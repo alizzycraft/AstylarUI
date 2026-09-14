@@ -11,7 +11,8 @@ import { collectPaginatorNavigationEvidence } from './paginator-navigation-evide
 import { chipHostTypographyAttribution, collectChipHostTypographyInputs, classifyChipHostTypographyInput } from './chip-host-typography-evidence.mjs';
 import { fieldHostTypographyAttribution, collectFieldHostTypographyInputs, classifyFieldHostTypographyInput } from './field-host-typography-evidence.mjs';
 import { rootTypographyAttribution, collectRootTypographyInputs, classifyRootTypographyInput } from './root-typography-input-evidence.mjs';
-import { appearanceInitialAttribution, collectAppearanceInitialInputs, classifyAppearanceInitialInput } from './appearance-input-evidence.mjs';
+import { appearanceInitialAttribution, collectAppearanceInitialInputs, classifyAppearanceInitialInput,
+  buttonAppearanceAttribution, collectButtonAppearanceInputs, classifyButtonAppearanceInput } from './appearance-input-evidence.mjs';
 import { collectNonGridTemplateInputs, classifyNonGridTemplateInput, nonGridTemplateAttribution, gridTemplateProperties } from './grid-template-input-evidence.mjs';
 import { selectorCanApply, borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput,
   buttonBorderResetAttribution, collectButtonBorderResetInputs, classifyButtonBorderResetInput,
@@ -111,6 +112,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const fieldHostTypographyInputs = collectFieldHostTypographyInputs(elementInventory, canonicalStyle, typographySelectorCanApply);
   const rootTypographyInputs = collectRootTypographyInputs(elementInventory, canonicalStyle, typographySelectorCanApply);
   const appearanceInitialInputs = collectAppearanceInitialInputs(elementInventory, typographySelectorCanApply);
+  const buttonAppearanceInputs = collectButtonAppearanceInputs(elementInventory, typographySelectorCanApply);
   const typographyCases = [...cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases,
     ...supplementalPaginatorNavigation.cases];
   const rawControlTypography = collectControlTypographyEvidence(typographyCases, elementInventory);
@@ -134,7 +136,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -211,6 +213,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     fieldHostTypographyInputs,
     rootTypographyInputs,
     appearanceInitialInputs,
+    buttonAppearanceInputs,
     retainedTypography,
     controlTypography,
     sourceFindings,
@@ -239,6 +242,18 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (requireComplete && report.elementInventory.resolvedStyleGaps.length > 0) errors.push(`${report.elementInventory.resolvedStyleGaps.length} inventoried elements lack resolved style evidence`);
   if (requireComplete && report.elementInventory.stateStyleGaps.length > 0) errors.push(`${report.elementInventory.stateStyleGaps.length} state cases lack effective style provenance`);
   if (report.elementInventory.errors.length > 0) errors.push(`${report.elementInventory.errors.length} full-tree collection errors`);
+  if (JSON.stringify(report.buttonAppearanceInputs) !== JSON.stringify(collectButtonAppearanceInputs(report.elementInventory, typographySelectorCanApply))) {
+    errors.push('button appearance evidence does not replay from captured authored reset ownership');
+  }
+  for (const entry of report.discrepancies.filter(d => d.attribution === buttonAppearanceAttribution)) {
+    const proof = report.buttonAppearanceInputs?.find(p => p.case === entry.reviewEvidence?.case && p.element === entry.element);
+    if (!proof || entry.classification !== 'application-plugin-authoring-defect' || entry.property !== 'appearance' || entry.reference !== 'none' || entry.astylar !== undefined ||
+        JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) || !Array.isArray(entry.reviewedCases) ||
+        entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
+        entry.reviewedCases.some(key => !report.buttonAppearanceInputs?.some(p => p.case === key && p.element === entry.element))) {
+      errors.push('button appearance classification lacks exact reset, stage and case evidence');
+    }
+  }
   if (JSON.stringify(report.appearanceInitialInputs) !== JSON.stringify(collectAppearanceInitialInputs(report.elementInventory, typographySelectorCanApply))) {
     errors.push('non-widget appearance evidence does not replay from captured initial requests');
   }
@@ -998,7 +1013,8 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs) {
+function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs) {
+  const buttonAppearanceByCaseId = new Map(buttonAppearanceInputs.map(p => [JSON.stringify([p.case, p.element]), p]));
   const appearanceByCaseId = new Map(appearanceInitialInputs.map(p => [JSON.stringify([p.case, p.element]), p]));
   const rootTypographyByCaseIdProperty = new Map(rootTypographyInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const grouped = new Map();
@@ -1030,6 +1046,8 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
           : classifyAppearanceInitialInput(input, property, referenceValue, astylarValue,
               appearanceByCaseId.get(JSON.stringify([key, input.id])))
+            ?? classifyButtonAppearanceInput(input, property, referenceValue, astylarValue,
+              buttonAppearanceByCaseId.get(JSON.stringify([key, input.id])))
             ?? classifyReviewedVisibleOverflow(input, property, referenceValue, astylarValue,
               visibleOverflowByCaseAndId.get(JSON.stringify([key, input.id])))
             ?? classifyBorderInitialInput(input, property, referenceValue, astylarValue,
@@ -1075,7 +1093,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
             ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
-              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, rootTypographyAttribution, appearanceInitialAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
+              'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, rootTypographyAttribution, appearanceInitialAttribution, buttonAppearanceAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
             states: [],
@@ -7887,6 +7905,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('button appearance preserves/,
+      'Material button authored appearance reset versus candidate omission', 'An active original .mdc-button none request is preserved independently of reference box-shadow transitions and disabled animation rules. Mapped candidate button authoring and normal/comparison/effective declarations must omit appearance; competing requests, ambiguous mappings, missing provenance, changed scalars and forged report claims prevent attribution. This is an authoring omission, not a confirmed core native-widget defect or screenshot equivalence.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('non-widget appearance initial request/,
       'initial non-widget appearance attribution with complete state and source evidence', 'Matching built-in types, complete rules, absence of competing appearance/reset/motion requests and independent core stages are required. Controls, plugin types, structural substitutions, unknown selectors, source gaps and forged classifications fail attribution. Raw omission and all case identities remain intact; no full raster or computed candidate value is synthesized.'),
     proof(root, 'examples/material-showcase/src/app/appearance-input-audit.spec.ts', /describe\('Material audit: appearance ownership/,
@@ -8056,6 +8076,7 @@ function implementationPlan() {
     { priority: 5.1, rootCause: 'Core rewrites an explicit font-family list before paint', action: 'The parser appends Arial, Helvetica, sans-serif to explicit lists without a recognized generic. Preserve this as distinct from missing Material font-token authoring. The equal-input unavailable-family proof now confirms changed text advance, while both explicit-generic controls pass. Preserve authored family ordering/quoting and browser fallback semantics at the core parser boundary; verify available/unavailable and missing-glyph cases without assuming a particular platform font. Do not add a generic family to the showcase merely to avoid the parser branch. Final raster verification remains separate from the measured advance proof.' },
     { priority: 5.15, rootCause: 'Canvas default shaping does not reproduce CSS text advance', action: 'Trace font-kerning and text-rendering semantics through the core text parser, single/multiline measurement, actual canvas paint and caret/selection metrics. The Arial office AV reduction proves a 0.882825px bound-texture advance difference with identical normal or zero tracking; a separate canvas probe isolates auto-versus-normal kerning behavior. Extend fonts, sizes, explicit kerning modes, retained text and wrapping before implementing a shared CSS-to-canvas rule. Do not force a showcase font, alter tracking or calibrate label widths; normal/zero representation equivalence is not proof of shaping or final raster parity.' },
     { priority: 5.2, rootCause: 'Material control typography tokens and nested line boxes are replaced by fixture defaults', action: 'Translate the original filled/outlined/text button and tab font/tracking tokens instead of inheriting the document control stack or omitting tracking. Restore toolbar button line-height inheritance instead of copying the density-specific container height. Preserve the tab text-label line-height:1 inside its independently sized content/control rather than applying the outer line-height to a flattened value label. Preserve alpha ink as a distinct authored input. Then investigate any core API or equal-input text mismatch; do not adjust font size, baseline, or offsets to recover screenshot similarity.' },
+    { priority: 5.205, rootCause: 'Original Material button appearance reset is omitted', action: 'Restore the original .mdc-button appearance:none request (including the installed CSS vendor alias semantics) in the public translation, alongside other independently identified button reset and typography inputs. Do not normalize the absent candidate declaration away because a custom-painted button looks similar. This is an initial authoring omission, not a demonstrated later compensation or core native-widget bug. After restoring equivalent inputs, reduce any remaining native presentation/state differences through core controls rather than plugin-specific paint or fixture offsets.' },
     { priority: 5.21, rootCause: 'Retained labels inherit the page fallback stack instead of component font tokens', action: 'Preserve the legitimate page font reset but restore each captured Material component font-family override and its inheritance path. Complete normal/effective candidate ancestry plus retained text distinguish this omission from the separate core font-list rewrite. Do not declare fallback lists equivalent because the installed Roboto renders current characters similarly, and do not change the page reset globally to hide missing component declarations. Re-run equal-input fallback, shaping, line-box and state-paint proofs after input restoration.' },
     { priority: 5.22, rootCause: 'Retained labels omit inherited component line-height and tracking tokens', action: 'Restore the captured reference text-metric tokens and inheritance structure instead of substituting fixed label heights, padding, vertical alignment or offsets. Complete normal/effective ancestry separates missing input from core metric defects. Preserve independent equal-input natural-line-height and shaping failures, and verify wrapping, placement and state paint only after equivalent inputs are supplied.' },
     { priority: 5.225, rootCause: 'Shared form-field hosts omit component typography tokens', action: 'Restore reference container font, size and line-height token ownership through the shared style input path for form-field, input, autocomplete, select, datepicker and timepicker. Captured candidate page fallback/scaled typography and omitted host declarations are separate from child control and label substitutions. Preserve original tokens and ancestry; do not hardcode a host size, patch descendants, or infer computed candidate values from omitted local diagnostics. Light/dark page size currently matches 16px but contrast/custom does not. Verify equal-input core inheritance, relative lengths, field content, responsive/state changes and final raster after restoring authored intent.' },

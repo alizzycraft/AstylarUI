@@ -10852,6 +10852,153 @@ test('non-widget appearance case index preserves all attributed raw main-capture
   ]) { const copy = structuredClone(index.groups); mutate(copy); assert.throws(() => verify(copy)); }
 });
 
+function buttonAppearanceReport(className = 'material-button') {
+  const raw = appearanceInitialReport('button'), e = raw.results[0];
+  const rule = { selector: '.mdc-button', declarations: { appearance: { value: 'none', important: false } } };
+  e.styleInputs[0].referenceAuthored = [structuredClone(rule)];
+  e.inputTrees.reference.nodes[0].attributes.class = 'mdc-button mat-mdc-button-base';
+  e.inputTrees.reference.rules = [{ ...structuredClone(rule), active: true, conditions: [] },
+    { selector: '.mat-mdc-unelevated-button', active: true, conditions: [], declarations: {
+      'transition-property': { value: 'box-shadow', important: false }, 'animation-name': { value: 'none', important: true } } }];
+  e.inputTrees.reference.nodes[0].rules = [0, 1];
+  e.inputTrees.astylar.nodes[0].authored.class = className;
+  return raw;
+}
+
+test('button appearance preserves explicit original reset ownership across button classes and states', () => {
+  const raw = parityReport({}, {}); raw.results = [];
+  for (const cls of ['material-button', 'text-button', 'toolbar-action', 'dialog-action']) for (let state = 0; state < 15; state++) {
+    const entry = buttonAppearanceReport(cls).results[0]; entry.family = cls; entry.state = `state-${state}`;
+    raw.interactions.push(entry);
+  }
+  const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.buttonAppearanceInputs.filter(p => p.element === 'core-root').length, 60);
+  const diffs = audit.discrepancies.filter(d => d.attribution === 'reviewed-material-button-appearance-omission');
+  assert.equal(diffs.length, 4);
+  for (const d of diffs) {
+    assert.equal(d.classification, 'application-plugin-authoring-defect'); assert.equal(d.astylar, undefined);
+    assert.equal(d.reviewEvidence.referenceRule.declarations.appearance.value, 'none');
+    assert.equal(d.reviewEvidence.candidateLocalDeclaration, '<omitted>'); assert.equal(d.reviewEvidence.finalRasterVerified, false);
+    assert.equal(d.occurrences, 15); assert.equal(d.reviewedCases.length, 15); assert.equal(d.cases.length, 12);
+  }
+  assert.equal(JSON.stringify(raw), before);
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => e.includes('button appearance')));
+  assert.ok(audit.sourceFindings.find(f => f.id === 'fixture-material-button-appearance-reset-omitted').detected);
+  assert.ok(audit.implementationPlan.some(p => p.priority === 5.205));
+});
+
+test('button appearance refuses missing, competing or changed owner and declaration evidence', () => {
+  const mutations = [
+    e => { e.inputTrees.reference.nodes[0].type = 'a'; },
+    e => { e.inputTrees.reference.nodes[0].attributes.class = ''; },
+    e => { e.inputTrees.astylar.nodes[0].authored.type = 'input'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.class = 'unknown'; },
+    e => { e.inputTrees.reference.rules[0].active = false; },
+    e => { e.inputTrees.reference.rules[0].conditions = ['unknown-media']; },
+    e => { e.inputTrees.reference.rules[0].selector = '.other'; },
+    e => { e.inputTrees.reference.rules[0].declarations.appearance.value = 'auto'; },
+    e => { e.inputTrees.reference.rules[0].declarations.appearance.important = true; },
+    e => { e.inputTrees.reference.rules[0].declarations.all = { value: 'initial' }; },
+    e => { e.inputTrees.reference.rules.push({ selector: 'button', active: true, declarations: { appearance: { value: 'none' } } }); e.inputTrees.reference.nodes[0].rules.push(2); },
+    e => { e.inputTrees.reference.nodes[0].inline = { appearance: { value: 'none' } }; },
+    e => { e.inputTrees.reference.nodes[0].attributes.style = '-webkit-appearance:none'; },
+    e => { e.inputTrees.astylar.nodes[0].authored.style = { appearance: 'none' }; },
+    e => { e.inputTrees.astylar.nodes[0].normalResolvedStyle.appearance = 'none'; },
+    e => { delete e.inputTrees.astylar.nodes[0].interactionResolvedStyle; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#core-root', appearance: 'none' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(#core-root)', all: 'initial' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: 'button:hover', transition: 'all 1s' }); },
+    e => { e.inputTrees.reference.nodes.push(structuredClone(e.inputTrees.reference.nodes[0])); },
+    e => { e.inputTrees.astylar.nodes.push(structuredClone(e.inputTrees.astylar.nodes[0])); },
+    e => { e.inputTrees.reference.errors.push('incomplete'); },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'mesh-metadata'; },
+    e => { e.inputTrees.astylar.resolvedStyleRevision = -1; },
+  ];
+  for (const [i, mutate] of mutations.entries()) {
+    const raw = buttonAppearanceReport(); mutate(raw.results[0]); const audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.buttonAppearanceInputs.filter(p => p.element === 'core-root').length, 0, `mutation ${i}`);
+    assert.ok(audit.discrepancies.every(d => d.attribution !== 'reviewed-material-button-appearance-omission'), `mutation ${i}`);
+  }
+});
+
+test('button appearance rejects scalar changes and independently replays report evidence', () => {
+  for (const mutate of [
+    i => { i.reference.appearance = 'auto'; },
+    i => { i.referenceAuthored[0].declarations.appearance.important = true; },
+    i => { i.referenceAuthored = []; },
+    i => { i.astylarAuthored.push({ selector: 'button', declarations: { appearance: 'none' } }); },
+    i => { i.astylarInteractionResolvedStyle.appearance = 'none'; },
+    i => { i.astylarStructure.type = 'div'; },
+    i => { delete i.astylarNormalResolvedStyle; },
+  ]) {
+    const raw = buttonAppearanceReport(); mutate(raw.results[0].styleInputs[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(d => d.attribution !== 'reviewed-material-button-appearance-omission'));
+  }
+  const audit = buildMaterialInputAudit(buttonAppearanceReport());
+  for (const mutate of [
+    a => { a.buttonAppearanceInputs[0].referenceRule.declarations.appearance.value = 'auto'; },
+    a => { a.discrepancies[0].classification = 'equivalent-representation'; },
+    a => { a.discrepancies[0].reviewedCases = []; },
+    a => { a.discrepancies[0].astylar = 'none'; },
+    a => { delete a.buttonAppearanceInputs; },
+  ]) {
+    const copy = structuredClone(audit); mutate(copy);
+    assert.ok(validateMaterialInputAudit(copy, { requireComplete: false }).some(e => e.includes('button appearance')));
+  }
+});
+
+test('button appearance case index retains every original reset and explicit mapping follow-up', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const index = JSON.parse(readFileSync('docs/material-button-appearance-audit.json', 'utf8'));
+  for (const source of index.sourceFingerprints) assert.equal(createHash('sha256')
+    .update(readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), source.sha256, source.file);
+  const bytes = readFileSync(index.mainCapture.file);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), index.mainCapture.sha256);
+  const report = JSON.parse(bytes), cases = new Map();
+  for (const [kind, list] of [['static', report.results], ['interaction', report.interactions]]) for (const entry of list) {
+    const key = `${kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`;
+    assert.equal(cases.has(key), false); cases.set(key, entry);
+  }
+  const verify = groups => {
+    assert.equal(groups.length, 13); assert.equal(new Set(groups.map(g => `${g.family}/${g.element}`)).size, 13);
+    assert.equal(groups.reduce((sum, g) => sum + g.occurrences, 0), 768);
+    for (const group of groups) {
+      assert.equal(group.classification, 'application-plugin-authoring-defect');
+      assert.equal(group.reference, 'none'); assert.equal(group.candidate, '<omitted>');
+      assert.equal(new Set(group.reviewedCases).size, group.occurrences);
+      const expected = [...cases].filter(([, e]) => e.family === group.family && e.styleInputs.some(i => i.id === group.element)).map(([key]) => key);
+      assert.deepEqual(group.reviewedCases, expected);
+      for (const key of group.reviewedCases) {
+        const inputs = cases.get(key).styleInputs.filter(i => i.id === group.element); assert.equal(inputs.length, 1);
+        const input = inputs[0]; assert.equal(input.referenceStructure.type, 'button'); assert.equal(input.astylarStructure.type, 'button');
+        assert.equal(input.reference.appearance, 'none'); assert.equal(input.astylarResolvedStyleEvidenceVersion, 2);
+        const rules = input.referenceAuthored.filter(r => r.declarations.appearance !== undefined);
+        assert.equal(rules.length, 1); assert.equal(rules[0].selector, '.mdc-button');
+        assert.deepEqual(rules[0].declarations.appearance, { value: 'none', important: false });
+        for (const stage of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle']) assert.equal(input[stage].appearance, undefined);
+        assert.ok(input.astylarAuthored.every(r => r.declarations.appearance === undefined));
+      }
+    }
+  };
+  verify(index.groups);
+  for (const mutate of [groups => groups.pop(), groups => { groups[0].reviewedCases.pop(); },
+    groups => { groups[0].classification = 'equivalent-representation'; }, groups => { groups[0].candidate = 'none'; }]) {
+    const copy = structuredClone(index.groups); mutate(copy); assert.throws(() => verify(copy));
+  }
+  assert.match(readFileSync('examples/material-showcase/node_modules/@angular/material/fesm2022/button.mjs', 'utf8'), /\.mdc-button\{[^}]*-webkit-appearance:none/);
+  assert.equal(index.remainingMappingFollowups.samples.length, 6);
+  for (const sample of index.remainingMappingFollowups.samples) {
+    assert.deepEqual(sample.inputTrees, cases.get(sample.case).inputTrees);
+    for (const ref of Object.values(sample.inputTrees)) assert.equal(createHash('sha256').update(readFileSync(ref.file)).digest('hex'), ref.sha256);
+    const tree = JSON.parse(readFileSync(sample.inputTrees.reference.file));
+    const nodes = tree.nodes.filter(n => (n.attributes?.['data-parity-id'] ?? n.attributes?.id) === sample.element)
+      .map(({ key, parent, type, attributes }) => ({ key, parent, type, attributes }));
+    assert.deepEqual(nodes, sample.referenceIdMatches);
+    assert.equal(nodes.length, sample.element === 'stepper-content' ? 2 : 0);
+  }
+});
+
 test('appearance public proof preserves control sensitivity and does not waive pending Material inputs', async () => {
   const { readFileSync } = await import('node:fs');
   const { createHash } = await import('node:crypto');

@@ -163,6 +163,16 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: browser border reset and capture-backed Material button attribution',
   }),
   Object.freeze({
+    id: 'fixture-material-button-appearance-reset-omitted',
+    introducedBy: '2f44011 initial material-button and dialog-action authoring omit the original appearance reset; source history only',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.material-button'(?:(?!appearance:)[^\r\n])*borderWidth: '0'(?:(?!appearance:)[^\r\n])*background: theme\.primary`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase original Material button appearance-reset input translation',
+    justification: 'Installed Material .mdc-button CSS authors -webkit-appearance:none, exposed by the browser CSSOM as appearance:none. The mapped material-button, text-button, toolbar-action and dialog-action candidates omit that request across complete applicable rules, inline inputs and normal/effective declarations. Preserve the omitted reset as unequal authored intent rather than waiving it from similar custom-button pixels. Initial source omission is not evidence of a later workaround; core native-widget appearance support and final rendering remain separate questions.',
+    focusedProof: 'tests/material-parity/input-equivalence-audit.spec.mjs: button appearance ownership, exclusion and replay tests',
+  }),
+  Object.freeze({
     id: 'core-border-initial-color-differs-from-css',
     introducedBy: '2c16e14 extracts the already-existing transparent default; not established as a Material workaround',
     file: 'src/app/config/browser-defaults.ts',

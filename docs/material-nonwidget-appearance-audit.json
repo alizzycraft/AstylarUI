@@ -19,11 +19,11 @@
   "sourceFingerprints": [
     {
       "file": "tests/material-parity/appearance-input-evidence.mjs",
-      "sha256": "1ae59d3aff93862d8e1e13ea33e0d0ff40a44b8fee807a04344056cd3d7a7bbd"
+      "sha256": "a1dbe9c34db4a2ea8844163ffd55d1b761670733600187880e42ede0c322d157"
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "e61a79d16f29fca7c68bf379f9d419f55da6e1bb35769a28694404df32a24820"
+      "sha256": "7d636a65d19d5c8dc8309f0c22fb20cb47aa8b0f0e1cff2a34c30bba870ac18b"
     },
     {
       "file": "examples/material-showcase/src/app/appearance-input-audit.spec.ts",

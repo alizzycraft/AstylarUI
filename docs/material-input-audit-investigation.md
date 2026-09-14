@@ -3,6 +3,76 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Material buttons: omitted explicit CSS appearance reset
+
+The [button appearance case index](material-button-appearance-audit.json)
+preserves **13 groups / 768 main scalar occurrences** as an
+**application/plugin authoring defect**. Installed Material `.mdc-button`
+CSS explicitly authors `-webkit-appearance:none`; Chrome CSSOM exposes the
+declaration as `appearance:none`. This concerns the CSS property, not
+Material's `matButton` variant input. Candidate material-button, text-button,
+toolbar-action and dialog-action authoring omit that reset through all three
+captured core declaration stages.
+
+The first demonstrated divergence is authored input translation. Source
+inspection of `2f44011` already shows the omission in material-button and
+dialog-action rules. This is not evidence of a later workaround or a confirmed
+core native-widget rendering failure. The implementation plan adds priority
+**5.205**: restore the original reset with the other original button inputs,
+then investigate any remaining equal-input failure at the core owner. Do not
+waive missing authored intent because the custom-painted button looks similar.
+
+`appearance-input-evidence.mjs` requires the unique mapped native button,
+original Material host class and exact active reset rule, complete reference
+and candidate rule pools, absent competing candidate requests, and agreement
+across independent local style stages. Reference box-shadow transition and
+animation-disable rules do not erase the appearance declaration being audited;
+no animation or final-raster equivalence is inferred. Explicit candidate
+appearance, changed source owners, resets, missing stages, unknown potentially
+applicable selectors and contradictory scalar captures prevent attribution.
+
+### Verification and coverage
+
+- The combined button/non-widget appearance, root/field typography and source
+  checks passed **17/17**, exit 0, **51.678 seconds**. The new button tests cover
+  60 class/state observations, 24 adverse capture mutations, seven scalar-stage
+  mutations and five forged reports. Every reviewed case is retained beyond
+  the twelve-item display sample limit.
+- Full build/replay retains **8,143 unique differences / 380,520 occurrences**,
+  **131/131 detected source findings** and 96 fingerprints. Unresolved
+  attributions decrease **2,898 to 2,885**. Strict validation reports only
+  `2885 resolved-style differences still lack root-cause attribution`.
+  The diagnostic command prints this error and exits 0, not acceptance.
+- The inventory collector records 801 qualifying button observations, including
+  supplemental and non-scalar-mapped nodes. Only the **768 main scalar
+  occurrences** in the linked index are newly attributed. Exact commands,
+  source fingerprints and case identities are retained there.
+- The additional case-index test passed **1/1**, exit 0, **1.990 seconds**.
+  It checks every original reset and omitted candidate declaration, current
+  source hashes, all six mapping samples and both source-tree hashes for each.
+  Four corrupted index variants are rejected; the exact command is in the index.
+- The previously verified field, section and non-widget appearance indices
+  were rechecked after refreshing only their changed audit-source fingerprints.
+  No captured values, canonical comparisons, renderer code or thresholds were
+  changed. Final enforced parity and the remaining audit are still required.
+
+### Mapping follow-ups remain open
+
+The first captured cases explain the six non-widget exclusions: badge-count,
+bottom-sheet-overlay, snack-bar-overlay, snack-bar-surface and tooltip-popup
+are selected through explicit generated-element aliases in
+`run-material-parity.mjs:1382–1396`, not through the candidate's ID. The
+reference stepper authors two `data-parity-id="stepper-content"` elements;
+`referenceTarget` selects a visible candidate. The initial-request collector
+requires a unique ID mapping and correctly does not accept these cases.
+
+The linked index preserves those six sample cases, both tree hashes, actual
+reference ID matches and the harness selection mechanism. These observations
+are **not** a completed owner/state mapping or proof of a harness defect.
+Generated ownership and the active stepper content must be independently
+mapped before extending attribution; do not relax uniqueness or infer
+correspondence merely from matching tag names or text.
+
 ## Non-widget appearance: captured initial requests, not a global omission waiver
 
 The [non-widget appearance case index](material-nonwidget-appearance-audit.json)
