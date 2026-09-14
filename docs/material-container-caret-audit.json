@@ -1,0 +1,1036 @@
+{
+  "schemaVersion": 1,
+  "attribution": "reviewed-container-caret-color-declaration-stage",
+  "capture": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+  },
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "eb21202a51a4945f6a49e726417b5e7996bdbca9551c5299411a4220e14911c1"
+    },
+    {
+      "file": "tests/material-parity/root-typography-input-evidence.mjs",
+      "sha256": "b89ae8c280cfdeafaab9765ef17e71c80fdb4a3176e123674439c0b409edb23e"
+    },
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90"
+    },
+    {
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+    },
+    {
+      "file": "src/lib/astylar.ts",
+      "sha256": "e72cfb8e8e1d91c5a4de9002de3ae98f76f1ed26112251b47fde3b77b13f1094"
+    },
+    {
+      "file": "src/lib/astylar-surface.ts",
+      "sha256": "91c2b6fe2fed03da0573d819cd3deed2330ffca91faf22b5083588cbb32fbb13"
+    },
+    {
+      "file": "tests/material-parity/root-color-input-evidence.mjs",
+      "sha256": "dc99a1697ee9b7d80d9cbb23fca10c1a1408430c15a51641ed13c6387458bdf8"
+    },
+    {
+      "file": "tests/material-parity/field-host-typography-evidence.mjs",
+      "sha256": "84590b2aa7adfec1aff1df7ad6305a002d77ab81938de61762ec4e92683d2ada"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/form-field-CFbrnFED.mjs",
+      "sha256": "72ca52ec72650eb2086357ba4263f7f5f5427ccea28ff0851973060c0555af2d"
+    },
+    {
+      "file": "tests/material-parity/input-tree-evidence.spec.mjs",
+      "sha256": "71c242b2f5e151b324b6bfc7de038bef1cd492931e9d8e71bf286533a12262b2"
+    },
+    {
+      "file": "src/app/services/dom/input/text-input.manager.ts",
+      "sha256": "e001e695dbc16b9c8d61d4db5ba49544f82f636bfaec69e1977cdd497729151d"
+    }
+  ],
+  "caseSources": [
+    {
+      "file": "docs/material-root-color-audit.json",
+      "groupCount": 72
+    },
+    {
+      "file": "docs/material-field-host-color-audit.json",
+      "groupCount": 12
+    }
+  ],
+  "groups": [
+    {
+      "family": "autocomplete",
+      "element": "autocomplete-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 82,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 0
+    },
+    {
+      "family": "autocomplete",
+      "element": "autocomplete-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 28,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 1
+    },
+    {
+      "family": "badge",
+      "element": "badge-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 39,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 2
+    },
+    {
+      "family": "badge",
+      "element": "badge-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 13,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 3
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 47,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 4
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 16,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 5
+    },
+    {
+      "family": "button",
+      "element": "button-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 45,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 6
+    },
+    {
+      "family": "button",
+      "element": "button-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 15,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 7
+    },
+    {
+      "family": "button-toggle",
+      "element": "button-toggle-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 51,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 8
+    },
+    {
+      "family": "button-toggle",
+      "element": "button-toggle-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 17,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 9
+    },
+    {
+      "family": "card",
+      "element": "card-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 39,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 10
+    },
+    {
+      "family": "card",
+      "element": "card-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 13,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 11
+    },
+    {
+      "family": "checkbox",
+      "element": "checkbox-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 51,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 12
+    },
+    {
+      "family": "checkbox",
+      "element": "checkbox-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 17,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 13
+    },
+    {
+      "family": "chips",
+      "element": "chips-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 57,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 14
+    },
+    {
+      "family": "chips",
+      "element": "chips-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 19,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 15
+    },
+    {
+      "family": "core",
+      "element": "core-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 39,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 16
+    },
+    {
+      "family": "core",
+      "element": "core-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 13,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 17
+    },
+    {
+      "family": "datepicker",
+      "element": "datepicker-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 83,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 18
+    },
+    {
+      "family": "datepicker",
+      "element": "datepicker-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 28,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 19
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 58,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 20
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 20,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 21
+    },
+    {
+      "family": "divider",
+      "element": "divider-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 18,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 22
+    },
+    {
+      "family": "divider",
+      "element": "divider-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 6,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 23
+    },
+    {
+      "family": "expansion",
+      "element": "expansion-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 51,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 24
+    },
+    {
+      "family": "expansion",
+      "element": "expansion-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 17,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 25
+    },
+    {
+      "family": "form-field",
+      "element": "form-field-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 57,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 26
+    },
+    {
+      "family": "form-field",
+      "element": "form-field-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 19,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 27
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-list-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 39,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 28
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-list-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 13,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 29
+    },
+    {
+      "family": "icon",
+      "element": "icon-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 15,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 30
+    },
+    {
+      "family": "icon",
+      "element": "icon-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 5,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 31
+    },
+    {
+      "family": "input",
+      "element": "input-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 57,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 32
+    },
+    {
+      "family": "input",
+      "element": "input-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 19,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 33
+    },
+    {
+      "family": "list",
+      "element": "list-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 39,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 34
+    },
+    {
+      "family": "list",
+      "element": "list-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 13,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 35
+    },
+    {
+      "family": "menu",
+      "element": "menu-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 70,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 36
+    },
+    {
+      "family": "menu",
+      "element": "menu-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 24,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 37
+    },
+    {
+      "family": "paginator",
+      "element": "paginator-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 39,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 38
+    },
+    {
+      "family": "paginator",
+      "element": "paginator-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 13,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 39
+    },
+    {
+      "family": "progress-bar",
+      "element": "progress-bar-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 15,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 40
+    },
+    {
+      "family": "progress-bar",
+      "element": "progress-bar-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 5,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 41
+    },
+    {
+      "family": "progress-spinner",
+      "element": "progress-spinner-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 15,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 42
+    },
+    {
+      "family": "progress-spinner",
+      "element": "progress-spinner-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 5,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 43
+    },
+    {
+      "family": "radio",
+      "element": "radio-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 51,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 44
+    },
+    {
+      "family": "radio",
+      "element": "radio-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 17,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 45
+    },
+    {
+      "family": "select",
+      "element": "select-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 70,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 46
+    },
+    {
+      "family": "select",
+      "element": "select-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 24,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 47
+    },
+    {
+      "family": "sidenav",
+      "element": "sidenav-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 46,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 48
+    },
+    {
+      "family": "sidenav",
+      "element": "sidenav-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 16,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 49
+    },
+    {
+      "family": "slide-toggle",
+      "element": "slide-toggle-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 51,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 50
+    },
+    {
+      "family": "slide-toggle",
+      "element": "slide-toggle-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 17,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 51
+    },
+    {
+      "family": "slider",
+      "element": "slider-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 59,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 52
+    },
+    {
+      "family": "slider",
+      "element": "slider-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 19,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 53
+    },
+    {
+      "family": "snack-bar",
+      "element": "snack-bar-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 54,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 54
+    },
+    {
+      "family": "snack-bar",
+      "element": "snack-bar-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 17,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 55
+    },
+    {
+      "family": "sort",
+      "element": "sort-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 45,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 56
+    },
+    {
+      "family": "sort",
+      "element": "sort-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 15,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 57
+    },
+    {
+      "family": "stepper",
+      "element": "stepper-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 51,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 58
+    },
+    {
+      "family": "stepper",
+      "element": "stepper-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 17,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 59
+    },
+    {
+      "family": "table",
+      "element": "table-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 39,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 60
+    },
+    {
+      "family": "table",
+      "element": "table-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 13,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 61
+    },
+    {
+      "family": "tabs",
+      "element": "tabs-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 52,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 62
+    },
+    {
+      "family": "tabs",
+      "element": "tabs-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 18,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 63
+    },
+    {
+      "family": "timepicker",
+      "element": "timepicker-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 82,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 64
+    },
+    {
+      "family": "timepicker",
+      "element": "timepicker-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 28,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 65
+    },
+    {
+      "family": "toolbar",
+      "element": "toolbar-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 39,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 66
+    },
+    {
+      "family": "toolbar",
+      "element": "toolbar-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 13,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 67
+    },
+    {
+      "family": "tooltip",
+      "element": "tooltip-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 47,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 68
+    },
+    {
+      "family": "tooltip",
+      "element": "tooltip-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 15,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 69
+    },
+    {
+      "family": "tree",
+      "element": "tree-root",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 39,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 70
+    },
+    {
+      "family": "tree",
+      "element": "tree-root",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 13,
+      "sourceIndex": 0,
+      "sourceGroupIndex": 71
+    },
+    {
+      "family": "form-field",
+      "element": "form-field-primary",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 57,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 0
+    },
+    {
+      "family": "form-field",
+      "element": "form-field-primary",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 19,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 1
+    },
+    {
+      "family": "input",
+      "element": "input-primary",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 57,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 2
+    },
+    {
+      "family": "input",
+      "element": "input-primary",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 19,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 3
+    },
+    {
+      "family": "autocomplete",
+      "element": "autocomplete-primary",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 82,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 4
+    },
+    {
+      "family": "autocomplete",
+      "element": "autocomplete-primary",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 28,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 5
+    },
+    {
+      "family": "select",
+      "element": "select-primary",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 70,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 6
+    },
+    {
+      "family": "select",
+      "element": "select-primary",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 24,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 7
+    },
+    {
+      "family": "datepicker",
+      "element": "datepicker-primary",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 83,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 8
+    },
+    {
+      "family": "datepicker",
+      "element": "datepicker-primary",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 28,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 9
+    },
+    {
+      "family": "timepicker",
+      "element": "timepicker-primary",
+      "property": "caretColor",
+      "reference": "rgba(29,27,32,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 82,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 10
+    },
+    {
+      "family": "timepicker",
+      "element": "timepicker-primary",
+      "property": "caretColor",
+      "reference": "rgba(230,225,229,1)",
+      "candidate": "<omitted>",
+      "classification": "parity-harness-defect",
+      "occurrences": 28,
+      "sourceIndex": 1,
+      "sourceGroupIndex": 11
+    }
+  ],
+  "caseCount": 2888,
+  "groupCount": 84,
+  "scope": "Root sections and field hosts only: independently verified color ancestry plus absence of caret requests. This preserves diagnostic-stage differences without synthesizing candidate computed caret values or claiming descendant caret paint.",
+  "caseEncoding": "Each group references caseSources[sourceIndex].file groups[sourceGroupIndex].reviewedCases; retain every listed case, not display samples. The case-index test validates all 2888 observations against the raw capture and tree hashes.",
+  "history": {
+    "commit": "2f44011",
+    "method": "Source history and current captured declarations, not a runtime bisect.",
+    "observation": "The shared root and field-shell rules do not author caret-color. Their inherited ink and omitted caret declarations are captured separately from descendant control styles."
+  },
+  "sourceLocations": [
+    {
+      "file": "src/lib/astylar-surface.ts",
+      "line": 41,
+      "observation": "Inspection exposes detached declarations, not computed caret paint."
+    },
+    {
+      "file": "src/app/services/dom/input/text-input.manager.ts",
+      "line": 1277,
+      "observation": "Control text-style construction uses explicit caretColor or auto. Container omission does not prove invocation or correct paint."
+    },
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "line": 480,
+      "observation": "Root rule omits caretColor."
+    },
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "line": 540,
+      "observation": "Field-shell rule omits caretColor."
+    }
+  ],
+  "implementationPlan": "Compare corresponding diagnostic stages or expose computed values separately. Do not add fixture caret colors to erase omitted-declaration differences. Keep actual control caret color, visible empty-input caret, selection, focus, placement and descendant overrides as independent evidence and implementation tasks.",
+  "verification": {
+    "computedCandidateVerified": false,
+    "descendantCaretVerified": false,
+    "finalRasterVerified": false,
+    "focusedCommand": "node --test --test-name-pattern='container caret' tests/material-parity/input-equivalence-audit.spec.mjs",
+    "focusedResult": "3/3 pass, 7612.9423 ms: 100 positive root/field observations, 12 adverse ancestry/declaration mutations, six scalar mutations and five forged reports.",
+    "browserCommand": "node --test --test-name-pattern='container caret computed' tests/material-parity/input-tree-evidence.spec.mjs",
+    "browserResult": "1/1 pass, 1453.5061 ms, both DPR1/2. Browser computed ancestor inheritance and input auto override are distinguished; no caret pixel claim.",
+    "combinedCommand": "node --test --test-name-pattern='container caret|root box model|root height case index|root color case index|root typography case index|field host color case index|field host case index|non-widget appearance case index|button appearance case index|source fingerprint' tests/material-parity/input-equivalence-audit.spec.mjs",
+    "combinedResult": "16/16 pass, 3484225.6804 ms; no failures, skips or cancellations. Includes all 2888 caret observations, 4622 tree hashes and eleven source fingerprints; raw linked case sets are complete.",
+    "replayStatus": "Full buildMaterialInputAudit replay with all four supplemental sources exits 0: 2888 proofs, 84 attributed groups and 2888 occurrences, with exact case-set agreement against this linked index. Raw 8143 groups / 380520 occurrences, classifications 508 authoring / 3670 equivalent / 312 documented limitation / 3653 harness, 131 source findings and 98 source fingerprints remain unchanged. Strict validation still reports 2576 unresolved style groups, down from 2660; no other strict errors.",
+    "replayCommand": "node --input-type=module -e \"import{readFileSync}from'node:fs';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const a=buildMaterialInputAudit(JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json')),{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.log(JSON.stringify({summary:a.summary,sourceFingerprintCount:a.sourceFingerprints.length,strict:validateMaterialInputAudit(a),proofs:a.containerCaretInputs.length,groups:a.discrepancies.filter(d=>d.attribution==='reviewed-container-caret-color-declaration-stage').map(d=>({family:d.family,element:d.element,property:d.property,reference:d.reference,candidate:d.astylar,classification:d.classification,occurrences:d.occurrences,reviewedCases:d.reviewedCases}))}));\"",
+    "fullHarness": "Pending."
+  }
+}

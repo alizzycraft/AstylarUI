@@ -1,5 +1,6 @@
 export const rootColorAttribution = 'reviewed-root-color-declaration-stage';
 export const fieldColorAttribution = 'reviewed-field-host-color-declaration-stage';
+export const containerCaretAttribution = 'reviewed-container-caret-color-declaration-stage';
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const affects = declarations => Object.keys(declarations ?? {}).some(key =>
   ['color', 'all'].includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key));
@@ -107,4 +108,44 @@ export function classifyFieldColorInput(input, property, reference, astylar, pro
   return { classification: 'parity-harness-defect', attribution: fieldColorAttribution,
     owner: 'input audit field-host inherited color versus local declaration stages', reviewEvidence: structuredClone(proof),
     justification: 'The mapped Material form-field and candidate field-shell have no local color request. Independently checked complete frame/page-to-section-to-host paths provide the same ancestor color; browser computed host color includes inheritance while candidate inspection preserves local omission. This color-stage finding does not erase the separately proven missing host font tokens, approve structural/layout substitutions, synthesize a computed candidate color, or prove descendant control/caret/currentColor paint.' };
+}
+
+const affectsCaret = declarations => Object.keys(declarations ?? {}).some(key =>
+  ['caretcolor', 'all'].includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key));
+const unsafeCaret = value => !object(value) || affectsCaret(value);
+
+// These are container declarations, not the descendant editable control's
+// computed caret style or painted caret. Reuse verified color ancestry and
+// independently check the complete captured chain for caret requests.
+export function collectContainerCaretInputs(colorInputs, canonical) {
+  const results = [];
+  for (const base of colorInputs) {
+    if (base.property !== 'color' || base.classification !== 'parity-harness-defect' ||
+        base.referencePath.some(n => unsafeCaret(n.inline) ||
+          /(?:^|;)\s*(?:caret-color|all|animation[^:]*|transition[^:]*)\s*:/i.test(n.attributes?.style ?? '') ||
+          !Array.isArray(n.rules) || n.rules.some(r => unsafeCaret(r.declarations)) ||
+          canonical(n.computed).caretColor !== base.values.reference) ||
+        base.candidatePath.some(n => (n.authored.style !== undefined && unsafeCaret(n.authored.style)) ||
+          !Array.isArray(n.rules) || n.rules.some(r => unsafeCaret(r.declarations)) ||
+          [n.normal, n.comparison, n.effective].some(unsafeCaret))) continue;
+    results.push({ case: base.case, family: base.family, element: base.element, property: 'caretColor',
+      values: { reference: base.values.reference, candidateLocalDeclaration: '<omitted>' },
+      source: base.source, revision: base.revision, referencePath: structuredClone(base.referencePath),
+      candidatePath: structuredClone(base.candidatePath), classification: 'parity-harness-defect',
+      computedCandidateVerified: false, descendantCaretVerified: false, finalRasterVerified: false });
+  }
+  return results;
+}
+
+export function classifyContainerCaretInput(input, property, reference, astylar, proof, canonical) {
+  if (!proof || property !== 'caretColor' || input.id !== proof.element || reference !== proof.values.reference || astylar !== undefined ||
+      input.astylarResolvedStyleEvidenceVersion !== 2 || input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
+      input.referenceStructure.type !== proof.referencePath.at(-1).type || input.astylarStructure.type !== proof.candidatePath.at(-1).authored.type ||
+      !object(input.reference) || canonical(input.reference).caretColor !== reference ||
+      ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'].some(stage => unsafeCaret(input[stage])) ||
+      !Array.isArray(input.referenceAuthored) || !Array.isArray(input.astylarAuthored) ||
+      [...input.referenceAuthored, ...input.astylarAuthored].some(r => unsafeCaret(r.declarations))) return;
+  return { classification: 'parity-harness-defect', attribution: containerCaretAttribution,
+    owner: 'input audit container computed caret color versus local declaration stages', reviewEvidence: structuredClone(proof),
+    justification: 'The independently mapped section or form-field host and its complete captured frame/page ancestry omit caret-color requests on both sides. Browser computed container caretColor equals the separately verified inherited color, while all candidate local declaration stages omit caretColor. This is a diagnostic-stage mismatch, not absent authored caret intent, a synthesized candidate computed value, or proof that any editable descendant renders a correct caret. Preserve descendant overrides, caret visibility/placement/color, focus and selection findings independently; adding fixture caret-color values would change the original input.' };
 }

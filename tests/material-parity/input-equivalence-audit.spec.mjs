@@ -10364,6 +10364,76 @@ test('root height rejects scalar and report tampering without erasing original s
   }
 });
 
+function containerCaretReport(family = 'chips', dark = false, size = '16px') {
+  const raw = family === 'chips' ? rootColorReport(family, dark, size) : fieldColorReport(family, dark, size);
+  const e = raw.results[0];
+  for (const s of e.inputTrees.reference.styles) s.caretColor = s.color;
+  for (const i of e.styleInputs) i.reference.caretColor = i.reference.color;
+  return raw;
+}
+
+test('container caret separates computed container color from declarations and descendant caret paint', () => {
+  const raw = parityReport({}, {}); raw.results = [];
+  for (const family of ['chips', 'autocomplete', 'timepicker']) for (const dark of [false, true]) for (const size of ['16px', '18.4px'])
+    for (const state of [undefined, 'hover', 'held', 'focus', 'open']) {
+      const e = containerCaretReport(family, dark, size).results[0]; e.profile = dark ? 'dark' : 'light';
+      e.viewport = { ...e.viewport, id: `desktop-${size}` };
+      if (state) { e.state = state; raw.interactions.push(e); } else raw.results.push(e);
+    }
+  const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.containerCaretInputs.length, 100);
+  const ds = audit.discrepancies.filter(d => d.attribution === 'reviewed-container-caret-color-declaration-stage');
+  assert.equal(ds.reduce((n, d) => n + d.occurrences, 0), 100);
+  for (const d of ds) {
+    assert.equal(d.property, 'caretColor'); assert.equal(d.astylar, undefined); assert.equal(d.classification, 'parity-harness-defect');
+    assert.equal(d.reviewedCases.length, d.occurrences);
+    for (const flag of ['computedCandidateVerified', 'descendantCaretVerified', 'finalRasterVerified']) assert.equal(d.reviewEvidence[flag], false);
+  }
+  assert.ok(audit.discrepancies.some(d => d.attribution === 'reviewed-field-host-typography-token-omission'));
+  assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => e.includes('container caret')), []);
+  assert.equal(JSON.stringify(raw), before);
+});
+
+test('container caret rejects local or ancestor overrides and incomplete source evidence', () => {
+  for (const [index, mutate] of [
+    e => { e.inputTrees.reference.nodes[1].inline['caret-color'] = { value: 'auto', important: false }; },
+    e => { e.inputTrees.reference.nodes[0].attributes.style = 'caret-color:transparent'; },
+    e => { e.inputTrees.reference.rules[0].declarations['caret-color'] = { value: 'auto', important: false }; },
+    e => { e.inputTrees.reference.styles[0].caretColor = 'rgb(1, 2, 3)'; },
+    e => { delete e.inputTrees.reference.styles[e.inputTrees.reference.nodes[1].style].caretColor; },
+    e => { e.inputTrees.astylar.rules[0].caretColor = 'auto'; },
+    e => { e.inputTrees.astylar.nodes[2].authored.style = { caretColor: 'auto' }; },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(section)', caretColor: 'transparent' }); },
+    e => { e.inputTrees.astylar.nodes[1].normalResolvedStyle.caretColor = 'auto'; },
+    e => { e.inputTrees.astylar.nodes[2].interactionResolvedStyle.caretColor = '#1d1b20'; },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'fixture'; },
+    e => { e.inputTrees.astylar.nodes[2].parent = 'root'; },
+  ].entries()) {
+    const raw = containerCaretReport(); mutate(raw.results[0]); const audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.containerCaretInputs.length, 0, `mutation ${index}`);
+    assert.equal(audit.discrepancies.some(d => d.attribution === 'reviewed-container-caret-color-declaration-stage'), false);
+  }
+});
+
+test('container caret rejects scalar changes and forged computed or painted claims', () => {
+  for (const mutate of [i => { i.reference.caretColor = 'red'; }, i => { i.astylar.caretColor = 'auto'; },
+    i => { delete i.astylarNormalResolvedStyle; }, i => { i.astylarResolvedStyleEvidenceVersion = 1; },
+    i => { i.referenceAuthored[0].declarations['caret-color'] = { value: 'auto', important: false }; },
+    i => { i.astylarAuthored[0].declarations.caretColor = 'auto'; }]) {
+    const raw = containerCaretReport(); mutate(raw.results[0].styleInputs[0]);
+    assert.equal(buildMaterialInputAudit(raw).discrepancies.some(d => d.attribution === 'reviewed-container-caret-color-declaration-stage'), false);
+  }
+  const audit = buildMaterialInputAudit(containerCaretReport());
+  for (const mutate of [a => { a.containerCaretInputs[0].descendantCaretVerified = true; },
+    a => { a.containerCaretInputs[0].candidatePath[0].normal.caretColor = 'auto'; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-container-caret-color-declaration-stage').classification = 'equivalent-representation'; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-container-caret-color-declaration-stage').reviewedCases = []; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-container-caret-color-declaration-stage').astylar = 'auto'; }]) {
+    const copy = structuredClone(audit); mutate(copy);
+    assert.ok(validateMaterialInputAudit(copy, { requireComplete: false }).some(e => e.includes('container caret')));
+  }
+});
+
 function fieldColorReport(family = 'autocomplete', dark = false, size = '16px') {
   const raw = fieldHostTypographyReport(family, size), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
   const color = dark ? '#e6e1e5' : '#1d1b20';
@@ -10649,6 +10719,76 @@ test('root typography scalar and report tampering cannot manufacture computed eq
     const report = structuredClone(base); mutate(report);
     assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => /root typography/.test(e)));
   }
+});
+
+test('container caret case index links every root and field observation without claiming editable caret paint', async () => {
+  const { readFileSync } = await import('node:fs'), { createHash } = await import('node:crypto');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const index = JSON.parse(readFileSync('docs/material-container-caret-audit.json', 'utf8'));
+  const bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
+  assert.equal(index.sourceFingerprints.length, 11);
+  for (const s of index.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replace(/\r\n/g, '\n')), s.sha256, s.file);
+  const sources = index.caseSources.map(s => {
+    const value = JSON.parse(readFileSync(s.file, 'utf8'));
+    assert.deepEqual(value.capture, index.capture); assert.equal(value.groups.length, s.groupCount); return value;
+  });
+  const covered = new Map(), groupLinks = new Set();
+  for (const g of index.groups) {
+    assert.equal(g.property, 'caretColor'); assert.equal(g.candidate, '<omitted>'); assert.equal(g.classification, 'parity-harness-defect');
+    const link = `${g.sourceIndex}:${g.sourceGroupIndex}`; assert.equal(groupLinks.has(link), false); groupLinks.add(link);
+    const source = sources[g.sourceIndex].groups[g.sourceGroupIndex];
+    for (const key of ['family', 'element', 'reference', 'candidate', 'occurrences']) assert.equal(g[key], source[key]);
+    assert.equal(source.reviewedCases.length, g.occurrences);
+    for (const key of source.reviewedCases) {
+      const id = `${key}/${g.element}`; assert.equal(covered.has(id), false); covered.set(id, g);
+    }
+  }
+  const affects = d => Object.keys(d).some(k => ['caretcolor', 'all'].includes(k.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(k));
+  const raw = JSON.parse(bytes), expected = [], fields = ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'];
+  let treeCount = 0;
+  for (const [kind, entries] of [['static', raw.results], ['interaction', raw.interactions]]) for (const e of entries) {
+    const key = `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? `/${e.state}` : ''}`;
+    const ids = [`${e.family}-root`, ...(fields.includes(e.family) ? [`${e.family}-primary`] : [])], trees = {};
+    for (const side of ['reference', 'astylar']) {
+      const f = e.inputTrees[side], bytes = readFileSync(f.file); assert.equal(hash(bytes), f.sha256); trees[side] = JSON.parse(bytes); treeCount++;
+    }
+    for (const id of ids) {
+      const caseId = `${key}/${id}`, g = covered.get(caseId); expected.push(caseId); assert.ok(g, caseId);
+      const browser = e.profile === 'dark' ? 'rgb(230, 225, 229)' : 'rgb(29, 27, 32)';
+      assert.equal(g.reference, e.profile === 'dark' ? 'rgba(230,225,229,1)' : 'rgba(29,27,32,1)');
+      const input = e.styleInputs.find(i => i.id === id); assert.equal(input.reference.caretColor, browser);
+      assert.equal(input.reference.caretColor, input.reference.color);
+      for (const stage of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle']) assert.equal(affects(input[stage]), false);
+      for (const rules of [input.referenceAuthored, input.astylarAuthored]) assert.ok(rules.every(r => !affects(r.declarations)));
+      for (const side of ['reference', 'astylar']) {
+        const t = trees[side], matches = t.nodes.filter(n => (side === 'reference' ? n.attributes?.id : n.authored?.id) === id);
+        assert.equal(matches.length, 1); let n = matches[0], depth = 0;
+        while (n && (side === 'reference' || n.authored.type)) {
+          depth++;
+          if (side === 'reference') {
+            assert.equal(t.styles[n.style].caretColor, browser); assert.equal(affects(n.inline), false);
+            assert.ok(n.rules.every(i => !affects(t.rules[i].declarations)));
+            assert.doesNotMatch(n.attributes?.style ?? '', /(?:^|;)\s*(?:caret-color|all|animation[^:]*|transition[^:]*)\s*:/i);
+          } else {
+            assert.equal(affects(n.authored.style ?? {}), false);
+            for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.equal(affects(n[stage]), false);
+            // The sole captured caret declaration belongs to a different control,
+            // never these container ancestors. Any new rule requires review.
+            for (const r of t.rules.filter(affects)) {
+              assert.equal(r.selector, '.select-control, .select-control:focus');
+              assert.equal(String(n.authored.class ?? '').split(/\s+/).includes('select-control'), false);
+            }
+          }
+          n = t.nodes.find(p => p.key === n.parent);
+        }
+        assert.equal(depth, id.endsWith('-root') ? 2 : 3);
+      }
+    }
+  }
+  assert.deepEqual([...covered.keys()].sort(), expected.sort()); assert.equal(covered.size, 2888); assert.equal(index.caseCount, 2888);
+  assert.equal(treeCount, 4622); assert.equal(groupLinks.size, 84); assert.equal(index.groupCount, 84);
+  assert.deepEqual([...groupLinks].sort(), sources.flatMap((s, i) => s.groups.map((_, j) => `${i}:${j}`)).sort());
+  for (const flag of ['computedCandidateVerified', 'descendantCaretVerified', 'finalRasterVerified']) assert.equal(index.verification[flag], false);
 });
 
 test('root box model case index links all companion declarations without duplicating or sampling boundaries', async () => {

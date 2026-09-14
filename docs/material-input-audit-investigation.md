@@ -3,6 +3,56 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Container caret-color diagnostics do not establish editable caret rendering
+
+The [container caret index](material-container-caret-audit.json) links **84
+groups / 2,888 observations** to the existing complete root-color and field-host
+color case lists. The root sections and field hosts omit local caret-color
+requests on both sides. Their captured browser ancestry computes caret color
+from the independently verified ink; all three candidate declaration stages
+preserve omission. This establishes a diagnostic-stage mismatch, not a missing
+authored caret value or correct editable-control rendering.
+
+The attribution independently checks the full captured ancestor paths for
+caret/all/motion declarations. Scalar-stage changes, ancestor overrides,
+incomplete evidence and forged computed/paint claims reject attribution.
+The raw case-index proof verifies all **4,622 tree hashes**, every linked case,
+and eleven source fingerprints. The candidate's explicit transparent caret
+rule belongs to `.select-control`, which is not any of these ancestors; the
+test rejects additional potentially relevant caret rules rather than silently
+assuming that local omission implies no inherited request.
+
+The public inspection contract at `src/lib/astylar-surface.ts:41` exposes
+declarations, not painted caret values. The control style path at
+`src/app/services/dom/input/text-input.manager.ts:1277` accepts an explicit
+caret color or `auto`; source inspection does not establish whether the
+correct path executes or paints correctly in a particular state. Initial
+source `2f44011` already omits caret color on the shared root and field-shell
+rules. This is source-history evidence, not a runtime bisect.
+
+A browser sensitivity test at DPR1/2 demonstrates why the distinction matters:
+an input with different ink computes a different caret color from its container;
+an explicit ancestor caret color inherits until the input overrides it with
+`auto`. Restoring omissions restores the original observations. This test
+proves computed-style behavior only, not visible pixels, focus or placement.
+The existing empty-input caret, selection and descendant override findings
+remain independent. Do not add fixture-only caret colors to erase this
+diagnostic difference; compare corresponding stages or expose computed values
+separately during future implementation.
+
+The combined diagnostic and raw-index checks pass **16/16**, **3,484,225.6804
+ms**, with no failures, skips or cancellations. The command is recorded in
+the machine index. The earlier focused caret checks pass **3/3** and browser
+sensitivity check **1/1**, with commands/results retained there. Full replay
+with all four supplemental sources exits 0: **2,888 proofs / 84 groups / 2,888
+occurrences**, with exact linked case-set agreement. Raw **8,143 groups /
+380,520 occurrences**, classifications, 131 source findings and 98 source
+fingerprints remain unchanged. Strict validation still reports **2,576
+unresolved style groups**, down from 2,660, and no other strict errors.
+Full harness verification is pending. No production renderer or canonical
+comparison inputs were changed, and this finding does not establish complete
+input equivalence or final enforced parity.
+
 ## Root box-model changes belong to the fixed-height authoring path
 
 The `companionBoxModel` section of the [root-height index](material-root-height-audit.json)

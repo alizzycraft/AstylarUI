@@ -10,7 +10,7 @@
   "sourceFingerprints": [
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "1b87e7fa26e9c2b5d3767fb8626bd991eef1b4959cb3cb62684649914459d50b"
+      "sha256": "eb21202a51a4945f6a49e726417b5e7996bdbca9551c5299411a4220e14911c1"
     },
     {
       "file": "tests/material-parity/root-typography-input-evidence.mjs",
@@ -38,7 +38,7 @@
     },
     {
       "file": "tests/material-parity/input-tree-evidence.spec.mjs",
-      "sha256": "3071b867be5f036f3911d1c97eec244b873da58b50096615d5004b84cf2bb6d9"
+      "sha256": "71c242b2f5e151b324b6bfc7de038bef1cd492931e9d8e71bf286533a12262b2"
     },
     {
       "file": "tests/material-parity/input-equivalence-policy.mjs",

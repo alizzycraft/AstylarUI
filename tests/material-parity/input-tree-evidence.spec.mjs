@@ -3,6 +3,30 @@ import test from 'node:test';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 
+test('container caret computed color does not prove descendant caret ownership', async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    for (const deviceScaleFactor of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 640, height: 400 }, deviceScaleFactor });
+      try {
+        await page.setContent('<main id="frame" style="color:rgb(29,27,32)"><section id="host"><input id="edit" style="color:rgb(17,34,51)"></section></main>');
+        const result = await page.evaluate(() => {
+          const frame = document.getElementById('frame'), edit = document.getElementById('edit');
+          const read = () => ['frame', 'host', 'edit'].map(id => getComputedStyle(document.getElementById(id)).caretColor);
+          const initial = read(); frame.style.caretColor = 'rgb(200,10,20)'; const inherited = read();
+          edit.style.caretColor = 'auto'; const overridden = read();
+          frame.style.removeProperty('caret-color'); edit.style.removeProperty('caret-color');
+          return { initial, inherited, overridden, restored: read() };
+        });
+        assert.deepEqual(result.initial, ['rgb(29, 27, 32)', 'rgb(29, 27, 32)', 'rgb(17, 34, 51)']);
+        assert.deepEqual(result.inherited, ['rgb(200, 10, 20)', 'rgb(200, 10, 20)', 'rgb(200, 10, 20)']);
+        assert.deepEqual(result.overridden, ['rgb(200, 10, 20)', 'rgb(200, 10, 20)', 'rgb(17, 34, 51)']);
+        assert.deepEqual(result.restored, result.initial);
+      } finally { await page.close(); }
+    }
+  } finally { await browser.close(); }
+});
+
 test('matching section boxes do not make fixed height equivalent to content-driven authoring', async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {
