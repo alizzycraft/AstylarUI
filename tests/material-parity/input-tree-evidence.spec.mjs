@@ -3,6 +3,43 @@ import test from 'node:test';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from './input-tree-evidence.mjs';
 
+test('captured Material scalar collector skips layer rules that full-tree capture retains', async () => {
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8');
+  const start = source.indexOf('    function matchedAuthoredStyles(element) {');
+  const end = source.indexOf('\n    return { elements, semantics };', start);
+  assert.ok(start >= 0 && end > start);
+  const collectorSource = source.slice(start, end).trim();
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage();
+    await page.setContent(`<style>
+      .target { display: flex; }
+      @layer cdk-overlay { .target { z-index: 1000; } }
+      @media (min-width: 1px) { .target { position: absolute; } }
+      @supports (display: grid) { .target { width: 120px; } }
+    </style><app-reference><main class="frame"><div class="target" style="height:40px">Proof</div></main></app-reference>`);
+    const scalar = await page.evaluate(source => {
+      const collect = new Function(`${source}; return matchedAuthoredStyles;`)();
+      const element = document.querySelector('.target');
+      return { rules: collect(element), computedZIndex: getComputedStyle(element).zIndex,
+        ruleTypes: [...document.styleSheets[0].cssRules].map(r => r.constructor.name) };
+    }, collectorSource);
+    const tree = await page.evaluate(captureBrowserInputTree, { styleProperties: ['zIndex', 'width', 'height'] });
+    const node = tree.nodes.find(n => n.attributes.class === 'target');
+    assert.equal(scalar.computedZIndex, '1000');
+    assert.ok(scalar.ruleTypes.includes('CSSLayerBlockRule'));
+    assert.equal(scalar.rules.some(r => r.declarations['z-index']), false, 'preserve the current scalar-collector defect');
+    for (const prop of ['display', 'position', 'width', 'height']) assert.ok(scalar.rules.some(r => r.declarations[prop]), prop);
+    const rule = node.rules.map(i => tree.rules[i]).find(r => r.declarations['z-index']);
+    assert.equal(rule.source, 'sheet:0/1/0');
+    assert.equal(rule.active, true);
+    assert.deepEqual(rule.declarations['z-index'], { value: '1000', important: false });
+    assert.equal(tree.styles[node.style].zIndex, '1000');
+    assert.deepEqual(tree.errors, []);
+  } finally { await browser.close(); }
+});
+
 test('browser omitted overflow equals visible only when both axes retain their initial values', async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {

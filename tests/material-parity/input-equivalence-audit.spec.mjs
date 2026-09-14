@@ -11046,6 +11046,148 @@ test('appearance public proof preserves control sensitivity and does not waive p
   assert.equal(evidence.build.exitCode, 0);
 });
 
+test('generated node mapping binds active stepper panels and aliases without changing inputs', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { checkGeneratedMappingPair } = await import('./generated-node-mapping-evidence.mjs');
+  const report = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
+  for (const [family, element, state] of [['badge', 'badge-count', null], ['stepper', 'stepper-content', null],
+    ['stepper', 'stepper-content', 'activate'], ['tooltip', 'tooltip-popup', 'hover'], ['snack-bar', 'snack-bar-surface', 'activate']]) {
+    const entry = (state ? report.interactions : report.results).find(e => e.family === family && (!state || e.state === state));
+    const reference = JSON.parse(readFileSync(entry.inputTrees.reference.file)), candidate = JSON.parse(readFileSync(entry.inputTrees.astylar.file));
+    const before = JSON.stringify([reference, candidate, entry]);
+    const proof = checkGeneratedMappingPair(entry, reference, candidate, element);
+    assert.equal(proof.status, 'mapped', JSON.stringify(proof.errors));
+    assert.equal(proof.checkedReferenceProperties, 89);
+    assert.equal(proof.inputEquivalent, false);
+    assert.equal(JSON.stringify([reference, candidate, entry]), before);
+    if (family === 'stepper') {
+      assert.equal(proof.rejected.length, 1);
+      assert.equal(proof.ownText, state ? 'Review changes' : 'Project details');
+      assert.ok(proof.owners.some(o => o.attributes['aria-selected'] === 'true'));
+    }
+  }
+});
+
+test('generated node mapping rejects ambiguous aliases, wrong owners and unsupported stepper states', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { resolveGeneratedReferenceNode } = await import('./generated-node-mapping-evidence.mjs');
+  const tree = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/stepper/light/desktop/reference-input-tree.json'));
+  const content = t => t.nodes.find(n => n.attributes?.['data-parity-id'] === 'stepper-content');
+  const panel = t => t.nodes.find(n => n.key === content(t).parent);
+  const header = t => t.nodes.find(n => n.attributes?.id === panel(t).attributes['aria-labelledby']);
+  const mutations = [
+    t => t.nodes.push(structuredClone(content(t))),
+    t => { content(t).attributes.id = 'stepper-content'; },
+    t => { panel(t).attributes.role = 'region'; },
+    t => { panel(t).attributes.inert = ''; },
+    t => { header(t).attributes['aria-selected'] = 'false'; },
+    t => { header(t).attributes['aria-controls'] = 'other'; },
+    t => { t.styles[panel(t).style].height = '0px'; },
+    t => { t.styles[content(t).style].visibility = 'hidden'; },
+    t => { content(t).parent = content(t).key; },
+    t => { t.nodes.find(n => n.attributes?.id === 'stepper-primary').type = 'div'; },
+    t => { t.nodes.find(n => n.attributes?.id === 'stepper-primary').parent = 'missing'; },
+    t => { t.errors.push('unreadable rules'); },
+    t => { delete t.styles; },
+    t => { delete t.rules; },
+  ];
+  for (const [i, mutate] of mutations.entries()) {
+    const changed = structuredClone(tree); mutate(changed);
+    assert.equal(resolveGeneratedReferenceNode(changed, 'stepper-content', 'stepper').status, 'unresolved', `mutation ${i}`);
+  }
+  const overlay = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/desktop-dpr1/hover/reference-input-tree.json'));
+  const popup = t => t.nodes.find(n => String(n.attributes?.class).includes('mat-mdc-tooltip-surface'));
+  for (const mutate of [
+    t => { const n = structuredClone(popup(t)); n.key += '/duplicate'; t.nodes.push(n); },
+    t => { popup(t).attributes['data-parity-id'] = 'tooltip-popup'; },
+    t => { popup(t).parent = 'frame'; },
+    t => { t.nodes.find(n => n.type === 'mat-tooltip-component').type = 'div'; },
+    t => { t.nodes.find(n => n.key === 'overlay:0').parent = 'frame'; },
+  ]) {
+    const changed = structuredClone(overlay); mutate(changed);
+    assert.equal(resolveGeneratedReferenceNode(changed, 'tooltip-popup', 'tooltip').status, 'unresolved');
+  }
+  assert.equal(resolveGeneratedReferenceNode(overlay, 'tooltip-popup', 'snack-bar').status, 'unresolved');
+});
+
+test('generated node mapping independently rejects scalar style, rule, text and candidate-stage mutations', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { checkGeneratedMappingPair } = await import('./generated-node-mapping-evidence.mjs');
+  const report = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
+  const entry = report.results.find(e => e.family === 'badge');
+  const ref = JSON.parse(readFileSync(entry.inputTrees.reference.file)), ast = JSON.parse(readFileSync(entry.inputTrees.astylar.file));
+  const input = e => e.styleInputs.find(i => i.id === 'badge-count');
+  for (const mutate of [
+    e => { input(e).reference.width = '999px'; },
+    e => { input(e).referenceStructure.text = 'wrong'; },
+    e => { input(e).referenceAuthored.pop(); },
+    e => { input(e).astylarResolvedStyleEvidenceVersion = 1; input(e).astylarNormalResolvedStyle = null; },
+    e => { input(e).astylarInteractionResolvedStyle.appearance = 'none'; },
+    e => { input(e).astylar.width = '999px'; },
+    e => { e.styleInputs.push(structuredClone(input(e))); },
+  ]) {
+    const changed = structuredClone(entry); mutate(changed);
+    assert.equal(checkGeneratedMappingPair(changed, ref, ast, 'badge-count').status, 'unresolved');
+  }
+  for (const mutate of [a => { a.resolvedStyleSource = 'inferred'; }, a => { a.resolvedStyleRevision = -1; },
+    a => { a.nodes.push(structuredClone(a.nodes.find(n => n.authored?.id === 'badge-count'))); }]) {
+    const changed = structuredClone(ast); mutate(changed);
+    assert.equal(checkGeneratedMappingPair(entry, ref, changed, 'badge-count').status, 'unresolved');
+  }
+});
+
+test('generated mapping case index preserves all boundaries, missing layer rules and one-sided tooltip states', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createHash } = await import('node:crypto');
+  const { buildGeneratedMappingAudit } = await import('./generated-node-mapping-evidence.mjs');
+  const index = JSON.parse(readFileSync('docs/material-generated-node-mapping-audit.json'));
+  for (const source of index.sourceFingerprints) assert.equal(createHash('sha256')
+    .update(readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), source.sha256, source.file);
+  const bytes = readFileSync(index.mainCapture.file);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), index.mainCapture.sha256);
+  const raw = JSON.parse(bytes), replay = buildGeneratedMappingAudit(raw);
+  assert.deepEqual(index.summary, replay.summary);
+  assert.deepEqual(index.observations, replay.observations);
+  assert.deepEqual(replay.summary, { observations: 387, scalarObservations: 239, mapped: 172,
+    unresolvedWithScalar: 67, pairedScalarObservations: 231, unresolvedPairedScalar: 59,
+    oneSidedScalar: 8, boundariesWithoutScalar: 148 });
+  const propsSource = readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8')
+    .match(/const materialStyleInputProperties = Object\.freeze\(\[([\s\S]*?)\]\);/)[1];
+  const expectedProperties = [...propsSource.matchAll(/'([^']+)'/g)].map(m => m[1]).sort();
+  assert.equal(expectedProperties.length, 89);
+  for (const entry of [...raw.results, ...raw.interactions]) for (const input of entry.styleInputs) {
+    if (input.reference) assert.deepEqual(Object.keys(input.reference).sort(), expectedProperties);
+  }
+  const gaps = replay.observations.filter(o => o.referenceScalarPresent && o.candidateScalarPresent && o.status !== 'mapped');
+  assert.equal(gaps.length, 59);
+  for (const gap of gaps) {
+    assert.ok(['bottom-sheet-overlay', 'snack-bar-overlay'].includes(gap.element));
+    assert.deepEqual(gap.errors, ['reference scalar authored rules differ from selected tree node']);
+    assert.deepEqual(gap.missingScalarRules, [{ selector: '.cdk-global-overlay-wrapper',
+      declarations: { 'z-index': { value: '1000', important: false } } }]);
+    assert.deepEqual(gap.extraScalarRules, []);
+  }
+  const oneSided = replay.observations.filter(o => o.referenceScalarPresent !== o.candidateScalarPresent);
+  assert.equal(oneSided.length, 8);
+  for (const observation of oneSided) {
+    assert.equal(observation.element, 'tooltip-popup'); assert.ok(observation.case.endsWith('/open'));
+    assert.equal(observation.referenceScalarPresent, false); assert.equal(observation.candidateKeys.length, 1);
+    assert.equal(observation.reason, 'alias absent in captured roots');
+  }
+  assert.ok(replay.observations.filter(o => o.scalarCount === 0).every(o => o.candidateKeys.length === 0));
+  for (const mutate of [o => o.pop(), o => { o[0].status = 'unresolved'; },
+    o => { o.find(r => r.missingScalarRules?.length).missingScalarRules = []; },
+    o => { o.find(r => r.scalarCount && !r.referenceScalarPresent).referenceScalarPresent = true; }]) {
+    const copy = structuredClone(index.observations); mutate(copy);
+    assert.throws(() => assert.deepEqual(copy, replay.observations));
+  }
+  const broken = structuredClone(raw.results.find(e => e.family === 'badge'));
+  broken.inputTrees.reference.file = 'package.json';
+  assert.throws(() => buildGeneratedMappingAudit({ results: [broken], interactions: [] }), /outside Material artifacts/);
+  broken.inputTrees.reference = { ...raw.results.find(e => e.family === 'badge').inputTrees.reference, sha256: '0'.repeat(64) };
+  assert.throws(() => buildGeneratedMappingAudit({ results: [broken], interactions: [] }), /hash mismatch/);
+});
+
 test('full-tree artifact references cannot escape the captured Material artifact directory', () => {
   const result = collectFullTreeInventory([{ family: 'core', profile: 'light', viewport: { id: 'desktop' },
     inputTrees: { reference: { file: 'package.json', sha256: 'irrelevant' } },

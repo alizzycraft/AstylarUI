@@ -3,6 +3,82 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Generated mappings expose omitted scalar CSS-layer evidence
+
+The [generated-node mapping index](material-generated-node-mapping-audit.json)
+replays **387 main-matrix boundaries** for six previously excluded targets.
+It verifies raw tree digests, exact generated selector/owner chains, active
+stepper panel/header linkage, and independent scalar/tree consistency. It
+does not substitute text matching for identity or infer rendering equivalence.
+
+**172 mappings pass**: 52 badge-count, 68 stepper-content, 34 snackbar-surface
+and 18 tooltip-popup. Both stepper contents retain their authored comparison
+ID; the selected tab's aria-controls/aria-labelledby linkage, current panel,
+positive panel dimensions and visibility identify one active span. The other
+panel is inert, hidden and zero-height. Both first and second selected steps
+are covered. Generated overlays must belong to their matching Material
+component and CDK overlay container, not merely share a class somewhere.
+
+**59 paired captures expose a confirmed scalar-collector defect**, not a core
+renderer defect: 25 bottom-sheet-overlay and 34 snack-bar-overlay. The full
+tree retains `.cdk-global-overlay-wrapper { z-index:1000 }` at `sheet:8/5/0`;
+the scalar authored-rule list omits it, even though all 89 computed properties
+agree with the selected node. Installed CDK places this declaration inside
+`@layer cdk-overlay`. `matchedAuthoredStyles` in
+`tests/material-parity/run-material-parity.mjs:1405–1420` recurses through media
+and supports rules only, then skips rules that are not CSSStyleRule instances.
+The full-tree collector instead visits nested cssRules. Source history shows
+this limitation in its introducing commit `6948211`; no historical runtime
+bisect is claimed.
+
+A real-Chrome minimal proof evaluates the **actual current scalar function**
+extracted from its source, alongside `captureBrowserInputTree`. Ordinary,
+media, supports and inline declarations are retained; the active layer's
+z-index is absent only from the scalar authored list. The browser computes
+1000, and the full tree retains its original declaration and nested source
+path. This preserves a demonstrated failure, not a passing parity claim.
+The full tree itself does not capture explicit layer names/order; arbitrary
+layer precedence must not be inferred from a nested numeric path alone.
+
+A separate whole-main-matrix sweep verified **2,311 reference tree hashes**
+and checked **6,496 uniquely ID-mapped scalar observations**: none omitted an
+active rule retained by their matching full-tree node. The exact command and
+result are in the index. This bounds the observed rule-loss evidence; it does
+not certify generated aliases, duplicate IDs, inline declarations, cascade
+ordering or equivalent output. The 59 generated-overlay failures remain real.
+
+**Eight further observations are the already-proven tooltip/open state
+mismatch**, not additional layer failures: only the candidate has a popup in
+both scalar and tree evidence. They remain linked to
+`fixture-tooltip-benchmark-click-forces-open` and
+`harness-tooltip-open-popup-checks-omitted`. The remaining **148 boundaries**
+have neither mapped scalar input nor a candidate node for these targets;
+their absent reference aliases remain explicit rather than counted as mapped.
+
+### Next owning-boundary actions
+
+1. Repair scalar grouping-rule capture with explicit condition/layer evidence
+   and readable-sheet error handling. Do not change CDK CSS or candidate z-index
+   to compensate for an incomplete authored-rule list.
+2. Rebind or recapture affected inputs with provenance and preserve the frozen
+   baseline. Do not silently backfill the missing rule into old scalar data.
+3. Extend property-level attribution using verified mappings only when each
+   property's own guards pass. Badge transitions and other motion/reset rules
+   still prevent the existing conservative appearance proof from applying.
+4. Keep the eight tooltip-open failures visible in subsequent acceptance;
+   removing or renaming the scenario is not a fix.
+
+Focused mapping tests reject ambiguous aliases, broken owner/header links,
+unsupported states, cycles, stale core evidence, altered scalar styles/rules/
+text, and changed candidate declaration stages. The initial combined mapping
+and real-browser proof passed **4/4**, exit 0, **2.714 seconds**. The case index
+also binds every boundary and all source/tree hashes.
+The combined replay/index/real-browser run passed **5/5**, exit 0,
+**4.691 seconds**, including raw artifact verification and rejection of corrupt
+indices, outside-artifact paths and mismatched digests. This increment changes
+audit evidence only: the main strict audit still has **2,885 unresolved
+attributions**, and the complete enforced rendering matrix remains required.
+
 ## Material buttons: omitted explicit CSS appearance reset
 
 The [button appearance case index](material-button-appearance-audit.json)
