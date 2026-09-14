@@ -1362,7 +1362,17 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 88);
+  assert.equal(audit.sourceFingerprints.length, 90);
+  for (const file of ['examples/material-showcase/src/app/font-relative-box-audit.spec.ts',
+    'examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js'])
+    assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
+  const fontBox = audit.sourceFindings.find(entry => entry.id === 'core-em-box-size-uses-uncomputed-font');
+  assert.equal(fontBox?.detected, true);
+  assert.equal(fontBox?.classification, 'confirmed-core-renderer-defect');
+  assert.match(fontBox.owner, /core.*CSS font-relative used-size/);
+  assert.match(fontBox.introducedBy, /21bdab9.*no historical runtime bisect/);
+  assert.ok(audit.focusedProofs.some(entry => entry.file === fontBox.focusedProof && entry.line > 0 && entry.status !== 'missing'));
+  assert.ok(audit.implementationPlan.some(entry => entry.priority === 3.45 && /computed CSS font/.test(entry.action)));
   assert.ok(audit.sourceFingerprints.some(p => p.file === 'tests/material-parity/chip-host-typography-evidence.mjs'));
   for (const file of ['src/lib/astylar-interaction-runtime.ts', 'src/lib/astylar-semantic-bridge.ts',
     'scripts/audit-button-pointer-focus.mjs', 'examples/material-showcase/audit/button-pointer-focus.mjs',

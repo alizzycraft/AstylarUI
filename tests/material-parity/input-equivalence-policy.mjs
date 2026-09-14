@@ -660,6 +660,16 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'The 104-boundary light/dark DPR 1/2 navigation capture preserves 48 cases with unequal native disabled inputs. Material keeps the native navigation button enabled while exposing aria-disabled and tabIndex:-1, and explicitly guards its click handler. Candidate authors native disabled at the first/last boundaries. Correct range guards do not establish equivalent focus retention or event behavior. Restore equivalent inputs through public APIs, then reduce any unsupported disabled-interactive semantics; do not force focus with a paginator-specific workaround. Forty of 44 focus mismatches coincide with unequal native-disabled inputs, while the enabled held mismatch has a separate minimal core proof.',
   }),
   Object.freeze({
+    id: 'core-em-box-size-uses-uncomputed-font',
+    introducedBy: '21bdab9e930783efb5cf34ab031fd04f2656155b introduced raw local font parsing for em dimensions; source history only, no historical runtime bisect',
+    file: 'src/app/services/dom/elements/element-dimension.service.ts',
+    pattern: String.raw`const elementFontSize = Math\.max\(0, parseFloat`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core computed typography and CSS font-relative used-size resolution',
+    justification: 'Two public-package browser runs each retain six equal-input em box failures and four passing explicit-font/pixel-box controls. With inherited 24/32px fonts, 2em by 1em boxes become 32 by 16px. With fontSize 1.5em they become 3 by 1.5px; with 150% they become 300 by 150px, although independent retained text correctly resolves to 36/48px. ElementDimensionService parses the local font declaration or substitutes 16px before em multiplication, separately from its inherited computed text path. Existing font-relative-units coverage supplies explicit pixel font sizes and cannot detect this gap. Share computed CSS font values before resolving lengths; do not insert pixel fonts, replace em dimensions, or repair projection in a plugin. This reduction does not attribute unrelated captured Material omissions or prove other relative-length properties, update behavior or final raster.',
+    focusedProof: 'examples/material-showcase/src/app/font-relative-box-audit.spec.ts',
+  }),
+  Object.freeze({
     id: 'core-enabled-held-focus-delays-native-mirror',
     introducedBy: 'dbe4d8ed introduced transaction suppression; no historical runtime bisect performed',
     file: 'src/lib/astylar.ts',
