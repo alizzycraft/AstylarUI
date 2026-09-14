@@ -3,6 +3,37 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Caret-color scalar suppression is an audit blind spot (correction pending)
+
+The [caret-color omission investigation](material-caret-color-omission-audit.json)
+identifies a separate unsafe shortcut at `input-equivalence-audit.mjs:1776`:
+when browser computed caret color equals candidate text color, an omitted
+candidate caret declaration disappears before ancestry review. The fallback
+classifier at line 1612 repeats the same assumption. A synthetic explicit
+reference `caret-color:auto` request is suppressed even without candidate
+ancestry evidence. The input remains unmodified; the report remains incomplete.
+
+At **DPR1 and DPR2**, two browser inputs with equal blue text initially have
+equal blue caret colors. After their parent requests red caret color, explicit
+auto stays blue while omission inherits red; removing the ancestor request
+restores the initial observation. This confirms why text-color equality alone
+cannot prove caret equivalence. It does not establish Astylar's computed or
+painted caret behavior.
+
+Two identical read-only survey runs exit **0**. Across all **2,311 cases**, the
+actual audit builder suppresses **10 of 37 observed value pairs**, affecting
+**25 element groups / 1,371 occurrences**. Full sorted case-list hashes and raw
+values are recorded. None has a direct captured scalar caret/all request;
+ancestor declarations, scalar capture limitations and state coverage still
+require review. These counts describe audit exposure, not confirmed rendering
+defects. The existing guarded container-caret evidence remains separate.
+
+History traces the filter to `5e3ac33a`; `6dae8bd6` narrowed the fallback
+classifier to matching text color without addressing inheritance. Next add a
+retention regression, correct both shortcuts, and replay every exposed case
+without default injection or fixture edits. The verified **2,499 unresolved**
+baseline is unchanged by this documentation-only investigation.
+
 ## Guarded root line-height attribution (full replay verified)
 
 The root initial-style collector now also records `lineHeight: normal` versus

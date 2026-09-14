@@ -1,0 +1,856 @@
+{
+  "schemaVersion": 1,
+  "findingId": "audit-caret-color-omission-suppression",
+  "classification": "parity-harness-defect",
+  "status": "confirmed-audit-blind-spot; correction-and-full-replay-pending",
+  "scope": "A scalar text-color match suppresses a computed caret-color/local-omission observation without authored-request or inherited-caret evidence. Exposure population is not a count of renderer or authoring defects.",
+  "sourceLocations": [
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "line": 1776,
+      "role": "equivalentValue drops the observation before independent ancestry attribution"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "line": 1612,
+      "role": "classifyStyleDifference independently claims omitted caret color follows text color"
+    }
+  ],
+  "history": [
+    {
+      "commit": "5e3ac33a",
+      "evidence": "git show and git blame: initial audit introduces the text-color equality filter and an even broader omitted-caret equivalence classification."
+    },
+    {
+      "commit": "6dae8bd6",
+      "evidence": "git blame: adds the reference/text-color equality condition to the classifier; the unconditional inherited-caret assumption remains. Source-history evidence, not a runtime bisect."
+    }
+  ],
+  "evidence": {
+    "scope": "Audit suppression and browser computed-style sensitivity only; not candidate runtime or caret raster proof",
+    "capture": {
+      "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+      "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+    },
+    "sourceFingerprints": [
+      {
+        "file": "tests/material-parity/input-equivalence-audit.mjs",
+        "sha256": "c97a8ef327bc2d4a82150dc9ea80866321ae7c722b122d521010a475906c5dd9"
+      },
+      {
+        "file": "tests/material-parity/input-tree-evidence.spec.mjs",
+        "sha256": "c2d0884f99fc4e1f41ac65d22b95643c8785f4fb7a339a47746bf31fe91344b3"
+      }
+    ],
+    "caseCount": 2311,
+    "pairProbes": [
+      {
+        "id": "probe-0",
+        "reference": "rgb(29, 27, 32)",
+        "suppressed": false
+      },
+      {
+        "id": "probe-1",
+        "reference": "rgb(255, 255, 255)",
+        "candidateColor": "#ffffff",
+        "suppressed": true
+      },
+      {
+        "id": "probe-2",
+        "reference": "rgb(230, 225, 229)",
+        "suppressed": false
+      },
+      {
+        "id": "probe-3",
+        "reference": "rgb(0, 0, 0)",
+        "candidateColor": "#000000",
+        "suppressed": true
+      },
+      {
+        "id": "probe-4",
+        "reference": "rgb(29, 27, 32)",
+        "candidateColor": "#1d1b20",
+        "suppressed": true
+      },
+      {
+        "id": "probe-5",
+        "reference": "rgb(230, 225, 229)",
+        "candidateColor": "#e6e1e5",
+        "suppressed": true
+      },
+      {
+        "id": "probe-6",
+        "reference": "rgb(29, 27, 30)",
+        "suppressed": false
+      },
+      {
+        "id": "probe-7",
+        "reference": "rgb(103, 80, 164)",
+        "candidateColor": "#6750a4",
+        "suppressed": true
+      },
+      {
+        "id": "probe-8",
+        "reference": "rgb(208, 188, 255)",
+        "candidateColor": "#d0bcff",
+        "suppressed": true
+      },
+      {
+        "id": "probe-9",
+        "reference": "rgb(0, 106, 106)",
+        "candidateColor": "#006a6a",
+        "suppressed": true
+      },
+      {
+        "id": "probe-10",
+        "reference": "rgb(29, 27, 32)",
+        "candidateColor": "#4b4357",
+        "suppressed": false
+      },
+      {
+        "id": "probe-11",
+        "reference": "rgb(230, 225, 229)",
+        "candidateColor": "#4b4357",
+        "suppressed": false
+      },
+      {
+        "id": "probe-12",
+        "reference": "rgb(29, 27, 32)",
+        "candidateColor": "#000000",
+        "suppressed": false
+      },
+      {
+        "id": "probe-13",
+        "reference": "rgb(16, 16, 16)",
+        "candidateColor": "#2c3e50",
+        "suppressed": false
+      },
+      {
+        "id": "probe-14",
+        "reference": "color(srgb 0.113725 0.105882 0.12549 / 0.38)",
+        "candidateColor": "#a4a0a7",
+        "suppressed": false
+      },
+      {
+        "id": "probe-15",
+        "reference": "color(srgb 0.901961 0.882353 0.898039 / 0.38)",
+        "candidateColor": "#706c72",
+        "suppressed": false
+      },
+      {
+        "id": "probe-16",
+        "reference": "color(srgb 0.113725 0.105882 0.12549 / 0.38)",
+        "candidateColor": "#a09fa1",
+        "suppressed": false
+      },
+      {
+        "id": "probe-17",
+        "reference": "color(srgb 0.113725 0.105882 0.12549 / 0.38)",
+        "candidateColor": "#99a0a2",
+        "suppressed": false
+      },
+      {
+        "id": "probe-18",
+        "reference": "rgb(75, 67, 87)",
+        "candidateColor": "#4b4357",
+        "suppressed": true
+      },
+      {
+        "id": "probe-19",
+        "reference": "rgb(73, 69, 78)",
+        "suppressed": false
+      },
+      {
+        "id": "probe-20",
+        "reference": "color(srgb 0.113725 0.105882 0.12549 / 0.38)",
+        "candidateColor": "#1d1b20",
+        "suppressed": false
+      },
+      {
+        "id": "probe-21",
+        "reference": "color(srgb 0.901961 0.882353 0.898039 / 0.38)",
+        "candidateColor": "#e6e1e5",
+        "suppressed": false
+      },
+      {
+        "id": "probe-22",
+        "reference": "color(srgb 0.113725 0.105882 0.12549 / 0.38)",
+        "suppressed": false
+      },
+      {
+        "id": "probe-23",
+        "reference": "color(srgb 0.901961 0.882353 0.898039 / 0.38)",
+        "suppressed": false
+      },
+      {
+        "id": "probe-24",
+        "reference": "rgb(197, 197, 197)",
+        "candidateColor": "#2c3e50",
+        "suppressed": false
+      },
+      {
+        "id": "probe-25",
+        "reference": "rgb(29, 27, 32)",
+        "candidateColor": "#a9a6aa",
+        "suppressed": false
+      },
+      {
+        "id": "probe-26",
+        "reference": "rgb(230, 225, 229)",
+        "candidateColor": "#69666a",
+        "suppressed": false
+      },
+      {
+        "id": "probe-27",
+        "reference": "rgb(29, 27, 32)",
+        "candidateColor": "#a9a8aa",
+        "suppressed": false
+      },
+      {
+        "id": "probe-28",
+        "reference": "rgb(29, 27, 32)",
+        "candidateColor": "#a2a6a7",
+        "suppressed": false
+      },
+      {
+        "id": "probe-29",
+        "reference": "rgb(0, 0, 0)",
+        "suppressed": false
+      },
+      {
+        "id": "probe-30",
+        "reference": "rgb(29, 27, 30)",
+        "candidateColor": "#1d1b20",
+        "suppressed": false
+      },
+      {
+        "id": "probe-31",
+        "reference": "rgb(29, 27, 30)",
+        "candidateColor": "#e6e1e5",
+        "suppressed": false
+      },
+      {
+        "id": "probe-32",
+        "reference": "rgb(73, 69, 78)",
+        "candidateColor": "#49454f",
+        "suppressed": false
+      },
+      {
+        "id": "probe-33",
+        "reference": "rgb(125, 0, 250)",
+        "candidateColor": "#7d00fa",
+        "suppressed": true
+      },
+      {
+        "id": "probe-34",
+        "reference": "rgb(0, 0, 0)",
+        "candidateColor": "#1d1b20",
+        "suppressed": false
+      },
+      {
+        "id": "probe-35",
+        "reference": "rgb(245, 239, 244)",
+        "candidateColor": "#ffffff",
+        "suppressed": false
+      },
+      {
+        "id": "probe-36",
+        "reference": "rgb(245, 239, 244)",
+        "candidateColor": "#f5eff4",
+        "suppressed": true
+      }
+    ],
+    "exposure": {
+      "groups": [
+        {
+          "family": "badge",
+          "element": "badge-count",
+          "occurrences": 52,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "40685211b3e4ebaed5e377cd58e29b051481c5039654f724740f1df15102e846",
+          "valuePairs": [
+            [
+              "rgb(0, 0, 0)",
+              "#000000"
+            ],
+            [
+              "rgb(255, 255, 255)",
+              "#ffffff"
+            ]
+          ]
+        },
+        {
+          "family": "bottom-sheet",
+          "element": "bottom-sheet-primary",
+          "occurrences": 63,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "d2d56e6bc035ca0c55b62677096e1a26c9c1a8f67bb72c8e8ca4c20cd9f9830b",
+          "valuePairs": [
+            [
+              "rgb(0, 0, 0)",
+              "#000000"
+            ],
+            [
+              "rgb(255, 255, 255)",
+              "#ffffff"
+            ]
+          ]
+        },
+        {
+          "family": "button-toggle",
+          "element": "button-toggle-one",
+          "occurrences": 68,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "bc9d31dc7f14166bbc601eedfa688426eb48dc4095335132c0ced4c8524c7ae1",
+          "valuePairs": [
+            [
+              "rgb(230, 225, 229)",
+              "#e6e1e5"
+            ],
+            [
+              "rgb(29, 27, 32)",
+              "#1d1b20"
+            ]
+          ]
+        },
+        {
+          "family": "button-toggle",
+          "element": "button-toggle-two",
+          "occurrences": 68,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "bc9d31dc7f14166bbc601eedfa688426eb48dc4095335132c0ced4c8524c7ae1",
+          "valuePairs": [
+            [
+              "rgb(75, 67, 87)",
+              "#4b4357"
+            ]
+          ]
+        },
+        {
+          "family": "button",
+          "element": "button-primary",
+          "occurrences": 60,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "1edc143895426e9b0cf9727c8526b22e022f099ec710b9a4e7fcb50088327c15",
+          "valuePairs": [
+            [
+              "rgb(0, 0, 0)",
+              "#000000"
+            ],
+            [
+              "rgb(255, 255, 255)",
+              "#ffffff"
+            ]
+          ]
+        },
+        {
+          "family": "button",
+          "element": "button-secondary",
+          "occurrences": 60,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "1edc143895426e9b0cf9727c8526b22e022f099ec710b9a4e7fcb50088327c15",
+          "valuePairs": [
+            [
+              "rgb(0, 0, 0)",
+              "#000000"
+            ],
+            [
+              "rgb(0, 106, 106)",
+              "#006a6a"
+            ],
+            [
+              "rgb(103, 80, 164)",
+              "#6750a4"
+            ],
+            [
+              "rgb(208, 188, 255)",
+              "#d0bcff"
+            ]
+          ]
+        },
+        {
+          "family": "card",
+          "element": "card-open",
+          "occurrences": 52,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "f6090c7943a7997abae5001598fcf0bbde11144ac69828ab0998782461409207",
+          "valuePairs": [
+            [
+              "rgb(0, 0, 0)",
+              "#000000"
+            ],
+            [
+              "rgb(0, 106, 106)",
+              "#006a6a"
+            ],
+            [
+              "rgb(103, 80, 164)",
+              "#6750a4"
+            ],
+            [
+              "rgb(208, 188, 255)",
+              "#d0bcff"
+            ]
+          ]
+        },
+        {
+          "family": "checkbox",
+          "element": "checkbox-label",
+          "occurrences": 60,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "1e4e69097a5d01a12a908111718238beb83d60247496ae50505a16135008579e",
+          "valuePairs": [
+            [
+              "rgb(230, 225, 229)",
+              "#e6e1e5"
+            ],
+            [
+              "rgb(29, 27, 32)",
+              "#1d1b20"
+            ]
+          ]
+        },
+        {
+          "family": "chips",
+          "element": "chip-0",
+          "occurrences": 24,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "f036c594caae436df851caeeadd368321a03e80cf5f4a9fc45d9dab285003ddd",
+          "valuePairs": [
+            [
+              "rgb(230, 225, 229)",
+              "#e6e1e5"
+            ],
+            [
+              "rgb(29, 27, 32)",
+              "#1d1b20"
+            ]
+          ]
+        },
+        {
+          "family": "chips",
+          "element": "chip-1",
+          "occurrences": 8,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "28465204be916c27ee9a6361e3de1d72de74189ee1c06d09b01d00eae3d67b32",
+          "valuePairs": [
+            [
+              "rgb(230, 225, 229)",
+              "#e6e1e5"
+            ],
+            [
+              "rgb(29, 27, 32)",
+              "#1d1b20"
+            ]
+          ]
+        },
+        {
+          "family": "core",
+          "element": "core-primary",
+          "occurrences": 52,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "a32104dcbf2151237489b7ebf141751c523a4cd8aad2ef09d240a2bb5d3a4906",
+          "valuePairs": [
+            [
+              "rgb(0, 0, 0)",
+              "#000000"
+            ],
+            [
+              "rgb(255, 255, 255)",
+              "#ffffff"
+            ]
+          ]
+        },
+        {
+          "family": "dialog",
+          "element": "dialog-cancel",
+          "occurrences": 32,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "71e5f739a0451c091489b0bc58a5a71d1125455206aa60707a43147e4dfa0dfa",
+          "valuePairs": [
+            [
+              "rgb(125, 0, 250)",
+              "#7d00fa"
+            ]
+          ]
+        },
+        {
+          "family": "dialog",
+          "element": "dialog-primary",
+          "occurrences": 78,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "f49213e8ba60ea1b41dbe91be30c8c5aea92671163ec4fb3f6e568f20647d414",
+          "valuePairs": [
+            [
+              "rgb(0, 0, 0)",
+              "#000000"
+            ],
+            [
+              "rgb(255, 255, 255)",
+              "#ffffff"
+            ]
+          ]
+        },
+        {
+          "family": "dialog",
+          "element": "dialog-save",
+          "occurrences": 32,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "71e5f739a0451c091489b0bc58a5a71d1125455206aa60707a43147e4dfa0dfa",
+          "valuePairs": [
+            [
+              "rgb(255, 255, 255)",
+              "#ffffff"
+            ]
+          ]
+        },
+        {
+          "family": "expansion",
+          "element": "expansion-primary",
+          "occurrences": 60,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "0fb1c4d7450c4e45accbf4dd8f47818497a16685be0fba9988807af556675928",
+          "valuePairs": [
+            [
+              "rgb(230, 225, 229)",
+              "#e6e1e5"
+            ],
+            [
+              "rgb(29, 27, 32)",
+              "#1d1b20"
+            ]
+          ]
+        },
+        {
+          "family": "menu",
+          "element": "menu-primary",
+          "occurrences": 94,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "36972bee40d905656b6a33628eec633806c99428ae874a07c0323043d7be335e",
+          "valuePairs": [
+            [
+              "rgb(0, 0, 0)",
+              "#000000"
+            ],
+            [
+              "rgb(255, 255, 255)",
+              "#ffffff"
+            ]
+          ]
+        },
+        {
+          "family": "slide-toggle",
+          "element": "slide-toggle-label",
+          "occurrences": 68,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "77c53e50a7b92646ae557006f18227b66b6116b01c9cb219cb8ac3f34c97802f",
+          "valuePairs": [
+            [
+              "rgb(230, 225, 229)",
+              "#e6e1e5"
+            ],
+            [
+              "rgb(29, 27, 32)",
+              "#1d1b20"
+            ]
+          ]
+        },
+        {
+          "family": "snack-bar",
+          "element": "snack-bar-primary",
+          "occurrences": 71,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "8864d4c37432a7fa4f27597cc3cd84a44a3c059c8c47e825746f1dee83aa2a1d",
+          "valuePairs": [
+            [
+              "rgb(0, 0, 0)",
+              "#000000"
+            ],
+            [
+              "rgb(255, 255, 255)",
+              "#ffffff"
+            ]
+          ]
+        },
+        {
+          "family": "sort",
+          "element": "sort-primary",
+          "occurrences": 45,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "3fab4f23ebaa13495c1600aaef66289426bfe41bc2dd0e66612e0fbc110519d5",
+          "valuePairs": [
+            [
+              "rgb(230, 225, 229)",
+              "#e6e1e5"
+            ],
+            [
+              "rgb(29, 27, 32)",
+              "#1d1b20"
+            ]
+          ]
+        },
+        {
+          "family": "tabs",
+          "element": "tab-activity",
+          "occurrences": 70,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "af99b7bd730809040e53c211b3b83cb8c2f63a73087fc833231d3d18e3b87512",
+          "valuePairs": [
+            [
+              "rgb(230, 225, 229)",
+              "#e6e1e5"
+            ],
+            [
+              "rgb(29, 27, 32)",
+              "#1d1b20"
+            ]
+          ]
+        },
+        {
+          "family": "tabs",
+          "element": "tab-overview",
+          "occurrences": 70,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "af99b7bd730809040e53c211b3b83cb8c2f63a73087fc833231d3d18e3b87512",
+          "valuePairs": [
+            [
+              "rgb(230, 225, 229)",
+              "#e6e1e5"
+            ],
+            [
+              "rgb(29, 27, 32)",
+              "#1d1b20"
+            ]
+          ]
+        },
+        {
+          "family": "toolbar",
+          "element": "toolbar-action",
+          "occurrences": 52,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "c65932fcde8c7c0699297c00c364d46ee7a920e04a0f7107cef4b78d03b7ed86",
+          "valuePairs": [
+            [
+              "rgb(230, 225, 229)",
+              "#e6e1e5"
+            ],
+            [
+              "rgb(29, 27, 32)",
+              "#1d1b20"
+            ]
+          ]
+        },
+        {
+          "family": "toolbar",
+          "element": "toolbar-primary",
+          "occurrences": 52,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "c65932fcde8c7c0699297c00c364d46ee7a920e04a0f7107cef4b78d03b7ed86",
+          "valuePairs": [
+            [
+              "rgb(230, 225, 229)",
+              "#e6e1e5"
+            ],
+            [
+              "rgb(29, 27, 32)",
+              "#1d1b20"
+            ]
+          ]
+        },
+        {
+          "family": "tooltip",
+          "element": "tooltip-popup",
+          "occurrences": 18,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "a5619eddd8d0d1878b47ad1b9fc8bd71d4cc15831ab8a5dc4f91e5f748d991c4",
+          "valuePairs": [
+            [
+              "rgb(245, 239, 244)",
+              "#f5eff4"
+            ]
+          ]
+        },
+        {
+          "family": "tooltip",
+          "element": "tooltip-primary",
+          "occurrences": 62,
+          "referenceDirectRequests": 0,
+          "candidateDirectRequests": 0,
+          "completeCaseListSha256": "ca946af3d1bc785780e46a0f845147aa512cf73382a78a77733f2821405d779b",
+          "valuePairs": [
+            [
+              "rgb(0, 0, 0)",
+              "#000000"
+            ],
+            [
+              "rgb(255, 255, 255)",
+              "#ffffff"
+            ]
+          ]
+        }
+      ],
+      "groupCount": 25,
+      "occurrences": 1371,
+      "referenceDirectRequests": 0,
+      "candidateDirectRequests": 0
+    },
+    "browserVersion": "152.0.7977.76",
+    "browserProofs": [
+      {
+        "deviceScaleFactor": 1,
+        "result": {
+          "initial": {
+            "explicit": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(0, 0, 255)",
+              "localCaret": ""
+            },
+            "omitted": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(0, 0, 255)",
+              "localCaret": ""
+            }
+          },
+          "inherited": {
+            "explicit": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(0, 0, 255)",
+              "localCaret": ""
+            },
+            "omitted": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(255, 0, 0)",
+              "localCaret": ""
+            }
+          },
+          "restored": {
+            "explicit": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(0, 0, 255)",
+              "localCaret": ""
+            },
+            "omitted": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(0, 0, 255)",
+              "localCaret": ""
+            }
+          }
+        }
+      },
+      {
+        "deviceScaleFactor": 2,
+        "result": {
+          "initial": {
+            "explicit": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(0, 0, 255)",
+              "localCaret": ""
+            },
+            "omitted": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(0, 0, 255)",
+              "localCaret": ""
+            }
+          },
+          "inherited": {
+            "explicit": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(0, 0, 255)",
+              "localCaret": ""
+            },
+            "omitted": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(255, 0, 0)",
+              "localCaret": ""
+            }
+          },
+          "restored": {
+            "explicit": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(0, 0, 255)",
+              "localCaret": ""
+            },
+            "omitted": {
+              "color": "rgb(0, 0, 255)",
+              "caretColor": "rgb(0, 0, 255)",
+              "localCaret": ""
+            }
+          }
+        }
+      }
+    ],
+    "unmodified": true
+  },
+  "syntheticCharacterization": {
+    "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{buildMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const base={id:'diagnostic',reference:{color:'rgb(0, 0, 255)',caretColor:'rgb(0, 0, 255)'},astylar:{color:'#0000ff'},astylarNormalResolvedStyle:{color:'#0000ff'},astylarInteractionResolvedStyle:{color:'#0000ff'},astylarResolvedStyleEvidenceVersion:2,referenceAuthored:[{selector:'#diagnostic',active:true,declarations:{'caret-color':{value:'auto',important:false}}}],astylarAuthored:[]};const raw={schemaVersion:1,mode:'report-only',generatedAt:'2026-09-14T00:00:00.000Z',browser:{name:'diagnostic'},summary:{meetsAcceptance:false},interactionSummary:{meetsAcceptance:false},results:[{family:'core',profile:'light',viewport:{id:'desktop'},styleInputs:[base]}],interactions:[]};const before=JSON.stringify(raw);const a=buildMaterialInputAudit(raw);assert.equal(JSON.stringify(raw),before);console.log(JSON.stringify({scope:'Audit-filter characterization, not renderer proof',reference:base.reference,candidate:base.astylar,referenceRequest:base.referenceAuthored,caretDifference:a.discrepancies.find(d=>d.element==='diagnostic'&&d.property==='caretColor')??null,inputEquivalent:a.summary.inputEquivalent,unmodified:JSON.stringify(raw)===before}));\"",
+    "result": {
+      "scope": "Audit-filter characterization, not renderer proof",
+      "reference": {
+        "color": "rgb(0, 0, 255)",
+        "caretColor": "rgb(0, 0, 255)"
+      },
+      "candidate": {
+        "color": "#0000ff"
+      },
+      "referenceRequest": [
+        {
+          "selector": "#diagnostic",
+          "active": true,
+          "declarations": {
+            "caret-color": {
+              "value": "auto",
+              "important": false
+            }
+          }
+        }
+      ],
+      "caretDifference": null,
+      "inputEquivalent": false,
+      "unmodified": true
+    },
+    "limitation": "No captured candidate ancestry is supplied. The absence of the scalar difference therefore cannot establish candidate auto behavior. This reproduction proves audit suppression, not a runtime rendering defect."
+  },
+  "verification": {
+    "command": "node --input-type=module -e \" import assert from 'node:assert/strict'; import {readFileSync} from 'node:fs'; import {createHash} from 'node:crypto'; import {chromium} from 'playwright-core'; import {buildMaterialInputAudit} from './tests/material-parity/input-equivalence-audit.mjs'; const sha=v=>createHash('sha256').update(v).digest('hex'); const captureFile='artifacts/material-parity/current-ancestry-audit/latest-report.json',bytes=readFileSync(captureFile); assert.equal(sha(bytes),'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a'); const raw=JSON.parse(bytes),entries=[...raw.results.map(e=>({...e,kind:'static'})),...raw.interactions.map(e=>({...e,kind:'interaction'}))]; const pairMap=new Map(); for(const e of entries)for(const i of e.styleInputs??[]){  if(i.reference?.caretColor===undefined||i.astylar?.caretColor!==undefined)continue;  const key=JSON.stringify([i.reference.caretColor,i.astylar?.color??'<omitted>']);  if(!pairMap.has(key))pairMap.set(key,{id:'probe-'+pairMap.size,reference:i.reference.caretColor,candidateColor:i.astylar?.color}); } const pairs=[...pairMap.values()]; const scalar=(id,reference,color)=>({id,reference:{caretColor:reference,color},astylar:color===undefined?{}:{color},astylarNormalResolvedStyle:color===undefined?{}:{color},astylarInteractionResolvedStyle:color===undefined?{}:{color},astylarResolvedStyleEvidenceVersion:2,referenceAuthored:[{selector:'#'+id,active:true,declarations:{'caret-color':{value:'auto',important:false}}}],astylarAuthored:[]}); const diagnostic={schemaVersion:1,mode:'report-only',generatedAt:'2026-09-14T00:00:00.000Z',browser:{name:'diagnostic'},summary:{meetsAcceptance:false},interactionSummary:{meetsAcceptance:false},results:[{family:'core',profile:'light',viewport:{id:'desktop'},styleInputs:pairs.map(p=>scalar(p.id,p.reference,p.candidateColor))}],interactions:[]}; const before=JSON.stringify(diagnostic),probe=buildMaterialInputAudit(diagnostic); assert.equal(JSON.stringify(diagnostic),before); for(const p of pairs)p.suppressed=!probe.discrepancies.some(d=>d.element===p.id&&d.property==='caretColor'); const groups=new Map(); for(const e of entries)for(const i of e.styleInputs??[]){  if(i.reference?.caretColor===undefined||i.astylar?.caretColor!==undefined)continue;  const p=pairMap.get(JSON.stringify([i.reference.caretColor,i.astylar?.color??'<omitted>']));  if(!p.suppressed)continue;  const key=e.family+'/'+i.id;  if(!groups.has(key))groups.set(key,{family:e.family,element:i.id,cases:[],referenceDirectRequests:0,candidateDirectRequests:0,valuePairs:new Set()});  const g=groups.get(key);g.cases.push(e.kind+':'+e.family+'@'+e.profile+'/'+e.viewport.id+(e.state?'/'+e.state:''));  g.valuePairs.add(JSON.stringify([i.reference.caretColor,i.astylar.color]));  const affects=rules=>(rules??[]).some(r=>Object.keys(r.declarations??{}).some(k=>['caretcolor','all'].includes(k.replaceAll('-','').toLowerCase())));  if(affects(i.referenceAuthored))g.referenceDirectRequests++;  if(affects(i.astylarAuthored))g.candidateDirectRequests++; } const exposure=[...groups.values()].sort((a,b)=>(a.family+'/'+a.element).localeCompare(b.family+'/'+b.element)).map(g=>{  assert.equal(new Set(g.cases).size,g.cases.length);  return{family:g.family,element:g.element,occurrences:g.cases.length,referenceDirectRequests:g.referenceDirectRequests,candidateDirectRequests:g.candidateDirectRequests,completeCaseListSha256:sha(JSON.stringify(g.cases.sort())),valuePairs:[...g.valuePairs].sort().map(JSON.parse)}; }); const browser=await chromium.launch({channel:'chrome',headless:true}),browserProofs=[]; try{for(const deviceScaleFactor of[1,2]){  const page=await browser.newPage({viewport:{width:640,height:400},deviceScaleFactor});  try{  await page.setContent('<style>#parent{color:rgb(0,0,255)}input{color:rgb(0,0,255)}#explicit{caret-color:auto}</style><main id=parent><input id=explicit><input id=omitted></main>');  const result=await page.evaluate(()=>{   const p=document.getElementById('parent'),read=()=>Object.fromEntries(['explicit','omitted'].map(id=>{const n=document.getElementById(id),s=getComputedStyle(n);return[id,{color:s.color,caretColor:s.caretColor,localCaret:n.style.caretColor}]}));   const initial=read();p.style.caretColor='rgb(255,0,0)';const inherited=read();p.style.removeProperty('caret-color');return{initial,inherited,restored:read()};  });  assert.deepEqual(result.initial.explicit,result.initial.omitted);  assert.equal(result.inherited.explicit.caretColor,'rgb(0, 0, 255)');  assert.equal(result.inherited.omitted.caretColor,'rgb(255, 0, 0)');  assert.equal(result.inherited.explicit.color,result.inherited.omitted.color);  assert.deepEqual(result.restored,result.initial);  assert.equal(pairs.find(p=>p.reference==='rgb(0, 0, 0)'&&p.candidateColor==='#000000')?.suppressed,true);  browserProofs.push({deviceScaleFactor,result});  }finally{await page.close();} }}finally{await browser.close();} const files=['tests/material-parity/input-equivalence-audit.mjs','tests/material-parity/input-tree-evidence.spec.mjs']; console.log(JSON.stringify({scope:'Audit suppression and browser computed-style sensitivity only; not candidate runtime or caret raster proof',capture:{file:captureFile,sha256:sha(bytes)},sourceFingerprints:files.map(file=>({file,sha256:sha(readFileSync(file,'utf8').replaceAll('\\r\\n','\\n'))})),caseCount:entries.length,pairProbes:pairs,exposure:{groups:exposure,groupCount:exposure.length,occurrences:exposure.reduce((n,g)=>n+g.occurrences,0),referenceDirectRequests:exposure.reduce((n,g)=>n+g.referenceDirectRequests,0),candidateDirectRequests:exposure.reduce((n,g)=>n+g.candidateDirectRequests,0)},browserVersion:browser.version(),browserProofs,unmodified:true})); \"",
+    "result": "Two executions exit 0 with identical evidence. Checks all 2311 main-capture cases, probes all 37 observed raw caret/text-color pairs through the actual audit builder (10 suppressed pairs), records 25 affected element groups / 1371 occurrences with complete sorted case-list hashes, and proves explicit auto versus inherited omission diverges at DPR1 and DPR2. Input JSON remains unmodified.",
+    "capturePopulationLimit": "The population probe identifies values subject to equivalentValue's scalar predicate; it does not assign final attribution or prove that observed default states render incorrectly. Direct request counts are zero in the captured scalar declarations, not a proof of absent inherited requests or complete cascade coverage.",
+    "existingBrowserProof": "tests/material-parity/input-tree-evidence.spec.mjs:27 already tests container-to-input caret inheritance and explicit auto. This new evidence reuses that causal distinction to expose the separate scalar-filter blind spot.",
+    "fullReplay": "Pending after the instrumentation correction. The last verified complete audit still has 8235 style groups / 385520 occurrences and 2499 unresolved attributions; none of those totals is updated by this read-only survey.",
+    "harness": "629/629 passed at e325304 (recorded in 33f3c9f), before these documentation-only findings. This survey does not change harness code or claim a new full-harness result."
+  },
+  "ownership": {
+    "earliestDivergence": "Audit scalar equivalence and fallback classification, before authoring/ancestry evidence is evaluated.",
+    "coreClaim": "No candidate computed caret value, painted caret, editable caret visibility, selection, focus, or renderer inheritance behavior is proven by this survey.",
+    "implementationPlan": [
+      "Add a focused regression requiring an explicit reference auto request versus omitted candidate local caret declaration to remain recorded without inventing candidate computed values.",
+      "Remove both unconditional text-color-based shortcuts. Retain every raw observation and independently classify eligible cases using proven ancestry, source requests, actual comparison stages, and all recorded state cases.",
+      "Replay the complete raw population and prior guarded container-caret proofs. Record actual newly exposed group/occurrence counts and unresolved attributions; do not predict classification totals from the exposure survey.",
+      "During later renderer implementation, obtain computed/consumer caret evidence through the core-owned pipeline. Do not add fixture-only caret colors, infer omission means auto, or use a showcase inheritance implementation.",
+      "Keep actual empty-input caret visibility and caret projection/paint defects separate from the observation-stage correction."
+    ]
+  }
+}
