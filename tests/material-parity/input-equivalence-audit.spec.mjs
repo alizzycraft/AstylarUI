@@ -10198,6 +10198,94 @@ test('an inventoried hidden or anonymous element still requires resolved style e
   assert.ok(validateMaterialInputAudit(audit).some((error) => error.includes('lack resolved style evidence')));
 });
 
+function fieldColorReport(family = 'autocomplete', dark = false, size = '16px') {
+  const raw = fieldHostTypographyReport(family, size), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
+  const color = dark ? '#e6e1e5' : '#1d1b20';
+  r.rules[0].source = 'sheet:3/1'; r.rules[0].declarations.color = { value: '#1d1b20', important: false };
+  for (const style of r.styles) style.color = color;
+  e.styleInputs[0].reference.color = color;
+  if (dark) {
+    r.nodes[0].attributes.class = 'frame dark'; r.nodes[0].rules.push(r.rules.length);
+    r.rules.push({ source: 'sheet:3/2', selector: '.dark', active: true, conditions: [], declarations: { color: { value: color, important: false } } });
+  }
+  a.rules[0].color = color;
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) a.nodes[1][stage].color = color;
+  e.styleInputs.push(rootColorReport(family, dark, size).results[0].styleInputs[0]);
+  return raw;
+}
+
+test('field host color joins exact ancestry without erasing missing font token evidence', () => {
+  const raw = parityReport({}, {}); raw.results = [];
+  for (const family of ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'])
+    for (const dark of [false, true]) for (const size of ['16px', '14.4px', '18.4px'])
+      for (const state of [undefined, 'hover', 'held', 'focus', 'disabled']) {
+        const e = fieldColorReport(family, dark, size).results[0]; e.profile = dark ? 'dark' : 'light';
+        e.viewport = { ...e.viewport, id: `desktop-${size}` };
+        if (state) { e.state = state; raw.interactions.push(e); } else raw.results.push(e);
+      }
+  const before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+  assert.equal(audit.fieldColorInputs.length, 180);
+  assert.equal(audit.fieldHostTypographyInputs.length, 540);
+  const ds = audit.discrepancies.filter(d => d.attribution === 'reviewed-field-host-color-declaration-stage');
+  assert.equal(ds.reduce((n, d) => n + d.occurrences, 0), 180);
+  for (const d of ds) {
+    assert.equal(d.classification, 'parity-harness-defect'); assert.equal(d.property, 'color'); assert.equal(d.astylar, undefined);
+    assert.equal(d.reviewedCases.length, d.occurrences); assert.equal(d.reviewEvidence.referencePath.length, 3);
+    assert.equal(d.reviewEvidence.candidatePath.length, 3); assert.equal(d.reviewEvidence.computedCandidateVerified, false);
+    assert.equal(d.reviewEvidence.finalRasterVerified, false); assert.match(d.justification, /missing host font tokens/);
+  }
+  assert.equal(audit.discrepancies.filter(d => d.attribution === 'reviewed-field-host-typography-token-omission')
+    .reduce((n, d) => n + d.occurrences, 0), 540);
+  assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => e.includes('field host color')), []);
+  assert.equal(JSON.stringify(raw), before);
+});
+
+test('field host color rejects changed host requests, ancestors, stages and identity', () => {
+  for (const [i, mutate] of [
+    e => { e.inputTrees.reference.rules[1].declarations.color = { value: 'inherit', important: false }; },
+    e => { e.inputTrees.reference.rules[1].declarations.all = { value: 'unset', important: false }; },
+    e => { e.inputTrees.reference.nodes[2].inline.color = { value: 'inherit', important: false }; },
+    e => { e.inputTrees.reference.nodes[2].attributes.style = 'color:inherit'; },
+    e => { e.inputTrees.reference.styles[1].color = '#ffffff'; },
+    e => { e.inputTrees.reference.nodes[2].parent = 'frame'; },
+    e => { e.inputTrees.reference.nodes[2].ownText = 'unmapped own text'; },
+    e => { e.inputTrees.reference.rules[0].source = 'sheet:3/1/0'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '.field-shell', color: 'inherit' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: ':is(div)', color: '#1d1b20' }); },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#page', transition: 'color 1s' }); },
+    e => { e.inputTrees.astylar.nodes[3].authored.style = { color: 'inherit' }; },
+    e => { e.inputTrees.astylar.nodes[3].normalResolvedStyle.color = '#1d1b20'; },
+    e => { delete e.inputTrees.astylar.nodes[3].interactionResolvedStyle; },
+    e => { e.inputTrees.astylar.nodes[3].parent = 'page'; },
+    e => { e.inputTrees.astylar.nodes[3].authored.type = 'input'; },
+    e => { e.inputTrees.astylar.nodes.push(structuredClone(e.inputTrees.astylar.nodes[3])); },
+    e => { e.inputTrees.astylar.resolvedStyleSource = 'fixture'; },
+  ].entries()) {
+    const raw = fieldColorReport(); mutate(raw.results[0]); const audit = buildMaterialInputAudit(raw);
+    assert.equal(audit.fieldColorInputs.length, 0, `mutation ${i}`);
+    assert.ok(audit.discrepancies.every(d => d.attribution !== 'reviewed-field-host-color-declaration-stage'));
+  }
+});
+
+test('field host color rejects scalar and report tampering independently', () => {
+  for (const mutate of [i => { i.reference.color = '#ffffff'; }, i => { i.astylar.color = '#1d1b20'; },
+    i => { i.astylarNormalResolvedStyle.color = 'inherit'; }, i => { delete i.astylarInteractionResolvedStyle; },
+    i => { i.referenceAuthored[0].declarations.color = { value: 'inherit', important: false }; },
+    i => { i.astylarAuthored[0].declarations.color = 'inherit'; }, i => { i.astylarResolvedStyleEvidenceVersion = 1; }]) {
+    const raw = fieldColorReport(); mutate(raw.results[0].styleInputs[0]);
+    assert.ok(buildMaterialInputAudit(raw).discrepancies.every(d => d.attribution !== 'reviewed-field-host-color-declaration-stage'));
+  }
+  const audit = buildMaterialInputAudit(fieldColorReport());
+  for (const mutate of [a => { a.fieldColorInputs[0].computedCandidateVerified = true; },
+    a => { a.fieldColorInputs[0].candidatePath[2].normal.color = '#1d1b20'; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-field-host-color-declaration-stage').classification = 'equivalent-representation'; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-field-host-color-declaration-stage').reviewedCases = []; },
+    a => { a.discrepancies.find(d => d.attribution === 'reviewed-field-host-color-declaration-stage').astylar = '#1d1b20'; }]) {
+    const copy = structuredClone(audit); mutate(copy);
+    assert.ok(validateMaterialInputAudit(copy, { requireComplete: false }).some(e => e.includes('field host color')));
+  }
+});
+
 function rootColorReport(family = 'chips', dark = false, size = '16px') {
   const raw = rootTypographyReport(family, size), e = raw.results[0], { reference: r, astylar: a } = e.inputTrees;
   const color = dark ? '#e6e1e5' : '#1d1b20';
@@ -10395,6 +10483,56 @@ test('root typography scalar and report tampering cannot manufacture computed eq
     const report = structuredClone(base); mutate(report);
     assert.ok(validateMaterialInputAudit(report, { requireComplete: false }).some(e => /root typography/.test(e)));
   }
+});
+
+test('field host color case index preserves every raw host and separate font authoring', async () => {
+  const { readFileSync } = await import('node:fs'), { createHash } = await import('node:crypto');
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const index = JSON.parse(readFileSync('docs/material-field-host-color-audit.json', 'utf8'));
+  const bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
+  assert.equal(index.sourceFingerprints.length, 9);
+  for (const s of index.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replace(/\r\n/g, '\n')), s.sha256, s.file);
+  const report = JSON.parse(bytes), covered = new Map(), expected = [];
+  for (const g of index.groups) {
+    assert.equal(g.property, 'color'); assert.equal(g.candidate, '<omitted>'); assert.equal(g.classification, 'parity-harness-defect');
+    assert.equal(g.reviewedCases.length, g.occurrences);
+    for (const key of g.reviewedCases) { assert.equal(covered.has(key), false); covered.set(key, g); }
+  }
+  const families = ['form-field', 'input', 'autocomplete', 'select', 'datepicker', 'timepicker'];
+  for (const [kind, entries] of [['static', report.results], ['interaction', report.interactions]]) for (const e of entries) {
+    if (!families.includes(e.family)) continue;
+    const key = `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? `/${e.state}` : ''}`, g = covered.get(key);
+    expected.push(key); assert.ok(g, key); assert.equal(g.family, e.family); assert.equal(g.element, `${e.family}-primary`);
+    const browser = e.profile === 'dark' ? 'rgb(230, 225, 229)' : 'rgb(29, 27, 32)';
+    assert.equal(g.reference, e.profile === 'dark' ? 'rgba(230,225,229,1)' : 'rgba(29,27,32,1)');
+    const input = e.styleInputs.find(i => i.id === g.element); assert.equal(input.reference.color, browser);
+    for (const stage of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle']) assert.equal(input[stage].color, undefined);
+    const trees = {};
+    for (const side of ['reference', 'astylar']) {
+      const source = e.inputTrees[side], raw = readFileSync(source.file); assert.equal(hash(raw), source.sha256, `${key}/${side}`); trees[side] = JSON.parse(raw);
+    }
+    const r = trees.reference, a = trees.astylar, matches = r.nodes.filter(n => n.attributes?.id === g.element);
+    assert.equal(matches.length, 1); const host = matches[0]; assert.equal(host.type, 'mat-form-field'); assert.equal(host.ownText, '');
+    const section = r.nodes.find(n => n.key === host.parent), frame = r.nodes.find(n => n.key === section.parent);
+    assert.equal(section.attributes.id, `${e.family}-root`); assert.equal(frame.type, 'main');
+    for (const node of [frame, section, host]) assert.equal(r.styles[node.style].color, browser);
+    assert.equal(host.inline.color, undefined);
+    const rules = host.rules.map(i => r.rules[i]); assert.ok(rules.every(rule => rule.declarations.color === undefined));
+    const token = rules.find(rule => rule.selector === '.mat-mdc-form-field'); assert.ok(token);
+    assert.equal(token.declarations['font-family'].value, 'var(--mat-form-field-container-text-font, var(--mat-sys-body-large-font))');
+    const candidates = a.nodes.filter(n => n.authored.id === g.element); assert.equal(candidates.length, 1);
+    const node = candidates[0], parent = a.nodes.find(n => n.key === node.parent), page = a.nodes.find(n => n.key === parent.parent);
+    assert.equal(node.authored.type, 'div'); assert.ok(node.authored.class.split(/\s+/).includes('field-shell'));
+    assert.equal(parent.authored.id, `${e.family}-root`); assert.equal(page.authored.id, 'page');
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+      assert.equal(node[stage].color, undefined); assert.equal(parent[stage].color, undefined);
+      assert.equal(page[stage].color, e.profile === 'dark' ? '#e6e1e5' : '#1d1b20');
+      assert.equal(node[stage].fontFamily, undefined);
+    }
+  }
+  assert.deepEqual([...covered.keys()].sort(), expected.sort()); assert.equal(covered.size, 577); assert.equal(index.caseCount, 577);
+  assert.equal(index.groups.length, 12); assert.equal(index.scalarGroups, 12);
+  for (const flag of ['inputEquivalent', 'computedCandidateVerified', 'finalRasterVerified']) assert.equal(index.verification[flag], false);
 });
 
 test('root color case index covers every raw section and retains diagnostic stage limits', async () => {

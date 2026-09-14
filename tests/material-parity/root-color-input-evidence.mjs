@@ -1,4 +1,5 @@
 export const rootColorAttribution = 'reviewed-root-color-declaration-stage';
+export const fieldColorAttribution = 'reviewed-field-host-color-declaration-stage';
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const affects = declarations => Object.keys(declarations ?? {}).some(key =>
   ['color', 'all'].includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key));
@@ -63,4 +64,47 @@ export function classifyRootColorInput(input, property, reference, astylar, proo
   return { classification: 'parity-harness-defect', attribution: rootColorAttribution,
     owner: 'input audit inherited computed color versus local declaration stages', reviewEvidence: structuredClone(proof),
     justification: 'The empty section has no local color request on either authored side. Its complete captured frame/page ancestry supplies the same color, with an independently checked same-sheet, top-level, equal-specificity, non-important dark override where present. Browser computed color includes inheritance; the core inspection contract exposes local declarations. Preserve the candidate omission rather than synthesizing a computed color or diagnosing absent authoring. This identifies a diagnostic-stage mismatch only: actual descendant color consumers, caret-color behavior, currentColor paint, alpha compositing and final raster remain separate.' };
+}
+
+// A host typography omission is not evidence of a color omission. Join the
+// independently proven host identity with its exact root color ancestry first.
+export function collectFieldColorInputs(fieldHostTypographyInputs, rootColorInputs, canonical) {
+  const results = [];
+  for (const base of fieldHostTypographyInputs.filter(p => p.property === 'fontFamily')) {
+    const roots = rootColorInputs.filter(p => p.case === base.case && p.family === base.family);
+    if (roots.length !== 1) continue;
+    const root = roots[0], ref = base.referencePath[2], ast = base.candidatePath[2];
+    if (base.referencePath.length !== 3 || base.candidatePath.length !== 3 ||
+        JSON.stringify(base.referencePath.slice(0, 2)) !== JSON.stringify(root.referencePath) ||
+        JSON.stringify(base.candidatePath.slice(0, 2)) !== JSON.stringify(root.candidatePath) ||
+        base.source !== root.source || base.revision !== root.revision ||
+        ref.parent !== root.referencePath[1].key || ast.parent !== root.candidatePath[1].key ||
+        unsafe(ref.inline) || /(?:^|;)\s*(?:color|all|animation[^:]*|transition[^:]*)\s*:/i.test(ref.attributes?.style ?? '') ||
+        !Array.isArray(ref.rules) || ref.rules.some(r => unsafe(r.declarations)) ||
+        !Array.isArray(ast.rules) || ast.rules.some(r => unsafe(r.declarations)) ||
+        (ast.authored.style !== undefined && unsafe(ast.authored.style)) ||
+        [ast.normal, ast.comparison, ast.effective].some(unsafe) ||
+        canonical(ref.computed).color !== root.values.reference) continue;
+    results.push({ case: base.case, family: base.family, element: base.element, property: 'color',
+      values: structuredClone(root.values), source: base.source, revision: base.revision,
+      referencePath: structuredClone(base.referencePath), candidatePath: structuredClone(base.candidatePath),
+      colorRuleSources: [...root.colorRuleSources], classification: 'parity-harness-defect',
+      computedCandidateVerified: false, finalRasterVerified: false });
+  }
+  return results;
+}
+
+export function classifyFieldColorInput(input, property, reference, astylar, proof, canonical) {
+  if (!proof || property !== 'color' || input.id !== proof.element || reference !== proof.values.reference || astylar !== undefined ||
+      input.astylarResolvedStyleEvidenceVersion !== 2 || input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
+      input.referenceStructure.type !== 'mat-form-field' || input.astylarStructure.type !== 'div' ||
+      input.referenceStructure.ownText?.trim() || input.astylarStructure.ownText?.trim() || !object(input.reference) ||
+      canonical(input.reference).color !== reference ||
+      ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'].some(stage => unsafe(input[stage])) ||
+      !Array.isArray(input.referenceAuthored) || !Array.isArray(input.astylarAuthored) ||
+      !input.astylarAuthored.some(r => r.selector === '.field-shell') ||
+      [...input.referenceAuthored, ...input.astylarAuthored].some(r => unsafe(r.declarations))) return;
+  return { classification: 'parity-harness-defect', attribution: fieldColorAttribution,
+    owner: 'input audit field-host inherited color versus local declaration stages', reviewEvidence: structuredClone(proof),
+    justification: 'The mapped Material form-field and candidate field-shell have no local color request. Independently checked complete frame/page-to-section-to-host paths provide the same ancestor color; browser computed host color includes inheritance while candidate inspection preserves local omission. This color-stage finding does not erase the separately proven missing host font tokens, approve structural/layout substitutions, synthesize a computed candidate color, or prove descendant control/caret/currentColor paint.' };
 }

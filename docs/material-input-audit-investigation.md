@@ -3,6 +3,50 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Field-host color is inherited, despite missing component font tokens
+
+The [field-host color index](material-field-host-color-audit.json) covers all
+**577 main boundaries** for form-field, input, autocomplete, select, datepicker
+and timepicker. In each capture the original Material host has no local color
+declaration; its computed color comes from the frame through the section.
+Candidate `field-shell` likewise omits color, and `#page` declares the matching
+theme color. The host's font tokens are a different input: the Material rule
+explicitly requests them, while the candidate omits them. A color diagnostic
+finding must not erase that separately proven authoring defect.
+
+The installed original rule is in
+`examples/material-showcase/node_modules/@angular/material/fesm2022/form-field-CFbrnFED.mjs:1016`;
+it declares font family, size, line height, tracking and weight but no color.
+The candidate shell rule is at `examples/material-showcase/src/app/astylar.component.ts:540`.
+Initial comparison commit `2f44011` already omits shell color and supplies page
+color. This source review does not demonstrate a later compensation or replace
+a runtime bisect. The raw sweep verifies 1,154 tree hashes and finds no local
+host color/reset/motion rules in these 577 captures.
+
+Attribution joins independently established host identity with the **exact**
+root-color ancestry paths and revision. It separately checks host inline and
+matched declarations, original inherited color, all three candidate declaration
+stages and scalar consistency. Changed ancestry, local color requests, unknown
+relevant selectors, missing stages and forged reports must reject attribution.
+No candidate computed color is synthesized; descendant input/caret/currentColor
+paint, font-token omissions, wrapper structure and layout remain independent.
+
+The proposed owner is the core diagnostic-stage / audit comparison contract:
+expose inherited computed values separately or compare corresponding declaration
+stages. Do not add field-local colors to imitate browser snapshots. This is not
+a production renderer change or approval of the surrounding fixture layout.
+
+Verification: `node --test --test-name-pattern='field host color'
+tests/material-parity/input-equivalence-audit.spec.mjs` initially passes **3/3**,
+13,733.4435 ms. Tests cover 180 valid observations while retaining all 540
+font-token omissions; 18 adverse host/ancestor cases, seven scalar mutations
+and five forged reports are rejected. The combined field/root color and prior
+case-index/fingerprint command passes **10/10**, 29,819.3889 ms, including the
+complete 577-case raw index. The full audit replay terminates with exit 0 and
+all **577 proofs / 12 grouped case lists** exactly match the raw index. Strict
+validation retains only **2,801 unresolved groups**, down from 2,813; every raw
+discrepancy remains present. Full harness verification is pending.
+
 ## Root section color: inherited computation versus declaration-stage inspection
 
 The [root color case index](material-root-color-audit.json) records all **2,311
