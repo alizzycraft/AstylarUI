@@ -3,6 +3,33 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Initial style values require inheritance and formatting-context evidence
+
+The [browser sensitivity proof](material-root-initial-style-sensitivity-audit.json)
+guards the next root-property investigation; it does **not** classify Material
+cases or supply candidate computed values. With unchanged, omitted local styles,
+changing an ancestor to `font-weight:700; text-align:center; vertical-align:middle`
+changes the browser section's weight/alignment to `700`/`center`, while its
+vertical alignment remains `baseline`. Local overrides and their removal are
+observed separately. Initial-looking values cannot be normalized globally.
+
+An independent formatting-context probe gives an inline-block and an ordinary
+block the same computed `vertical-align:10px`. Only the inline-level box consumes
+the alignment. The first diagnostic incorrectly expected a 10px displacement
+relative to the parent: both DPR runs failed because the line baseline also
+moves. Measuring against a zero-height inline baseline marker proves the exact
+10px baseline-relative shift; the block remains stationary. This is a correction
+to the new diagnostic's observation, not a renderer or canonical fixture change.
+
+`node --test tests/material-parity/root-initial-style-sensitivity.spec.mjs`
+passes **4/4 twice**, **3,128.255 ms / 4,254.2552 ms**, Chrome
+**152.0.7977.76**, DPR **1 and 2**, with identical observations. The standalone
+test is not included in the pre-existing full harness currently running; that
+run must not be described as covering this new proof. Before assigning root
+attributions, join the complete captured ancestry, authored rules, resets,
+direction/writing mode and all candidate declaration stages. Candidate consumers,
+descendant overrides, geometry and final raster remain independent obligations.
+
 ## Form-field hosts omit an explicit alignment request
 
 The [field-host alignment index](material-field-host-alignment-audit.json)

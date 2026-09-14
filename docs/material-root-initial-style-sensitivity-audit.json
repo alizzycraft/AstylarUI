@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "scope": "Browser-only diagnostic sensitivity proof. Not a candidate computed-style, layout, raster, or Material input-equivalence claim.",
+  "source": {
+    "file": "tests/material-parity/root-initial-style-sensitivity.spec.mjs",
+    "sha256": "b40aa7f8c629bbe6dc2b431c96c149a2d11ea2b8afe0efd34749e1480d550e98"
+  },
+  "command": "node --test tests/material-parity/root-initial-style-sensitivity.spec.mjs",
+  "verification": {
+    "runs": [
+      {
+        "exitCode": 0,
+        "passed": 4,
+        "failed": 0,
+        "durationMs": 3128.255
+      },
+      {
+        "exitCode": 0,
+        "passed": 4,
+        "failed": 0,
+        "durationMs": 4254.2552
+      }
+    ],
+    "observationsIdenticalAcrossRuns": true,
+    "initialProbeFailure": "The original parent-top displacement assertion failed twice (DPR 1/2): expected -3px, actual 0px. Inline vertical alignment also changes the line baseline. The corrected diagnostic includes a zero-height inline baseline marker and checks the probe bottom relative to it; no production or canonical comparison inputs changed.",
+    "fullHarnessCoverage": "This standalone diagnostic has its own explicit command. The currently running pre-existing harness does not include this newly added file; do not count that run as coverage of this proof."
+  },
+  "observations": [
+    {
+      "browserVersion": "152.0.7977.76",
+      "deviceScaleFactor": 1,
+      "scope": "browser computed-style sensitivity only; no candidate or raster equivalence claim",
+      "result": {
+        "initial": {
+          "fontWeight": "400",
+          "textAlign": "start",
+          "verticalAlign": "baseline",
+          "localStyle": null
+        },
+        "changedAncestor": {
+          "fontWeight": "700",
+          "textAlign": "center",
+          "verticalAlign": "baseline",
+          "localStyle": null
+        },
+        "explicit": {
+          "fontWeight": "400",
+          "textAlign": "start",
+          "verticalAlign": "middle",
+          "localStyle": "font-weight: 400; text-align: start; vertical-align: middle;"
+        },
+        "removedOverride": {
+          "fontWeight": "700",
+          "textAlign": "center",
+          "verticalAlign": "baseline",
+          "localStyle": null
+        },
+        "restored": {
+          "fontWeight": "400",
+          "textAlign": "start",
+          "verticalAlign": "baseline",
+          "localStyle": null
+        }
+      }
+    },
+    {
+      "browserVersion": "152.0.7977.76",
+      "deviceScaleFactor": 1,
+      "scope": "browser formatting-context sensitivity only; not an Astylar layout proof",
+      "result": {
+        "initial": [
+          {
+            "id": "inline",
+            "display": "inline-block",
+            "verticalAlign": "baseline",
+            "top": 7,
+            "width": 20,
+            "height": 20,
+            "bottomFromBaseline": 0
+          },
+          {
+            "id": "block",
+            "display": "block",
+            "verticalAlign": "baseline",
+            "top": 0,
+            "width": 20,
+            "height": 20
+          }
+        ],
+        "shifted": [
+          {
+            "id": "inline",
+            "display": "inline-block",
+            "verticalAlign": "10px",
+            "top": 0,
+            "width": 20,
+            "height": 20,
+            "bottomFromBaseline": -10
+          },
+          {
+            "id": "block",
+            "display": "block",
+            "verticalAlign": "10px",
+            "top": 0,
+            "width": 20,
+            "height": 20
+          }
+        ],
+        "restored": [
+          {
+            "id": "inline",
+            "display": "inline-block",
+            "verticalAlign": "baseline",
+            "top": 7,
+            "width": 20,
+            "height": 20,
+            "bottomFromBaseline": 0
+          },
+          {
+            "id": "block",
+            "display": "block",
+            "verticalAlign": "baseline",
+            "top": 0,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      }
+    },
+    {
+      "browserVersion": "152.0.7977.76",
+      "deviceScaleFactor": 2,
+      "scope": "browser computed-style sensitivity only; no candidate or raster equivalence claim",
+      "result": {
+        "initial": {
+          "fontWeight": "400",
+          "textAlign": "start",
+          "verticalAlign": "baseline",
+          "localStyle": null
+        },
+        "changedAncestor": {
+          "fontWeight": "700",
+          "textAlign": "center",
+          "verticalAlign": "baseline",
+          "localStyle": null
+        },
+        "explicit": {
+          "fontWeight": "400",
+          "textAlign": "start",
+          "verticalAlign": "middle",
+          "localStyle": "font-weight: 400; text-align: start; vertical-align: middle;"
+        },
+        "removedOverride": {
+          "fontWeight": "700",
+          "textAlign": "center",
+          "verticalAlign": "baseline",
+          "localStyle": null
+        },
+        "restored": {
+          "fontWeight": "400",
+          "textAlign": "start",
+          "verticalAlign": "baseline",
+          "localStyle": null
+        }
+      }
+    },
+    {
+      "browserVersion": "152.0.7977.76",
+      "deviceScaleFactor": 2,
+      "scope": "browser formatting-context sensitivity only; not an Astylar layout proof",
+      "result": {
+        "initial": [
+          {
+            "id": "inline",
+            "display": "inline-block",
+            "verticalAlign": "baseline",
+            "top": 7,
+            "width": 20,
+            "height": 20,
+            "bottomFromBaseline": 0
+          },
+          {
+            "id": "block",
+            "display": "block",
+            "verticalAlign": "baseline",
+            "top": 0,
+            "width": 20,
+            "height": 20
+          }
+        ],
+        "shifted": [
+          {
+            "id": "inline",
+            "display": "inline-block",
+            "verticalAlign": "10px",
+            "top": 0,
+            "width": 20,
+            "height": 20,
+            "bottomFromBaseline": -10
+          },
+          {
+            "id": "block",
+            "display": "block",
+            "verticalAlign": "10px",
+            "top": 0,
+            "width": 20,
+            "height": 20
+          }
+        ],
+        "restored": [
+          {
+            "id": "inline",
+            "display": "inline-block",
+            "verticalAlign": "baseline",
+            "top": 7,
+            "width": 20,
+            "height": 20,
+            "bottomFromBaseline": 0
+          },
+          {
+            "id": "block",
+            "display": "block",
+            "verticalAlign": "baseline",
+            "top": 0,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      }
+    }
+  ],
+  "conclusions": [
+    "Omitted local font-weight and text-align inherit the changed ancestor values in the browser; vertical-align does not inherit.",
+    "An explicit local value is not interchangeable with omission under ancestor changes.",
+    "Equal computed vertical-align values do not establish equal geometric behavior across inline-level and block formatting contexts.",
+    "Parent-relative displacement alone cannot establish the requested inline baseline shift."
+  ],
+  "nextRequiredEvidence": [
+    "Replay complete mapped root ancestry, rules, inline declarations and all candidate diagnostic stages for the captured root-property observations.",
+    "Preserve font shorthand, resets, direction/writing-mode, state, ancestor and formatting-context differences; do not blanket-normalize initial values or synthesize candidate computed styles.",
+    "Classify only exact captured cases supported by that evidence. Actual candidate consumers and output behavior require separate public-API equal-input proofs."
+  ],
+  "computedCandidateVerified": false,
+  "materialAttributionVerified": false,
+  "finalRasterVerified": false
+}
