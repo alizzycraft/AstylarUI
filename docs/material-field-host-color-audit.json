@@ -796,6 +796,6 @@
     "replayStatus": "Full build/replay terminated with exit 0; all 577 proofs and 12 grouped case lists exactly match the raw index. Independent validation retains only the 2801-unresolved-groups error. This is not complete audit acceptance.",
     "unresolvedAttributions": 2801,
     "strictErrors": ["2801 resolved-style differences still lack root-cause attribution"],
-    "fullHarness": "Pending for this increment."
+    "fullHarness": "npm run parity:harness:check: exit 0, 586/586 tests pass, 483845.4561 ms. Includes all four field-host color tests. The subsequent root-height browser proof was not loaded in this run and is separate. This verifies audit tooling, not complete input equivalence or final enforced parity."
   }
 }

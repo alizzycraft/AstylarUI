@@ -45,7 +45,11 @@ case-index/fingerprint command passes **10/10**, 29,819.3889 ms, including the
 complete 577-case raw index. The full audit replay terminates with exit 0 and
 all **577 proofs / 12 grouped case lists** exactly match the raw index. Strict
 validation retains only **2,801 unresolved groups**, down from 2,813; every raw
-discrepancy remains present. Full harness verification is pending.
+discrepancy remains present. `npm run parity:harness:check` passes **586/586**,
+exit 0, **483,845.4561 ms**, including all four field-host color tests. The later
+root-height sensitivity proof is separate and was not loaded in this run.
+Evidence was committed/pushed as `dbd045b`; this full-suite gate is recorded in
+a separate increment. No complete input-equivalence or final parity claim follows.
 
 ## Root section color: inherited computation versus declaration-stage inspection
 
