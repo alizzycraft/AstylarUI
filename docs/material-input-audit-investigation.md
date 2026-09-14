@@ -51,8 +51,23 @@ pass **14/14**, **203,033.4937 ms**, with no failures, skips or cancellations;
 the 577-case alignment index and prior source/case indices all pass.
 The initial pooled-evidence replay terminated with exit code 1 and no captured
 output; its cause is not established and it supplies no acceptance evidence.
-Retry with phase markers after the concurrent full harness finishes. Both
-replay verification and the full harness gate remain pending. No renderer or
+The full harness also exits 1: **491 passed / three failed test-file processes**,
+494 reported tests, **981,551.6314 ms**. Failures are
+`normal-line-box-report.spec.mjs`, `tts-parity/interaction-metrics.spec.mjs`
+and `tts-parity/scrolling-metrics.spec.mjs`, with process exit 2147483651 and
+fatal allocation/out-of-memory diagnostics. This is not a complete passing gate.
+After both original processes terminated, the isolated full replay with
+build/validation phase markers exits **0**. Its **577 proofs / six groups**
+match this index's complete case sets, occurrences, reference values and candidate
+omissions exactly. Raw **8,143 groups / 380,520 occurrences** remain unchanged.
+Classification totals are **514 authoring / 3,670 equivalent / 312 documented
+limitation / 3,647 harness**; **131 source findings / 98 fingerprints** remain.
+Strict validation still rejects the incomplete audit solely for **2,570 unresolved
+attributions**, down from 2,576. This verifies the bounded alignment finding,
+not overall input equivalence or output parity.
+The identical complete harness file set is now being retried with
+`--test-concurrency=1`; no assertions or files are removed. Its full gate remains
+pending. No renderer or
 canonical fixture inputs have changed.
 
 ## Container caret-color diagnostics do not establish editable caret rendering
