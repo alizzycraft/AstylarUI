@@ -3,7 +3,7 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Inherited-default policy correction (focused verification)
+## Inherited-default policy correction (full replay verified)
 
 The shared fallback no longer treats omitted `fontStyle`, `letterSpacing`,
 `wordSpacing`, `textTransform`, `whiteSpace`, `overflowWrap`, `wordBreak`,
@@ -22,9 +22,29 @@ were corrected; explicit normal/zero tracking equivalence remains supported.
 
 Refreshed index and regression checks report **21/21 pass** (**100,816.1451 ms**),
 including one file with no matching subtests. All **88** current fingerprints
-across 12 rolling indices and this correction match the source files. The full
-comparison replay is in progress; the complete expanded harness and final
-enforced parity are not yet verified.
+across 12 rolling indices and this correction match the source files.
+
+The complete 2,311-case replay exits **0** and independently matches every raw
+omitted-property family/element/value occurrence for all nine properties.
+All **386,891** style observations remain, now grouped into **8,339** differences:
+**526** authoring, **2,678** equivalent representation, **312** limitations and
+**4,823** harness findings. Strict acceptance correctly rejects **3,534**
+unresolved groups, an increase of **992** from the pre-correction replay; this
+is exposed uncertainty, not a renderer regression or a count of new defects.
+
+The earlier guarded evidence remains: **9,244** root-initial proofs,
+**2,888** container-caret proofs and all **6,938** raw caret omissions. Tracking
+omissions retain **577** field-token and **600** button-host authoring
+observations. Exact retained-typography stage evidence attributes **212**
+observations each for font style, word spacing and text transform, and **128**
+for tracking; these do not synthesize candidate inherited values. The machine
+record preserves the full per-property attribution breakdown and exact command.
+
+The first replay attempt failed because the verification command incorrectly
+stripped units from nonzero tracking values. Correcting only that command and
+rerunning the complete builder/validator passes; audit inputs were not changed.
+The complete expanded harness is running; final enforced parity and remaining
+inherited-stage attribution are not yet verified.
 Historical pre-correction evidence and commands are retained below and in the
 machine record; they must not be read as current equivalence assertions.
 
