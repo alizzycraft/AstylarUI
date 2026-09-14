@@ -3,6 +3,54 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Root section color: inherited computation versus declaration-stage inspection
+
+The [root color case index](material-root-color-audit.json) records all **2,311
+main capture boundaries**, **72 color discrepancy groups** across 36 families.
+Both authored root sections omit a local color. The reference `.frame` supplies
+`#1d1b20`; its later, same-sheet, equal-specificity `.dark` rule supplies
+`#e6e1e5`. Candidate `#page` supplies the corresponding `theme.onSurface` color.
+The captured frame and section computed colors agree, while all three candidate
+section declaration stages preserve the original omission. This is an
+**inherited computed value versus local declaration diagnostic mismatch**, not
+evidence that a section-local color should be added to the candidate fixture.
+
+The owning contract is explicit at `src/lib/astylar-surface.ts:41`: detached
+diagnostic declarations are not used layout boxes or Babylon coordinates.
+`src/lib/astylar.ts:910–942` collects normal/effective declarations separately
+from retained text and painted control text. The audit must not manufacture a
+computed candidate color from the matching ancestor declaration. Actual
+descendant inheritance, caret color, currentColor paint, alpha compositing and
+final raster correctness remain independent obligations.
+
+The collector reuses independently validated full root-font ancestry mapping,
+then separately proves color declarations, source order, specificity, active
+conditions, non-important declarations and all three candidate stages. It
+rejects competing/reset/motion requests, layered source paths, missing ancestry,
+unknown relevant selectors, reversed/cross-sheet dark overrides, scalar changes
+and forged evidence. Color literals must canonicalize to in-range RGBA; matching
+malformed values are not accepted as equivalent evidence. Every grouped case ID
+is retained, with no truncated sample list standing in for coverage.
+
+Source history at initial comparison commit `2f44011` already contains these
+frame/dark and page colors with no local section color. This is source evidence,
+not a runtime bisect; no later color compensation is demonstrated. The proposed
+general correction is to expose inherited computed values as a distinct,
+provenance-bearing diagnostic stage or compare corresponding declaration stages.
+It is **not** to add per-component colors or alter the renderer for this finding.
+
+Verification so far: four focused root-color tests pass (13,213.3184 ms),
+including 90 valid synthetic observations, 24 adverse ancestry/cascade mutations,
+five invalid literals, seven scalar mutations and five forged reports. The
+separate complete raw-capture index test passes (7,831.3949 ms), checking all
+2,311 sections and 4,622 raw tree hashes. Initial full audit replay retains every
+raw discrepancy and reduces unresolved attribution from **2,885 to 2,813**;
+strict validation still reports those 2,813 unresolved groups. The hardened
+full replay also terminates with exit 0 and identical case groups; the only
+strict error is the retained unresolved-attribution count. All ten frozen
+capture-harness fingerprints still match. Full harness verification is pending.
+No production renderer or canonical comparison inputs changed.
+
 ## Generated mappings expose omitted scalar CSS-layer evidence
 
 The [generated-node mapping index](material-generated-node-mapping-audit.json)
