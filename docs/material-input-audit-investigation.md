@@ -72,6 +72,8 @@ pending-group totals, including four deliberately corrupted variants.
 `node --test --test-name-pattern='appearance public proof' tests/material-parity/input-equivalence-audit.spec.mjs`
 passed **1/1**, exit 0, 577.785 ms. All ten frozen capture-harness hashes
 remain unchanged.
+The full `npm run parity:harness:check` gate on `77a7447` subsequently passed
+**564/564**, zero failures/skips/cancellations, 361.129 seconds, exit 0.
 Neither this focused proof nor the build establishes the final enforced
 parity matrix or the complete input-equivalence audit.
 
