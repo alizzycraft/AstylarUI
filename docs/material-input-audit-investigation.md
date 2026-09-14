@@ -51,7 +51,9 @@ stale hash before refresh (**0/1**, **16,317.183 ms**); the complete root-style
 file then passes **5/5**, **15,726.2943 ms**. All **83 source fingerprints / 12
 affected indices** also pass a direct independent hash check. This is
 instrumentation/evidence work only, not a renderer or canonical fixture change.
-The post-correction full harness and final enforced parity remain outstanding.
+The complete post-correction harness passes **626/626**, exit **0**,
+**679,749.22 ms**, no failures/skips/cancellations. This precedes the separate
+root line-height attribution extension; final enforced parity is outstanding.
 The historical section below describes the pre-correction filter.
 
 ## Audit blind spot: unconditional normal line-height omission (historical)
