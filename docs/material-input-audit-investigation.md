@@ -49,7 +49,10 @@ survey verifies **1,154 tree hashes** with no survey issues; exact commands
 are retained in the machine index. The complete case-index/combined checks
 pass **14/14**, **203,033.4937 ms**, with no failures, skips or cancellations;
 the 577-case alignment index and prior source/case indices all pass.
-Pooled-evidence replay and the full harness gate are pending. No renderer or
+The initial pooled-evidence replay terminated with exit code 1 and no captured
+output; its cause is not established and it supplies no acceptance evidence.
+Retry with phase markers after the concurrent full harness finishes. Both
+replay verification and the full harness gate remain pending. No renderer or
 canonical fixture inputs have changed.
 
 ## Container caret-color diagnostics do not establish editable caret rendering
