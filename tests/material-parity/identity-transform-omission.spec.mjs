@@ -17,6 +17,71 @@ const input = (id, reference, candidate, authored = true) => ({ id,
   astylarResolvedStyleEvidenceVersion: 2,
 });
 
+test('fixed-descendant context proof is preserved and owned in the main audit inventory', () => {
+  const evidence = JSON.parse(readFileSync('docs/material-identity-transform-context-audit.json'));
+  assert.equal(evidence.findingId, 'fixed-descendant-ignores-transformed-containing-block');
+  assert.equal(evidence.sourceFingerprints.length, 11);
+  for (const { file, sha256 } of evidence.sourceFingerprints)
+    assert.equal(createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), sha256, file);
+  const transforms = ['<omitted>', 'none', 'translateZ(0px)', 'matrix(1,0,0,1,0,0)', 'translate(0px)', 'scale(1)', 'rotate(0deg)'];
+  const verify = runs => {
+    assert.equal(runs.length, 2);
+    assert.deepEqual(runs[0].observations, runs[1].observations);
+    for (const run of runs) {
+      assert.equal(run.exitCode, 1); assert.equal(run.tests, 14);
+      assert.equal(run.passed, 9); assert.equal(run.failed, 5);
+      assert.equal(run.observations.length, 14);
+      assert.equal(new Set(run.observations.map(o => o.mode + '/' + o.transform)).size, 14);
+      for (const mode of ['fixed-child', 'stacking']) for (const transform of transforms) {
+        const o = run.observations.find(row => row.mode === mode && row.transform === transform);
+        assert.ok(o, mode + '/' + transform);
+        const identity = !['<omitted>', 'none'].includes(transform);
+        assert.equal(o.dpr, 1); assert.deepEqual(o.viewport, [320, 200]);
+        assert.deepEqual(o.renderSize, [320, 200]); assert.deepEqual(o.diagnostics, []);
+        assert.equal(o.candidateNormal, transform); assert.equal(o.candidateEffective, transform);
+        assert.equal(o.referenceTransform.replace(/\s/g, ''), identity ? 'matrix(1,0,0,1,0,0)' : 'none');
+        const host = { left: 80, top: 60, width: 100, height: 100 };
+        assert.deepEqual(o.observations['context-host'], { actual: host, reference: host });
+        if (mode === 'fixed-child') {
+          assert.equal(o.stack, undefined);
+          assert.deepEqual(o.observations['context-child'].actual, { left: 5, top: 7, width: 10, height: 10 });
+          assert.deepEqual(o.observations['context-child'].reference,
+            { left: identity ? 85 : 5, top: identity ? 67 : 7, width: 10, height: 10 });
+        } else {
+          assert.deepEqual(o.observations['context-child'], { actual: host, reference: host });
+          assert.equal(o.stack.referenceHit, identity ? 'context-sibling' : 'context-child');
+          assert.equal(o.stack.expectedColor, identity ? 'rgb(0, 0, 255)' : 'rgb(255, 0, 0)');
+          assert.deepEqual(o.stack.actualPixel, identity ? [0, 0, 255, 255] : [255, 0, 0, 255]);
+        }
+      }
+    }
+  };
+  verify(evidence.verification.runs);
+  for (const mutate of [
+    runs => runs[0].observations.pop(),
+    runs => { for (const run of runs) run.observations[0].dpr = 2; },
+    runs => { for (const run of runs) run.observations[0].candidateEffective = 'scale(1)'; },
+    runs => { for (const run of runs) run.observations[0].diagnostics.push({ severity: 'error' }); },
+    runs => { for (const run of runs) for (const o of run.observations) o.observations['context-child'].actual = o.observations['context-child'].reference; },
+    runs => { for (const run of runs) run.observations.find(o => o.stack).stack.actualPixel = [0, 0, 0, 255]; },
+  ]) {
+    const copy = structuredClone(evidence.verification.runs); mutate(copy);
+    assert.throws(() => verify(copy));
+  }
+  const audit = buildMaterialInputAudit(report([]));
+  const finding = audit.sourceFindings.find(f => f.id === 'core-fixed-descendant-ignores-transformed-containing-block');
+  assert.ok(finding, 'the demonstrated defect must be included in the main findings');
+  assert.equal(finding.detected, true); assert.equal(finding.classification, 'confirmed-core-renderer-defect');
+  assert.match(finding.owner, /core.*CSS containing-block/);
+  assert.match(finding.introducedBy, /d3ef6dc3/);
+  assert.ok(audit.focusedProofs.some(p => p.file === finding.focusedProof && p.line > 0 && p.status !== 'missing'));
+  assert.ok(audit.implementationPlan.some(p => p.priority === 1.2 && /containing block/.test(p.action)));
+  assert.deepEqual(audit.implementationPlan.map(p => p.priority), audit.implementationPlan.map(p => p.priority).sort((a, b) => a - b));
+  for (const { file, sha256 } of evidence.sourceFingerprints)
+    assert.deepEqual(audit.sourceFingerprints.filter(f => f.file === file), [{ file, sha256 }]);
+  assert.deepEqual(audit.discrepancies, []); // A source proof does not manufacture Material scalar attribution.
+});
+
 test('identity transforms cannot establish equivalence to an omitted transform', () => {
   const transforms = ['matrix(1,0,0,1,0,0)', 'matrix(1, 0, 0, 1, 0, 0)', 'translate(0px)', 'scale(1)',
     'rotate(0deg)', 'matrix3d(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1)'];

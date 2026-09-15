@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "kind": "fixed-descendant-context-proof-inventory-integration",
+  "baselineCommit": "0b966fc",
+  "scope": "Audit metadata and regression protection only. The existing public renderer reproduction remains unchanged and intentionally failing.",
+  "findingId": "core-fixed-descendant-ignores-transformed-containing-block",
+  "proofArtifact": "docs/material-identity-transform-context-audit.json",
+  "changes": [
+    "Add the confirmed CSS containing-block defect to the main source findings and implementation plan at priority 1.2.",
+    "Include all eleven proof source fingerprints in the main inventory; seven new entries bring the source count to 123.",
+    "Add one registered Node regression that independently checks the two identical 14-trial records, eleven original source hashes, six evidence-mutation rejection controls and main inventory ownership.",
+    "Refresh only eighteen current source fingerprint fields across twelve rolling indices, preserving all historical and body evidence.",
+    "Sort implementation-plan items by their declared numeric priorities. A new ordering assertion exposed an existing 5.2955-before-5.295 inversion; all original item contents and equal-priority ordering are preserved."
+  ],
+  "verification": [
+    {
+      "command": "node --test --test-name-pattern=\"fixed-descendant context proof\" tests/material-parity/identity-transform-omission.spec.mjs",
+      "phase": "before integration",
+      "exitCode": 1,
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "durationMs": 2019.7214,
+      "result": "Missing main source finding rejected after all recorded witness and mutation controls passed."
+    },
+    {
+      "command": "node --test --test-name-pattern=\"fixed-descendant context proof|source audit has an explicit\" tests/material-parity/identity-transform-omission.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs",
+      "phase": "after integration",
+      "exitCode": 0,
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "durationMs": 1532.9884
+    },
+    {
+      "command": "node --test tests/material-parity/identity-transform-omission.spec.mjs",
+      "exitCode": 0,
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 12329.5142,
+      "scope": "Entire identity omission spec, including original complete 140-case capture population and independent DPR1/2 browser reference probe."
+    },
+    {
+      "command": "node --test --test-name-pattern=\"fixed-descendant context proof|source audit has an explicit|records source fingerprints\" tests/material-parity/identity-transform-omission.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs",
+      "phase": "ordering regression before sorting",
+      "exitCode": 1,
+      "tests": 3,
+      "passed": 2,
+      "failed": 1,
+      "durationMs": 2640.9698,
+      "result": "Existing priority 5.2955 appeared before a second priority 5.295 item."
+    },
+    {
+      "command": "node --test --test-name-pattern=\"fixed-descendant context proof|source audit has an explicit|records source fingerprints\" tests/material-parity/identity-transform-omission.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs",
+      "phase": "final sorted plan and inventory",
+      "exitCode": 0,
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "durationMs": 2582.3411
+    }
+  ],
+  "rollingIndices": {
+    "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{execFileSync}from'node:child_process';import{createHash}from'node:crypto';const files=['docs/material-button-appearance-audit.json','docs/material-field-host-alignment-audit.json','docs/material-container-caret-audit.json','docs/material-field-host-weight-tracking-audit.json','docs/material-field-host-color-audit.json','docs/material-field-host-typography-audit.json','docs/material-root-height-audit.json','docs/material-root-typography-audit.json','docs/material-root-color-audit.json','docs/material-line-height-omission-audit.json','docs/material-nonwidget-appearance-audit.json','docs/material-root-initial-style-audit.json'];let fingerprints=0,changed=0;for(const file of files){const before=JSON.parse(execFileSync('git',['show','HEAD:'+file],{encoding:'utf8',maxBuffer:50000000}));const after=JSON.parse(readFileSync(file));assert.deepEqual(before.sourceFingerprints.map(f=>f.file),after.sourceFingerprints.map(f=>f.file));for(const [i,f]of after.sourceFingerprints.entries()){assert.equal(createHash('sha256').update(readFileSync(f.file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex'),f.sha256,f.file);fingerprints++;if(f.sha256!==before.sourceFingerprints[i].sha256)changed++;}delete before.sourceFingerprints;delete after.sourceFingerprints;assert.deepEqual(after,before,file+' historical/body evidence changed');}console.log(JSON.stringify({indices:files.length,fingerprints,changedFingerprintFields:changed,historicalAndBodyEvidenceUnchanged:true}));\"",
+    "exitCode": 0,
+    "indices": 12,
+    "fingerprints": 85,
+    "changedFingerprintFields": 18,
+    "historicalAndBodyEvidenceUnchanged": true
+  },
+  "priorIndexChecks": {
+    "command": "node --test --test-concurrency=1 --test-name-pattern='root initial-style|case index|records source fingerprints|covers every captured host|normalizes browser-used' tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+    "status": "passed",
+    "exitCode": 0,
+    "tests": 18,
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "durationMs": 214548.1421
+  },
+  "fullCapturedReplay": {
+    "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const bytes=readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');assert.equal(createHash('sha256').update(bytes).digest('hex'),'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');const audit=buildMaterialInputAudit(JSON.parse(bytes),{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});assert.equal(audit.sourceFingerprints.length,123);assert.equal(audit.sourceFindings.length,132);const finding=audit.sourceFindings.find(f=>f.id==='core-fixed-descendant-ignores-transformed-containing-block');assert.equal(finding.detected,true);assert.equal(finding.classification,'confirmed-core-renderer-defect');const groups=audit.discrepancies.filter(d=>d.property==='transform'&&d.reference==='matrix(1,0,0,1,0,0)'&&d.astylar===undefined);assert.equal(groups.length,3);assert.equal(groups.reduce((n,g)=>n+g.occurrences,0),140);assert.ok(groups.every(g=>g.attribution==='unresolved'));assert.equal(audit.summary.totalStyleDifferenceOccurrences,386891);assert.equal(audit.summary.uniqueStyleDifferences,8339);assert.equal(audit.summary.unresolvedAttributions,3213);const errors=validateMaterialInputAudit(audit);assert.deepEqual(errors,['3213 resolved-style differences still lack root-cause attribution']);console.log(JSON.stringify({summary:audit.summary,sourceFingerprints:audit.sourceFingerprints.length,sourceFinding: finding.id,identityGroups:groups.map(({family,element,occurrences,attribution})=>({family,element,occurrences,attribution})),errors,scope:'Complete unchanged frozen capture; source-proof integration only, no report files written'}));\"",
+    "status": "passed with expected strict unresolved rejection",
+    "exitCode": 0,
+    "summary": {
+      "inputEquivalent": false,
+      "structureDifferences": 88,
+      "uniqueStyleDifferences": 8339,
+      "totalStyleDifferenceOccurrences": 386891,
+      "classifications": {
+        "application-plugin-authoring-defect": 526,
+        "equivalent-representation": 2675,
+        "intentional-documented-limitation": 312,
+        "parity-harness-defect": 4826
+      },
+      "propertyGroups": {
+        "interaction": 351,
+        "layout": 3106,
+        "other": 351,
+        "paint": 1255,
+        "transform": 937,
+        "typography": 2339
+      },
+      "affectedFamilies": {
+        "autocomplete": 147,
+        "badge": 282,
+        "bottom-sheet": 412,
+        "button": 305,
+        "button-toggle": 260,
+        "card": 376,
+        "checkbox": 220,
+        "chips": 317,
+        "core": 145,
+        "datepicker": 147,
+        "dialog": 487,
+        "divider": 300,
+        "expansion": 264,
+        "form-field": 147,
+        "grid-list": 278,
+        "icon": 128,
+        "input": 147,
+        "list": 149,
+        "menu": 150,
+        "paginator": 269,
+        "progress-bar": 130,
+        "progress-spinner": 124,
+        "radio": 304,
+        "select": 147,
+        "sidenav": 128,
+        "slide-toggle": 190,
+        "slider": 331,
+        "snack-bar": 262,
+        "sort": 151,
+        "stepper": 341,
+        "table": 142,
+        "tabs": 342,
+        "timepicker": 147,
+        "toolbar": 273,
+        "tooltip": 249,
+        "tree": 148
+      },
+      "unclassifiedDifferences": 0,
+      "unresolvedAttributions": 3213,
+      "sourceFindings": 132,
+      "unexplainedSourceFindings": 0,
+      "undetectedSourceDefinitions": 0
+    },
+    "sourceFingerprints": 123,
+    "sourceFinding": "core-fixed-descendant-ignores-transformed-containing-block",
+    "identityGroups": [
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-primary",
+        "occurrences": 68,
+        "attribution": "unresolved"
+      },
+      {
+        "family": "core",
+        "element": "core-primary",
+        "occurrences": 52,
+        "attribution": "unresolved"
+      },
+      {
+        "family": "progress-bar",
+        "element": "progress-bar-primary",
+        "occurrences": 20,
+        "attribution": "unresolved"
+      }
+    ],
+    "errors": [
+      "3213 resolved-style differences still lack root-cause attribution"
+    ],
+    "scope": "Complete unchanged frozen capture; source-proof integration only, no report files written",
+    "qualification": "Run completed before the final plan-order-only correction. Final focused checks and a separate exact plan-item comparison verify that correction; no captured-data classifier or proof body was changed afterward."
+  },
+  "limits": [
+    "The public renderer proof remains DPR1 with five placement failures and nine passing controls per run; the independent DPR1/2 reference probe is not candidate DPR2 evidence.",
+    "No new attribution is assigned to the three original Material identity-transform groups or any other captured scalar difference.",
+    "The canonical snapshot committed at 0b966fc remains the prior 131-finding/116-fingerprint report; it must be regenerated and checked after integration work.",
+    "The complete 656-test harness result predates this additional registered test. The expanded unfiltered harness has not yet been run.",
+    "Final unfiltered enforced parity and remaining material-difference attribution remain pending."
+  ],
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/input-equivalence-policy.mjs",
+      "sha256": "7e939aece26dd69b846b78fc6d21aa332463b53068f488cf19343578306d80d8"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "693c14b881acfd1cb1adbd664c5a2ec12b83b47a895ba70fa2fd3c4b26b7e599"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+      "sha256": "b85a7969107883f0bec71f40da6ec98620f257019c9b2157652dbdabf32740de"
+    },
+    {
+      "file": "tests/material-parity/identity-transform-omission.spec.mjs",
+      "sha256": "7ad3305ff7a26473f288ba5b213e4d0383cc6ebf0f2f5d68000663c9a9e94567"
+    }
+  ],
+  "planIntegrity": {
+    "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{execFileSync}from'node:child_process';import{createHash}from'node:crypto';const file='tests/material-parity/input-equivalence-audit.mjs';const before=execFileSync('git',['show','HEAD:'+file],{encoding:'utf8',maxBuffer:10000000});const after=readFileSync(file,'utf8');const plan=source=>Function(source.slice(source.indexOf('function implementationPlan()'),source.indexOf('function compactAuthored('))+';return implementationPlan();')();const original=plan(before),current=plan(after);const added=current.filter(p=>p.rootCause==='Fixed descendants unconditionally use the viewport instead of a transformed containing block');assert.equal(added.length,1);assert.deepEqual(current,[...original,...added].sort((a,b)=>a.priority-b.priority));const names=['tests/material-parity/input-equivalence-policy.mjs',file,'tests/material-parity/input-equivalence-audit.spec.mjs','tests/material-parity/identity-transform-omission.spec.mjs'];console.log(JSON.stringify({oldPlanEntries:original.length,currentPlanEntries:current.length,existingPlanItemsUnchanged:true,oneNewContainingBlockItem:true,sortedByDeclaredPriority:true,sourceFingerprints:names.map(file=>({file,sha256:createHash('sha256').update(readFileSync(file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex')}))}));\"",
+    "exitCode": 0,
+    "oldPlanEntries": 60,
+    "currentPlanEntries": 61,
+    "existingPlanItemsUnchanged": true,
+    "oneNewContainingBlockItem": true,
+    "sortedByDeclaredPriority": true
+  }
+}

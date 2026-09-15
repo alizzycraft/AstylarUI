@@ -3,6 +3,41 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Fixed-child context proof integrated into the main inventory
+
+The [integration record](material-identity-context-inventory-audit.json) adds the
+demonstrated fixed-descendant defect to the main source findings and gives its
+core CSS containing-block correction priority **1.2**. All eleven original
+proof source files are now fingerprinted in the main inventory (**123 total**).
+No production rule, diagnostic browser reproduction or canonical fixture changed.
+
+The new regression first failed because the finding was absent, then passed
+with the existing source-inventory test (**2/2**). The full identity-omission
+file passes **5/5**, including all **140** original capture cases and the separate
+DPR1/2 browser reference probe. It independently checks both original 14-trial
+candidate records and rejects six altered-evidence controls. The candidate
+reproduction still has five fixed-placement failures and nine passing controls
+at DPR1; reference-only DPR2 evidence does not enlarge that candidate claim.
+
+Twelve rolling indices retain all historical/body evidence; only **18** current
+source fingerprint fields changed, with all **85** recorded fingerprints checked.
+The prior-index tests pass **18/18**. Complete frozen raw replay passes its expected
+assertions with **132 source findings**, **123 fingerprints**, **8,339 groups** and
+**386,891 occurrences**. All three Material identity groups (**140 cases**) remain
+unresolved; strict validation still rejects **3,213 unresolved attributions**.
+The source proof does not change any captured scalar classification.
+
+Final review also found an existing numeric-priority ordering inversion. A new
+assertion rejected it; sorting by the declared priorities passes **3/3** focused
+inventory checks. An independent comparison proves all **60** original plan items
+are unchanged, with one new containing-block item and stable numeric ordering.
+This presentation-only correction followed the full raw replay; final source
+fingerprints and all rolling indices were checked again afterward.
+
+The canonical report below is the **0b966fc snapshot** and requires regeneration after
+this integration; its old counts must not be presented as current verification.
+The 656-test harness result also predates this additional registered test.
+
 ## Canonical report generated and independently checked
 
 The [canonical generation record](material-input-audit-canonical-generation.json)

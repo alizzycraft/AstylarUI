@@ -685,6 +685,16 @@ export const sourceAuditDefinitions = Object.freeze([
     focusedProof: 'examples/material-showcase/src/app/font-relative-box-audit.spec.ts',
   }),
   Object.freeze({
+    id: 'core-fixed-descendant-ignores-transformed-containing-block',
+    introducedBy: 'd3ef6dc3e9c6c27003b59315fe5c5d86cf7c5ce8 introduced unconditional viewport parenting; source history only, no historical runtime bisect',
+    file: 'src/app/services/dom/elements/element-dimension.service.ts',
+    pattern: String.raw`return dom\.context\.elements\.get\('root-body'\) \?\? parent;`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core CSS containing-block selection before used-size calculation and final projection',
+    justification: 'Two public-package equal-input runs each preserve five fixed-child failures and nine passing controls at DPR1. Under identity matrix, translateZ(0px), translate(0px), scale(1) or rotate(0deg), HTML places the fixed child at 85,67 while Astylar leaves it at 5,7; both host boxes remain 80,60/100x100. Omitted/none fixed-child controls pass. All seven independent stacking controls pass geometry and final interior color checks, so this is not a general stacking failure. ElementDimensionService.resolveLayoutParent unconditionally selects root-body for fixed elements before ElementCreationService calculates CSS dimensions and retains parent identity. Supported 2D identities also fail, excluding unsupported matrix/translateZ parsing as the sole cause. Select the correct CSS containing block in core; do not insert fixture offsets, infer layout from mesh projection, or duplicate placement in a plugin. This minimal proof does not attribute the 140 captured Material identity omissions, establish DPR2/update/scroll behavior, or broaden documented transform support.',
+    focusedProof: 'examples/material-showcase/src/app/identity-transform-context-audit.spec.ts',
+  }),
+  Object.freeze({
     id: 'core-enabled-held-focus-delays-native-mirror',
     introducedBy: 'dbe4d8ed introduced transaction suppression; no historical runtime bisect performed',
     file: 'src/lib/astylar.ts',
