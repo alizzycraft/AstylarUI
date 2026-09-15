@@ -12,7 +12,10 @@ Canonical regeneration and the independent conservation gate now verify the
 remaining unattributed count is **2,812**, not a claim that this many renderer
 bugs exist. Generation still exits 1 on that strict audit acceptance failure.
 The historical counts in earlier investigation entries describe their own
-checkpoints. No-write replay and the full 43-file harness are not yet terminal.
+checkpoints. The full 43-file harness is now terminal at 708/710 passing with
+two preserved failures (source-fingerprint count and historical non-border row
+hash); all 47 start-of-run source hashes remained unchanged. No-write replay is
+still running. The linked integration record contains the exact failed guards.
 
 ## Overlay ancestor-context capture limitation
 

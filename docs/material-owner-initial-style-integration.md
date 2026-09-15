@@ -123,9 +123,27 @@ The generated gzip payload is 48,413,240 bytes with SHA-256
 Its 1,795,180,227 decoded bytes have SHA-256
 `d8d776394aaf5d3830146cc5967150eaf7da69877751441852059db58ec31da9`.
 
-Canonical no-write replay and the unfiltered 43-file harness are running and
-still require terminal verification. The successful conservation gate does not
-substitute for either result or for the final enforced UI matrix.
+The unfiltered 43-file harness subsequently finished with **708/710 passing,
+2 failing**, zero skipped/cancelled tests, in **2,178,545.2152 ms**. All 47
+recorded start-of-run source hashes remained unchanged. The log is
+`artifacts/material-parity/owner-initial-full-harness.log`, SHA-256
+`ced043e2b7897e79c34012191232c85490d9be1522dc14ecaed5f797ee1b2c5b`.
+
+Failures are preserved, not dismissed as a green run:
+
+- `input-equivalence-audit.spec.mjs:1376` expects 148 source fingerprints but
+  the collector now returns 156. Exact source membership must be checked before
+  updating the expectation.
+- `slider-border-canonical-integration.spec.mjs:53` rejects the complete-row
+  hash of 220 non-border rows in its two-case fixture. The expected hash is
+  `4e1f09fc03af948aec7b2d1d927ee13c298b6439ceaa3bb0145a72122eb315ee`;
+  actual is `08822637348df515eecd57ef53bb9652a932a2b5e03e3b835ba14633948fc87d`.
+  New shared owner attribution is a plausible explanation, but exact row
+  conservation must be demonstrated before changing the historical guard.
+
+Canonical no-write replay is still running. The successful conservation gate
+does not substitute for resolving these test failures, no-write verification or
+the final enforced UI matrix.
 
 Remaining obligations include inherited/used-value consumption, wrapping,
 visibility, hit testing, plugin/core ownership, all other unresolved input
