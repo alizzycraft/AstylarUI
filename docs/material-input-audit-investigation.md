@@ -31,6 +31,15 @@ integration record retains the failures, corrections and exact hashes.
 
 ## Overlay ancestor-context capture limitation
 
+The [shared container shadow audit](material-root-shadow-input-audit.md) now
+checks all 2,311 cases / 36 families against their original root owners and
+three candidate style stages. Reference `#0002` and candidate alpha `0.14`
+are genuinely unequal inputs; browser serialization controls at DPR 1 and 2
+separate this from equivalent token order and zero-spread representations.
+Both requests date to the initial showcase, not a demonstrated later workaround.
+All four tests pass, including 11 negative controls; generation and no-write
+replay pass. No fixture/renderer behavior or canonical attribution was changed.
+
 The [remaining overlay ancestry review](material-remaining-overlay-ancestry-review.md)
 accounts for 48 more groups / 1,424 observations. The existing original-state
 replay also reproduces 160 dialog-owner proofs; the 18 tooltip hover/held owners
