@@ -1368,7 +1368,12 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 109);
+  assert.equal(audit.sourceFingerprints.length, 114);
+  for (const file of ['tests/material-parity/input-audit-report-codec.mjs',
+    'tests/material-parity/input-audit-report-codec.spec.mjs', 'tests/material-parity/input-audit-report-stream.mjs',
+    'tests/material-parity/input-audit-report-stream.spec.mjs', 'tests/material-parity/input-audit-cli-transport.spec.mjs'])
+    assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
+  assert.ok(audit.focusedProofs.some(entry => entry.file === 'tests/material-parity/input-audit-cli-transport.spec.mjs' && entry.status !== 'missing'));
   assert.ok(audit.sourceFingerprints.some(s => s.file === 'tests/material-parity/inherited-default-sensitivity.spec.mjs'));
   assert.ok(audit.sourceFingerprints.some(s => s.file === 'tests/material-parity/caret-color-omission-sensitivity.spec.mjs'));
   assert.ok(audit.sourceFingerprints.some(s => s.file === 'tests/material-parity/root-line-height-proof.spec.mjs'));

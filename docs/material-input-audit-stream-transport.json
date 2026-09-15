@@ -156,5 +156,97 @@
     "maxRssKiB": 3791020,
     "scope": "Full frozen captured audit encoded and byte-checked in memory; canonical output files not overwritten; strict input-equivalence remains false"
   },
-  "remaining": "Full captured-audit transport replay passed. CLI integration, registration in complete harness/source provenance, and final enforced parity remain pending. The final checked-in report has not been overwritten."
+  "cliIntegration": {
+    "baselineCommit": "8641ebd",
+    "scope": "Wire existing lossless stream writer/checker into maintained audit CLI, register its tests and retain complete source provenance. No renderer, canonical fixture, raw capture, classification rule or acceptance change.",
+    "sourceFingerprints": [
+      {
+        "file": "package.json",
+        "sha256": "bf38e6792933fed75e70f176d5e5011fece7979ed8793ab299f86327af1dece0"
+      },
+      {
+        "file": "scripts/run-material-input-audit.mjs",
+        "sha256": "d3762679413b59822ad299e41425195d67b53e456e46d96dd8c217c0ec02fd9a"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.mjs",
+        "sha256": "4b318d2abfb5c73b5358e5021a3d2d6f4f953f66465ba677f023f2bbfe45f5f3"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+        "sha256": "cccb4fac54084844d28757d0e27b90c229320ad861f3b9f3d6d26a1edc4cb14b"
+      },
+      {
+        "file": "tests/material-parity/input-audit-report-codec.mjs",
+        "sha256": "d68fdcfc63aafc9526b0ecf497645f24532782c7d1611c7f4ef0e9b1dcb6c8ed"
+      },
+      {
+        "file": "tests/material-parity/input-audit-report-codec.spec.mjs",
+        "sha256": "3a7d424e4b1ab695fbe7f92c8b90f11859eba36f4407884fc4ca7c16d0d8d350"
+      },
+      {
+        "file": "tests/material-parity/input-audit-report-stream.mjs",
+        "sha256": "3a2afb9d0ceec21fe24a24451156fb2e4902e7f8cf052a996479f83399eddc12"
+      },
+      {
+        "file": "tests/material-parity/input-audit-report-stream.spec.mjs",
+        "sha256": "5907ac58cbc0cb85301e5db09ff0fbb173b549c0bed8dd9e627a11c61e0eedf5"
+      },
+      {
+        "file": "tests/material-parity/input-audit-cli-transport.spec.mjs",
+        "sha256": "fbaf2cac9e26566643cd53d3b3a61006656586de6a9d9696c6d205b494f32b60"
+      }
+    ],
+    "changes": [
+      "Generation and --check await stream transport; unresolved validator errors still set process exit status 1.",
+      "The complete harness includes both the seven streaming tests and one CLI boundary test.",
+      "The report fingerprints all five codec/stream/CLI-test sources (114 total) and points to the CLI focused proof.",
+      "Twelve rolling indices refresh only current collector/spec fingerprint fields; historical proof records remain pinned to their original versions."
+    ],
+    "verification": [
+      {
+        "command": "node --test tests/material-parity/input-audit-cli-transport.spec.mjs",
+        "phase": "before integration",
+        "exitCode": 1,
+        "tests": 1,
+        "passed": 0,
+        "durationMs": 218.4852,
+        "error": "Aggregate-audit stringifier guard rejects the maintained CLI's legacy encoder before unresolved findings can be reported."
+      },
+      {
+        "command": "node --test tests/material-parity/input-audit-cli-transport.spec.mjs",
+        "phase": "after integration",
+        "exitCode": 0,
+        "tests": 1,
+        "passed": 1,
+        "durationMs": 477.5883
+      },
+      {
+        "command": "node --test --test-concurrency=1 tests/material-parity/input-audit-report-codec.spec.mjs tests/material-parity/input-audit-report-stream.spec.mjs tests/material-parity/input-audit-cli-transport.spec.mjs",
+        "exitCode": 0,
+        "tests": 14,
+        "passed": 14,
+        "failed": 0,
+        "durationMs": 1277.9925
+      }
+    ],
+    "commandProofScope": "Maintained executable and actual codec/stream files run in a temporary child-process workspace; only the expensive collector is replaced with a small unresolved fixture. A process preload rejects aggregate audit serialization. Generation preserves the full fixture; check accepts current evidence but retains unresolved exit status; stale nested data and unsafe manifest paths fail; check never overwrites payload. This does not replace the separate full captured-audit transport proof or final real CLI/report verification.",
+    "rollingIndices": {
+      "rollingIndices": 12,
+      "verifiedFingerprints": 85,
+      "packageSha256": "bf38e6792933fed75e70f176d5e5011fece7979ed8793ab299f86327af1dece0"
+    },
+    "priorIndexChecks": {
+      "command": "node --test --test-concurrency=1 --test-name-pattern='root initial-style|case index|records source fingerprints|covers every captured host' tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+      "exitCode": 0,
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "durationMs": 117457.886
+    },
+    "remaining": "Complete expanded harness (expected 652 tests), real CLI report generation/check with current provenance, correction of identity-transform omission equivalence, remaining attribution work and final enforced parity are pending."
+  },
+  "remaining": "Streaming CLI integration passes 14 focused tests and 18 prior-index checks. Complete expanded harness, real report generation/check, remaining attribution work and final enforced parity remain pending."
 }

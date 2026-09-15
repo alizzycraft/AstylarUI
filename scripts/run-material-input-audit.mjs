@@ -9,10 +9,10 @@ import {
   validateMaterialInputAudit,
 } from '../tests/material-parity/input-equivalence-audit.mjs';
 import {
-  assertMaterialInputAuditCurrent,
-  encodeMaterialInputAudit,
-  materialInputAuditPayloadFile,
-} from '../tests/material-parity/input-audit-report-codec.mjs';
+  assertMaterialInputAuditCurrentStream,
+  encodeMaterialInputAuditStream,
+} from '../tests/material-parity/input-audit-report-stream.mjs';
+import { materialInputAuditPayloadFile } from '../tests/material-parity/input-audit-report-codec.mjs';
 
 const root = process.cwd();
 const options = parseMaterialInputAuditArguments(process.argv.slice(2), root);
@@ -28,10 +28,10 @@ const markdown = renderMaterialInputAuditMarkdown(audit);
 const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial });
 
 if (check) {
-  assertMaterialInputAuditCurrent(audit, JSON.parse(readFileSync(jsonPath, 'utf8')), readFileSync(payloadPath));
+  await assertMaterialInputAuditCurrentStream(audit, JSON.parse(readFileSync(jsonPath, 'utf8')), readFileSync(payloadPath));
   assert.equal(readFileSync(markdownPath, 'utf8'), markdown, 'checked-in human audit is stale');
 } else {
-  const { manifest, payload } = encodeMaterialInputAudit(audit);
+  const { manifest, payload } = await encodeMaterialInputAuditStream(audit);
   writeFileSync(payloadPath, payload);
   writeFileSync(jsonPath, `${JSON.stringify(manifest, null, 2)}\n`);
   writeFileSync(markdownPath, markdown);

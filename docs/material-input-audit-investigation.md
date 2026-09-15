@@ -27,7 +27,7 @@ original authored intent and core ownership. Review the separate transform-origi
 guard on its own merits; this witness does not itself prove an origin mismatch.
 No renderer, canonical fixture or classification rule changed in this increment.
 
-## Lossless streamed report transport (focused proof; integration pending)
+## Lossless streamed report transport (full capture verified)
 
 The [transport evidence](material-input-audit-stream-transport.json) records a
 bounded writer and exact-byte verifier for the existing ordinary JSON/gzip v1
@@ -52,8 +52,18 @@ payload. Encoding plus checking takes **234,613.2947 ms**; process peak RSS is
 **3,791,020 KiB**, including the resident full audit. The report still contains
 **30,043 root proofs**, **386,891 style occurrences**, and **3,210 unresolved
 attributions**. This is transport success, not input-equivalence acceptance.
-CLI integration and test/provenance registration remain pending; canonical
-report files are untouched. Exact hashes and command are in the transport record.
+The maintained CLI now awaits the stream writer/checker in both generation and
+`--check`. Its command-boundary regression first fails on aggregate serialization
+(**0/1**, **218.4852 ms**), then passes after integration (**1/1**, **477.5883 ms**).
+Combined codec, stream and command tests pass **14/14** (**1,277.9925 ms**).
+The command still reports unresolved findings with exit **1**, rejects changed
+nested data and unsafe manifests, and does not overwrite evidence in check mode.
+This focused command proof substitutes only a small collector fixture; it is not
+the final real-report CLI run. Both new test files are registered in the complete
+harness, and all five transport/test sources are now fingerprinted (**114 total**).
+All **85** fingerprints in **12** rolling indices match; prior-index checks pass
+**18/18** (**117,457.886 ms**). Canonical report files are untouched. Exact hashes, commands, scope and
+pending complete-harness/real-report/final-parity gates are in the transport record.
 The legacy small-report decoder retains its string-size limit; the new checker
 needs neither a second complete report object nor a new JSON parser.
 

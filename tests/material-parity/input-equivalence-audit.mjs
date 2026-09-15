@@ -8046,6 +8046,11 @@ function sourceFingerprints(root) {
     'tests/material-parity/control-line-box-evidence.mjs',
     'scripts/audit-material-control-line-boxes.mjs',
     'scripts/run-material-input-audit.mjs',
+    'tests/material-parity/input-audit-report-codec.mjs',
+    'tests/material-parity/input-audit-report-codec.spec.mjs',
+    'tests/material-parity/input-audit-report-stream.mjs',
+    'tests/material-parity/input-audit-report-stream.spec.mjs',
+    'tests/material-parity/input-audit-cli-transport.spec.mjs',
     'tests/material-parity/normal-line-box-report.spec.mjs',
     'tests/material-parity/normal-line-box-evidence.mjs',
     'scripts/audit-material-normal-line-boxes.mjs',
@@ -8064,6 +8069,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/input-audit-cli-transport.spec.mjs', /test\('audit CLI awaits streamed transport/,
+      'lossless streamed audit command transport', 'The maintained CLI and stream/codec modules run in isolated child processes with a small substituted collector. An aggregate-audit stringifier guard rejects the old path; generation and check preserve complete JSON bytes and unresolved exit status. Stale nested evidence and unsafe manifest paths fail without check-mode writes. Full captured-report streaming has separate recorded scale evidence; this command-boundary proof does not certify renderer or input equivalence.'),
     proof(root, 'tests/material-parity/root-inherited-default-proof.spec.mjs', /test\('root inherited-property stage proof/,
       'guarded root inherited-property observation stages', 'Nine root properties retain exact browser computed values and candidate local omissions across complete captured ancestry. Explicit requests, inherited changes, aliases, incomplete stages and broader equivalence claims are rejected. This attributes observation stages, not candidate computed inheritance, hit testing or rendering.'),
     proof(root, 'tests/material-parity/inherited-default-sensitivity.spec.mjs', /test\('inherited defaults cannot/,
