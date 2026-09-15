@@ -1,0 +1,52 @@
+# Field-host initial styles: observation-stage audit
+
+This is an audit finding, not a renderer fix or accepted input equivalence.
+
+The original source-bound inventory contains 577 form-field, input,
+autocomplete, select, datepicker and timepicker cases. Reopening their paired
+trees produces 48 family/property groups and 4,616 observations for `fontStyle`,
+`wordSpacing`, `textTransform`, `whiteSpace`, `overflowWrap`, `wordBreak`,
+`pointerEvents` and `visibility`.
+
+For these properties, the captured browser frame/section/Material-host chain
+has no competing authored requests and reports computed defaults. The mapped
+Astylar page/section/field-shell chain also omits requests, but its three
+diagnostic snapshots describe local declarations, not computed inherited
+values. Consequently the scalar mismatch cannot by itself establish missing
+authoring or a renderer defect. Its demonstrated cause is a mismatch between
+the observation stages used by the audit.
+
+The [machine inventory](material-field-host-initial-style-audit.json) preserves
+the original report digest, all 577 case keys and paired tree references,
+property-specific values, all group occurrences, eight source fingerprints,
+and a digest of the complete independently replayed paths. The browser's
+`wordSpacing: 0px` remains recorded separately from the canonical scalar `0`;
+candidate omission is never replaced with either value.
+
+## Verification
+
+- `node --test tests/material-parity/field-host-initial-style-evidence.spec.mjs`:
+  4/4 pass, zero skips/cancellations, 12.536 seconds. This includes the complete
+  577-case replay and exact joins to all 4,616 original scalars.
+- Negative controls reject incomplete/duplicate cases, wrong style provenance,
+  changed ancestry, ancestor inline requests, potentially matching unknown
+  selectors, changed browser values, populated candidate local stages,
+  mismapped scalar identities and fabricated computed/raster verification.
+- `node scripts/audit-material-field-host-initial-styles.mjs --check` replays
+  the complete source population and checks the generated inventory exactly.
+
+## Ownership and limits
+
+The audit observation boundary owns this finding. It must expose and compare
+equivalent stages without synthesizing candidate computed values. Core
+inheritance, wrapping, pointer-event/visibility consumption, layout and final
+paint still require their independent proofs. Existing Material component
+font-family, font-size, line-height, weight/tracking and alignment authoring
+findings are not changed by this survey.
+
+This standalone proof is not yet integrated into the canonical classifier or
+registered in the package's full harness. Its 48 groups therefore do not reduce
+the current canonical unresolved count. Integration requires complete replay
+validation, preservation of all unrelated rows, registered tests and renewed
+canonical verification. No renderer, plugin, canonical example, reference or
+visual threshold was changed.
