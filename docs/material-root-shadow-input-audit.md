@@ -71,3 +71,36 @@ cancellations, in **10,414.1947 ms**.
    `src/app/services/dom/elements/box-shadow.ts` preserves explicit color tokens
    separately from CSS lengths; downstream paint behavior needs its own paired
    public-API/raster proof, not inference from this authoring audit.
+
+## Independent source binding prepared
+
+`tests/material-parity/root-shadow-source-binding.mjs` now binds the complete
+2,311-case original population to its capture digest and all 4,622 original tree
+descriptors. Every case remains present; only the root scalar is selected, while
+the full trees retain all rules, ancestry and owner-stage evidence. The binding
+compares the caller's population with the independently reopened original report
+and atomically rejects changed or incomplete evidence. It does not read the
+standalone survey as an authority for classification.
+
+The focused proof separately compares all newly derived property proofs with
+the checked-in survey. Source validation reopens the original capture and trees;
+classification validation requires exact per-family owner, state, values and
+case coverage for all **36 groups / 2,311 observations**. Raw captured inputs and
+four explicit non-equivalence/paint-limit flags remain intact. Classification
+is limited to unequal authored shadow inputs, not a new renderer diagnosis.
+
+```powershell
+node --test tests/material-parity/root-shadow-source-binding.spec.mjs
+```
+
+Result: **4/4 passed**, zero failures/skips/cancellations, **60,063.5204 ms**.
+Negative controls cover lost/duplicated cases, altered scalar inputs, source
+boundary violations, removed retained evidence, modified request traces,
+unsupported rendering claims, changed classifications/owners/values, duplicate
+or incomplete reviewed cases and forged occurrence counts.
+
+This standalone stage deliberately uses identity normalization callbacks.
+Production normalization, classification precedence and full-report conservation
+remain required before integration. The canonical attribution count is still
+**2,810** after the separate tooltip integration; this increment does not change
+it. No renderer or canonical example was modified.

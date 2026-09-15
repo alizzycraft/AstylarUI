@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared shadow source binding prepared
+
+The [shared root-shadow finding](material-root-shadow-input-audit.md#independent-source-binding-prepared)
+now has independent original-source binding and complete classification-coverage
+validation for 36 groups / 2,311 observations. All original full-tree owner
+proofs match the separately checked-in survey. Four tests pass, including
+coverage, input, provenance, identity and overclaim rejection controls.
+Production canonical integration/conservation is still pending. The canonical
+count remains 2,810; no captured input or renderer behavior changed.
+
 ## Current canonical tooltip-wrapping checkpoint
 
 The [tooltip-wrapping integration](material-tooltip-wrapping-source-binding.md#full-report-regeneration-and-conservation-verified)
