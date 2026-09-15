@@ -1,0 +1,1188 @@
+{
+  "schemaVersion": 1,
+  "artifactVerification": {
+    "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const d=JSON.parse(readFileSync('docs/material-transform-origin-omission-audit.json'));const v=d.verification.data;for(const f of v.sourceFingerprints)assert.equal(createHash('sha256').update(readFileSync(f.file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex'),f.sha256,f.file);assert.deepEqual(v.runs.map(r=>r.dpr),[1,2]);let failures=0,controls=0;for(const run of v.runs){assert.equal(run.trials.length,6);for(const t of run.trials){assert.equal(t.states.length,3);const [initial,scaled,restored]=t.states;assert.deepEqual(initial.reference.rect,initial.candidate.rect);assert.deepEqual(restored.reference.rect,initial.reference.rect);assert.deepEqual(restored.candidate.rect,initial.candidate.rect);if(t.mode==='explicit-corner-versus-omitted'){assert.equal(scaled.reference.rect.left-scaled.candidate.rect.left,40);assert.equal(scaled.reference.rect.top-scaled.candidate.rect.top,20);failures++;}else{assert.deepEqual(scaled.reference.rect,scaled.candidate.rect);controls++;}}}assert.equal(failures,4);assert.equal(controls,8);assert.equal(v.collector.filter(c=>c.reference==='0 0'&&c.classification==='equivalent-representation').length,4);assert.equal(v.exposure.observations,6938);assert.equal(Object.keys(v.exposure.byFamily).length,36);assert.equal(Object.values(v.exposure.byFamily).reduce((a,b)=>a+b,0),6938);console.log(JSON.stringify({sourceFingerprints:3,repeatedProbeExitCodes:d.verification.exitCodes,falseEquivalenceWitnesses:failures,matchingControls:controls,families:36,rawExposure:6938}));\"",
+    "exitCode": 0,
+    "result": {
+      "sourceFingerprints": 3,
+      "repeatedProbeExitCodes": [
+        0,
+        0
+      ],
+      "falseEquivalenceWitnesses": 4,
+      "matchingControls": 8,
+      "families": 36,
+      "rawExposure": 6938
+    }
+  },
+  "kind": "transform-origin-omission-sensitivity-audit",
+  "baselineCommit": "341dfb9",
+  "classification": "confirmed parity-harness false input equivalence in the demonstrated explicit-origin case",
+  "scope": "Read-only investigation and isolated browser/collector probe; no renderer, canonical fixture or audit-classification change in this increment.",
+  "finding": {
+    "file": "tests/material-parity/input-equivalence-audit.mjs",
+    "lines": [
+      1608,
+      1616
+    ],
+    "symbol": "classifyStyleDifference transformOrigin omission guard",
+    "firstDivergence": "The scalar guard assigns equivalent-representation from inactive transform values without checking the authored origin request or reference-box/default context.",
+    "history": [
+      {
+        "commit": "5e3ac33a",
+        "behavior": "Introduced the no-transform origin-equivalence justification."
+      },
+      {
+        "commit": "6dae8bd6",
+        "behavior": "Current guard includes both none and identity matrix on each side."
+      }
+    ],
+    "historyCommand": "git blame -L 1608,1617 -- tests/material-parity/input-equivalence-audit.mjs"
+  },
+  "reference": {
+    "url": "https://www.w3.org/TR/2019/CR-css-transforms-1-20190214/#transform-origin-property",
+    "sections": [
+      "3 The Transform Rendering Model",
+      "5 The transform-origin Property"
+    ],
+    "interpretation": "For ordinary CSS boxes the initial origin is 50% 50%, not inherited. The transform matrix incorporates origin translations. Equal initial pixels under none/identity do not establish equal origin requests; a subsequent identical nonidentity transform can reveal their difference. SVG defaults require separate context."
+  },
+  "verification": {
+    "command": "node scripts/audit-material-transform-origin.mjs",
+    "runs": 2,
+    "exitCodes": [
+      0,
+      0
+    ],
+    "identicalStructuredOutput": true,
+    "sourceFingerprintNormalization": "LF-normalized source text; capture and ordered-selection digests use exact bytes/canonical JSON respectively.",
+    "data": {
+      "schemaVersion": 1,
+      "browserVersion": "152.0.7977.76",
+      "capturePath": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+      "captureSha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a",
+      "scope": "Browser authored-request sensitivity plus collector behavior; not a candidate-renderer reproduction or attribution of all captured origin omissions",
+      "sourceFingerprints": [
+        {
+          "file": "scripts/audit-material-transform-origin.mjs",
+          "sha256": "ac7899c76925c51041fa75d88b6101d079228a093048e256cfb092b12d4ae026"
+        },
+        {
+          "file": "tests/material-parity/input-equivalence-audit.mjs",
+          "sha256": "693c14b881acfd1cb1adbd664c5a2ec12b83b47a895ba70fa2fd3c4b26b7e599"
+        },
+        {
+          "file": "tests/material-parity/input-equivalence-policy.mjs",
+          "sha256": "7e939aece26dd69b846b78fc6d21aa332463b53068f488cf19343578306d80d8"
+        }
+      ],
+      "exposure": {
+        "observations": 6938,
+        "rawSignatures": 587,
+        "withCapturedExplicitOrigin": 0,
+        "orderedSelectionSha256": "d670b3c015fe5d7cce57bec97ba160dcc412df1a3fb5bf759cf54dceea69bbff",
+        "byFamily": {
+          "core": 104,
+          "toolbar": 208,
+          "sidenav": 124,
+          "grid-list": 208,
+          "divider": 96,
+          "badge": 208,
+          "card": 260,
+          "chips": 304,
+          "icon": 40,
+          "list": 104,
+          "table": 104,
+          "sort": 120,
+          "paginator": 208,
+          "tree": 104,
+          "form-field": 152,
+          "input": 152,
+          "autocomplete": 220,
+          "checkbox": 204,
+          "radio": 272,
+          "select": 188,
+          "slider": 312,
+          "slide-toggle": 204,
+          "datepicker": 222,
+          "timepicker": 220,
+          "button": 240,
+          "button-toggle": 272,
+          "menu": 188,
+          "tabs": 350,
+          "stepper": 340,
+          "expansion": 204,
+          "bottom-sheet": 226,
+          "dialog": 348,
+          "snack-bar": 210,
+          "tooltip": 142,
+          "progress-bar": 40,
+          "progress-spinner": 40
+        },
+        "limitation": "Absence from captured scalar rule lists does not prove complete origin authoring, cascade/defaults, corresponding reference boxes or candidate computed values. Full original cases remain in the pinned raw report."
+      },
+      "runs": [
+        {
+          "dpr": 1,
+          "trials": [
+            {
+              "mode": "explicit-corner-versus-omitted",
+              "initialTransform": "none",
+              "states": [
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "mode": "matching-corner",
+              "initialTransform": "none",
+              "states": [
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "mode": "initial-center-control",
+              "initialTransform": "none",
+              "states": [
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "mode": "explicit-corner-versus-omitted",
+              "initialTransform": "matrix(1,0,0,1,0,0)",
+              "states": [
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "mode": "matching-corner",
+              "initialTransform": "matrix(1,0,0,1,0,0)",
+              "states": [
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "mode": "initial-center-control",
+              "initialTransform": "matrix(1,0,0,1,0,0)",
+              "states": [
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "dpr": 2,
+          "trials": [
+            {
+              "mode": "explicit-corner-versus-omitted",
+              "initialTransform": "none",
+              "states": [
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "mode": "matching-corner",
+              "initialTransform": "none",
+              "states": [
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "mode": "initial-center-control",
+              "initialTransform": "none",
+              "states": [
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "none",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "none",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "mode": "explicit-corner-versus-omitted",
+              "initialTransform": "matrix(1,0,0,1,0,0)",
+              "states": [
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "mode": "matching-corner",
+              "initialTransform": "matrix(1,0,0,1,0,0)",
+              "states": [
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "0px 0px",
+                    "computedOrigin": "0px 0px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "mode": "initial-center-control",
+              "initialTransform": "matrix(1,0,0,1,0,0)",
+              "states": [
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                },
+                {
+                  "transform": "scale(2)",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(2, 0, 0, 2, 0, 0)",
+                    "rect": {
+                      "left": 60,
+                      "top": 80,
+                      "width": 160,
+                      "height": 80
+                    }
+                  }
+                },
+                {
+                  "transform": "matrix(1,0,0,1,0,0)",
+                  "reference": {
+                    "declaredOrigin": "50% 50%",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  },
+                  "candidate": {
+                    "declaredOrigin": "<omitted>",
+                    "computedOrigin": "40px 20px",
+                    "computedTransform": "matrix(1, 0, 0, 1, 0, 0)",
+                    "rect": {
+                      "left": 100,
+                      "top": 100,
+                      "width": 80,
+                      "height": 40
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "collector": [
+        {
+          "element": "origin-1-0",
+          "reference": "0 0",
+          "candidate": "<omitted>",
+          "classification": "equivalent-representation",
+          "attribution": "<none>",
+          "justification": "Browser transform-origin is a derived used value; Astylar has no transform, so omission carries the same rendering intent."
+        },
+        {
+          "element": "origin-1-2",
+          "reference": "40px 20px",
+          "candidate": "<omitted>",
+          "classification": "equivalent-representation",
+          "attribution": "<none>",
+          "justification": "Browser transform-origin is a derived used value; Astylar has no transform, so omission carries the same rendering intent."
+        },
+        {
+          "element": "origin-1-3",
+          "reference": "0 0",
+          "candidate": "<omitted>",
+          "classification": "equivalent-representation",
+          "attribution": "<none>",
+          "justification": "Browser transform-origin is a derived used value; Astylar has no transform, so omission carries the same rendering intent."
+        },
+        {
+          "element": "origin-1-5",
+          "reference": "40px 20px",
+          "candidate": "<omitted>",
+          "classification": "equivalent-representation",
+          "attribution": "<none>",
+          "justification": "Browser transform-origin is a derived used value; Astylar has no transform, so omission carries the same rendering intent."
+        },
+        {
+          "element": "origin-2-0",
+          "reference": "0 0",
+          "candidate": "<omitted>",
+          "classification": "equivalent-representation",
+          "attribution": "<none>",
+          "justification": "Browser transform-origin is a derived used value; Astylar has no transform, so omission carries the same rendering intent."
+        },
+        {
+          "element": "origin-2-2",
+          "reference": "40px 20px",
+          "candidate": "<omitted>",
+          "classification": "equivalent-representation",
+          "attribution": "<none>",
+          "justification": "Browser transform-origin is a derived used value; Astylar has no transform, so omission carries the same rendering intent."
+        },
+        {
+          "element": "origin-2-3",
+          "reference": "0 0",
+          "candidate": "<omitted>",
+          "classification": "equivalent-representation",
+          "attribution": "<none>",
+          "justification": "Browser transform-origin is a derived used value; Astylar has no transform, so omission carries the same rendering intent."
+        },
+        {
+          "element": "origin-2-5",
+          "reference": "40px 20px",
+          "candidate": "<omitted>",
+          "classification": "equivalent-representation",
+          "attribution": "<none>",
+          "justification": "Browser transform-origin is a derived used value; Astylar has no transform, so omission carries the same rendering intent."
+        }
+      ]
+    }
+  },
+  "conclusions": [
+    "Four explicit corner/omission comparisons (none and identity matrix at each DPR) are falsely classified equivalent; their scale states differ by 40px horizontally and 20px vertically.",
+    "Four matching explicit-corner and four default-center/omission controls remain geometrically equal through initial, scale and restored states. This prevents a blanket claim that every omitted origin is a different input.",
+    "The frozen capture contains 6938 observations matching this guard's scalar preconditions across 587 raw signatures; no explicit origin rules appear in their captured scalar rule lists. This is exposure, not proof of complete authoring absence or a defect in every observed box.",
+    "The original raw capture is unchanged and fingerprinted. The diagnostic variant does not claim that original Material states perform scale(2), nor that its browser 'candidate' is the Astylar renderer."
+  ],
+  "nextSteps": [
+    "Add regression assertions that explicit or unproven origin omissions cannot receive unconditional equivalence from an inactive transform.",
+    "Remove or replace the scalar-only waiver with evidence-backed classification. Preserve all captured observations and distinguish supported default-origin equivalence from unknown declaration/reference-box context.",
+    "Independently replay the complete affected capture population and full audit totals after the instrumentation correction. Do not attribute all origins to a core defect or substitute measured origins into fixtures.",
+    "Retain the separate core transform-origin support and transformed fixed-containing-block findings; this audit-policy defect does not replace their public renderer evidence."
+  ]
+}

@@ -3,6 +3,34 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Transform-origin omission: confirmed audit equivalence blind spot
+
+The [origin sensitivity record](material-transform-origin-omission-audit.json)
+and standalone browser/collector probe repeat identically twice at **DPR1/2**.
+An explicit `transform-origin:0px 0px` and an omitted origin both initially give
+the same **100,100 / 80x40** box under `none` or an identity transform. Applying
+the same `scale(2)` keeps the corner-origin box at **100,100**, but moves the
+omitted-origin box to **60,80**. Restoring the initial transform restores matching
+geometry. Matching-corner and explicit-default-center controls pass all states.
+
+The current scalar audit nonetheless labels all four corner/omission witnesses
+`equivalent-representation`, because it checks inactive transforms rather than
+the original origin request. The first divergence is the audit classification
+guard, not evidence of a new candidate renderer failure. Both visual witnesses
+in this sensitivity probe are browser elements; no Babylon layout is changed.
+This follows the [CSS origin and matrix rules](https://www.w3.org/TR/2019/CR-css-transforms-1-20190214/#transform-origin-property).
+
+The pinned raw capture has **6,938** observations matching the guard's scalar
+preconditions across **587 raw signatures** and all 36 families. None has an
+explicit origin in its captured scalar rule list. That does not prove full
+authored absence, corresponding reference-box defaults, candidate computed
+origins, or a visible defect in every observation. The selection is reproducible
+and hashed; full original cases remain in the unchanged raw report.
+
+The waiver correction and complete population replay remain pending. This
+increment records the defect and controls without changing any classifier,
+renderer, canonical fixture, or claimed attribution count.
+
 ## Fixed-child context proof integrated into the main inventory
 
 The [integration record](material-identity-context-inventory-audit.json) adds the
