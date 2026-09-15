@@ -3,6 +3,38 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Fixed descendants ignore identity-transformed containing blocks
+
+The [public-package context proof](material-identity-transform-context-audit.json)
+separates containing-block placement from stacking. Two DPR1 runs each finish
+with **5 failing / 9 passing** trials and identical structured observations.
+HTML and AstylarUI receive the same trees and declarations. With `translateZ(0px)`,
+an identity matrix, `translate(0px)`, `scale(1)` or `rotate(0deg)`, the browser's
+fixed child is at **85,67**, while AstylarUI leaves it at **5,7**. The host remains
+correct at **80,60 / 100x100**. Omitted/`none` fixed-child controls both pass.
+
+All seven stacking controls pass geometry and final interior pixel checks:
+the high-z nested red child wins without a transform; the blue sibling wins
+with an identity transform. This rules out a blanket claim that identity
+stacking is broken. It also prevents attributing every failure to unsupported
+`translateZ`/matrix parsing: supported 2D identity functions fail fixed placement
+as well.
+
+The owning rule is `ElementDimensionService.resolveLayoutParent` (line 40),
+introduced by `d3ef6dc3` ("anchor fixed elements to viewport"). It unconditionally
+returns `root-body` for fixed elements. `ElementCreationService` consumes that
+parent before CSS dimensions and retained layout-parent identity are established.
+The core fix must select the correct CSS containing block; Material-specific
+offsets or plugin-owned layout would bypass the cause.
+
+The diagnostic spec compiles and preserves the five failing parity assertions.
+The separate consumer production build exits **0**, generates its bundle in
+**38.401 s** and prerenders **2 routes**. Both browser runs report empty renderer
+diagnostics and dispose all surface meshes/materials/textures. The existing
+NG0914 zoneless/Zone.js host warning is disclosed. DPR2 candidate evidence,
+nested/update/scroll cases and attribution of the original Material observations
+remain pending. No production renderer or canonical fixture was changed.
+
 ## Identity transform authorship: complete captured population
 
 The [authorship survey](material-identity-transform-authorship-survey.json)

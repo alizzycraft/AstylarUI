@@ -1,0 +1,1619 @@
+{
+  "schemaVersion": 1,
+  "artifactVerification": {
+    "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const d=JSON.parse(readFileSync('docs/material-identity-transform-context-audit.json'));for(const f of d.sourceFingerprints)assert.equal(createHash('sha256').update(readFileSync(f.file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex'),f.sha256,f.file);assert.deepEqual(d.verification.runs[0].observations,d.verification.runs[1].observations);for(const run of d.verification.runs){assert.equal(run.observations.length,14);assert.equal(new Set(run.observations.map(o=>o.mode+'/'+o.transform)).size,14);let failures=0;for(const o of run.observations){assert.deepEqual(o.diagnostics,[]);assert.equal(o.dpr,1);assert.deepEqual(o.observations['context-host'].actual,o.observations['context-host'].reference);const child=o.observations['context-child'];if(o.mode==='fixed-child'&&o.transform!=='<omitted>'&&o.transform!=='none'){assert.deepEqual(child.actual,{left:5,top:7,width:10,height:10});assert.deepEqual(child.reference,{left:85,top:67,width:10,height:10});failures++;}else assert.deepEqual(child.actual,child.reference);if(o.stack){const color=o.stack.referenceHit==='context-child'?[255,0,0,255]:[0,0,255,255];assert.deepEqual(o.stack.actualPixel,color);}}assert.equal(failures,5);assert.equal(run.failed,failures);assert.equal(run.passed,run.observations.length-failures);}assert.equal(d.build.exitCode,0);console.log('11 source fingerprints and two identical 14-trial records validate: five preserved containing-block failures, nine passing controls per run.');\"",
+    "exitCode": 0,
+    "result": "11 source fingerprints and two identical 14-trial records validate: five preserved containing-block failures, nine passing controls per run."
+  },
+  "findingId": "fixed-descendant-ignores-transformed-containing-block",
+  "baselineCommit": "28a8a33",
+  "classification": "confirmed core CSS-compatibility defect in the demonstrated containing-block case",
+  "scope": "Audit-only public-package proof; no renderer or canonical Material fixture changes. Stacking is measured separately and passes the tested controls.",
+  "versions": {
+    "astylarui": "0.2.0",
+    "@angular/core": "20.3.29",
+    "@angular/material": "20.0.5",
+    "@babylonjs/core": "8.56.2",
+    "browser": "Chrome Headless 152.0.0.0 (Windows 10)",
+    "dpr": 1,
+    "viewport": {
+      "width": 320,
+      "height": 200
+    }
+  },
+  "sourceFingerprints": [
+    {
+      "file": "examples/material-showcase/src/app/identity-transform-context-audit.spec.ts",
+      "sha256": "7eafce1887a5c8e79cabc8db4441c4abf7f87043f0080df6da5416b626be1f78"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-dimension.service.ts",
+      "sha256": "24d3c910ec0f054f0ec2de1808420f3e6571708a13348eea0887d040c9aa3d30"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-creation.service.ts",
+      "sha256": "bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a"
+    },
+    {
+      "file": "src/app/services/dom/elements/css-transform.ts",
+      "sha256": "65fca50a260da0212bb1988969810b95dee2f9bafbf1a7a9ead830f8d2a57b5f"
+    },
+    {
+      "file": "src/app/services/dom/positioning/stacking-context.manager.ts",
+      "sha256": "e65f87b070f8a3941fd224b70e544f581f46afdf4097ef1c7db15533131e9a8a"
+    },
+    {
+      "file": "docs/compatibility/capabilities.json",
+      "sha256": "7bde70f23f806570bc3eb8b30a627677f11ef26b134e7d57a4d15f943266c0be"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/lib/index.js",
+      "sha256": "fe18e880313b9799e2d9c26e51d4f5f4a09c553880888c32d5d0fcb34903c709"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js",
+      "sha256": "0a65a1659a51062ab41cda030c4f030b15bcf5328c85fb1a3597628c05cf190c"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-creation.service.js",
+      "sha256": "68e45ca7b851ddeac40f6f55d3e2f176768b47dd6ad8e0d8eefa5c2a77d28ef3"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/css-transform.js",
+      "sha256": "d53f4f12d24e4eec71eb54e714043fbf43811ad8de7944fca566bea93a320cc3"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/positioning/stacking-context.manager.js",
+      "sha256": "2bc9dd6b8492d65c3e53563f301bb41c5ee6fbe44276ad897435f6797617d05f"
+    }
+  ],
+  "sourceProvenanceCommand": "node --input-type=module -e \"import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const base='examples/material-showcase/node_modules/';const files=['examples/material-showcase/src/app/identity-transform-context-audit.spec.ts','src/app/services/dom/elements/element-dimension.service.ts','src/app/services/dom/elements/element-creation.service.ts','src/app/services/dom/elements/css-transform.ts','src/app/services/dom/positioning/stacking-context.manager.ts','docs/compatibility/capabilities.json',base+'astylarui/dist/lib/lib/index.js',base+'astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js',base+'astylarui/dist/lib/app/services/dom/elements/element-creation.service.js',base+'astylarui/dist/lib/app/services/dom/elements/css-transform.js',base+'astylarui/dist/lib/app/services/dom/positioning/stacking-context.manager.js'];console.log(JSON.stringify({versions:Object.fromEntries(['astylarui','@angular/core','@angular/material','@babylonjs/core'].map(n=>[n,JSON.parse(readFileSync(base+n+'/package.json')).version])),sourceFingerprints:files.map(file=>({file,sha256:createHash('sha256').update(readFileSync(file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex')}))}));\"",
+  "invariant": "A transform other than none, including an identity transform, establishes the containing block for fixed-positioned descendants; omitted/none leaves these witnesses viewport-relative.",
+  "referenceBasis": {
+    "source": "docs/material-identity-transform-omission-audit.json",
+    "note": "Prior DPR1/2 browser controls and CSS Transforms rendering-model citation establish reference semantics. This new paired candidate proof currently runs at DPR1 only."
+  },
+  "catalog": {
+    "file": "docs/compatibility/capabilities.json",
+    "groups": [
+      "positioning",
+      "transforms"
+    ],
+    "classification": "Positioning is compatible for the tested subset; transforms are different/partial. Exact identity transformed fixed-descendant behavior is not separately promised. This evidence identifies the missing CSS rule without expanding the published support claim."
+  },
+  "ownership": {
+    "earliestDivergence": {
+      "file": "src/app/services/dom/elements/element-dimension.service.ts",
+      "line": 40,
+      "symbol": "ElementDimensionService.resolveLayoutParent",
+      "behavior": "Every fixed element chooses root-body without walking ancestors or checking their resolved transform."
+    },
+    "caller": {
+      "file": "src/app/services/dom/elements/element-creation.service.ts",
+      "line": 152,
+      "behavior": "Chooses layoutParent before calculating CSS dimensions, passing it to plugin context, mesh parenting and retained parentId."
+    },
+    "history": {
+      "commit": "d3ef6dc3e9c6c27003b59315fe5c5d86cf7c5ce8",
+      "subject": "fix: anchor fixed elements to viewport",
+      "evidenceCommand": "git blame -L 36,46 -- src/app/services/dom/elements/element-dimension.service.ts",
+      "qualification": "History establishes the origin of the unconditional rule; it does not show an intent to conceal this defect."
+    },
+    "separateStacking": {
+      "file": "src/app/services/dom/positioning/stacking-context.manager.ts",
+      "line": 255,
+      "behavior": "Non-none transform establishes a stacking context independent of parser output. All seven paired stacking controls pass geometry and final red/blue pixel checks."
+    },
+    "parser": {
+      "file": "src/app/services/dom/elements/css-transform.ts",
+      "line": 14,
+      "behavior": "Parser supports translate/rotate/scale variants but not matrix or translateZ. Five fixed-child failures include supported translate(0px), scale(1) and rotate(0deg), so unsupported grammar is not the sole cause."
+    },
+    "pluginAssessment": "The minimal proof uses core div elements and no custom plugin. Fix the containing-block rule in core; do not add Material-specific position offsets or a plugin-owned substitute."
+  },
+  "verification": {
+    "command": "npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/identity-transform-context-audit.spec.ts --progress=false",
+    "runs": [
+      {
+        "run": 1,
+        "exitCode": 1,
+        "tests": 14,
+        "passed": 9,
+        "failed": 5,
+        "reportedExecutionSeconds": 2.059,
+        "observations": [
+          {
+            "mode": "fixed-child",
+            "transform": "<omitted>",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "none",
+            "candidateNormal": "<omitted>",
+            "candidateEffective": "<omitted>",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "matrix(1,0,0,1,0,0)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "matrix(1,0,0,1,0,0)",
+            "candidateEffective": "matrix(1,0,0,1,0,0)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 85,
+                  "top": 67,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "none",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "none",
+            "candidateNormal": "none",
+            "candidateEffective": "none",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "rotate(0deg)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "rotate(0deg)",
+            "candidateEffective": "rotate(0deg)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 85,
+                  "top": 67,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "scale(1)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "scale(1)",
+            "candidateEffective": "scale(1)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 85,
+                  "top": 67,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "translate(0px)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "translate(0px)",
+            "candidateEffective": "translate(0px)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 85,
+                  "top": 67,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "translateZ(0px)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "translateZ(0px)",
+            "candidateEffective": "translateZ(0px)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 85,
+                  "top": 67,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "<omitted>",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "none",
+            "candidateNormal": "<omitted>",
+            "candidateEffective": "<omitted>",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-child",
+              "expectedColor": "rgb(255, 0, 0)",
+              "actualPixel": [
+                255,
+                0,
+                0,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "matrix(1,0,0,1,0,0)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "matrix(1,0,0,1,0,0)",
+            "candidateEffective": "matrix(1,0,0,1,0,0)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-sibling",
+              "expectedColor": "rgb(0, 0, 255)",
+              "actualPixel": [
+                0,
+                0,
+                255,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "none",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "none",
+            "candidateNormal": "none",
+            "candidateEffective": "none",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-child",
+              "expectedColor": "rgb(255, 0, 0)",
+              "actualPixel": [
+                255,
+                0,
+                0,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "rotate(0deg)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "rotate(0deg)",
+            "candidateEffective": "rotate(0deg)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-sibling",
+              "expectedColor": "rgb(0, 0, 255)",
+              "actualPixel": [
+                0,
+                0,
+                255,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "scale(1)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "scale(1)",
+            "candidateEffective": "scale(1)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-sibling",
+              "expectedColor": "rgb(0, 0, 255)",
+              "actualPixel": [
+                0,
+                0,
+                255,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "translate(0px)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "translate(0px)",
+            "candidateEffective": "translate(0px)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-sibling",
+              "expectedColor": "rgb(0, 0, 255)",
+              "actualPixel": [
+                0,
+                0,
+                255,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "translateZ(0px)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "translateZ(0px)",
+            "candidateEffective": "translateZ(0px)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-sibling",
+              "expectedColor": "rgb(0, 0, 255)",
+              "actualPixel": [
+                0,
+                0,
+                255,
+                255
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "run": 2,
+        "exitCode": 1,
+        "tests": 14,
+        "passed": 9,
+        "failed": 5,
+        "reportedExecutionSeconds": 2.012,
+        "observations": [
+          {
+            "mode": "fixed-child",
+            "transform": "<omitted>",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "none",
+            "candidateNormal": "<omitted>",
+            "candidateEffective": "<omitted>",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "matrix(1,0,0,1,0,0)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "matrix(1,0,0,1,0,0)",
+            "candidateEffective": "matrix(1,0,0,1,0,0)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 85,
+                  "top": 67,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "none",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "none",
+            "candidateNormal": "none",
+            "candidateEffective": "none",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "rotate(0deg)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "rotate(0deg)",
+            "candidateEffective": "rotate(0deg)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 85,
+                  "top": 67,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "scale(1)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "scale(1)",
+            "candidateEffective": "scale(1)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 85,
+                  "top": 67,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "translate(0px)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "translate(0px)",
+            "candidateEffective": "translate(0px)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 85,
+                  "top": 67,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "fixed-child",
+            "transform": "translateZ(0px)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "translateZ(0px)",
+            "candidateEffective": "translateZ(0px)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 5,
+                  "top": 7,
+                  "width": 10,
+                  "height": 10
+                },
+                "reference": {
+                  "left": 85,
+                  "top": 67,
+                  "width": 10,
+                  "height": 10
+                }
+              }
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "<omitted>",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "none",
+            "candidateNormal": "<omitted>",
+            "candidateEffective": "<omitted>",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-child",
+              "expectedColor": "rgb(255, 0, 0)",
+              "actualPixel": [
+                255,
+                0,
+                0,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "matrix(1,0,0,1,0,0)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "matrix(1,0,0,1,0,0)",
+            "candidateEffective": "matrix(1,0,0,1,0,0)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-sibling",
+              "expectedColor": "rgb(0, 0, 255)",
+              "actualPixel": [
+                0,
+                0,
+                255,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "none",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "none",
+            "candidateNormal": "none",
+            "candidateEffective": "none",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-child",
+              "expectedColor": "rgb(255, 0, 0)",
+              "actualPixel": [
+                255,
+                0,
+                0,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "rotate(0deg)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "rotate(0deg)",
+            "candidateEffective": "rotate(0deg)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-sibling",
+              "expectedColor": "rgb(0, 0, 255)",
+              "actualPixel": [
+                0,
+                0,
+                255,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "scale(1)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "scale(1)",
+            "candidateEffective": "scale(1)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-sibling",
+              "expectedColor": "rgb(0, 0, 255)",
+              "actualPixel": [
+                0,
+                0,
+                255,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "translate(0px)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "translate(0px)",
+            "candidateEffective": "translate(0px)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-sibling",
+              "expectedColor": "rgb(0, 0, 255)",
+              "actualPixel": [
+                0,
+                0,
+                255,
+                255
+              ]
+            }
+          },
+          {
+            "mode": "stacking",
+            "transform": "translateZ(0px)",
+            "dpr": 1,
+            "viewport": [
+              320,
+              200
+            ],
+            "renderSize": [
+              320,
+              200
+            ],
+            "diagnostics": [],
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "candidateNormal": "translateZ(0px)",
+            "candidateEffective": "translateZ(0px)",
+            "observations": {
+              "context-host": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "context-child": {
+                "actual": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                },
+                "reference": {
+                  "left": 80,
+                  "top": 60,
+                  "width": 100,
+                  "height": 100
+                }
+              }
+            },
+            "stack": {
+              "referenceHit": "context-sibling",
+              "expectedColor": "rgb(0, 0, 255)",
+              "actualPixel": [
+                0,
+                0,
+                255,
+                255
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "repeat": "All 14 structured observations match exactly after sorting by mode/transform.",
+    "diagnostics": "All recorded surface diagnostic arrays are empty. Existing NG0914 zoneless-with-Zone.js host warning appears; no renderer error is hidden.",
+    "inputIntegrity": "HTML structure and CSS declarations are generated from the same SiteData. Tests assert unchanged SiteData/CSS, retained transform declarations, geometry for host/child, exact stack pixel channels, and zero meshes/materials/textures after disposal.",
+    "result": "For each of five non-none identity variants, fixed child expected (85,67) but actual (5,7); host geometry matches (80,60,100,100). Omitted/none fixed-child controls match. All seven stacking controls match reference hit-derived solid colors, red without transform and blue with identity.",
+    "measurementLimits": "Stack proof reads one interior rendered pixel backed by known solid reference CSS color and browser hit order, not an exhaustive browser screenshot or candidate input-event proof. Fixed-child evidence measures projected final geometry, not hit testing. No sampled coordinate feeds candidate layout."
+  },
+  "build": {
+    "command": "npm --prefix examples/material-showcase run build -- --output-path dist/material-showcase-identity-context-audit",
+    "exitCode": 0,
+    "bundleGenerationSeconds": 38.401,
+    "prerenderedRoutes": 2,
+    "outputPath": "examples/material-showcase/dist/material-showcase-identity-context-audit",
+    "scope": "Separate production output; canonical frozen capture build unchanged. Browser tests compile the diagnostic spec; production build verifies consumer compilation, not parity."
+  },
+  "implementationPlan": [
+    "Resolve the CSS containing block by ancestor semantics before geometry calculation, retaining the viewport fallback only when no qualifying ancestor exists.",
+    "Keep CSS layout/scroll/hit-test boxes authoritative and project once at paint. Do not patch individual coordinates or reparent only visual meshes while leaving layout and events inconsistent.",
+    "Retain omitted/none and stacking passing controls; add nested transformed ancestors, explicit translations, scrolling, update/removal and DPR2 before implementation acceptance.",
+    "After core proof, audit the original Material requests and plugin ownership. Restore equivalent transform intent without claiming this fixed-child reproduction explains every current Material visual discrepancy."
+  ],
+  "remaining": [
+    "DPR2 paired candidate replay and broader nested/update/scroll cases are not yet performed.",
+    "Original 140 transform observations remain unresolved in the full scalar audit. This core witness does not prove a transform-related visual failure for all three component families.",
+    "Full input audit, current canonical report packaging and final enforced parity are incomplete."
+  ]
+}
