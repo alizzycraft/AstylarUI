@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "kind": "slider-border-default-source-binding-verification",
+  "baselineCommit": "5fed2067060eeb2586413be2abba7a0362a68cd3",
+  "summary": {
+    "cases": 78,
+    "owners": 156,
+    "ownerPropertyGroups": 24,
+    "propertyOccurrences": 1872,
+    "reviewedCasesPerGroup": 78,
+    "presentationCasesPerGroup": 12
+  },
+  "verification": {
+    "command": "node --test tests/material-parity/slider-border-default-source-binding.spec.mjs",
+    "exitCode": 0,
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 6961.2905
+  },
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/slider-border-default-source-binding.mjs",
+      "sha256": "a2cc75c92d0a595a0b1ce10005fb4be9e8519deaf4c3a3f22e5d598f13ebd584",
+      "normalizedLfSha256": "a2cc75c92d0a595a0b1ce10005fb4be9e8519deaf4c3a3f22e5d598f13ebd584"
+    },
+    {
+      "file": "tests/material-parity/slider-border-default-source-binding.spec.mjs",
+      "sha256": "f0df784c1eed17b7db32827052d8c37177e55caa2beb6b702919123057962912",
+      "normalizedLfSha256": "f0df784c1eed17b7db32827052d8c37177e55caa2beb6b702919123057962912"
+    },
+    {
+      "file": "tests/material-parity/slider-border-default-evidence.mjs",
+      "sha256": "b0d1616e0046c1b5659be9a3a86ea8e938c87d2f57dd96038e9a75929a01ecbb",
+      "normalizedLfSha256": "b0d1616e0046c1b5659be9a3a86ea8e938c87d2f57dd96038e9a75929a01ecbb"
+    },
+    {
+      "file": "tests/material-parity/slider-input-box-source-binding.mjs",
+      "sha256": "f57b24f5a5d5610b443413aba32de36018b35360a2cfcd57fcce1ba6920e75cb",
+      "normalizedLfSha256": "f57b24f5a5d5610b443413aba32de36018b35360a2cfcd57fcce1ba6920e75cb"
+    },
+    {
+      "file": "tests/material-parity/slider-input-box-evidence.mjs",
+      "sha256": "406e4d0898661efa81d8e352cea37538d91b7492780529314b03379fa049fea6",
+      "normalizedLfSha256": "406e4d0898661efa81d8e352cea37538d91b7492780529314b03379fa049fea6"
+    },
+    {
+      "file": "docs/material-slider-border-defaults.json",
+      "sha256": "91911d7aae0b016919452af7a989dc429a3dfbbdaf8f029ece3ce773770a8392",
+      "normalizedLfSha256": "91911d7aae0b016919452af7a989dc429a3dfbbdaf8f029ece3ce773770a8392"
+    },
+    {
+      "file": "docs/material-range-default-box-audit.json",
+      "sha256": "40d0d90b825789337845ca65b03f9049765381bfc7bc1bfe00cd404f38df1e2f",
+      "normalizedLfSha256": "40d0d90b825789337845ca65b03f9049765381bfc7bc1bfe00cd404f38df1e2f"
+    }
+  ],
+  "limits": [
+    "Standalone binding and scalar-coverage proof; production canonical classifier is not yet integrated.",
+    "Normalization callback in this test expands uniform border declarations only; production canonicalization must be exercised during integration.",
+    "Original omitted-border defaults differ, but the complete Material inputs remain unequal.",
+    "No original used-box delta, drag, hit-test, final raster or screenshot equality is inferred.",
+    "The new binding spec is not part of the currently running 35-file harness; register after that run reaches its terminal state."
+  ],
+  "nextActions": [
+    "Integrate collector, attribution and independent source/scalar replay into the canonical audit.",
+    "Use production canonicalization and preserve every original scalar, occurrence, case and unrelated classification.",
+    "Regenerate canonical reports and check complete coverage/conservation before reducing the unresolved count."
+  ]
+}

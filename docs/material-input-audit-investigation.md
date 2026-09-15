@@ -3,6 +3,30 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Slider border defaults: complete source and scalar replay prepared
+
+The [binding verification](material-slider-border-source-binding.json) checks the
+original report population before accepting border owners, then reopens and
+hash-checks the paired trees. It reproduces all **78 cases / 156 owners / 24
+property groups / 1,872 occurrences** from the earlier standalone inventory.
+Every group retains all 78 reviewed case keys, independently of the 12-case
+presentation limit. Missing cases, altered declarations, changed files,
+fabricated omissions, deleted or duplicate rows and false equivalence claims
+are rejected. Rejected owners remain visible in the captured population.
+
+`node --test tests/material-parity/slider-border-default-source-binding.spec.mjs`
+passes **4/4**, zero skips, in **6.961 seconds**. These are source-binding and
+coverage tests, not fresh browser or full-harness acceptance. Their normalization
+callback intentionally covers only uniform borders; production normalization
+and complete canonical-row conservation still require integration. No existing
+canonical classification or unresolved count changes in this increment.
+
+The separate 35-file harness launched at `5fed206` remains running with a durable
+log at `artifacts/material-parity/range-border-full-harness.log`. Its registered
+sources are held unchanged. Register the new standalone binding spec only after
+that run terminates, then integrate the border attribution with independent
+source replay and complete scalar-coverage validation.
+
 ## Stale harness source-count assertion corrected
 
 The logged, unfiltered 33-file harness completed with **675 passes / one failure**
