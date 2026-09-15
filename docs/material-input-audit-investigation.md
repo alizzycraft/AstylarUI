@@ -3,6 +3,31 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Canonical report generated and independently checked
+
+The [canonical generation record](material-input-audit-canonical-generation.json)
+records the actual maintained CLI generation and its separate `--check` run.
+Both reach the complete **436 static / 1,875 interaction** population and report
+**8,339 unique differences**, **386,891 occurrences** and **131 source findings**.
+Both exit **1** solely for **3,213 unresolved attributions**. This is preserved
+failing audit acceptance, not a generation failure or established equivalence.
+
+The checked-in [manifest](material-input-equivalence-audit.json) describes the
+lossless **45,222,740-byte gzip payload**, which expands to **1,532,991,469 bytes**
+of ordinary JSON. The read-only check regenerated the full evidence, compared
+every decompressed byte, and verified the human report without writes. Separate
+integrity checks verified both hashes/lengths, all **116 source fingerprints**,
+and the unchanged frozen raw capture. The previous untracked generated reports
+were backed up and hash-verified before regeneration; their paths and hashes
+are retained in the generation record.
+
+The [human report](material-input-equivalence-audit.md) and machine payload are
+current for this recorded generation, not a completed audit. The separate
+identity-transform fixed-descendant proof still needs integration into the main
+finding/proof inventory. Remaining attribution work and the final unfiltered
+enforced parity matrix are still pending. No renderer or canonical comparison
+input was changed by packaging this evidence.
+
 ## Complete audit harness: 656 tests verified
 
 The [unfiltered harness record](material-input-harness-656-audit.json) reports
@@ -15,8 +40,8 @@ The package script and directly registered test/source fingerprints are recorded
 This is audit-tool verification, not output or input parity. The separate Angular
 identity-context reproduction still intentionally fails five of fourteen cases;
 the Node harness does not include or supersede it. The full raw audit still has
-**3,213 unresolved attributions**. Real current-report packaging and final
-unfiltered enforced parity remain pending.
+**3,213 unresolved attributions**. Real current-report packaging is now verified
+above; final unfiltered enforced parity remains pending.
 
 ## Fixed descendants ignore identity-transformed containing blocks
 
@@ -88,8 +113,8 @@ unresolved, increasing the unresolved total from **3,210 to 3,213**. Strict
 validation rejects precisely those 3,213 unresolved attributions; assertion
 success does not establish input equivalence. No canonical reports were written.
 The complete 656-test harness now passes, as recorded above. Original input
-ownership and transform-origin review remain incomplete; real report packaging
-and final enforced parity also remain pending.
+ownership and transform-origin review remain incomplete. Real report packaging
+is now verified above; final enforced parity remains pending.
 
 ## Identity transform is not omitted transform (historical read-only investigation)
 

@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "kind": "canonical-material-input-audit-generation",
+  "sourceCommit": "6ccd175",
+  "scope": "Actual maintained CLI using the complete frozen captured population; no substituted collector, source changes, reference changes or production fixes.",
+  "generation": {
+    "command": "node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit",
+    "exitCode": 1,
+    "output": [
+      "# Material input-equivalence audit",
+      "- Parity evidence: artifacts\\material-parity\\current-ancestry-audit\\latest-report.json",
+      "- ERROR: 3213 resolved-style differences still lack root-cause attribution",
+      "- Coverage: 436/436 static, 1875/1875 interaction",
+      "- Unique differences: 8339",
+      "- Occurrences: 386891",
+      "- Source findings: 131",
+      "- Input equivalent: no"
+    ]
+  },
+  "check": {
+    "command": "node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit --check",
+    "status": "completed",
+    "exitCode": 1,
+    "output": [
+      "# Material input-equivalence audit",
+      "- Parity evidence: artifacts\\material-parity\\current-ancestry-audit\\latest-report.json",
+      "- Coverage: 436/436 static, 1875/1875 interaction",
+      "- Unique differences: 8339",
+      "- Occurrences: 386891",
+      "- Source findings: 131",
+      "- Input equivalent: no",
+      "- ERROR: 3213 resolved-style differences still lack root-cause attribution"
+    ],
+    "transport": "Complete regenerated canonical JSON compared byte-for-byte with the decompressed payload; manifest hashes/lengths and generated Markdown equality passed before the expected unresolved-attribution exit."
+  },
+  "coverage": {
+    "componentFamilies": 36,
+    "static": {
+      "executed": 436,
+      "configured": 436
+    },
+    "interaction": {
+      "executed": 1875,
+      "configured": 1875
+    }
+  },
+  "summary": {
+    "uniqueStyleDifferences": 8339,
+    "styleDifferenceOccurrences": 386891,
+    "sourceFindings": 131,
+    "unresolvedAttributions": 3213,
+    "inputEquivalent": false
+  },
+  "integrity": {
+    "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{createReadStream,readFileSync,statSync}from'node:fs';import{createHash}from'node:crypto';import{createGunzip}from'node:zlib';const sha=b=>createHash('sha256').update(b).digest('hex');const file='docs/material-input-equivalence-audit.json';const manifest=JSON.parse(readFileSync(file));const payload='docs/'+manifest.payload;assert.equal(statSync(payload).size,manifest.compressedBytes);assert.equal(sha(readFileSync(payload)),manifest.compressedSha256);const hash=createHash('sha256');let bytes=0,prefix='';for await(const chunk of createReadStream(payload).pipe(createGunzip())){hash.update(chunk);bytes+=chunk.length;if(prefix.length<2000000)prefix+=chunk.toString('utf8');}assert.equal(bytes,manifest.uncompressedBytes);assert.equal(hash.digest('hex'),manifest.uncompressedSha256);const match=prefix.match(/\\x22sourceFingerprints\\x22:\\[([^\\]]*)\\]/);assert.ok(match,'complete source fingerprint array must be in bounded prefix');const sources=JSON.parse('['+match[1]+']');assert.equal(sources.length,116);for(const x of sources)assert.equal(sha(readFileSync(x.file,'utf8').replace(/\\r\\n/g,'\\n')),x.sha256,x.file);const raw='artifacts/material-parity/current-ancestry-audit/latest-report.json';assert.equal(sha(readFileSync(raw)),'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');const files=[file,payload,'docs/material-input-equivalence-audit.md',raw].map(file=>({file,bytes:statSync(file).size,sha256:sha(readFileSync(file))}));console.log(JSON.stringify({files,manifest,sourceFingerprintsChecked:sources.length,uncompressedHashVerified:true,uncompressedBytesVerified:bytes}));\"",
+    "exitCode": 0,
+    "files": [
+      {
+        "file": "docs/material-input-equivalence-audit.json",
+        "bytes": 454,
+        "sha256": "37351b616e7ec63a6fcba19a221c96d42a81881fa13adb30a6429e3297942ff9"
+      },
+      {
+        "file": "docs/material-input-equivalence-audit.json.gz",
+        "bytes": 45222740,
+        "sha256": "86ecdad59e416c07b00dfc641dd628615a611016f352f5ab36dd3b9c42666cc3"
+      },
+      {
+        "file": "docs/material-input-equivalence-audit.md",
+        "bytes": 155518,
+        "sha256": "e1a55f8c3ab439d21cf8c7d8dd92fe445c3f5089918d44bb597b3e33bb082a7a"
+      },
+      {
+        "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+        "bytes": 117465211,
+        "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+      }
+    ],
+    "manifest": {
+      "format": "astylar-material-input-audit-gzip",
+      "formatVersion": 1,
+      "auditSchemaVersion": 3,
+      "payload": "material-input-equivalence-audit.json.gz",
+      "encoding": "utf-8",
+      "compression": "gzip",
+      "compressedBytes": 45222740,
+      "compressedSha256": "86ecdad59e416c07b00dfc641dd628615a611016f352f5ab36dd3b9c42666cc3",
+      "uncompressedBytes": 1532991469,
+      "uncompressedSha256": "645efdbfde72645c6717cfb8730a9c6d5c4363c7d4ec9cd3c33ee18bae2e8086"
+    },
+    "sourceFingerprintsChecked": 116,
+    "uncompressedHashVerified": true,
+    "uncompressedBytesVerified": 1532991469
+  },
+  "preservedPreviousGeneratedReports": [
+    {
+      "Source": "D:\\dev\\github\\AstylarUI-material\\docs\\material-input-equivalence-audit.json",
+      "Backup": "D:\\dev\\github\\AstylarUI-material\\artifacts\\material-parity\\input-audit-pre-stream-6ccd175\\material-input-equivalence-audit.json",
+      "Sha256": "FFDC530D75AA7FAFFAB6C4FDC242E8F60A7F869C58D3BB76EF8C0FF3CA42DED6",
+      "Bytes": 286977383
+    },
+    {
+      "Source": "D:\\dev\\github\\AstylarUI-material\\docs\\material-input-equivalence-audit.md",
+      "Backup": "D:\\dev\\github\\AstylarUI-material\\artifacts\\material-parity\\input-audit-pre-stream-6ccd175\\material-input-equivalence-audit.md",
+      "Sha256": "0E4044DD02EB27EC220234AFB6F1912A45A95AAA7EAA8A1900C5481689481647",
+      "Bytes": 51895
+    }
+  ],
+  "limitations": [
+    "The CLI exits 1 intentionally because 3213 unresolved attributions remain; report transport success is not audit acceptance.",
+    "The separate identity-transform fixed-descendant public reproduction is checked in but not yet integrated into the main source-finding/proof inventory; its five demonstrated failures are not waived by this report.",
+    "Generated prose includes historical per-proof summaries. Current top-level counts govern this generation; historical green output-parity evidence is not the required final enforced matrix.",
+    "The full unfiltered enforced parity matrix after all audit changes remains pending.",
+    "No claim that all material input differences have been attributed, or that raw capture coverage establishes equivalence."
+  ]
+}
