@@ -1605,15 +1605,9 @@ function classifyStyleDifference(property, reference, astylar, referenceStyle, a
       owner: 'none',
     };
   }
-  if (property === 'transformOrigin' && astylar === undefined &&
-      (!referenceStyle.transform || ['none', 'matrix(1,0,0,1,0,0)'].includes(referenceStyle.transform)) &&
-      (!astylarStyle.transform || ['none', 'matrix(1,0,0,1,0,0)'].includes(astylarStyle.transform))) {
-    return {
-      classification: 'equivalent-representation',
-      justification: 'Browser transform-origin is a derived used value; Astylar has no transform, so omission carries the same rendering intent.',
-      owner: 'none',
-    };
-  }
+  // Inactive transforms do not prove equal origin requests. An explicit corner
+  // and an omitted center can share initial pixels yet diverge under the same
+  // next transform. Origin omission needs authored/default/reference-box proof.
   if (property === 'maxWidth' && equivalentFixedMaxWidth(reference, astylar, referenceStyle, astylarStyle)) {
     return {
       classification: 'equivalent-representation',
@@ -8028,6 +8022,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/input-equivalence-policy.mjs',
     'tests/material-parity/identity-transform-omission.spec.mjs',
     'scripts/audit-material-identity-transform.mjs',
+    'scripts/audit-material-transform-origin.mjs',
     'tests/material-parity/border-initial-input-evidence.mjs',
     'tests/material-parity/chip-host-typography-evidence.mjs',
     'tests/material-parity/field-host-typography-evidence.mjs',
@@ -8078,6 +8073,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/identity-transform-omission.spec.mjs', /test\('inactive transforms cannot/,
+      'inactive transforms do not establish origin omission equivalence', 'Explicit and unproven origin requests remain unresolved when the candidate declaration is omitted, even under none or an identity matrix. Matching explicit inputs remain comparable. The full 6938-observation scalar exposure is retained; independent DPR1/2 browser request controls reproduce the historical false waiver while the corrected collector rejects it. Default-center controls remain geometrically equal, but no candidate computed origin, complete captured cascade, reference-box equivalence or renderer parity is invented. Full-tree population attribution is separate.'),
     proof(root, 'examples/material-showcase/src/app/identity-transform-context-audit.spec.ts', /describe\('Material audit: identity transform context semantics/,
       'confirmed transformed fixed-child containing-block failures with separate stacking controls', 'Two identical DPR1 public-package browser runs preserve five fixed-child placement failures and nine passing controls. Both sides receive one shared tree/style input; final mesh projection measures output without feeding layout. All seven stacking controls pass independent browser hit/color and candidate interior-pixel checks. Core viewport-only layout-parent selection is the first divergence, including supported 2D identity transforms. The recorded observations and eleven source fingerprints are checked by the identity omission spec. This does not attribute original Material scalar groups, certify all hit testing/raster, or establish DPR2, nested/update/scroll behavior.'),
     proof(root, 'tests/material-parity/identity-transform-omission.spec.mjs', /test\('identity transforms cannot/,

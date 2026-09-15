@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "kind": "transform-origin-omission-scalar-waiver-correction",
+  "baselineCommit": "1d5fd13",
+  "scope": "Audit instrumentation and regression protection only. No renderer, canonical fixture, browser probe, or raw capture changes.",
+  "historicalProbe": "docs/material-transform-origin-omission-audit.json",
+  "finding": {
+    "owner": "input audit transform-origin equivalence classification",
+    "firstDivergence": "classifyStyleDifference accepted any omitted candidate origin when both transforms were absent, none or identity; no authored-origin, default or reference-box proof was required.",
+    "demonstratedCause": "At DPR1 and DPR2, explicit corner and omitted default-center origins share initial geometry but diverge under the same subsequent scale(2), both from none and identity transforms. This disproves the scalar-only equivalence rule.",
+    "correction": "Remove that waiver. Preserve raw values and mark omissions unresolved until context-specific evidence proves their origin semantics.",
+    "nonClaims": [
+      "This is not proof of 587 renderer defects.",
+      "The absence of explicit origin rules in captured scalar rule lists is not a complete cascade/default proof.",
+      "The browser sensitivity probe does not render the candidate through AstylarUI.",
+      "Geometrically matching default-center controls alone do not supply missing candidate computed origin or corresponding reference-box evidence."
+    ]
+  },
+  "changes": [
+    "Remove the unguarded transform-origin scalar waiver.",
+    "Add three registered regression tests for 16 authored/unproven scalar contexts and matching controls, the complete 6938-observation scalar exposure, and unchanged DPR1/2 browser sensitivity controls.",
+    "Fingerprint the origin probe and add its focused proof to the main inventory; 124 source fingerprints and 132 source findings.",
+    "Refresh 13 top-level source fingerprint fields across 12 rolling indices, preserving every historical/body field."
+  ],
+  "verification": [
+    {
+      "command": "node --test --test-name-pattern=\"inactive transforms cannot\" tests/material-parity/identity-transform-omission.spec.mjs",
+      "phase": "before waiver removal",
+      "exitCode": 1,
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "durationMs": 1206.4172,
+      "result": "Explicit corner origin omission was incorrectly classified equivalent-representation."
+    },
+    {
+      "command": "node --test tests/material-parity/identity-transform-omission.spec.mjs",
+      "phase": "first population reduction",
+      "exitCode": 1,
+      "tests": 8,
+      "passed": 7,
+      "failed": 1,
+      "durationMs": 16580.783,
+      "result": "The diagnostic reduction dropped effective-style provenance, incorrectly routing current records through the old-capture branch. Corrected the reduction to preserve version, normal and interaction metadata; no classifier bypass was added."
+    },
+    {
+      "command": "node --test tests/material-parity/identity-transform-omission.spec.mjs",
+      "phase": "final complete focused file",
+      "exitCode": 0,
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "durationMs": 16515.0305
+    },
+    {
+      "command": "node --test --test-concurrency=1 --test-name-pattern='root initial-style|case index|records source fingerprints|covers every captured host|normalizes browser-used' tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+      "phase": "prior provenance/index regressions",
+      "exitCode": 0,
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "durationMs": 190714.4525
+    }
+  ],
+  "fullReplay": {
+    "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const bytes=readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');assert.equal(createHash('sha256').update(bytes).digest('hex'),'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');const audit=buildMaterialInputAudit(JSON.parse(bytes),{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});assert.equal(audit.sourceFingerprints.length,124);assert.equal(audit.sourceFindings.length,132);assert.equal(audit.summary.totalStyleDifferenceOccurrences,386891);assert.ok(audit.summary.unresolvedAttributions>3213);const origins=audit.discrepancies.filter(d=>d.property==='transformOrigin'&&d.astylar===undefined);assert.ok(origins.every(d=>d.classification!=='equivalent-representation'));const errors=validateMaterialInputAudit(audit);assert.deepEqual(errors,[audit.summary.unresolvedAttributions+' resolved-style differences still lack root-cause attribution']);console.log(JSON.stringify({summary:audit.summary,sourceFingerprintCount:audit.sourceFingerprints.length,originGroups:origins.length,originOccurrences:origins.reduce((n,d)=>n+d.occurrences,0),originAttributions:[...new Set(origins.map(d=>d.attribution??'<none>'))],errors,scope:'Complete unchanged frozen capture; removal of scalar-only origin waiver, no renderer/fixture changes or report writes'}));\"",
+    "exitCode": 0,
+    "result": {
+      "summary": {
+        "inputEquivalent": false,
+        "structureDifferences": 88,
+        "uniqueStyleDifferences": 8339,
+        "totalStyleDifferenceOccurrences": 386891,
+        "classifications": {
+          "application-plugin-authoring-defect": 526,
+          "equivalent-representation": 2088,
+          "intentional-documented-limitation": 312,
+          "parity-harness-defect": 5413
+        },
+        "propertyGroups": {
+          "interaction": 351,
+          "layout": 3106,
+          "other": 351,
+          "paint": 1255,
+          "transform": 937,
+          "typography": 2339
+        },
+        "affectedFamilies": {
+          "autocomplete": 147,
+          "badge": 282,
+          "bottom-sheet": 412,
+          "button": 305,
+          "button-toggle": 260,
+          "card": 376,
+          "checkbox": 220,
+          "chips": 317,
+          "core": 145,
+          "datepicker": 147,
+          "dialog": 487,
+          "divider": 300,
+          "expansion": 264,
+          "form-field": 147,
+          "grid-list": 278,
+          "icon": 128,
+          "input": 147,
+          "list": 149,
+          "menu": 150,
+          "paginator": 269,
+          "progress-bar": 130,
+          "progress-spinner": 124,
+          "radio": 304,
+          "select": 147,
+          "sidenav": 128,
+          "slide-toggle": 190,
+          "slider": 331,
+          "snack-bar": 262,
+          "sort": 151,
+          "stepper": 341,
+          "table": 142,
+          "tabs": 342,
+          "timepicker": 147,
+          "toolbar": 273,
+          "tooltip": 249,
+          "tree": 148
+        },
+        "unclassifiedDifferences": 0,
+        "unresolvedAttributions": 3800,
+        "sourceFindings": 132,
+        "unexplainedSourceFindings": 0,
+        "undetectedSourceDefinitions": 0
+      },
+      "sourceFingerprintCount": 124,
+      "originGroups": 587,
+      "originOccurrences": 6938,
+      "originAttributions": [
+        "unresolved"
+      ],
+      "errors": [
+        "3800 resolved-style differences still lack root-cause attribution"
+      ],
+      "scope": "Complete unchanged frozen capture; removal of scalar-only origin waiver, no renderer/fixture changes or report writes"
+    },
+    "meaning": "Exit 0 proves the expected assertions, including exact strict rejection. It is not audit acceptance.",
+    "before": {
+      "uniqueStyleDifferences": 8339,
+      "totalStyleDifferenceOccurrences": 386891,
+      "unresolvedAttributions": 3213
+    },
+    "delta": {
+      "newlyUnresolvedGroups": 587,
+      "retainedOriginObservations": 6938
+    },
+    "raw": {
+      "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+      "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+    }
+  },
+  "rollingIndices": {
+    "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{execFileSync}from'node:child_process';import{createHash}from'node:crypto';const files=['docs/material-button-appearance-audit.json','docs/material-field-host-alignment-audit.json','docs/material-container-caret-audit.json','docs/material-field-host-weight-tracking-audit.json','docs/material-field-host-color-audit.json','docs/material-field-host-typography-audit.json','docs/material-root-height-audit.json','docs/material-root-typography-audit.json','docs/material-root-color-audit.json','docs/material-line-height-omission-audit.json','docs/material-nonwidget-appearance-audit.json','docs/material-root-initial-style-audit.json'];let fingerprints=0,changed=0;for(const file of files){const before=JSON.parse(execFileSync('git',['show','HEAD:'+file],{encoding:'utf8',maxBuffer:50000000}));const after=JSON.parse(readFileSync(file));assert.deepEqual(before.sourceFingerprints.map(f=>f.file),after.sourceFingerprints.map(f=>f.file));for(const [i,f]of after.sourceFingerprints.entries()){assert.equal(createHash('sha256').update(readFileSync(f.file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex'),f.sha256,f.file);fingerprints++;if(f.sha256!==before.sourceFingerprints[i].sha256)changed++;}delete before.sourceFingerprints;delete after.sourceFingerprints;assert.deepEqual(after,before,file+' historical/body evidence changed');}console.log(JSON.stringify({indices:files.length,fingerprints,changedFingerprintFields:changed,historicalAndBodyEvidenceUnchanged:true}));\"",
+    "exitCode": 0,
+    "result": {
+      "indices": 12,
+      "fingerprints": 85,
+      "changedFingerprintFields": 13,
+      "historicalAndBodyEvidenceUnchanged": true
+    },
+    "note": "HEAD in this recorded command was 1d5fd13."
+  },
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "4dbd3a4c532e14991578197c7004ddee9f576d0df204cfb642b6ca563190923a"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+      "sha256": "09c79ec8fb283bc9563aff12ebba5383fc8ac1a77ddabf94033389fc99488247"
+    },
+    {
+      "file": "tests/material-parity/identity-transform-omission.spec.mjs",
+      "sha256": "604e4b5d67e88bda0aef858d2a71b73277b8678ee83605a621d52896759e0899"
+    },
+    {
+      "file": "scripts/audit-material-transform-origin.mjs",
+      "sha256": "ac7899c76925c51041fa75d88b6101d079228a093048e256cfb092b12d4ae026"
+    }
+  ],
+  "recordVerification": {
+    "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{execFileSync}from'node:child_process';import{createHash}from'node:crypto';const r=JSON.parse(readFileSync('docs/material-transform-origin-waiver-correction.json'));for(const f of r.sourceFingerprints)assert.equal(createHash('sha256').update(readFileSync(f.file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex'),f.sha256,f.file);assert.deepEqual(JSON.parse(readFileSync(r.historicalProbe)),JSON.parse(execFileSync('git',['show','HEAD:'+r.historicalProbe],{encoding:'utf8',maxBuffer:2000000})));const a=r.fullReplay.result;assert.equal(a.originGroups,587);assert.equal(a.originOccurrences,6938);assert.deepEqual(a.originAttributions,['unresolved']);assert.equal(a.summary.unresolvedAttributions,3800);assert.equal(a.summary.uniqueStyleDifferences,8339);assert.equal(a.summary.totalStyleDifferenceOccurrences,386891);assert.deepEqual(a.errors,['3800 resolved-style differences still lack root-cause attribution']);assert.equal(a.sourceFingerprintCount,124);assert.equal(a.summary.sourceFindings,132);assert.equal(r.fullReplay.before.unresolvedAttributions+r.fullReplay.delta.newlyUnresolvedGroups,a.summary.unresolvedAttributions);assert.deepEqual(r.verification.map(v=>[v.exitCode,v.passed,v.failed]),[[1,0,1],[1,7,1],[0,8,0],[0,18,0]]);assert.ok(r.verification.every(v=>v.command));console.log(JSON.stringify({sourceFingerprints:r.sourceFingerprints.length,historicalProbeUnchanged:true,originGroups:a.originGroups,originOccurrences:a.originOccurrences,strictErrors:a.errors,recordChecksPassed:true}));\"",
+    "exitCode": 0,
+    "result": {
+      "sourceFingerprints": 4,
+      "historicalProbeUnchanged": true,
+      "originGroups": 587,
+      "originOccurrences": 6938,
+      "strictErrors": [
+        "3800 resolved-style differences still lack root-cause attribution"
+      ],
+      "recordChecksPassed": true
+    },
+    "note": "HEAD in this recorded check was 1d5fd13. This independently checks record consistency, normalized source hashes and unchanged historical probe; it does not rerun the full capture."
+  },
+  "pending": [
+    "Determine authored/default/reference-box provenance for newly exposed origin groups; do not blanket-attribute them.",
+    "Complete all other unresolved input-difference ownership investigations.",
+    "Regenerate and independently check canonical reports after audit source changes; the checked-in canonical payload remains the 0b966fc snapshot.",
+    "Run the complete current registered harness and unfiltered enforced parity matrix; the earlier 656-test result is historical, not current proof."
+  ]
+}

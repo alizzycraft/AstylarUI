@@ -3,7 +3,37 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Transform-origin omission: confirmed audit equivalence blind spot
+## Transform-origin waiver removed; complete population remains visible
+
+The [correction record](material-transform-origin-waiver-correction.json) removes
+the scalar-only equivalence waiver exposed below. No renderer, canonical fixture,
+browser probe, or frozen capture changed. The first regression failed on the
+explicit-corner case; the final focused file passes **8/8**, and prior provenance
+and index regressions pass **18/18**. An intermediate test reduction lost the
+capture's effective-style metadata; that test input was corrected to preserve
+the original version and normal/interaction stages, without a classifier bypass.
+
+Complete frozen replay retains **8,339 difference groups / 386,891 occurrences**.
+All **587 origin-omission groups / 6,938 observations** now remain unresolved,
+instead of being silently accepted as equivalent. Strict rejection therefore
+rises from **3,213 to 3,800 unresolved attributions**. This is improved audit
+fidelity, not a claim of 587 new renderer defects or changed output. The replay's
+exit 0 confirms its expected assertions, including that exact strict rejection;
+it does not establish audit acceptance.
+
+The unchanged DPR1/2 browser witnesses and matching controls reproduce their
+original geometry. Matching controls cannot establish missing candidate origin
+defaults or equivalent reference boxes in the actual captured cases. Those
+context-specific ownership investigations remain open. The main inventory now
+contains **124 source fingerprints / 132 source findings**. Twelve rolling
+indices preserve all historical/body evidence; **13** current fingerprint fields
+changed, with all **85** fingerprint entries checked.
+
+The canonical report remains the **0b966fc snapshot**, and the earlier full
+656-test harness result predates this correction. Current canonical regeneration,
+the complete current harness, and the enforced full parity matrix remain pending.
+
+## Transform-origin omission: historical blind-spot evidence before correction
 
 The [origin sensitivity record](material-transform-origin-omission-audit.json)
 and standalone browser/collector probe repeat identically twice at **DPR1/2**.
@@ -13,7 +43,7 @@ the same `scale(2)` keeps the corner-origin box at **100,100**, but moves the
 omitted-origin box to **60,80**. Restoring the initial transform restores matching
 geometry. Matching-corner and explicit-default-center controls pass all states.
 
-The current scalar audit nonetheless labels all four corner/omission witnesses
+The scalar audit at **1d5fd13** nonetheless labels all four corner/omission witnesses
 `equivalent-representation`, because it checks inactive transforms rather than
 the original origin request. The first divergence is the audit classification
 guard, not evidence of a new candidate renderer failure. Both visual witnesses
@@ -27,9 +57,10 @@ authored absence, corresponding reference-box defaults, candidate computed
 origins, or a visible defect in every observation. The selection is reproducible
 and hashed; full original cases remain in the unchanged raw report.
 
-The waiver correction and complete population replay remain pending. This
-increment records the defect and controls without changing any classifier,
-renderer, canonical fixture, or claimed attribution count.
+That historical increment recorded the defect and controls without changing any
+classifier, renderer, canonical fixture, or claimed attribution count. The
+subsequent waiver correction and complete replay are recorded above; the original
+machine evidence deliberately retains its historical classifier results.
 
 ## Fixed-child context proof integrated into the main inventory
 

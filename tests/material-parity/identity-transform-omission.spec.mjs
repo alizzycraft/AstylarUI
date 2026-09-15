@@ -17,6 +17,69 @@ const input = (id, reference, candidate, authored = true) => ({ id,
   astylarResolvedStyleEvidenceVersion: 2,
 });
 
+test('inactive transforms cannot establish origin-omission input equivalence', () => {
+  const inputs = [];
+  for (const transform of ['none', 'matrix(1,0,0,1,0,0)']) for (const origin of ['0px 0px', '20px 30px', '40px 20px', '50% 50%'])
+    for (const authored of [true, false]) {
+      const id = `origin-${inputs.length}`;
+      inputs.push({ id, reference: { transform, transformOrigin: origin }, astylar: { transform },
+        referenceAuthored: authored ? [{ selector: '#' + id, active: true, declarations: {
+          'transform-origin': { value: origin, important: false } } }] : [], astylarAuthored: [] });
+    }
+  const raw = report(inputs), before = JSON.stringify(raw), audit = buildMaterialInputAudit(raw);
+  for (const i of inputs) {
+    const d = audit.discrepancies.find(d => d.element === i.id && d.property === 'transformOrigin');
+    assert.ok(d, i.id); assert.equal(d.astylar, undefined);
+    assert.notEqual(d.classification, 'equivalent-representation', i.id);
+    assert.equal(d.attribution, 'unresolved', i.id);
+  }
+  assert.equal(JSON.stringify(raw), before);
+  const matching = report(inputs.map(i => ({ ...i, astylar: { ...i.reference } })));
+  assert.deepEqual(buildMaterialInputAudit(matching).discrepancies, []);
+});
+
+test('all captured inactive origin omissions remain visible without scalar equivalence', () => {
+  const record = JSON.parse(readFileSync('docs/material-transform-origin-omission-audit.json')).verification.data;
+  const bytes = readFileSync(record.capturePath);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), record.captureSha256);
+  const raw = JSON.parse(bytes), selected = { schemaVersion: raw.schemaVersion, mode: 'report-only', results: [], interactions: [] };
+  const inactive = value => value === undefined || ['none', 'matrix(1,0,0,1,0,0)'].includes(value.replace(/\s/g, ''));
+  let count = 0;
+  for (const key of ['results', 'interactions']) for (const e of raw[key]) {
+    const styleInputs = (e.styleInputs ?? []).filter(i => i.reference?.transformOrigin !== undefined && i.astylar?.transformOrigin === undefined &&
+      inactive(i.reference?.transform) && inactive(i.astylar?.transform)).map(i => ({ id: i.id,
+      reference: { transformOrigin: i.reference.transformOrigin, transform: i.reference.transform },
+      astylar: { transform: i.astylar?.transform }, referenceAuthored: i.referenceAuthored, astylarAuthored: i.astylarAuthored,
+      astylarResolvedStyleEvidenceVersion: i.astylarResolvedStyleEvidenceVersion,
+      astylarNormalResolvedStyle: i.astylarNormalResolvedStyle,
+      astylarInteractionResolvedStyle: i.astylarInteractionResolvedStyle }));
+    count += styleInputs.length;
+    if (styleInputs.length) selected[key].push({ family: e.family, profile: e.profile, viewport: e.viewport, state: e.state, styleInputs });
+  }
+  assert.equal(count, record.exposure.observations);
+  const before = JSON.stringify(selected), audit = buildMaterialInputAudit(selected);
+  const origins = audit.discrepancies.filter(d => d.property === 'transformOrigin');
+  assert.equal(origins.reduce((n, d) => n + d.occurrences, 0), count);
+  assert.ok(origins.every(d => d.astylar === undefined && d.attribution === 'unresolved' && d.classification !== 'equivalent-representation'));
+  assert.equal(JSON.stringify(selected), before);
+  // This isolates scalar-policy exposure. Full-tree attribution and full raw
+  // replay are separate; omission never supplies invented computed geometry.
+});
+
+test('origin sensitivity browser controls replay without the historical false waiver', () => {
+  const record = JSON.parse(readFileSync('docs/material-transform-origin-omission-audit.json')).verification.data;
+  const run = spawnSync(process.execPath, ['scripts/audit-material-transform-origin.mjs'], { encoding: 'utf8', maxBuffer: 2000000 });
+  assert.equal(run.status, 0, run.stderr);
+  const actual = JSON.parse(run.stdout);
+  for (const key of ['capturePath', 'captureSha256', 'scope', 'exposure', 'runs']) assert.deepEqual(actual[key], record[key], key);
+  assert.equal(actual.collector.length, record.collector.length);
+  for (const item of actual.collector) {
+    assert.equal(item.candidate, '<omitted>'); assert.equal(item.attribution, 'unresolved');
+    assert.notEqual(item.classification, 'equivalent-representation');
+  }
+  assert.equal(record.collector.filter(i => i.reference === '0 0' && i.classification === 'equivalent-representation').length, 4);
+});
+
 test('fixed-descendant context proof is preserved and owned in the main audit inventory', () => {
   const evidence = JSON.parse(readFileSync('docs/material-identity-transform-context-audit.json'));
   assert.equal(evidence.findingId, 'fixed-descendant-ignores-transformed-containing-block');
