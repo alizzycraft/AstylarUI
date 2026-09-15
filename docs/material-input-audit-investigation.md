@@ -25,6 +25,15 @@ identifies a harness evidence limitation, **not** the cause of the original
 tooltip/snackbar failures. Original-state, runtime-bound ancestry evidence is
 still required; canonical classifications and production inputs are unchanged.
 
+The subsequent [frozen-runtime priority overlay survey](material-overlay-ancestor-context-survey.md)
+now verifies 48 original static root contexts plus 48 separately labelled real
+reference activations. In every new open sample, the overlay attaches to body
+and html with 16px/normal typography, no transform and zoom 1; themed frame
+typography varies independently. This rules out an external DOM-ancestor
+transform in those reference activations, not candidate projection/plugin
+defects or other original interaction states. Source digests, original records,
+4,656 root property comparisons and full ancestry are independently checked.
+
 ## Remaining mapped-owner defaults: bounded triage across components
 
 The [owner survey](material-owner-initial-style-survey.md) covers all 600 remaining

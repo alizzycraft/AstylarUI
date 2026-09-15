@@ -101,6 +101,8 @@ and a missing-frame negative control. Test-only mutations are not part of the
 collector. No changes were made to the existing collector or running harness.
 
 This proves the supplemental instrumentation on controlled browser inputs.
-Application capture and independent binding to original state/runtime evidence
-remain pending; the collector's existence does not justify any canonical
-classification or original-case ancestry claim.
+At this collector-only checkpoint, application capture and independent binding
+were still pending. The subsequent [priority overlay survey](material-overlay-ancestor-context-survey.md)
+now supplies 48 original static reference contexts and 48 separately labelled
+fresh activations against the frozen runtime. Neither the collector nor that
+reference-only supplement establishes a candidate rendering cause or parity.
