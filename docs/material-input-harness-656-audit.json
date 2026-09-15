@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "kind": "complete-unfiltered-audit-harness-verification",
+  "startedFromCommit": "92074d9",
+  "recordedAfterCommit": "81291b3",
+  "scope": "All files registered in parity:harness:check run without name filters, with file concurrency one to bound memory. This is audit-tool verification, not enforced browser parity or the separate public renderer-defect reproduction.",
+  "command": "node --input-type=module -e \"import{readFileSync}from'node:fs';import{spawnSync}from'node:child_process';const script=JSON.parse(readFileSync('package.json')).scripts['parity:harness:check'];const args=script.slice('node '.length).split(' ');args.splice(1,0,'--test-concurrency=1');const result=spawnSync(process.execPath,args,{stdio:'inherit'});process.exit(result.status??1);\"",
+  "exitCode": 0,
+  "tests": 656,
+  "passed": 656,
+  "failed": 0,
+  "cancelled": 0,
+  "skipped": 0,
+  "todo": 0,
+  "durationMs": 2148160.3781,
+  "sourceFingerprintCommand": "node --input-type=module -e \"import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const script=JSON.parse(readFileSync('package.json')).scripts['parity:harness:check'];const files=[...new Set(['package.json',...script.split(' ').filter(x=>x.endsWith('.mjs')),'tests/material-parity/input-equivalence-audit.mjs','tests/material-parity/input-equivalence-policy.mjs','tests/material-parity/input-audit-report-codec.mjs','tests/material-parity/input-audit-report-stream.mjs','scripts/run-material-input-audit.mjs'])];console.log(JSON.stringify({script,files:files.map(file=>({file,sha256:createHash('sha256').update(readFileSync(file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex')}))}));\"",
+  "sourceFingerprints": [
+    {
+      "file": "package.json",
+      "sha256": "c4861a8b6847c1173004b9d973be8f65961dc406ed5f789105c486559df6f6ad"
+    },
+    {
+      "file": "tests/parity/fixture-manifest.spec.mjs",
+      "sha256": "5ce5ad2ab8df322f9a7a74e810b303d9b5b367063889c993782d32efafb1d8c4"
+    },
+    {
+      "file": "tests/parity/visibility-metrics.spec.mjs",
+      "sha256": "a3c660d6221193763f9e4ba03625fd3f849855247ddf0b80251b873240021fad"
+    },
+    {
+      "file": "tests/parity/sharpness-metrics.spec.mjs",
+      "sha256": "b3eda42c5d8f289350f994442644e0eccb328d82e5ab17d736062a32d0986fc9"
+    },
+    {
+      "file": "tests/tts-parity/benchmark-config.spec.mjs",
+      "sha256": "2b485edeb92c26054184ac11ac3830d9d1d55e0c61d1f1620ac93262bb291473"
+    },
+    {
+      "file": "tests/tts-parity/demo-workflow.spec.mjs",
+      "sha256": "334b9b81a82a74b73d972ae8cd0becd83261a04a4acbbaed62def9723a0765c7"
+    },
+    {
+      "file": "tests/tts-parity/scrolling-metrics.spec.mjs",
+      "sha256": "be54c1d8d28e2d348d978c8dd30d44115d8e37c8f468a1e568ebb737ed0c7dd5"
+    },
+    {
+      "file": "tests/tts-parity/interaction-metrics.spec.mjs",
+      "sha256": "cdb4292467b2912d3abf9885d8913ad7c725b275be7b53471d43c51f91e3c057"
+    },
+    {
+      "file": "tests/material-parity/benchmark-config.spec.mjs",
+      "sha256": "fddc5eb7e18d073f40e77b17d489960549557ae2df6878b1cd98a340a0edad96"
+    },
+    {
+      "file": "tests/material-parity/cursor-metrics.spec.mjs",
+      "sha256": "e4c6f7004b3df18e8d742b0bba30941182e608b29d0007c41e9b509dd09714a7"
+    },
+    {
+      "file": "tests/material-parity/focused-raster-metrics.spec.mjs",
+      "sha256": "64fe44d9295788ab58ca8530b3f6e67d59c6e16c66d00af8ee2e84918179a950"
+    },
+    {
+      "file": "tests/material-parity/text-alignment-metrics.spec.mjs",
+      "sha256": "21628e49f7657067573dbf2c11a15ed6db983c7ecae37963c7dfd9cbe5d7939e"
+    },
+    {
+      "file": "tests/material-parity/shadow-profile-metrics.spec.mjs",
+      "sha256": "9d4123e2ff5d40af7f64ff7b43dfd81187ce4b3f17d485e07483fa2279466615"
+    },
+    {
+      "file": "tests/material-parity/input-tree-evidence.spec.mjs",
+      "sha256": "c2d0884f99fc4e1f41ac65d22b95643c8785f4fb7a339a47746bf31fe91344b3"
+    },
+    {
+      "file": "tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+      "sha256": "0eb054b63f89c949c22ad38a9e571b5fc9a384f1be171a279980e7472cf03379"
+    },
+    {
+      "file": "tests/material-parity/field-host-token-sensitivity.spec.mjs",
+      "sha256": "1712b21b5dc04393c385eeaaabadaf12faf578c4637fb7659640879dced9d8a8"
+    },
+    {
+      "file": "tests/material-parity/line-height-omission-sensitivity.spec.mjs",
+      "sha256": "8f50185a2d328a602d96ae229f6107ce7191be158400c6673bebc6d3c7ff8637"
+    },
+    {
+      "file": "tests/material-parity/root-line-height-proof.spec.mjs",
+      "sha256": "86fb0c14ae9b69baad0c4dbd23ddb467c31b98301eec874dc4b15153a8bb9595"
+    },
+    {
+      "file": "tests/material-parity/root-inherited-default-proof.spec.mjs",
+      "sha256": "ed824a7bd8bbd4cc000b225f30859283fb4b0098667dd60e57576f097079851c"
+    },
+    {
+      "file": "tests/material-parity/caret-color-omission-sensitivity.spec.mjs",
+      "sha256": "055c61e9e7b378219c82cffe4bab5fc00912a4caa202794baef357f20a63ed83"
+    },
+    {
+      "file": "tests/material-parity/inherited-default-sensitivity.spec.mjs",
+      "sha256": "6f0cad24bca24388695f16ffbe90b7e45ccabef438fa6b03c13a234e24884de3"
+    },
+    {
+      "file": "tests/material-parity/root-initial-style-evidence.spec.mjs",
+      "sha256": "b1fc7ec4c17fc277d5813cc13a82f3d773827dbecae479a093c82c8d6e28fba4"
+    },
+    {
+      "file": "tests/material-parity/root-initial-style-sensitivity.spec.mjs",
+      "sha256": "b40aa7f8c629bbe6dc2b431c96c149a2d11ea2b8afe0efd34749e1480d550e98"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+      "sha256": "2dd993c70487d2fbac133ec9c0f0214bef6c7318653f84377f3f6f9f21f9799b"
+    },
+    {
+      "file": "tests/material-parity/input-audit-report-codec.spec.mjs",
+      "sha256": "3a7d424e4b1ab695fbe7f92c8b90f11859eba36f4407884fc4ca7c16d0d8d350"
+    },
+    {
+      "file": "tests/material-parity/input-audit-report-stream.spec.mjs",
+      "sha256": "5907ac58cbc0cb85301e5db09ff0fbb173b549c0bed8dd9e627a11c61e0eedf5"
+    },
+    {
+      "file": "tests/material-parity/input-audit-cli-transport.spec.mjs",
+      "sha256": "fbaf2cac9e26566643cd53d3b3a61006656586de6a9d9696c6d205b494f32b60"
+    },
+    {
+      "file": "tests/material-parity/identity-transform-omission.spec.mjs",
+      "sha256": "847a4df580e4abab297dc6185baa95e1563c55d685417efc97f22657c78d32dc"
+    },
+    {
+      "file": "tests/material-parity/normal-line-box-report.spec.mjs",
+      "sha256": "aab40f8f4dceb8a1478f5b0fcd59c15686593ce03eec459a357e451655d5dc9e"
+    },
+    {
+      "file": "tests/material-parity/supplemental-capture-evidence.spec.mjs",
+      "sha256": "98976d1bd23b5c95a61ffd7960b75f363d8426ad10694db5658c90f41b83843d"
+    },
+    {
+      "file": "tests/material-parity/button-pointer-focus-evidence.spec.mjs",
+      "sha256": "604131405323900b4c84ae967c1880de43cbace1580d68b6b9a6db18727da1b1"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "8ac5d6b5c4c74853c446b58ab2fe43a5f95b7bf69d97fd6bf25470157ae375c1"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-policy.mjs",
+      "sha256": "6346a329c06a4f2dbb72714206abb2f7acf1ab3e5cfad95ab75fabad6fc65569"
+    },
+    {
+      "file": "tests/material-parity/input-audit-report-codec.mjs",
+      "sha256": "d68fdcfc63aafc9526b0ecf497645f24532782c7d1611c7f4ef0e9b1dcb6c8ed"
+    },
+    {
+      "file": "tests/material-parity/input-audit-report-stream.mjs",
+      "sha256": "3a2afb9d0ceec21fe24a24451156fb2e4902e7f8cf052a996479f83399eddc12"
+    },
+    {
+      "file": "scripts/run-material-input-audit.mjs",
+      "sha256": "d3762679413b59822ad299e41425195d67b53e456e46d96dd8c217c0ec02fd9a"
+    }
+  ],
+  "sourceScope": "Package script, every directly registered test file, and listed audit policy/builder/codec/stream/CLI modules. Not a claim that these are all transitive source dependencies.",
+  "changesSincePreviousFullHarness": {
+    "previousVerifiedTests": 644,
+    "additions": [
+      {
+        "file": "tests/material-parity/input-audit-report-stream.spec.mjs",
+        "tests": 7
+      },
+      {
+        "file": "tests/material-parity/input-audit-cli-transport.spec.mjs",
+        "tests": 1
+      },
+      {
+        "file": "tests/material-parity/identity-transform-omission.spec.mjs",
+        "tests": 4
+      }
+    ]
+  },
+  "sourceStability": "No registered harness tests or audit implementation changed while the process ran. Subsequent commits added documentation and a separate Angular diagnostic spec, which is not part of this Node harness.",
+  "limitations": [
+    "The separate identity-transform-context Angular reproduction intentionally fails 5 of 14 cases, twice; it is not covered or overridden by this passing Node harness.",
+    "The full raw replay retains 3213 unresolved attributions. Passing harness tests does not establish input equivalence.",
+    "Canonical current CLI report packaging and the complete enforced parity matrix remain pending.",
+    "Some verbose intermediate tool output was truncated; the terminal test summary and exit status were preserved. No claim of an archived complete TAP transcript."
+  ]
+}

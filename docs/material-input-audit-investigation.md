@@ -3,6 +3,21 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete audit harness: 656 tests verified
+
+The [unfiltered harness record](material-input-harness-656-audit.json) reports
+**656/656 passing**, **0 failed/skipped/cancelled**, exit **0**, in
+**2,148,160.3781 ms**. It includes all seven streamed-transport tests, the CLI
+transport test and four identity-omission tests added since the prior 644-test
+run. File concurrency is one; no test-name or file subset filter is applied.
+The package script and directly registered test/source fingerprints are recorded.
+
+This is audit-tool verification, not output or input parity. The separate Angular
+identity-context reproduction still intentionally fails five of fourteen cases;
+the Node harness does not include or supersede it. The full raw audit still has
+**3,213 unresolved attributions**. Real current-report packaging and final
+unfiltered enforced parity remain pending.
+
 ## Fixed descendants ignore identity-transformed containing blocks
 
 The [public-package context proof](material-identity-transform-context-audit.json)
@@ -72,8 +87,9 @@ container-caret proofs** remain. The three identity-transform groups are now
 unresolved, increasing the unresolved total from **3,210 to 3,213**. Strict
 validation rejects precisely those 3,213 unresolved attributions; assertion
 success does not establish input equivalence. No canonical reports were written.
-Original input ownership, transform-origin review, complete harness, real report
-packaging and final enforced parity remain pending.
+The complete 656-test harness now passes, as recorded above. Original input
+ownership and transform-origin review remain incomplete; real report packaging
+and final enforced parity also remain pending.
 
 ## Identity transform is not omitted transform (historical read-only investigation)
 

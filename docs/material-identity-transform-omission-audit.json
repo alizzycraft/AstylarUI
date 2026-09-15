@@ -2,7 +2,8 @@
   "schemaVersion": 1,
   "findingId": "identity-transform-is-not-omitted-transform",
   "classification": "parity-harness-defect",
-  "status": "audit assumption correction passes focused and prior tests plus full raw replay; complete harness pending",
+  "status": "audit assumption correction passes focused and prior tests, full raw replay and complete 656-test harness",
+  "completeHarnessEvidence": "docs/material-input-harness-656-audit.json",
   "correction": {
     "baselineCommit": "2658571",
     "scope": "Audit classification-policy correction only. Do not reinterpret identity as an initial transform, fabricate candidate context semantics, remove raw observations or change renderer/fixture inputs.",
@@ -88,7 +89,7 @@
       "strict": ["3213 resolved-style differences still lack root-cause attribution"],
       "scope": "Full frozen raw replay; all occurrences retained, no renderer or fixture changes. Exit zero means assertions about the expected strict rejection passed, not input equivalence. No canonical report files were written."
     },
-    "remaining": "Expanded complete harness is pending. Original transform authorship and candidate/core context ownership still need attribution. The transform-origin guard is not changed or certified by this correction. Real CLI packaging and final enforced parity remain pending."
+    "remaining": "Expanded complete harness passes (656/656). Original transform authorship is recorded separately; public candidate fixed-descendant proof exposes a core gap but does not fully attribute every Material observation. The transform-origin guard is not changed or certified by this correction. Real CLI packaging and final enforced parity remain pending."
   },
   "baselineCommit": "09e789d",
   "sourceFingerprints": [
