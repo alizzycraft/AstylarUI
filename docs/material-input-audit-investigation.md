@@ -3,6 +3,36 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Repeated frozen-reference motion samples distinguish declarations from state
+
+The [sample verification](material-origin-motion-sample-verification.json)
+records two reference-only Chrome **152.0.7977.76** runs covering one original
+case for each of the **15 guarded request contexts**, across **10 cases**. All
+target/ancestor identities, original computed style fields, inline declarations
+and matched rule inputs reproduce exactly. Served document, script, stylesheet
+and font digests match the frozen checkpoint in both runs.
+
+All **89 target/ancestor path entries per run** report computed animation-name
+`none` and an empty `getAnimations()` list, with identical repeated observations.
+This does not mean every transition declaration is disabled: the chip host still
+has `transition-property: all` with **1ms**, and the progress-bar host has an
+opacity transition of **0.25s**. The tooltip ancestor's top origin remains on
+that ancestor, not the measured surface. No candidate computed origin or
+reference-box/raster equivalence follows from these readings.
+
+An independent verifier replays original/fresh ancestry and style evidence,
+checks source/assets/tree digests and exact case/viewport coverage, compares both
+motion results, and rejects **17 altered-evidence controls**. Missing contexts,
+owners, ancestors, motion fields, fonts, changed source/tree/asset data and
+invented animation/origin values cannot pass the sample check.
+
+These observations narrow the remaining state/cascade investigation; they do
+not replace full theme/state/DPR evidence for all **1,368** guarded observations.
+The main audit is unchanged at **3,272 unresolved groups**. No renderer, plugin
+or canonical fixture edits were made. Final enforced browser parity remains
+pending; the complete registered harness and canonical check below are separate
+completed gates.
+
 ## Current canonical report regenerated and independently checked
 
 The [canonical verification](material-origin-canonical-generation.json) records

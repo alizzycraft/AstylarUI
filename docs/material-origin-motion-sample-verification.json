@@ -1,0 +1,1801 @@
+{
+  "schemaVersion": 1,
+  "kind": "repeated-frozen-reference-origin-motion-samples",
+  "baselineCommit": "a5cfe91e0171554607706923dc237cd963254d6d",
+  "scope": "Reference-only diagnostic observations for one original case in each of 15 guarded request patterns; original captures and all main classifications remain unchanged.",
+  "runs": [
+    {
+      "command": "node scripts/audit-material-origin-motion-samples.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint --output=artifacts/material-parity/origin-motion-context-samples-a5cfe91",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/audit-material-origin-motion-samples.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint --output=artifacts/material-parity/origin-motion-context-samples-a5cfe91-repeat",
+      "exitCode": 0
+    }
+  ],
+  "verification": {
+    "command": "node scripts/verify-material-origin-motion-samples.mjs artifacts/material-parity/origin-motion-context-samples-a5cfe91/latest-report.json artifacts/material-parity/origin-motion-context-samples-a5cfe91-repeat/latest-report.json",
+    "exitCode": 0,
+    "result": {
+      "reports": [
+        {
+          "file": "artifacts/material-parity/origin-motion-context-samples-a5cfe91/latest-report.json",
+          "sha256": "37b493369f581fa9e7d7bf3c01e8dabe3fec523961d1153d25d3e8b86846d6a0"
+        },
+        {
+          "file": "artifacts/material-parity/origin-motion-context-samples-a5cfe91-repeat/latest-report.json",
+          "sha256": "b97ed946222b2b5ef45a1743dad494ca781f67f258af1db3091ae6149eb7bcf7"
+        }
+      ],
+      "browser": "152.0.7977.76",
+      "repeated": true,
+      "casesPerRun": 10,
+      "contextsPerRun": 15,
+      "pathNodesPerRun": 89,
+      "allSampledAnimationNamesNone": true,
+      "allSampledOwnerAnimationListsEmpty": true,
+      "mutationControlsRejected": [
+        "missing-case",
+        "duplicate-case",
+        "missing-context",
+        "wrong-owner",
+        "wrong-viewport",
+        "missing-ancestor",
+        "changed-origin",
+        "changed-transform",
+        "named-animation",
+        "live-animation",
+        "missing-motion-value",
+        "runtime-error",
+        "missing-font-evidence",
+        "changed-asset",
+        "changed-tree",
+        "changed-source",
+        "changed-browser"
+      ],
+      "observations": [
+        {
+          "case": "static:core@light/desktop",
+          "context": 0,
+          "element": "core-primary",
+          "motion": [
+            {
+              "key": "frame",
+              "type": "main",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2",
+              "type": "section",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "389px 49px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0",
+              "type": "button",
+              "computed": {
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "transformOrigin": "106.117px 20px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "static:toolbar@light/desktop",
+          "context": 1,
+          "element": "toolbar-action",
+          "motion": [
+            {
+              "key": "frame",
+              "type": "main",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2",
+              "type": "section",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "389px 61px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0",
+              "type": "mat-toolbar",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 32px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/2",
+              "type": "button",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "32.5703px 20px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "static:badge@light/desktop",
+          "context": 2,
+          "element": "badge-count",
+          "motion": [
+            {
+              "key": "frame",
+              "type": "main",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2",
+              "type": "section",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "389px 38.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0",
+              "type": "span",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "0px 0px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/1",
+              "type": "span",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "8px 8px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "static:chips@light/desktop",
+          "context": 3,
+          "element": "chip-0",
+          "motion": [
+            {
+              "key": "frame",
+              "type": "main",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2",
+              "type": "section",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "389px 49px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0",
+              "type": "mat-chip-listbox",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 20px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 20px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/0",
+              "type": "mat-chip-option",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "48.7109px 16px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0.001s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0.001s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "static:button@light/desktop",
+          "context": 4,
+          "element": "button-secondary",
+          "motion": [
+            {
+              "key": "frame",
+              "type": "main",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2",
+              "type": "section",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "389px 49px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/1",
+              "type": "button",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "58.625px 20px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "static:tabs@light/desktop",
+          "context": 5,
+          "element": "tab-overview",
+          "motion": [
+            {
+              "key": "frame",
+              "type": "main",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2",
+              "type": "section",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "389px 63px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0",
+              "type": "mat-tab-group",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 34px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0",
+              "type": "mat-tab-header",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 24.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 24.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0",
+              "type": "div",
+              "computed": {
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "transformOrigin": "360px 24px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 24px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "182.656px 24px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0/0/0/2",
+              "type": "span",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "29.125px 24px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0/0/0/2/0",
+              "type": "span",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "29.125px 7px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0/0/0/2/0/0",
+              "type": "span",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "29.125px 7px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "static:tabs@light/desktop",
+          "context": 6,
+          "element": "tab-activity",
+          "motion": [
+            {
+              "key": "frame",
+              "type": "main",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2",
+              "type": "section",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "389px 63px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0",
+              "type": "mat-tab-group",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 34px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0",
+              "type": "mat-tab-header",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 24.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 24.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0",
+              "type": "div",
+              "computed": {
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "transformOrigin": "360px 24px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 24px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0/0/1",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "177.344px 24px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0/0/1/2",
+              "type": "span",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "23.8125px 24px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0/0/1/2/0",
+              "type": "span",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "23.8125px 7px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/0/1/0/0/1/2/0/0",
+              "type": "span",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "23.8125px 7px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "static:tabs@light/desktop",
+          "context": 7,
+          "element": "tab-panel",
+          "motion": [
+            {
+              "key": "frame",
+              "type": "main",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2",
+              "type": "section",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "389px 63px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0",
+              "type": "mat-tab-group",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 34px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/1",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 9.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/1/0",
+              "type": "mat-tab-body",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 9.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/1/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "360px 9.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0/1/0/0/0",
+              "type": "span",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "0px 0px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "static:progress-bar@light/desktop",
+          "context": 8,
+          "element": "progress-bar-primary",
+          "motion": [
+            {
+              "key": "frame",
+              "type": "main",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2",
+              "type": "section",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "389px 31px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0",
+              "type": "mat-progress-bar",
+              "computed": {
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "transformOrigin": "360px 2px",
+                "transformBox": "view-box",
+                "transitionProperty": "opacity",
+                "transitionDuration": "0.25s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "static:progress-spinner@light/desktop",
+          "context": 9,
+          "element": "progress-spinner-primary",
+          "motion": [
+            {
+              "key": "frame",
+              "type": "main",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2",
+              "type": "section",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "389px 79px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "frame/2/0",
+              "type": "mat-progress-spinner",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "50px 50px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/activate",
+          "context": 10,
+          "element": "dialog-title",
+          "motion": [
+            {
+              "key": "overlay:0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1",
+              "type": "mat-dialog-container",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0/0/0",
+              "type": "h2",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 33.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/activate",
+          "context": 11,
+          "element": "dialog-cancel",
+          "motion": [
+            {
+              "key": "overlay:0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1",
+              "type": "mat-dialog-container",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0/0/2",
+              "type": "mat-dialog-actions",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 36.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0/0/2/0",
+              "type": "button",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "33.7188px 20px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/activate",
+          "context": 12,
+          "element": "dialog-save",
+          "motion": [
+            {
+              "key": "overlay:0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1",
+              "type": "mat-dialog-container",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0/0/2",
+              "type": "mat-dialog-actions",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 36.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0/0/2/1",
+              "type": "button",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "39.3359px 20px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/activate",
+          "context": 13,
+          "element": "dialog-panel",
+          "motion": [
+            {
+              "key": "overlay:0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1",
+              "type": "mat-dialog-container",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/1/0/1/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "140px 80.5px",
+                "transformBox": "view-box",
+                "transitionProperty": "none",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        },
+        {
+          "case": "interaction:tooltip@light/desktop-dpr1/hover",
+          "context": 14,
+          "element": "tooltip-popup",
+          "motion": [
+            {
+              "key": "overlay:0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "720px 500px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "matrix(1, 0, 0, 1, 0, 8)",
+                "transformOrigin": "53.4062px 12px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/0/0/0",
+              "type": "mat-tooltip-component",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "53.4062px 12px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/0/0/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "matrix(1, 0, 0, 1, 0, 0)",
+                "transformOrigin": "53.4062px 0px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            },
+            {
+              "key": "overlay:0/0/0/0/0/0",
+              "type": "div",
+              "computed": {
+                "transform": "none",
+                "transformOrigin": "53.4062px 12px",
+                "transformBox": "view-box",
+                "transitionProperty": "all",
+                "transitionDuration": "0s",
+                "transitionDelay": "0s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationDelay": "0s",
+                "animationPlayState": "running",
+                "animationFillMode": "none"
+              },
+              "animations": []
+            }
+          ]
+        }
+      ],
+      "limitations": [
+        "Only 15 context samples, not all 1368 observations.",
+        "Captured transform-origin matches do not prove a candidate computed origin or equivalent inputs.",
+        "Motion state is observed at these settled samples; transitions may be declared even with no running animation."
+      ]
+    }
+  },
+  "findings": [
+    "Both runs reproduce the complete captured target/ancestor identities, original computed style fields, inline declarations and matched rule inputs for 15 contexts across 10 cases.",
+    "All 89 target/ancestor path entries per run have computed animation-name none and empty getAnimations() lists; this is sampled settled state, not absence of transition declarations.",
+    "The chip host retains transition-property all with a 1ms duration. The progress-bar host retains an opacity transition of 0.25s. Those requests are not normalized to none.",
+    "The tooltip ancestor retains a top origin while the measured surface retains its own origin. Ancestor transform/reference-box effects remain separate from inheritance and candidate used values."
+  ],
+  "nextInvestigation": [
+    "Use the observed disabled-motion cascades and explicit remaining transitions to design per-case proof for all guarded observations; these 15 samples cannot substitute for complete state/theme/DPR coverage.",
+    "Keep explicit ancestor-origin ownership and any core transform-origin limitation independent from the measurement-stage attribution.",
+    "Do not add screenshot-derived offsets, fixture changes or plugin coordinate calculations."
+  ],
+  "sourceFingerprints": [
+    {
+      "file": "scripts/audit-material-origin-motion-samples.mjs",
+      "sha256": "ffb717a7f6754e11affea2f6ffe230c62e0c5ceeb674330546324bc6f743635b"
+    },
+    {
+      "file": "scripts/verify-material-origin-motion-samples.mjs",
+      "sha256": "17386f5b063650b5e1d83e135bca4878b30f5671448942dea661bbd3b2b87dd8"
+    },
+    {
+      "file": "tests/material-parity/input-tree-evidence.mjs",
+      "sha256": "06197edaf92b2296e3e0564771f307a1036ce7bc5eb13d8e242a5c420e7a7e3b"
+    },
+    {
+      "file": "tests/material-parity/supplemental-capture-evidence.mjs",
+      "sha256": "94d18aa40a5d2311c1c352a8ca698986dc7771de4faadca5aa672728eff1bdbc"
+    }
+  ]
+}
