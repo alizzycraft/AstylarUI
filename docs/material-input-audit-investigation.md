@@ -29,6 +29,15 @@ integration record retains the failures, corrections and exact hashes.
 
 ## Overlay ancestor-context capture limitation
 
+The [remaining overlay ancestry review](material-remaining-overlay-ancestry-review.md)
+accounts for 48 more groups / 1,424 observations. The existing original-state
+replay also reproduces 160 dialog-owner proofs; the 18 tooltip hover/held owners
+retain an explicit external-context gap. Two tooltip groups have confirmed
+unequal wrapping inputs: reference normal/anywhere versus candidate nowrap and
+no overflow-wrap/wordWrap request. These standalone authoring findings precede
+layout/projection but do not diagnose original displacement or blur. Canonical
+integration remains pending; no fixture or renderer behavior was changed.
+
 The subsequent [overlay declaration trace](material-overlay-owner-declaration-review.md)
 reviews all 54 mapped groups / 1,532 observations after the original-state
 context replay. It separates 42 groups without captured requests, four with
