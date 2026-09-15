@@ -3,6 +3,24 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Identity transform authorship: complete captured population
+
+The [authorship survey](material-identity-transform-authorship-survey.json)
+checks all **140** identity/omission cases against their original case lists.
+Every case has exactly one captured explicit `translateZ(0px)` reference rule:
+`.mat-ripple:not(:empty)` (**52 core**), the Material toggle group rule (**68**),
+or `.mdc-linear-progress` (**20**). No candidate transform request or normal/
+interaction resolved transform is recorded for those elements. Current installed
+Material source rules independently match these captured declarations.
+
+This establishes captured input asymmetry, not a browser-initial-value default.
+It does **not** yet establish full candidate context ownership or a visible
+failure in each fixture. In particular, progress-bar uses a custom plugin node;
+its internal behavior must be inspected rather than inferred from omitted host
+data. The three groups remain unresolved. No classification or renderer changes
+are made by this survey. The record includes every case ID, exact commands,
+source hashes/locations and the next ownership investigations.
+
 ## Identity transform omission: audit-rule correction
 
 The [identity-transform evidence](material-identity-transform-omission-audit.json)

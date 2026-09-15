@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "findingId": "identity-transform-explicit-reference-authorship",
+  "baselineCommit": "92074d9",
+  "artifactVerification": {
+    "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{spawnSync}from'node:child_process';const d=JSON.parse(readFileSync('docs/material-identity-transform-authorship-survey.json'));const raw=JSON.parse(readFileSync('docs/material-identity-transform-omission-audit.json')).verification;assert.equal(d.verification.captureSha256,raw.captureSha256);for(const g of d.verification.groups){const r=raw.groups.find(x=>x.family===g.family&&x.element===g.element);assert.deepEqual(g.cases,r.cases);assert.equal(g.referenceRequests.reduce((n,x)=>n+x.occurrences,0),g.cases.length);assert.deepEqual(g.candidateAuthoredTransformCases,[]);assert.deepEqual(g.candidateResolvedTransformCases,[]);}for(const f of d.sourceInspection.files)assert.equal(createHash('sha256').update(readFileSync(f.file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex'),f.sha256,f.file);const command=d.verification.command;const source=command.slice(command.indexOf('-e ')+4,-1);const run=spawnSync(process.execPath,['--input-type=module','-e',source],{encoding:'utf8'});assert.equal(run.status,0,run.stderr);const actual=JSON.parse(run.stdout);for(const k of Object.keys(actual))assert.deepEqual(d.verification[k],actual[k],k);console.log('All 140 saved cases, source fingerprints and repeated executable survey match.');\"",
+    "exitCode": 0,
+    "result": "All 140 saved cases, source fingerprints and repeated executable survey match."
+  },
+  "status": "captured authoring asymmetry established; candidate context ownership unresolved",
+  "classification": "suspected application/plugin authoring defect; core support not yet tested",
+  "invariant": "An explicit transform request cannot be silently dropped on the basis that its current matrix has identity geometry.",
+  "verification": {
+    "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const record=JSON.parse(readFileSync('docs/material-identity-transform-omission-audit.json')).verification;const bytes=readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');assert.equal(createHash('sha256').update(bytes).digest('hex'),record.captureSha256);const raw=JSON.parse(bytes),groups=new Map();for(const[kind,key]of[['static','results'],['interaction','interactions']])for(const e of raw[key])for(const i of e.styleInputs??[]){if(i.reference?.transform?.replace(/\\s/g,'')!=='matrix(1,0,0,1,0,0)'||i.astylar?.transform!==undefined)continue;const id=e.family+'/'+i.id;if(!groups.has(id))groups.set(id,{family:e.family,element:i.id,cases:[],referenceRequests:[],candidateAuthoredTransformCases:[],candidateResolvedTransformCases:[]});const g=groups.get(id),caseId=kind+':'+e.family+'@'+e.profile+'/'+e.viewport.id+(e.state?'/'+e.state:'');g.cases.push(caseId);const rules=(i.referenceAuthored??[]).filter(r=>r.declarations?.transform).map(r=>({sheetIndex:r.sheetIndex,rulePath:r.rulePath,selector:r.selector,transform:r.declarations.transform}));assert.equal(rules.length,1,caseId);assert.equal(rules[0].transform.value,'translateZ(0px)',caseId);const signature=JSON.stringify(rules[0]);let request=g.referenceRequests.find(r=>r.signature===signature);if(!request){request={signature,rule:rules[0],occurrences:0};g.referenceRequests.push(request);}request.occurrences++;if((i.astylarAuthored??[]).some(r=>r.declarations?.transform))g.candidateAuthoredTransformCases.push(caseId);if(i.astylarNormalResolvedStyle?.transform!==undefined||i.astylarInteractionResolvedStyle?.transform!==undefined)g.candidateResolvedTransformCases.push(caseId);}for(const g of groups.values()){const expected=record.groups.find(r=>r.family===g.family&&r.element===g.element);assert.deepEqual(g.cases,expected.cases);assert.deepEqual(g.candidateAuthoredTransformCases,[]);assert.deepEqual(g.candidateResolvedTransformCases,[]);for(const r of g.referenceRequests)delete r.signature;}assert.equal([...groups.values()].reduce((n,g)=>n+g.cases.length,0),140);console.log(JSON.stringify({captureSha256:record.captureSha256,scope:'All 140 frozen scalar transform observations and their captured authored rules; not complete cascade or candidate containing-block/stacking proof',groups:[...groups.values()]}));\"",
+    "exitCode": 0,
+    "captureSha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a",
+    "scope": "All 140 frozen scalar transform observations and their captured authored rules; not complete cascade or candidate containing-block/stacking proof",
+    "groups": [
+      {
+        "family": "core",
+        "element": "core-primary",
+        "cases": [
+          "static:core@light/desktop",
+          "static:core@light/tablet",
+          "static:core@light/mobile",
+          "static:core@dark/desktop",
+          "static:core@dark/tablet",
+          "static:core@dark/mobile",
+          "static:core@contrast/desktop",
+          "static:core@contrast/tablet",
+          "static:core@contrast/mobile",
+          "static:core@custom/desktop",
+          "static:core@custom/tablet",
+          "static:core@custom/mobile",
+          "interaction:core@light/desktop-dpr1/focus",
+          "interaction:core@light/desktop-dpr1/hover",
+          "interaction:core@light/desktop-dpr1/held",
+          "interaction:core@light/desktop-dpr1/activate",
+          "interaction:core@light/desktop-dpr1/activate-leave",
+          "interaction:core@light/desktop-dpr2/focus",
+          "interaction:core@light/desktop-dpr2/hover",
+          "interaction:core@light/desktop-dpr2/held",
+          "interaction:core@light/desktop-dpr2/activate",
+          "interaction:core@light/desktop-dpr2/activate-leave",
+          "interaction:core@dark/desktop-dpr1/focus",
+          "interaction:core@dark/desktop-dpr1/hover",
+          "interaction:core@dark/desktop-dpr1/held",
+          "interaction:core@dark/desktop-dpr1/activate",
+          "interaction:core@dark/desktop-dpr1/activate-leave",
+          "interaction:core@dark/desktop-dpr2/focus",
+          "interaction:core@dark/desktop-dpr2/hover",
+          "interaction:core@dark/desktop-dpr2/held",
+          "interaction:core@dark/desktop-dpr2/activate",
+          "interaction:core@dark/desktop-dpr2/activate-leave",
+          "interaction:core@contrast/desktop-dpr1/focus",
+          "interaction:core@contrast/desktop-dpr1/hover",
+          "interaction:core@contrast/desktop-dpr1/held",
+          "interaction:core@contrast/desktop-dpr1/activate",
+          "interaction:core@contrast/desktop-dpr1/activate-leave",
+          "interaction:core@contrast/desktop-dpr2/focus",
+          "interaction:core@contrast/desktop-dpr2/hover",
+          "interaction:core@contrast/desktop-dpr2/held",
+          "interaction:core@contrast/desktop-dpr2/activate",
+          "interaction:core@contrast/desktop-dpr2/activate-leave",
+          "interaction:core@custom/desktop-dpr1/focus",
+          "interaction:core@custom/desktop-dpr1/hover",
+          "interaction:core@custom/desktop-dpr1/held",
+          "interaction:core@custom/desktop-dpr1/activate",
+          "interaction:core@custom/desktop-dpr1/activate-leave",
+          "interaction:core@custom/desktop-dpr2/focus",
+          "interaction:core@custom/desktop-dpr2/hover",
+          "interaction:core@custom/desktop-dpr2/held",
+          "interaction:core@custom/desktop-dpr2/activate",
+          "interaction:core@custom/desktop-dpr2/activate-leave"
+        ],
+        "referenceRequests": [
+          {
+            "rule": {
+              "sheetIndex": 7,
+              "rulePath": [
+                1
+              ],
+              "selector": ".mat-ripple:not(:empty)",
+              "transform": {
+                "value": "translateZ(0px)",
+                "important": false
+              }
+            },
+            "occurrences": 52
+          }
+        ],
+        "candidateAuthoredTransformCases": [],
+        "candidateResolvedTransformCases": []
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-primary",
+        "cases": [
+          "static:button-toggle@light/desktop",
+          "static:button-toggle@light/tablet",
+          "static:button-toggle@light/mobile",
+          "static:button-toggle@dark/desktop",
+          "static:button-toggle@dark/tablet",
+          "static:button-toggle@dark/mobile",
+          "static:button-toggle@contrast/desktop",
+          "static:button-toggle@contrast/tablet",
+          "static:button-toggle@contrast/mobile",
+          "static:button-toggle@custom/desktop",
+          "static:button-toggle@custom/tablet",
+          "static:button-toggle@custom/mobile",
+          "interaction:button-toggle@light/desktop-dpr1/focus",
+          "interaction:button-toggle@light/desktop-dpr1/hover",
+          "interaction:button-toggle@light/desktop-dpr1/held",
+          "interaction:button-toggle@light/desktop-dpr1/activate",
+          "interaction:button-toggle@light/desktop-dpr1/activate-leave",
+          "interaction:button-toggle@light/desktop-dpr1/disabled",
+          "interaction:button-toggle@light/desktop-dpr1/selected",
+          "interaction:button-toggle@light/desktop-dpr2/focus",
+          "interaction:button-toggle@light/desktop-dpr2/hover",
+          "interaction:button-toggle@light/desktop-dpr2/held",
+          "interaction:button-toggle@light/desktop-dpr2/activate",
+          "interaction:button-toggle@light/desktop-dpr2/activate-leave",
+          "interaction:button-toggle@light/desktop-dpr2/disabled",
+          "interaction:button-toggle@light/desktop-dpr2/selected",
+          "interaction:button-toggle@dark/desktop-dpr1/focus",
+          "interaction:button-toggle@dark/desktop-dpr1/hover",
+          "interaction:button-toggle@dark/desktop-dpr1/held",
+          "interaction:button-toggle@dark/desktop-dpr1/activate",
+          "interaction:button-toggle@dark/desktop-dpr1/activate-leave",
+          "interaction:button-toggle@dark/desktop-dpr1/disabled",
+          "interaction:button-toggle@dark/desktop-dpr1/selected",
+          "interaction:button-toggle@dark/desktop-dpr2/focus",
+          "interaction:button-toggle@dark/desktop-dpr2/hover",
+          "interaction:button-toggle@dark/desktop-dpr2/held",
+          "interaction:button-toggle@dark/desktop-dpr2/activate",
+          "interaction:button-toggle@dark/desktop-dpr2/activate-leave",
+          "interaction:button-toggle@dark/desktop-dpr2/disabled",
+          "interaction:button-toggle@dark/desktop-dpr2/selected",
+          "interaction:button-toggle@contrast/desktop-dpr1/focus",
+          "interaction:button-toggle@contrast/desktop-dpr1/hover",
+          "interaction:button-toggle@contrast/desktop-dpr1/held",
+          "interaction:button-toggle@contrast/desktop-dpr1/activate",
+          "interaction:button-toggle@contrast/desktop-dpr1/activate-leave",
+          "interaction:button-toggle@contrast/desktop-dpr1/disabled",
+          "interaction:button-toggle@contrast/desktop-dpr1/selected",
+          "interaction:button-toggle@contrast/desktop-dpr2/focus",
+          "interaction:button-toggle@contrast/desktop-dpr2/hover",
+          "interaction:button-toggle@contrast/desktop-dpr2/held",
+          "interaction:button-toggle@contrast/desktop-dpr2/activate",
+          "interaction:button-toggle@contrast/desktop-dpr2/activate-leave",
+          "interaction:button-toggle@contrast/desktop-dpr2/disabled",
+          "interaction:button-toggle@contrast/desktop-dpr2/selected",
+          "interaction:button-toggle@custom/desktop-dpr1/focus",
+          "interaction:button-toggle@custom/desktop-dpr1/hover",
+          "interaction:button-toggle@custom/desktop-dpr1/held",
+          "interaction:button-toggle@custom/desktop-dpr1/activate",
+          "interaction:button-toggle@custom/desktop-dpr1/activate-leave",
+          "interaction:button-toggle@custom/desktop-dpr1/disabled",
+          "interaction:button-toggle@custom/desktop-dpr1/selected",
+          "interaction:button-toggle@custom/desktop-dpr2/focus",
+          "interaction:button-toggle@custom/desktop-dpr2/hover",
+          "interaction:button-toggle@custom/desktop-dpr2/held",
+          "interaction:button-toggle@custom/desktop-dpr2/activate",
+          "interaction:button-toggle@custom/desktop-dpr2/activate-leave",
+          "interaction:button-toggle@custom/desktop-dpr2/disabled",
+          "interaction:button-toggle@custom/desktop-dpr2/selected"
+        ],
+        "referenceRequests": [
+          {
+            "rule": {
+              "sheetIndex": 4,
+              "rulePath": [
+                0
+              ],
+              "selector": ".mat-button-toggle-standalone, .mat-button-toggle-group",
+              "transform": {
+                "value": "translateZ(0px)",
+                "important": false
+              }
+            },
+            "occurrences": 68
+          }
+        ],
+        "candidateAuthoredTransformCases": [],
+        "candidateResolvedTransformCases": []
+      },
+      {
+        "family": "progress-bar",
+        "element": "progress-bar-primary",
+        "cases": [
+          "static:progress-bar@light/desktop",
+          "static:progress-bar@light/tablet",
+          "static:progress-bar@light/mobile",
+          "static:progress-bar@dark/desktop",
+          "static:progress-bar@dark/tablet",
+          "static:progress-bar@dark/mobile",
+          "static:progress-bar@contrast/desktop",
+          "static:progress-bar@contrast/tablet",
+          "static:progress-bar@contrast/mobile",
+          "static:progress-bar@custom/desktop",
+          "static:progress-bar@custom/tablet",
+          "static:progress-bar@custom/mobile",
+          "interaction:progress-bar@light/desktop-dpr1/inspect",
+          "interaction:progress-bar@light/desktop-dpr2/inspect",
+          "interaction:progress-bar@dark/desktop-dpr1/inspect",
+          "interaction:progress-bar@dark/desktop-dpr2/inspect",
+          "interaction:progress-bar@contrast/desktop-dpr1/inspect",
+          "interaction:progress-bar@contrast/desktop-dpr2/inspect",
+          "interaction:progress-bar@custom/desktop-dpr1/inspect",
+          "interaction:progress-bar@custom/desktop-dpr2/inspect"
+        ],
+        "referenceRequests": [
+          {
+            "rule": {
+              "sheetIndex": 4,
+              "rulePath": [
+                4
+              ],
+              "selector": ".mdc-linear-progress",
+              "transform": {
+                "value": "translateZ(0px)",
+                "important": false
+              }
+            },
+            "occurrences": 20
+          }
+        ],
+        "candidateAuthoredTransformCases": [],
+        "candidateResolvedTransformCases": []
+      }
+    ]
+  },
+  "sourceInspection": {
+    "command": "node --input-type=module -e \"import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const files=['examples/material-showcase/src/app/astylar.component.ts','examples/material-showcase/src/app/reference.component.ts','examples/material-showcase/node_modules/@angular/material/fesm2022/ripple-BYgV4oZC.mjs','examples/material-showcase/node_modules/@angular/material/fesm2022/button-toggle.mjs','examples/material-showcase/node_modules/@angular/material/fesm2022/progress-bar.mjs'];for(const file of files){const text=readFileSync(file,'utf8').replace(/\\r\\n/g,'\\n');const matches=[];for(const needle of ['.mat-ripple:not(:empty){','.mat-button-toggle-standalone,.mat-button-toggle-group{','.mdc-linear-progress{']){const start=text.indexOf(needle);if(start>=0)matches.push({line:text.slice(0,start).split('\\n').length,rule:text.slice(start,text.indexOf('}',start)+1)});}console.log(JSON.stringify({file,sha256:createHash('sha256').update(text).digest('hex'),matches}));}\"",
+    "exitCode": 0,
+    "files": [
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90",
+        "matches": []
+      },
+      {
+        "file": "examples/material-showcase/src/app/reference.component.ts",
+        "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa",
+        "matches": []
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/ripple-BYgV4oZC.mjs",
+        "sha256": "3f14d8c4b84add68d172a99b8a099ef8f7de3c17146577865616d67a82186c9a",
+        "matches": [
+          {
+            "line": 128,
+            "rule": ".mat-ripple:not(:empty){transform:translateZ(0)}"
+          }
+        ]
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/button-toggle.mjs",
+        "sha256": "d617525fd7b3dd2479dd654497f96bc046204f20a65f18680eaf6b34372a9fa0",
+        "matches": [
+          {
+            "line": 641,
+            "rule": ".mat-button-toggle-standalone,.mat-button-toggle-group{position:relative;display:inline-flex;flex-direction:row;white-space:nowrap;overflow:hidden;-webkit-tap-highlight-color:rgba(0,0,0,0);border-radius:var(--mat-button-toggle-legacy-shape);transform:translateZ(0)}"
+          }
+        ]
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/progress-bar.mjs",
+        "sha256": "8b66f30f7c695accd9759ba3bac2ffd11695920abdb8df13b69d3509519605b4",
+        "matches": [
+          {
+            "line": 141,
+            "rule": ".mdc-linear-progress{position:relative;width:100%;transform:translateZ(0);outline:1px solid rgba(0,0,0,0);overflow-x:hidden;transition:opacity 250ms 0ms cubic-bezier(0.4, 0, 0.6, 1);height:max(var(--mat-progress-bar-track-height, 4px),var(--mat-progress-bar-active-indicator-height, 4px))}"
+          }
+        ]
+      }
+    ],
+    "scope": "Current installed source rules independently match the captured authored declarations. These file hashes do not by themselves prove which served bundle produced the frozen capture; the capture retains its own baseline provenance."
+  },
+  "candidateLocations": [
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "line": 488,
+      "element": "core-primary",
+      "observation": "Explicit placement/dimensions without a transform request; core node authored at line 1082."
+    },
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "line": 512,
+      "element": "button-toggle-primary",
+      "observation": "Flex/clipping/rounded-box declarations without a transform request; group structure at line 976."
+    },
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "line": 906,
+      "element": "progress-bar-primary",
+      "observation": "Custom showcase.material:linear-progress node; internal plugin paint/context semantics still require inspection."
+    }
+  ],
+  "conclusions": [
+    "Every one of the 140 selected observations includes exactly one captured explicit translateZ(0px) rule; no candidate transform declaration is recorded and neither captured normal nor interaction resolved stage supplies a transform.",
+    "This is not an unrequested browser initial-value observation. It establishes an input asymmetry in the captured stages, not a complete cascade, descendant-context or visual diagnosis.",
+    "The existing identity-versus-none browser witness establishes why global equivalence is invalid. It does not prove that these three specific current fixtures visibly differ because of the missing transform."
+  ],
+  "remaining": [
+    "Inspect complete candidate input paths and plugin implementations for implicit or alternate context ownership.",
+    "Trace the source/history of each omitted request; do not infer author intent from absence alone.",
+    "Add minimal equivalent public-API candidate context witnesses before classifying renderer support.",
+    "Investigate transform-origin independently.",
+    "Keep the 140 transform observations unresolved in the audit until ownership evidence supports a narrower classification."
+  ]
+}
