@@ -104,3 +104,54 @@ Production normalization, classification precedence and full-report conservation
 remain required before integration. The canonical attribution count is still
 **2,810** after the separate tooltip integration; this increment does not change
 it. No renderer or canonical example was modified.
+
+## Canonical integration; full-report regeneration pending
+
+The production builder now retains independent root-shadow binding and invokes
+the classifier only for still-unresolved rows, after all earlier classifications
+retain precedence. Validation reopens the source capture and verifies exact
+owner/state/property coverage. The report and source inventory include the
+limited authoring claim and its four supporting modules/proofs (162 to 166
+source files, with no prior entry removed).
+
+The production integration proof compares against the actual committed pipeline
+at `502ea44a064d49cd4c273bd93dfb5d51f6adbc87`, not a simulated classifier with
+old bindings disabled. Only relative import locations are relocated, with AST
+checks that every executable statement is preserved. Current alias mapping,
+normalization and equivalence functions remain identical to that predecessor.
+The diagnostic population has **277 original cases**: 36 static family controls
+and one original case for each of all 241 interaction family/state combinations.
+Full original trees remain intact; only root scalar owners are selected in the
+separate diagnostic report. This is not a substitute for all-profile coverage.
+
+The diagnostic verifies 36 newly attributed shadow groups, unchanged captured
+inputs and scalar projections, and unchanged complete unrelated classification
+records. Mutation controls reject lost binding, removed proof/rows, false raster
+claims and incomplete reviewed-case lists. A separate diagnostic report with no
+selected root scalar retains its negative cases without fabricating a shadow
+observation; the existing tooltip integration continues to pass. Original
+all-case source binding still rejects a caller deleting root scalar inputs from
+the independently reopened original population.
+
+```powershell
+node --test tests/material-parity/root-shadow-source-binding.spec.mjs tests/material-parity/root-shadow-canonical-integration.spec.mjs
+node --test tests/material-parity/tooltip-wrapping-canonical-integration.spec.mjs
+node --test --test-name-pattern='records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs
+node scripts/verify-material-root-shadow-integration.mjs
+```
+
+Results, respectively: **6/6 pass, 191,783.9885 ms**; **2/2 pass, 23,563.1913 ms**;
+and **1/1 pass, 1,330.4549 ms**, all with zero failures/skips/cancellations. The
+full-report gate currently fails as expected at `0 !== 36`: the checked-in
+canonical report predates this integration. After regeneration it must prove
+all 8,339 scalar rows and 8,303 unrelated complete records unchanged, independently
+replay all 2,311 source owners, verify all source digests and exact inventory
+membership, and permit only the 36-group classification/summary delta.
+
+An AST comparison finds 171 main audit functions, with 165 unchanged. Only the
+builder, validator, Markdown renderer, discrepancy collector, source inventory
+and focused-proof inventory changed. No normalization or renderer function was
+edited. Do not claim **2,774** remaining until the full regeneration and its
+conservation gate finish; the last verified canonical checkpoint is **2,810**.
+Final no-write replay, full harness, historical-survey provenance review and
+enforced matrix remain required.

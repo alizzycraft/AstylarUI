@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared-shadow production integration prepared
+
+The [root-shadow integration](material-root-shadow-input-audit.md#canonical-integration-full-report-regeneration-pending)
+now preserves production classification precedence, with independent source and
+complete coverage validation. Six binding/integration tests pass; the two
+tooltip integration tests and the source-inventory test also pass. A 277-case
+diagnostic covers every family/state combination and changes only 36 shadow
+groups. Full-report regeneration and conservation are pending, so the last
+verified canonical count remains 2,810. The gate correctly rejects the old
+report's zero shadow attributions. No reference, fixture or renderer changed.
+
 ## Repeated root-selector formatting evidence
 
 The [height-only root-rule supplement](material-root-flow-height-overrides.md)
@@ -32,8 +43,9 @@ observations gain independently source-bound authoring attribution; all 8,339
 measured rows and 8,337 unrelated complete classification records are unchanged.
 Strict audit acceptance still fails for **2,810 unattributed groups**. These
 counts describe evidence gaps, not a count of confirmed renderer defects.
-The complete canonical no-write replay is running; full harness and final
-enforced parity acceptance remain outstanding. Older checkpoints below retain
+The complete canonical no-write replay is terminal with exit 1 only for those
+2,810 unattributed differences, with no stale-report/source or source-binding
+errors; full harness and final enforced parity acceptance remain outstanding. Older checkpoints below retain
 their historical counts and failures.
 
 ## Historical overlay-source replay correction

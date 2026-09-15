@@ -29,16 +29,19 @@ export function collectRootShadowInputs(report, { root = process.cwd(), parityPa
     if (!isDeepStrictEqual(captures, select(report))) throw new Error('root shadow population differs from original capture');
     if (!captures.length || new Set(captures.map(keyOf)).size !== captures.length)
       throw new Error('empty or duplicate root shadow case population');
-    const observations = captures.map(entry => {
+    const observations = captures.flatMap(entry => {
       const trees = {};
       for (const side of ['reference', 'astylar']) {
         const descriptor = entry.inputTrees?.[side], bytes = read(root, descriptor.file);
         if (hash(bytes) !== descriptor.sha256) throw new Error('root shadow input tree digest changed');
         trees[side] = JSON.parse(bytes);
       }
+      // Separate diagnostic reports may deliberately select different scalar
+      // owners. Preserve those negative cases; never invent a missing scalar.
+      if (entry.styleInputs.length === 0) return [];
       const proof = inspectRootShadowInput(entry, trees.reference, trees.astylar);
-      return { case: keyOf(entry), family: entry.family, state: entry.state ?? 'static',
-        element: proof.element, input: entry.styleInputs[0], proof };
+      return [{ case: keyOf(entry), family: entry.family, state: entry.state ?? 'static',
+        element: proof.element, input: entry.styleInputs[0], proof }];
     });
     return { binding: { status: 'bound', file: path.relative(root, path.resolve(root, parityPath)).replaceAll('\\', '/'),
       sha256: hash(bytes) }, captures, observations };

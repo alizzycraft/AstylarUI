@@ -123,7 +123,10 @@ its inventory test among existing entries. Current source digests are verified.
 
 The regenerated compressed report SHA-256 is
 `14de1c5cca7afb08f6295e38c735f7053676c1375d3842b43d79c3fec07b97ab`.
-The complete canonical `--check` replay has been launched with the same original
-and supplemental report paths as the command above; its terminal result remains
-pending. Conservation is not a substitute for that replay, the final full
-harness, enforced parity matrix, or resolving the remaining audit uncertainty.
+The complete canonical `--check` replay with the same original and supplemental
+report paths as the command above is now terminal: exit 1 **only** for 2,810
+unattributed differences. It confirms 436/436 static and 1,875/1,875 interaction
+cases, 8,339 differences, 386,891 occurrences and 132 source findings. There are
+no stale-report/source or source-binding errors. This validates that report
+checkpoint, not the final full harness, enforced parity matrix, or resolution
+of the remaining audit uncertainty.
