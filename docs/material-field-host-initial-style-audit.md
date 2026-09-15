@@ -53,8 +53,12 @@ in the reduced two-case proof retain their pre-integration hashes. Independent
 validation rejects lost/duplicate property groups, changed paths, forged
 equivalence and incomplete case/state coverage.
 
-Complete canonical regeneration and subsequent verification are pending; do
-not subtract these 48 groups from the last verified canonical count yet. The
+Complete canonical regeneration now attributes exactly 48 groups / 4,616
+occurrences, reducing unresolved attributions from 3,186 to **3,138**. All 8,339
+original groups retain their values and occurrence counts; the complete 8,291
+unrelated rows retain their pre-integration digest. All 148 source fingerprints
+verify and the complete 1,715,204,637-byte decoded payload passes its recorded
+SHA-256. The separate canonical re-check and 39-file harness remain running. The
 source-survey generator's `canonicalIntegration: false` intentionally means
 that its standalone replay does not itself verify integration. The separate
 integration tests and canonical checks own that claim. No renderer, plugin,

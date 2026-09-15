@@ -3,6 +3,21 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Slider sibling pointer suppression: separate held-state input
+
+The [source-bound survey](material-slider-peer-pointer-survey.md) reopens all
+78 original slider cases / 156 input owners. In each of the eight held states,
+the reference start-thumb sibling has an explicit active `pointer-events:none`
+rule, while the reference end thumb remains `auto`. Both are `auto` in the other
+70 cases; candidate matching requests and all three local snapshots omit the
+property throughout. The installed Material pointer-down/up methods add/remove
+the matching sibling class, but their release timing is source evidence rather
+than a fresh interaction replay. Two focused tests pass. This identifies a
+state-input discrepancy, not the cause of swapped dragging; candidate computed
+values, actual exclusion/capture and both drag directions still require proof.
+The standalone survey is not yet a canonical attribution or part of the running
+39-file harness. Do not turn it into a fixture-specific pointer patch.
+
 ## Field-host defaults: observation-stage survey
 
 The [standalone field-host review](material-field-host-initial-style-audit.md)
@@ -19,8 +34,14 @@ tests failed before the change and now pass, preserving the original scalar
 values and all 105 unrelated complete rows in the reduced proof. Both new test
 files are registered in the package harness. The
 [integration record](material-field-host-initial-style-integration.json) tracks
-full regeneration and verification; until those complete, the last verified
-canonical unresolved count remains 3,186.
+full regeneration and verification. Generation finished with exactly **3,138
+unresolved** attributions, down by the intended 48 groups / 4,616 occurrences.
+Independent streaming comparison preserves all original values and sampled
+case/state lists and all **8,291 unrelated complete rows**. All 148 current source
+fingerprints verify. The entire decoded 1,715,204,637-byte payload and its
+47,442,118-byte compressed representation pass independent digest checks.
+The separate canonical re-check and 39-file harness remain running; neither
+attribution progress nor an unchanged scalar count establishes input equivalence.
 
 The combined owning checks pass **20/20**, zero skips/cancellations, in
 **170.941 seconds**, including the full field-host survey, all affected case
