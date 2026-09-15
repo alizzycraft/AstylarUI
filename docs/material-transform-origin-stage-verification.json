@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "kind": "origin-declaration-stage-proof-verification",
+  "baselineCommit": "edd2fc4",
+  "scope": "Audit-only observation-stage attribution. No renderer, canonical fixture, main classifier or frozen capture changed.",
+  "artifact": "docs/material-transform-origin-stage-survey.json",
+  "artifactBytes": 17985878,
+  "artifactSha256": "38e1435fedaf3068f2d395d3a83d5171106a309e270430096bab5f567fb35d1a",
+  "verification": [
+    {
+      "command": "node scripts/audit-material-transform-origin-stages.mjs",
+      "exitCode": 0,
+      "result": "6938 observations, 4622 hash-checked tree files, 350 mutation rejections across 35 contexts."
+    },
+    {
+      "command": "node scripts/audit-material-transform-origin-stages.mjs --check",
+      "exitCode": 0,
+      "result": "Complete read-only replay reproduced the full artifact exactly, including observations, mutation controls and source fingerprints."
+    },
+    {
+      "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';\nconst hash=v=>createHash('sha256').update(v).digest('hex'),file='docs/material-transform-origin-stage-survey.json',bytes=readFileSync(file),r=JSON.parse(bytes);\nfor(const f of [...r.sourceFingerprints,...r.reusedCoreProof])assert.equal(hash(readFileSync(f.file,'utf8').replace(/\\r\\n/g,'\\n')),f.sha256,f.file);\nconst rawBytes=readFileSync(r.capturePath);assert.equal(hash(rawBytes),r.captureSha256);\nconst raw=JSON.parse(rawBytes),cases=new Map();for(const[k,entries]of[['static',raw.results],['interaction',raw.interactions]])for(const e of entries)cases.set(k+':'+e.family+'@'+e.profile+'/'+e.viewport.id+(e.state?'/'+e.state:''),e);\nconst ids=new Set(),counts={},reasons={};for(const o of r.observations){const key=o.case+'#'+o.element;assert.ok(!ids.has(key));ids.add(key);const e=cases.get(o.case),matches=e.styleInputs.filter(i=>i.id===o.element);assert.equal(matches.length,1);assert.deepEqual(o.inputTrees,e.inputTrees);assert.equal(o.referenceOrigin,matches[0].reference.transformOrigin);assert.equal(matches[0].astylar.transformOrigin,undefined);counts[o.status]=(counts[o.status]??0)+1;const reason=o.reason??o.attribution;reasons[reason]=(reasons[reason]??0)+1;if(o.status==='observed-declaration-stage-gap'){assert.equal(o.classification,'parity-harness-defect');for(const k of['inputEquivalent','candidateComputedOriginVerified','referenceBoxEqualityVerified','finalRasterVerified'])assert.equal(o[k],false);}}\nassert.equal(ids.size,6938);assert.deepEqual(counts,{'observed-declaration-stage-gap':5570,unresolved:1368});assert.deepEqual(reasons,r.summary.reasons);assert.equal(r.mutationControls.length,350);assert.ok(r.mutationControls.every(c=>c.status==='unresolved'));assert.equal(new Set(r.mutationControls.map(c=>c.context)).size,35);assert.equal(Object.keys(r.summary.byFamily).length,36);\nconsole.log(JSON.stringify({sourceFingerprints:r.sourceFingerprints.length,reusedCoreFiles:r.reusedCoreProof.length,uniqueCaseElementPairs:ids.size,counts,reasons,mutationControls:350,families:36,bytes:bytes.length,sha256:hash(bytes)}));\"",
+      "exitCode": 0,
+      "result": {
+        "sourceFingerprints": 11,
+        "reusedCoreFiles": 5,
+        "uniqueCaseElementPairs": 6938,
+        "counts": {
+          "observed-declaration-stage-gap": 5570,
+          "unresolved": 1368
+        },
+        "reasons": {
+          "reviewed-origin-declaration-stage": 5570,
+          "motion declarations require separate state/cascade proof": 1350,
+          "explicit origin/reference-box/reset request": 18
+        },
+        "mutationControls": 350,
+        "families": 36,
+        "bytes": 17985878,
+        "sha256": "38e1435fedaf3068f2d395d3a83d5171106a309e270430096bab5f567fb35d1a"
+      }
+    }
+  ],
+  "proofBoundaries": {
+    "observed": "5570 observations compare browser-used pixel origins with candidate normal/effective/interaction declaration stages that omit origin. Captured target and ancestor declarations have no origin, reference-box, reset or motion request.",
+    "unresolved": "1350 observations have motion declarations requiring separate state/cascade proof. Another 18 tooltip-popup observations have an explicit origin/reference-box/reset request. None are silently accepted.",
+    "notProven": "No candidate used origin, matching reference box, equivalent input or final raster is established. Captured paths do not establish uncaptured outer or UA scopes.",
+    "historicalCoreProof": "Five owning core files are byte-equivalent after LF normalization to commit 3c040455a35160825dfd3d69f18de993ec7f3134. Existing public browser reductions for core-transform-origin-not-authored-or-applied remain relevant historical evidence, not a newly executed browser test.",
+    "classifierEffect": "No change: all 587 origin groups remain unresolved in the main classifier; last complete main replay has 3800 unresolved groups."
+  },
+  "pending": [
+    "Resolve motion and explicit-origin contexts using exact declaration/state evidence.",
+    "Integrate reviewed stage attribution and associated proofs into the main inventory and registered harness without marking origins equivalent.",
+    "Regenerate and check current canonical reports, then run the complete unfiltered enforced parity matrix."
+  ],
+  "previousGoalTurn": "The preceding prompt-writing response did not advance authoritative audit evidence. This continuation revalidated the worktree and terminal generation handle, completed replay and independent verification, and records a new audit increment."
+}

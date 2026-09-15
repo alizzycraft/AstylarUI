@@ -3,6 +3,42 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Origin observation stages: guarded attribution across the complete population
+
+The [stage survey](material-transform-origin-stage-survey.json) and
+[verification record](material-transform-origin-stage-verification.json) retain
+all **6,938 observations / 587 raw signatures / 36 families**. The proof joins
+direct IDs and the already verified generated aliases, then checks all three
+candidate style stages and captured target/ancestor declarations.
+
+**5,570** observations establish a narrower instrumentation distinction:
+browser-used pixel origins are compared against candidate declaration-stage
+snapshots that omit origin. Their captured declaration paths contain no origin,
+reference-box, reset or motion request. This is **not input equivalence**, does
+not synthesize a candidate used origin, and does not establish matching reference
+boxes or final paint. Known core origin support remains a separate obligation.
+
+**1,368** observations remain unresolved: **1,350** have motion declarations
+requiring state/cascade proof; **18 tooltip-popup** observations have explicit
+origin/reference-box/reset requests. No signature mixes positive and unresolved
+dispositions. Captured ancestry is not evidence of uncaptured outer or UA rules.
+
+Generation and complete read-only `--check` replay both exit **0**, reproducing
+**17,985,878 bytes** exactly. All **4,622** frozen tree files are hash-checked;
+**350 mutation controls across 35 contexts** reject stale scalar data, explicit
+requests, motion, missing provenance and broken ancestry. Independent validation
+checks all unique raw case/element links, 11 source fingerprints, five unchanged
+core files, population counts and the non-equivalence flags.
+
+The five core files still match the original public origin reduction at
+`3c040455a35160825dfd3d69f18de993ec7f3134`. That preserves the relevance of the
+existing `core-transform-origin-not-authored-or-applied` finding without claiming
+a fresh browser run. No renderer, canonical fixture or main classifier changed.
+The main report therefore still has **3,800 unresolved groups**, including all
+587 origin groups. Next: resolve the guarded contexts, integrate the reviewed
+attribution into the main inventory and harness, regenerate current canonical
+reports and run the complete enforced parity matrix.
+
 ## Origin aliases: all 750 measured-node identities established
 
 The [alias survey](material-transform-origin-alias-survey.json) and
