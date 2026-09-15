@@ -1,5 +1,6 @@
 import { isDeepStrictEqual } from 'node:util';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { reviewedTemplateTextMappings } from './input-equivalence-audit.mjs';
 
 export const ownerInitialValues = Object.freeze({ fontStyle: 'normal', wordSpacing: '0px',
   textTransform: 'none', whiteSpace: 'normal', overflowWrap: 'normal', wordBreak: 'normal',
@@ -27,7 +28,7 @@ function pathToRoot(tree, owner) {
 // Unknown selectors and animation/transition declarations remain review blockers.
 // Root paths stop at the captured surface: document-external inheritance remains
 // unverified even when every captured node computes the same initial keyword.
-export function inspectOwnerInitialStyle(input, property, reference, candidate) {
+export function inspectOwnerInitialStyle(input, property, reference, candidate, { family, reviewedGeneratedOwners = false } = {}) {
   const issues = [];
   const issue = (reason, detail = {}) => issues.push({ reason, ...detail });
   const finish = extra => ({ property, element: input?.id, issues,
@@ -41,8 +42,19 @@ export function inspectOwnerInitialStyle(input, property, reference, candidate) 
       input.astylarResolvedStyleEvidenceVersion !== 2 || !Array.isArray(reference.styles)) {
     issue('incomplete-provenance'); return finish();
   }
-  const rn = one(reference.nodes.filter(n => n.attributes?.id === input.id));
+  let rn = one(reference.nodes.filter(n => n.attributes?.id === input.id));
   const an = one(candidate.nodes.filter(n => n.authored?.id === input.id));
+  let mapping;
+  if (reviewedGeneratedOwners && !reference.nodes.some(n => n.attributes?.id === input.id)) {
+    const aliases = reference.nodes.filter(n => n.attributes?.['data-parity-id'] === input.id);
+    if (aliases.length === 1) {
+      rn = aliases[0];
+      mapping = { kind: 'unique-captured-data-parity-id', element: input.id, referenceNode: rn.key, astylarNode: an?.key };
+    } else if (!aliases.length && typeof family === 'string') {
+      mapping = one(reviewedTemplateTextMappings(family, reference, candidate).filter(m => m.element === input.id));
+      if (mapping?.astylarNode === an?.key) rn = one(reference.nodes.filter(n => n.key === mapping.referenceNode));
+    }
+  }
   if (!rn || !an || input.referenceStructure?.type !== rn.type || input.astylarStructure?.type !== an.authored.type) {
     issue('owner-mapping'); return finish();
   }
@@ -51,6 +63,19 @@ export function inspectOwnerInitialStyle(input, property, reference, candidate) 
       ap[0].parent !== null || !object(ap[0].authored) || Object.keys(ap[0].authored).length ||
       ap[1]?.authored?.type !== 'main' || ap[1]?.authored?.id !== 'page') {
     issue('incomplete-surface-ancestry'); return finish();
+  }
+  if (reviewedGeneratedOwners) {
+    const normalizeText = value => String(value ?? '').replace(/\s+/g, ' ').trim();
+    const subtreeText = node => String(node.ownText ?? '') + reference.nodes
+      .filter(child => child.parent === node.key).map(subtreeText).join('');
+    const referenceText = ['input', 'textarea'].includes(rn.type) ? rn.value : subtreeText(rn);
+    if (input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
+        normalizeText(referenceText) !== input.referenceStructure.text ||
+        normalizeText(an.authored.textContent ?? an.authored.value) !== input.astylarStructure.ownText) {
+      // Captured ownText loses interleaving around element children. If that
+      // prevents exact reconstruction, retain a gap rather than guess identity.
+      issue('scalar-tree-content-disagreement'); return finish();
+    }
   }
   const stages = ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'];
   const scalarStages = ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'];
@@ -106,5 +131,6 @@ export function inspectOwnerInitialStyle(input, property, reference, candidate) 
   }
   return finish({ referenceComputed: input.reference[property], candidateLocalDeclaration: input.astylar[property] ?? '<omitted>',
     referencePath: rp.map(n => n.key), candidatePath: ap.map(n => n.key),
-    source: candidate.resolvedStyleSource, revision: candidate.resolvedStyleRevision });
+    source: candidate.resolvedStyleSource, revision: candidate.resolvedStyleRevision,
+    ...(mapping ? { mapping } : {}) });
 }

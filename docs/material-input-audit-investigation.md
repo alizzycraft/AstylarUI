@@ -31,6 +31,21 @@ including fifteen negative mutations and full no-write replay, pass. This closes
 the survey's membership ambiguity; generated-owner and state-request attribution
 remain open, and the canonical unresolved count is unchanged.
 
+The [opt-in generated-owner pass](material-owner-initial-style-mappings.md) now
+uses unique captured data aliases and existing reviewed template paths without
+rewriting either tree. Across the exact unresolved membership it identifies
+319 groups / 17,916 observations with captured-default/local-omission evidence;
+62 mapping and 48 surface-ancestry groups remain explicit gaps, alongside
+property-specific request and motion reviews. A conflicting-ID negative test
+exposed a same-tag parent substitution in the first reader draft; added
+scalar/tree content checks reject it. The original survey and membership data
+remain exactly unchanged apart from their source fingerprints. No new canonical
+attribution is claimed by this standalone pass.
+The original survey/membership regression suite passes 8/8 and the full new
+mapping suite passes 4/4, both with no failures, skips or cancellations. Exact
+commands, times, source checks and evidence-conservation digests are recorded
+in the linked mapping review.
+
 ## Slider sibling pointer suppression: separate held-state input
 
 The [source-bound survey](material-slider-peer-pointer-survey.md) reopens all
