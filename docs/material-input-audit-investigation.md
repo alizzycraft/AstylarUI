@@ -14,8 +14,11 @@ bugs exist. Generation still exits 1 on that strict audit acceptance failure.
 The historical counts in earlier investigation entries describe their own
 checkpoints. The full 43-file harness is now terminal at 708/710 passing with
 two preserved failures (source-fingerprint count and historical non-border row
-hash); all 47 start-of-run source hashes remained unchanged. No-write replay is
-still running. The linked integration record contains the exact failed guards.
+hash); all 47 start-of-run source hashes remained unchanged. No-write replay
+then completed with only the strict 2,812-unattributed failure. The two stale
+expectations were corrected after exact delta proof; three focused tests pass,
+with the historical hash retained. Full rerun and refreshed source metadata
+remain required. The linked integration record retains the original failures.
 
 ## Overlay ancestor-context capture limitation
 

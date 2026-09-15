@@ -59,7 +59,20 @@ audits and checks the stated conservation. It does not modify canonical
 comparison inputs or production code. Temporary report cleanup uses exact-file
 unlink and empty-directory removal, preserving original artifacts.
 
-The original no-write audit replay is still running against the unchanged
-fingerprinted test files. Their corrections are deliberately pending its
-terminal result so that run is not invalidated by concurrent source edits.
-Focused regression reruns and a new full harness result are required afterward.
+The original no-write audit replay completed against unchanged fingerprinted
+test files. It exits 1 solely for the 2,812 still-unattributed differences;
+there is no stale-source or regenerated-report mismatch. Only afterward were
+the two expectations corrected as described above.
+
+The focused regression run passes **3/3**, with no failures, skips or
+cancellations, in **10,874.5903 ms**:
+
+```powershell
+node --test --test-name-pattern="records source fingerprints and actual visual acceptance fields|slider border canonical" tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/slider-border-canonical-integration.spec.mjs
+```
+
+The original 220-row digest is unchanged. The slider test now also validates
+the new owner-style proof while retaining its border-specific negative controls.
+Because these two test files are themselves fingerprinted audit sources, a new
+canonical generation/no-write replay is required, as is a new full harness run.
+The narrow three-test pass is not substituted for those results.

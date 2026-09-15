@@ -141,16 +141,19 @@ Failures are preserved, not dismissed as a green run:
   New shared owner attribution is a plausible explanation, but exact row
   conservation must be demonstrated before changing the historical guard.
 
-Canonical no-write replay is still running. The successful conservation gate
-does not substitute for resolving these test failures, no-write verification or
-the final enforced UI matrix.
+Canonical no-write replay subsequently completed with exit 1 solely on the
+2,812 unattributed differences, without stale-source or regenerated-evidence
+mismatches. The successful conservation and no-write checks do not substitute
+for resolving the two harness failures or the final enforced UI matrix.
 
 The [exact failure diagnosis](material-owner-integration-harness-diagnosis.md)
 now proves the source-list delta is precisely the eight intended files and
 restoring only 22 explicitly identified shared-owner attributions reproduces
 the slider test's original 220-row hash. That isolates stale expectations
-without weakening the historical guard. Test corrections and fresh regression
-results remain pending the unchanged-source no-write replay.
+without weakening the historical guard. After that replay completed, the
+expectations were corrected and all three focused regression tests passed in
+10,874.5903 ms. The original digest remains enforced. Full harness rerun and
+canonical regeneration for the two updated test-source fingerprints are next.
 
 Remaining obligations include inherited/used-value consumption, wrapping,
 visibility, hit testing, plugin/core ownership, all other unresolved input

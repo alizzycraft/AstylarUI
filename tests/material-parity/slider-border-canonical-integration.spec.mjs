@@ -5,6 +5,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { buildMaterialInputAudit, validateMaterialInputAudit } from './input-equivalence-audit.mjs';
 import { sliderBorderDefaultAttribution } from './slider-border-default-source-binding.mjs';
+import { ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
 
 const prior = JSON.parse(readFileSync('docs/material-slider-border-defaults.json'));
 const bytes = readFileSync(prior.capture.file);
@@ -46,13 +47,33 @@ test('slider border canonical integration preserves raw values and attributes on
   assert.deepEqual(raw, snapshot);
   assert.deepEqual(audit.discrepancies.map(signature), unbound.discrepancies.map(signature));
   // Frozen before integration at 165ec49, using these same two original cases.
-  // Compare complete unrelated rows, including their existing source-bound
-  // classifications; a bound/unbound comparison alone would also change those.
+  // Retain the historical complete-row guard. Only the 22 explicitly reviewed
+  // later owner-stage attributions may be projected back to unresolved; every
+  // other complete row must still reproduce the original frozen digest.
   const otherRows = audit.discrepancies.filter(row => !rows.includes(row));
   assert.equal(otherRows.length, 220);
-  assert.equal(createHash('sha256').update(JSON.stringify(otherRows)).digest('hex'),
+  const shared = otherRows.filter(row => row.attribution === ownerInitialStyleAttribution);
+  const common = ['overflowWrap', 'pointerEvents', 'textTransform', 'visibility', 'whiteSpace', 'wordBreak', 'wordSpacing'];
+  const expected = ['slider-primary', 'slider-start', 'slider-visual'].flatMap(element =>
+    (element === 'slider-visual' ? ['fontStyle', ...common] : common).map(property => [element, property]));
+  assert.deepEqual(shared.map(row => [row.element, row.property]), expected);
+  const oldRows = new Map(unbound.discrepancies.map(row => [signature(row), row]));
+  assert.equal(oldRows.size, unbound.discrepancies.length);
+  for (const row of shared) {
+    assert.equal(row.classification, 'parity-harness-defect');
+    assert.equal(row.astylar, undefined); assert.equal(row.occurrences, 2);
+    assert.deepEqual(row.reviewedCases, ['static:slider@light/desktop', 'interaction:slider@light/desktop-dpr1/focus']);
+    assert.equal(row.reviewEvidence.computedCandidateVerified, false);
+    assert.equal(row.reviewEvidence.renderingEquivalent, false);
+  }
+  const historicalRows = otherRows.map(row => {
+    if (row.attribution !== ownerInitialStyleAttribution) return row;
+    const previous = oldRows.get(signature(row)); assert.equal(previous.attribution, 'unresolved'); return previous;
+  });
+  assert.equal(createHash('sha256').update(JSON.stringify(historicalRows)).digest('hex'),
     '4e1f09fc03af948aec7b2d1d927ee13c298b6439ceaa3bb0145a72122eb315ee');
-  assert.ok(!validateMaterialInputAudit(audit, { root, requireComplete: false }).some(error => error.includes('slider border')));
+  const errors = validateMaterialInputAudit(audit, { root, requireComplete: false });
+  assert.ok(!errors.some(error => error.includes('slider border') || error.includes('owner initial-style')));
 }));
 
 test('slider border canonical validation rejects missing sources altered scalars and fabricated parity', () => withCapture(({ raw, root, options }) => {
