@@ -20,8 +20,12 @@ expectations were corrected after exact delta proof; three focused tests pass,
 with the historical hash retained. Refreshed canonical generation now exits 1
 only for the same 2,812-unattributed failure. Independent verification preserves
 all 8,339 complete discrepancy rows and the summary, with only the two intended
-test-source hashes changed. Full rerun and the new no-write replay remain live.
-The linked integration record retains the original failures and exact hashes.
+test-source hashes changed. The full rerun finished 709/710: one remaining
+root-survey source fingerprint was stale. Its one-field metadata correction
+preserves the entire survey, and the failing original-capture test now passes
+in isolation. The full result remains recorded as failing; final unfiltered
+acceptance is still required. The new no-write replay remains live. The linked
+integration record retains the failures, corrections and exact hashes.
 
 ## Overlay ancestor-context capture limitation
 

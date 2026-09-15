@@ -192,3 +192,34 @@ Its manifest records 1,795,180,227 decoded bytes, SHA-256
 `ebe493b1e3c2f7db81513d99e054db432969a8268b9372955aa6e02419cb829c`.
 The full 43-file rerun remains live; all 47 start-of-run source hashes were
 rechecked unchanged during execution. No terminal pass is claimed yet.
+
+### Corrected full harness: 709/710, followed by focused metadata proof
+
+That 43-file rerun subsequently finished **709/710 passing, one failing**, with
+zero skips/cancellations, in **1,418,224.5883 ms**. All 47 start-of-run source
+hashes remained unchanged at termination. Log:
+`artifacts/material-parity/owner-initial-corrected-full-harness.log`, SHA-256
+`f72de6c42e66f78b215b15f2d20a76fdee8fe314a33e1a22b6574ae4af50b460`.
+
+Test 600 (`root-initial-style-evidence.spec.mjs:107`, assertion at line 137)
+passed the complete original-capture/root-observation checks, then rejected the
+old `input-equivalence-audit.spec.mjs` fingerprint in
+`material-root-initial-style-audit.json`. All other eight source fingerprints
+were current. The differing hash is exactly the test source changed by
+`04b7b4a`, not a new collector or source-behavior change.
+
+Only that one recorded fingerprint was refreshed. A separate comparison against
+the preceding committed JSON verifies every non-fingerprint field unchanged,
+including all 2,311 cases / 30,043 property observations; the data SHA-256 is
+`a43e00eeb2d4223a28b0b6feafd91776fca883ffea15ab135a4ac2954dd83286`.
+All nine recorded source hashes now match the files. No assertion was removed,
+no expected population changed and no audit discrepancy reclassified.
+
+```powershell
+node --test --test-name-pattern='root initial-style collector covers the full captured root survey' tests/material-parity/root-initial-style-evidence.spec.mjs
+```
+
+The failing test then replayed successfully: **1/1**, no failures/skips/
+cancellations, **26,231.6915 ms**. This focused correction does not relabel the
+full 709/710 run as passing. Final unfiltered harness/renderer acceptance remains
+required, and canonical no-write session 30257 is still live at this checkpoint.
