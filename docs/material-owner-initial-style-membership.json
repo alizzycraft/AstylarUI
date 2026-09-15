@@ -9,7 +9,7 @@
   "sourceFingerprints": [
     {
       "file": "docs/material-owner-initial-style-survey.json",
-      "sha256": "f1a8f590b5a88e7a6e118337ab9d0e5de9b39afaf4029ed7c9e6ac49c0ee6dc5"
+      "sha256": "ddad50e3fce4f57ff8a9063ada3aa21eba06328a90700afc7044941cd0f3a75c"
     },
     {
       "file": "scripts/audit-material-owner-initial-membership.mjs",

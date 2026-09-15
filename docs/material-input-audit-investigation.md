@@ -46,6 +46,16 @@ mapping suite passes 4/4, both with no failures, skips or cancellations. Exact
 commands, times, source checks and evidence-conservation digests are recorded
 in the linked mapping review.
 
+A subsequent stepper identity correction reuses the existing reviewed active-
+panel path where both retained panels share a diagnostic alias. All 68 captured
+cases pass, including 272 malformed-panel rejections and capture-order reversal.
+Exactly eight mapping-survey groups change; the other 592 remain identical.
+Seven groups / 440 observations add measurement-stage evidence, while the
+visibility group's explicit hidden/current-visible rules remain under review.
+The current survey therefore has 326 evidence-backed measurement-stage groups,
+54 mapping gaps and 48 ancestry gaps. The canonical 3,138 unresolved groups and
+all production rendering remain unchanged; see the linked review for proof.
+
 ## Slider sibling pointer suppression: separate held-state input
 
 The [source-bound survey](material-slider-peer-pointer-survey.md) reopens all

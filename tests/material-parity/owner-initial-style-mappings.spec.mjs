@@ -29,13 +29,50 @@ test('mapped survey reuses the exact generated badge path without rewriting IDs 
   assert.ok(!badge.reference.nodes.some(n => n.attributes?.id === 'badge-count'));
 });
 
-test('mapped survey accepts a unique real data-parity alias and refuses ambiguous active/hidden aliases', () => {
+test('mapped survey accepts a unique real data-parity alias', () => {
   const slider = load('slider', 'slider-visual'), proof = inspect(slider);
   assert.equal(proof.mapping.kind, 'unique-captured-data-parity-id');
   assert.equal(proof.mapping.referenceNode, 'frame/2/0');
-  const stepper = load('stepper', 'stepper-content');
-  assert.equal(stepper.reference.nodes.filter(n => n.attributes?.['data-parity-id'] === 'stepper-content').length, 2);
-  assert.ok(inspect(stepper).issues.some(i => i.reason === 'owner-mapping'));
+});
+
+test('mapped survey disambiguates retained stepper panels only through the reviewed active path', () => {
+  const entries = [...raw.results, ...raw.interactions].filter(e => e.family === 'stepper');
+  assert.equal(entries.length, 68);
+  const texts = new Set();
+  for (const e of entries) {
+    const v = { family: e.family, input: e.styleInputs.find(i => i.id === 'stepper-content'),
+      reference: JSON.parse(readFileSync(e.inputTrees.reference.file)),
+      candidate: JSON.parse(readFileSync(e.inputTrees.astylar.file)) };
+    const before = JSON.stringify(v), proof = inspect(v);
+    assert.equal(v.reference.nodes.filter(n => n.attributes?.['data-parity-id'] === 'stepper-content').length, 2);
+    assert.equal(proof.mapping?.kind, 'reviewed-showcase-template-text');
+    const owner = v.reference.nodes.find(n => n.key === proof.mapping.referenceNode);
+    texts.add(owner.ownText);
+    assert.ok(v.reference.nodes.find(n => n.key === owner.parent).attributes.class.split(/\s+/)
+      .includes('mat-horizontal-stepper-content-current'));
+    assert.ok(!proof.issues.some(i => ['owner-mapping', 'scalar-tree-content-disagreement'].includes(i.reason)));
+    assert.equal(proof.computedCandidateVerified, false);
+    assert.equal(proof.renderingEquivalent, false);
+    assert.equal(JSON.stringify(v), before);
+    const reordered = structuredClone(v);
+    reordered.reference.nodes.reverse();
+    assert.equal(inspect(reordered).mapping?.referenceNode, owner.key, 'identity must not depend on capture order');
+    for (const mutation of ['both-active', 'neither-active', 'foreign-parent', 'wrong-active-text']) {
+      const changed = structuredClone(v);
+      const aliases = changed.reference.nodes.filter(n => n.attributes?.['data-parity-id'] === 'stepper-content');
+      const active = aliases.find(n => n.key === owner.key);
+      const inactive = aliases.find(n => n.key !== owner.key);
+      const panel = changed.reference.nodes.find(n => n.key === active.parent);
+      if (mutation === 'both-active') changed.reference.nodes.find(n => n.key === inactive.parent)
+        .attributes.class += ' mat-horizontal-stepper-content-current';
+      if (mutation === 'neither-active') panel.attributes.class = panel.attributes.class
+        .replace('mat-horizontal-stepper-content-current', 'mat-horizontal-stepper-content-next');
+      if (mutation === 'foreign-parent') active.parent = 'frame';
+      if (mutation === 'wrong-active-text') active.ownText = 'unrelated text';
+      assert.ok(inspect(changed).issues.some(i => i.reason === 'owner-mapping'), mutation);
+    }
+  }
+  assert.deepEqual([...texts].sort(), ['Project details', 'Review changes']);
 });
 
 test('mapped survey rejects fabricated, conflicting or transplanted generated owners', () => {

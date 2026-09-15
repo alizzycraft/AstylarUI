@@ -50,9 +50,12 @@ export function inspectOwnerInitialStyle(input, property, reference, candidate, 
     if (aliases.length === 1) {
       rn = aliases[0];
       mapping = { kind: 'unique-captured-data-parity-id', element: input.id, referenceNode: rn.key, astylarNode: an?.key };
-    } else if (!aliases.length && typeof family === 'string') {
+    } else if (typeof family === 'string') {
       mapping = one(reviewedTemplateTextMappings(family, reference, candidate).filter(m => m.element === input.id));
-      if (mapping?.astylarNode === an?.key) rn = one(reference.nodes.filter(n => n.key === mapping.referenceNode));
+      // Retained active/hidden panels may share a diagnostic alias. Only the
+      // source-reviewed unique path may disambiguate them; never choose by order.
+      if (mapping?.astylarNode === an?.key && (!aliases.length || aliases.some(n => n.key === mapping.referenceNode)))
+        rn = one(reference.nodes.filter(n => n.key === mapping.referenceNode));
     }
   }
   if (!rn || !an || input.referenceStructure?.type !== rn.type || input.astylarStructure?.type !== an.authored.type) {

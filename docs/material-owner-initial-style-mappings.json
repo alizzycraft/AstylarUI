@@ -9,7 +9,7 @@
   "sourceFingerprints": [
     {
       "file": "docs/material-owner-initial-style-membership.json",
-      "sha256": "5d6ea23fa8b5ce902cb9563e1e39a2b63f3d4a80b95cc554c371b678382b72a8"
+      "sha256": "50b527e4871c53c8488c10efe200bd15dca66b26d5040ba1a5041c8cb0d152a3"
     },
     {
       "file": "scripts/audit-material-owner-initial-mappings.mjs",
@@ -17,7 +17,7 @@
     },
     {
       "file": "tests/material-parity/owner-initial-style-survey.mjs",
-      "sha256": "00245dde6e9fe923cecdfc7a673e5684f22f1c50804970d47c5a6dc1396c7694"
+      "sha256": "77ea9fd39297f31e067f83b262f33a466b6b9a4b501071a178d993be170b731c"
     },
     {
       "file": "tests/material-parity/owner-initial-style-membership.mjs",
@@ -38,7 +38,7 @@
   ],
   "groupCount": 600,
   "observations": 31508,
-  "capturedObservationStageGroups": 319,
+  "capturedObservationStageGroups": 326,
   "canonicalAttributionChanged": false,
   "computedCandidateVerified": false,
   "renderingEquivalent": false,
@@ -142656,7 +142656,7 @@
       "inputEquivalent": false,
       "renderingEquivalent": false,
       "reasons": {
-        "owner-mapping": [
+        "captured-default-versus-local-omission": [
           "interaction:stepper@light/desktop-dpr1/focus",
           "interaction:stepper@light/desktop-dpr1/hover",
           "interaction:stepper@light/desktop-dpr1/held",
@@ -142716,19 +142716,56 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-default-versus-local-omission": {
           "case": "interaction:stepper@light/desktop-dpr1/focus",
           "proof": {
             "property": "fontStyle",
             "element": "stepper-content",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-default-versus-local-omission",
             "computedCandidateVerified": false,
-            "renderingEquivalent": false
+            "renderingEquivalent": false,
+            "referenceComputed": "normal",
+            "candidateLocalDeclaration": "<omitted>",
+            "referencePath": [
+              "frame",
+              "frame/2",
+              "frame/2/0",
+              "frame/2/0/0",
+              "frame/2/0/0/1",
+              "frame/2/0/0/1/0",
+              "frame/2/0/0/1/0/0"
+            ],
+            "candidatePath": [
+              "root",
+              "root/0",
+              "root/0/2",
+              "root/0/2/0",
+              "root/0/2/0/1",
+              "root/0/2/0/1/0"
+            ],
+            "source": "core-style-inspection",
+            "revision": 3,
+            "mapping": {
+              "kind": "reviewed-showcase-template-text",
+              "element": "stepper-content",
+              "referenceNode": "frame/2/0/0/1/0/0",
+              "astylarNode": "root/0/2/0/1/0",
+              "referencePath": [
+                "frame/2/0",
+                "frame/2/0/0",
+                "frame/2/0/0/1",
+                "frame/2/0/0/1/0",
+                "frame/2/0/0/1/0/0"
+              ],
+              "astylarPath": [
+                "root/0/2/0",
+                "root/0/2/0/1",
+                "root/0/2/0/1/0"
+              ],
+              "referenceDecorationNodes": [],
+              "justification": "The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both text owners have identical direct own-text. They have no element children except the explicitly identified, unique, text-free chip focus-indicator leaf when required by that reviewed template. Generated Material IDs are checked by shape and uniqueness, not their unstable numeric suffix. A same-ID reference wrapper is allowed only on that path with no own text. This establishes text-owner identity only; wrapper, decoration, layout, typography, paint and interaction differences remain subject to separate comparison."
+            }
           }
         }
       },
@@ -142790,8 +142827,8 @@
         "interaction:stepper@custom/desktop-dpr2/disabled",
         "interaction:stepper@custom/desktop-dpr2/selected"
       ],
-      "proofSha256": "bf7946324321755708ab71cd5edf6287087b712dbbe584cb4516cd528653eaa0",
-      "allCasesHaveCapturedObservationStageEvidence": false
+      "proofSha256": "70f284644c327ae9bee7cccc3afa260fd365afd911dd6d020df8bf73431bc9d7",
+      "allCasesHaveCapturedObservationStageEvidence": true
     },
     {
       "family": "stepper",
@@ -142887,7 +142924,7 @@
       "inputEquivalent": false,
       "renderingEquivalent": false,
       "reasons": {
-        "owner-mapping": [
+        "captured-default-versus-local-omission": [
           "static:stepper@light/desktop",
           "static:stepper@light/tablet",
           "static:stepper@light/mobile",
@@ -142959,19 +142996,56 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-default-versus-local-omission": {
           "case": "static:stepper@light/desktop",
           "proof": {
             "property": "overflowWrap",
             "element": "stepper-content",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-default-versus-local-omission",
             "computedCandidateVerified": false,
-            "renderingEquivalent": false
+            "renderingEquivalent": false,
+            "referenceComputed": "normal",
+            "candidateLocalDeclaration": "<omitted>",
+            "referencePath": [
+              "frame",
+              "frame/2",
+              "frame/2/0",
+              "frame/2/0/0",
+              "frame/2/0/0/1",
+              "frame/2/0/0/1/0",
+              "frame/2/0/0/1/0/0"
+            ],
+            "candidatePath": [
+              "root",
+              "root/0",
+              "root/0/2",
+              "root/0/2/0",
+              "root/0/2/0/1",
+              "root/0/2/0/1/0"
+            ],
+            "source": "core-style-inspection",
+            "revision": 3,
+            "mapping": {
+              "kind": "reviewed-showcase-template-text",
+              "element": "stepper-content",
+              "referenceNode": "frame/2/0/0/1/0/0",
+              "astylarNode": "root/0/2/0/1/0",
+              "referencePath": [
+                "frame/2/0",
+                "frame/2/0/0",
+                "frame/2/0/0/1",
+                "frame/2/0/0/1/0",
+                "frame/2/0/0/1/0/0"
+              ],
+              "astylarPath": [
+                "root/0/2/0",
+                "root/0/2/0/1",
+                "root/0/2/0/1/0"
+              ],
+              "referenceDecorationNodes": [],
+              "justification": "The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both text owners have identical direct own-text. They have no element children except the explicitly identified, unique, text-free chip focus-indicator leaf when required by that reviewed template. Generated Material IDs are checked by shape and uniqueness, not their unstable numeric suffix. A same-ID reference wrapper is allowed only on that path with no own text. This establishes text-owner identity only; wrapper, decoration, layout, typography, paint and interaction differences remain subject to separate comparison."
+            }
           }
         }
       },
@@ -143045,8 +143119,8 @@
         "interaction:stepper@custom/desktop-dpr2/disabled",
         "interaction:stepper@custom/desktop-dpr2/selected"
       ],
-      "proofSha256": "20850797b33e2f51b93c99e6ae12370d10e2afb1954a49610c7db63830ea7082",
-      "allCasesHaveCapturedObservationStageEvidence": false
+      "proofSha256": "2606d50b23ebf70c8a83c6b4dd74d0a140577f2d6126f2758abcd52d258e4913",
+      "allCasesHaveCapturedObservationStageEvidence": true
     },
     {
       "family": "stepper",
@@ -143142,7 +143216,7 @@
       "inputEquivalent": false,
       "renderingEquivalent": false,
       "reasons": {
-        "owner-mapping": [
+        "captured-default-versus-local-omission": [
           "static:stepper@light/desktop",
           "static:stepper@light/tablet",
           "static:stepper@light/mobile",
@@ -143214,19 +143288,56 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-default-versus-local-omission": {
           "case": "static:stepper@light/desktop",
           "proof": {
             "property": "pointerEvents",
             "element": "stepper-content",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-default-versus-local-omission",
             "computedCandidateVerified": false,
-            "renderingEquivalent": false
+            "renderingEquivalent": false,
+            "referenceComputed": "auto",
+            "candidateLocalDeclaration": "<omitted>",
+            "referencePath": [
+              "frame",
+              "frame/2",
+              "frame/2/0",
+              "frame/2/0/0",
+              "frame/2/0/0/1",
+              "frame/2/0/0/1/0",
+              "frame/2/0/0/1/0/0"
+            ],
+            "candidatePath": [
+              "root",
+              "root/0",
+              "root/0/2",
+              "root/0/2/0",
+              "root/0/2/0/1",
+              "root/0/2/0/1/0"
+            ],
+            "source": "core-style-inspection",
+            "revision": 3,
+            "mapping": {
+              "kind": "reviewed-showcase-template-text",
+              "element": "stepper-content",
+              "referenceNode": "frame/2/0/0/1/0/0",
+              "astylarNode": "root/0/2/0/1/0",
+              "referencePath": [
+                "frame/2/0",
+                "frame/2/0/0",
+                "frame/2/0/0/1",
+                "frame/2/0/0/1/0",
+                "frame/2/0/0/1/0/0"
+              ],
+              "astylarPath": [
+                "root/0/2/0",
+                "root/0/2/0/1",
+                "root/0/2/0/1/0"
+              ],
+              "referenceDecorationNodes": [],
+              "justification": "The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both text owners have identical direct own-text. They have no element children except the explicitly identified, unique, text-free chip focus-indicator leaf when required by that reviewed template. Generated Material IDs are checked by shape and uniqueness, not their unstable numeric suffix. A same-ID reference wrapper is allowed only on that path with no own text. This establishes text-owner identity only; wrapper, decoration, layout, typography, paint and interaction differences remain subject to separate comparison."
+            }
           }
         }
       },
@@ -143300,8 +143411,8 @@
         "interaction:stepper@custom/desktop-dpr2/disabled",
         "interaction:stepper@custom/desktop-dpr2/selected"
       ],
-      "proofSha256": "d551d908aea2762b84a69a535ed4e9589d987a69c3354db15cbc138e162275f0",
-      "allCasesHaveCapturedObservationStageEvidence": false
+      "proofSha256": "5cc5dc3e88bcf800c9cd989b536a6bcc97de8de32cb76de8a8a2ed06e2ea6613",
+      "allCasesHaveCapturedObservationStageEvidence": true
     },
     {
       "family": "stepper",
@@ -143542,7 +143653,7 @@
       "inputEquivalent": false,
       "renderingEquivalent": false,
       "reasons": {
-        "owner-mapping": [
+        "captured-default-versus-local-omission": [
           "interaction:stepper@light/desktop-dpr1/focus",
           "interaction:stepper@light/desktop-dpr1/hover",
           "interaction:stepper@light/desktop-dpr1/held",
@@ -143602,19 +143713,56 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-default-versus-local-omission": {
           "case": "interaction:stepper@light/desktop-dpr1/focus",
           "proof": {
             "property": "textTransform",
             "element": "stepper-content",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-default-versus-local-omission",
             "computedCandidateVerified": false,
-            "renderingEquivalent": false
+            "renderingEquivalent": false,
+            "referenceComputed": "none",
+            "candidateLocalDeclaration": "<omitted>",
+            "referencePath": [
+              "frame",
+              "frame/2",
+              "frame/2/0",
+              "frame/2/0/0",
+              "frame/2/0/0/1",
+              "frame/2/0/0/1/0",
+              "frame/2/0/0/1/0/0"
+            ],
+            "candidatePath": [
+              "root",
+              "root/0",
+              "root/0/2",
+              "root/0/2/0",
+              "root/0/2/0/1",
+              "root/0/2/0/1/0"
+            ],
+            "source": "core-style-inspection",
+            "revision": 3,
+            "mapping": {
+              "kind": "reviewed-showcase-template-text",
+              "element": "stepper-content",
+              "referenceNode": "frame/2/0/0/1/0/0",
+              "astylarNode": "root/0/2/0/1/0",
+              "referencePath": [
+                "frame/2/0",
+                "frame/2/0/0",
+                "frame/2/0/0/1",
+                "frame/2/0/0/1/0",
+                "frame/2/0/0/1/0/0"
+              ],
+              "astylarPath": [
+                "root/0/2/0",
+                "root/0/2/0/1",
+                "root/0/2/0/1/0"
+              ],
+              "referenceDecorationNodes": [],
+              "justification": "The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both text owners have identical direct own-text. They have no element children except the explicitly identified, unique, text-free chip focus-indicator leaf when required by that reviewed template. Generated Material IDs are checked by shape and uniqueness, not their unstable numeric suffix. A same-ID reference wrapper is allowed only on that path with no own text. This establishes text-owner identity only; wrapper, decoration, layout, typography, paint and interaction differences remain subject to separate comparison."
+            }
           }
         }
       },
@@ -143676,8 +143824,8 @@
         "interaction:stepper@custom/desktop-dpr2/disabled",
         "interaction:stepper@custom/desktop-dpr2/selected"
       ],
-      "proofSha256": "3f0de3bc5e8b630d9c9cf1a2a3247294b80cfa7c4f39570ac5216f0948d2586b",
-      "allCasesHaveCapturedObservationStageEvidence": false
+      "proofSha256": "eb190cd30eb6ec1d61282a00236df5d6bf0301371f534ffe7e6f4f3101934878",
+      "allCasesHaveCapturedObservationStageEvidence": true
     },
     {
       "family": "stepper",
@@ -143773,7 +143921,7 @@
       "inputEquivalent": false,
       "renderingEquivalent": false,
       "reasons": {
-        "owner-mapping": [
+        "explicit-relevant-request": [
           "static:stepper@light/desktop",
           "static:stepper@light/tablet",
           "static:stepper@light/mobile",
@@ -143845,19 +143993,79 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "explicit-relevant-request": {
           "case": "static:stepper@light/desktop",
           "proof": {
             "property": "visibility",
             "element": "stepper-content",
             "issues": [
               {
-                "reason": "owner-mapping"
+                "reason": "explicit-relevant-request",
+                "side": "reference",
+                "node": "frame/2/0/0/1/0",
+                "source": ".mat-horizontal-stepper-content",
+                "key": "visibility",
+                "value": {
+                  "value": "hidden",
+                  "important": false
+                }
+              },
+              {
+                "reason": "explicit-relevant-request",
+                "side": "reference",
+                "node": "frame/2/0/0/1/0",
+                "source": ".mat-horizontal-stepper-content.mat-horizontal-stepper-content-current",
+                "key": "visibility",
+                "value": {
+                  "value": "visible",
+                  "important": false
+                }
               }
             ],
             "disposition": "requires-specific-review",
             "computedCandidateVerified": false,
-            "renderingEquivalent": false
+            "renderingEquivalent": false,
+            "referenceComputed": "visible",
+            "candidateLocalDeclaration": "<omitted>",
+            "referencePath": [
+              "frame",
+              "frame/2",
+              "frame/2/0",
+              "frame/2/0/0",
+              "frame/2/0/0/1",
+              "frame/2/0/0/1/0",
+              "frame/2/0/0/1/0/0"
+            ],
+            "candidatePath": [
+              "root",
+              "root/0",
+              "root/0/2",
+              "root/0/2/0",
+              "root/0/2/0/1",
+              "root/0/2/0/1/0"
+            ],
+            "source": "core-style-inspection",
+            "revision": 3,
+            "mapping": {
+              "kind": "reviewed-showcase-template-text",
+              "element": "stepper-content",
+              "referenceNode": "frame/2/0/0/1/0/0",
+              "astylarNode": "root/0/2/0/1/0",
+              "referencePath": [
+                "frame/2/0",
+                "frame/2/0/0",
+                "frame/2/0/0/1",
+                "frame/2/0/0/1/0",
+                "frame/2/0/0/1/0/0"
+              ],
+              "astylarPath": [
+                "root/0/2/0",
+                "root/0/2/0/1",
+                "root/0/2/0/1/0"
+              ],
+              "referenceDecorationNodes": [],
+              "justification": "The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both text owners have identical direct own-text. They have no element children except the explicitly identified, unique, text-free chip focus-indicator leaf when required by that reviewed template. Generated Material IDs are checked by shape and uniqueness, not their unstable numeric suffix. A same-ID reference wrapper is allowed only on that path with no own text. This establishes text-owner identity only; wrapper, decoration, layout, typography, paint and interaction differences remain subject to separate comparison."
+            }
           }
         }
       },
@@ -143931,7 +144139,7 @@
         "interaction:stepper@custom/desktop-dpr2/disabled",
         "interaction:stepper@custom/desktop-dpr2/selected"
       ],
-      "proofSha256": "6a9fbbe7102111141397a0ab8866e8b1bd4123865dc263e405ea06dec091a4b8",
+      "proofSha256": "5a7348c35baddcdd779e4d7c05feff22aea9808fc989f57c8ba7cf9dacec5e5c",
       "allCasesHaveCapturedObservationStageEvidence": false
     },
     {
@@ -144028,7 +144236,7 @@
       "inputEquivalent": false,
       "renderingEquivalent": false,
       "reasons": {
-        "owner-mapping": [
+        "captured-default-versus-local-omission": [
           "static:stepper@light/desktop",
           "static:stepper@light/tablet",
           "static:stepper@light/mobile",
@@ -144100,19 +144308,56 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-default-versus-local-omission": {
           "case": "static:stepper@light/desktop",
           "proof": {
             "property": "whiteSpace",
             "element": "stepper-content",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-default-versus-local-omission",
             "computedCandidateVerified": false,
-            "renderingEquivalent": false
+            "renderingEquivalent": false,
+            "referenceComputed": "normal",
+            "candidateLocalDeclaration": "<omitted>",
+            "referencePath": [
+              "frame",
+              "frame/2",
+              "frame/2/0",
+              "frame/2/0/0",
+              "frame/2/0/0/1",
+              "frame/2/0/0/1/0",
+              "frame/2/0/0/1/0/0"
+            ],
+            "candidatePath": [
+              "root",
+              "root/0",
+              "root/0/2",
+              "root/0/2/0",
+              "root/0/2/0/1",
+              "root/0/2/0/1/0"
+            ],
+            "source": "core-style-inspection",
+            "revision": 3,
+            "mapping": {
+              "kind": "reviewed-showcase-template-text",
+              "element": "stepper-content",
+              "referenceNode": "frame/2/0/0/1/0/0",
+              "astylarNode": "root/0/2/0/1/0",
+              "referencePath": [
+                "frame/2/0",
+                "frame/2/0/0",
+                "frame/2/0/0/1",
+                "frame/2/0/0/1/0",
+                "frame/2/0/0/1/0/0"
+              ],
+              "astylarPath": [
+                "root/0/2/0",
+                "root/0/2/0/1",
+                "root/0/2/0/1/0"
+              ],
+              "referenceDecorationNodes": [],
+              "justification": "The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both text owners have identical direct own-text. They have no element children except the explicitly identified, unique, text-free chip focus-indicator leaf when required by that reviewed template. Generated Material IDs are checked by shape and uniqueness, not their unstable numeric suffix. A same-ID reference wrapper is allowed only on that path with no own text. This establishes text-owner identity only; wrapper, decoration, layout, typography, paint and interaction differences remain subject to separate comparison."
+            }
           }
         }
       },
@@ -144186,8 +144431,8 @@
         "interaction:stepper@custom/desktop-dpr2/disabled",
         "interaction:stepper@custom/desktop-dpr2/selected"
       ],
-      "proofSha256": "57bc7e96450f120b9136e3e9ddfa7379d8667c6c50be4e4724ea1daa3e12de49",
-      "allCasesHaveCapturedObservationStageEvidence": false
+      "proofSha256": "9301434be5a47d08e649e75af265a8e1e4cec0e9a4f5c96cfe4043e557303416",
+      "allCasesHaveCapturedObservationStageEvidence": true
     },
     {
       "family": "stepper",
@@ -144283,7 +144528,7 @@
       "inputEquivalent": false,
       "renderingEquivalent": false,
       "reasons": {
-        "owner-mapping": [
+        "captured-default-versus-local-omission": [
           "static:stepper@light/desktop",
           "static:stepper@light/tablet",
           "static:stepper@light/mobile",
@@ -144355,19 +144600,56 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-default-versus-local-omission": {
           "case": "static:stepper@light/desktop",
           "proof": {
             "property": "wordBreak",
             "element": "stepper-content",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-default-versus-local-omission",
             "computedCandidateVerified": false,
-            "renderingEquivalent": false
+            "renderingEquivalent": false,
+            "referenceComputed": "normal",
+            "candidateLocalDeclaration": "<omitted>",
+            "referencePath": [
+              "frame",
+              "frame/2",
+              "frame/2/0",
+              "frame/2/0/0",
+              "frame/2/0/0/1",
+              "frame/2/0/0/1/0",
+              "frame/2/0/0/1/0/0"
+            ],
+            "candidatePath": [
+              "root",
+              "root/0",
+              "root/0/2",
+              "root/0/2/0",
+              "root/0/2/0/1",
+              "root/0/2/0/1/0"
+            ],
+            "source": "core-style-inspection",
+            "revision": 3,
+            "mapping": {
+              "kind": "reviewed-showcase-template-text",
+              "element": "stepper-content",
+              "referenceNode": "frame/2/0/0/1/0/0",
+              "astylarNode": "root/0/2/0/1/0",
+              "referencePath": [
+                "frame/2/0",
+                "frame/2/0/0",
+                "frame/2/0/0/1",
+                "frame/2/0/0/1/0",
+                "frame/2/0/0/1/0/0"
+              ],
+              "astylarPath": [
+                "root/0/2/0",
+                "root/0/2/0/1",
+                "root/0/2/0/1/0"
+              ],
+              "referenceDecorationNodes": [],
+              "justification": "The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both text owners have identical direct own-text. They have no element children except the explicitly identified, unique, text-free chip focus-indicator leaf when required by that reviewed template. Generated Material IDs are checked by shape and uniqueness, not their unstable numeric suffix. A same-ID reference wrapper is allowed only on that path with no own text. This establishes text-owner identity only; wrapper, decoration, layout, typography, paint and interaction differences remain subject to separate comparison."
+            }
           }
         }
       },
@@ -144441,8 +144723,8 @@
         "interaction:stepper@custom/desktop-dpr2/disabled",
         "interaction:stepper@custom/desktop-dpr2/selected"
       ],
-      "proofSha256": "1415fd050a7fddedc4a9ac2150d2f9f62e89a2aa84e64428ca5c4afa16c88352",
-      "allCasesHaveCapturedObservationStageEvidence": false
+      "proofSha256": "f2c31f84edda145226733b6a93b3c70e91c9e69d9450cfcca0b3cf467ee71fde",
+      "allCasesHaveCapturedObservationStageEvidence": true
     },
     {
       "family": "stepper",
@@ -144683,7 +144965,7 @@
       "inputEquivalent": false,
       "renderingEquivalent": false,
       "reasons": {
-        "owner-mapping": [
+        "captured-default-versus-local-omission": [
           "interaction:stepper@light/desktop-dpr1/focus",
           "interaction:stepper@light/desktop-dpr1/hover",
           "interaction:stepper@light/desktop-dpr1/held",
@@ -144743,19 +145025,56 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-default-versus-local-omission": {
           "case": "interaction:stepper@light/desktop-dpr1/focus",
           "proof": {
             "property": "wordSpacing",
             "element": "stepper-content",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-default-versus-local-omission",
             "computedCandidateVerified": false,
-            "renderingEquivalent": false
+            "renderingEquivalent": false,
+            "referenceComputed": "0px",
+            "candidateLocalDeclaration": "<omitted>",
+            "referencePath": [
+              "frame",
+              "frame/2",
+              "frame/2/0",
+              "frame/2/0/0",
+              "frame/2/0/0/1",
+              "frame/2/0/0/1/0",
+              "frame/2/0/0/1/0/0"
+            ],
+            "candidatePath": [
+              "root",
+              "root/0",
+              "root/0/2",
+              "root/0/2/0",
+              "root/0/2/0/1",
+              "root/0/2/0/1/0"
+            ],
+            "source": "core-style-inspection",
+            "revision": 3,
+            "mapping": {
+              "kind": "reviewed-showcase-template-text",
+              "element": "stepper-content",
+              "referenceNode": "frame/2/0/0/1/0/0",
+              "astylarNode": "root/0/2/0/1/0",
+              "referencePath": [
+                "frame/2/0",
+                "frame/2/0/0",
+                "frame/2/0/0/1",
+                "frame/2/0/0/1/0",
+                "frame/2/0/0/1/0/0"
+              ],
+              "astylarPath": [
+                "root/0/2/0",
+                "root/0/2/0/1",
+                "root/0/2/0/1/0"
+              ],
+              "referenceDecorationNodes": [],
+              "justification": "The paired reference.component.ts and astylar.component.ts templates identify this text through a unique component anchor and exact direct-child tag/ID/class path. Both text owners have identical direct own-text. They have no element children except the explicitly identified, unique, text-free chip focus-indicator leaf when required by that reviewed template. Generated Material IDs are checked by shape and uniqueness, not their unstable numeric suffix. A same-ID reference wrapper is allowed only on that path with no own text. This establishes text-owner identity only; wrapper, decoration, layout, typography, paint and interaction differences remain subject to separate comparison."
+            }
           }
         }
       },
@@ -144817,8 +145136,8 @@
         "interaction:stepper@custom/desktop-dpr2/disabled",
         "interaction:stepper@custom/desktop-dpr2/selected"
       ],
-      "proofSha256": "14091f6a7f294c22df08280aeefaed46b2204f3097abe6b2847377f7bb6b207f",
-      "allCasesHaveCapturedObservationStageEvidence": false
+      "proofSha256": "9f5c069499a6cf568cb7d85672a8a187fb0b343667adc0d1f98e12a408d483ee",
+      "allCasesHaveCapturedObservationStageEvidence": true
     },
     {
       "family": "stepper",
