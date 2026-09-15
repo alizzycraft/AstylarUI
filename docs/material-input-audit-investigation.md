@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Field-host defaults: observation-stage survey
+
+The [standalone field-host review](material-field-host-initial-style-audit.md)
+and its machine inventory cover all 577 original field-family cases, 48 groups
+and 4,616 property observations. Browser computed inherited/default values are
+being compared with omitted candidate local declarations. Complete captured
+ancestry and all three candidate diagnostic stages establish that observation
+gap without claiming candidate computed values or accepted rendering parity.
+The four focused tests and exact inventory replay pass. Component typography,
+alignment, core inheritance and final rendering obligations remain independent.
+This evidence is not yet integrated into the canonical classifier or full
+package harness and does not change the canonical unresolved count.
+
 ## Slider border defaults: canonical integration and index verification
 
 The canonical collector now retains the complete original-source border evidence
@@ -28,16 +41,22 @@ records and capture digests remain untouched.
 The combined owning checks now pass **16/16**, zero skips, in **172.561 seconds**,
 including the complete 30,043-observation root-style collector, the field-host
 weight/tracking inventory, existing case indices and the new integration guards.
-The package harness now registers 37 spec files and its unfiltered run is active
-at `88ce462`. Canonical regeneration finished with only **3,186 unresolved**
+The package harness registers 37 spec files and its unfiltered run at `88ce462`
+completed with **688/688 passes**, zero failures/skips/cancellations, in
+**1,315.620 seconds**. All 38 recorded source fingerprints stayed unchanged
+through completion. The durable log and its SHA-256 are retained in the
+integration record. This suite does not yet include the separate field-host
+initial-style proof. Canonical regeneration finished with only **3,186 unresolved**
 attributions (exit 1), down by exactly 24. All 8,339 groups / 386,891 occurrences
 retain their original values and sampled case/state lists; all **8,315 unrelated
 complete rows** retain their full digest. Only the 24 slider-border groups /
 1,872 occurrences gain the source-backed default-policy attribution.
 All 143 source fingerprints verify. Independent streaming decompression verifies
 the complete 1,600,132,409-byte payload and its recorded SHA-256; the compressed
-payload is 46,436,210 bytes. The separate canonical `--check` and post-integration
-full harness remain running. This is attribution progress, not rendering parity.
+payload is 46,436,210 bytes. The separate canonical `--check` completed with
+exit 1 and only the 3,186 unresolved-attribution error, with no stale-report
+error. These results verify the audit machinery and report currency; they are
+attribution progress, not rendering parity or completed audit acceptance.
 
 Implementation priority within the slider investigation: resolve the core
 input-subtype default policy and reconcile the catalog's claim, using the shared
