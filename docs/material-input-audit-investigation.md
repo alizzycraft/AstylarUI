@@ -15,7 +15,7 @@ the matching sibling class, but their release timing is source evidence rather
 than a fresh interaction replay. Two focused tests pass. This identifies a
 state-input discrepancy, not the cause of swapped dragging; candidate computed
 values, actual exclusion/capture and both drag directions still require proof.
-The standalone survey is not yet a canonical attribution or part of the running
+The standalone survey is not yet a canonical attribution or part of the completed
 39-file harness. Do not turn it into a fixture-specific pointer patch.
 
 ## Field-host defaults: observation-stage survey
@@ -40,8 +40,13 @@ Independent streaming comparison preserves all original values and sampled
 case/state lists and all **8,291 unrelated complete rows**. All 148 current source
 fingerprints verify. The entire decoded 1,715,204,637-byte payload and its
 47,442,118-byte compressed representation pass independent digest checks.
-The separate canonical re-check and 39-file harness remain running; neither
-attribution progress nor an unchanged scalar count establishes input equivalence.
+The separate canonical re-check has completed with exit 1 solely for those
+3,138 unresolved attributions, with no stale-evidence error. The complete
+39-file harness passes **694/694** tests in **1,460.447 seconds**, with zero
+failures, skips or cancellations. All 40 starting manifest/spec fingerprints
+remain unchanged. The integration record retains the exact command, terminal
+results and log digest. Neither these audit checks nor an unchanged scalar
+count establishes input equivalence or rendered parity.
 
 The combined owning checks pass **20/20**, zero skips/cancellations, in
 **170.941 seconds**, including the full field-host survey, all affected case
