@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "kind": "canonical-material-input-audit-after-slider-box-attribution",
+  "sourceCommit": "bebedbd1b60a594dd1e3c06ba6cf9ab4f747e37e",
+  "generation": {
+    "command": "node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit",
+    "exitCode": 1,
+    "output": [
+      "# Material input-equivalence audit",
+      "- Parity evidence: artifacts\\material-parity\\current-ancestry-audit\\latest-report.json",
+      "- Coverage: 436/436 static, 1875/1875 interaction",
+      "- Unique differences: 8339",
+      "- Occurrences: 386891",
+      "- Source findings: 132",
+      "- Input equivalent: no",
+      "- ERROR: 3210 resolved-style differences still lack root-cause attribution"
+    ]
+  },
+  "check": {
+    "command": "node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit --check",
+    "exitCode": 1,
+    "output": [
+      "# Material input-equivalence audit",
+      "- Parity evidence: artifacts\\material-parity\\current-ancestry-audit\\latest-report.json",
+      "- Coverage: 436/436 static, 1875/1875 interaction",
+      "- Unique differences: 8339",
+      "- Occurrences: 386891",
+      "- Source findings: 132",
+      "- Input equivalent: no",
+      "- ERROR: 3210 resolved-style differences still lack root-cause attribution"
+    ],
+    "meaning": "The maintained CLI compared the regenerated complete JSON and Markdown with saved artifacts. Its only rejection is 3210 unresolved attributions; this is not input-equivalence acceptance."
+  },
+  "summary": {
+    "uniqueStyleDifferences": 8339,
+    "totalStyleDifferenceOccurrences": 386891,
+    "unresolvedBefore": 3224,
+    "unresolvedAfter": 3210,
+    "attributedGroups": 14,
+    "attributedOccurrences": 780,
+    "sourceFindings": 132,
+    "inputEquivalent": false
+  },
+  "conservation": {
+    "command": "@'\nconst fs=require('fs'), z=require('zlib'), crypto=require('crypto'), assert=require('assert/strict'), {Readable}=require('stream'), Parser=require('jsonparse');\n(async()=>{const manifest=JSON.parse(fs.readFileSync('docs/material-input-equivalence-audit.json')); const payload=fs.readFileSync('docs/'+manifest.payload), hash=x=>crypto.createHash('sha256').update(x).digest('hex'); assert.equal(hash(payload),manifest.compressedSha256); const p=new Parser(), out={summary:null,rows:[]};let done=false;p.onValue=function(v){const top=this.stack[1]?.key??(this.stack.length===1?this.key:undefined);if(this.stack.length===2&&top==='discrepancies'){out.rows.push(v);delete this.value[this.key];}else if(this.stack.length===1){if(this.key==='summary')out.summary=v;if(this.key==='discrepancies')done=true;delete this.value[this.key];}else if(this.value&&!['summary','discrepancies'].includes(top))delete this.value[this.key];};for await(const b of Readable.from([payload]).pipe(z.createGunzip())){p.write(b);if(done)break;}assert.ok(done);const projection=out.rows.map(r=>({family:r.family,element:r.element,property:r.property,reference:r.reference,astylar:r.astylar,occurrences:r.occurrences,cases:r.cases,states:r.states}));const candidateOnly=out.rows.filter(r=>r.family==='slider'&&['slider-start','slider-primary'].includes(r.element)&&['paddingTop','paddingRight','paddingBottom','paddingLeft','boxSizing'].includes(r.property));console.log(JSON.stringify({compressedSha256:manifest.compressedSha256,summary:out.summary,allOriginalValuesAndCasesSha256:hash(JSON.stringify(projection)),allOtherRowsSha256:hash(JSON.stringify(out.rows.filter(r=>!candidateOnly.includes(r)))),candidateOnlyGroups:candidateOnly.length,candidateOnlyOccurrences:candidateOnly.reduce((n,r)=>n+r.occurrences,0),candidateOnlyAttributions:[...new Set(candidateOnly.map(r=>r.attribution))]},null,2));})();\n'@ | node",
+    "allOriginalValuesAndCasesSha256": "d5e916fb99193565c6be9a6428d8616a3ca87424d8f658d09f7df9824b693d03",
+    "allOtherRowsSha256": "41811420279711f4efa9bbef9255053d84cca446a2e75b9ffb03ec96d5b24050",
+    "beforeAndAfterEqual": true,
+    "scope": "All 8339 rows retain property values, occurrences, sample case keys and states. The other 8325 complete discrepancy rows are unchanged. Only 14 slider padding/box-sizing groups gain original-source authoring attribution and complete reviewed cases."
+  },
+  "integrity": {
+    "manifest": {
+      "file": "docs/material-input-equivalence-audit.json",
+      "bytes": 454,
+      "sha256": "f9f35f2dabfdaff119645e909ec6c8384802a783195980dd8ca57b8b2a71867d"
+    },
+    "payload": {
+      "file": "docs/material-input-equivalence-audit.json.gz",
+      "bytes": 46371290,
+      "sha256": "cfcdc58978cac42a5ef88b0b906a212067d7efadc52d491d4d1d38e446d0b4b9"
+    },
+    "uncompressed": {
+      "bytes": 1595621458,
+      "sha256": "2a0971b455bbe16226aa4dbe6aab0cb655923b32a5db6b545ef5d900b02aff46"
+    },
+    "markdown": {
+      "file": "docs/material-input-equivalence-audit.md",
+      "bytes": 161421,
+      "sha256": "c3f0ca46a32df61ccc474358548d2b61037b16c3d342e6431ae61964d38f7d2b"
+    },
+    "verifiedSourceFingerprints": 133,
+    "exactByteFingerprints": 102,
+    "lfNormalizedFingerprints": 31,
+    "originalCaptureUnchanged": true
+  },
+  "integrityCommand": "@'\nconst fs=require('fs'),z=require('zlib'),c=require('crypto'),{Readable}=require('stream'),Parser=require('jsonparse'),assert=require('assert/strict');\n(async()=>{const mf='docs/material-input-equivalence-audit.json',mb=fs.readFileSync(mf),m=JSON.parse(mb),pb=fs.readFileSync('docs/'+m.payload),hash=b=>c.createHash('sha256').update(b).digest('hex');assert.equal(pb.length,m.compressedBytes);assert.equal(hash(pb),m.compressedSha256);const digest=c.createHash('sha256');let length=0,parsed=false,sourceFingerprints;const p=new Parser();p.onValue=function(v){const top=this.stack[1]?.key??(this.stack.length===1?this.key:undefined);if(this.stack.length===1){if(this.key==='sourceFingerprints'){sourceFingerprints=v;parsed=true;}delete this.value[this.key];}else if(this.value&&top!=='sourceFingerprints')delete this.value[this.key];};for await(const b of Readable.from([pb]).pipe(z.createGunzip())){digest.update(b);length+=b.length;if(!parsed)p.write(b);}assert.equal(length,m.uncompressedBytes);assert.equal(digest.digest('hex'),m.uncompressedSha256);let exact=0,lfNormalized=0;for(const f of sourceFingerprints){const b=fs.readFileSync(f.file);if(hash(b)===f.sha256)exact++;else {assert.equal(hash(b.toString().replace(/\\r\\n/g,'\\n')),f.sha256,f.file);lfNormalized++;}}const md='docs/material-input-equivalence-audit.md',mdb=fs.readFileSync(md),raw='artifacts/material-parity/current-ancestry-audit/latest-report.json';assert.equal(hash(fs.readFileSync(raw)),'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');console.log(JSON.stringify({manifest:{file:mf,bytes:mb.length,sha256:hash(mb)},payload:{file:'docs/'+m.payload,bytes:pb.length,sha256:hash(pb)},uncompressed:{bytes:length,sha256:m.uncompressedSha256},markdown:{file:md,bytes:mdb.length,sha256:hash(mdb)},verifiedSourceFingerprints:sourceFingerprints.length,exactByteFingerprints:exact,lfNormalizedFingerprints:lfNormalized,originalCaptureUnchanged:true},null,2));})();\n'@ | node",
+  "enforcedMatrix": "docs/material-slider-box-enforced-matrix.json",
+  "limitations": [
+    "3210 unresolved style groups still require investigation.",
+    "Complete enforced matrix was revalidated from matching, hash-checked checkpoints; no fresh browser captures are claimed.",
+    "The full unfiltered Node harness is a separate pending check.",
+    "No renderer, plugin behavior, canonical comparison inputs or original frozen capture bytes changed."
+  ]
+}

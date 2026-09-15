@@ -58,12 +58,46 @@ CRLF-to-LF convention. The source-bound slider reproduction and previous
 verification records remain historical evidence; their earlier not-integrated
 limitations describe those earlier increments.
 
-Full canonical regeneration, complete-report conservation and maintained-CLI
-`--check` are pending for this integration. The last verified report still has
-3,224 unresolved groups. The expected 14-group attribution is not counted as
-complete until that regeneration and independent conservation check finish.
-The full enforced browser matrix remains pending. No renderer or comparison
-input changes are included.
+Full canonical regeneration and the actual maintained-CLI `--check` both
+completed. Each exits 1 solely because **3,210 unresolved groups remain**, down
+from 3,224. The [canonical verification record](material-slider-box-canonical-generation.json)
+preserves both exact commands and outputs. This is expected failing audit
+evidence, not input-equivalence acceptance.
+
+Independent whole-report checks retain **8,339 groups / 386,891 occurrences**.
+The checksum over every original property value, occurrence count, sampled case
+and state is unchanged; all **8,325 other complete rows** are unchanged. Only
+the **14 slider box groups / 780 occurrences** gain the new attribution. The
+compressed payload and its full 1,595,621,458-byte decoded stream match their
+recorded sizes/digests, all **133 source fingerprints** verify, and the original
+capture bytes remain unchanged. The enforced checkpoint matrix is recorded
+above; the full unfiltered Node harness remains a separate pending check.
+No renderer or comparison input changes are included.
+
+### Next slider defaults investigation — separate from authored box requests
+
+A read-only review of both native range inputs in all 78 captured slider cases
+finds **156/156 owners** with no captured author/inline border or appearance
+declaration on either side. Every browser owner reports top border `0px none`,
+top-left radius `0px` and appearance `auto`; every candidate owner reports
+generic `borderWidth: 1px`, `borderStyle: solid`, `borderRadius: 4px` and omitted
+appearance. This is an observation lead, not a new canonical attribution.
+
+The core selects defaults by `element.type` (`style.service.ts:364`,
+`style-defaults.service.ts:44`), and the generic input defaults specify that
+border/radius (`browser-defaults.ts:294–303`). The compatibility document
+explicitly describes styled controls and intentionally different UA defaults
+(`docs/compatibility/html-css.md:109–114,380`). That policy locates a potential
+shared-default compatibility boundary; it does not establish equivalent inputs
+or authorize a candidate-only border reset under this audit's stricter contract.
+
+Next, reduce this to a public-package range input with one shared HTML/CSS and
+SiteData authoring source, paired omitted/explicit border controls, and separate
+normal/effective declarations and used-box measurements. Verify whether the
+first divergence is generic-versus-input-type defaults and whether explicit
+equal inputs still expose a layout defect. Retain the documented support
+boundary and any resulting core defect separately. Do not add a showcase style
+adjustment or infer that these invisible input borders explain all drag faults.
 
 ## Slider native input boxes differ before layout and pointer conversion
 

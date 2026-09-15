@@ -12,7 +12,7 @@ Evidence: complete enforced parity report with Chromium 152.0.7977.76.
 
 Visual parity is green, but input equivalence is **not established**. The audit found 8339 unique normalized input differences across 386891 occurrences.
 
-3224 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
+3210 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
 
 Border initial-color evidence: 3580 uniquely paired node observations prove omitted author/inline color inputs with browser currentColor versus core transparent defaults. Attribution rejects possibly applicable state/media/reset rules and unknown selectors, and is not an equivalence waiver. Alpha paint, contextual-color paint, structure and final raster require separate evidence.
 
@@ -103,6 +103,7 @@ Supplemental tooltip state: 30/30 paired boundaries across benchmark-open, bench
 Supplemental paginator navigation: 104/104 paired boundaries cover first/last guards, every page, Previous/Next, held pointer, Space and departure in light/dark at DPR 1/2. Binding=checkpoint-bound; 116 individual input/focus/tooltip checks remain unequal. Full trees and typography enter the consolidated inventory; correct range transitions do not establish native-disabled, tooltip, focus or raster equivalence.
 Unmatched tooltip text owners: 18 state-input discrepancies retain their complete captured trigger, overlay/anchor, style-stage and absent-counterpart evidence. They are unequal authoring, not missing renderer text or accepted typography/placement.
 Unpaired tooltip scalar styles: 8 original candidate-only popup captures independently bind their scalar and full-tree owner evidence. 48 style groups retain all values and occurrences under the unequal-presence authoring defect; no reference styles or rendered equivalence are invented.
+Slider native box requests: 156 independently source-bound owners retain explicit reference padding/content-box requests versus candidate omissions and generic defaults. 14 groups preserve the original values and complete case coverage; this is unequal input authoring, not proof of used-box, drag or raster equivalence.
 
 Calendar controls remaining after reference dismissal: 108 current texture owners are attributed to the verified unequal close state. Their full candidate input trees remain present; no reference typography is invented for the closed popup, and other unreviewed typography differences remain unresolved.
 
@@ -123,10 +124,10 @@ This means the existing screenshot score cannot be used as evidence that the ren
 
 | Classification | Unique signatures |
 | --- | ---: |
-| application-plugin-authoring-defect | 574 |
+| application-plugin-authoring-defect | 588 |
 | equivalent-representation | 2088 |
 | intentional-documented-limitation | 312 |
-| parity-harness-defect | 5365 |
+| parity-harness-defect | 5351 |
 
 ## Source-level compensation findings
 
@@ -337,6 +338,7 @@ The Material-specific state layers, ripples, progress/range visuals, checkmark, 
 
 ## Focused evidence
 
+- slider native box requests independently bound to original scalar and tree evidence: Both native slider owners retain exact inline padding and Material content-box requests versus omitted candidate authoring and generic input padding. Independent original-source replay, production scalar normalization, complete per-property case coverage and mutation controls guard this authoring attribution. Other range input properties, core default compatibility, used geometry, pointer capture, drag mapping and raster remain separate concerns. No equal-input rendering claim or fixture correction follows from these unequal box requests. (tests/material-parity/slider-input-box-source-binding.spec.mjs:168)
 - origin declaration-stage attribution with independent original capture coverage: The original parity report and each paired source tree are hash-checked independently of report-retained evidence. Complete scalar/case selection and every proof disposition must match the original capture; removing both a retained capture and its attribution cannot satisfy validation. Pooled inventory replay separately rejects changed ownership, stages and equivalence claims. Attribution remains a browser-used versus candidate-declaration measurement gap, never a used-origin or rendering-equivalence claim. Motion and explicit origin contexts remain unresolved. (tests/material-parity/origin-stage-inventory-evidence.spec.mjs:91)
 - inactive transforms do not establish origin omission equivalence: Explicit and unproven origin requests remain unresolved when the candidate declaration is omitted, even under none or an identity matrix. Matching explicit inputs remain comparable. The full 6938-observation scalar exposure is retained; independent DPR1/2 browser request controls reproduce the historical false waiver while the corrected collector rejects it. Default-center controls remain geometrically equal, but no candidate computed origin, complete captured cascade, reference-box equivalence or renderer parity is invented. Full-tree population attribution is separate. (tests/material-parity/identity-transform-omission.spec.mjs:20)
 - confirmed transformed fixed-child containing-block failures with separate stacking controls: Two identical DPR1 public-package browser runs preserve five fixed-child placement failures and nine passing controls. Both sides receive one shared tree/style input; final mesh projection measures output without feeding layout. All seven stacking controls pass independent browser hit/color and candidate interior-pixel checks. Core viewport-only layout-parent selection is the first divergence, including supported 2D identity transforms. The recorded observations and eleven source fingerprints are checked by the identity omission spec. This does not attribute original Material scalar groups, certify all hit testing/raster, or establish DPR2, nested/update/scroll behavior. (examples/material-showcase/src/app/identity-transform-context-audit.spec.ts:8)
