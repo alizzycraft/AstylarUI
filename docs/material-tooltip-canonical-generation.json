@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "kind": "canonical-material-input-audit-after-tooltip-unpaired-attribution",
+  "sourceCommit": "9afcdf3c3c93639ee952f52ccb4eff9bdb6c690c",
+  "generation": {
+    "command": "node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit",
+    "exitCode": 1,
+    "output": [
+      "# Material input-equivalence audit",
+      "- Parity evidence: artifacts\\material-parity\\current-ancestry-audit\\latest-report.json",
+      "- Coverage: 436/436 static, 1875/1875 interaction",
+      "- Unique differences: 8339",
+      "- Occurrences: 386891",
+      "- Source findings: 132",
+      "- Input equivalent: no",
+      "- ERROR: 3224 resolved-style differences still lack root-cause attribution"
+    ]
+  },
+  "check": {
+    "command": "node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit --check",
+    "exitCode": 1,
+    "output": [
+      "# Material input-equivalence audit",
+      "- Parity evidence: artifacts\\material-parity\\current-ancestry-audit\\latest-report.json",
+      "- Coverage: 436/436 static, 1875/1875 interaction",
+      "- Unique differences: 8339",
+      "- Occurrences: 386891",
+      "- Source findings: 132",
+      "- Input equivalent: no",
+      "- ERROR: 3224 resolved-style differences still lack root-cause attribution"
+    ],
+    "meaning": "Actual maintained CLI compared the complete regenerated JSON and Markdown byte-for-byte. The only reported rejection is 3224 unresolved attributions; this is not input-equivalence or output-parity acceptance."
+  },
+  "coverage": {
+    "componentFamilies": 36,
+    "static": 436,
+    "interaction": 1875,
+    "totalCases": 2311
+  },
+  "summary": {
+    "uniqueStyleDifferences": 8339,
+    "totalStyleDifferenceOccurrences": 386891,
+    "sourceFindings": 132,
+    "unresolvedBefore": 3272,
+    "unresolvedAfter": 3224,
+    "attributedGroups": 48,
+    "attributedOccurrences": 384,
+    "inputEquivalent": false
+  },
+  "conservation": {
+    "allOriginalValuesAndCasesSha256": "d5e916fb99193565c6be9a6428d8616a3ca87424d8f658d09f7df9824b693d03",
+    "allOtherRowsSha256": "30838c8c7486d4c245d02fc87142082803b2ef03a61a7174137eb6fb8cf5cf14",
+    "beforeAndAfterEqual": true,
+    "scope": "All 8339 rows retain property values, occurrences, sample case keys and states. The other 8291 full discrepancy rows are unchanged. Only 48 tooltip candidate-only rows gain source-bound unequal-state attribution and complete reviewed case identities."
+  },
+  "integrity": {
+    "manifest": {
+      "file": "docs/material-input-equivalence-audit.json",
+      "bytes": 454,
+      "sha256": "b31a2ee74f242946a27af3b1eebddc05e0fdcd6ae37261b85d39867b70ac7526"
+    },
+    "payload": {
+      "file": "docs/material-input-equivalence-audit.json.gz",
+      "bytes": 46285254,
+      "sha256": "da8353b6fa9d16b9ee9eb1f0b4c890ed566c1af9d39db74b04563121ed89998e"
+    },
+    "uncompressed": {
+      "bytes": 1590963968,
+      "sha256": "155ad8ae6317ca3e3b97371f94f0d6b71dc7e916fcdea8fba2e37a930d59e638"
+    },
+    "markdown": {
+      "file": "docs/material-input-equivalence-audit.md",
+      "bytes": 160399,
+      "sha256": "3a4c34dcf82cee341aaf6829a1a67f1484bb9821bb161787a22b8c2d9b3ae830"
+    },
+    "verifiedSourceFingerprints": 130,
+    "exactByteFingerprints": 99,
+    "lfNormalizedFingerprints": 31,
+    "originalCaptureUnchanged": true,
+    "sourceFingerprintConvention": "The maintained sourceFingerprints function hashes UTF-8 text after CRLF-to-LF normalization. 99 entries also match raw bytes; 31 use that explicit normalization. Payload, manifest, Markdown and original capture digests are exact byte digests."
+  },
+  "limitations": [
+    "3224 unresolved style groups still require investigation.",
+    "The complete enforced output-parity matrix after audit changes remains required.",
+    "No renderer, plugin behavior, canonical comparison inputs or frozen capture bytes were changed.",
+    "The new standalone slider box evidence is not integrated into this canonical report."
+  ]
+}

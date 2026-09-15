@@ -70,8 +70,9 @@
     "note": "The 25 unchanged historical fingerprints match LF-normalized source text, not current CRLF checkout bytes. They were not silently replaced or claimed byte-identical."
   },
   "canonicalRefresh": {
-    "status": "pending",
-    "note": "The maintained complete-report generator was started against unchanged frozen evidence. Generation and independent --check results are not yet claimed by this instrumentation increment."
+    "status": "verified-with-expected-unresolved-rejection",
+    "evidence": "docs/material-tooltip-canonical-generation.json",
+    "note": "Actual maintained generation and --check retain all 8339 groups / 386891 occurrences. Forty-eight tooltip groups gain unequal-state attribution; 3224 unresolved groups still reject audit acceptance. Original measurements/cases and every other discrepancy row remain unchanged."
   },
   "sourceFingerprints": [
     {

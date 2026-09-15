@@ -27,17 +27,23 @@ coverage reject removed cases, altered styles or owners, invented counterparts,
 deleted/duplicated classifications and false equivalence. **25/25** focused
 tooltip/state tests pass, including three new scalar-attribution tests.
 
-The previous canonical report retains **48 groups / 384 occurrences** for these
-owners. Checksums of all original scalar values/cases and all other discrepancy
-rows have been recorded for conservation checking. Full canonical regeneration
-is in progress; its result and subsequent `--check` are not claimed yet. This is
-an audit-instrumentation increment, not completed parity or an implemented fix.
+The [complete canonical regeneration and independent check](material-tooltip-canonical-generation.json)
+retain **48 groups / 384 occurrences** for these owners under the unequal-state
+attribution. All **8,339 groups / 386,891 occurrences** remain; unresolved groups
+decrease from **3,272 to 3,224**, not to zero. Checksums confirm that every original
+scalar value/case and all **8,291 other full discrepancy rows** are unchanged.
+The actual maintained CLI's regenerated JSON and Markdown agree byte-for-byte;
+both runs report only the expected unresolved-attribution rejection. No input
+equivalence, rendering fix or final full-matrix acceptance is claimed.
 
 Only 13 rolling-index fingerprint fields changed across 12 files; every other
 field remains identical. Of their 85 fingerprints, 60 match current bytes and
 25 unchanged historical entries match LF text rather than current CRLF checkout
-bytes. That encoding distinction is retained explicitly, not represented as a
-new behavior change or silently refreshed historical evidence.
+bytes. Inspection confirms that the maintained source fingerprint function
+intentionally uses LF-normalized text. The new canonical report verifies all
+130 source fingerprints under that convention (99 also match raw bytes, 31 use
+normalization). Payload/capture digests remain exact byte checks. This encoding
+distinction is not represented as a behavior change or silently refreshed history.
 
 ## Repeated frozen-reference motion samples distinguish declarations from state
 
