@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "kind": "overlay-captured-root-context-sensitivity",
+  "sourceFingerprints": [
+    {
+      "file": "scripts/audit-material-overlay-root-context.mjs",
+      "sha256": "05cee0de333c5232b99f75d626bbbd6db3b7e03091cf485c4859982041ad7be3"
+    },
+    {
+      "file": "tests/material-parity/overlay-captured-root-context.spec.mjs",
+      "sha256": "0f616016cbebcd0e96b09038da1a5df1e19ceebce0b558d7c803346059b12023"
+    },
+    {
+      "file": "tests/material-parity/input-tree-evidence.mjs",
+      "sha256": "06197edaf92b2296e3e0564771f307a1036ce7bc5eb13d8e242a5c420e7a7e3b"
+    },
+    {
+      "file": "examples/material-showcase/src/app/reference.component.ts",
+      "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+    },
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90"
+    },
+    {
+      "file": "examples/material-showcase/src/app/app.config.ts",
+      "sha256": "4045cedc0d821e6cc94c3116513beedfd0c1e3cde0125c00495f4c13309bf0ba"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/@angular/cdk/fesm2022/overlay-module-Bd2UplUU.mjs",
+      "sha256": "14fb6e5657ea562b17d30dc19c2392d08993bcaf2a72bf2e8eb9c42fde9ed994"
+    }
+  ],
+  "observations": [
+    {
+      "browser": "152.0.7977.76",
+      "deviceScaleFactor": 1,
+      "capturedRoots": [
+        "frame",
+        "overlay:0"
+      ],
+      "actualOverlayParent": "body",
+      "originalRect": {
+        "x": 10,
+        "y": 20,
+        "width": 100,
+        "height": 40
+      },
+      "transformedRect": {
+        "x": 40,
+        "y": 60,
+        "width": 100,
+        "height": 40
+      },
+      "claim": "Capture-boundary sensitivity only; no original-case inheritance, candidate values or rendered equivalence inferred."
+    },
+    {
+      "browser": "152.0.7977.76",
+      "deviceScaleFactor": 2,
+      "capturedRoots": [
+        "frame",
+        "overlay:0"
+      ],
+      "actualOverlayParent": "body",
+      "originalRect": {
+        "x": 10,
+        "y": 20,
+        "width": 100,
+        "height": 40
+      },
+      "transformedRect": {
+        "x": 40,
+        "y": 60,
+        "width": 100,
+        "height": 40
+      },
+      "claim": "Capture-boundary sensitivity only; no original-case inheritance, candidate values or rendered equivalence inferred."
+    }
+  ],
+  "classification": "parity-harness-defect",
+  "owner": "reference ancestor-context capture",
+  "canonicalAttributionChanged": false,
+  "originalOverlayCauseEstablished": false,
+  "renderingEquivalent": false,
+  "limitation": "Captured roots are traversal boundaries, not assertions of absent DOM ancestors. These synthetic browser controls do not establish original-case document inheritance, CSS containing blocks, candidate used values or final raster.",
+  "nextEvidence": "Bind a supplemental original-state capture of actual html/body/host ancestry and overlay attachment to the frozen served runtime, preserving existing trees and scalar observations."
+}

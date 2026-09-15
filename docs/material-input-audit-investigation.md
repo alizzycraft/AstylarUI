@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Overlay ancestor-context capture limitation
+
+The [overlay capture-root proof](material-overlay-root-context-audit.md) shows
+at DPR 1 and 2 that captured null parents are traversal boundaries, not proof
+of absent DOM ancestry. Uncaptured body declarations change overlay inheritance,
+and a body transform moves a fixed overlay despite its own transform remaining
+`none`. Both focused browser tests pass with exact restoration controls. This
+identifies a harness evidence limitation, **not** the cause of the original
+tooltip/snackbar failures. Original-state, runtime-bound ancestry evidence is
+still required; canonical classifications and production inputs are unchanged.
+
 ## Remaining mapped-owner defaults: bounded triage across components
 
 The [owner survey](material-owner-initial-style-survey.md) covers all 600 remaining
