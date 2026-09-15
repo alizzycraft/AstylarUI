@@ -3,6 +3,28 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Stale harness source-count assertion corrected
+
+The logged, unfiltered 33-file harness completed with **675 passes / one failure**
+(676 tests, zero skips). Its sole failure expected 129 source fingerprints when
+the collector correctly recorded 133. History accounts for all four additions:
+one tooltip binding module and three slider binding modules/tests, with no
+removed or duplicate entries. The corrected assertion checks the count, unique
+paths, and the exact added files' current normalized digests.
+
+The [verification record](material-harness-source-inventory-correction.json)
+retains the failed run's durable log digest, historical inventory comparison and
+commands. A fresh focused repeat passes **7/7**, zero skips, in **1.872 seconds**.
+The two new range-border proof files are now registered in the 35-file harness;
+an unfiltered post-correction pass has not yet been established.
+
+Canonical regeneration finished with only the existing **3,210 unresolved**
+attributions. All 8,339 complete discrepancy rows and the summary are unchanged.
+The corrected test's source fingerprint and 34 shifted proof line references
+were refreshed; the independent canonical `--check` completed with only those
+3,210 unresolved attributions (exit 1), with no stale-output error. This is a
+test-inventory correction, not a renderer fix or input-equivalence acceptance.
+
 ## Original slider border-default observations bound to source
 
 The [standalone border-default inventory](material-slider-border-defaults.json)

@@ -1,0 +1,266 @@
+{
+  "schemaVersion": 1,
+  "kind": "material-harness-source-inventory-assertion-correction",
+  "baselineCommit": "adf79a2",
+  "previousRuns": [
+    {
+      "session": 51476,
+      "sourceCommit": "e18074001f806a507694634d4b4e55a9fb839d9b",
+      "exitCode": 1,
+      "tests": 676,
+      "passed": 675,
+      "failed": 1,
+      "skipped": 0,
+      "durationMs": 968251.3506,
+      "limitation": "Tool output was truncated; the failed test was identified in the complete logged rerun, not recovered from this run."
+    },
+    {
+      "session": 66254,
+      "exitCode": 1,
+      "tests": 676,
+      "passed": 675,
+      "failed": 1,
+      "skipped": 0,
+      "durationMs": 912608.3163,
+      "command": "node --test --test-concurrency=1 tests/parity/fixture-manifest.spec.mjs tests/parity/visibility-metrics.spec.mjs tests/parity/sharpness-metrics.spec.mjs tests/tts-parity/benchmark-config.spec.mjs tests/tts-parity/demo-workflow.spec.mjs tests/tts-parity/scrolling-metrics.spec.mjs tests/tts-parity/interaction-metrics.spec.mjs tests/material-parity/benchmark-config.spec.mjs tests/material-parity/cursor-metrics.spec.mjs tests/material-parity/focused-raster-metrics.spec.mjs tests/material-parity/text-alignment-metrics.spec.mjs tests/material-parity/shadow-profile-metrics.spec.mjs tests/material-parity/input-tree-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs tests/material-parity/field-host-token-sensitivity.spec.mjs tests/material-parity/line-height-omission-sensitivity.spec.mjs tests/material-parity/root-line-height-proof.spec.mjs tests/material-parity/root-inherited-default-proof.spec.mjs tests/material-parity/caret-color-omission-sensitivity.spec.mjs tests/material-parity/inherited-default-sensitivity.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/root-initial-style-sensitivity.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/input-audit-report-codec.spec.mjs tests/material-parity/input-audit-report-stream.spec.mjs tests/material-parity/input-audit-cli-transport.spec.mjs tests/material-parity/identity-transform-omission.spec.mjs tests/material-parity/origin-stage-inventory-evidence.spec.mjs tests/material-parity/normal-line-box-report.spec.mjs tests/material-parity/supplemental-capture-evidence.spec.mjs tests/material-parity/button-pointer-focus-evidence.spec.mjs tests/material-parity/slider-input-box-evidence.spec.mjs tests/material-parity/slider-input-box-source-binding.spec.mjs 2>&1 | Tee-Object -FilePath artifacts/material-parity/slider-box-full-harness-rerun.log | ForEach-Object { if ($_ -match '^not ok') { $auditFailureBlock = $true }; if ($auditFailureBlock -or $_ -match '^# (tests|pass|fail|cancelled|skipped|duration_ms|suites|todo)') { $_ }; if ($auditFailureBlock -and $_ -match '^  \\.\\.\\.') { $auditFailureBlock = $false } }; exit $LASTEXITCODE",
+      "log": {
+        "file": "artifacts/material-parity/slider-box-full-harness-rerun.log",
+        "bytes": 261913,
+        "sha256": "dbd7d6a807cceb22e386b360da5bba5236904c548a506c7bd4dfe8cc5b818b88",
+        "failures": [
+          "not ok 99 - records source fingerprints and actual visual acceptance fields"
+        ],
+        "failure": "not ok 99 - records source fingerprints and actual visual acceptance fields\r\n  ---\r\n  duration_ms: 346.7748\r\n  type: 'test'\r\n  location: 'D:\\\\dev\\\\github\\\\AstylarUI-material\\\\tests\\\\material-parity\\\\input-equivalence-audit.spec.mjs:1372:1'\r\n  failureType: 'testCodeFailure'\r\n  error: |-\r\n    Expected values to be strictly equal:\r\n    \r\n    133 !== 129\r\n    \r\n  code: 'ERR_ASSERTION'\r\n  name: 'AssertionError'\r\n  expected: 129\r\n  actual: 133\r\n  operator: 'strictEqual'\r\n  stack: |-\r\n    TestContext.<anonymous> (file:///D:/dev/github/AstylarUI-material/tests/material-parity/input-equivalence-audit.spec.mjs:1376:10)\r\n    Test.runInAsyncScope (node:async_hooks:214:14)\r\n    Test.run (node:internal/test_runner/test:1047:25)\r\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\r\n    Test.postRun (node:internal/test_runner/test:1173:19)\r\n    Test.run (node:internal/test_runner/test:1101:12)\r\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\r\n  ...",
+        "summary": "1..676\r\n# tests 676\r\n# suites 0\r\n# pass 675\r\n# fail 1\r\n# cancelled 0\r\n# skipped 0\r\n# todo 0\r\n# duration_ms 912608.3163\r\n"
+      }
+    }
+  ],
+  "sourceInventory": {
+    "before": 129,
+    "after": 133,
+    "unique": 133,
+    "removed": [],
+    "added": [
+      {
+        "file": "tests/material-parity/tooltip-unpaired-style-evidence.mjs",
+        "commit": "9afcdf3"
+      },
+      {
+        "file": "tests/material-parity/slider-input-box-evidence.mjs",
+        "commit": "bebedbd"
+      },
+      {
+        "file": "tests/material-parity/slider-input-box-source-binding.mjs",
+        "commit": "bebedbd"
+      },
+      {
+        "file": "tests/material-parity/slider-input-box-source-binding.spec.mjs",
+        "commit": "bebedbd"
+      }
+    ],
+    "startSources": {
+      "sourceCommit": "e18074001f806a507694634d4b4e55a9fb839d9b",
+      "script": "node --test tests/parity/fixture-manifest.spec.mjs tests/parity/visibility-metrics.spec.mjs tests/parity/sharpness-metrics.spec.mjs tests/tts-parity/benchmark-config.spec.mjs tests/tts-parity/demo-workflow.spec.mjs tests/tts-parity/scrolling-metrics.spec.mjs tests/tts-parity/interaction-metrics.spec.mjs tests/material-parity/benchmark-config.spec.mjs tests/material-parity/cursor-metrics.spec.mjs tests/material-parity/focused-raster-metrics.spec.mjs tests/material-parity/text-alignment-metrics.spec.mjs tests/material-parity/shadow-profile-metrics.spec.mjs tests/material-parity/input-tree-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs tests/material-parity/field-host-token-sensitivity.spec.mjs tests/material-parity/line-height-omission-sensitivity.spec.mjs tests/material-parity/root-line-height-proof.spec.mjs tests/material-parity/root-inherited-default-proof.spec.mjs tests/material-parity/caret-color-omission-sensitivity.spec.mjs tests/material-parity/inherited-default-sensitivity.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/root-initial-style-sensitivity.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/input-audit-report-codec.spec.mjs tests/material-parity/input-audit-report-stream.spec.mjs tests/material-parity/input-audit-cli-transport.spec.mjs tests/material-parity/identity-transform-omission.spec.mjs tests/material-parity/origin-stage-inventory-evidence.spec.mjs tests/material-parity/normal-line-box-report.spec.mjs tests/material-parity/supplemental-capture-evidence.spec.mjs tests/material-parity/button-pointer-focus-evidence.spec.mjs tests/material-parity/slider-input-box-evidence.spec.mjs tests/material-parity/slider-input-box-source-binding.spec.mjs",
+      "specFiles": 33,
+      "sourceFingerprints": [
+        {
+          "file": "package.json",
+          "sha256": "8cc5268a11e7fd787dd75ba6447a92d0446f891e255fab2e2c519ffaec351a58"
+        },
+        {
+          "file": "tests/parity/fixture-manifest.spec.mjs",
+          "sha256": "49618813e8a5442922ad9d41d43f023d5c519f32d81d7e4df44fda188f1d6436"
+        },
+        {
+          "file": "tests/parity/visibility-metrics.spec.mjs",
+          "sha256": "9e610a15cf2a593466adc7dcbcd112f0d03cf9565f6d591e5bc2c42d8cc4ddfa"
+        },
+        {
+          "file": "tests/parity/sharpness-metrics.spec.mjs",
+          "sha256": "c08401da965279b174ad3832f65a5745a85a1e4e8ba826234b009c3bfcff963b"
+        },
+        {
+          "file": "tests/tts-parity/benchmark-config.spec.mjs",
+          "sha256": "b2e61f5ade2815de5262b9699110199c9a5070134ac7037a4c608c0a9920b2b5"
+        },
+        {
+          "file": "tests/tts-parity/demo-workflow.spec.mjs",
+          "sha256": "3b7913ab71a6843cfe24cdd0a1c377ffd84c5cfdcc3c3d91623498ade45121f1"
+        },
+        {
+          "file": "tests/tts-parity/scrolling-metrics.spec.mjs",
+          "sha256": "4c2197ab923e38699ff0ec959c499621b3ce02ddb5bd9e02ba3616a697df59ec"
+        },
+        {
+          "file": "tests/tts-parity/interaction-metrics.spec.mjs",
+          "sha256": "8c5eb465e3bf39fe7912153fbdb6e167a460f1c0221aa8d69eaedf5ebd4aa602"
+        },
+        {
+          "file": "tests/material-parity/benchmark-config.spec.mjs",
+          "sha256": "63feb0fdf91a87a0fc9985103e619a32ec7a2ceba5a537bbb8ca49f32d10334b"
+        },
+        {
+          "file": "tests/material-parity/cursor-metrics.spec.mjs",
+          "sha256": "e4c6f7004b3df18e8d742b0bba30941182e608b29d0007c41e9b509dd09714a7"
+        },
+        {
+          "file": "tests/material-parity/focused-raster-metrics.spec.mjs",
+          "sha256": "64fe44d9295788ab58ca8530b3f6e67d59c6e16c66d00af8ee2e84918179a950"
+        },
+        {
+          "file": "tests/material-parity/text-alignment-metrics.spec.mjs",
+          "sha256": "21628e49f7657067573dbf2c11a15ed6db983c7ecae37963c7dfd9cbe5d7939e"
+        },
+        {
+          "file": "tests/material-parity/shadow-profile-metrics.spec.mjs",
+          "sha256": "9d4123e2ff5d40af7f64ff7b43dfd81187ce4b3f17d485e07483fa2279466615"
+        },
+        {
+          "file": "tests/material-parity/input-tree-evidence.spec.mjs",
+          "sha256": "c2d0884f99fc4e1f41ac65d22b95643c8785f4fb7a339a47746bf31fe91344b3"
+        },
+        {
+          "file": "tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+          "sha256": "0eb054b63f89c949c22ad38a9e571b5fc9a384f1be171a279980e7472cf03379"
+        },
+        {
+          "file": "tests/material-parity/field-host-token-sensitivity.spec.mjs",
+          "sha256": "1712b21b5dc04393c385eeaaabadaf12faf578c4637fb7659640879dced9d8a8"
+        },
+        {
+          "file": "tests/material-parity/line-height-omission-sensitivity.spec.mjs",
+          "sha256": "8f50185a2d328a602d96ae229f6107ce7191be158400c6673bebc6d3c7ff8637"
+        },
+        {
+          "file": "tests/material-parity/root-line-height-proof.spec.mjs",
+          "sha256": "86fb0c14ae9b69baad0c4dbd23ddb467c31b98301eec874dc4b15153a8bb9595"
+        },
+        {
+          "file": "tests/material-parity/root-inherited-default-proof.spec.mjs",
+          "sha256": "ed824a7bd8bbd4cc000b225f30859283fb4b0098667dd60e57576f097079851c"
+        },
+        {
+          "file": "tests/material-parity/caret-color-omission-sensitivity.spec.mjs",
+          "sha256": "055c61e9e7b378219c82cffe4bab5fc00912a4caa202794baef357f20a63ed83"
+        },
+        {
+          "file": "tests/material-parity/inherited-default-sensitivity.spec.mjs",
+          "sha256": "6f0cad24bca24388695f16ffbe90b7e45ccabef438fa6b03c13a234e24884de3"
+        },
+        {
+          "file": "tests/material-parity/root-initial-style-evidence.spec.mjs",
+          "sha256": "b1fc7ec4c17fc277d5813cc13a82f3d773827dbecae479a093c82c8d6e28fba4"
+        },
+        {
+          "file": "tests/material-parity/root-initial-style-sensitivity.spec.mjs",
+          "sha256": "b40aa7f8c629bbe6dc2b431c96c149a2d11ea2b8afe0efd34749e1480d550e98"
+        },
+        {
+          "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+          "sha256": "0efc929dcaffe90090e6110d95371d0c6016c9935c073a32460bd007c1d8fdc1"
+        },
+        {
+          "file": "tests/material-parity/input-audit-report-codec.spec.mjs",
+          "sha256": "3a7d424e4b1ab695fbe7f92c8b90f11859eba36f4407884fc4ca7c16d0d8d350"
+        },
+        {
+          "file": "tests/material-parity/input-audit-report-stream.spec.mjs",
+          "sha256": "5907ac58cbc0cb85301e5db09ff0fbb173b549c0bed8dd9e627a11c61e0eedf5"
+        },
+        {
+          "file": "tests/material-parity/input-audit-cli-transport.spec.mjs",
+          "sha256": "fbaf2cac9e26566643cd53d3b3a61006656586de6a9d9696c6d205b494f32b60"
+        },
+        {
+          "file": "tests/material-parity/identity-transform-omission.spec.mjs",
+          "sha256": "604e4b5d67e88bda0aef858d2a71b73277b8678ee83605a621d52896759e0899"
+        },
+        {
+          "file": "tests/material-parity/origin-stage-inventory-evidence.spec.mjs",
+          "sha256": "cb416aa989e7cc7bb86a8bd00e052efe677909be85528e744fecc29c265b552e"
+        },
+        {
+          "file": "tests/material-parity/normal-line-box-report.spec.mjs",
+          "sha256": "aab40f8f4dceb8a1478f5b0fcd59c15686593ce03eec459a357e451655d5dc9e"
+        },
+        {
+          "file": "tests/material-parity/supplemental-capture-evidence.spec.mjs",
+          "sha256": "98976d1bd23b5c95a61ffd7960b75f363d8426ad10694db5658c90f41b83843d"
+        },
+        {
+          "file": "tests/material-parity/button-pointer-focus-evidence.spec.mjs",
+          "sha256": "604131405323900b4c84ae967c1880de43cbace1580d68b6b9a6db18727da1b1"
+        },
+        {
+          "file": "tests/material-parity/slider-input-box-evidence.spec.mjs",
+          "sha256": "078342498ca02d34ddfe46ee17fbcab58e88b4353c0a2957d522fb5202c20347"
+        },
+        {
+          "file": "tests/material-parity/slider-input-box-source-binding.spec.mjs",
+          "sha256": "a31c2c7e479d00d9d3fd283f55f46709164f0aeec76a1c06b5ea95f5207c970a"
+        }
+      ]
+    },
+    "unchangedThroughLoggedRerun": true
+  },
+  "correction": "Update stale expected source count to 133; independently require unique paths and the exact four added paths with current LF-normalized SHA-256 values. No collector or renderer behavior changes.",
+  "focusedVerification": {
+    "command": "node --test --test-name-pattern=\"records source fingerprints|range default-box|border omission|original slider border\" tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/range-default-box-proof.spec.mjs tests/material-parity/slider-border-default-evidence.spec.mjs",
+    "exitCode": 0,
+    "tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 1489.0053,
+    "latestRepeat": {
+      "exitCode": 0,
+      "tests": 7,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 1872.1241
+    }
+  },
+  "manifestChange": {
+    "beforeSpecFiles": 33,
+    "afterSpecFiles": 35,
+    "added": [
+      "tests/material-parity/range-default-box-proof.spec.mjs",
+      "tests/material-parity/slider-border-default-evidence.spec.mjs"
+    ]
+  },
+  "canonicalRefresh": {
+    "status": "generated",
+    "command": "node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit",
+    "exitCode": 1,
+    "expectedRemainingError": "3210 resolved-style differences still lack root-cause attribution",
+    "allDiscrepancyRowsUnchanged": true,
+    "allRowsSha256": "c6055d948460fb130bb89e2c50410f22577f798405a4f636fbb823675128f70b",
+    "summaryUnchanged": true,
+    "sourceFingerprintCount": 133,
+    "changedSourceFingerprint": [
+      {
+        "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+        "sha256": "389fcb71a514c9e8bf23a8240a24b10d29c814f34a1ef262e3362cc7fbe0d1e5"
+      }
+    ],
+    "adjustedMarkdownProofLines": 34,
+    "otherMarkdownUnchanged": true,
+    "compressedSha256": "fb640345b1866f61e5a6085e05cee385917cb5629101ffab5701437dfff5ca86",
+    "compressedBytes": 46371301,
+    "uncompressedBytes": 1595621458,
+    "uncompressedSha256": "6b0bbd9b7b2e068cf2fe310fe6b4ae3ae70e62c9aeaafd11c4a819e05e43f9cd",
+    "check": {
+      "status": "completed-with-known-unresolved-attributions",
+      "exitCode": 1,
+      "remainingUnresolved": 3210,
+      "otherErrors": [],
+      "session": 39347,
+      "command": "node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit --check"
+    }
+  },
+  "fullVerification": {
+    "status": "pending",
+    "limitation": "Focused success is not an unfiltered harness pass."
+  }
+}

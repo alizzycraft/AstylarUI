@@ -1373,7 +1373,17 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 129);
+  assert.equal(audit.sourceFingerprints.length, 133);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 133);
+  // The original 129-source inventory gained one tooltip binding and three
+  // slider binding files. Require the actual entries/digests, not only a count.
+  for (const file of ['tests/material-parity/tooltip-unpaired-style-evidence.mjs',
+    'tests/material-parity/slider-input-box-evidence.mjs',
+    'tests/material-parity/slider-input-box-source-binding.mjs',
+    'tests/material-parity/slider-input-box-source-binding.spec.mjs']) {
+    assert.deepEqual(audit.sourceFingerprints.filter(entry => entry.file === file), [{ file,
+      sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') }]);
+  }
   for (const file of ['tests/material-parity/origin-stage-inventory-evidence.mjs',
     'tests/material-parity/origin-stage-inventory-evidence.spec.mjs', 'tests/material-parity/origin-stage-source-binding.mjs',
     'tests/material-parity/transform-origin-stage-evidence.mjs', 'tests/material-parity/origin-alias-mapping-evidence.mjs'])
