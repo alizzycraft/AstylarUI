@@ -24,6 +24,8 @@ import { bindOriginStageSource, validateOriginStageSource } from './origin-stage
 import { fieldHostWeightTrackingAttribution, collectFieldHostWeightTrackingInputs, classifyFieldHostWeightTrackingInput } from './field-host-weight-tracking-evidence.mjs';
 import { fieldHostInitialStyleAttribution, collectFieldHostInitialStyleInputs, classifyFieldHostInitialStyleInput,
   validateFieldHostInitialStyleInputs } from './field-host-initial-style-evidence.mjs';
+import { ownerInitialStyleAttribution, bindOwnerInitialStyleSource, collectOwnerInitialStyleEvidence,
+  classifyOwnerInitialStyleInput, validateOwnerInitialStyleSource, readOwnerInitialStyleSource } from './owner-initial-style-attribution.mjs';
 import { rootHeightAttribution, collectRootHeightInputs, classifyRootHeightInput,
   rootBoxSizingAttribution, hasRootBoxSizingWitness, classifyRootBoxSizingInput } from './root-height-input-evidence.mjs';
 import { rootColorAttribution, collectRootColorInputs, classifyRootColorInput,
@@ -139,6 +141,9 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const fieldHostAlignmentInputs = collectFieldHostAlignmentInputs(fieldHostTypographyInputs);
   const fieldHostWeightTrackingInputs = collectFieldHostWeightTrackingInputs(fieldHostTypographyInputs);
   const fieldHostInitialStyleInputs = collectFieldHostInitialStyleInputs(elementInventory, canonicalStyle);
+  const ownerInitialStyleBinding = bindOwnerInitialStyleSource(parityReport, { root, parityPath: options.parityPath });
+  const ownerInitialStyleEvidence = collectOwnerInitialStyleEvidence(
+    ownerInitialStyleBinding.status === 'bound' ? parityReport : {}, elementInventory);
   const appearanceInitialInputs = collectAppearanceInitialInputs(elementInventory, typographySelectorCanApply);
   const buttonAppearanceInputs = collectButtonAppearanceInputs(elementInventory, typographySelectorCanApply);
   const typographyCases = [...cases, ...supplementalCalendarClose.cases, ...supplementalTooltipState.cases,
@@ -168,7 +173,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -257,6 +262,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     fieldHostAlignmentInputs,
     fieldHostWeightTrackingInputs,
     fieldHostInitialStyleInputs,
+    ownerInitialStyleBinding,
+    ownerInitialStyleEvidence,
     appearanceInitialInputs,
     buttonAppearanceInputs,
     retainedTypography,
@@ -271,6 +278,33 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
+  if (report.ownerInitialStyleBinding?.status === 'bound') {
+    errors.push(...validateOwnerInitialStyleSource(report.ownerInitialStyleBinding, report.ownerInitialStyleEvidence, { root }));
+    try {
+      const original = readOwnerInitialStyleSource(report.ownerInitialStyleBinding, { root });
+      const replayedEvidence = collectOwnerInitialStyleEvidence(original, report.elementInventory);
+      if (JSON.stringify(replayedEvidence) !== JSON.stringify(report.ownerInitialStyleEvidence))
+        errors.push('owner initial-style evidence differs from complete captured inventory replay');
+      const cases = [...(original.results ?? []).map(e => ({ ...e, kind: 'static' })),
+        ...(original.interactions ?? []).map(e => ({ ...e, kind: 'interaction' }))];
+      const replayedRows = collectStyleDiscrepancies(cases, report.originStageEvidence, report.retainedTypography,
+        report.visibleOverflowInputs, report.borderInitialInputs, report.buttonBorderResetInputs,
+        report.outlineTokenInputs, report.chipOutlineInputs, report.nonGridTemplateInputs,
+        report.buttonTypographyScalarInputs, report.chipHostTypographyInputs, report.fieldHostTypographyInputs,
+        report.rootTypographyInputs, report.appearanceInitialInputs, report.buttonAppearanceInputs,
+        report.rootColorInputs, report.fieldColorInputs, report.rootHeightInputs, report.containerCaretInputs,
+        report.fieldHostAlignmentInputs, report.rootInitialStyleInputs, report.fieldHostWeightTrackingInputs,
+        report.tooltipUnpairedStyles, report.sliderInputBoxes, report.sliderBorderDefaults,
+        report.fieldHostInitialStyleInputs, replayedEvidence);
+      const selected = rows => rows.filter(r => r.attribution === ownerInitialStyleAttribution);
+      if (JSON.stringify(selected(replayedRows)) !== JSON.stringify(selected(report.discrepancies)))
+        errors.push('owner initial-style attributions lack replayed original precedence, values and exact case coverage');
+    } catch (error) { errors.push(`owner initial-style replay failed: ${error}`); }
+  } else if (requireComplete || report.ownerInitialStyleBinding?.status === 'invalid' ||
+      report.ownerInitialStyleEvidence?.observations?.length ||
+      report.discrepancies?.some(d => d.attribution === ownerInitialStyleAttribution)) {
+    errors.push('owner initial-style attribution lacks independently bound original capture evidence');
+  }
   if (report.sliderBorderDefaults?.binding?.status === 'bound') {
     errors.push(...validateSliderBorderDefaults(report.sliderBorderDefaults, { root }));
     errors.push(...validateSliderBorderDefaultClassifications(report.sliderBorderDefaults,
@@ -1161,6 +1195,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Unmatched tooltip text owners: ${report.retainedTypography.gaps.filter(gap => gap.attribution === 'reviewed-tooltip-unmatched-state-input').length} state-input discrepancies retain their complete captured trigger, overlay/anchor, style-stage and absent-counterpart evidence. They are unequal authoring, not missing renderer text or accepted typography/placement.`,
     `Unpaired tooltip scalar styles: ${report.tooltipUnpairedStyles.observations.length} original candidate-only popup captures independently bind their scalar and full-tree owner evidence. ${report.discrepancies.filter(d => d.attribution === tooltipUnpairedStyleAttribution).length} style groups retain all values and occurrences under the unequal-presence authoring defect; no reference styles or rendered equivalence are invented.`,
     `Field-host initial styles: ${report.fieldHostInitialStyleInputs.length} observations retain browser computed defaults and candidate local omissions across captured ancestry. ${report.discrepancies.filter(d => d.attribution === fieldHostInitialStyleAttribution).length} groups are attributed to the unequal observation stages, without synthesizing candidate computed values. Component token authoring, inherited-value consumption, wrapping, hit testing, visibility and final rendering remain independent obligations.`,
+    `Remaining owner initial styles: ${report.ownerInitialStyleEvidence?.observations?.length ?? 0} captured eligible property observations are independently source-bound; ${report.discrepancies.filter(d => d.attribution === ownerInitialStyleAttribution).length} previously unresolved groups receive observation-stage attribution only. Existing classifications retain precedence. Explicit requests, mapping/ancestry gaps and negative observations are preserved; no candidate computed values or rendering equivalence are inferred.`,
     `Slider native box requests: ${report.sliderInputBoxes.observations.length} independently source-bound owners retain explicit reference padding/content-box requests versus candidate omissions and generic defaults. ${report.discrepancies.filter(d => d.attribution === sliderInputBoxAttribution).length} groups preserve the original values and complete case coverage; this is unequal input authoring, not proof of used-box, drag or raster equivalence.`,
     `Slider native border defaults: ${report.sliderBorderDefaults.observations.length} independently source-bound owners omit border requests but retain different browser and generic core defaults. ${report.discrepancies.filter(d => d.attribution === sliderBorderDefaultAttribution).length} groups preserve original values and complete case coverage. This documented policy divergence requires a core decision, not a candidate-only reset; other input differences and original used-box, drag and raster outcomes remain separate.`,
     '',
@@ -1207,7 +1242,8 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs) {
+function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence = { observations: [] }) {
+  const ownerInitialByCaseIdProperty = new Map(ownerInitialStyleEvidence.observations.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const fieldInitialByCaseIdProperty = new Map(fieldHostInitialStyleInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const sliderBorderByCaseId = new Map(sliderBorderDefaults.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
   const tooltipByCaseId = new Map(tooltipUnpairedStyles.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
@@ -1248,7 +1284,7 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
         const referenceValue = reference[property];
         const astylarValue = astylar[property];
         if (equivalentValue(property, referenceValue, astylarValue, reference, astylar)) continue;
-        const classification = benchmarkCase.state && input.reference && input.astylar && input.astylarResolvedStyleEvidenceVersion !== 2
+        let classification = benchmarkCase.state && input.reference && input.astylar && input.astylarResolvedStyleEvidenceVersion !== 2
           ? { classification: 'parity-harness-defect', owner: 'audit effective pseudo-state style capture',
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
           : classifyTooltipUnpairedStyle(input, property, referenceValue, astylarValue,
@@ -1309,6 +1345,9 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
             ?? classifyReviewedTypographyStage(benchmarkCase, input, property, referenceValue, astylarValue,
               typographyByCaseAndId.get(JSON.stringify([key, input.id])))
             ?? classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
+        if (classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(
+          input, property, referenceValue, astylarValue,
+          ownerInitialByCaseIdProperty.get(JSON.stringify([key, input.id, property]))) ?? classification;
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
           classification.classification, classification.attribution ?? null, classification.justification]);
         let entry = grouped.get(signature);
@@ -1325,7 +1364,7 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
-            ...([fieldHostInitialStyleAttribution, sliderBorderDefaultAttribution, sliderInputBoxAttribution, tooltipUnpairedStyleAttribution, originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
+            ...([ownerInitialStyleAttribution, fieldHostInitialStyleAttribution, sliderBorderDefaultAttribution, sliderInputBoxAttribution, tooltipUnpairedStyleAttribution, originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
               'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, fieldHostAlignmentAttribution, fieldHostWeightTrackingAttribution, rootTypographyAttribution, rootInitialStyleAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution, rootBoxSizingAttribution, containerCaretAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
@@ -8122,6 +8161,14 @@ function sourceFingerprints(root) {
     'tests/material-parity/field-host-initial-style-evidence.mjs',
     'tests/material-parity/field-host-initial-style-evidence.spec.mjs',
     'tests/material-parity/field-host-initial-style-integration.spec.mjs',
+    'tests/material-parity/owner-initial-style-attribution.mjs',
+    'tests/material-parity/owner-initial-style-attribution.spec.mjs',
+    'tests/material-parity/owner-initial-style-baseline.mjs',
+    'tests/material-parity/owner-initial-style-survey.mjs',
+    'tests/material-parity/owner-initial-style-survey.spec.mjs',
+    'tests/material-parity/owner-initial-style-membership.mjs',
+    'tests/material-parity/owner-initial-style-membership.spec.mjs',
+    'tests/material-parity/owner-initial-style-mappings.spec.mjs',
     'scripts/audit-material-field-host-initial-styles.mjs',
     'docs/material-field-host-initial-style-audit.json',
     'tests/material-parity/field-host-token-sensitivity.spec.mjs',

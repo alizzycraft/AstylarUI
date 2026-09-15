@@ -23,7 +23,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+      "sha256": "fb97f72a543cff1f6c4e1f163f8b92f98c7dbbacbaa4a37d0571432045201392"
     },
     {
       "file": "examples/material-showcase/src/app/appearance-input-audit.spec.ts",

@@ -1,39 +1,24 @@
+import { readOwnerInitialBaseline } from '../tests/material-parity/owner-initial-style-baseline.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
-import { Readable } from 'node:stream';
-import { createGunzip } from 'node:zlib';
 import path from 'node:path';
-import Parser from 'jsonparse';
 import { inspectOwnerInitialStyle, ownerInitialValues } from '../tests/material-parity/owner-initial-style-survey.mjs';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
 const target = 'docs/material-owner-initial-style-survey.json';
-const manifestFile = 'docs/material-input-equivalence-audit.json';
-const manifest = JSON.parse(readFileSync(manifestFile));
-const payload = readFileSync(path.join('docs', manifest.payload));
-assert.equal(hash(payload), manifest.compressedSha256);
-const parser = new Parser(), groups = new Map();
+const { manifest, rows: baselineRows } = await readOwnerInitialBaseline();
+const groups = new Map();
 const signature = (family, element, property, reference, astylar) => JSON.stringify([family, element, property, reference, astylar]);
-let done = false;
-parser.onValue = function (value) {
-  const top = this.stack[1]?.key ?? (this.stack.length === 1 ? this.key : undefined);
-  if (this.stack.length === 2 && top === 'discrepancies') {
-    if (value.attribution === 'unresolved' && Object.hasOwn(ownerInitialValues, value.property)) {
-      const key = signature(value.family, value.element, value.property, value.reference, value.astylar);
-      assert.ok(!groups.has(key));
-      groups.set(key, { family: value.family, element: value.element, property: value.property,
-        reference: value.reference, candidate: value.astylar ?? '<omitted>', canonicalOccurrences: value.occurrences,
-        originalCases: [], reasons: {}, witnesses: {}, proofHasher: createHash('sha256') });
-    }
-    delete this.value[this.key];
-  } else if (this.stack.length === 1) {
-    if (this.key === 'discrepancies') done = true;
-    delete this.value[this.key];
-  } else if (this.value && top !== 'discrepancies') delete this.value[this.key];
-};
-for await (const chunk of Readable.from([payload]).pipe(createGunzip())) { parser.write(chunk); if (done) break; }
-assert.ok(done); assert.equal(groups.size, 600, 'review canonical scope before changing the survey');
+for (const value of baselineRows) {
+  if (value.attribution !== 'unresolved' || !Object.hasOwn(ownerInitialValues, value.property)) continue;
+  const key = signature(value.family, value.element, value.property, value.reference, value.astylar);
+  assert.ok(!groups.has(key));
+  groups.set(key, { family: value.family, element: value.element, property: value.property,
+    reference: value.reference, candidate: value.astylar ?? '<omitted>', canonicalOccurrences: value.occurrences,
+    originalCases: [], reasons: {}, witnesses: {}, proofHasher: createHash('sha256') });
+}
+assert.equal(groups.size, 600, 'review baseline scope before changing the survey');
 const capture = JSON.parse(readFileSync('docs/material-field-host-initial-style-audit.json')).capture;
 const captureBytes = readFileSync(capture.file); assert.equal(hash(captureBytes), capture.sha256);
 const raw = JSON.parse(captureBytes);
@@ -73,7 +58,7 @@ const rows = [...groups.values()].map(({ proofHasher, ...group }) => ({ ...group
   allOriginalCasesHaveObservationStageEvidence: group.originalCases.length > 0 &&
     Object.keys(group.reasons).length === 1 && Object.hasOwn(group.reasons, 'captured-default-versus-local-omission'),
   proofSha256: proofHasher.digest('hex') }));
-const sourceFiles = ['scripts/audit-material-owner-initial-styles.mjs', 'tests/material-parity/owner-initial-style-survey.mjs',
+const sourceFiles = ['tests/material-parity/owner-initial-style-baseline.mjs', 'scripts/audit-material-owner-initial-styles.mjs', 'tests/material-parity/owner-initial-style-survey.mjs',
   'tests/material-parity/root-initial-style-evidence.mjs', 'tests/material-parity/border-initial-input-evidence.mjs'];
 const result = { schemaVersion: 1, kind: 'mapped-owner-initial-style-triage', capture,
   canonicalCompressedSha256: manifest.compressedSha256,

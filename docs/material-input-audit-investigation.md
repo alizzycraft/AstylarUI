@@ -56,6 +56,15 @@ The current survey therefore has 326 evidence-backed measurement-stage groups,
 54 mapping gaps and 48 ancestry gaps. The canonical 3,138 unresolved groups and
 all production rendering remain unchanged; see the linked review for proof.
 
+The [shared-style integration record](material-owner-initial-style-integration.md)
+documents the new source-bound canonical attribution path and independent
+original-tree replay. Earlier classifications retain precedence; negative
+observations and rendering obligations remain explicit. The initial focused
+integration proof passes 3/3. Canonical regeneration and broader checks are
+pending; the last verified 3,138 unresolved count is not yet replaced by an
+assumed reduction. Original surveys now pin their original committed baseline
+so live canonical updates cannot silently change historical membership.
+
 ## Slider sibling pointer suppression: separate held-state input
 
 The [source-bound survey](material-slider-peer-pointer-survey.md) reopens all

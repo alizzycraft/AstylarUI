@@ -8,12 +8,16 @@
   },
   "sourceFingerprints": [
     {
+      "file": "tests/material-parity/owner-initial-style-baseline.mjs",
+      "sha256": "e471f03375ae322c0e7f4a00d0c8b9143c5dbcc0c28e6b680578f6b09998761c"
+    },
+    {
       "file": "docs/material-owner-initial-style-survey.json",
-      "sha256": "ddad50e3fce4f57ff8a9063ada3aa21eba06328a90700afc7044941cd0f3a75c"
+      "sha256": "fa7604e04c1b6fcea1b913859afa9a39ac03dd659202c7c8fb3341aa840a64fc"
     },
     {
       "file": "scripts/audit-material-owner-initial-membership.mjs",
-      "sha256": "6e3d12683ab35f9207097bee11d627b49dbb257b59a2ae5b021ca42b3f6dfd2a"
+      "sha256": "cf1e46ddc5c738b873d653b693131055c76086b4179a221d8dc20b00202f3269"
     },
     {
       "file": "tests/material-parity/owner-initial-style-membership.mjs",
@@ -21,7 +25,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+      "sha256": "fb97f72a543cff1f6c4e1f163f8b92f98c7dbbacbaa4a37d0571432045201392"
     },
     {
       "file": "tests/material-parity/input-equivalence-policy.mjs",

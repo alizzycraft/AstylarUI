@@ -1,32 +1,18 @@
+import { readOwnerInitialBaseline } from '../tests/material-parity/owner-initial-style-baseline.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
-import { Readable } from 'node:stream';
-import { createGunzip } from 'node:zlib';
-import path from 'node:path';
-import Parser from 'jsonparse';
 import { bindOwnerInitialMembership } from '../tests/material-parity/owner-initial-style-membership.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const target = 'docs/material-owner-initial-style-membership.json';
 const surveyFile = 'docs/material-owner-initial-style-survey.json', survey = JSON.parse(readFileSync(surveyFile));
-const manifest = JSON.parse(readFileSync('docs/material-input-equivalence-audit.json'));
-const payload = readFileSync(path.join('docs', manifest.payload));
-assert.equal(hash(payload), manifest.compressedSha256);
+const { manifest, rows } = await readOwnerInitialBaseline();
 assert.equal(manifest.compressedSha256, survey.canonicalCompressedSha256);
-const parser = new Parser(), rows = []; let done = false;
-parser.onValue = function (value) {
-  const top = this.stack[1]?.key ?? (this.stack.length === 1 ? this.key : undefined);
-  if (this.stack.length === 2 && top === 'discrepancies') { rows.push(value); delete this.value[this.key]; }
-  else if (this.stack.length === 1) { if (this.key === 'discrepancies') done = true; delete this.value[this.key]; }
-  else if (this.value && top !== 'discrepancies') delete this.value[this.key];
-};
-for await (const chunk of Readable.from([payload]).pipe(createGunzip())) { parser.write(chunk); if (done) break; }
-assert.ok(done); assert.equal(rows.length, 8339);
 const bytes = readFileSync(survey.capture.file); assert.equal(hash(bytes), survey.capture.sha256);
 const raw = JSON.parse(bytes), groups = bindOwnerInitialMembership(rows, raw);
 assert.equal(groups.length, 600);
-const files = [surveyFile, 'scripts/audit-material-owner-initial-membership.mjs',
+const files = ['tests/material-parity/owner-initial-style-baseline.mjs', surveyFile, 'scripts/audit-material-owner-initial-membership.mjs',
   'tests/material-parity/owner-initial-style-membership.mjs', 'tests/material-parity/input-equivalence-audit.mjs',
   'tests/material-parity/input-equivalence-policy.mjs'];
 const result = { schemaVersion: 1, kind: 'owner-initial-style-canonical-case-membership',
