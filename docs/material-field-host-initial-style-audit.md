@@ -44,9 +44,18 @@ paint still require their independent proofs. Existing Material component
 font-family, font-size, line-height, weight/tracking and alignment authoring
 findings are not changed by this survey.
 
-This standalone proof is not yet integrated into the canonical classifier or
-registered in the package's full harness. Its 48 groups therefore do not reduce
-the current canonical unresolved count. Integration requires complete replay
-validation, preservation of all unrelated rows, registered tests and renewed
-canonical verification. No renderer, plugin, canonical example, reference or
-visual threshold was changed.
+The source survey is now consumed by the canonical classifier and its tests are
+registered in the package harness. The separate
+[integration record](material-field-host-initial-style-integration.json)
+retains the two expected failing tests before integration and their passing
+results afterward. All original scalar values and 105 unrelated complete rows
+in the reduced two-case proof retain their pre-integration hashes. Independent
+validation rejects lost/duplicate property groups, changed paths, forged
+equivalence and incomplete case/state coverage.
+
+Complete canonical regeneration and subsequent verification are pending; do
+not subtract these 48 groups from the last verified canonical count yet. The
+source-survey generator's `canonicalIntegration: false` intentionally means
+that its standalone replay does not itself verify integration. The separate
+integration tests and canonical checks own that claim. No renderer, plugin,
+canonical example, reference or visual threshold was changed.

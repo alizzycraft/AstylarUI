@@ -1,0 +1,914 @@
+{
+  "schemaVersion": 1,
+  "kind": "field-host-initial-style-canonical-integration",
+  "baselineCommit": "ac91772",
+  "scope": "Audit observation-stage attribution only; no renderer or canonical authored fixture changes.",
+  "before": {
+    "compressedSha256": "684173a4f4ea995cdcee1fd21b489a493d34634c7c9093c886859d85dccf0a31",
+    "summary": {
+      "inputEquivalent": false,
+      "structureDifferences": 88,
+      "uniqueStyleDifferences": 8339,
+      "totalStyleDifferenceOccurrences": 386891,
+      "classifications": {
+        "application-plugin-authoring-defect": 588,
+        "equivalent-representation": 2088,
+        "intentional-documented-limitation": 336,
+        "parity-harness-defect": 5327
+      },
+      "propertyGroups": {
+        "interaction": 351,
+        "layout": 3106,
+        "other": 351,
+        "paint": 1255,
+        "transform": 937,
+        "typography": 2339
+      },
+      "affectedFamilies": {
+        "autocomplete": 147,
+        "badge": 282,
+        "bottom-sheet": 412,
+        "button": 305,
+        "button-toggle": 260,
+        "card": 376,
+        "checkbox": 220,
+        "chips": 317,
+        "core": 145,
+        "datepicker": 147,
+        "dialog": 487,
+        "divider": 300,
+        "expansion": 264,
+        "form-field": 147,
+        "grid-list": 278,
+        "icon": 128,
+        "input": 147,
+        "list": 149,
+        "menu": 150,
+        "paginator": 269,
+        "progress-bar": 130,
+        "progress-spinner": 124,
+        "radio": 304,
+        "select": 147,
+        "sidenav": 128,
+        "slide-toggle": 190,
+        "slider": 331,
+        "snack-bar": 262,
+        "sort": 151,
+        "stepper": 341,
+        "table": 142,
+        "tabs": 342,
+        "timepicker": 147,
+        "toolbar": 273,
+        "tooltip": 249,
+        "tree": 148
+      },
+      "unclassifiedDifferences": 0,
+      "unresolvedAttributions": 3186,
+      "sourceFindings": 132,
+      "unexplainedSourceFindings": 0,
+      "undetectedSourceDefinitions": 0
+    },
+    "sourceFingerprints": [
+      {
+        "file": "src/lib/astylar.ts",
+        "sha256": "e72cfb8e8e1d91c5a4de9002de3ae98f76f1ed26112251b47fde3b77b13f1094"
+      },
+      {
+        "file": "src/lib/astylar-interaction-runtime.ts",
+        "sha256": "10a7d573ae5f8da3db51675327720f6fb70d2c3547da35e69f48e21e092e35b7"
+      },
+      {
+        "file": "src/lib/astylar-semantic-bridge.ts",
+        "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+      },
+      {
+        "file": "scripts/audit-button-pointer-focus.mjs",
+        "sha256": "5e4120b04d177d589d1836ed68eaac0da2378af78b7385891efda8c83283fd90"
+      },
+      {
+        "file": "examples/material-showcase/audit/button-pointer-focus.mjs",
+        "sha256": "8f02ebe6c56744e2cdac6f26e9fae0c8b35555cf7b184e28173e306dfc9de753"
+      },
+      {
+        "file": "tests/material-parity/button-pointer-focus-evidence.spec.mjs",
+        "sha256": "604131405323900b4c84ae967c1880de43cbace1580d68b6b9a6db18727da1b1"
+      },
+      {
+        "file": "scripts/audit-material-paginator-navigation.mjs",
+        "sha256": "dc48fbf9904a456de8e83123e66808f95deb22620d2e1091108d49e7c86d3fc3"
+      },
+      {
+        "file": "tests/material-parity/paginator-navigation-evidence.mjs",
+        "sha256": "4e4fbcdc1ff9d0ab6bd7fdeba2868764d0fc5eaf4d8704f0b9e13e94fb7fa877"
+      },
+      {
+        "file": "src/lib/astylar-surface.ts",
+        "sha256": "91c2b6fe2fed03da0573d819cd3deed2330ffca91faf22b5083588cbb32fbb13"
+      },
+      {
+        "file": "src/app/services/dom/style.service.ts",
+        "sha256": "7d27b815442240250d3e9a3b577e8c5eab7d08fad67f7723c6004328a553f083"
+      },
+      {
+        "file": "src/app/services/dom/style-defaults.service.ts",
+        "sha256": "379775839024538bcd2a6acc69528039e24fc58b849e52841ba9d6c88f4da7d0"
+      },
+      {
+        "file": "src/app/services/dom/dom-ancestry.service.ts",
+        "sha256": "a6a224cda3ba51ea37a8cd88ebcfd4f39517a908dac69a78ffbfbcd6a4962e68"
+      },
+      {
+        "file": "src/app/config/browser-defaults.ts",
+        "sha256": "c429bec0fa047e71148f4ce743868a4c89986fde28cc7d11076bb7afa89993f3"
+      },
+      {
+        "file": "src/app/services/dom/elements/element-border.service.ts",
+        "sha256": "7c6ecc3f366be05ecc6b60b2ed5ab989795c04b412f87b93571dcd657b38faf8"
+      },
+      {
+        "file": "src/app/services/babylon-mesh.service.ts",
+        "sha256": "a1a1adab9ffdc0e9edbc43a6d4c835ee7b2f6094b9cbd3a13484ccd0923f0a2c"
+      },
+      {
+        "file": "examples/material-showcase/src/app/border-color-input-audit.spec.ts",
+        "sha256": "9b68a96c440de50b50549ee6e6bdee49a5ce8491de8235012d2a59bcd89dc6f0"
+      },
+      {
+        "file": "src/app/services/dom/elements/overflow-clip.service.ts",
+        "sha256": "f66a26a20844e471cf7db4a4e6e9cf6f197f97a0d4eb9cad3cb23bc3892f802a"
+      },
+      {
+        "file": "src/app/services/dom/elements/overflow-clip.service.spec.ts",
+        "sha256": "1a1b9cf370ee02e9c7fa9f77cac2050cf36504f14f832f5239d7b9301f34fbf4"
+      },
+      {
+        "file": "src/lib/astylar-scroll-runtime.ts",
+        "sha256": "2c7f0667264471b12315c5619e446dde65c6bb266d0bf114f84688f76f5288ac"
+      },
+      {
+        "file": "src/lib/astylar-scroll-runtime.spec.ts",
+        "sha256": "91a1f492f15e6a2d27844655b8a017a6d632f8698450bb9ab20f09a24a461e8e"
+      },
+      {
+        "file": "src/app/services/dom/elements/element-dimension.service.ts",
+        "sha256": "24d3c910ec0f054f0ec2de1808420f3e6571708a13348eea0887d040c9aa3d30"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js",
+        "sha256": "0a65a1659a51062ab41cda030c4f030b15bcf5328c85fb1a3597628c05cf190c"
+      },
+      {
+        "file": "examples/material-showcase/src/app/font-relative-box-audit.spec.ts",
+        "sha256": "db02dd616ade081e34b1e34c45da5a1365e1de5b72bcebdcb162e13f4902263e"
+      },
+      {
+        "file": "examples/material-showcase/src/app/identity-transform-context-audit.spec.ts",
+        "sha256": "7eafce1887a5c8e79cabc8db4441c4abf7f87043f0080df6da5416b626be1f78"
+      },
+      {
+        "file": "src/app/services/dom/positioning/stacking-context.manager.ts",
+        "sha256": "e65f87b070f8a3941fd224b70e544f581f46afdf4097ef1c7db15533131e9a8a"
+      },
+      {
+        "file": "docs/compatibility/capabilities.json",
+        "sha256": "7bde70f23f806570bc3eb8b30a627677f11ef26b134e7d57a4d15f943266c0be"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/lib/index.js",
+        "sha256": "fe18e880313b9799e2d9c26e51d4f5f4a09c553880888c32d5d0fcb34903c709"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-creation.service.js",
+        "sha256": "68e45ca7b851ddeac40f6f55d3e2f176768b47dd6ad8e0d8eefa5c2a77d28ef3"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/css-transform.js",
+        "sha256": "d53f4f12d24e4eec71eb54e714043fbf43811ad8de7944fca566bea93a320cc3"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/positioning/stacking-context.manager.js",
+        "sha256": "2bc9dd6b8492d65c3e53563f301bb41c5ee6fbe44276ad897435f6797617d05f"
+      },
+      {
+        "file": "examples/material-showcase/src/app/appearance-input-audit.spec.ts",
+        "sha256": "6151a0dbadb45fe66e19a657d8b86f7023a7436968d2053fb32b8a1289a3be2d"
+      },
+      {
+        "file": "src/app/services/dom/input/checkbox.manager.ts",
+        "sha256": "e12976121d07bd5cd622b055352d981dd0ee4dd2874590bd85fde10219ec81f9"
+      },
+      {
+        "file": "src/app/services/dom/input/select.manager.ts",
+        "sha256": "9504111f1f9a1f1f9eb2aae440adc8e9c7afa248efb77db596cc3591b663b845"
+      },
+      {
+        "file": "src/app/services/dom/elements/element-creation.service.ts",
+        "sha256": "bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a"
+      },
+      {
+        "file": "src/app/services/dom/elements/grid.service.ts",
+        "sha256": "b01021281a7f140ec97388ebb4bc22be6762c1ad155f6045b9c4e25016d53829"
+      },
+      {
+        "file": "src/app/services/dom/elements/grid-track-sizing.ts",
+        "sha256": "7231dd71c110fc8ce125971cf7cdc22f148ed4a24a6d08a6a968c93b7e18328e"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/grid.service.js",
+        "sha256": "77035a34302ae398796b48392aac61d72174748810f0ec008d7137f0d34da785"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/grid-track-sizing.js",
+        "sha256": "d4266467e7f2bf1452270eb15f2a1b0eb0822be005628bc1e764e34306bc5d9d"
+      },
+      {
+        "file": "examples/material-showcase/src/app/grid-template-initial-audit.spec.ts",
+        "sha256": "1ec3a178460522a7b8cf2a05b9cf98b4f32428336cd4a0b27844154095c817b6"
+      },
+      {
+        "file": "tests/material-parity/grid-template-input-evidence.mjs",
+        "sha256": "26c2e963c71772debdf6a4ccc9451f5762be3ed68c04785afbc3d13d98181670"
+      },
+      {
+        "file": "src/app/services/dom/elements/css-transform.ts",
+        "sha256": "65fca50a260da0212bb1988969810b95dee2f9bafbf1a7a9ead830f8d2a57b5f"
+      },
+      {
+        "file": "src/app/services/dom/elements/element-material.service.ts",
+        "sha256": "dd76868fbec43df4a298e305249da80238ef6223cd1f5f61a543e17121c6e44f"
+      },
+      {
+        "file": "src/app/services/dom/input/button.manager.ts",
+        "sha256": "270c57f672c2f54bd5bd6b0e255e0207912fa9fa8bedbf983b765e6a3f207aa5"
+      },
+      {
+        "file": "src/app/services/text/text-style-parser.service.ts",
+        "sha256": "6c30ccdc018ca95fc6a3832f9563d22e65f971d5de475df64bd8a99b3fa5fc9f"
+      },
+      {
+        "file": "src/app/services/text/text-canvas-renderer.service.ts",
+        "sha256": "847b4370091c69a8b04319fe9b0f911b83fe231e57536ab9da3e8fcf6ad35f67"
+      },
+      {
+        "file": "src/app/types/style-rule.ts",
+        "sha256": "f59e9522605eeb64c7ffa0369f3a6b023a54a1e7e329434d6a5bd9420adadfae"
+      },
+      {
+        "file": "examples/material-showcase/src/app/astylar.component.ts",
+        "sha256": "b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90"
+      },
+      {
+        "file": "examples/material-showcase/src/app/material-input-evidence.ts",
+        "sha256": "de0efefd73f69cbd62d2fc902c43c0fb48db59a07ee718b6baa92936fe56d357"
+      },
+      {
+        "file": "examples/material-showcase/src/app/normal-line-height-audit.spec.ts",
+        "sha256": "97b8ff54b416664a94c80c5525c94a9e2ba1f172da3f0b163b374e0a73001eff"
+      },
+      {
+        "file": "examples/material-showcase/src/app/snackbar-action-line-box-audit.spec.ts",
+        "sha256": "597b2c6626a648d2e76a633da304d310f751643580bc4689194d5a81ba815671"
+      },
+      {
+        "file": "scripts/audit-material-supplemental-line-boxes.mjs",
+        "sha256": "aa53612007ee7980c9c0583faabc15b97ff1d27bab811159716ee4c7df84a1b5"
+      },
+      {
+        "file": "tests/material-parity/supplemental-line-box-evidence.mjs",
+        "sha256": "8f5d2a74ff764df0394241539385f4bd18279436a45b69a48595dbfe38f9cca6"
+      },
+      {
+        "file": "examples/material-showcase/src/app/normal-letter-spacing-audit.spec.ts",
+        "sha256": "7e55f0508b9863b88a3b230af4cdd0bd85a89679f3d878952b2bdafe0311478d"
+      },
+      {
+        "file": "examples/material-showcase/src/app/label-cascade-input-audit.spec.ts",
+        "sha256": "c9a46b62b0670f5c029a5d5230cb9e856b4247ab3d4add5b1ac6a9722a5c94a2"
+      },
+      {
+        "file": "examples/material-showcase/angular.json",
+        "sha256": "b3f9cc12f51cbf366176d92efc74c722cc459d5bd0edeb635be9f74c72c05106"
+      },
+      {
+        "file": "examples/material-showcase/src/app/reference.component.ts",
+        "sha256": "debe55bc492d0fa1e48a9c7f09e1b668d435a2260588710207ab878b23c1d4aa"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/datepicker.mjs",
+        "sha256": "4908c21a6081eeaba4db6f027ef96afd42dded26b8da465b8d0a4cb6ece59d83"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/timepicker.mjs",
+        "sha256": "3db7b830e9634894882b189d2fc865b4ac4a9e72bf79da1b34454f92095c0e83"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/option-BzhYL_xC.mjs",
+        "sha256": "b0cfbc81ecd9e69b40b26b9d574495a5c5ca6069f3578a4c575a8e74527c08ca"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/snack-bar.mjs",
+        "sha256": "b2cb4da644c994dbaeb58cc40d8753fd00d76d25f20e2757f70e10d8ec49ba26"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/menu.mjs",
+        "sha256": "dd6c37afc7e0e791535c8198ed96f85970848845f23b9368460ab6b243bd9846"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/paginator.mjs",
+        "sha256": "fa5301cff98f5d1e2da13ae05d5bcf987f57a4141de6e857a55e7b0ddd67ffc3"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/dialog.mjs",
+        "sha256": "3b595559f72d5dff7d61d5db7c37d9a8f83591fe03ba6e79d357c9f01f1a9524"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/module-Ce6F7TNm.mjs",
+        "sha256": "afc1343c25397c3ffc02048dde91f9c041edf47071024c260f6eddaf8953360d"
+      },
+      {
+        "file": "examples/material-showcase/node_modules/@angular/material/fesm2022/module-CWxMD37a.mjs",
+        "sha256": "75d4207bc0b6e97105c0ff88f80c5017e4df00af13f92b5bdaa19a80bcb81a2a"
+      },
+      {
+        "file": "examples/material-showcase/src/app/theme.ts",
+        "sha256": "60a0737e357b6cf03f19256212f26f27d6a54d6153e9ee3a433246a37a39c609"
+      },
+      {
+        "file": "examples/material-showcase/src/app/showcase.store.ts",
+        "sha256": "0760fb811d25d600346ce0b063477d0237c64ac25088a5500190ce1a97146d92"
+      },
+      {
+        "file": "examples/material-showcase/src/styles.scss",
+        "sha256": "addc773ab7fadb0e0fabf498ea99b2dd45026af9e7f9c16214509d4faf290505"
+      },
+      {
+        "file": "examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts",
+        "sha256": "dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e"
+      },
+      {
+        "file": "examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts",
+        "sha256": "1d6bf44d12422208a523501b13b374faa8a127b6ed3b20d60a3eb766d385bce0"
+      },
+      {
+        "file": "examples/material-showcase/src/app/material-plugin/material-ripple.controller.ts",
+        "sha256": "a88a338b3b7780a1db3af987dc10e3b6b172a41b3d1125836ac423c57ae0ec4a"
+      },
+      {
+        "file": "tests/material-parity/benchmark.config.mjs",
+        "sha256": "a55e95abe098be26d6a99e3faab22a951ae140143fece8701726a23624b98535"
+      },
+      {
+        "file": "tests/material-parity/run-material-parity.mjs",
+        "sha256": "c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10"
+      },
+      {
+        "file": "tests/material-parity/input-tree-evidence.mjs",
+        "sha256": "06197edaf92b2296e3e0564771f307a1036ce7bc5eb13d8e242a5c420e7a7e3b"
+      },
+      {
+        "file": "tests/material-parity/input-tree-evidence.spec.mjs",
+        "sha256": "c2d0884f99fc4e1f41ac65d22b95643c8785f4fb7a339a47746bf31fe91344b3"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.mjs",
+        "sha256": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+        "sha256": "4c7b8a61582cb72da87d649999dbdf7be5dce37d05cc20e38d0ccb79dc3f74eb"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-policy.mjs",
+        "sha256": "7e939aece26dd69b846b78fc6d21aa332463b53068f488cf19343578306d80d8"
+      },
+      {
+        "file": "tests/material-parity/identity-transform-omission.spec.mjs",
+        "sha256": "604e4b5d67e88bda0aef858d2a71b73277b8678ee83605a621d52896759e0899"
+      },
+      {
+        "file": "scripts/audit-material-identity-transform.mjs",
+        "sha256": "047741461c42f5a5908252ad6a2aeca42c9899ef27bd12239b441663e5af86bc"
+      },
+      {
+        "file": "scripts/audit-material-transform-origin.mjs",
+        "sha256": "ac7899c76925c51041fa75d88b6101d079228a093048e256cfb092b12d4ae026"
+      },
+      {
+        "file": "tests/material-parity/origin-stage-inventory-evidence.mjs",
+        "sha256": "f25f65e6fd248b69edeac084a8cbb1272f542779980360e8a7bd29b6bd14bc60"
+      },
+      {
+        "file": "tests/material-parity/origin-stage-inventory-evidence.spec.mjs",
+        "sha256": "cb416aa989e7cc7bb86a8bd00e052efe677909be85528e744fecc29c265b552e"
+      },
+      {
+        "file": "tests/material-parity/origin-stage-source-binding.mjs",
+        "sha256": "f73412758feaaf36d982ea47e8cee45cfa64968e72eda51316d213c8fcc5dd55"
+      },
+      {
+        "file": "tests/material-parity/transform-origin-stage-evidence.mjs",
+        "sha256": "c8f8d0a03bf37fd5467863885c527ab674118cd954e07e4173db66528ae7b2b6"
+      },
+      {
+        "file": "tests/material-parity/origin-alias-mapping-evidence.mjs",
+        "sha256": "bd6a621438f2053d7edacc3d669e927f3306753c636849ff5df8e724b3fc472d"
+      },
+      {
+        "file": "tests/material-parity/border-initial-input-evidence.mjs",
+        "sha256": "3dbcf33ff70244a8179f438962a2549fb7e354948f084d35d433bcf82e76f9f4"
+      },
+      {
+        "file": "tests/material-parity/chip-host-typography-evidence.mjs",
+        "sha256": "50d28e5d199de05d51815be060ebf4384dde79a20af86f0137f5c33eb10c4bee"
+      },
+      {
+        "file": "tests/material-parity/field-host-typography-evidence.mjs",
+        "sha256": "91ab71ad5f8e20412c1ff94a95b167d16b8c2cddefa0f226f116666682df5c07"
+      },
+      {
+        "file": "tests/material-parity/root-typography-input-evidence.mjs",
+        "sha256": "b89ae8c280cfdeafaab9765ef17e71c80fdb4a3176e123674439c0b409edb23e"
+      },
+      {
+        "file": "tests/material-parity/root-initial-style-evidence.mjs",
+        "sha256": "1fb7dc3f6dee4c64a0e86db8cbaedee621cffe15e6ff5fb62878f37977d4fa8f"
+      },
+      {
+        "file": "tests/material-parity/root-initial-style-evidence.spec.mjs",
+        "sha256": "b1fc7ec4c17fc277d5813cc13a82f3d773827dbecae479a093c82c8d6e28fba4"
+      },
+      {
+        "file": "tests/material-parity/root-line-height-proof.spec.mjs",
+        "sha256": "86fb0c14ae9b69baad0c4dbd23ddb467c31b98301eec874dc4b15153a8bb9595"
+      },
+      {
+        "file": "tests/material-parity/root-inherited-default-proof.spec.mjs",
+        "sha256": "ed824a7bd8bbd4cc000b225f30859283fb4b0098667dd60e57576f097079851c"
+      },
+      {
+        "file": "tests/material-parity/caret-color-omission-sensitivity.spec.mjs",
+        "sha256": "055c61e9e7b378219c82cffe4bab5fc00912a4caa202794baef357f20a63ed83"
+      },
+      {
+        "file": "tests/material-parity/inherited-default-sensitivity.spec.mjs",
+        "sha256": "6f0cad24bca24388695f16ffbe90b7e45ccabef438fa6b03c13a234e24884de3"
+      },
+      {
+        "file": "tests/material-parity/root-initial-style-sensitivity.spec.mjs",
+        "sha256": "b40aa7f8c629bbe6dc2b431c96c149a2d11ea2b8afe0efd34749e1480d550e98"
+      },
+      {
+        "file": "tests/material-parity/field-host-weight-tracking-evidence.mjs",
+        "sha256": "b46820abf5356183ea99d35177fe916100458e487f6f107cf656090fa287c66e"
+      },
+      {
+        "file": "tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+        "sha256": "0eb054b63f89c949c22ad38a9e571b5fc9a384f1be171a279980e7472cf03379"
+      },
+      {
+        "file": "tests/material-parity/field-host-token-sensitivity.spec.mjs",
+        "sha256": "1712b21b5dc04393c385eeaaabadaf12faf578c4637fb7659640879dced9d8a8"
+      },
+      {
+        "file": "tests/material-parity/line-height-omission-sensitivity.spec.mjs",
+        "sha256": "8f50185a2d328a602d96ae229f6107ce7191be158400c6673bebc6d3c7ff8637"
+      },
+      {
+        "file": "tests/material-parity/root-height-input-evidence.mjs",
+        "sha256": "3cb6d793f58e383beb6871e2c76782e6b2a1b9ad706af77f0f71e8ee99d05645"
+      },
+      {
+        "file": "tests/material-parity/root-color-input-evidence.mjs",
+        "sha256": "dc99a1697ee9b7d80d9cbb23fca10c1a1408430c15a51641ed13c6387458bdf8"
+      },
+      {
+        "file": "tests/material-parity/appearance-input-evidence.mjs",
+        "sha256": "a1dbe9c34db4a2ea8844163ffd55d1b761670733600187880e42ede0c322d157"
+      },
+      {
+        "file": "tests/material-parity/normal-line-box-report.mjs",
+        "sha256": "7af2a2635cbee6a890e498aa0548de000da172a269506229b8f24c3b56ce77ee"
+      },
+      {
+        "file": "tests/material-parity/control-line-box-report.mjs",
+        "sha256": "2abb50d5b516d533fca8e3ec0e26f3228c702b04b0d8637c633103fef1f62250"
+      },
+      {
+        "file": "tests/material-parity/control-line-box-validation.mjs",
+        "sha256": "3ad55fe012d86f2f941f5364e5e10ff248019992da6b6bd6de03d87aa2e93b91"
+      },
+      {
+        "file": "tests/material-parity/supplemental-line-box-report.mjs",
+        "sha256": "e99cbf50ffa82f1091b8edc1ea044baced431bd2f6669e179369478b13ea4cce"
+      },
+      {
+        "file": "tests/material-parity/supplemental-line-box-fixtures.mjs",
+        "sha256": "9cc583aee7a07701127e678abb0110cc65828b5a05c0ecfabcb1a43ea01dad39"
+      },
+      {
+        "file": "tests/material-parity/supplemental-capture-fixtures.mjs",
+        "sha256": "a19c89ac7e2665bab8911f9f0d4f8d9bbf22a98c95e8a0591e3f5ea82620feed"
+      },
+      {
+        "file": "tests/material-parity/control-line-box-evidence.mjs",
+        "sha256": "90dd599d01a649e630e33d039acfb2ff575036b088523daf043ce98513d4f584"
+      },
+      {
+        "file": "scripts/audit-material-control-line-boxes.mjs",
+        "sha256": "e743f4e76ff48dadcf883309189053624daf7c383b2e73f6fc4288984230df71"
+      },
+      {
+        "file": "scripts/run-material-input-audit.mjs",
+        "sha256": "d3762679413b59822ad299e41425195d67b53e456e46d96dd8c217c0ec02fd9a"
+      },
+      {
+        "file": "tests/material-parity/input-audit-report-codec.mjs",
+        "sha256": "d68fdcfc63aafc9526b0ecf497645f24532782c7d1611c7f4ef0e9b1dcb6c8ed"
+      },
+      {
+        "file": "tests/material-parity/input-audit-report-codec.spec.mjs",
+        "sha256": "3a7d424e4b1ab695fbe7f92c8b90f11859eba36f4407884fc4ca7c16d0d8d350"
+      },
+      {
+        "file": "tests/material-parity/input-audit-report-stream.mjs",
+        "sha256": "3a2afb9d0ceec21fe24a24451156fb2e4902e7f8cf052a996479f83399eddc12"
+      },
+      {
+        "file": "tests/material-parity/input-audit-report-stream.spec.mjs",
+        "sha256": "5907ac58cbc0cb85301e5db09ff0fbb173b549c0bed8dd9e627a11c61e0eedf5"
+      },
+      {
+        "file": "tests/material-parity/input-audit-cli-transport.spec.mjs",
+        "sha256": "fbaf2cac9e26566643cd53d3b3a61006656586de6a9d9696c6d205b494f32b60"
+      },
+      {
+        "file": "tests/material-parity/normal-line-box-report.spec.mjs",
+        "sha256": "aab40f8f4dceb8a1478f5b0fcd59c15686593ce03eec459a357e451655d5dc9e"
+      },
+      {
+        "file": "tests/material-parity/normal-line-box-evidence.mjs",
+        "sha256": "3689d3b8c544fc0b181f90e0442a5feb64376ebae74e765ac5f0239a97c8755c"
+      },
+      {
+        "file": "scripts/audit-material-normal-line-boxes.mjs",
+        "sha256": "1c1c8770e619512bd04bd8af8172299bf28638f1d45c765c01930311ef3e5c79"
+      },
+      {
+        "file": "scripts/audit-material-button-defaults.mjs",
+        "sha256": "7d49ae0ebabace79128906ea7e9133381ede05a4baacbf55cc161b27da31a784"
+      },
+      {
+        "file": "scripts/audit-material-outline-inputs.mjs",
+        "sha256": "28f1ffca6917710225df242f14e2e46de4abf414d90efaf50478b7e1b9908422"
+      },
+      {
+        "file": "scripts/audit-material-chip-inputs.mjs",
+        "sha256": "af85fbeb9353d38ff65c289dbbbbd224e7b15f15918e142e3d2220b2c12a7337"
+      },
+      {
+        "file": "scripts/audit-material-calendar-close.mjs",
+        "sha256": "65c560e6fe322863a331dc716e7ff8419fae75376a69940131cced6f6fbefeae"
+      },
+      {
+        "file": "tests/material-parity/calendar-close-evidence.mjs",
+        "sha256": "a60954b3c553c5fbfd53da38e903aea3201138bc861325b64397aa3e10359e81"
+      },
+      {
+        "file": "scripts/audit-material-tooltip-state.mjs",
+        "sha256": "fe4c684f40ff9152dfd0da19da5ced26846390f8b05cd24dfb7377540f4e08d7"
+      },
+      {
+        "file": "tests/material-parity/tooltip-state-evidence.mjs",
+        "sha256": "a4a8a82b8608daa5dc17298bd454792ef33c6e3f3f84b65ab494ab4e15e7a66e"
+      },
+      {
+        "file": "tests/material-parity/tooltip-unpaired-style-evidence.mjs",
+        "sha256": "8d6a9d99a59f9e4cccbe7de746f2371e44a3bdf850d3ddc395022564b0575bf5"
+      },
+      {
+        "file": "tests/material-parity/slider-input-box-evidence.mjs",
+        "sha256": "406e4d0898661efa81d8e352cea37538d91b7492780529314b03379fa049fea6"
+      },
+      {
+        "file": "tests/material-parity/slider-input-box-source-binding.mjs",
+        "sha256": "f57b24f5a5d5610b443413aba32de36018b35360a2cfcd57fcce1ba6920e75cb"
+      },
+      {
+        "file": "tests/material-parity/slider-input-box-source-binding.spec.mjs",
+        "sha256": "a31c2c7e479d00d9d3fd283f55f46709164f0aeec76a1c06b5ea95f5207c970a"
+      },
+      {
+        "file": "tests/material-parity/slider-border-default-evidence.mjs",
+        "sha256": "b0d1616e0046c1b5659be9a3a86ea8e938c87d2f57dd96038e9a75929a01ecbb"
+      },
+      {
+        "file": "tests/material-parity/slider-border-default-evidence.spec.mjs",
+        "sha256": "c0982b63ce56b3895381c56874aef41c7d9c41de6256d10a7e501c5c47b3e6b8"
+      },
+      {
+        "file": "tests/material-parity/slider-border-default-source-binding.mjs",
+        "sha256": "a2cc75c92d0a595a0b1ce10005fb4be9e8519deaf4c3a3f22e5d598f13ebd584"
+      },
+      {
+        "file": "tests/material-parity/slider-border-default-source-binding.spec.mjs",
+        "sha256": "f0df784c1eed17b7db32827052d8c37177e55caa2beb6b702919123057962912"
+      },
+      {
+        "file": "tests/material-parity/slider-border-canonical-integration.spec.mjs",
+        "sha256": "fd90f24d02debc09e2f0bf6be41959005c8d28ad045c57b6f4f17fee935106af"
+      },
+      {
+        "file": "tests/material-parity/range-default-box-proof.spec.mjs",
+        "sha256": "65bd3606508028b5afd7d115049586fc4edc8601f4e816c82357a3a43924ab1a"
+      },
+      {
+        "file": "examples/material-showcase/src/app/range-default-box-audit.spec.ts",
+        "sha256": "68de22c89904ea01aafbf359a43a870b90fbcb37887f64e2ce52fbe08d61322f"
+      },
+      {
+        "file": "docs/material-range-default-box-audit.json",
+        "sha256": "40d0d90b825789337845ca65b03f9049765381bfc7bc1bfe00cd404f38df1e2f"
+      },
+      {
+        "file": "scripts/audit-material-slider-border-defaults.mjs",
+        "sha256": "fbfe1e2a206be1273d90aa2ae0ed07412b00bba091342bff59d13c701a00add8"
+      },
+      {
+        "file": "docs/material-slider-border-defaults.json",
+        "sha256": "91911d7aae0b016919452af7a989dc429a3dfbbdaf8f029ece3ce773770a8392"
+      },
+      {
+        "file": "tests/material-parity/supplemental-capture-evidence.spec.mjs",
+        "sha256": "98976d1bd23b5c95a61ffd7960b75f363d8426ad10694db5658c90f41b83843d"
+      }
+    ],
+    "allRowsSha256": "98bd104f33449d5a8b5f1b550e0ada5a5fcfb902f6f140603bcdd821a014259a",
+    "allOriginalValuesAndCasesSha256": "d5e916fb99193565c6be9a6428d8616a3ca87424d8f658d09f7df9824b693d03",
+    "allOtherRowsSha256": "9f0c508326cd86c45f099fa287dafc2e2c4e0af66e9bba4dd2e4cce5178e769d",
+    "candidateOnlyGroups": 48,
+    "candidateOnlyOccurrences": 4616,
+    "candidateOnlyAttributions": [
+      "unresolved"
+    ]
+  },
+  "reducedCase": {
+    "family": "autocomplete",
+    "staticCases": 1,
+    "interactionCases": 1,
+    "groups": 8,
+    "occurrences": 16,
+    "allScalarValuesSha256": "8c66989fb7abe305d84feb3abdb97d64cf17869e2ed187da6b95d06e1f26186f",
+    "unrelatedCompleteRows": 105,
+    "unrelatedCompleteRowsSha256": "aa3a0af27874b69dd8c54a92a4bf972ff4d34e599b60c31b1cb44d530c1b6d4e"
+  },
+  "red": {
+    "command": "node --test tests/material-parity/field-host-initial-style-integration.spec.mjs",
+    "exitCode": 1,
+    "passed": 0,
+    "failed": 2,
+    "durationMs": 2609.7292,
+    "failures": [
+      "Canonical rows have no field-host initial-style attribution.",
+      "Canonical report has no fieldHostInitialStyleInputs."
+    ]
+  },
+  "green": {
+    "command": "node --test tests/material-parity/field-host-initial-style-integration.spec.mjs",
+    "exitCode": 0,
+    "passed": 2,
+    "failed": 0,
+    "durationMs": 5563.1795
+  },
+  "sourceIndices": {
+    "changes": [
+      {
+        "file": "docs/material-container-caret-audit.json",
+        "changes": [
+          {
+            "file": "tests/material-parity/input-equivalence-audit.mjs",
+            "before": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f",
+            "after": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+          }
+        ],
+        "nonFingerprintSha256": "bc4c228d75555c8cdf726e180b7141f1f5cacf349be23c956f0d0ccbc33ba559"
+      },
+      {
+        "file": "docs/material-root-height-audit.json",
+        "changes": [
+          {
+            "file": "tests/material-parity/input-equivalence-audit.mjs",
+            "before": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f",
+            "after": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+          }
+        ],
+        "nonFingerprintSha256": "986b2bae4039d2c9e42e9147363b8b5559deae2be5ca1a856a9da722e9e1166d"
+      },
+      {
+        "file": "docs/material-field-host-color-audit.json",
+        "changes": [
+          {
+            "file": "tests/material-parity/input-equivalence-audit.mjs",
+            "before": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f",
+            "after": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+          }
+        ],
+        "nonFingerprintSha256": "12792290a0af2c53900e97ab827b7c59d0bbb92eec44af601145e8f66d17e857"
+      },
+      {
+        "file": "docs/material-root-color-audit.json",
+        "changes": [
+          {
+            "file": "tests/material-parity/input-equivalence-audit.mjs",
+            "before": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f",
+            "after": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+          }
+        ],
+        "nonFingerprintSha256": "ff2eee079e1295d97e3f51519adac2116a3cbb579ea2dcbef7c99e4a1f5c49d7"
+      },
+      {
+        "file": "docs/material-root-typography-audit.json",
+        "changes": [
+          {
+            "file": "tests/material-parity/input-equivalence-audit.mjs",
+            "before": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f",
+            "after": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+          }
+        ],
+        "nonFingerprintSha256": "2d6030e8fcf5e8b0bbd23151b82566d82ebeb8776bf12f06f87fc23746e7e187"
+      },
+      {
+        "file": "docs/material-field-host-alignment-audit.json",
+        "changes": [
+          {
+            "file": "tests/material-parity/input-equivalence-audit.mjs",
+            "before": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f",
+            "after": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+          }
+        ],
+        "nonFingerprintSha256": "0025378a8b8e240d496d58feab46a4d85be358013c72a0da1f6dccaddc807beb"
+      },
+      {
+        "file": "docs/material-field-host-typography-audit.json",
+        "changes": [
+          {
+            "file": "tests/material-parity/input-equivalence-audit.mjs",
+            "before": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f",
+            "after": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+          }
+        ],
+        "nonFingerprintSha256": "297c35c3695f97744cee5154349857b474656cf7dbeb68034607f07f00a850f3"
+      },
+      {
+        "file": "docs/material-nonwidget-appearance-audit.json",
+        "changes": [
+          {
+            "file": "tests/material-parity/input-equivalence-audit.mjs",
+            "before": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f",
+            "after": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+          }
+        ],
+        "nonFingerprintSha256": "8f264987d262d023209e0b95cdb38f543cb865b62c9370e3cbd85a872d8e636a"
+      },
+      {
+        "file": "docs/material-button-appearance-audit.json",
+        "changes": [
+          {
+            "file": "tests/material-parity/input-equivalence-audit.mjs",
+            "before": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f",
+            "after": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+          }
+        ],
+        "nonFingerprintSha256": "89489e4693e4daa72bc04fd232dc413664263dbb3c6b65146ea84918f3476eb8"
+      },
+      {
+        "file": "docs/material-generated-node-mapping-audit.json",
+        "changes": [],
+        "nonFingerprintSha256": "90285dc493acdb3eed872ae4ba873745e0507bee870659f18d4fe809efa882b3"
+      },
+      {
+        "file": "docs/material-root-initial-style-audit.json",
+        "changes": [
+          {
+            "file": "tests/material-parity/input-equivalence-audit.mjs",
+            "before": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f",
+            "after": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+          },
+          {
+            "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+            "before": "4c7b8a61582cb72da87d649999dbdf7be5dce37d05cc20e38d0ccb79dc3f74eb",
+            "after": "e115d127e5e310c250525d49fc6f8c7af273601ace631e24dea4d8b7390e282c"
+          }
+        ],
+        "nonFingerprintSha256": "a43e00eeb2d4223a28b0b6feafd91776fca883ffea15ab135a4ac2954dd83286"
+      },
+      {
+        "file": "docs/material-field-host-weight-tracking-audit.json",
+        "changes": [
+          {
+            "file": "tests/material-parity/input-equivalence-audit.mjs",
+            "before": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f",
+            "after": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
+          }
+        ],
+        "nonFingerprintSha256": "76c82d3bcca1d4e8c0f24ae08dbcce04a32d619793f0ff3d81aeb7b64fb3e012"
+      },
+      {
+        "file": "docs/material-font-relative-box-audit.json",
+        "changes": [],
+        "nonFingerprintSha256": "d1f67b678029f46b2958ac44fb5694b9bd83681cca04654f0a30251238b895a9"
+      }
+    ],
+    "unchangedNonFingerprintData": [
+      {
+        "file": "docs/material-container-caret-audit.json",
+        "nonFingerprintSha256": "bc4c228d75555c8cdf726e180b7141f1f5cacf349be23c956f0d0ccbc33ba559"
+      },
+      {
+        "file": "docs/material-root-height-audit.json",
+        "nonFingerprintSha256": "986b2bae4039d2c9e42e9147363b8b5559deae2be5ca1a856a9da722e9e1166d"
+      },
+      {
+        "file": "docs/material-field-host-color-audit.json",
+        "nonFingerprintSha256": "12792290a0af2c53900e97ab827b7c59d0bbb92eec44af601145e8f66d17e857"
+      },
+      {
+        "file": "docs/material-root-color-audit.json",
+        "nonFingerprintSha256": "ff2eee079e1295d97e3f51519adac2116a3cbb579ea2dcbef7c99e4a1f5c49d7"
+      },
+      {
+        "file": "docs/material-root-typography-audit.json",
+        "nonFingerprintSha256": "2d6030e8fcf5e8b0bbd23151b82566d82ebeb8776bf12f06f87fc23746e7e187"
+      },
+      {
+        "file": "docs/material-field-host-alignment-audit.json",
+        "nonFingerprintSha256": "0025378a8b8e240d496d58feab46a4d85be358013c72a0da1f6dccaddc807beb"
+      },
+      {
+        "file": "docs/material-field-host-typography-audit.json",
+        "nonFingerprintSha256": "297c35c3695f97744cee5154349857b474656cf7dbeb68034607f07f00a850f3"
+      },
+      {
+        "file": "docs/material-nonwidget-appearance-audit.json",
+        "nonFingerprintSha256": "8f264987d262d023209e0b95cdb38f543cb865b62c9370e3cbd85a872d8e636a"
+      },
+      {
+        "file": "docs/material-button-appearance-audit.json",
+        "nonFingerprintSha256": "89489e4693e4daa72bc04fd232dc413664263dbb3c6b65146ea84918f3476eb8"
+      },
+      {
+        "file": "docs/material-generated-node-mapping-audit.json",
+        "nonFingerprintSha256": "90285dc493acdb3eed872ae4ba873745e0507bee870659f18d4fe809efa882b3"
+      },
+      {
+        "file": "docs/material-root-initial-style-audit.json",
+        "nonFingerprintSha256": "a43e00eeb2d4223a28b0b6feafd91776fca883ffea15ab135a4ac2954dd83286"
+      },
+      {
+        "file": "docs/material-field-host-weight-tracking-audit.json",
+        "nonFingerprintSha256": "76c82d3bcca1d4e8c0f24ae08dbcce04a32d619793f0ff3d81aeb7b64fb3e012"
+      },
+      {
+        "file": "docs/material-font-relative-box-audit.json",
+        "nonFingerprintSha256": "d1f67b678029f46b2958ac44fb5694b9bd83681cca04654f0a30251238b895a9"
+      },
+      {
+        "file": "docs/material-field-host-initial-style-audit.json",
+        "nonFingerprintSha256": "6fcbb2bffc719bcda9da7064411b8145598e611e7b8d808684486a45f9816603"
+      }
+    ]
+  },
+  "canonical": {
+    "status": "generating",
+    "session": 24637,
+    "command": "node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit",
+    "expectedAttributedGroups": 48,
+    "expectedAttributedOccurrences": 4616,
+    "expectedUnresolved": 3138,
+    "expectationsVerified": false
+  },
+  "focusedVerification": {
+    "status": "completed-passed",
+    "session": 7646,
+    "command": "node --test --test-concurrency=1 --test-name-pattern=\"case index|records source fingerprints|covers every captured host|root initial-style collector|field host initial-style\" tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs tests/material-parity/field-host-initial-style-evidence.spec.mjs tests/material-parity/field-host-initial-style-integration.spec.mjs",
+    "exitCode": 0,
+    "tests": 20,
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "durationMs": 170940.7396,
+    "logBytes": 68105,
+    "logSha256": "5c07f643ed48e2c4b5f6bf469668f8a925f4725a61b0edb6ad402831fe148e16",
+    "log": "artifacts/material-parity/field-host-initial-integration-focused.log"
+  },
+  "fullHarness": {
+    "registeredSpecFiles": 39,
+    "status": "not-started"
+  },
+  "limits": [
+    "This attribution identifies mismatched diagnostic stages, not candidate computed values or accepted rendering equivalence.",
+    "All original scalar values, occurrences and unrelated complete rows must be preserved and independently verified after generation.",
+    "Standalone source survey canonicalIntegration=false means its generator does not itself verify canonical integration; the separate integration tests do.",
+    "Remaining component-token, inherited-value consumption, layout, interaction and raster defects are not waived."
+  ]
+}

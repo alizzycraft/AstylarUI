@@ -13,8 +13,22 @@ ancestry and all three candidate diagnostic stages establish that observation
 gap without claiming candidate computed values or accepted rendering parity.
 The four focused tests and exact inventory replay pass. Component typography,
 alignment, core inheritance and final rendering obligations remain independent.
-This evidence is not yet integrated into the canonical classifier or full
-package harness and does not change the canonical unresolved count.
+The canonical classifier now incorporates this evidence, with independent
+inventory replay and complete group/case/state validation. The two integration
+tests failed before the change and now pass, preserving the original scalar
+values and all 105 unrelated complete rows in the reduced proof. Both new test
+files are registered in the package harness. The
+[integration record](material-field-host-initial-style-integration.json) tracks
+full regeneration and verification; until those complete, the last verified
+canonical unresolved count remains 3,186.
+
+The combined owning checks pass **20/20**, zero skips/cancellations, in
+**170.941 seconds**, including the full field-host survey, all affected case
+indices and the 30,043-observation root-style survey. Twelve changed fingerprints
+in eleven live indices were refreshed; all non-fingerprint data in fourteen
+reviewed records, including the field-host source survey, is independently
+unchanged. The full harness now registers 39 files. These guards verify audit
+evidence and attribution, not rendered parity.
 
 ## Slider border defaults: canonical integration and index verification
 

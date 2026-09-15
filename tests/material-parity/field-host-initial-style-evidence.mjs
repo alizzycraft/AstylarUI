@@ -73,3 +73,36 @@ export function classifyFieldHostInitialStyleInput(input, property, reference, a
     justification: 'The mapped Material form-field host and its complete captured frame/section ancestry omit these inherited requests and compute the recorded defaults. Candidate page/section/field-shell authoring and all three local diagnostic stages omit them too. This establishes a computed-versus-local-declaration observation gap, not candidate computed values, missing authoring or accepted rendering equivalence. Component font/size/line-height/weight/tracking and alignment requests remain independently unequal. Preserve descendant inheritance, wrapping, hit testing, visibility and raster obligations; do not add initial declarations to the candidate or equate omission with the reference keyword.',
   };
 }
+
+export function validateFieldHostInitialStyleInputs(report, canonicalStyle) {
+  const errors = [], supplied = report.fieldHostInitialStyleInputs;
+  const replayed = collectFieldHostInitialStyleInputs(report.elementInventory, canonicalStyle);
+  if (!Array.isArray(supplied) || supplied.length !== replayed.length ||
+      replayed.some((proof, i) => !isDeepStrictEqual(proof, supplied[i])))
+    errors.push('field host initial-style evidence does not replay from captured ancestry and declaration stages');
+  const expected = new Map(), key = p => JSON.stringify([p.family, p.element, p.property, p.values.reference]);
+  for (const proof of replayed) {
+    const id = key(proof);
+    if (!expected.has(id)) expected.set(id, []);
+    expected.get(id).push(proof);
+  }
+  const seen = new Set();
+  for (const row of report.discrepancies) {
+    const id = JSON.stringify([row.family, row.element, row.property, row.reference]);
+    const proofs = expected.get(id);
+    if (!proofs && row.attribution !== fieldHostInitialStyleAttribution) continue;
+    const cases = proofs?.map(p => p.case) ?? [];
+    const witness = proofs?.find(p => p.case === row.reviewEvidence?.case);
+    const states = [...new Set(cases.map(c => c.startsWith('static:') ? 'static' : c.split('/').slice(2).join('/')))];
+    if (!proofs || seen.has(id) || row.attribution !== fieldHostInitialStyleAttribution ||
+        row.classification !== 'parity-harness-defect' || row.astylar !== undefined ||
+        !witness || !isDeepStrictEqual(row.reviewEvidence, witness) ||
+        row.occurrences !== cases.length || !isDeepStrictEqual(row.reviewedCases, cases) ||
+        !isDeepStrictEqual(row.cases, cases.slice(0, 12)) || !isDeepStrictEqual(row.states, states))
+      errors.push('field host initial-style attribution lacks exact values, replayed evidence and complete unique case coverage');
+    seen.add(id);
+  }
+  if ([...expected.keys()].some(id => !seen.has(id)))
+    errors.push('field host initial-style attribution is missing a captured property group');
+  return errors;
+}

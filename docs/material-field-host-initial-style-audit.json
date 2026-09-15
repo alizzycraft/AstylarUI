@@ -8,7 +8,7 @@
   "sourceFingerprints": [
     {
       "file": "docs/material-field-host-typography-audit.json",
-      "sha256": "0cde9d0f6e7c07c5af664a81c68c10e7b4ad9fd4e04fb3471d92d4f98caa12be"
+      "sha256": "0582edb44e926c36c70e9106d8f240cccf707d8f011d663797ae0a5c07ab02ce"
     },
     {
       "file": "scripts/audit-material-field-host-initial-styles.mjs",
@@ -16,7 +16,7 @@
     },
     {
       "file": "tests/material-parity/field-host-initial-style-evidence.mjs",
-      "sha256": "7d19432a8f77a9d850cf0a67466d9c7663e4a7a4d91062ed0d9fb77904832adf"
+      "sha256": "16add5a9814a5053b93c37b7a8f8e5b6346d9159bcc4738b5afe859e3e6ead3b"
     },
     {
       "file": "tests/material-parity/field-host-initial-style-evidence.spec.mjs",
@@ -36,7 +36,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "27958f41f369adb409b63891852006fd9939a2d45d5e98b791d80b95102a867f"
+      "sha256": "48b06153954aaf60b43aea1b53ec3cddfcaec024352168886e63416beceded88"
     }
   ],
   "caseCount": 577,
