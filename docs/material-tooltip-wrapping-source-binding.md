@@ -103,3 +103,27 @@ surveys/captures that compare those whole-file hashes against current source
 will now require explicit provenance review or replay. Their stored hashes and
 observations have not been silently refreshed. Final full-harness, canonical
 no-write and enforced parity acceptance remain pending.
+
+## Full-report regeneration and conservation verified
+
+The subsequent canonical regeneration finished with exit 1 only for **2,810
+unattributed groups**. Coverage remains 436/436 static and 1,875/1,875 interaction
+cases, with 8,339 differences, 386,891 occurrences and 132 source findings.
+Input equivalence remains false.
+
+`node scripts/verify-material-tooltip-wrapping-integration.mjs` now exits 0.
+Against the immutable pre-integration report at `65487aeba6a26f9715f302f92b4ee454161a94ef`,
+it proves all **8,339 scalar rows** and **8,337 unrelated complete rows** unchanged.
+The latter projection has SHA-256
+`fb9f92a8d674363d6e7892c6e79be78bafc8bd80fff21ac17fbbdc555aa3fc53`.
+Exactly two wrapping groups / 36 observations across 18 independently bound
+owners change attribution. The source inventory retains all 156 prior entries,
+adds the six declared dependencies, and changes only the main audit module and
+its inventory test among existing entries. Current source digests are verified.
+
+The regenerated compressed report SHA-256 is
+`14de1c5cca7afb08f6295e38c735f7053676c1375d3842b43d79c3fec07b97ab`.
+The complete canonical `--check` replay has been launched with the same original
+and supplemental report paths as the command above; its terminal result remains
+pending. Conservation is not a substitute for that replay, the final full
+harness, enforced parity matrix, or resolving the remaining audit uncertainty.

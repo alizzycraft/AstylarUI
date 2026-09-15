@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Current canonical tooltip-wrapping checkpoint
+
+The [tooltip-wrapping integration](material-tooltip-wrapping-source-binding.md#full-report-regeneration-and-conservation-verified)
+has now reached verified full-report regeneration. Exactly two groups / 36
+observations gain independently source-bound authoring attribution; all 8,339
+measured rows and 8,337 unrelated complete classification records are unchanged.
+Strict audit acceptance still fails for **2,810 unattributed groups**. These
+counts describe evidence gaps, not a count of confirmed renderer defects.
+The complete canonical no-write replay is running; full harness and final
+enforced parity acceptance remain outstanding. Older checkpoints below retain
+their historical counts and failures.
+
 ## Historical overlay-source replay correction
 
 The [91-state original overlay survey](material-original-overlay-context-survey.md#historical-source-receipt-and-current-replay)
