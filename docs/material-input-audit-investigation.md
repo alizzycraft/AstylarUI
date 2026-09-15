@@ -28,9 +28,16 @@ records and capture digests remain untouched.
 The combined owning checks now pass **16/16**, zero skips, in **172.561 seconds**,
 including the complete 30,043-observation root-style collector, the field-host
 weight/tracking inventory, existing case indices and the new integration guards.
-The package harness now registers 37 spec files. Full canonical regeneration
-is running; complete-row conservation and the post-integration unfiltered
-harness remain pending, so no new canonical unresolved count is claimed yet.
+The package harness now registers 37 spec files and its unfiltered run is active
+at `88ce462`. Canonical regeneration finished with only **3,186 unresolved**
+attributions (exit 1), down by exactly 24. All 8,339 groups / 386,891 occurrences
+retain their original values and sampled case/state lists; all **8,315 unrelated
+complete rows** retain their full digest. Only the 24 slider-border groups /
+1,872 occurrences gain the source-backed default-policy attribution.
+All 143 source fingerprints verify. Independent streaming decompression verifies
+the complete 1,600,132,409-byte payload and its recorded SHA-256; the compressed
+payload is 46,436,210 bytes. The separate canonical `--check` and post-integration
+full harness remain running. This is attribution progress, not rendering parity.
 
 Implementation priority within the slider investigation: resolve the core
 input-subtype default policy and reconcile the catalog's claim, using the shared
