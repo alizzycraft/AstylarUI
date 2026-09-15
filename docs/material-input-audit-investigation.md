@@ -48,6 +48,37 @@ groups unchanged**. Integrating these per-owner property observations requires
 the same original-capture binding, full scalar-row conservation and independent
 replay used for the tooltip attribution. No renderer or fixture fix is included.
 
+### Slider source-binding and row-conservation guard
+
+`slider-input-box-source-binding.mjs` now supplies that independently replayed
+binding and narrow five-property classification contract. It reads the complete
+original slider population, checks every paired tree digest, retains rejected
+owners in the capture inventory, and allows attribution only for inspected
+native-input padding and box-sizing requests. It rejects missing/replaced source
+population, escaped source paths, duplicate case identity, altered retained
+evidence, and missing/duplicated/reclassified rows. The other slider properties
+remain outside its attribution scope.
+
+The two slider spec files pass **7/7 tests**, including an independent replay of
+all **78 cases / 156 owners / 780 property occurrences** against the previously
+checked inventory. These observations form **14 distinct property/value groups**
+under the tested padding expansion. The source-binding spec is registered in
+`parity:harness:check` alongside the original box-evidence spec.
+
+The first draft of the test's deliberately limited normalization callback
+overwrote explicit padding longhands with the reference's two-value shorthand,
+producing 18 rather than 14 groups. The failing original-capture test exposed
+that test-helper error. The helper now preserves existing longhands and expands
+only a uniform shorthand when a longhand is absent; original captures and
+recorded values are unchanged. Production canonicalization must still be used
+and verified when integrating this guard into the main audit.
+
+This guard is **not yet wired into the canonical collector or validator**.
+Therefore it does not reduce the canonical 3,224 unresolved groups, prove slider
+rendering/interaction parity, or satisfy the pending full-harness and enforced
+browser-matrix gates. The [guard verification record](material-slider-box-binding-verification.json)
+records the focused command and source fingerprints.
+
 ## Candidate-only tooltip scalar styles share an unequal-state owner
 
 The [focused verification](material-tooltip-unpaired-style-verification.json)

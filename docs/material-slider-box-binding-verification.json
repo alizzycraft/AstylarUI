@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "kind": "slider-native-box-source-binding-verification",
+  "baselineCommit": "80c23cb",
+  "scope": "Original capture binding and scalar classification guard; not yet integrated into the canonical audit.",
+  "command": "node --test tests/material-parity/slider-input-box-evidence.spec.mjs tests/material-parity/slider-input-box-source-binding.spec.mjs",
+  "exitCode": 0,
+  "tests": 7,
+  "passed": 7,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 4546.8008,
+  "originalEvidence": {
+    "file": "docs/material-slider-input-boxes.json",
+    "sha256": "f05bbfac3be5b37526542aa7b46a468eee300b1cd5aead8adb970dd8924961a7",
+    "cases": 78,
+    "owners": 156,
+    "propertyOccurrences": 780,
+    "testedGroups": 14
+  },
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/slider-input-box-source-binding.mjs",
+      "normalizedLfSha256": "f57b24f5a5d5610b443413aba32de36018b35360a2cfcd57fcce1ba6920e75cb"
+    },
+    {
+      "file": "tests/material-parity/slider-input-box-source-binding.spec.mjs",
+      "normalizedLfSha256": "a9f980bf15f5688d67ab3adf02613276cd408a6dc255036f7ebe77c76d570f60"
+    },
+    {
+      "file": "tests/material-parity/slider-input-box-evidence.mjs",
+      "normalizedLfSha256": "406e4d0898661efa81d8e352cea37538d91b7492780529314b03379fa049fea6"
+    },
+    {
+      "file": "tests/material-parity/slider-input-box-evidence.spec.mjs",
+      "normalizedLfSha256": "078342498ca02d34ddfe46ee17fbcab58e88b4353c0a2957d522fb5202c20347"
+    },
+    {
+      "file": "package.json",
+      "normalizedLfSha256": "671440d454902bbc8cd044ddb8205649df7d8b422db9ca2d67fc28bb19f8c174"
+    }
+  ],
+  "limitations": [
+    "Canonical collector/validator integration and production canonicalization replay remain pending.",
+    "No renderer fixes, comparison rewrites or new browser runs.",
+    "Canonical unresolved group count remains 3224; complete enforced parity matrix remains pending."
+  ],
+  "inputEquivalent": false,
+  "finalRasterVerified": false
+}
