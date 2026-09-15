@@ -13,6 +13,8 @@ import { fieldHostTypographyAttribution, collectFieldHostTypographyInputs, class
   fieldHostAlignmentAttribution, collectFieldHostAlignmentInputs, classifyFieldHostAlignmentInput } from './field-host-typography-evidence.mjs';
 import { rootTypographyAttribution, collectRootTypographyInputs, classifyRootTypographyInput } from './root-typography-input-evidence.mjs';
 import { rootInitialStyleAttribution, collectRootInitialStyleInputs, classifyRootInitialStyleInput } from './root-initial-style-evidence.mjs';
+import { originStageAttribution, collectOriginStageEvidence, classifyOriginStageInput, validateOriginStageEvidence } from './origin-stage-inventory-evidence.mjs';
+import { bindOriginStageSource, validateOriginStageSource } from './origin-stage-source-binding.mjs';
 import { fieldHostWeightTrackingAttribution, collectFieldHostWeightTrackingInputs, classifyFieldHostWeightTrackingInput } from './field-host-weight-tracking-evidence.mjs';
 import { rootHeightAttribution, collectRootHeightInputs, classifyRootHeightInput,
   rootBoxSizingAttribution, hasRootBoxSizingWitness, classifyRootBoxSizingInput } from './root-height-input-evidence.mjs';
@@ -120,6 +122,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const fieldHostTypographyInputs = collectFieldHostTypographyInputs(elementInventory, canonicalStyle, typographySelectorCanApply);
   const rootTypographyInputs = collectRootTypographyInputs(elementInventory, canonicalStyle, typographySelectorCanApply);
   const rootInitialStyleInputs = collectRootInitialStyleInputs(elementInventory);
+  const originStageBinding = bindOriginStageSource(parityReport, { root, parityPath: options.parityPath });
+  const originStageEvidence = collectOriginStageEvidence(originStageBinding.status === 'bound' ? cases : [], elementInventory, canonicalStyle);
   const rootHeightInputs = collectRootHeightInputs(rootTypographyInputs, canonicalStyle);
   const rootColorInputs = collectRootColorInputs(rootTypographyInputs, canonicalStyle);
   const fieldColorInputs = collectFieldColorInputs(fieldHostTypographyInputs, rootColorInputs, canonicalStyle);
@@ -151,7 +155,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -228,6 +232,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     fieldHostTypographyInputs,
     rootTypographyInputs,
     rootInitialStyleInputs,
+    originStageBinding,
+    originStageEvidence,
     rootHeightInputs,
     rootColorInputs,
     fieldColorInputs,
@@ -248,6 +254,13 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
+  if (report.originStageBinding?.status === 'bound') {
+    errors.push(...validateOriginStageEvidence(report.originStageEvidence, report.elementInventory, report.discrepancies, canonicalStyle));
+    errors.push(...validateOriginStageSource(report.originStageBinding, report.originStageEvidence, { root, canonicalStyle }));
+  } else if (requireComplete || report.originStageBinding?.status === 'invalid' ||
+      report.originStageEvidence?.observations?.length || report.discrepancies?.some(d => d.attribution === originStageAttribution)) {
+    errors.push('origin stage attribution lacks independently bound original capture evidence');
+  }
   if (report.schemaVersion !== materialInputAuditSchemaVersion) errors.push('unexpected audit schema version');
   if (JSON.stringify(report.reviewedValueNormalizations) !== JSON.stringify(reviewedValueNormalizations)) {
     errors.push('reviewed value normalizations lack the current exact property, scope and evidence policy');
@@ -1003,6 +1016,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     'Counts are review signatures, not counts of confirmed renderer bugs. Browser computed styles include used pixel values, while Astylar resolved styles can retain percentages, auto sizes, and track expressions. Those unresolved comparisons are reported as harness normalization gaps, not accepted equivalence.',
     '',
+    `Origin-stage evidence: source binding is ${report.originStageBinding?.status ?? 'missing'}; ${report.originStageEvidence?.observations.filter(o => o.status === 'observed-declaration-stage-gap').length ?? 0} observations establish only a browser-used versus candidate-declaration stage distinction. Original report and tree replay protect full case coverage. Motion/explicit-origin cases remain unresolved; no candidate used origin, reference-box equality or rendered equivalence is inferred.`,
+    '',
     `Evidence: complete enforced parity report with ${report.generatedFrom.browser?.name ?? 'browser'} ${report.generatedFrom.browser?.version ?? ''}.`,
     '',
     '## Verdict',
@@ -1145,7 +1160,9 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs) {
+function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs) {
+  const originByCaseId = new Map(originStageEvidence.observations.filter(p => p.status === 'observed-declaration-stage-gap')
+    .map(p => [JSON.stringify([p.case, p.element]), p]));
   const fieldWeightTrackingByCaseIdProperty = new Map(fieldHostWeightTrackingInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const rootInitialByCaseIdProperty = new Map(rootInitialStyleInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
   const fieldAlignmentByCaseId = new Map(fieldHostAlignmentInputs.map(p => [JSON.stringify([p.case, p.element]), p]));
@@ -1183,7 +1200,9 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
         const classification = benchmarkCase.state && input.reference && input.astylar && input.astylarResolvedStyleEvidenceVersion !== 2
           ? { classification: 'parity-harness-defect', owner: 'audit effective pseudo-state style capture',
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
-          : classifyAppearanceInitialInput(input, property, referenceValue, astylarValue,
+          : classifyOriginStageInput(input, property, referenceValue, astylarValue,
+              originByCaseId.get(JSON.stringify([key, input.id])))
+            ?? classifyAppearanceInitialInput(input, property, referenceValue, astylarValue,
               appearanceByCaseId.get(JSON.stringify([key, input.id])))
             ?? classifyButtonAppearanceInput(input, property, referenceValue, astylarValue,
               buttonAppearanceByCaseId.get(JSON.stringify([key, input.id])))
@@ -1247,7 +1266,7 @@ function collectStyleDiscrepancies(cases, retainedTypography, visibleOverflowInp
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
-            ...([borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
+            ...([originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
               'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, fieldHostAlignmentAttribution, fieldHostWeightTrackingAttribution, rootTypographyAttribution, rootInitialStyleAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution, rootBoxSizingAttribution, containerCaretAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
@@ -8023,6 +8042,11 @@ function sourceFingerprints(root) {
     'tests/material-parity/identity-transform-omission.spec.mjs',
     'scripts/audit-material-identity-transform.mjs',
     'scripts/audit-material-transform-origin.mjs',
+    'tests/material-parity/origin-stage-inventory-evidence.mjs',
+    'tests/material-parity/origin-stage-inventory-evidence.spec.mjs',
+    'tests/material-parity/origin-stage-source-binding.mjs',
+    'tests/material-parity/transform-origin-stage-evidence.mjs',
+    'tests/material-parity/origin-alias-mapping-evidence.mjs',
     'tests/material-parity/border-initial-input-evidence.mjs',
     'tests/material-parity/chip-host-typography-evidence.mjs',
     'tests/material-parity/field-host-typography-evidence.mjs',
@@ -8073,6 +8097,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/origin-stage-inventory-evidence.spec.mjs', /test\('origin stage source binding rejects/,
+      'origin declaration-stage attribution with independent original capture coverage', 'The original parity report and each paired source tree are hash-checked independently of report-retained evidence. Complete scalar/case selection and every proof disposition must match the original capture; removing both a retained capture and its attribution cannot satisfy validation. Pooled inventory replay separately rejects changed ownership, stages and equivalence claims. Attribution remains a browser-used versus candidate-declaration measurement gap, never a used-origin or rendering-equivalence claim. Motion and explicit origin contexts remain unresolved.'),
     proof(root, 'tests/material-parity/identity-transform-omission.spec.mjs', /test\('inactive transforms cannot/,
       'inactive transforms do not establish origin omission equivalence', 'Explicit and unproven origin requests remain unresolved when the candidate declaration is omitted, even under none or an identity matrix. Matching explicit inputs remain comparable. The full 6938-observation scalar exposure is retained; independent DPR1/2 browser request controls reproduce the historical false waiver while the corrected collector rejects it. Default-center controls remain geometrically equal, but no candidate computed origin, complete captured cascade, reference-box equivalence or renderer parity is invented. Full-tree population attribution is separate.'),
     proof(root, 'examples/material-showcase/src/app/identity-transform-context-audit.spec.ts', /describe\('Material audit: identity transform context semantics/,

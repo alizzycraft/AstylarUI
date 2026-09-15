@@ -3,6 +3,38 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Origin stage attribution integrated with independent capture coverage
+
+The [integration verification](material-origin-stage-integration-verification.json)
+records a complete, unchanged-capture main audit replay. All **8,339 difference
+groups / 386,891 observations** remain present. **528 origin groups / 5,570
+observations** now receive the guarded `reviewed-origin-declaration-stage`
+attribution. Unresolved groups fall from **3,800 to 3,272**; all **587 origin
+groups / 6,938 observations** remain visible and none is declared equivalent.
+
+The builder binds selected scalar cases and tree references to the original
+parity report. Validation independently checks its digest, exact case/scalar
+coverage and every paired tree digest before replaying each proof. A report that
+deletes matching captures and attributions can be internally consistent, but is
+rejected by this external source comparison. Pooled inventory replay remains a
+separate check. No-source diagnostic reports receive no new origin attribution;
+strict acceptance requires source binding.
+
+Focused evidence passes **4/4 new integration tests**, **8/8 origin/identity
+regressions**, and **18/18 prior audit regressions**. Main source inventory grows
+to **129** fingerprints; **132** source findings remain unchanged. Twelve rolling
+indexes update only thirteen top-level fingerprint fields, with **85 hashes**
+verified and historical/body data unchanged. The full replay exits 0 because its
+assertions expect the honest strict rejection: **3,272 resolved-style differences
+still lack root-cause attribution**. This is not audit or output-parity acceptance.
+
+The **1,368 unresolved origin observations / 59 signatures** still need analysis:
+1,350 motion contexts and 18 tooltip cases with `center top` on the immediate
+tooltip ancestor, not on the measured surface. No default, used-origin, reference
+box or final-raster claim follows from the new attribution. Renderer, canonical
+fixtures and frozen capture files are untouched. Current canonical regeneration,
+the complete harness and the unfiltered enforced parity matrix remain pending.
+
 ## Origin stage proof: pooled-inventory bridge registered and verified
 
 The [bridge verification](material-origin-stage-inventory-verification.json)

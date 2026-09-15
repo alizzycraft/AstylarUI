@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-bound-origin-stage-main-integration",
+  "baselineCommit": "3c320ec",
+  "scope": "Main audit collector/classifier/validator integration only. Original captures, renderer and canonical fixtures unchanged; canonical payload regeneration remains pending.",
+  "capture": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+  },
+  "verification": [
+    {
+      "command": "node --test tests/material-parity/origin-stage-inventory-evidence.spec.mjs",
+      "exitCode": 0,
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "durationMs": 154276.9947,
+      "result": "Complete 6938-observation pooled/raw proof agreement; JSON replay; malformed provenance and forged claims rejected; independently bound source rejects an internally consistent shortened report."
+    },
+    {
+      "command": "node --test --test-concurrency=1 tests/material-parity/identity-transform-omission.spec.mjs",
+      "exitCode": 0,
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "durationMs": 56355.1332,
+      "result": "Scalar-only omissions stay unresolved; previous origin/identity false-waiver browser controls and public fixed-containing-block evidence remain intact."
+    },
+    {
+      "command": "node --test --test-concurrency=1 --test-name-pattern='root initial-style|case index|records source fingerprints|covers every captured host|normalizes browser-used' tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+      "exitCode": 0,
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "durationMs": 224066.4077,
+      "result": "Prior case-index, source-inventory, field-host and root-initial-style proofs pass."
+    },
+    {
+      "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{execFileSync}from'node:child_process';import{createHash}from'node:crypto';const files=['docs/material-button-appearance-audit.json','docs/material-field-host-alignment-audit.json','docs/material-container-caret-audit.json','docs/material-field-host-weight-tracking-audit.json','docs/material-field-host-color-audit.json','docs/material-field-host-typography-audit.json','docs/material-root-height-audit.json','docs/material-root-typography-audit.json','docs/material-root-color-audit.json','docs/material-line-height-omission-audit.json','docs/material-nonwidget-appearance-audit.json','docs/material-root-initial-style-audit.json'];let fingerprints=0,changed=0;for(const file of files){const before=JSON.parse(execFileSync('git',['show','HEAD:'+file],{encoding:'utf8',maxBuffer:50000000}));const after=JSON.parse(readFileSync(file));assert.deepEqual(before.sourceFingerprints.map(f=>f.file),after.sourceFingerprints.map(f=>f.file));for(const [i,f]of after.sourceFingerprints.entries()){assert.equal(createHash('sha256').update(readFileSync(f.file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex'),f.sha256,f.file);fingerprints++;if(f.sha256!==before.sourceFingerprints[i].sha256)changed++;}delete before.sourceFingerprints;delete after.sourceFingerprints;assert.deepEqual(after,before,file+' historical/body evidence changed');}console.log(JSON.stringify({indices:files.length,fingerprints,changedFingerprintFields:changed,historicalAndBodyEvidenceUnchanged:true}));\"",
+      "exitCode": 0,
+      "result": {
+        "indices": 12,
+        "fingerprints": 85,
+        "changedFingerprintFields": 13,
+        "historicalAndBodyEvidenceUnchanged": true
+      }
+    },
+    {
+      "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const bytes=readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');assert.equal(createHash('sha256').update(bytes).digest('hex'),'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');const audit=buildMaterialInputAudit(JSON.parse(bytes),{root:process.cwd(),parityPath:'artifacts/material-parity/current-ancestry-audit/latest-report.json',normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});assert.equal(audit.sourceFingerprints.length,129);assert.equal(audit.sourceFindings.length,132);assert.equal(audit.summary.totalStyleDifferenceOccurrences,386891);assert.ok(audit.summary.unresolvedAttributions<3800);const origins=audit.discrepancies.filter(d=>d.property==='transformOrigin'&&d.astylar===undefined);assert.ok(origins.every(d=>d.classification!=='equivalent-representation'));const errors=validateMaterialInputAudit(audit);assert.deepEqual(errors,[audit.summary.unresolvedAttributions+' resolved-style differences still lack root-cause attribution']);console.log(JSON.stringify({summary:audit.summary,sourceFingerprintCount:audit.sourceFingerprints.length,originGroups:origins.length,originOccurrences:origins.reduce((n,d)=>n+d.occurrences,0),originAttributions:[...new Set(origins.map(d=>d.attribution??'<none>'))],errors,scope:'Complete unchanged frozen capture; source-bound origin stage integration, no renderer/fixture changes or report writes'}));\"",
+      "exitCode": 0,
+      "result": {
+        "summary": {
+          "inputEquivalent": false,
+          "structureDifferences": 88,
+          "uniqueStyleDifferences": 8339,
+          "totalStyleDifferenceOccurrences": 386891,
+          "classifications": {
+            "application-plugin-authoring-defect": 526,
+            "equivalent-representation": 2088,
+            "intentional-documented-limitation": 312,
+            "parity-harness-defect": 5413
+          },
+          "propertyGroups": {
+            "interaction": 351,
+            "layout": 3106,
+            "other": 351,
+            "paint": 1255,
+            "transform": 937,
+            "typography": 2339
+          },
+          "affectedFamilies": {
+            "autocomplete": 147,
+            "badge": 282,
+            "bottom-sheet": 412,
+            "button": 305,
+            "button-toggle": 260,
+            "card": 376,
+            "checkbox": 220,
+            "chips": 317,
+            "core": 145,
+            "datepicker": 147,
+            "dialog": 487,
+            "divider": 300,
+            "expansion": 264,
+            "form-field": 147,
+            "grid-list": 278,
+            "icon": 128,
+            "input": 147,
+            "list": 149,
+            "menu": 150,
+            "paginator": 269,
+            "progress-bar": 130,
+            "progress-spinner": 124,
+            "radio": 304,
+            "select": 147,
+            "sidenav": 128,
+            "slide-toggle": 190,
+            "slider": 331,
+            "snack-bar": 262,
+            "sort": 151,
+            "stepper": 341,
+            "table": 142,
+            "tabs": 342,
+            "timepicker": 147,
+            "toolbar": 273,
+            "tooltip": 249,
+            "tree": 148
+          },
+          "unclassifiedDifferences": 0,
+          "unresolvedAttributions": 3272,
+          "sourceFindings": 132,
+          "unexplainedSourceFindings": 0,
+          "undetectedSourceDefinitions": 0
+        },
+        "sourceFingerprintCount": 129,
+        "originGroups": 587,
+        "originOccurrences": 6938,
+        "originAttributions": [
+          "reviewed-origin-declaration-stage",
+          "unresolved"
+        ],
+        "errors": [
+          "3272 resolved-style differences still lack root-cause attribution"
+        ],
+        "scope": "Complete unchanged frozen capture; source-bound origin stage integration, no renderer/fixture changes or report writes"
+      }
+    }
+  ],
+  "attributionEffect": {
+    "beforeUnresolvedGroups": 3800,
+    "afterUnresolvedGroups": 3272,
+    "newlyAttributedOriginGroups": 528,
+    "originGroups": 587,
+    "originObservations": 6938,
+    "stageGapObservations": 5570,
+    "unresolvedOriginObservations": 1368,
+    "remainingOriginGroups": 59,
+    "inputEquivalent": false,
+    "totalDifferenceGroupsUnchanged": 8339,
+    "totalOccurrencesUnchanged": 386891
+  },
+  "boundaries": {
+    "originalSource": "The builder requires parityPath and checks selected scalar cases plus paired tree references against that original report. Validation checks its raw digest, all original selected case/scalar coverage and every referenced tree digest, then recomputes proof dispositions. Only pooled rule indices are excluded from cross-inventory proof comparison.",
+    "unbound": "Synthetic or in-memory reports without an original source path receive no new origin attribution. Strict acceptance rejects missing source binding; invalid source binding is rejected even in partial mode.",
+    "notEquivalence": "The new classification is parity-harness-defect: browser-used origin pixels versus candidate declaration stages. It does not assert a candidate used origin, reference-box match, default semantics or rendering.",
+    "guarded": "1350 motion contexts and 18 tooltip explicit-ancestor-origin contexts remain unresolved. The latter all have center top on the immediate .mat-mdc-tooltip ancestor, not the measured .mat-mdc-tooltip-surface itself; separate ownership/non-inheritance analysis remains pending.",
+    "historical": "12 rolling indexes refresh only 13 top-level source-fingerprint fields, with all 85 fingerprints verified and historical/body evidence unchanged. Older origin survey verification records remain historical source-pinned observations, not claims that their --check payload fingerprints match this later classifier revision."
+  },
+  "pending": [
+    "Resolve the remaining 3272 attributed-unknown style groups, including 59 origin signatures, without hiding material input differences.",
+    "Regenerate and --check the current canonical machine/human reports.",
+    "Run the complete registered harness and unfiltered enforced parity matrix after audit changes; focused tests and replay are not release acceptance."
+  ],
+  "developmentNotes": [
+    "The first read-only fingerprint-update command failed because PowerShell did not interpret backslash-escaped JavaScript quotes. It made no edits. The corrected literal-path command succeeded; applied changes were independently verified."
+  ],
+  "previousGoalTurn": "Progress: 3c320ec was committed and pushed with the verified inventory bridge. This increment integrates it with independently bound source coverage.",
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/origin-stage-source-binding.mjs",
+      "sha256": "f73412758feaaf36d982ea47e8cee45cfa64968e72eda51316d213c8fcc5dd55"
+    },
+    {
+      "file": "tests/material-parity/origin-stage-inventory-evidence.mjs",
+      "sha256": "f25f65e6fd248b69edeac084a8cbb1272f542779980360e8a7bd29b6bd14bc60"
+    },
+    {
+      "file": "tests/material-parity/origin-stage-inventory-evidence.spec.mjs",
+      "sha256": "cb416aa989e7cc7bb86a8bd00e052efe677909be85528e744fecc29c265b552e"
+    },
+    {
+      "file": "tests/material-parity/transform-origin-stage-evidence.mjs",
+      "sha256": "c8f8d0a03bf37fd5467863885c527ab674118cd954e07e4173db66528ae7b2b6"
+    },
+    {
+      "file": "tests/material-parity/origin-alias-mapping-evidence.mjs",
+      "sha256": "bd6a621438f2053d7edacc3d669e927f3306753c636849ff5df8e724b3fc472d"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "4ac313dae0ff6dde2ddb0023902223ddf2c35ff2dce6d364084c3535935cb93e"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+      "sha256": "9ff7ee860c0d984fdbca0159c8bdf07cc88186f3891a9fcc5c2ba909baed838a"
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { collectOriginStageEvidence, classifyOriginStageInput, validateOriginStageEvidence, originStageTrees } from './origin-stage-inventory-evidence.mjs';
+import { bindOriginStageSource, validateOriginStageSource } from './origin-stage-source-binding.mjs';
 
 const sha = x => createHash('sha256').update(x).digest('hex');
 const survey = JSON.parse(readFileSync('docs/material-transform-origin-stage-survey.json'));
@@ -85,4 +86,24 @@ test('origin stage inventory bridge refuses incomplete or duplicate case provena
   const missing = collectOriginStageEvidence([capture], { schemaVersion: 1 });
   assert.ok(missing.observations.length);
   assert.ok(missing.observations.every(o => o.status === 'unresolved' && o.reason === 'missing paired inventory evidence'));
+});
+
+test('origin stage source binding rejects self-consistent deletion and altered original provenance', () => {
+  const binding = bindOriginStageSource(raw, { parityPath: survey.capturePath });
+  assert.equal(binding.status, 'bound'); assert.equal(binding.observations, 6938);
+  assert.deepEqual(validateOriginStageSource(binding, evidence), []);
+  assert.deepEqual(validateOriginStageSource(binding, JSON.parse(JSON.stringify(evidence))), []);
+  // This smaller report is internally consistent. Only independent original
+  // capture binding can establish that most observed cases have been removed.
+  const reduced = collectOriginStageEvidence([evidence.captures[0]], inventory);
+  assert.deepEqual(validateOriginStageEvidence(reduced, inventory, toDifferences(reduced)), []);
+  assert.match(validateOriginStageSource(binding, reduced).join('\n'), /coverage differs from original capture/);
+  for (const changed of [{ ...binding, sha256: '0'.repeat(64) }, { ...binding, observations: 1 },
+    { ...binding, file: 'package.json' }, { ...binding, status: 'unbound' }])
+    assert.ok(validateOriginStageSource(changed, evidence).length);
+  const forged = { ...evidence, observations: evidence.observations.map((o, index) => index ? o : { ...o, status: 'unresolved', reason: 'invented' }) };
+  assert.match(validateOriginStageSource(binding, forged).join('\n'), /proof differs from original source/);
+  const changedRaw = { ...raw, results: raw.results.slice(1) };
+  assert.equal(bindOriginStageSource(changedRaw, { parityPath: survey.capturePath }).status, 'invalid');
+  assert.equal(bindOriginStageSource(raw).status, 'unbound');
 });
