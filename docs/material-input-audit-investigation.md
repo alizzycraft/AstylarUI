@@ -24,7 +24,9 @@ test-source hashes changed. The full rerun finished 709/710: one remaining
 root-survey source fingerprint was stale. Its one-field metadata correction
 preserves the entire survey, and the failing original-capture test now passes
 in isolation. The full result remains recorded as failing; final unfiltered
-acceptance is still required. The new no-write replay remains live. The linked
+acceptance is still required. The new no-write replay is now terminal: exit 1
+only for the same 2,812 unattributed groups, with no stale-report/source or
+source-binding errors. The linked
 integration record retains the failures, corrections and exact hashes.
 
 ## Overlay ancestor-context capture limitation
@@ -37,6 +39,14 @@ unequal wrapping inputs: reference normal/anywhere versus candidate nowrap and
 no overflow-wrap/wordWrap request. These standalone authoring findings precede
 layout/projection but do not diagnose original displacement or blur. Canonical
 integration remains pending; no fixture or renderer behavior was changed.
+
+The [tooltip wrapping source binding](material-tooltip-wrapping-source-binding.md)
+now independently retains and validates the complete original tooltip family
+population, including all 36 positive property observations. Six focused tests
+pass with source, population, identity, classification and false-claim mutation
+checks. These establish unequal inputs only. The classifier is not yet wired
+into canonical production normalization/precedence, so the canonical count is
+unchanged and integration requires its own conservation proof.
 
 The subsequent [overlay declaration trace](material-overlay-owner-declaration-review.md)
 reviews all 54 mapped groups / 1,532 observations after the original-state
