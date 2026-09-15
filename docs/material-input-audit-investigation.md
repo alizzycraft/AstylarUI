@@ -3,6 +3,31 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Guarded origin requests: complete context inventory
+
+The [request inventory](material-origin-request-contexts.json) retains all
+**1,368** currently guarded case/element observations and groups their complete
+captured request paths into **15** contexts. Generation and independent `--check`
+both pass. A separate integrity check verifies all original row identities,
+reasons and paired-tree references, **1,644** distinct tree digests and four
+source fingerprints; commands and results are recorded in the
+[verification record](material-origin-request-contexts-verification.json).
+
+The 1,350 motion-guarded observations include non-origin transitions, no-animation
+rules, duration-only declarations and unresolved variable-based shorthands.
+Full CSS rule text, declaration priority, ancestor depth and source ownership
+are preserved rather than reducing empty CSSOM longhands to `none`. All 18
+explicit `center top` declarations belong to the immediate tooltip ancestor,
+not to the measured tooltip surface.
+
+This narrows the next investigation to concrete request contexts but does not
+establish cascade winners, computed motion, settlement, candidate used origins,
+or reference-box/raster equality. **All 1,368 observations remain unresolved.**
+No classifier, renderer, canonical fixture or capture has changed in this
+inventory increment. The canonical report generation has separately finished
+with the expected 3,272-unresolved rejection; its independent regeneration check
+and the full harness are still running. Final enforced parity remains pending.
+
 ## Origin stage attribution integrated with independent capture coverage
 
 The [integration verification](material-origin-stage-integration-verification.json)

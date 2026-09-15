@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "kind": "guarded-origin-request-context-verification",
+  "baselineCommit": "45a82cc943c1d4ee5c3cdae8e4407b88fa6d818b",
+  "scope": "Read-only inventory of the 1368 guarded origin observations, with no main attribution, renderer, fixture, or capture changes.",
+  "verification": [
+    {
+      "command": "node scripts/audit-material-origin-request-contexts.mjs",
+      "exitCode": 0,
+      "result": {
+        "mode": "generate",
+        "file": "docs/material-origin-request-contexts.json",
+        "summary": {
+          "observations": 1368,
+          "contexts": 15,
+          "motionOnlyObservations": 1350,
+          "explicitAncestorOriginObservations": 18,
+          "checkedTreeFiles": 1644
+        },
+        "bytes": 1587802,
+        "sha256": "8cd9950f3dc692509f1b8fd897fe60b9239281acfeac482c07e48e62a4d55696"
+      }
+    },
+    {
+      "command": "node scripts/audit-material-origin-request-contexts.mjs --check",
+      "exitCode": 0,
+      "result": {
+        "mode": "--check",
+        "file": "docs/material-origin-request-contexts.json",
+        "summary": {
+          "observations": 1368,
+          "contexts": 15,
+          "motionOnlyObservations": 1350,
+          "explicitAncestorOriginObservations": 18,
+          "checkedTreeFiles": 1644
+        },
+        "bytes": 1587802,
+        "sha256": "8cd9950f3dc692509f1b8fd897fe60b9239281acfeac482c07e48e62a4d55696"
+      }
+    },
+    {
+      "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const hash=b=>createHash('sha256').update(b).digest('hex');const file='docs/material-origin-request-contexts.json',bytes=readFileSync(file),r=JSON.parse(bytes),stage=JSON.parse(readFileSync(r.priorStageSurvey.file));assert.equal(hash(readFileSync(r.capture.file)),r.capture.sha256);assert.equal(hash(readFileSync(r.priorStageSurvey.file,'utf8').replace(/\\r\\n/g,'\\n')),r.priorStageSurvey.normalizedLfSha256);const expected=stage.observations.filter(o=>o.status==='unresolved').map(o=>[o.case,o.element,o.reason,o.inputTrees]);assert.deepEqual(r.observations.map(o=>[o.case,o.element,o.reason,o.inputTrees]),expected);const counts=Array(r.contexts.length).fill(0),files=new Map;for(const o of r.observations){assert.ok(Number.isInteger(o.context)&&o.context>=0&&o.context<counts.length);counts[o.context]++;assert.equal(o.owners.length,r.contexts[o.context].length);for(const x of Object.values(o.inputTrees)){if(files.has(x.file))assert.equal(files.get(x.file),x.sha256);else files.set(x.file,x.sha256);}}for(const [f,h]of files)assert.equal(hash(readFileSync(f)),h,f);for(const f of r.sourceFingerprints)assert.equal(hash(readFileSync(f.file,'utf8').replace(/\\r\\n/g,'\\n')),f.sha256,f.file);assert.deepEqual(counts,[540,104,52,152,60,70,70,70,20,20,96,32,32,32,18]);assert.equal(files.size,1644);console.log(JSON.stringify({file,bytes:bytes.length,sha256:hash(bytes),all1368OriginalRowsRetained:true,contexts:counts,treeDigestsVerified:files.size,sourceFingerprintsVerified:r.sourceFingerprints.length}));\"",
+      "exitCode": 0,
+      "result": {
+        "file": "docs/material-origin-request-contexts.json",
+        "bytes": 1587802,
+        "sha256": "8cd9950f3dc692509f1b8fd897fe60b9239281acfeac482c07e48e62a4d55696",
+        "all1368OriginalRowsRetained": true,
+        "contexts": [
+          540,
+          104,
+          52,
+          152,
+          60,
+          70,
+          70,
+          70,
+          20,
+          20,
+          96,
+          32,
+          32,
+          32,
+          18
+        ],
+        "treeDigestsVerified": 1644,
+        "sourceFingerprintsVerified": 4
+      }
+    }
+  ],
+  "limitations": [
+    "All 1368 observations remain unresolved in the main audit; this inventory grants no equivalence.",
+    "Captured request rules are not computed cascade winners, animation state, or settlement evidence.",
+    "The 18 explicit center top declarations belong to the tooltip ancestor, not the measured surface.",
+    "The complete harness, canonical regeneration check, and final unfiltered enforced parity matrix are separate gates."
+  ]
+}
