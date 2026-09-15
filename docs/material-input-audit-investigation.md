@@ -3,6 +3,35 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete enforced matrix revalidated after slider audit integration
+
+The maintained runner completed its **unfiltered enforced matrix** at commit
+`bebedbd`, using `--skip-build --resume` against an independent copy of the
+frozen checkpoint. All **436 static / 1,875 interaction cases** passed the
+existing output gates (exit 0). The [verification record](material-slider-box-enforced-matrix.json)
+retains the exact command, all profile/family coverage, source/report digests,
+summary metrics and an independent comparison with the original report.
+
+The browser version, all **971 served assets**, **10 harness modules** and
+installed-dependency fingerprint match the checkpoint. Each resumed case's
+artifacts are hash-checked by the maintained runner. The complete new report is
+identical to the original except for `generatedAt`; the original 117,465,211-byte
+capture remains unchanged at SHA-256 `b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a`.
+The copy occupies a separate directory so revalidation cannot overwrite that
+source-bound report.
+
+Static minimum/median SSIM are **0.965296 / 0.996382**, maximum edge error is
+**0.984px**, and all 120 focused raster targets pass. Interaction minimum/median
+SSIM are **0.954514 / 0.997463**, with all 880 focused raster targets passing.
+No fresh browser captures are claimed: this is provenance-checked replay of the
+complete captured matrix, not newly demonstrated interaction behavior.
+
+These green gates **do not establish input equivalence**. The audit's unequal
+authoring, missing assertions and unresolved renderer/default questions remain
+open. This result supersedes earlier statements that no post-audit enforced run
+had occurred; it does not supersede the remaining canonical input-audit work or
+the pending full unfiltered Node-harness verification.
+
 ## Slider box source proof integrated into the canonical audit pipeline
 
 The collector now binds the complete original slider capture population and
