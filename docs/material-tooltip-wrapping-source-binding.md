@@ -56,3 +56,50 @@ node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-par
 This closes that replay obligation, not the whole audit. The recorded full
 harness result remains 709/710 plus its separately passing metadata correction;
 final full-harness and enforced parity acceptance remain required.
+
+## Canonical pipeline integration (report regeneration pending)
+
+The canonical builder now collects the independently bound wrapping evidence,
+retains it in the machine report and invokes the classifier only after existing
+attributions have had precedence. Validation independently reopens the original
+capture and checks every classified property's exact case/state population.
+The human report and focused-proof inventory state the same limited claim.
+Six dependencies/proofs are added to the source inventory (156 to 162); none of
+the original 156 entries is removed.
+
+The initial production test correctly failed (1/2 passing, 23,664.9811 ms): its
+unbound comparison also disabled the older candidate-only tooltip attribution.
+That was an invalid test baseline, not evidence that wrapping replaced the old
+classification. The corrected test loads the actual committed pre-integration
+pipeline at `65487aeba6a26f9715f302f92b4ee454161a94ef` with identical bindings.
+Relative imports are relocated for execution, with statement-by-statement AST
+checks that nothing else changed. The shared alias-mapping declaration is also
+required to remain identical. It now proves exactly two groups / 36 observations
+change attribution while every scalar projection and unrelated complete row in
+the diagnostic population remains identical. All original tooltip states and
+full trees are retained; only the target scalar owner is selected in this
+separate diagnostic report. This does not substitute for full-report coverage.
+
+```powershell
+node --test tests/material-parity/tooltip-wrapping-source-binding.spec.mjs tests/material-parity/tooltip-wrapping-canonical-integration.spec.mjs
+node --test --test-name-pattern='records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Results: **8/8**, zero failures/skips/cancellations, **30,509.0957 ms**; and
+**1/1**, zero failures/skips/cancellations, **1,721.5844 ms**, respectively.
+An earlier corrected integration-only run passed 2/2 in 27,698.477 ms.
+
+The full-report conservation gate is
+`node scripts/verify-material-tooltip-wrapping-integration.mjs`. Before report
+regeneration it fails as expected at `0 !== 2`: the committed machine report
+does not yet contain these attributions. It requires all 8,339 scalar rows and
+8,337 unrelated complete rows to survive, exact original-source membership for
+the two wrapping groups, only the intended summary changes, six added source
+entries and exactly two changed existing source fingerprints. Do not claim
+2,810 remaining attributions until regeneration and this gate actually pass.
+
+The main audit module and its source-inventory test have changed. Historical
+surveys/captures that compare those whole-file hashes against current source
+will now require explicit provenance review or replay. Their stored hashes and
+observations have not been silently refreshed. Final full-harness, canonical
+no-write and enforced parity acceptance remain pending.

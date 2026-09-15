@@ -1373,13 +1373,20 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 156);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 156);
+  assert.equal(audit.sourceFingerprints.length, 162);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 162);
   // The original 129-source inventory gained one tooltip binding and three
   // slider binding files, followed by ten range-border, five field-host and
-  // eight shared owner-attribution sources. No previous source was removed.
+  // eight shared owner-attribution sources and six tooltip wrapping/proof
+  // dependencies. No previous source was removed.
   // Require the actual entries/digests, not only a count.
   for (const file of ['tests/material-parity/tooltip-unpaired-style-evidence.mjs',
+    'tests/material-parity/tooltip-wrapping-input-evidence.mjs',
+    'tests/material-parity/tooltip-wrapping-source-binding.mjs',
+    'tests/material-parity/tooltip-wrapping-source-binding.spec.mjs',
+    'tests/material-parity/tooltip-wrapping-canonical-integration.spec.mjs',
+    'tests/material-parity/overlay-owner-declaration-review.mjs',
+    'tests/material-parity/generated-node-mapping-evidence.mjs',
     'tests/material-parity/slider-input-box-evidence.mjs',
     'tests/material-parity/slider-input-box-source-binding.mjs',
     'tests/material-parity/slider-input-box-source-binding.spec.mjs',

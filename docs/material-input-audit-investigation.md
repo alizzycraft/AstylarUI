@@ -46,7 +46,14 @@ population, including all 36 positive property observations. Six focused tests
 pass with source, population, identity, classification and false-claim mutation
 checks. These establish unequal inputs only. The classifier is not yet wired
 into canonical production normalization/precedence, so the canonical count is
-unchanged and integration requires its own conservation proof.
+unchanged and integration requires its own conservation proof. The production
+pipeline is now wired and its source-binding/integration tests pass 8/8; the
+source inventory test passes 1/1. The full-report regeneration/conservation
+gate is still pending, so 2,812 remains the last verified canonical count.
+The linked record preserves the initial invalid-baseline test failure and its
+correction using the actual committed prior pipeline, plus the expected red
+full-report gate before regeneration. Historical whole-module fingerprint
+dependencies require explicit replay/review; none was silently refreshed.
 
 The subsequent [overlay declaration trace](material-overlay-owner-declaration-review.md)
 reviews all 54 mapped groups / 1,532 observations after the original-state
