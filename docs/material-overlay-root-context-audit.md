@@ -76,3 +76,31 @@ reference host setup, input differences, core CSS-space layout/projection and
 plugin placement. Existing overlay failures and uncertain attributions remain
 open. No adjustment to popup coordinates, dimensions or text is authorized by
 this finding.
+
+## Supplemental collector: focused verification, application capture pending
+
+`tests/material-parity/reference-root-ancestor-context.mjs` now provides a
+separate read-only browser evaluator. It records each existing capture root's
+actual DOM path and complete parent-element chain, deduplicated ancestor nodes,
+inline declarations and priorities, enumerated computed CSS/custom properties,
+viewport rectangles, scrolling and ordered stylesheet CSSOM source. Raw nested
+rules are preserved; the collector does not implement a competing cascade or
+infer which ancestor establishes a containing block. Unreadable stylesheets and
+missing reference frames produce explicit errors.
+
+```powershell
+node --test tests/material-parity/reference-root-ancestor-context.spec.mjs
+```
+
+The two DPR cases passed **2/2**, with zero failures, skips or cancellations in
+**4,644.5069 ms**. They verify inheritance outside the original tree, transformed
+ancestor geometry, nested stylesheet source, stable repeated capture, exact
+preservation of the DOM and original input-tree capture, changed attachment and
+inherited values after explicit test reparenting, inline `!important` source,
+and a missing-frame negative control. Test-only mutations are not part of the
+collector. No changes were made to the existing collector or running harness.
+
+This proves the supplemental instrumentation on controlled browser inputs.
+Application capture and independent binding to original state/runtime evidence
+remain pending; the collector's existence does not justify any canonical
+classification or original-case ancestry claim.
