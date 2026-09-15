@@ -22,6 +22,17 @@ remain required. The linked integration record retains the original failures.
 
 ## Overlay ancestor-context capture limitation
 
+The subsequent [overlay declaration trace](material-overlay-owner-declaration-review.md)
+reviews all 54 mapped groups / 1,532 observations after the original-state
+context replay. It separates 42 groups without captured requests, four with
+pointer-event requests, seven with motion requests and one with both. Notably,
+the bottom-sheet wrapper computes `pointer-events: none` in HTML, not an initial
+`auto`; its candidate also serves as the backdrop, so identity is not role or
+input equivalence. The traced composition difference precedes projection.
+Six tests pass; generation and no-write replay pass. Canonical attribution and
+production inputs remain unchanged, and no historical click-stealing cause is
+claimed from source alone.
+
 The [91-state reference replay](material-original-overlay-context-survey.md)
 now matches 200 original overlay owner proofs and independently binds 17,654
 enumerated root properties to fresh ancestor context. All observed overlay
