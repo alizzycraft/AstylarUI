@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Repeated root-selector formatting evidence
+
+The [height-only root-rule supplement](material-root-flow-height-overrides.md)
+replays every button, toolbar and paginator case: 138 repeated-root cases plus
+26 single-rule controls. The additional rules request only responsive height,
+not display, direction or gap. Complete scalar/tree joins and 14 rejection
+controls support the same authored block-to-column-flex cause for nine pending
+direction/gap groups (414 observations). Two tests pass; generation and no-write
+checks exit 0. No canonical classification, height claim or rendering behavior
+changed. Integration and conservation remain pending.
+
 ## Shared shadow source binding prepared
 
 The [shared root-shadow finding](material-root-shadow-input-audit.md#independent-source-binding-prepared)
