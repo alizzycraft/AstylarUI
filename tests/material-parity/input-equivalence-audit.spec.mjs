@@ -1373,14 +1373,25 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 133);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 133);
+  assert.equal(audit.sourceFingerprints.length, 143);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 143);
   // The original 129-source inventory gained one tooltip binding and three
-  // slider binding files. Require the actual entries/digests, not only a count.
+  // slider binding files, followed by ten range-border proof sources.
+  // Require the actual entries/digests, not only a count.
   for (const file of ['tests/material-parity/tooltip-unpaired-style-evidence.mjs',
     'tests/material-parity/slider-input-box-evidence.mjs',
     'tests/material-parity/slider-input-box-source-binding.mjs',
-    'tests/material-parity/slider-input-box-source-binding.spec.mjs']) {
+    'tests/material-parity/slider-input-box-source-binding.spec.mjs',
+    'tests/material-parity/slider-border-default-evidence.mjs',
+    'tests/material-parity/slider-border-default-evidence.spec.mjs',
+    'tests/material-parity/slider-border-default-source-binding.mjs',
+    'tests/material-parity/slider-border-default-source-binding.spec.mjs',
+    'tests/material-parity/slider-border-canonical-integration.spec.mjs',
+    'tests/material-parity/range-default-box-proof.spec.mjs',
+    'examples/material-showcase/src/app/range-default-box-audit.spec.ts',
+    'docs/material-range-default-box-audit.json',
+    'scripts/audit-material-slider-border-defaults.mjs',
+    'docs/material-slider-border-defaults.json']) {
     assert.deepEqual(audit.sourceFingerprints.filter(entry => entry.file === file), [{ file,
       sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') }]);
   }

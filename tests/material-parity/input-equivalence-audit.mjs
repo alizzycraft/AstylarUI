@@ -9,6 +9,8 @@ import { collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
 import { collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
 import { sliderInputBoxAttribution, collectSliderInputBoxes, classifySliderInputBox,
   validateSliderInputBoxes, validateSliderInputBoxClassifications } from './slider-input-box-source-binding.mjs';
+import { sliderBorderDefaultAttribution, collectSliderBorderDefaults, classifySliderBorderDefault,
+  validateSliderBorderDefaults, validateSliderBorderDefaultClassifications } from './slider-border-default-source-binding.mjs';
 import { tooltipUnpairedStyleAttribution, collectTooltipUnpairedStyles, classifyTooltipUnpairedStyle,
   validateTooltipUnpairedStyles, validateTooltipUnpairedStyleClassifications } from './tooltip-unpaired-style-evidence.mjs';
 import { collectPaginatorNavigationEvidence } from './paginator-navigation-evidence.mjs';
@@ -144,6 +146,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const tooltipUnpairedStyles = collectTooltipUnpairedStyles(parityReport, { root, parityPath: options.parityPath,
     collectInventory: collectFullTreeInventory, reviewGap: reviewedTooltipStateGap });
   const sliderInputBoxes = collectSliderInputBoxes(parityReport, { root, parityPath: options.parityPath });
+  const sliderBorderDefaults = collectSliderBorderDefaults(parityReport, { root, parityPath: options.parityPath });
   const normalLineBoxes = options.normalLineBoxPath
     ? loadNormalLineBoxReport({ root, reportPath: path.relative(root, path.resolve(root, options.normalLineBoxPath)).replaceAll('\\', '/'), cases, inventory: elementInventory,
       controlTypography: rawControlTypography, expectedProvenance: parityReport.captureProvenance })
@@ -162,7 +165,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes);
+  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -243,6 +246,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     originStageEvidence,
     tooltipUnpairedStyles,
     sliderInputBoxes,
+    sliderBorderDefaults,
     rootHeightInputs,
     rootColorInputs,
     fieldColorInputs,
@@ -263,6 +267,14 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
+  if (report.sliderBorderDefaults?.binding?.status === 'bound') {
+    errors.push(...validateSliderBorderDefaults(report.sliderBorderDefaults, { root }));
+    errors.push(...validateSliderBorderDefaultClassifications(report.sliderBorderDefaults,
+      report.discrepancies, canonicalStyle, equivalentValue));
+  } else if (requireComplete || report.sliderBorderDefaults?.binding?.status === 'invalid' ||
+      report.sliderBorderDefaults?.observations?.length || report.discrepancies?.some(d => d.attribution === sliderBorderDefaultAttribution)) {
+    errors.push('slider border attribution lacks independently bound original capture evidence');
+  }
   if (report.tooltipUnpairedStyles?.binding?.status === 'bound') {
     errors.push(...validateTooltipUnpairedStyles(report.tooltipUnpairedStyles, { root,
       collectInventory: collectFullTreeInventory, reviewGap: reviewedTooltipStateGap }));
@@ -1144,6 +1156,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Unmatched tooltip text owners: ${report.retainedTypography.gaps.filter(gap => gap.attribution === 'reviewed-tooltip-unmatched-state-input').length} state-input discrepancies retain their complete captured trigger, overlay/anchor, style-stage and absent-counterpart evidence. They are unequal authoring, not missing renderer text or accepted typography/placement.`,
     `Unpaired tooltip scalar styles: ${report.tooltipUnpairedStyles.observations.length} original candidate-only popup captures independently bind their scalar and full-tree owner evidence. ${report.discrepancies.filter(d => d.attribution === tooltipUnpairedStyleAttribution).length} style groups retain all values and occurrences under the unequal-presence authoring defect; no reference styles or rendered equivalence are invented.`,
     `Slider native box requests: ${report.sliderInputBoxes.observations.length} independently source-bound owners retain explicit reference padding/content-box requests versus candidate omissions and generic defaults. ${report.discrepancies.filter(d => d.attribution === sliderInputBoxAttribution).length} groups preserve the original values and complete case coverage; this is unequal input authoring, not proof of used-box, drag or raster equivalence.`,
+    `Slider native border defaults: ${report.sliderBorderDefaults.observations.length} independently source-bound owners omit border requests but retain different browser and generic core defaults. ${report.discrepancies.filter(d => d.attribution === sliderBorderDefaultAttribution).length} groups preserve original values and complete case coverage. This documented policy divergence requires a core decision, not a candidate-only reset; other input differences and original used-box, drag and raster outcomes remain separate.`,
     '',
     `Calendar controls remaining after reference dismissal: ${report.controlTypography.gaps.filter(gap => gap.attribution === 'reviewed-calendar-close-state-divergence').length} current texture owners are attributed to the verified unequal close state. Their full candidate input trees remain present; no reference typography is invented for the closed popup, and other unreviewed typography differences remain unresolved.`,
     '',
@@ -1188,7 +1201,8 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes) {
+function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults) {
+  const sliderBorderByCaseId = new Map(sliderBorderDefaults.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
   const tooltipByCaseId = new Map(tooltipUnpairedStyles.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
   const sliderBoxByCaseId = new Map(sliderInputBoxes.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
   const originByCaseId = new Map(originStageEvidence.observations.filter(p => p.status === 'observed-declaration-stage-gap')
@@ -1234,6 +1248,8 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
               tooltipByCaseId.get(JSON.stringify([key, input.id])), canonicalStyle)
             ?? classifySliderInputBox(input, property, referenceValue, astylarValue,
               sliderBoxByCaseId.get(JSON.stringify([key, input.id])), canonicalStyle)
+            ?? classifySliderBorderDefault(input, property, referenceValue, astylarValue,
+              sliderBorderByCaseId.get(JSON.stringify([key, input.id])), canonicalStyle)
             ?? classifyOriginStageInput(input, property, referenceValue, astylarValue,
               originByCaseId.get(JSON.stringify([key, input.id])))
             ?? classifyAppearanceInitialInput(input, property, referenceValue, astylarValue,
@@ -1300,7 +1316,7 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
-            ...([sliderInputBoxAttribution, tooltipUnpairedStyleAttribution, originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
+            ...([sliderBorderDefaultAttribution, sliderInputBoxAttribution, tooltipUnpairedStyleAttribution, originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
               'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, fieldHostAlignmentAttribution, fieldHostWeightTrackingAttribution, rootTypographyAttribution, rootInitialStyleAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution, rootBoxSizingAttribution, containerCaretAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
@@ -8127,6 +8143,16 @@ function sourceFingerprints(root) {
     'tests/material-parity/slider-input-box-evidence.mjs',
     'tests/material-parity/slider-input-box-source-binding.mjs',
     'tests/material-parity/slider-input-box-source-binding.spec.mjs',
+    'tests/material-parity/slider-border-default-evidence.mjs',
+    'tests/material-parity/slider-border-default-evidence.spec.mjs',
+    'tests/material-parity/slider-border-default-source-binding.mjs',
+    'tests/material-parity/slider-border-default-source-binding.spec.mjs',
+    'tests/material-parity/slider-border-canonical-integration.spec.mjs',
+    'tests/material-parity/range-default-box-proof.spec.mjs',
+    'examples/material-showcase/src/app/range-default-box-audit.spec.ts',
+    'docs/material-range-default-box-audit.json',
+    'scripts/audit-material-slider-border-defaults.mjs',
+    'docs/material-slider-border-defaults.json',
     'tests/material-parity/supplemental-capture-evidence.spec.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
@@ -8135,6 +8161,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/slider-border-canonical-integration.spec.mjs', /test\('slider border canonical integration preserves/,
+      'range border default policy independently bound to complete original owner and scalar evidence', 'Both original native range owners omit border and appearance requests, but Chromium computed zero-width/none/zero-radius borders differ from generic candidate input defaults at all three stages. The shared-input public range proof establishes a default-selection divergence and isolated content-box effect. Original-source replay, complete physical-property coverage, production normalization, unchanged unrelated rows and mutation controls guard attribution. Other Material box/domain/width requests remain unequal; no original used-box delta, drag, hit-test or raster equivalence follows. Core default policy and the compatibility catalog require reconciliation, not candidate-only resets.'),
     proof(root, 'tests/material-parity/slider-input-box-source-binding.spec.mjs', /test\('slider box canonical integration uses/,
       'slider native box requests independently bound to original scalar and tree evidence', 'Both native slider owners retain exact inline padding and Material content-box requests versus omitted candidate authoring and generic input padding. Independent original-source replay, production scalar normalization, complete per-property case coverage and mutation controls guard this authoring attribution. Other range input properties, core default compatibility, used geometry, pointer capture, drag mapping and raster remain separate concerns. No equal-input rendering claim or fixture correction follows from these unequal box requests.'),
     proof(root, 'tests/material-parity/origin-stage-inventory-evidence.spec.mjs', /test\('origin stage source binding rejects/,

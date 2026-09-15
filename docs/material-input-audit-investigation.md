@@ -3,6 +3,43 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Slider border defaults: canonical integration and index verification
+
+The canonical collector now retains the complete original-source border evidence
+and uses it to classify only the twelve physical width/style/radius properties
+for each native range owner. Independent validation reopens the original report
+and trees, checks complete scalar coverage, and rejects missing evidence,
+relabelled or duplicate rows, altered values and fabricated parity claims.
+The [integration record](material-slider-border-integration-verification.json)
+retains the initial two failing integration tests and their two passing results.
+Production normalization preserves the original zero values as `0`, rather than
+changing the reference input. All 220 unrelated complete rows in the reduced
+two-case proof retain their pre-integration digest.
+
+The full 35-file harness at `5fed206` finished with **681 passes / one failure**
+(682 tests, zero skips, 1,079.875 seconds). Its only failure was the root-style
+index's stale fingerprint of the corrected inventory test. The 36 recorded
+sources stayed unchanged throughout that run. The index was not allowed to pass
+by dropping its fingerprint assertion: after integration, 12 affected source
+fingerprints in 11 live indices were refreshed and all non-fingerprint data in
+the 13 reviewed indices was independently proven unchanged. Historical run
+records and capture digests remain untouched.
+
+The combined owning checks now pass **16/16**, zero skips, in **172.561 seconds**,
+including the complete 30,043-observation root-style collector, the field-host
+weight/tracking inventory, existing case indices and the new integration guards.
+The package harness now registers 37 spec files. Full canonical regeneration
+is running; complete-row conservation and the post-integration unfiltered
+harness remain pending, so no new canonical unresolved count is claimed yet.
+
+Implementation priority within the slider investigation: resolve the core
+input-subtype default policy and reconcile the catalog's claim, using the shared
+omitted/explicit-border public tests. Then restore the reference padding,
+content-box and peer-dependent width authoring through the shared CSS APIs and
+retest the independent domain, capture and drag failures. Do not add a range
+border reset to the plugin, change content-box arithmetic to hide the default,
+or assign the isolated 2px box effect to the original unequal Material hit area.
+
 ## Slider border defaults: complete source and scalar replay prepared
 
 The [binding verification](material-slider-border-source-binding.json) checks the
