@@ -106,3 +106,10 @@ were still pending. The subsequent [priority overlay survey](material-overlay-an
 now supplies 48 original static reference contexts and 48 separately labelled
 fresh activations against the frozen runtime. Neither the collector nor that
 reference-only supplement establishes a candidate rendering cause or parity.
+
+The [91 original-state overlay replay](material-original-overlay-context-survey.md)
+subsequently verifies reference owner styles against original captures and
+records state-specific external ancestry for the dialog, bottom-sheet and
+snackbar owner-mapping population at DPR 1 and 2. No external reference
+transform or zoom is observed there; candidate placement remains a separate
+investigation, not a conclusion supplied by ancestor capture alone.

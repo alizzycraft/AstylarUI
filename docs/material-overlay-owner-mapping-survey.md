@@ -67,3 +67,9 @@ and computed/used-value consumption as separate checks. In particular, it must
 not waive the non-main-root guard merely because an alias now resolves. The
 canonical unresolved count remains 2,812; this standalone join grants no new
 initial-style or rendering-equivalence attribution.
+
+The subsequent [original-state context replay](material-original-overlay-context-survey.md)
+now supplies fresh reference external context for all 91 original cases, using
+the harness's exact action functions and matching all 200 original owner proofs.
+That closes the state-replay evidence gap above, but not the candidate
+inherited/used-value or rendering-equivalence obligations.

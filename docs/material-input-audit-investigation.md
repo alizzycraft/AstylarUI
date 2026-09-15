@@ -22,6 +22,15 @@ remain required. The linked integration record retains the original failures.
 
 ## Overlay ancestor-context capture limitation
 
+The [91-state reference replay](material-original-overlay-context-survey.md)
+now matches 200 original overlay owner proofs and independently binds 17,654
+enumerated root properties to fresh ancestor context. All observed overlay
+chains are div/body/html without transforms or zoom. Four focused tests and
+18 negative controls pass; no-write reproduction passes. This closes the
+state-specific reference-context gap for that owner population, not candidate
+used-value or rendering parity. The original capture limitation and its
+controlled proof below remain valid.
+
 The [overlay capture-root proof](material-overlay-root-context-audit.md) shows
 at DPR 1 and 2 that captured null parents are traversal boundaries, not proof
 of absent DOM ancestry. Uncaptured body declarations change overlay inheritance,
