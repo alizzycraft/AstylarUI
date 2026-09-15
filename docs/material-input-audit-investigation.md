@@ -3,6 +3,31 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Range defaults: same-input public proof now available
+
+The [range default-border investigation](material-range-default-box-audit.md)
+advances the slider-default lead below: two complete fresh browser runs each
+retain **2 failing / 4 passing equality tests**. Omitted range borders resolve
+to generic Astylar input defaults and enlarge the explicit content-box root
+from the browser's 120 x 44 to 122 x 46. Identically authored explicit-border
+controls match. The earliest demonstrated divergence is default selection, not
+final projection or an inspection-only artifact. The catalog's subtype-default
+claim needs reconciliation with the actual range border path.
+
+This does not explain all slider dragging failures or classify the original
+Material border groups yet. The machine record preserves exact inputs,
+observations, repeated logs, source/runtime hashes and scope limits; the separate
+production build passed. No canonical comparison or renderer changed.
+
+The full 33-file Node harness at `e180740` completed with **675 passes / 1 failure**
+(676 tests, zero skips, 968.251 seconds). Its tool output was truncated before
+the failed test could be identified. An unfiltered rerun now retains a durable
+TAP log at `artifacts/material-parity/slider-box-full-harness-rerun.log`; this gate
+is **not** recorded as passing, and its failure still requires investigation.
+All 33 registered spec files and `package.json` still match their exact
+start-of-run SHA-256 fingerprints. The new standalone range reproduction and
+evidence check are not part of that in-flight 33-file command.
+
 ## Complete enforced matrix revalidated after slider audit integration
 
 The maintained runner completed its **unfiltered enforced matrix** at commit

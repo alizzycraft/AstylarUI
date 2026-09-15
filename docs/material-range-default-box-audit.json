@@ -1,0 +1,693 @@
+{
+  "schemaVersion": 1,
+  "evidenceId": "range-native-border-defaults-public-proof",
+  "baselineCommit": "e18074001f806a507694634d4b4e55a9fb839d9b",
+  "branch": "codex/material-ui-showcase",
+  "classification": "documented-default-policy-divergence-with-confirmed-used-box-effect",
+  "command": "npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/range-default-box-audit.spec.ts",
+  "environment": {
+    "astylarui": "0.2.0",
+    "angular": "20.3.29",
+    "material": "20.0.5",
+    "babylon": "8.56.2",
+    "browser": "Chrome Headless 152.0.0.0 (Windows 10)",
+    "dpr": 1,
+    "canvasCssSize": [
+      320,
+      180
+    ],
+    "font": "Arial",
+    "settlement": "document.fonts.ready then surface.whenSettled()"
+  },
+  "sourceFingerprints": [
+    {
+      "file": "examples/material-showcase/src/app/range-default-box-audit.spec.ts",
+      "sha256": "68de22c89904ea01aafbf359a43a870b90fbcb37887f64e2ce52fbe08d61322f"
+    },
+    {
+      "file": "src/app/config/browser-defaults.ts",
+      "sha256": "82fb3a97989cd04015fa441f76154a9fa3112754ef5cd63f032bbd12917746c1"
+    },
+    {
+      "file": "src/app/services/dom/style-defaults.service.ts",
+      "sha256": "37ba8605ecae96dfbe43579053f6f888f88f5315a728769edabcd19dd93ddcb1"
+    },
+    {
+      "file": "src/app/services/dom/style.service.ts",
+      "sha256": "fd7bf028b63241bdc0b09933e14e0070690c804c671b77e9b84bc766d9bd5098"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-dimension.service.ts",
+      "sha256": "1a9a76bdbf7d1dc60fd915d2a1733d39d6be5eafdb38d94c3caa355874c9c9a0"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-creation.service.ts",
+      "sha256": "a1eef26cae187ef5aa9ebf946fd9cfcac3fa5e1d9f81764459465b0334edba0b"
+    },
+    {
+      "file": "src/app/services/dom/input/range.manager.ts",
+      "sha256": "5300fd18403ff659f4ef415df796f0e9ea0260e7c591004fa407fd99ec24b4db"
+    },
+    {
+      "file": "docs/compatibility/capabilities.json",
+      "sha256": "2a73436d17e37dc13774859924d1a011229a15be073cf71f0423353240bb4258"
+    },
+    {
+      "file": "docs/compatibility/html-css.md",
+      "sha256": "d0c4e544b771512a6245fa259b72208f261cea6a3bdd551302dd19dacfe090c6"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/package.json",
+      "sha256": "4e1038f17f7d51879a3e513db3ddf4b92a3521369645e7378affe6038f71441d"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/config/browser-defaults.js",
+      "sha256": "5a0f4ced0db345b5a26b3b8606d5198c3462dfcfbd3ed842105d697bfde8530b"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/style-defaults.service.js",
+      "sha256": "a11515a342f8fb441f775a16b7ad7480e711934d046084d686c0ef098ae4cafa"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/style.service.js",
+      "sha256": "b0a9baa39da07df8a15cd34d508b3988b88d26d294f0f40f03e0c7e20be4d52e"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js",
+      "sha256": "0a65a1659a51062ab41cda030c4f030b15bcf5328c85fb1a3597628c05cf190c"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-creation.service.js",
+      "sha256": "68e45ca7b851ddeac40f6f55d3e2f176768b47dd6ad8e0d8eefa5c2a77d28ef3"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/input/range.manager.js",
+      "sha256": "07e99a20d6effa8434b9efdf49d720d5774258dea5e71e056f3d28ca82fdce5a"
+    },
+    {
+      "file": "examples/material-showcase/tsconfig.spec.json",
+      "sha256": "78d85d0c577e8a3f44b6c041265beb43bcbe1fafd7f3b30554675b10ab1f16c5"
+    },
+    {
+      "file": "examples/material-showcase/angular.json",
+      "sha256": "b3f9cc12f51cbf366176d92efc74c722cc459d5bd0edeb635be9f74c72c05106"
+    }
+  ],
+  "observations": [
+    {
+      "mode": "omitted",
+      "boxSizing": "border-box",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "input",
+              "inputType": "range",
+              "id": "range-box-probe",
+              "min": "0",
+              "max": "100",
+              "step": "5",
+              "value": "50"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#range-box-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "120px",
+            "height": "44px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "fontFamily": "Arial",
+            "fontSize": "16px"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:border-box;margin:0;padding:0;font-family:Arial;font-size:16px}",
+      "browserStyle": {
+        "borderWidth": "0px",
+        "borderStyle": "none",
+        "borderRadius": "0px",
+        "boxSizing": "border-box",
+        "appearance": "auto"
+      },
+      "stages": [
+        {
+          "borderWidth": "1px",
+          "borderStyle": "solid",
+          "borderRadius": "4px",
+          "boxSizing": "border-box",
+          "appearance": "<omitted>"
+        },
+        {
+          "borderWidth": "1px",
+          "borderStyle": "solid",
+          "borderRadius": "4px",
+          "boxSizing": "border-box",
+          "appearance": "<omitted>"
+        }
+      ],
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "renderSize": [
+        320,
+        180
+      ]
+    },
+    {
+      "mode": "two",
+      "boxSizing": "border-box",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "input",
+              "inputType": "range",
+              "id": "range-box-probe",
+              "min": "0",
+              "max": "100",
+              "step": "5",
+              "value": "50"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#range-box-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "120px",
+            "height": "44px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "borderWidth": "2px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0px"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:border-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:2px;border-style:solid;border-color:#123456;border-radius:0px}",
+      "browserStyle": {
+        "borderWidth": "2px",
+        "borderStyle": "solid",
+        "borderRadius": "0px",
+        "boxSizing": "border-box",
+        "appearance": "auto"
+      },
+      "stages": [
+        {
+          "borderWidth": "2px",
+          "borderStyle": "solid",
+          "borderRadius": "0px",
+          "boxSizing": "border-box",
+          "appearance": "<omitted>"
+        },
+        {
+          "borderWidth": "2px",
+          "borderStyle": "solid",
+          "borderRadius": "0px",
+          "boxSizing": "border-box",
+          "appearance": "<omitted>"
+        }
+      ],
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "renderSize": [
+        320,
+        180
+      ]
+    },
+    {
+      "mode": "zero",
+      "boxSizing": "border-box",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "input",
+              "inputType": "range",
+              "id": "range-box-probe",
+              "min": "0",
+              "max": "100",
+              "step": "5",
+              "value": "50"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#range-box-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "120px",
+            "height": "44px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "borderWidth": "0px",
+            "borderStyle": "none",
+            "borderColor": "#123456",
+            "borderRadius": "0px"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:border-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:0px;border-style:none;border-color:#123456;border-radius:0px}",
+      "browserStyle": {
+        "borderWidth": "0px",
+        "borderStyle": "none",
+        "borderRadius": "0px",
+        "boxSizing": "border-box",
+        "appearance": "auto"
+      },
+      "stages": [
+        {
+          "borderWidth": "0px",
+          "borderStyle": "none",
+          "borderRadius": "0px",
+          "boxSizing": "border-box",
+          "appearance": "<omitted>"
+        },
+        {
+          "borderWidth": "0px",
+          "borderStyle": "none",
+          "borderRadius": "0px",
+          "boxSizing": "border-box",
+          "appearance": "<omitted>"
+        }
+      ],
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "renderSize": [
+        320,
+        180
+      ]
+    },
+    {
+      "mode": "omitted",
+      "boxSizing": "content-box",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "input",
+              "inputType": "range",
+              "id": "range-box-probe",
+              "min": "0",
+              "max": "100",
+              "step": "5",
+              "value": "50"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#range-box-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "120px",
+            "height": "44px",
+            "boxSizing": "content-box",
+            "margin": "0",
+            "padding": "0",
+            "fontFamily": "Arial",
+            "fontSize": "16px"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:content-box;margin:0;padding:0;font-family:Arial;font-size:16px}",
+      "browserStyle": {
+        "borderWidth": "0px",
+        "borderStyle": "none",
+        "borderRadius": "0px",
+        "boxSizing": "content-box",
+        "appearance": "auto"
+      },
+      "stages": [
+        {
+          "borderWidth": "1px",
+          "borderStyle": "solid",
+          "borderRadius": "4px",
+          "boxSizing": "content-box",
+          "appearance": "<omitted>"
+        },
+        {
+          "borderWidth": "1px",
+          "borderStyle": "solid",
+          "borderRadius": "4px",
+          "boxSizing": "content-box",
+          "appearance": "<omitted>"
+        }
+      ],
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 122,
+        "height": 46
+      },
+      "renderSize": [
+        320,
+        180
+      ]
+    },
+    {
+      "mode": "two",
+      "boxSizing": "content-box",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "input",
+              "inputType": "range",
+              "id": "range-box-probe",
+              "min": "0",
+              "max": "100",
+              "step": "5",
+              "value": "50"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#range-box-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "120px",
+            "height": "44px",
+            "boxSizing": "content-box",
+            "margin": "0",
+            "padding": "0",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "borderWidth": "2px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0px"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:content-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:2px;border-style:solid;border-color:#123456;border-radius:0px}",
+      "browserStyle": {
+        "borderWidth": "2px",
+        "borderStyle": "solid",
+        "borderRadius": "0px",
+        "boxSizing": "content-box",
+        "appearance": "auto"
+      },
+      "stages": [
+        {
+          "borderWidth": "2px",
+          "borderStyle": "solid",
+          "borderRadius": "0px",
+          "boxSizing": "content-box",
+          "appearance": "<omitted>"
+        },
+        {
+          "borderWidth": "2px",
+          "borderStyle": "solid",
+          "borderRadius": "0px",
+          "boxSizing": "content-box",
+          "appearance": "<omitted>"
+        }
+      ],
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 124,
+        "height": 48
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 124,
+        "height": 48
+      },
+      "renderSize": [
+        320,
+        180
+      ]
+    },
+    {
+      "mode": "zero",
+      "boxSizing": "content-box",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "input",
+              "inputType": "range",
+              "id": "range-box-probe",
+              "min": "0",
+              "max": "100",
+              "step": "5",
+              "value": "50"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#range-box-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "120px",
+            "height": "44px",
+            "boxSizing": "content-box",
+            "margin": "0",
+            "padding": "0",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "borderWidth": "0px",
+            "borderStyle": "none",
+            "borderColor": "#123456",
+            "borderRadius": "0px"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:content-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:0px;border-style:none;border-color:#123456;border-radius:0px}",
+      "browserStyle": {
+        "borderWidth": "0px",
+        "borderStyle": "none",
+        "borderRadius": "0px",
+        "boxSizing": "content-box",
+        "appearance": "auto"
+      },
+      "stages": [
+        {
+          "borderWidth": "0px",
+          "borderStyle": "none",
+          "borderRadius": "0px",
+          "boxSizing": "content-box",
+          "appearance": "<omitted>"
+        },
+        {
+          "borderWidth": "0px",
+          "borderStyle": "none",
+          "borderRadius": "0px",
+          "boxSizing": "content-box",
+          "appearance": "<omitted>"
+        }
+      ],
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "renderSize": [
+        320,
+        180
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "session": 70754,
+      "exitCode": 1,
+      "tests": 6,
+      "passed": 4,
+      "failed": 2,
+      "commandOutput": "\r\n\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider \r\nremoving Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically \r\nincluded in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing \r\nZone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in \r\nthe \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', '{\"mode\":\"omitted\",\"boxSizing\":\"border-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 \r\n(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"r\r\noot\":{\"children\":[{\"type\":\"input\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"\r\n50\"}]},\"styles\":[{\"selector\":\"body\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"d\r\nisplay\":\"block\",\"left\":\"32px\",\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"border-box\",\"margin\":\"0\",\"paddi\r\nng\":\"0\",\"fontFamily\":\"Arial\",\"fontSize\":\"16px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;d\r\nisplay:block;left:32px;top:32px;width:120px;height:44px;box-sizing:border-box;margin:0;padding:0;font-family:Arial;font\r\n-size:16px}\",\"browserStyle\":{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRadius\":\"0px\",\"boxSizing\":\"border-box\",\"ap\r\npearance\":\"auto\"},\"stages\":[{\"borderWidth\":\"1px\",\"borderStyle\":\"solid\",\"borderRadius\":\"4px\",\"boxSizing\":\"border-box\",\"a\r\nppearance\":\"<omitted>\"},{\"borderWidth\":\"1px\",\"borderStyle\":\"solid\",\"borderRadius\":\"4px\",\"boxSizing\":\"border-box\",\"appea\r\nrance\":\"<omitted>\"}],\"reference\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"actual\":{\"x\":32,\"y\":32,\"width\":120,\"height\":4\r\n4},\"renderSize\":[320,180]}'\r\n\tborderWidth: Expected '1px' to be '0px'.\r\n\tborderStyle: Expected 'solid' to be 'none'.\r\n\tborderRadius: Expected '4px' to be '0px'.\r\n\tborderWidth: Expected '1px' to be '0px'.\r\n\tborderStyle: Expected 'solid' to be 'none'.\r\n\tborderRadius: Expected '4px' to be '0px'.\r\n\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider \r\nremoving Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically \r\nincluded in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing \r\nZone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in \r\nthe \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', '{\"mode\":\"zero\",\"boxSizing\":\"border-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 \r\n(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"r\r\noot\":{\"children\":[{\"type\":\"input\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"\r\n50\"}]},\"styles\":[{\"selector\":\"body\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"d\r\nisplay\":\"block\",\"left\":\"32px\",\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"border-box\",\"margin\":\"0\",\"paddi\r\nng\":\"0\",\"fontFamily\":\"Arial\",\"fontSize\":\"16px\",\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderColor\":\"#123456\",\"border\r\nRadius\":\"0px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;w\r\nidth:120px;height:44px;box-sizing:border-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:0px;borde\r\nr-style:none;border-color:#123456;border-radius:0px}\",\"browserStyle\":{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderR\r\nadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"auto\"},\"stages\":[{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderR\r\nadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"<omitted>\"},{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRadius\r\n\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"<omitted>\"}],\"reference\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"actual\r\n\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"renderSize\":[320,180]}'\r\n\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider \r\nremoving Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically \r\nincluded in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing \r\nZone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in \r\nthe \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', '{\"mode\":\"two\",\"boxSizing\":\"border-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 \r\n(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"r\r\noot\":{\"children\":[{\"type\":\"input\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"\r\n50\"}]},\"styles\":[{\"selector\":\"body\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"d\r\nisplay\":\"block\",\"left\":\"32px\",\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"border-box\",\"margin\":\"0\",\"paddi\r\nng\":\"0\",\"fontFamily\":\"Arial\",\"fontSize\":\"16px\",\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"borderColor\":\"#123456\",\"borde\r\nrRadius\":\"0px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;\r\nwidth:120px;height:44px;box-sizing:border-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:2px;bord\r\ner-style:solid;border-color:#123456;border-radius:0px}\",\"browserStyle\":{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"bord\r\nerRadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"auto\"},\"stages\":[{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"bor\r\nderRadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"<omitted>\"},{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"borderR\r\nadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"<omitted>\"}],\"reference\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"a\r\nctual\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"renderSize\":[320,180]}'\r\n\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider \r\nremoving Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically \r\nincluded in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing \r\nZone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in \r\nthe \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', \r\n'{\"mode\":\"omitted\",\"boxSizing\":\"content-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) \r\nAppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"root\":{\"children\":[{\"type\":\"inp\r\nut\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"50\"}]},\"styles\":[{\"selector\":\"\r\nbody\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"display\":\"block\",\"left\":\"32px\",\r\n\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"content-box\",\"margin\":\"0\",\"padding\":\"0\",\"fontFamily\":\"Arial\",\r\n\"fontSize\":\"16px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;display:block;left:32px;top:32\r\npx;width:120px;height:44px;box-sizing:content-box;margin:0;padding:0;font-family:Arial;font-size:16px}\",\"browserStyle\":\r\n{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"auto\"},\"stages\":\r\n[{\"borderWidth\":\"1px\",\"borderStyle\":\"solid\",\"borderRadius\":\"4px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"},{\"\r\nborderWidth\":\"1px\",\"borderStyle\":\"solid\",\"borderRadius\":\"4px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"}],\"ref\r\nerence\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"actual\":{\"x\":32,\"y\":32,\"width\":122,\"height\":46},\"renderSize\":[320,180]\r\n}'\r\n\tborderWidth: Expected '1px' to be '0px'.\r\n\tborderStyle: Expected 'solid' to be 'none'.\r\n\tborderRadius: Expected '4px' to be '0px'.\r\n\tborderWidth: Expected '1px' to be '0px'.\r\n\tborderStyle: Expected 'solid' to be 'none'.\r\n\tborderRadius: Expected '4px' to be '0px'.\r\n\twidth: Expected 2 to be less than 0.5.\r\n\theight: Expected 2 to be less than 0.5.\r\n\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider \r\nremoving Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically \r\nincluded in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing \r\nZone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in \r\nthe \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', '{\"mode\":\"zero\",\"boxSizing\":\"content-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 \r\n(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"r\r\noot\":{\"children\":[{\"type\":\"input\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"\r\n50\"}]},\"styles\":[{\"selector\":\"body\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"d\r\nisplay\":\"block\",\"left\":\"32px\",\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"content-box\",\"margin\":\"0\",\"padd\r\ning\":\"0\",\"fontFamily\":\"Arial\",\"fontSize\":\"16px\",\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderColor\":\"#123456\",\"borde\r\nrRadius\":\"0px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;\r\nwidth:120px;height:44px;box-sizing:content-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:0px;bor\r\nder-style:none;border-color:#123456;border-radius:0px}\",\"browserStyle\":{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borde\r\nrRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"auto\"},\"stages\":[{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"bord\r\nerRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"},{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRa\r\ndius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"}],\"reference\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"a\r\nctual\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"renderSize\":[320,180]}'\r\n\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider \r\nremoving Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically \r\nincluded in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing \r\nZone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in \r\nthe \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', '{\"mode\":\"two\",\"boxSizing\":\"content-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 \r\n(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"r\r\noot\":{\"children\":[{\"type\":\"input\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"\r\n50\"}]},\"styles\":[{\"selector\":\"body\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"d\r\nisplay\":\"block\",\"left\":\"32px\",\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"content-box\",\"margin\":\"0\",\"padd\r\ning\":\"0\",\"fontFamily\":\"Arial\",\"fontSize\":\"16px\",\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"borderColor\":\"#123456\",\"bord\r\nerRadius\":\"0px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;display:block;left:32px;top:32px\r\n;width:120px;height:44px;box-sizing:content-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:2px;bo\r\nrder-style:solid;border-color:#123456;border-radius:0px}\",\"browserStyle\":{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"bo\r\nrderRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"auto\"},\"stages\":[{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"\r\nborderRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"},{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"bor\r\nderRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"}],\"reference\":{\"x\":32,\"y\":32,\"width\":124,\"height\":4\r\n8},\"actual\":{\"x\":32,\"y\":32,\"width\":124,\"height\":48},\"renderSize\":[320,180]}'\r\nTOTAL: 2 FAILED, 4 SUCCESS\r\n",
+      "outputFormatting": "PowerShell MatchInfo line-wrapping; remove CRLF within the INFO JSON record only"
+    },
+    {
+      "session": 66315,
+      "exitCode": 1,
+      "tests": 6,
+      "passed": 4,
+      "failed": 2,
+      "commandOutput": "\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', '{\"mode\":\"two\",\"boxSizing\":\"border-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"root\":{\"children\":[{\"type\":\"input\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"50\"}]},\"styles\":[{\"selector\":\"body\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"display\":\"block\",\"left\":\"32px\",\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"border-box\",\"margin\":\"0\",\"padding\":\"0\",\"fontFamily\":\"Arial\",\"fontSize\":\"16px\",\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"borderColor\":\"#123456\",\"borderRadius\":\"0px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:border-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:2px;border-style:solid;border-color:#123456;border-radius:0px}\",\"browserStyle\":{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"borderRadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"auto\"},\"stages\":[{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"borderRadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"<omitted>\"},{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"borderRadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"<omitted>\"}],\"reference\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"actual\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"renderSize\":[320,180]}'\r\n\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', '{\"mode\":\"omitted\",\"boxSizing\":\"content-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"root\":{\"children\":[{\"type\":\"input\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"50\"}]},\"styles\":[{\"selector\":\"body\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"display\":\"block\",\"left\":\"32px\",\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"content-box\",\"margin\":\"0\",\"padding\":\"0\",\"fontFamily\":\"Arial\",\"fontSize\":\"16px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:content-box;margin:0;padding:0;font-family:Arial;font-size:16px}\",\"browserStyle\":{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"auto\"},\"stages\":[{\"borderWidth\":\"1px\",\"borderStyle\":\"solid\",\"borderRadius\":\"4px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"},{\"borderWidth\":\"1px\",\"borderStyle\":\"solid\",\"borderRadius\":\"4px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"}],\"reference\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"actual\":{\"x\":32,\"y\":32,\"width\":122,\"height\":46},\"renderSize\":[320,180]}'\r\n\tborderWidth: Expected '1px' to be '0px'.\r\n\tborderStyle: Expected 'solid' to be 'none'.\r\n\tborderRadius: Expected '4px' to be '0px'.\r\n\tborderWidth: Expected '1px' to be '0px'.\r\n\tborderStyle: Expected 'solid' to be 'none'.\r\n\tborderRadius: Expected '4px' to be '0px'.\r\n\twidth: Expected 2 to be less than 0.5.\r\n\theight: Expected 2 to be less than 0.5.\r\n\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', '{\"mode\":\"zero\",\"boxSizing\":\"border-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"root\":{\"children\":[{\"type\":\"input\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"50\"}]},\"styles\":[{\"selector\":\"body\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"display\":\"block\",\"left\":\"32px\",\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"border-box\",\"margin\":\"0\",\"padding\":\"0\",\"fontFamily\":\"Arial\",\"fontSize\":\"16px\",\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderColor\":\"#123456\",\"borderRadius\":\"0px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:border-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:0px;border-style:none;border-color:#123456;border-radius:0px}\",\"browserStyle\":{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"auto\"},\"stages\":[{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"<omitted>\"},{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"<omitted>\"}],\"reference\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"actual\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"renderSize\":[320,180]}'\r\n\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', '{\"mode\":\"two\",\"boxSizing\":\"content-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"root\":{\"children\":[{\"type\":\"input\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"50\"}]},\"styles\":[{\"selector\":\"body\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"display\":\"block\",\"left\":\"32px\",\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"content-box\",\"margin\":\"0\",\"padding\":\"0\",\"fontFamily\":\"Arial\",\"fontSize\":\"16px\",\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"borderColor\":\"#123456\",\"borderRadius\":\"0px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:content-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:2px;border-style:solid;border-color:#123456;border-radius:0px}\",\"browserStyle\":{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"borderRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"auto\"},\"stages\":[{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"borderRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"},{\"borderWidth\":\"2px\",\"borderStyle\":\"solid\",\"borderRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"}],\"reference\":{\"x\":32,\"y\":32,\"width\":124,\"height\":48},\"actual\":{\"x\":32,\"y\":32,\"width\":124,\"height\":48},\"renderSize\":[320,180]}'\r\n\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', '{\"mode\":\"omitted\",\"boxSizing\":\"border-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"root\":{\"children\":[{\"type\":\"input\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"50\"}]},\"styles\":[{\"selector\":\"body\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"display\":\"block\",\"left\":\"32px\",\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"border-box\",\"margin\":\"0\",\"padding\":\"0\",\"fontFamily\":\"Arial\",\"fontSize\":\"16px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:border-box;margin:0;padding:0;font-family:Arial;font-size:16px}\",\"browserStyle\":{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRadius\":\"0px\",\"boxSizing\":\"border-box\",\"appearance\":\"auto\"},\"stages\":[{\"borderWidth\":\"1px\",\"borderStyle\":\"solid\",\"borderRadius\":\"4px\",\"boxSizing\":\"border-box\",\"appearance\":\"<omitted>\"},{\"borderWidth\":\"1px\",\"borderStyle\":\"solid\",\"borderRadius\":\"4px\",\"boxSizing\":\"border-box\",\"appearance\":\"<omitted>\"}],\"reference\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"actual\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"renderSize\":[320,180]}'\r\n\tborderWidth: Expected '1px' to be '0px'.\r\n\tborderStyle: Expected 'solid' to be 'none'.\r\n\tborderRadius: Expected '4px' to be '0px'.\r\n\tborderWidth: Expected '1px' to be '0px'.\r\n\tborderStyle: Expected 'solid' to be 'none'.\r\n\tborderRadius: Expected '4px' to be '0px'.\r\n\u001b[1A\u001b[2KWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nWARN: 'NG0914: The application is using zoneless change detection, but is still loading Zone.js. Consider removing Zone.js to get the full benefits of zoneless. In applications using the Angular CLI, Zone.js is typically included in the \"polyfills\" section of the angular.json file.'\r\nINFO: 'MATERIAL_RANGE_DEFAULT_BOX_PROOF', '{\"mode\":\"zero\",\"boxSizing\":\"content-box\",\"dpr\":1,\"userAgent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\",\"site\":{\"root\":{\"children\":[{\"type\":\"input\",\"inputType\":\"range\",\"id\":\"range-box-probe\",\"min\":\"0\",\"max\":\"100\",\"step\":\"5\",\"value\":\"50\"}]},\"styles\":[{\"selector\":\"body\",\"margin\":\"0\",\"padding\":\"0\"},{\"selector\":\"#range-box-probe\",\"position\":\"absolute\",\"display\":\"block\",\"left\":\"32px\",\"top\":\"32px\",\"width\":\"120px\",\"height\":\"44px\",\"boxSizing\":\"content-box\",\"margin\":\"0\",\"padding\":\"0\",\"fontFamily\":\"Arial\",\"fontSize\":\"16px\",\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderColor\":\"#123456\",\"borderRadius\":\"0px\"}]},\"css\":\"body{margin:0;padding:0}\\n#range-box-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;box-sizing:content-box;margin:0;padding:0;font-family:Arial;font-size:16px;border-width:0px;border-style:none;border-color:#123456;border-radius:0px}\",\"browserStyle\":{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"auto\"},\"stages\":[{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"},{\"borderWidth\":\"0px\",\"borderStyle\":\"none\",\"borderRadius\":\"0px\",\"boxSizing\":\"content-box\",\"appearance\":\"<omitted>\"}],\"reference\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"actual\":{\"x\":32,\"y\":32,\"width\":120,\"height\":44},\"renderSize\":[320,180]}'\r\nTOTAL: 2 FAILED, 4 SUCCESS\r\n",
+      "outputFormatting": "PowerShell MatchInfo.Line strings; INFO JSON records are unwrapped"
+    }
+  ],
+  "repeatIdentical": true,
+  "build": {
+    "command": "npm --prefix examples/material-showcase run build -- --output-path dist/material-showcase-range-default-box-audit",
+    "exitCode": 0,
+    "output": "Prerendered 2 static routes.\r\nApplication bundle generation complete. [31.214 seconds] - 2026-09-15T18:05:24.133Z\r\nOutput location: D:\\dev\\github\\AstylarUI-material\\examples\\material-showcase\\dist\\material-showcase-range-default-box-audit\r\n",
+    "scope": "browser/server production build; the browser test command compiled the diagnostic spec separately"
+  },
+  "sourceAssessment": [
+    {
+      "file": "src/app/services/dom/style.service.ts",
+      "line": 364,
+      "observation": "Default selection receives element.type (input), not inputType (range)."
+    },
+    {
+      "file": "src/app/services/dom/style-defaults.service.ts",
+      "line": 44,
+      "observation": "Merges global defaults and elementDefaults[elementType]."
+    },
+    {
+      "file": "src/app/config/browser-defaults.ts",
+      "line": 294,
+      "observation": "Generic input defaults specify borderWidth 1px, borderStyle solid, borderRadius 4px.",
+      "historyCommit": "2c16e148"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-dimension.service.ts",
+      "line": 315,
+      "observation": "Explicit content-box sizing adds resolved border widths outside authored width and height; this explains 122x46 versus 120x44."
+    },
+    {
+      "file": "src/app/services/dom/elements/element-creation.service.ts",
+      "line": 200,
+      "observation": "Calculated dimensions are passed to the core input manager, before normalization of the public mesh identity."
+    },
+    {
+      "file": "src/app/services/dom/input/range.manager.ts",
+      "line": 27,
+      "observation": "The manager projects the received CSS dimensions into its root hit-plane size. It does not repair generic border defaults before layout."
+    },
+    {
+      "file": "docs/compatibility/capabilities.json",
+      "line": 64,
+      "observation": "The claim that checkbox/radio/range use inputType-specific defaults is too broad for the demonstrated range border-resolution path.",
+      "historyCommit": "cd222388"
+    },
+    {
+      "file": "docs/compatibility/html-css.md",
+      "line": 109,
+      "observation": "Documents deliberate styled-control defaults rather than full Chromium UA defaults. That explains existing policy; it does not establish the user's same-input parity requirement."
+    }
+  ],
+  "limits": [
+    "Static DPR 1 style and final root-box proof only; no drag, pointer hit-test, paint/raster, blur, scrollbar or browser-native thumb geometry claim.",
+    "Appearance is recorded but not accepted as equivalent or included in border equality assertions.",
+    "Only borderWidth, borderStyle, borderRadius and boxSizing are equality asserted; border colors and side-specific paint require further proof.",
+    "Explicit equal-border modes are isolated controls, not a proposed candidate-only fixture workaround.",
+    "No change to canonical Material fixtures, renderer, compatibility documentation, canonical classifications, or unresolved count (3210).",
+    "The 156 original Material input owners still require property-specific source binding before this isolated proof may classify their border groups.",
+    "Initial test compilation rejected numeric min/max/step; the public strings now come directly from the browser input attributes. No browser result is claimed for the rejected compile.",
+    "An earlier successful compilation/browser execution also returned 2 failures/4 passes, but its tool output was truncated. The two complete repeated observation records above are the retained evidence."
+  ],
+  "nextActions": [
+    "Bind the original Material border observations to the captured author declarations and exact normal/effective stages; keep padding/box-sizing author discrepancies separate.",
+    "Plan a general core input-type/default-policy correction and reconcile the catalog claim; do not add candidate-only border resets.",
+    "Keep the omitted-border cases as failing equality tests and the explicit-border cases as sensitivity controls during implementation.",
+    "Investigate slider thumb identity, pointer domain, min/max/step and peer constraints independently; a 2px border effect does not explain all drag faults."
+  ]
+}
