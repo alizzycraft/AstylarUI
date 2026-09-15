@@ -12,7 +12,7 @@ Evidence: complete enforced parity report with Chromium 152.0.7977.76.
 
 Visual parity is green, but input equivalence is **not established**. The audit found 8339 unique normalized input differences across 386891 occurrences.
 
-3138 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
+2812 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
 
 Border initial-color evidence: 3580 uniquely paired node observations prove omitted author/inline color inputs with browser currentColor versus core transparent defaults. Attribution rejects possibly applicable state/media/reset rules and unknown selectors, and is not an equivalence waiver. Alpha paint, contextual-color paint, structure and final raster require separate evidence.
 
@@ -104,6 +104,7 @@ Supplemental paginator navigation: 104/104 paired boundaries cover first/last gu
 Unmatched tooltip text owners: 18 state-input discrepancies retain their complete captured trigger, overlay/anchor, style-stage and absent-counterpart evidence. They are unequal authoring, not missing renderer text or accepted typography/placement.
 Unpaired tooltip scalar styles: 8 original candidate-only popup captures independently bind their scalar and full-tree owner evidence. 48 style groups retain all values and occurrences under the unequal-presence authoring defect; no reference styles or rendered equivalence are invented.
 Field-host initial styles: 4616 observations retain browser computed defaults and candidate local omissions across captured ancestry. 48 groups are attributed to the unequal observation stages, without synthesizing candidate computed values. Component token authoring, inherited-value consumption, wrapping, hit testing, visibility and final rendering remain independent obligations.
+Remaining owner initial styles: 54139 captured eligible property observations are independently source-bound; 326 previously unresolved groups receive observation-stage attribution only. Existing classifications retain precedence. Explicit requests, mapping/ancestry gaps and negative observations are preserved; no candidate computed values or rendering equivalence are inferred.
 Slider native box requests: 156 independently source-bound owners retain explicit reference padding/content-box requests versus candidate omissions and generic defaults. 14 groups preserve the original values and complete case coverage; this is unequal input authoring, not proof of used-box, drag or raster equivalence.
 Slider native border defaults: 156 independently source-bound owners omit border requests but retain different browser and generic core defaults. 24 groups preserve original values and complete case coverage. This documented policy divergence requires a core decision, not a candidate-only reset; other input differences and original used-box, drag and raster outcomes remain separate.
 

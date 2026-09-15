@@ -100,11 +100,32 @@ gate fails as expected with **0 new groups versus 326 required**. This records
 the red baseline; the in-progress regeneration must supply verified new
 evidence before this gate can pass.
 
-Until canonical regeneration and conservation checks finish, the last verified
-canonical unresolved count remains **3,138**. The earlier standalone mapping
-survey identifies 326 groups / 18,356 observations with observation-stage
-evidence; this is an expected integration population, not an assumed final
-canonical count. Partial-state groups, if any, must be accounted for separately.
+Canonical regeneration subsequently completed with exit code 1, reporting only
+the expected strict acceptance failure: **2,812** remaining unattributed
+differences. Coverage remains 436 static and 1,875 interaction cases, with
+8,339 groups, 386,891 occurrences and 132 source findings. No input-equivalence
+claim is made.
+
+The independent conservation gate then passed: exactly **326 groups / 18,356
+observations** acquired the new observation-stage attribution, all **8,013
+other complete rows** remained identical, and all **8,339** original scalar
+value/count/sample/state projections were conserved. There were no unexpected
+partial-state replacements. The new evidence pool contains 54,139 eligible
+property observations, including negative evidence; it is not a count of
+equivalent rendered properties or newly attributed occurrences.
+
+The conserved scalar projection SHA-256 is
+`d5e916fb99193565c6be9a6428d8616a3ca87424d8f658d09f7df9824b693d03`.
+The 8,013 unchanged complete rows have SHA-256
+`7e0b7a23aa044e4e559fabce438e9d27fbe9164049b9fca4e42961b93b3ccad0`.
+The generated gzip payload is 48,413,240 bytes with SHA-256
+`bc51756963cfd2c0f81cfb099f48f7776cd608224d0c997a6f703edc6f48378d`.
+Its 1,795,180,227 decoded bytes have SHA-256
+`d8d776394aaf5d3830146cc5967150eaf7da69877751441852059db58ec31da9`.
+
+Canonical no-write replay and the unfiltered 43-file harness are running and
+still require terminal verification. The successful conservation gate does not
+substitute for either result or for the final enforced UI matrix.
 
 Remaining obligations include inherited/used-value consumption, wrapping,
 visibility, hit testing, plugin/core ownership, all other unresolved input

@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Current canonical owner-style integration checkpoint
+
+Canonical regeneration and the independent conservation gate now verify the
+[owner observation-stage integration](material-owner-initial-style-integration.md):
+326 groups / 18,356 observations have new evidence-backed attribution, with all
+8,339 scalar projections and 8,013 unrelated complete rows unchanged. The
+remaining unattributed count is **2,812**, not a claim that this many renderer
+bugs exist. Generation still exits 1 on that strict audit acceptance failure.
+The historical counts in earlier investigation entries describe their own
+checkpoints. No-write replay and the full 43-file harness are not yet terminal.
+
 ## Overlay ancestor-context capture limitation
 
 The [overlay capture-root proof](material-overlay-root-context-audit.md) shows
