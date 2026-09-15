@@ -3,6 +3,27 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Current canonical report regenerated and independently checked
+
+The [canonical verification](material-origin-canonical-generation.json) records
+the actual maintained CLI generation and independent `--check` after source-bound
+origin attribution. Both complete with the expected audit rejection and no other
+error: **3,272 unresolved attribution groups**. Coverage remains **436 static /
+1,875 interaction cases across 36 families**; all **8,339 groups / 386,891
+observations** and **132 source findings** are retained.
+
+The full regenerated JSON matches the decompressed checked-in payload byte for
+byte, and regenerated Markdown matches the human report. Separate integrity
+verification checks **129 source fingerprints**, the unchanged frozen capture,
+both payload hashes and the complete **1,590,484,878-byte** decoded stream. The
+gzip payload is **46,243,142 bytes**. This is lossless report generation, not an
+equivalence waiver or a renderer fix.
+
+The current **664/664** registered harness result is recorded below. The final
+unfiltered enforced browser matrix and remaining attribution work are still
+pending. Earlier generation/harness sections are chronological evidence, not
+current completion claims.
+
 ## Complete registered harness after origin source binding
 
 The [full harness record](material-origin-integration-full-harness.json) reports
