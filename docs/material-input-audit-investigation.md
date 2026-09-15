@@ -3,6 +3,29 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Origin stage proof: pooled-inventory bridge registered and verified
+
+The [bridge verification](material-origin-stage-inventory-verification.json)
+records the infrastructure needed to reuse the raw-tree origin proof from the
+main audit's pooled inventory. It reconstructs declaration snapshots and retains
+reference global style/rule indices; it does not resolve CSS or compute origins.
+Every one of the **6,938** original case/element dispositions matches the prior
+raw-tree survey, including **5,570** guarded stage gaps and **1,368** unresolved
+observations. Owner paths, mappings and non-equivalence flags are preserved.
+
+The new spec is registered once in the **31-file** `parity:harness:check` command.
+Its focused run passes **3/3 tests** in **74,300.6953 ms**, including JSON-round-trip
+replay, eleven altered-report controls, four false-equivalence flag controls and
+missing/duplicate provenance checks. The complete harness has not been rerun.
+
+This is a separate audit-infrastructure increment under the maintainer workflow.
+The main classifier and canonical report have not changed: **3,800 unresolved
+groups** remain in the last full replay. Integration must bind the retained
+scalar cases independently to original capture coverage; replaying self-supplied
+evidence alone cannot prove that a report retained every original observation.
+Motion/explicit-origin investigation, main source/proof integration, canonical
+regeneration and the full enforced parity matrix remain pending.
+
 ## Origin observation stages: guarded attribution across the complete population
 
 The [stage survey](material-transform-origin-stage-survey.json) and

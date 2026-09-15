@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "kind": "origin-stage-inventory-bridge-verification",
+  "baselineCommit": "deaf628",
+  "scope": "Audit infrastructure: rehydrate pooled full-tree inventory for the existing guarded origin-stage proof and register its complete-population regression test. No main classifier or production behavior change.",
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/origin-stage-inventory-evidence.mjs",
+      "sha256": "f25f65e6fd248b69edeac084a8cbb1272f542779980360e8a7bd29b6bd14bc60"
+    },
+    {
+      "file": "tests/material-parity/origin-stage-inventory-evidence.spec.mjs",
+      "sha256": "0ea45b4fa7de6a9c5c488656a330425d364c6f61c28316850bde568a33dfd9c2"
+    },
+    {
+      "file": "tests/material-parity/transform-origin-stage-evidence.mjs",
+      "sha256": "c8f8d0a03bf37fd5467863885c527ab674118cd954e07e4173db66528ae7b2b6"
+    },
+    {
+      "file": "tests/material-parity/origin-alias-mapping-evidence.mjs",
+      "sha256": "bd6a621438f2053d7edacc3d669e927f3306753c636849ff5df8e724b3fc472d"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "4dbd3a4c532e14991578197c7004ddee9f576d0df204cfb642b6ca563190923a"
+    },
+    {
+      "file": "package.json",
+      "sha256": "c848a22501e5ae8a808db1dec08ccf6f9c4a3c423ec27e912342166eae32365d"
+    }
+  ],
+  "verification": [
+    {
+      "command": "node --test tests/material-parity/origin-stage-inventory-evidence.spec.mjs",
+      "exitCode": 0,
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "durationMs": 74300.6953,
+      "result": "All 6938 case/element dispositions match the prior raw-tree survey; 5570 stage gaps and 1368 unresolved preserved. JSON-round-tripped evidence replays. Eleven report mutations, four non-equivalence flag mutations and missing/duplicate provenance controls are rejected."
+    },
+    {
+      "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const files=['tests/material-parity/origin-stage-inventory-evidence.mjs','tests/material-parity/origin-stage-inventory-evidence.spec.mjs','tests/material-parity/transform-origin-stage-evidence.mjs','tests/material-parity/origin-alias-mapping-evidence.mjs','tests/material-parity/input-equivalence-audit.mjs','package.json'];const sourceFingerprints=files.map(file=>({file,sha256:createHash('sha256').update(readFileSync(file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex')}));const command=JSON.parse(readFileSync('package.json')).scripts['parity:harness:check'];const registered=command.split(' ').filter(s=>s.endsWith('.spec.mjs'));assert.equal(registered.filter(f=>f===files[1]).length,1);console.log(JSON.stringify({sourceFingerprints,registeredHarnessFiles:registered.length,newTestRegistered:true}));\"",
+      "exitCode": 0,
+      "registeredHarnessFiles": 31,
+      "newTestRegistered": true
+    }
+  ],
+  "proofBoundaries": {
+    "mapping": "Raw-tree rule/style indices become pooled inventory indices. The bridge retains reference global indices and reconstructs candidate declaration stages without computing CSS or reading files. Every captured observation is compared to the prior raw-tree result.",
+    "ownership": "The bridge delegates identity and declaration analysis to existing proofs. No plugin or renderer behavior is recreated.",
+    "validation": "Replays retained scalar cases against the inventory and checks every positive observation has exactly one attribution with the original owner, values and non-equivalence claims.",
+    "notProven": "This infrastructure does not itself bind report captures to an external original capture manifest. The main collector integration must preserve original case/scalar provenance and retain unresolved cases. No rendering, candidate used origin or motion/default equivalence is established.",
+    "mainAuditEffect": "Main classifier, source/proof inventory and canonical payload remain unchanged. The new test is registered in parity:harness:check but the full harness has not yet been rerun."
+  },
+  "pending": [
+    "Wire the bridge into the main collector, discrepancy classifier and validator with original capture coverage bound independently; register source and focused proof inventory.",
+    "Preserve 1350 motion-context and 18 explicit ancestor-origin observations for further attribution.",
+    "Run current canonical regeneration/check and complete unfiltered enforced parity after all audit changes."
+  ],
+  "previousGoalTurn": "Progress: deaf628 was committed and pushed with generation/replay/integrity evidence. This turn adds and tests the pooled-inventory bridge as a separate infrastructure increment."
+}
