@@ -22,6 +22,15 @@ Canonical attribution remains unchanged at 3,138 unresolved; exact canonical
 membership, generated-node mappings and property-specific motion/state requests
 must be reviewed before any wider integration.
 
+The [exact membership binding](material-owner-initial-style-membership.md) now
+replays all 600 groups, conserving 31,508 unresolved occurrences separately from
+636 previously reviewed static occurrences. Static own-text, retained values,
+source digests, canonical counts/samples/states and existing witnesses are
+independently checked rather than inferred from count subtraction. Four tests,
+including fifteen negative mutations and full no-write replay, pass. This closes
+the survey's membership ambiguity; generated-owner and state-request attribution
+remain open, and the canonical unresolved count is unchanged.
+
 ## Slider sibling pointer suppression: separate held-state input
 
 The [source-bound survey](material-slider-peer-pointer-survey.md) reopens all
