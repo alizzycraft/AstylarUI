@@ -3,6 +3,25 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Remaining mapped-owner defaults: bounded triage across components
+
+The [owner survey](material-owner-initial-style-survey.md) covers all 600 remaining
+unresolved groups for eight shared inherited/default properties, reopening
+1,734 original case pairs and preserving 32,144 raw observations. It records
+297 groups with only a captured-default/local-omission result, 150 requiring
+generated-owner mapping, and the remaining groups with explicit requests,
+motion declarations or noninitial reference values. These are diagnostic
+partitions, not equivalent-rendering claims or confirmed defect counts.
+
+Crucially, 51 raw signature counts differ from canonical unresolved membership:
+for example, 12 static badge-label observations already have retained-text stage
+attribution, while 40 interaction observations remain unresolved. No previous
+classification was overwritten. The new four-test standalone proof passes,
+including sixteen negative mutations and exact no-write tree/report replay.
+Canonical attribution remains unchanged at 3,138 unresolved; exact canonical
+membership, generated-node mappings and property-specific motion/state requests
+must be reviewed before any wider integration.
+
 ## Slider sibling pointer suppression: separate held-state input
 
 The [source-bound survey](material-slider-peer-pointer-survey.md) reopens all
