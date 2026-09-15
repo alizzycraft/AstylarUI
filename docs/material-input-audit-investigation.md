@@ -3,6 +3,39 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Slider box source proof integrated into the canonical audit pipeline
+
+The collector now binds the complete original slider capture population and
+classifies only the five inspected native-input padding/box-sizing properties.
+The canonical validator independently reopens the original report and paired
+trees, replays that proof, and checks exact scalar values, state identities,
+occurrences and full reviewed-case coverage. Missing bindings or contradictory
+classification evidence fail validation rather than becoming an equivalence
+waiver. The production normalization path, not the standalone test helper,
+drives these report classifications.
+
+Focused verification passes **35/35 slider and tooltip tests** (zero skipped),
+including two new canonical-integration controls. Those controls preserve every
+original scalar value/count/state and every unrelated discrepancy row; mutation
+controls reject dropped evidence, missing or duplicated rows, altered values and
+false equivalence claims. The small synthetic fixture initially omitted its
+empty `pseudoElements` list; adding that required capture-schema field corrected
+the integration fixture without changing the harness or original captures.
+
+Twelve rolling audit indices update only their main-collector fingerprint.
+Their historical body data is independently compared with the prior commit and
+remains unchanged. All 85 indexed fingerprints are checked using the maintained
+CRLF-to-LF convention. The source-bound slider reproduction and previous
+verification records remain historical evidence; their earlier not-integrated
+limitations describe those earlier increments.
+
+Full canonical regeneration, complete-report conservation and maintained-CLI
+`--check` are pending for this integration. The last verified report still has
+3,224 unresolved groups. The expected 14-group attribution is not counted as
+complete until that regeneration and independent conservation check finish.
+The full enforced browser matrix remains pending. No renderer or comparison
+input changes are included.
+
 ## Slider native input boxes differ before layout and pointer conversion
 
 The [source-bound box inventory](material-slider-input-boxes.json) reviews both

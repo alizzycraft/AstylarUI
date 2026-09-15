@@ -6,6 +6,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { collectSliderInputBoxes, classifySliderInputBox, sliderInputBoxAttribution,
   validateSliderInputBoxes, validateSliderInputBoxClassifications } from './slider-input-box-source-binding.mjs';
+import { buildMaterialInputAudit, validateMaterialInputAudit } from './input-equivalence-audit.mjs';
 
 const sides = ['Top', 'Right', 'Bottom', 'Left'];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -24,10 +25,14 @@ const canonical = style => {
 };
 const equivalent = (_property, r, a) => r === a;
 
-function withCapture(run) {
-  const root = mkdtempSync(path.join(tmpdir(), 'astylar-slider-binding-'));
+function withCapture(run, repository = false) {
+  const temporary = mkdtempSync(repository
+    ? path.join(process.cwd(), 'artifacts/material-parity/slider-box-binding-')
+    : path.join(tmpdir(), 'astylar-slider-binding-'));
+  const root = repository ? process.cwd() : temporary;
   try {
-    const folder = 'artifacts/material-parity/proof'; mkdirSync(path.join(root, folder), { recursive: true });
+    const folder = repository ? path.relative(root, temporary).replaceAll('\\', '/') : 'artifacts/material-parity/proof';
+    mkdirSync(path.join(root, folder), { recursive: true });
     const save = (name, object) => {
       const file = `${folder}/${name}.json`, bytes = JSON.stringify(object);
       writeFileSync(path.join(root, file), bytes); return { file, sha256: hash(bytes) };
@@ -45,7 +50,7 @@ function withCapture(run) {
         ...(state !== 'static' ? { state } : {}) };
       for (const id of ['slider-start', 'slider-primary']) {
         r.nodes.push({ key: id, parent: 'ref-parent', type: 'input', attributes: { id, type: 'range', class: 'mdc-slider__input' },
-          style: 0, rules: [0], inline: Object.fromEntries(sides.map(side => [`padding-${side.toLowerCase()}`,
+          style: 0, rules: [0], pseudoElements: [], inline: Object.fromEntries(sides.map(side => [`padding-${side.toLowerCase()}`,
             { value: rStyle[`padding${side}`], important: false }])) });
         a.nodes.push({ key: id, parent: 'ast-parent', authored: { id, type: 'input', inputType: 'range', class: 'range-layer' },
           resolvedStyle: aStyle, normalResolvedStyle: aStyle, interactionResolvedStyle: aStyle });
@@ -59,7 +64,7 @@ function withCapture(run) {
     }
     const parityPath = save('report', raw).file, options = { root, parityPath };
     run({ raw, root, options, parityPath, save });
-  } finally { rmSync(root, { recursive: true, force: true }); }
+  } finally { rmSync(temporary, { recursive: true, force: true }); }
 }
 
 function rowsOf(evidence) {
@@ -159,3 +164,37 @@ test('slider source collector reproduces all original 156 audited native owners 
   assert.deepEqual(validateSliderInputBoxClassifications(evidence, rows, canonical, equivalent), []);
   assert.deepEqual(validateSliderInputBoxes(evidence, { root }), []);
 });
+
+test('slider box canonical integration uses production normalization without changing values or other rows', () => withCapture(({ raw, root, options }) => {
+  const before = structuredClone(raw), unbound = buildMaterialInputAudit(raw, { root });
+  const report = buildMaterialInputAudit(raw, options);
+  const rows = report.discrepancies.filter(r => r.attribution === sliderInputBoxAttribution);
+  assert.equal(rows.length, 14); assert.equal(rows.reduce((n, r) => n + r.occurrences, 0), 20);
+  assert.ok(rows.some(r => r.property === 'paddingLeft' && r.reference === '0' && r.astylar === '8px'));
+  assert.ok(rows.some(r => r.property === 'paddingLeft' && r.reference === '16px' && r.astylar === '8px'));
+  assert.ok(rows.some(r => r.property === 'boxSizing' && r.reference === 'content-box' && r.astylar === undefined));
+  assert.deepEqual(raw, before);
+  const projection = r => [r.family, r.element, r.property, r.reference, r.astylar, r.occurrences, r.cases, r.states];
+  assert.deepEqual(report.discrepancies.map(projection), unbound.discrepancies.map(projection));
+  const keys = new Set(rows.map(r => JSON.stringify(projection(r))));
+  assert.deepEqual(report.discrepancies.filter(r => !keys.has(JSON.stringify(projection(r)))),
+    unbound.discrepancies.filter(r => !keys.has(JSON.stringify(projection(r)))));
+  assert.ok(!validateMaterialInputAudit(report, { root, requireComplete: false }).some(e => e.includes('slider box')));
+}, true));
+
+test('slider box canonical validation rejects missing binding changed rows and false equivalence', () => withCapture(({ raw, root, options }) => {
+  const original = buildMaterialInputAudit(raw, options);
+  for (const mutate of [
+    (r, d) => { delete r.sliderInputBoxes; },
+    (r, d) => { r.sliderInputBoxes.captures = []; r.sliderInputBoxes.observations = []; },
+    (r, d) => { r.discrepancies = r.discrepancies.filter(row => row !== d); },
+    (r, d) => { d.attribution = 'unresolved'; },
+    (r, d) => { d.classification = 'equivalent-representation'; },
+    (r, d) => { d.reference = '8px'; },
+    (r, d) => { d.reviewEvidence.inputEquivalent = true; },
+    (r, d) => { r.discrepancies.push(structuredClone(d)); },
+  ]) {
+    const r = structuredClone(original); mutate(r, r.discrepancies.find(d => d.attribution === sliderInputBoxAttribution));
+    assert.ok(validateMaterialInputAudit(r, { root, requireComplete: false }).some(e => e.includes('slider box')));
+  }
+}, true));

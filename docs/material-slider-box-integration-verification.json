@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "kind": "slider-box-canonical-integration-focused-verification",
+  "baselineCommit": "59522aafd081e25c88d8fff73193062722e447d0",
+  "command": "node --test --test-name-pattern=\"slider|tooltip\" tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/supplemental-capture-evidence.spec.mjs tests/material-parity/slider-input-box-evidence.spec.mjs tests/material-parity/slider-input-box-source-binding.spec.mjs",
+  "exitCode": 0,
+  "tests": 35,
+  "passed": 35,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 11525.3575,
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "normalizedLfSha256": "242eda5b01049814e1ce0251d432acf27a886ab6e550736423dc349452486b1b"
+    },
+    {
+      "file": "tests/material-parity/slider-input-box-source-binding.spec.mjs",
+      "normalizedLfSha256": "a31c2c7e479d00d9d3fd283f55f46709164f0aeec76a1c06b5ea95f5207c970a"
+    },
+    {
+      "file": "tests/material-parity/slider-input-box-source-binding.mjs",
+      "normalizedLfSha256": "f57b24f5a5d5610b443413aba32de36018b35360a2cfcd57fcce1ba6920e75cb"
+    }
+  ],
+  "rollingIndexCheck": {
+    "files": 12,
+    "verifiedFingerprints": 85,
+    "changedMainCollectorFingerprints": 12,
+    "allHistoricalBodyDataUnchanged": true
+  },
+  "canonicalBefore": {
+    "compressedSha256": "da8353b6fa9d16b9ee9eb1f0b4c890ed566c1af9d39db74b04563121ed89998e",
+    "summary": {
+      "inputEquivalent": false,
+      "structureDifferences": 88,
+      "uniqueStyleDifferences": 8339,
+      "totalStyleDifferenceOccurrences": 386891,
+      "classifications": {
+        "application-plugin-authoring-defect": 574,
+        "equivalent-representation": 2088,
+        "intentional-documented-limitation": 312,
+        "parity-harness-defect": 5365
+      },
+      "propertyGroups": {
+        "interaction": 351,
+        "layout": 3106,
+        "other": 351,
+        "paint": 1255,
+        "transform": 937,
+        "typography": 2339
+      },
+      "affectedFamilies": {
+        "autocomplete": 147,
+        "badge": 282,
+        "bottom-sheet": 412,
+        "button": 305,
+        "button-toggle": 260,
+        "card": 376,
+        "checkbox": 220,
+        "chips": 317,
+        "core": 145,
+        "datepicker": 147,
+        "dialog": 487,
+        "divider": 300,
+        "expansion": 264,
+        "form-field": 147,
+        "grid-list": 278,
+        "icon": 128,
+        "input": 147,
+        "list": 149,
+        "menu": 150,
+        "paginator": 269,
+        "progress-bar": 130,
+        "progress-spinner": 124,
+        "radio": 304,
+        "select": 147,
+        "sidenav": 128,
+        "slide-toggle": 190,
+        "slider": 331,
+        "snack-bar": 262,
+        "sort": 151,
+        "stepper": 341,
+        "table": 142,
+        "tabs": 342,
+        "timepicker": 147,
+        "toolbar": 273,
+        "tooltip": 249,
+        "tree": 148
+      },
+      "unclassifiedDifferences": 0,
+      "unresolvedAttributions": 3224,
+      "sourceFindings": 132,
+      "unexplainedSourceFindings": 0,
+      "undetectedSourceDefinitions": 0
+    },
+    "allOriginalValuesAndCasesSha256": "d5e916fb99193565c6be9a6428d8616a3ca87424d8f658d09f7df9824b693d03",
+    "allOtherRowsSha256": "41811420279711f4efa9bbef9255053d84cca446a2e75b9ffb03ec96d5b24050",
+    "candidateOnlyGroups": 14,
+    "candidateOnlyOccurrences": 780,
+    "candidateOnlyAttributions": [
+      "unresolved"
+    ]
+  },
+  "limitations": [
+    "Canonical generation, complete-report row conservation and actual maintained CLI --check remain pending.",
+    "No full unfiltered harness or enforced browser matrix run in this increment.",
+    "No renderer changes or canonical comparison rewrites; unequal authored box requests are not equivalent rendering."
+  ],
+  "inputEquivalent": false
+}
