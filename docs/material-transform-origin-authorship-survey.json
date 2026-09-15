@@ -1,0 +1,537 @@
+{
+  "schemaVersion": 1,
+  "kind": "transform-origin-authorship-and-mapping-survey",
+  "baselineCommit": "bdda076",
+  "finding": "The newly exposed population contains both directly mapped declaration-stage observations and generated reference aliases; blanket equivalence or blanket renderer attribution is unsupported.",
+  "verification": {
+    "command": "node scripts/audit-material-transform-origin-authorship.mjs",
+    "exitCodes": [
+      0,
+      0
+    ],
+    "identicalRuns": true,
+    "data": {
+      "schemaVersion": 1,
+      "capturePath": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+      "captureSha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a",
+      "scope": "Full pinned raw origin population and both captured ancestry trees; read-only declaration/provenance survey, not classification or computed candidate origin proof.",
+      "observations": 6938,
+      "directlyMappedObservations": 6188,
+      "mappingGaps": {
+        "badge-count": {
+          "mappingGap": true,
+          "element": "badge-count",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 52
+        },
+        "paginator-size": {
+          "mappingGap": true,
+          "element": "paginator-size",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 52
+        },
+        "paginator-range": {
+          "mappingGap": true,
+          "element": "paginator-range",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 52
+        },
+        "slider-visual": {
+          "mappingGap": true,
+          "element": "slider-visual",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 78
+        },
+        "tab-panel": {
+          "mappingGap": true,
+          "element": "tab-panel",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 70
+        },
+        "stepper-content": {
+          "mappingGap": true,
+          "element": "stepper-content",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 68
+        },
+        "bottom-sheet-overlay": {
+          "mappingGap": true,
+          "element": "bottom-sheet-overlay",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 25
+        },
+        "bottom-sheet-panel": {
+          "mappingGap": true,
+          "element": "bottom-sheet-panel",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 25
+        },
+        "bottom-sheet-dismiss": {
+          "mappingGap": true,
+          "element": "bottom-sheet-dismiss",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 25
+        },
+        "bottom-sheet-copy": {
+          "mappingGap": true,
+          "element": "bottom-sheet-copy",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 25
+        },
+        "dialog-title": {
+          "mappingGap": true,
+          "element": "dialog-title",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 32
+        },
+        "dialog-copy": {
+          "mappingGap": true,
+          "element": "dialog-copy",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 32
+        },
+        "dialog-cancel": {
+          "mappingGap": true,
+          "element": "dialog-cancel",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 32
+        },
+        "dialog-save": {
+          "mappingGap": true,
+          "element": "dialog-save",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 32
+        },
+        "dialog-panel": {
+          "mappingGap": true,
+          "element": "dialog-panel",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 32
+        },
+        "dialog-actions": {
+          "mappingGap": true,
+          "element": "dialog-actions",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 32
+        },
+        "snack-bar-overlay": {
+          "mappingGap": true,
+          "element": "snack-bar-overlay",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 34
+        },
+        "snack-bar-surface": {
+          "mappingGap": true,
+          "element": "snack-bar-surface",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 34
+        },
+        "tooltip-popup": {
+          "mappingGap": true,
+          "element": "tooltip-popup",
+          "referenceIdMatches": 0,
+          "candidateIdMatches": 1,
+          "observations": 18
+        }
+      },
+      "uniqueContexts": 368,
+      "treeFiles": 4622,
+      "orderedRowsSha256": "57a325737fbe082a92a893db35cee6473019b5cdf151819e13ca7e9892f08ff3",
+      "orderedContextsSha256": "c1721ea5ef1ae59d277fb87c57d162ef6f58bbd8c4a0e569a40ac42e2e6be3a7",
+      "typePairs": {
+        "section/section": 2311,
+        "button/button": 704,
+        "mat-toolbar/div": 52,
+        "span/span": 612,
+        "mat-sidenav-container/div": 62,
+        "mat-grid-list/div": 52,
+        "mat-grid-tile/div": 104,
+        "mat-divider/div": 24,
+        "mat-card/div": 52,
+        "mat-card-title/h2": 52,
+        "mat-card-content/p": 52,
+        "mat-chip-listbox/div": 76,
+        "mat-chip-option/div": 152,
+        "mat-icon/img": 20,
+        "mat-list/div": 52,
+        "table/table": 52,
+        "div/div": 60,
+        "mat-paginator/div": 52,
+        "mat-tree/div": 52,
+        "mat-form-field/div": 577,
+        "mat-checkbox/div": 68,
+        "mat-radio-group/div": 68,
+        "input/input": 156,
+        "mat-slide-toggle/div": 68,
+        "mat-button-toggle-group/div": 68,
+        "mat-button-toggle/div": 136,
+        "mat-tab-group/div": 70,
+        "span/button": 140,
+        "mat-stepper/div": 68,
+        "mat-expansion-panel/div": 68,
+        "mat-panel-title/span": 68,
+        "mat-progress-bar/showcase.material:linear-progress": 20,
+        "mat-progress-spinner/showcase.material:circular-progress": 20
+      },
+      "referenceWithRelevantPathRequests": 1036,
+      "referenceWithOriginBoxOrResetPathRequests": 0,
+      "referenceWithAnimationOrTransitionPathRequests": 1036,
+      "candidateWithPotentialRelevantPathRequests": 0,
+      "candidateWithRelevantRetainedStageValues": 0,
+      "withoutCapturedTransformBox": 6188,
+      "contextSamples": [
+        {
+          "hash": "4b0199b2cbcc238c00d4dc78b32363eb9d2324930b02890c139e0b18867d95d1",
+          "context": {
+            "referenceType": "section",
+            "candidateType": "section",
+            "referenceDisplay": "block",
+            "referenceTransformOrigin": "389px 49px",
+            "referenceTransform": "none",
+            "referenceTransformBox": "<not-captured>",
+            "referenceBoxSizing": "content-box",
+            "referenceWidth": "720px",
+            "referenceHeight": "40px",
+            "referencePath": [
+              {
+                "key": "frame",
+                "type": "main",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "key": "frame/2",
+                "type": "section",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "key": "root",
+                "type": "<synthetic-root>",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "key": "root/0",
+                "type": "main",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "key": "root/0/2",
+                "type": "section",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            }
+          }
+        },
+        {
+          "hash": "6bb07a60566643e8a8669a6e3c0556472f500e9e0c435c5e3896583bd9d78bc0",
+          "context": {
+            "referenceType": "button",
+            "candidateType": "button",
+            "referenceDisplay": "inline-flex",
+            "referenceTransformOrigin": "106.117px 20px",
+            "referenceTransform": "matrix(1, 0, 0, 1, 0, 0)",
+            "referenceTransformBox": "<not-captured>",
+            "referenceBoxSizing": "border-box",
+            "referenceWidth": "212.234px",
+            "referenceHeight": "40px",
+            "referencePath": [
+              {
+                "key": "frame",
+                "type": "main",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "key": "frame/2",
+                "type": "section",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "key": "frame/2/0",
+                "type": "button",
+                "inline": {},
+                "rules": [
+                  {
+                    "source": "sheet:4/24",
+                    "selector": ".mat-mdc-unelevated-button",
+                    "active": true,
+                    "conditions": [],
+                    "declarations": {
+                      "transition-behavior": {
+                        "value": "normal",
+                        "important": false
+                      },
+                      "transition-duration": {
+                        "value": "280ms",
+                        "important": false
+                      },
+                      "transition-timing-function": {
+                        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+                        "important": false
+                      },
+                      "transition-delay": {
+                        "value": "0s",
+                        "important": false
+                      },
+                      "transition-property": {
+                        "value": "box-shadow",
+                        "important": false
+                      }
+                    }
+                  },
+                  {
+                    "source": "sheet:4/98",
+                    "selector": ".mat-mdc-button._mat-animation-noopable, .mat-mdc-unelevated-button._mat-animation-noopable, .mat-mdc-raised-button._mat-animation-noopable, .mat-mdc-outlined-button._mat-animation-noopable, .mat-tonal-button._mat-animation-noopable",
+                    "active": true,
+                    "conditions": [],
+                    "declarations": {
+                      "transition-behavior": {
+                        "value": "normal",
+                        "important": true
+                      },
+                      "transition-duration": {
+                        "value": "0s",
+                        "important": true
+                      },
+                      "transition-timing-function": {
+                        "value": "ease",
+                        "important": true
+                      },
+                      "transition-delay": {
+                        "value": "0s",
+                        "important": true
+                      },
+                      "transition-property": {
+                        "value": "none",
+                        "important": true
+                      },
+                      "animation-duration": {
+                        "value": "auto",
+                        "important": true
+                      },
+                      "animation-timing-function": {
+                        "value": "ease",
+                        "important": true
+                      },
+                      "animation-delay": {
+                        "value": "0s",
+                        "important": true
+                      },
+                      "animation-iteration-count": {
+                        "value": "1",
+                        "important": true
+                      },
+                      "animation-direction": {
+                        "value": "normal",
+                        "important": true
+                      },
+                      "animation-fill-mode": {
+                        "value": "none",
+                        "important": true
+                      },
+                      "animation-play-state": {
+                        "value": "running",
+                        "important": true
+                      },
+                      "animation-name": {
+                        "value": "none",
+                        "important": true
+                      },
+                      "animation-timeline": {
+                        "value": "auto",
+                        "important": true
+                      },
+                      "animation-range-start": {
+                        "value": "normal",
+                        "important": true
+                      },
+                      "animation-range-end": {
+                        "value": "normal",
+                        "important": true
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "candidatePath": [
+              {
+                "key": "root",
+                "type": "<synthetic-root>",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "key": "root/0",
+                "type": "main",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "key": "root/0/2",
+                "type": "section",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "key": "root/0/2/0",
+                "type": "button",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            }
+          }
+        },
+        {
+          "hash": "06164ed470dff78aa1630165e880daa5ec3bbb831687c49a9020990539fc4c17",
+          "context": {
+            "referenceType": "section",
+            "candidateType": "section",
+            "referenceDisplay": "block",
+            "referenceTransformOrigin": "348px 49px",
+            "referenceTransform": "none",
+            "referenceTransformBox": "<not-captured>",
+            "referenceBoxSizing": "content-box",
+            "referenceWidth": "638px",
+            "referenceHeight": "40px",
+            "referencePath": [
+              {
+                "key": "frame",
+                "type": "main",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "key": "frame/2",
+                "type": "section",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "key": "root",
+                "type": "<synthetic-root>",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "key": "root/0",
+                "type": "main",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "key": "root/0/2",
+                "type": "section",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            }
+          }
+        }
+      ],
+      "limitations": [
+        "Context samples are illustrations only; all reported counts and hashes traverse all 6938 observations.",
+        "Direct-ID mapping gaps remain explicit; generated aliases need independently proven mappings. Declaration counts only concern directly mapped observations.",
+        "Candidate selector filtering is conservative possible applicability, not a computed cascade or state winner.",
+        "Ancestry ends at the captured frame/synthetic root. Absence of requests does not prove browser UA rules, uncaptured outer scopes, transform-box semantics, reference-box equality or candidate computed defaults.",
+        "All origin groups remain unresolved. No existing attribution, report or fixture is rewritten."
+      ],
+      "sourceFingerprints": [
+        {
+          "file": "scripts/audit-material-transform-origin-authorship.mjs",
+          "sha256": "7dda5be92e2b5ff24cfa9a590206864764696ace6dd7250a5b4a81ce884ffab5"
+        },
+        {
+          "file": "tests/material-parity/root-initial-style-evidence.mjs",
+          "sha256": "1fb7dc3f6dee4c64a0e86db8cbaedee621cffe15e6ff5fb62878f37977d4fa8f"
+        },
+        {
+          "file": "tests/material-parity/border-initial-input-evidence.mjs",
+          "sha256": "3dbcf33ff70244a8179f438962a2549fb7e354948f084d35d433bcf82e76f9f4"
+        }
+      ]
+    }
+  },
+  "methodology": [
+    "Both runs read and SHA-256 verify the unchanged raw capture and all 4622 referenced tree files; candidate evidence must be version 2 core-style-inspection and tree diagnostics empty.",
+    "For each selected observation, map only a unique literal ID on each side. Verify the reference tree origin equals the original scalar origin. Follow captured ancestry with unique parents and cycle rejection.",
+    "Inspect origin, transform-box, all, animation and transition declarations in reference matched rules and inline data, and conservatively possibly matching candidate rules plus all three retained declaration stages.",
+    "Keep every generated alias as an explicit mapping gap in this survey rather than guessing its reference node. Existing alias mapping proofs elsewhere in the audit have not been invalidated; they must be joined explicitly for origin-specific attribution.",
+    "The initial diagnostic draft required every scalar alias to be a literal reference ID and stopped on badge-count. The final survey records those cases rather than dropping them or inventing nodes."
+  ],
+  "observations": {
+    "total": 6938,
+    "directlyMapped": 6188,
+    "generatedAliasObservations": 750,
+    "generatedAliasNames": 19,
+    "referenceOriginBoxOrResetPathRequests": 0,
+    "referenceAnimationOrTransitionPathRequests": 1036,
+    "candidateRelevantPathRequests": 0,
+    "candidateRelevantRetainedStageValues": 0,
+    "missingReferenceTransformBoxValues": 6188
+  },
+  "assessment": {
+    "confirmed": "For directly mapped nodes, the captured paths contain no explicit origin, transform-box or all reset requests on the reference side, and no relevant candidate requests or retained values. Reference computed pixels and candidate declaration omissions are different evidence stages.",
+    "notEstablished": "No candidate computed origin or corresponding used reference-box is available here. Transition/animation declarations require their own cascade and state interpretation. Absence in captured ancestry does not prove all browser/default contexts. Generated aliases are not literal ID matches.",
+    "effect": "No classifier or canonical input changes. All 587 origin groups / 6938 observations remain unresolved; the full audit still has 3800 unresolved groups at bdda076."
+  },
+  "recordVerification": {
+    "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const r=JSON.parse(readFileSync('docs/material-transform-origin-authorship-survey.json')),d=r.verification.data;for(const f of d.sourceFingerprints)assert.equal(createHash('sha256').update(readFileSync(f.file,'utf8').replace(/\\r\\n/g,'\\n')).digest('hex'),f.sha256,f.file);assert.equal(d.observations,6938);assert.equal(d.directlyMappedObservations,6188);assert.equal(Object.keys(d.mappingGaps).length,19);assert.equal(Object.values(d.mappingGaps).reduce((n,g)=>n+g.observations,0),750);assert.equal(Object.values(d.typePairs).reduce((n,v)=>n+v,0),6188);assert.equal(d.treeFiles,4622);assert.equal(d.referenceWithOriginBoxOrResetPathRequests,0);assert.equal(d.referenceWithAnimationOrTransitionPathRequests,1036);assert.equal(d.candidateWithPotentialRelevantPathRequests,0);assert.equal(d.candidateWithRelevantRetainedStageValues,0);assert.equal(d.withoutCapturedTransformBox,6188);assert.equal(createHash('sha256').update(readFileSync(d.capturePath)).digest('hex'),d.captureSha256);assert.deepEqual(r.verification.exitCodes,[0,0]);console.log(JSON.stringify({sourceFingerprints:d.sourceFingerprints.length,rawHashVerified:true,population:d.observations,direct:d.directlyMappedObservations,aliasObservations:750,recordChecksPassed:true}));\"",
+    "exitCode": 0,
+    "result": {
+      "sourceFingerprints": 3,
+      "rawHashVerified": true,
+      "population": 6938,
+      "direct": 6188,
+      "aliasObservations": 750,
+      "recordChecksPassed": true
+    }
+  },
+  "nextSteps": [
+    "Join all 750 generated-alias observations to independently verified semantic mappings already present in the audit; preserve any unresolved mapping.",
+    "Reduce CSS-box default-origin and reference-box semantics through equivalent public-API inputs, distinguishing current declaration-stage omission from actual layout/projection failures.",
+    "Only add guarded attribution when exact authored/default/context evidence supports it; do not reintroduce a scalar-only waiver."
+  ]
+}

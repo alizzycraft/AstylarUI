@@ -3,6 +3,29 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Origin ancestry survey: declaration stages and generated aliases separated
+
+The [authorship survey](material-transform-origin-authorship-survey.json) repeats
+identically twice over all **6,938** exposed observations, checking the raw hash
+and all **4,622** referenced tree files. **6,188** observations have unique literal
+IDs on both sides. The other **750**, across **19** alias names, need the existing
+generated-element mapping proofs joined explicitly; they are retained as gaps
+in this survey, not declared missing from the application or silently skipped.
+
+For directly mapped nodes, captured reference ancestry has no explicit origin,
+transform-box or `all` request. **1,036** observations do have animation/transition
+declarations, which are retained rather than assumed inactive. Candidate paths
+and all three retained declaration stages omit the surveyed properties. This
+locates a computed-browser versus candidate-declaration evidence distinction,
+but does not yet prove equal defaults, corresponding used reference boxes, or
+correct candidate projection. Reference `transform-box` is not captured for any
+of those **6,188** observations. The three displayed context samples are only
+illustrations; population counts and ordered hashes cover every selected case.
+
+No classifier, renderer or canonical fixture changed in this survey. All **587**
+origin groups remain unresolved. Next work must join the generated mappings and
+establish origin/default/reference-box evidence without restoring the old waiver.
+
 ## Transform-origin waiver removed; complete population remains visible
 
 The [correction record](material-transform-origin-waiver-correction.json) removes
