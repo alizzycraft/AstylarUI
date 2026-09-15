@@ -145,6 +145,13 @@ Canonical no-write replay is still running. The successful conservation gate
 does not substitute for resolving these test failures, no-write verification or
 the final enforced UI matrix.
 
+The [exact failure diagnosis](material-owner-integration-harness-diagnosis.md)
+now proves the source-list delta is precisely the eight intended files and
+restoring only 22 explicitly identified shared-owner attributions reproduces
+the slider test's original 220-row hash. That isolates stale expectations
+without weakening the historical guard. Test corrections and fresh regression
+results remain pending the unchanged-source no-write replay.
+
 Remaining obligations include inherited/used-value consumption, wrapping,
 visibility, hit testing, plugin/core ownership, all other unresolved input
 differences and the full goal acceptance matrix. No UI issue is marked fixed.
