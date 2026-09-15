@@ -3,6 +3,47 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Original slider border-default observations bound to source
+
+The [standalone border-default inventory](material-slider-border-defaults.json)
+now reopens the original full-matrix report and verifies every paired tree digest.
+Both range inputs in all **78 cases / 156 owners** omit border and appearance
+author declarations. Their **1,872 physical border-width/style/radius observations
+(24 owner/property groups)** retain Chromium's 0px/none/0px values versus the
+candidate's generic 1px/solid/4px declarations at all three captured stages.
+Mapped author declarations are checked against full-tree rule and inline sources;
+explicit competing declarations, missing rules, changed stages and aliases are
+rejected. Border colors and appearance equivalence are not attributed.
+
+The [public range proof](material-range-default-box-audit.md) establishes the
+core default-selection effect with shared inputs. These original application
+captures independently establish the same border omission/default pattern;
+their other unequal padding, box-sizing, domain and peer-dependent width inputs
+remain visible. **The 2px increase measured in the isolated content-box test must
+not be assigned as the original Material hit-area delta.** Neither record proves
+dragging or raster parity, and neither proposes candidate-only border resets.
+
+Verification: `node --test tests/material-parity/slider-border-default-evidence.spec.mjs tests/material-parity/range-default-box-proof.spec.mjs`
+passed **6/6**, zero skips, in **1.323 seconds**. This includes 18 border-reader
+rejection controls, seven public-record corruption controls, all 18 public
+source/runtime fingerprints and every original slider case. Running
+`node scripts/audit-material-slider-border-defaults.mjs --check` independently
+replays the complete inventory and verifies all original source digests.
+The generated record is 2,643,047 bytes at SHA-256
+`91911d7aae0b016919452af7a989dc429a3dfbbdaf8f029ece3ce773770a8392`.
+
+This coherent increment does not change the canonical scalar classifier or
+the **3,210 unresolved** count. Next, integrate this exact source-bound subset
+with complete per-case scalar coverage and conservation checks; keep the
+documented default-policy classification distinct from authoring defects.
+
+The logged 33-file harness rerun has identified its failure: test 99,
+`records source fingerprints and actual visual acceptance fields`, still expects
+129 files although the collector records 133. History adds one tooltip binding
+module (`9afcdf3`) and three slider binding modules/tests (`bebedbd`), with no
+removed or duplicate source entries. The assertion correction is pending the
+running command's terminal result; no test source has been changed mid-run.
+
 ## Range defaults: same-input public proof now available
 
 The [range default-border investigation](material-range-default-box-audit.md)
