@@ -37,6 +37,13 @@ transform in those reference activations, not candidate projection/plugin
 defects or other original interaction states. Source digests, original records,
 4,656 root property comparisons and full ancestry are independently checked.
 
+The [shared-style overlay owner join](material-overlay-owner-mapping-survey.md)
+connects all 54 remaining identity-gap groups to 200 existing alias proofs over
+91 original cases. Every proof and tree binding replays exactly, with 600
+mutation rejections. The known 59 CSS-layer scalar-rule gaps remain explicit.
+This closes the bounded owner-identity question, not original open-state
+external ancestry or initial-style attribution; canonical counts are unchanged.
+
 ## Remaining mapped-owner defaults: bounded triage across components
 
 The [owner survey](material-owner-initial-style-survey.md) covers all 600 remaining
