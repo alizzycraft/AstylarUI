@@ -5,7 +5,10 @@ import { collectOriginalOverlayContextSurvey } from '../tests/material-parity/or
 
 const report = collectOriginalOverlayContextSurvey('artifacts/material-parity/original-overlay-context-current-ancestry-audit/latest-report.json');
 report.sourceFingerprints = ['scripts/audit-material-original-overlay-context.mjs',
-  'tests/material-parity/original-overlay-context-survey.mjs'].map(file => ({ file,
+  'tests/material-parity/original-overlay-context-survey.mjs',
+  'tests/material-parity/historical-audit-module-source.mjs',
+  'tests/material-parity/original-overlay-context-survey.spec.mjs',
+  'tests/material-parity/input-equivalence-audit.mjs'].map(file => ({ file,
     sha256: createHash('sha256').update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex') }));
 const file = 'docs/material-original-overlay-context-survey.json', output = JSON.stringify(report, null, 2) + '\n';
 if (process.argv.includes('--check')) assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), output);

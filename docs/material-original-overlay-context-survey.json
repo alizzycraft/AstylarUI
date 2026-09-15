@@ -6,6 +6,14 @@
     "sha256": "74813a6a0872c7215e338639d395279a5e0016bfb3b0a44123e4994a8501489e"
   },
   "browser": "152.0.7977.76",
+  "historicalAuditSource": {
+    "file": "tests/material-parity/input-equivalence-audit.mjs",
+    "recordedSha256": "fb97f72a543cff1f6c4e1f163f8b92f98c7dbbacbaa4a37d0571432045201392",
+    "historicalSourceCommit": "65487aeba6a26f9715f302f92b4ee454161a94ef",
+    "currentSha256": "c00cef561be90f9d67fbb98bad7a04898b369b0b5348eb310636cbee45334a66",
+    "exactCurrentSourceMatch": false,
+    "scope": "Historical source receipt only; current mapping behavior requires complete owner-proof replay and negative controls."
+  },
   "cases": 91,
   "matchedOriginalOwners": 200,
   "rootProperties": 17654,
@@ -6033,11 +6041,23 @@
   "sourceFingerprints": [
     {
       "file": "scripts/audit-material-original-overlay-context.mjs",
-      "sha256": "7afc47bb5ffc6bef18a16b6165c7f576c61fc45bb5e57968aee809af653e52b7"
+      "sha256": "def68a002c1119eba007e779bfd5687a9adba82cd22dbab8ee7882538d2bf358"
     },
     {
       "file": "tests/material-parity/original-overlay-context-survey.mjs",
-      "sha256": "4735b18559d079078dd269d8154b57f41e97e4d61d4b0c72b3c6db0bc969ade1"
+      "sha256": "393928864474a49bf1f839bc3aee9f21b8d1618cf05126d199885d18da1cbd17"
+    },
+    {
+      "file": "tests/material-parity/historical-audit-module-source.mjs",
+      "sha256": "4c05eddcff0260c5f1e55e1b4d4ca40965562120ca2993ac171a5c157249c624"
+    },
+    {
+      "file": "tests/material-parity/original-overlay-context-survey.spec.mjs",
+      "sha256": "23cad44f533ac1eae156a3b6599dadbed8fa0514b5956d18e157787f85cb8dfd"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "c00cef561be90f9d67fbb98bad7a04898b369b0b5348eb310636cbee45334a66"
     }
   ]
 }

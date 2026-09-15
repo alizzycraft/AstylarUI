@@ -87,3 +87,35 @@ candidate inherited/used values equal. Continue tracing explicit declarations,
 candidate ancestor styles and core/plugin consumers at the mapped owners. Keep
 the 59 existing layered-rule capture gaps visible. The canonical **2,812
 unattributed groups** remain unchanged by this increment.
+
+## Historical source receipt and current replay
+
+After tooltip wrapping integration, the unchanged historical capture initially
+failed its reader: the recorded audit-module SHA-256 was
+`fb97f72a543cff1f6c4e1f163f8b92f98c7dbbacbaa4a37d0571432045201392`,
+whereas the current module was
+`c00cef561be90f9d67fbb98bad7a04898b369b0b5348eb310636cbee45334a66`.
+The capture receipt describes historical producer code, not current code.
+
+The reader now verifies that one historical receipt against the exact Git blob
+at `65487aeba6a26f9715f302f92b4ee454161a94ef`. It separately records the
+current module digest. The other ten capture source dependencies still require
+exact current-file matches. This is not a blanket stale-source waiver or proof
+that the two module versions behave identically: the current reader still
+independently replays all 200 original/fresh owner proofs and the 17,654 root
+property comparisons. Existing corruption and coverage rejection checks remain.
+
+The original capture, its source receipt, trees and observations were not
+rewritten. Comparing the previous checked-in survey with the regenerated one,
+excluding only `sourceFingerprints` and the newly added `historicalAuditSource`,
+proves deep equality of every prior data field. That conserved JSON projection
+has SHA-256 `b4b16ea7e329e2467325fd3a1c2d54b7f82755e02ee9a42a155e458138b715d1`.
+The regenerated survey additionally fingerprints the historical verifier,
+reader tests and current audit module alongside the existing generator/reader.
+
+Verification: `node --test tests/material-parity/original-overlay-context-survey.spec.mjs`
+passed **5/5**, zero failures/skips/cancellations, **3,411.6009 ms**.
+Generation and `--check` both exited 0. New negative controls reject relabelling
+the historical receipt with today's hash, a different file, and corrupted Git
+source bytes. This correction does not establish candidate rendering parity,
+change canonical attribution, or repair other historical surveys automatically.

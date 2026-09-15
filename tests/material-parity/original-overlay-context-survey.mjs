@@ -5,6 +5,7 @@ import path from 'node:path';
 import ts from 'typescript';
 import { originalCaseKey } from './owner-initial-style-membership.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+import { originalOverlayAuditSourceFile, verifyHistoricalAuditModuleSource } from './historical-audit-module-source.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export function collectOriginalOverlayContextSurvey(reportFile, { root = process.cwd(), readBytes = readFileSync } = {}) {
@@ -30,7 +31,11 @@ export function collectOriginalOverlayContextSurvey(reportFile, { root = process
     'tests/material-parity/input-equivalence-audit.mjs', 'tests/material-parity/owner-initial-style-membership.mjs',
     'tests/material-parity/cursor-metrics.mjs', 'node_modules/typescript/lib/typescript.js'];
   assert.deepEqual(raw.capture.sources.map(s => s.file), expectedSources);
-  raw.capture.sources.forEach(item => hashed(item, true));
+  // Historical source identity and current proof replay are separate checks.
+  // All other producer dependencies still require an exact current-file match.
+  const historicalAuditSource = verifyHistoricalAuditModuleSource(
+    raw.capture.sources.find(s => s.file === originalOverlayAuditSourceFile), read(originalOverlayAuditSourceFile, true), { root });
+  raw.capture.sources.filter(item => item.file !== originalOverlayAuditSourceFile).forEach(item => hashed(item, true));
   const runner = read(expectedSources[3], true).toString('utf8');
   const parsed = ts.createSourceFile(expectedSources[3], runner, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const names = ['profileTheme', 'sendShowcaseCommand', 'waitForThemeApplied', 'settleInteraction',
@@ -105,7 +110,7 @@ export function collectOriginalOverlayContextSurvey(reportFile, { root = process
   }
   assert.equal(owners, 200);
   return { schemaVersion: 1, kind: 'original-overlay-reference-context-survey', capture: { file: reportFile, sha256: hash(bytes) },
-    browser: raw.browser, cases: rows.length, matchedOriginalOwners: owners, rootProperties,
+    browser: raw.browser, historicalAuditSource, cases: rows.length, matchedOriginalOwners: owners, rootProperties,
     missingEnumeratedAliases: [...missingAliases].sort(), observations: rows,
     canonicalAttributionChanged: false, candidateReplayed: false, renderingEquivalent: false,
     limitation: 'Original reference action functions and mapped owner styles are replayed. External context is freshly observed; no historical unrecorded ancestor values, fresh candidate behavior or final raster equivalence is inferred.' };

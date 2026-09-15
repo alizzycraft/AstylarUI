@@ -4,6 +4,9 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { collectOriginalOverlayContextSurvey } from './original-overlay-context-survey.mjs';
+import { originalOverlayAuditSourceCommit, originalOverlayAuditSourceFile,
+  verifyHistoricalAuditModuleSource } from './historical-audit-module-source.mjs';
+import { execFileSync } from 'node:child_process';
 
 const file = 'artifacts/material-parity/original-overlay-context-current-ancestry-audit/latest-report.json';
 const baseline = JSON.parse(readFileSync(file)), root = process.cwd();
@@ -27,6 +30,9 @@ test('original overlay context reader replays all 91 states and 200 original own
   assert.deepEqual([...new Set(result.observations.map(r => r.viewport.deviceScaleFactor))].sort(), [1, 2]);
   assert.equal(result.candidateReplayed, false); assert.equal(result.renderingEquivalent, false);
   assert.equal(result.canonicalAttributionChanged, false);
+  assert.equal(result.historicalAuditSource.historicalSourceCommit, originalOverlayAuditSourceCommit);
+  assert.equal(result.historicalAuditSource.recordedSha256, baseline.capture.sources.find(s => s.file === originalOverlayAuditSourceFile).sha256);
+  assert.equal(result.historicalAuditSource.currentSha256, hash(readFileSync(originalOverlayAuditSourceFile)));
   assert.deepEqual(result.missingEnumeratedAliases, ['flex', 'gap', 'gridColumn', 'gridRow', 'margin', 'padding', 'whiteSpace']);
 });
 
@@ -58,4 +64,19 @@ test('original overlay context rejects stale runtime and claims beyond reference
   assert.throws(() => probe(({ raw }) => { raw.candidateReplayed = true; }));
   assert.throws(() => probe(({ raw }) => { raw.renderingEquivalent = true; }));
   assert.throws(() => probe(({ record }) => record(r => { r.candidateReplayed = true; })));
+});
+
+test('historical source verification preserves the recorded digest and distinguishes current code', () => {
+  const recorded = baseline.capture.sources.find(s => s.file === originalOverlayAuditSourceFile);
+  const before = structuredClone(recorded), current = readFileSync(originalOverlayAuditSourceFile);
+  const historical = execFileSync('git', ['show', `${originalOverlayAuditSourceCommit}:${originalOverlayAuditSourceFile}`], { maxBuffer: 4 * 1024 * 1024 });
+  const result = verifyHistoricalAuditModuleSource(recorded, current);
+  assert.deepEqual(recorded, before);
+  assert.equal(result.recordedSha256, hash(historical)); assert.equal(result.currentSha256, hash(current));
+  assert.equal(result.exactCurrentSourceMatch, false);
+  assert.equal(verifyHistoricalAuditModuleSource(recorded, historical).exactCurrentSourceMatch, true);
+  assert.throws(() => verifyHistoricalAuditModuleSource({ ...recorded, sha256: hash(current) }, current), /Historical audit-module receipt/);
+  assert.throws(() => verifyHistoricalAuditModuleSource({ ...recorded, file: 'different.mjs' }, current));
+  assert.throws(() => verifyHistoricalAuditModuleSource(recorded, current, { readRevision: () => Buffer.from('corrupt history') }), /Historical audit-module receipt/);
+  assert.throws(() => probe(({ raw }) => { raw.capture.sources.find(s => s.file === originalOverlayAuditSourceFile).sha256 = hash(current); }), /Historical audit-module receipt/);
 });

@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Historical overlay-source replay correction
+
+The [91-state original overlay survey](material-original-overlay-context-survey.md#historical-source-receipt-and-current-replay)
+now distinguishes its immutable historical producer receipt from current reader
+code. The old audit-module hash is verified against its exact committed Git
+blob, not overwritten. All 200 owner proofs and 17,654 root properties replay;
+all previous survey data remain deeply equal after excluding only the new
+provenance field and current replay-source fingerprints. Five focused tests
+pass, including receipt-corruption controls; generation and no-write checks
+exit 0. This instrumentation correction does not establish candidate rendering
+or waive stale provenance in any other survey.
+
 ## Current canonical owner-style integration checkpoint
 
 Canonical regeneration and the independent conservation gate now verify the
