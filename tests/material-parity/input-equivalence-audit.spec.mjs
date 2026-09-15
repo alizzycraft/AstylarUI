@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import path from 'node:path';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import {
   buildMaterialInputAudit,
   attributeObservedNormalLineBoxes,
@@ -13,11 +15,14 @@ import {
   parseMaterialInputAuditArguments,
   reviewedHeadingMappings,
   reviewedTemplateTextMappings,
+  reviewedTooltipStateGap,
   summarizeSupplementalBehavior,
   summarizeSupplementalOverlays,
   summarizeSupplementalSlider,
   validateMaterialInputAudit,
 } from './input-equivalence-audit.mjs';
+import { collectTooltipUnpairedStyles, validateTooltipUnpairedStyles,
+  tooltipUnpairedStyleAttribution } from './tooltip-unpaired-style-evidence.mjs';
 
 const browserDefaults = {
   visibility: 'visible', minWidth: '0px', maxWidth: 'none', minHeight: '0px', maxHeight: 'none',
@@ -6887,6 +6892,112 @@ function unmatchedTooltipEvidence(entry) {
   return collectRetainedTypographyEvidence([entry], collectFullTreeInventory([entry])).gaps
     .filter(g => g.attribution === 'reviewed-tooltip-unmatched-state-input');
 }
+
+function boundTooltipScalarFixture(run, mutate = () => {}) {
+  const root = process.cwd(), artifacts = path.join(root, 'artifacts/material-parity');
+  mkdirSync(artifacts, { recursive: true });
+  const dir = mkdtempSync(path.join(artifacts, 'tooltip-style-test-'));
+  try {
+    const f = unmatchedTooltipCase('astylar', { kind: 'interaction' });
+    const popup = f.a.nodes.find(n => n.key === 'popup');
+    const style = { height: '24px', display: 'flex', color: '#f5eff4' };
+    Object.assign(popup, { resolvedStyle: { ...style }, normalResolvedStyle: { ...style }, interactionResolvedStyle: { ...style } });
+    f.entry.styleInputs = [{ id: 'tooltip-popup', referenceAuthored: [], astylarAuthored: [],
+      astylarResolvedStyleEvidenceVersion: 2, astylar: { ...style }, astylarNormalResolvedStyle: { ...style },
+      astylarInteractionResolvedStyle: { ...style }, astylarStructure: { schemaVersion: 2, type: 'div',
+        ownText: 'Create a project', text: 'Create a project', directChildIds: [], descendantIds: [] } }];
+    mutate(f);
+    for (const side of ['reference', 'astylar']) {
+      const bytes = JSON.stringify(f.entry.inputTrees[side]), file = path.relative(root, path.join(dir, `${side}.json`)).replaceAll('\\', '/');
+      writeFileSync(path.join(root, file), bytes);
+      f.entry.inputTrees[side] = { file, sha256: createHash('sha256').update(bytes).digest('hex') };
+    }
+    const parityPath = path.relative(root, path.join(dir, 'report.json')).replaceAll('\\', '/');
+    writeFileSync(path.join(root, parityPath), JSON.stringify(f.raw));
+    run({ ...f, root, parityPath, options: { root, parityPath,
+      collectInventory: collectFullTreeInventory, reviewGap: reviewedTooltipStateGap } });
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+}
+
+test('tooltip unpaired scalar styles retain unequal presence with independently bound original owners', () => {
+  boundTooltipScalarFixture(({ raw, root, parityPath, options }) => {
+    const before = structuredClone(raw), evidence = collectTooltipUnpairedStyles(raw, options);
+    assert.equal(evidence.binding.status, 'bound'); assert.equal(evidence.binding.candidateOnlyInputs, 1);
+    assert.equal(evidence.observations.length, 1);
+    assert.deepEqual(validateTooltipUnpairedStyles(evidence, options), []);
+    const report = buildMaterialInputAudit(raw, { root, parityPath });
+    const rows = report.discrepancies.filter(d => d.attribution === tooltipUnpairedStyleAttribution);
+    assert.equal(rows.length, 3);
+    for (const row of rows) {
+      assert.equal(row.reference, undefined); assert.equal(row.classification, 'application-plugin-authoring-defect');
+      assert.equal(row.reviewEvidence.inputEquivalent, false); assert.equal(row.reviewEvidence.finalRasterVerified, false);
+      assert.deepEqual(row.reviewedCases, ['interaction:tooltip@light/desktop/open']);
+    }
+    assert.deepEqual(raw, before);
+    assert.ok(!validateMaterialInputAudit(report, { root, requireComplete: false }).some(e => e.includes('unpaired tooltip')));
+    assert.equal(buildMaterialInputAudit(raw, { root }).discrepancies.filter(d => d.attribution === tooltipUnpairedStyleAttribution).length, 0);
+  });
+});
+
+test('tooltip unpaired scalar binding rejects missing population changed bytes and contradictory owner stages', () => {
+  const mutations = [
+    f => { f.entry.state = 'hover'; },
+    f => { f.entry.family = 'menu'; },
+    f => { f.entry.styleInputs[0].reference = {}; },
+    f => { f.entry.styleInputs[0].referenceStructure = { type: 'div' }; },
+    f => { f.entry.styleInputs[0].astylar.height = '99px'; },
+    f => { f.entry.styleInputs[0].astylarNormalResolvedStyle.height = '99px'; },
+    f => { delete f.entry.styleInputs[0].astylarInteractionResolvedStyle; },
+    f => { f.entry.styleInputs[0].astylarStructure.ownText = 'Other'; },
+    f => { f.entry.styleInputs.push(structuredClone(f.entry.styleInputs[0])); },
+    f => { f.r.nodes.push({ key: 'unexpected', parent: 'overlay', type: 'mat-tooltip-component', attributes: {}, style: 0, rules: [] }); },
+    f => { f.a.nodes.find(n => n.key === 'popup').parent = 'section'; },
+    f => { f.a.nodes.find(n => n.key === 'popup').authored.role = 'status'; },
+  ];
+  for (const mutate of mutations) boundTooltipScalarFixture(({ raw, options }) => {
+    assert.equal(collectTooltipUnpairedStyles(raw, options).observations.length, 0);
+  }, mutate);
+  boundTooltipScalarFixture(({ raw, root, parityPath, options }) => {
+    const evidence = collectTooltipUnpairedStyles(raw, options);
+    const removed = structuredClone(raw); removed.interactions = [];
+    assert.equal(collectTooltipUnpairedStyles(removed, options).binding.status, 'invalid');
+    for (const mutate of [e => { e.captures = []; e.observations = []; e.binding.candidateOnlyInputs = 0; },
+      e => { e.observations[0].gap.reviewEvidence.referencePopupAuthored = true; },
+      e => { e.observations[0].input.astylar.height = '99px'; },
+      e => { e.observations.push(structuredClone(e.observations[0])); }]) {
+      const changed = structuredClone(evidence); mutate(changed);
+      assert.ok(validateTooltipUnpairedStyles(changed, options).length);
+    }
+    const tree = path.join(root, raw.interactions[0].inputTrees.astylar.file), treeBytes = readFileSync(tree);
+    writeFileSync(tree, '{}');
+    assert.equal(collectTooltipUnpairedStyles(raw, options).binding.status, 'invalid');
+    assert.ok(validateTooltipUnpairedStyles(evidence, options).length);
+    writeFileSync(tree, treeBytes); writeFileSync(path.join(root, parityPath), '{}');
+    assert.ok(validateTooltipUnpairedStyles(evidence, options).length);
+  });
+});
+
+test('tooltip unpaired scalar replay rejects dropped reclassified duplicated and invented comparison rows', () => {
+  boundTooltipScalarFixture(({ raw, root, parityPath }) => {
+    const original = buildMaterialInputAudit(raw, { root, parityPath });
+    for (const mutate of [
+      (r, d) => { r.discrepancies = r.discrepancies.filter(row => row !== d); },
+      (r, d) => { d.attribution = 'unresolved'; },
+      (r, d) => { d.classification = 'equivalent-representation'; },
+      (r, d) => { d.reference = '24px'; },
+      (r, d) => { d.astylar = '99px'; },
+      (r, d) => { d.reviewedCases = []; d.occurrences = 0; },
+      (r, d) => { d.reviewedCases[0] = 'interaction:tooltip@light/desktop/hover'; },
+      (r, d) => { d.reviewEvidence.inputEquivalent = true; },
+      (r, d) => { d.reviewEvidence.candidateNode = 'invented'; },
+      (r, d) => { r.discrepancies.push(structuredClone(d)); },
+    ]) {
+      const report = structuredClone(original), row = report.discrepancies.find(d => d.attribution === tooltipUnpairedStyleAttribution);
+      mutate(report, row);
+      assert.ok(validateMaterialInputAudit(report, { root, requireComplete: false }).some(e => e.includes('unpaired tooltip')));
+    }
+  });
+});
 
 test('tooltip unmatched state inputs preserve the sole authored text owner without creating a counterpart', () => {
   const contexts = [unmatchedTooltipCase('astylar', { kind: 'interaction' }),

@@ -7,6 +7,8 @@ import { loadSupplementalLineBoxReport } from './supplemental-line-box-report.mj
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { collectCalendarCloseEvidence } from './calendar-close-evidence.mjs';
 import { collectTooltipStateEvidence } from './tooltip-state-evidence.mjs';
+import { tooltipUnpairedStyleAttribution, collectTooltipUnpairedStyles, classifyTooltipUnpairedStyle,
+  validateTooltipUnpairedStyles, validateTooltipUnpairedStyleClassifications } from './tooltip-unpaired-style-evidence.mjs';
 import { collectPaginatorNavigationEvidence } from './paginator-navigation-evidence.mjs';
 import { chipHostTypographyAttribution, collectChipHostTypographyInputs, classifyChipHostTypographyInput } from './chip-host-typography-evidence.mjs';
 import { fieldHostTypographyAttribution, collectFieldHostTypographyInputs, classifyFieldHostTypographyInput,
@@ -137,6 +139,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const rawControlTypography = collectControlTypographyEvidence(typographyCases, elementInventory);
   const buttonTypographyScalarInputs = collectButtonTypographyScalarInputs(elementInventory, rawControlTypography);
   const retainedTypography = collectRetainedTypographyEvidence(typographyCases, elementInventory, rawControlTypography);
+  const tooltipUnpairedStyles = collectTooltipUnpairedStyles(parityReport, { root, parityPath: options.parityPath,
+    collectInventory: collectFullTreeInventory, reviewGap: reviewedTooltipStateGap });
   const normalLineBoxes = options.normalLineBoxPath
     ? loadNormalLineBoxReport({ root, reportPath: path.relative(root, path.resolve(root, options.normalLineBoxPath)).replaceAll('\\', '/'), cases, inventory: elementInventory,
       controlTypography: rawControlTypography, expectedProvenance: parityReport.captureProvenance })
@@ -155,7 +159,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -234,6 +238,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     rootInitialStyleInputs,
     originStageBinding,
     originStageEvidence,
+    tooltipUnpairedStyles,
     rootHeightInputs,
     rootColorInputs,
     fieldColorInputs,
@@ -254,6 +259,15 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
+  if (report.tooltipUnpairedStyles?.binding?.status === 'bound') {
+    errors.push(...validateTooltipUnpairedStyles(report.tooltipUnpairedStyles, { root,
+      collectInventory: collectFullTreeInventory, reviewGap: reviewedTooltipStateGap }));
+    errors.push(...validateTooltipUnpairedStyleClassifications(report.tooltipUnpairedStyles,
+      report.discrepancies, canonicalStyle, equivalentValue));
+  } else if (requireComplete || report.tooltipUnpairedStyles?.binding?.status === 'invalid' ||
+      report.tooltipUnpairedStyles?.observations?.length || report.discrepancies?.some(d => d.attribution === tooltipUnpairedStyleAttribution)) {
+    errors.push('unpaired tooltip style attribution lacks independently bound original capture evidence');
+  }
   if (report.originStageBinding?.status === 'bound') {
     errors.push(...validateOriginStageEvidence(report.originStageEvidence, report.elementInventory, report.discrepancies, canonicalStyle));
     errors.push(...validateOriginStageSource(report.originStageBinding, report.originStageEvidence, { root, canonicalStyle }));
@@ -1116,6 +1130,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Supplemental tooltip state: ${report.supplementalTooltipState.cases.length}/30 paired boundaries across benchmark-open, benchmark-hover and ordinary cohorts at DPR 1 and 2. Binding=${report.supplementalTooltipState.binding.status}; ${report.supplementalTooltipState.mismatches.length} presence mismatches remain. Every tree, authored/resolved style and retained/control text owner is included, including reference-only and candidate-only popup states. State correspondence is not glyph, placement, visibility or semantic equivalence.`,
     `Supplemental paginator navigation: ${report.supplementalPaginatorNavigation.cases.length}/104 paired boundaries cover first/last guards, every page, Previous/Next, held pointer, Space and departure in light/dark at DPR 1/2. Binding=${report.supplementalPaginatorNavigation.binding.status}; ${report.supplementalPaginatorNavigation.mismatches.length} individual input/focus/tooltip checks remain unequal. Full trees and typography enter the consolidated inventory; correct range transitions do not establish native-disabled, tooltip, focus or raster equivalence.`,
     `Unmatched tooltip text owners: ${report.retainedTypography.gaps.filter(gap => gap.attribution === 'reviewed-tooltip-unmatched-state-input').length} state-input discrepancies retain their complete captured trigger, overlay/anchor, style-stage and absent-counterpart evidence. They are unequal authoring, not missing renderer text or accepted typography/placement.`,
+    `Unpaired tooltip scalar styles: ${report.tooltipUnpairedStyles.observations.length} original candidate-only popup captures independently bind their scalar and full-tree owner evidence. ${report.discrepancies.filter(d => d.attribution === tooltipUnpairedStyleAttribution).length} style groups retain all values and occurrences under the unequal-presence authoring defect; no reference styles or rendered equivalence are invented.`,
     '',
     `Calendar controls remaining after reference dismissal: ${report.controlTypography.gaps.filter(gap => gap.attribution === 'reviewed-calendar-close-state-divergence').length} current texture owners are attributed to the verified unequal close state. Their full candidate input trees remain present; no reference typography is invented for the closed popup, and other unreviewed typography differences remain unresolved.`,
     '',
@@ -1160,7 +1175,8 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs) {
+function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles) {
+  const tooltipByCaseId = new Map(tooltipUnpairedStyles.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
   const originByCaseId = new Map(originStageEvidence.observations.filter(p => p.status === 'observed-declaration-stage-gap')
     .map(p => [JSON.stringify([p.case, p.element]), p]));
   const fieldWeightTrackingByCaseIdProperty = new Map(fieldHostWeightTrackingInputs.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
@@ -1200,7 +1216,9 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
         const classification = benchmarkCase.state && input.reference && input.astylar && input.astylarResolvedStyleEvidenceVersion !== 2
           ? { classification: 'parity-harness-defect', owner: 'audit effective pseudo-state style capture',
             justification: 'This interaction capture predates effective-style provenance. It can compare browser state styles against candidate normal-only declarations; recapture with evidence version2 before attributing the difference to authoring or core.' }
-          : classifyOriginStageInput(input, property, referenceValue, astylarValue,
+          : classifyTooltipUnpairedStyle(input, property, referenceValue, astylarValue,
+              tooltipByCaseId.get(JSON.stringify([key, input.id])), canonicalStyle)
+            ?? classifyOriginStageInput(input, property, referenceValue, astylarValue,
               originByCaseId.get(JSON.stringify([key, input.id])))
             ?? classifyAppearanceInitialInput(input, property, referenceValue, astylarValue,
               appearanceByCaseId.get(JSON.stringify([key, input.id])))
@@ -1266,7 +1284,7 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
-            ...([originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
+            ...([tooltipUnpairedStyleAttribution, originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
               'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, fieldHostAlignmentAttribution, fieldHostWeightTrackingAttribution, rootTypographyAttribution, rootInitialStyleAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution, rootBoxSizingAttribution, containerCaretAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
@@ -2597,7 +2615,7 @@ function validatePaginatorTooltipOmissions(report, errors) {
     errors.push('paginator tooltip omissions do not replay from captured trigger, overlay and candidate inputs');
 }
 
-function reviewedTooltipStateGap(key, inventory) {
+export function reviewedTooltipStateGap(key, inventory) {
   const match = parseReviewedCase(key, 'tooltip');
   const referenceOnly = match?.[1] === 'supplemental' && /^tooltip-state-benchmark-open-(hover|press)$/.test(match[4]);
   const candidateOnly = (match?.[1] === 'interaction' && match[4] === 'open') ||
@@ -8089,6 +8107,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/calendar-close-evidence.mjs',
     'scripts/audit-material-tooltip-state.mjs',
     'tests/material-parity/tooltip-state-evidence.mjs',
+    'tests/material-parity/tooltip-unpaired-style-evidence.mjs',
     'tests/material-parity/supplemental-capture-evidence.spec.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
@@ -8185,6 +8204,8 @@ function focusedProofInventory(root) {
       'menu ordered item text ownership and connected-overlay versus fixed-popup inputs', 'The complete expanded-trigger and two-item domain maps anonymous Material label spans to exact candidate spans, retaining ripple, backdrop, wrapper, state and all authored/resolved input evidence. Mapping identity never certifies layout or typography; negative and independent replay controls reject ambiguous, incomplete or fabricated correspondence.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip unmatched state inputs preserve/,
       'tooltip one-sided authored popup context and state-input attribution', 'Exact trigger/message identities, complete source paths, empty counterpart context, unique node identities and independent style stages distinguish a genuinely unpaired authored popup from missing core text. Both reference-only and candidate-only observations remain unequal; negative and report-mutation controls reject invented counterparts, missing stages and foreign states. Existing paired typography and raster obligations are unchanged.'),
+    proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip unpaired scalar styles retain/,
+      'source-bound candidate-only tooltip scalar attribution', 'The entire original candidate-only scalar population and both source-tree digests bind attribution to a uniquely authored popup with no reference counterpart. Effective, normal and interaction styles must agree with that owner. Independent source replay and row-coverage checks reject removed cases, forged counterparts, changed stages, deleted or duplicated rows and equivalence claims. Original values and unequal presence remain visible; paired tooltip rendering is not waived.'),
     proof(root, 'tests/material-parity/supplemental-capture-evidence.spec.mjs', /test\('tooltip state collector keeps/,
       'tooltip action-boundary capture and consolidated inventory provenance', 'All three state-input cohorts and both DPRs retain all thirty paired boundaries, including presence mismatches. Independent replay compares complete source trees with dereferenced inventory styles, rules and text stages; missing cases and changed evidence cannot be accepted through summary counts. This does not classify away absent counterparts or establish visual equivalence.'),
     proof(root, 'tests/material-parity/input-equivalence-audit.spec.mjs', /test\('tooltip text alignment traces/,

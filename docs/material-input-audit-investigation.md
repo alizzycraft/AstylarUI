@@ -3,6 +3,42 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Candidate-only tooltip scalar styles share an unequal-state owner
+
+The [focused verification](material-tooltip-unpaired-style-verification.json)
+connects the existing tooltip state investigation to scalar-style attribution.
+All **eight** original candidate-only scalar inputs are tooltip `open` cases,
+covering four themes and both DPRs. Their reference trees contain the trigger
+and empty overlay container; their candidate trees contain one trigger-linked
+popup. Scalar effective, normal and interaction styles match that unique owner.
+There is no reference popup style to compare in these states.
+
+Git blame independently confirms that `7159b1d5` introduced the benchmark-only
+`open:true` click branch at `astylar.component.ts:285–287`. The existing bound
+pointer-state investigation already demonstrates the forced-open mismatch and
+the separate ordinary dismissal omission. This is unequal state authoring, not
+evidence that each candidate-only style value is a distinct renderer failure.
+The tooltip's paired-state placement, typography, clipping and raster defects
+remain outside this attribution and remain unresolved by this change.
+
+The new collector binds the complete original candidate-only scalar population
+and both source-tree digests. Independent replay and exact discrepancy-row
+coverage reject removed cases, altered styles or owners, invented counterparts,
+deleted/duplicated classifications and false equivalence. **25/25** focused
+tooltip/state tests pass, including three new scalar-attribution tests.
+
+The previous canonical report retains **48 groups / 384 occurrences** for these
+owners. Checksums of all original scalar values/cases and all other discrepancy
+rows have been recorded for conservation checking. Full canonical regeneration
+is in progress; its result and subsequent `--check` are not claimed yet. This is
+an audit-instrumentation increment, not completed parity or an implemented fix.
+
+Only 13 rolling-index fingerprint fields changed across 12 files; every other
+field remains identical. Of their 85 fingerprints, 60 match current bytes and
+25 unchanged historical entries match LF text rather than current CRLF checkout
+bytes. That encoding distinction is retained explicitly, not represented as a
+new behavior change or silently refreshed historical evidence.
+
 ## Repeated frozen-reference motion samples distinguish declarations from state
 
 The [sample verification](material-origin-motion-sample-verification.json)

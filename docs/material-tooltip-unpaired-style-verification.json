@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "kind": "tooltip-candidate-only-scalar-owner-attribution",
+  "baselineCommit": "44861f85190f2ef5d9f76e7bb027092c9574107f",
+  "scope": "Audit instrumentation only. No renderer, plugin behavior, reference or canonical comparison input changes.",
+  "originalCapture": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a",
+    "candidateOnlyInputs": 8,
+    "boundTooltipOwners": 8,
+    "themes": [
+      "light",
+      "dark",
+      "contrast",
+      "custom"
+    ],
+    "deviceScaleFactors": [
+      1,
+      2
+    ],
+    "state": "open"
+  },
+  "historicalCause": {
+    "commit": "7159b1d5",
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "line": 285,
+    "observation": "Benchmark-only tooltip click forces open:true. Existing independently bound action-state evidence distinguishes this from Material dismissal and also retains the ordinary candidate dismissal omission."
+  },
+  "verification": {
+    "command": "node --test --test-name-pattern=\"tooltip\" tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/supplemental-capture-evidence.spec.mjs",
+    "exitCode": 0,
+    "tests": 25,
+    "passed": 25,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 15554.6056,
+    "originalReplay": {
+      "exitCode": 0,
+      "binding": "bound",
+      "captures": 8,
+      "observations": 8,
+      "errors": []
+    },
+    "negativeCoverage": [
+      "missing original scalar cases",
+      "changed original report or tree bytes",
+      "foreign family/state",
+      "unexpected reference owner",
+      "contradictory effective/normal/interaction styles",
+      "wrong candidate owner identity or role",
+      "missing, duplicated or forged proof records",
+      "removed, duplicated, reclassified or falsely equivalent scalar rows"
+    ]
+  },
+  "baselineRowConservation": {
+    "compressedSha256": "df8866d463d1c5d6147f1dbceebbcc1938354c117c750f16739a9c45cafadeee",
+    "allOriginalValuesAndCasesSha256": "d5e916fb99193565c6be9a6428d8616a3ca87424d8f658d09f7df9824b693d03",
+    "allOtherRowsSha256": "30838c8c7486d4c245d02fc87142082803b2ef03a61a7174137eb6fb8cf5cf14",
+    "candidateOnlyGroups": 48,
+    "candidateOnlyOccurrences": 384,
+    "unresolvedAttributions": 3272
+  },
+  "rollingIndices": {
+    "files": 12,
+    "fingerprints": 85,
+    "changedFingerprints": 13,
+    "unchangedNonFingerprintData": true,
+    "exactByteFingerprints": 60,
+    "historicalLfFingerprints": 25,
+    "note": "The 25 unchanged historical fingerprints match LF-normalized source text, not current CRLF checkout bytes. They were not silently replaced or claimed byte-identical."
+  },
+  "canonicalRefresh": {
+    "status": "pending",
+    "note": "The maintained complete-report generator was started against unchanged frozen evidence. Generation and independent --check results are not yet claimed by this instrumentation increment."
+  },
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "sha256": "25904659f43e33107823aef530e50c6da17aa94b8e6d270531af4ac945e8f028"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+      "sha256": "0efc929dcaffe90090e6110d95371d0c6016c9935c073a32460bd007c1d8fdc1"
+    },
+    {
+      "file": "tests/material-parity/tooltip-unpaired-style-evidence.mjs",
+      "sha256": "8d6a9d99a59f9e4cccbe7de746f2371e44a3bdf850d3ddc395022564b0575bf5"
+    },
+    {
+      "file": "tests/material-parity/tooltip-state-evidence.mjs",
+      "sha256": "a4a8a82b8608daa5dc17298bd454792ef33c6e3f3f84b65ab494ab4e15e7a66e"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-policy.mjs",
+      "sha256": "7e939aece26dd69b846b78fc6d21aa332463b53068f488cf19343578306d80d8"
+    }
+  ],
+  "inputEquivalent": false,
+  "finalRasterVerified": false,
+  "auditComplete": false,
+  "remaining": "Canonical regeneration/check and conservation verification, other unresolved input differences, and final complete enforced parity matrix."
+}
