@@ -53,7 +53,9 @@ export const implicitReferenceValues = Object.freeze({
   textOverflow: Object.freeze(['clip']),
   textDecoration: Object.freeze(['none']),
   clipPath: Object.freeze(['none']),
-  transform: Object.freeze(['none', 'matrix(1,0,0,1,0,0)']),
+  // Identity geometry still establishes a containing block and stacking
+  // context. It is not the initial/omitted transform request.
+  transform: Object.freeze(['none']),
   perspective: Object.freeze(['none']),
   zIndex: Object.freeze(['auto']),
   objectFit: Object.freeze(['fill']),

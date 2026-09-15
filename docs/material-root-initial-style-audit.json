@@ -14,11 +14,11 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "4b318d2abfb5c73b5358e5021a3d2d6f4f953f66465ba677f023f2bbfe45f5f3"
+      "sha256": "8ac5d6b5c4c74853c446b58ab2fe43a5f95b7bf69d97fd6bf25470157ae375c1"
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
-      "sha256": "cccb4fac54084844d28757d0e27b90c229320ad861f3b9f3d6d26a1edc4cb14b"
+      "sha256": "2dd993c70487d2fbac133ec9c0f0214bef6c7318653f84377f3f6f9f21f9799b"
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.mjs",
@@ -38,7 +38,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-policy.mjs",
-      "sha256": "b003e0b652e53166d71a97c30b6899d8c3ff56c93627d729b79fe605e5dc2cbc"
+      "sha256": "6346a329c06a4f2dbb72714206abb2f7acf1ab3e5cfad95ab75fabad6fc65569"
     },
     {
       "file": "tests/material-parity/root-inherited-default-proof.spec.mjs",

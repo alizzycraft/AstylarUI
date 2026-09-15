@@ -2,7 +2,94 @@
   "schemaVersion": 1,
   "findingId": "identity-transform-is-not-omitted-transform",
   "classification": "parity-harness-defect",
-  "status": "confirmed audit assumption defect; correction pending",
+  "status": "audit assumption correction passes focused and prior tests plus full raw replay; complete harness pending",
+  "correction": {
+    "baselineCommit": "2658571",
+    "scope": "Audit classification-policy correction only. Do not reinterpret identity as an initial transform, fabricate candidate context semantics, remove raw observations or change renderer/fixture inputs.",
+    "invariant": "A reference identity transform and an omitted candidate transform are not generally equivalent: identity still establishes containing-block and stacking semantics.",
+    "changes": [
+      "Remove only matrix(1,0,0,1,0,0) from the unconditional omitted-transform equivalence table; retain none as a separate existing control.",
+      "Register the four-test regression and browser/population probe in source provenance (116 total) and the complete harness (expected 656 tests).",
+      "Refresh only current fingerprint entries in twelve rolling indices. Preserve historical proof snapshots."
+    ],
+    "sourceFingerprints": [
+      {
+        "file": "package.json",
+        "sha256": "c4861a8b6847c1173004b9d973be8f65961dc406ed5f789105c486559df6f6ad"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-policy.mjs",
+        "sha256": "6346a329c06a4f2dbb72714206abb2f7acf1ab3e5cfad95ab75fabad6fc65569"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.mjs",
+        "sha256": "8ac5d6b5c4c74853c446b58ab2fe43a5f95b7bf69d97fd6bf25470157ae375c1"
+      },
+      {
+        "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
+        "sha256": "2dd993c70487d2fbac133ec9c0f0214bef6c7318653f84377f3f6f9f21f9799b"
+      },
+      {
+        "file": "tests/material-parity/identity-transform-omission.spec.mjs",
+        "sha256": "847a4df580e4abab297dc6185baa95e1563c55d685417efc97f22657c78d32dc"
+      },
+      {
+        "file": "scripts/audit-material-identity-transform.mjs",
+        "sha256": "047741461c42f5a5908252ad6a2aeca42c9899ef27bd12239b441663e5af86bc"
+      }
+    ],
+    "verification": [
+      {
+        "command": "node --test --test-name-pattern='cannot establish equivalence' tests/material-parity/identity-transform-omission.spec.mjs",
+        "phase": "before correction",
+        "exitCode": 1,
+        "tests": 1,
+        "passed": 0,
+        "durationMs": 1114.6511,
+        "result": "Explicit reference identity matrix was wrongly classified equivalent to omission."
+      },
+      {
+        "command": "node --test tests/material-parity/identity-transform-omission.spec.mjs",
+        "phase": "after correction",
+        "exitCode": 0,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "durationMs": 10938.1738
+      }
+    ],
+    "controls": "Twelve explicit/unproven synthetic identity representations remain unresolved; equal explicit transforms and the separate none/omission control still behave as before. All 140 frozen observations retain exact case identities and counts across three families. The independently run browser script reproduces fixed-child placement and stacking changes at both DPRs.",
+    "priorIndexChecks": {
+      "command": "node --test --test-concurrency=1 --test-name-pattern='root initial-style|case index|records source fingerprints|covers every captured host|normalizes browser-used' tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs",
+      "status": "passed",
+      "exitCode": 0,
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "durationMs": 157711.651
+    },
+    "fullReplay": {
+      "command": "node --input-type=module -e \"import assert from 'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';import{buildMaterialInputAudit,validateMaterialInputAudit}from'./tests/material-parity/input-equivalence-audit.mjs';const bytes=readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');const record=JSON.parse(readFileSync('docs/material-identity-transform-omission-audit.json')).verification;assert.equal(createHash('sha256').update(bytes).digest('hex'),record.captureSha256);const raw=JSON.parse(bytes);console.error('IDENTITY_REPLAY_PHASE build-start');const audit=buildMaterialInputAudit(raw,{root:process.cwd(),normalLineBoxPath:'artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json',controlLineBoxPath:'artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json',supplementalLineBoxPath:'artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json',supplementalRoot:'artifacts/material-parity/supplemental-current-ancestry-audit'});console.error('IDENTITY_REPLAY_PHASE build-complete');const groups=audit.discrepancies.filter(d=>d.property==='transform'&&d.reference==='matrix(1,0,0,1,0,0)'&&d.astylar===undefined);assert.equal(groups.length,record.groups.length);for(const g of groups){const expected=record.groups.find(x=>x.family===g.family&&x.element===g.element);assert.ok(expected);assert.equal(g.occurrences,expected.occurrences);assert.equal(g.classification,'parity-harness-defect');assert.equal(g.attribution,'unresolved');}assert.equal(groups.reduce((n,g)=>n+g.occurrences,0),140);assert.equal(audit.summary.totalStyleDifferenceOccurrences,386891);assert.equal(audit.summary.uniqueStyleDifferences,8339);assert.equal(audit.summary.unresolvedAttributions,3213);assert.equal(audit.sourceFingerprints.length,116);assert.equal(audit.rootInitialStyleInputs.length,30043);assert.equal(audit.containerCaretInputs.length,2888);const strict=validateMaterialInputAudit(audit);assert.deepEqual(strict,['3213 resolved-style differences still lack root-cause attribution']);console.log(JSON.stringify({summary:audit.summary,sourceFingerprintCount:audit.sourceFingerprints.length,rootProofCount:audit.rootInitialStyleInputs.length,containerCaretProofCount:audit.containerCaretInputs.length,identityGroups:groups.map(({family,element,occurrences,classification,attribution})=>({family,element,occurrences,classification,attribution})),strict,scope:'Full frozen raw replay; all occurrences retained, no renderer or fixture changes'}));\"",
+      "status": "passed with expected strict unresolved rejection",
+      "exitCode": 0,
+      "uniqueStyleDifferences": 8339,
+      "totalStyleDifferenceOccurrences": 386891,
+      "unresolvedAttributions": 3213,
+      "sourceFingerprintCount": 116,
+      "rootProofCount": 30043,
+      "containerCaretProofCount": 2888,
+      "identityGroups": [
+        { "family": "button-toggle", "element": "button-toggle-primary", "occurrences": 68, "classification": "parity-harness-defect", "attribution": "unresolved" },
+        { "family": "core", "element": "core-primary", "occurrences": 52, "classification": "parity-harness-defect", "attribution": "unresolved" },
+        { "family": "progress-bar", "element": "progress-bar-primary", "occurrences": 20, "classification": "parity-harness-defect", "attribution": "unresolved" }
+      ],
+      "strict": ["3213 resolved-style differences still lack root-cause attribution"],
+      "scope": "Full frozen raw replay; all occurrences retained, no renderer or fixture changes. Exit zero means assertions about the expected strict rejection passed, not input equivalence. No canonical report files were written."
+    },
+    "remaining": "Expanded complete harness is pending. Original transform authorship and candidate/core context ownership still need attribution. The transform-origin guard is not changed or certified by this correction. Real CLI packaging and final enforced parity remain pending."
+  },
   "baselineCommit": "09e789d",
   "sourceFingerprints": [
     {

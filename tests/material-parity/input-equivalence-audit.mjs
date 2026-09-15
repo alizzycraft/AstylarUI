@@ -8019,6 +8019,8 @@ function sourceFingerprints(root) {
     'tests/material-parity/input-equivalence-audit.mjs',
     'tests/material-parity/input-equivalence-audit.spec.mjs',
     'tests/material-parity/input-equivalence-policy.mjs',
+    'tests/material-parity/identity-transform-omission.spec.mjs',
+    'scripts/audit-material-identity-transform.mjs',
     'tests/material-parity/border-initial-input-evidence.mjs',
     'tests/material-parity/chip-host-typography-evidence.mjs',
     'tests/material-parity/field-host-typography-evidence.mjs',
@@ -8069,6 +8071,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/identity-transform-omission.spec.mjs', /test\('identity transforms cannot/,
+      'identity transforms retain containing-block and stacking semantics', 'The scalar collector cannot accept a reference identity transform as an omitted candidate transform. Equal explicit transforms and none/omission controls remain separate. The proof retains all 140 captured identities and replays DPR1/2 browser fixed-child and stacking controls. This removes a false audit equivalence; it does not claim candidate layout, paint or all affected fixture outcomes have been reproduced.'),
     proof(root, 'tests/material-parity/input-audit-cli-transport.spec.mjs', /test\('audit CLI awaits streamed transport/,
       'lossless streamed audit command transport', 'The maintained CLI and stream/codec modules run in isolated child processes with a small substituted collector. An aggregate-audit stringifier guard rejects the old path; generation and check preserve complete JSON bytes and unresolved exit status. Stale nested evidence and unsafe manifest paths fail without check-mode writes. Full captured-report streaming has separate recorded scale evidence; this command-boundary proof does not certify renderer or input equivalence.'),
     proof(root, 'tests/material-parity/root-inherited-default-proof.spec.mjs', /test\('root inherited-property stage proof/,

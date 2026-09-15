@@ -1368,7 +1368,10 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 114);
+  assert.equal(audit.sourceFingerprints.length, 116);
+  for (const file of ['tests/material-parity/identity-transform-omission.spec.mjs', 'scripts/audit-material-identity-transform.mjs'])
+    assert.equal(audit.sourceFingerprints.filter(entry => entry.file === file).length, 1);
+  assert.ok(audit.focusedProofs.some(entry => entry.file === 'tests/material-parity/identity-transform-omission.spec.mjs' && entry.status !== 'missing'));
   for (const file of ['tests/material-parity/input-audit-report-codec.mjs',
     'tests/material-parity/input-audit-report-codec.spec.mjs', 'tests/material-parity/input-audit-report-stream.mjs',
     'tests/material-parity/input-audit-report-stream.spec.mjs', 'tests/material-parity/input-audit-cli-transport.spec.mjs'])

@@ -3,7 +3,29 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Identity transform is not omitted transform (read-only investigation)
+## Identity transform omission: audit-rule correction
+
+The [identity-transform evidence](material-identity-transform-omission-audit.json)
+now includes a failing collector regression (**0/1**, **1,114.6511 ms**) followed
+by **4/4** passing focused tests (**10,938.1738 ms**). The policy no longer treats
+an identity matrix as an omitted transform. Equal explicit transforms and the
+separate `none`/omission control remain; no candidate semantics are invented.
+
+The focused captured-population replay retains all **140 observations** and
+their exact case lists across core, button-toggle and progress-bar. Both DPR
+browser controls replay independently. The four-test file is registered in the
+complete harness, and source provenance now includes **116 files**. Prior-index
+checks pass **18/18** (**157,711.651 ms**, no failures, skips or cancellations).
+The complete frozen raw replay exits **0** with all expected assertions: **8,339
+style groups**, **386,891 occurrences**, **30,043 root proofs** and **2,888
+container-caret proofs** remain. The three identity-transform groups are now
+unresolved, increasing the unresolved total from **3,210 to 3,213**. Strict
+validation rejects precisely those 3,213 unresolved attributions; assertion
+success does not establish input equivalence. No canonical reports were written.
+Original input ownership, transform-origin review, complete harness, real report
+packaging and final enforced parity remain pending.
+
+## Identity transform is not omitted transform (historical read-only investigation)
 
 The [identity-transform record](material-identity-transform-omission-audit.json)
 finds **140** raw reference identity matrices paired with omitted candidate
