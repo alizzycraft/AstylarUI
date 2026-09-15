@@ -3,6 +3,22 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete registered harness after origin source binding
+
+The [full harness record](material-origin-integration-full-harness.json) reports
+**664/664 passing tests**, zero failures, skips or cancellations, in
+**1,350,967.3489 ms**. All **31 registered test files** ran without a name or file
+filter; file concurrency was limited to one. The package registration, every
+test file and the recorded main policy/source-binding files were checked against
+`45a82cc` after completion and remained unchanged.
+
+This supersedes the earlier 656-test run for the current origin integration.
+It verifies the registered harness, not final browser output or input equivalence.
+The canonical regeneration check remains running, **3,272 unresolved attribution
+groups** remain, and the final unfiltered enforced browser matrix is still pending.
+The standalone request inventory and subsequent motion samples are separate
+diagnostic evidence, not extra registered tests covered by this result.
+
 ## Guarded origin requests: complete context inventory
 
 The [request inventory](material-origin-request-contexts.json) retains all
