@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "slider-input-box-audit-verification",
+  "scope": "Original capture review only; no renderer changes, fixture rewrites, new browser runs or main scalar-attribution integration.",
+  "commands": [
+    {
+      "command": "node --test tests/material-parity/slider-input-box-evidence.spec.mjs",
+      "exitCode": 0,
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "negativeControls": 21
+    },
+    {
+      "command": "node scripts/audit-material-slider-input-boxes.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/audit-material-slider-input-boxes.mjs --check",
+      "exitCode": 0
+    },
+    {
+      "command": "@'\nconst fs=require('fs'),c=require('crypto'),assert=require('assert/strict');const file='docs/material-slider-input-boxes.json',bytes=fs.readFileSync(file),report=JSON.parse(bytes),hash=b=>c.createHash('sha256').update(b).digest('hex');const rawBytes=fs.readFileSync(report.capture.file);assert.equal(hash(rawBytes),report.capture.sha256);const raw=JSON.parse(rawBytes),entries=new Map();for(const [kind,list]of [['static',raw.results],['interaction',raw.interactions]])for(const e of list.filter(e=>e.family==='slider'))entries.set(`${kind}:slider@${e.profile}/${e.viewport.id}${e.state?'/'+e.state:''}`,e);assert.deepEqual(report.cases,[...entries.keys()]);const seen=new Set();for(const o of report.observations){const e=entries.get(o.case);assert.ok(e);assert.deepEqual(o.inputTrees,e.inputTrees);const id=o.case+'#'+o.element;assert.ok(!seen.has(id));seen.add(id);const input=e.styleInputs.find(i=>i.id===o.element);assert.deepEqual(o.reference.computed,input.reference);assert.deepEqual(o.candidate.effective,input.astylar);assert.deepEqual(o.candidate.normal,input.astylarNormalResolvedStyle);assert.deepEqual(o.candidate.interaction,input.astylarInteractionResolvedStyle);assert.deepEqual(o.candidate.matchingRules,input.astylarAuthored);for(const side of ['reference','astylar']){const source=e.inputTrees[side],treeBytes=fs.readFileSync(source.file);assert.equal(hash(treeBytes),source.sha256);const tree=JSON.parse(treeBytes),n=tree.nodes.find(n=>(n.attributes??n.authored)?.id===o.element);assert.equal(n.key,side==='reference'?o.reference.node:o.candidate.node);if(side==='reference'){assert.deepEqual(o.reference.inline,n.inline);assert.deepEqual(o.reference.attributes,n.attributes);assert.deepEqual(o.reference.fullTreeComputed,tree.styles[n.style]);}else assert.deepEqual(o.candidate.authored,n.authored);}assert.equal(o.properties.length,5);assert.equal(o.inputEquivalent,false);assert.equal(o.finalRasterVerified,false);}assert.equal(seen.size,entries.size*2);for(const p of report.sourceFingerprints){assert.equal(p.sha256,hash(fs.readFileSync(p.file)),p.file);assert.equal(p.normalizedLfSha256,hash(fs.readFileSync(p.file,'utf8').replace(/\\r\\n/g,'\\n')));}console.log(JSON.stringify({file,sha256:hash(bytes),bytes:bytes.length,cases:entries.size,owners:seen.size,sourceFingerprints:report.sourceFingerprints.length,allOriginalValuesAndOwnersPreserved:true,summary:report.summary}));\n'@ | node",
+      "exitCode": 0,
+      "result": {
+        "file": "docs/material-slider-input-boxes.json",
+        "sha256": "f05bbfac3be5b37526542aa7b46a468eee300b1cd5aead8adb970dd8924961a7",
+        "bytes": 2552745,
+        "cases": 78,
+        "owners": 156,
+        "sourceFingerprints": 8,
+        "allOriginalValuesAndOwnersPreserved": true,
+        "summary": {
+          "cases": 78,
+          "observations": 156,
+          "propertyOccurrences": 780,
+          "checkedTreeFiles": 156,
+          "paddingPatterns": {
+            "0px 0px 0px 0px": 140,
+            "0px 16px 0px 16px": 16
+          }
+        }
+      }
+    }
+  ],
+  "evidence": {
+    "file": "docs/material-slider-input-boxes.json",
+    "bytes": 2552745,
+    "sha256": "f05bbfac3be5b37526542aa7b46a468eee300b1cd5aead8adb970dd8924961a7"
+  },
+  "limitations": [
+    "The 780 property observations are not yet attributed in the canonical scalar report.",
+    "Unequal authored native-input box requests do not establish that padding alone causes swapped thumbs or jerky dragging.",
+    "Shared range-domain constraints, core default compatibility, pointer capture, CSS hit geometry and visible track composition retain separate investigations."
+  ],
+  "inputEquivalent": false,
+  "finalRasterVerified": false
+}

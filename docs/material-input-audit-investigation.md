@@ -3,6 +3,51 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Slider native input boxes differ before layout and pointer conversion
+
+The [source-bound box inventory](material-slider-input-boxes.json) reviews both
+native inputs in **all 78 original slider cases**: **156 owners / 780 padding and
+box-sizing observations**, backed by **156 checked tree files**. The separate
+[verification record](material-slider-input-boxes-verification.json) includes
+generation, exact regeneration, independent source/value/owner checks and two
+focused tests with **21 negative controls**.
+
+The two tests are registered in `parity:harness:check`. The complete harness and
+enforced browser matrix remain final audit gates; this increment reruns only
+the focused tests, exact regeneration and independent source/value checks.
+
+The reference explicitly sets native input padding inline: **140 observations**
+have `0px` on all sides, while **16 held-state observations** have `0px 16px 0px
+16px`. Its `.mdc-slider__input` rule also requests `box-sizing: content-box`.
+The candidate supplies neither request. Its normal/effective/interaction styles
+retain generic input `padding: 8px` and omit box sizing, while both authored hit
+inputs remain `width: 50%` and `height: 44px`. Original scalar styles agree with
+the corresponding full-tree owners; the extra reference context-style fields
+are retained rather than mistaken for changed scalar values.
+
+The first demonstrated difference here is the native-input box request, before
+CSS layout or world projection. Material's `_updateWidthActive()` and
+`_updateWidthInactive()` compute peer/state-dependent input widths and padding
+(`@angular/material/fesm2022/slider.mjs:1665–1701`). Git blame identifies
+`ce8f3f1c` as the current fixed-half-width replacement at
+`astylar.component.ts:784–785`. Core resolves the candidate's defaults by
+`element.type` (`style.service.ts:364`); the generic input definition supplies
+8px padding (`browser-defaults.ts:294–303`). That default is not a translated
+Material padding declaration.
+
+This does **not** prove that 8px padding alone causes swapped thumbs or jerky
+movement. The already demonstrated half-domain/min/max/step mismatch, pointer
+capture/coordinate path and visual-track composition remain separate concerns.
+Core generic-input default compatibility also needs its own equal-input proof;
+it is not excused by the authoring mismatch. Restore the original peer-dependent
+CSS input mechanism through shared control/layout APIs, not sampled widths,
+hard-coded padding adjustments or Babylon-space calculations.
+
+This standalone increment leaves the canonical report's **3,224 unresolved
+groups unchanged**. Integrating these per-owner property observations requires
+the same original-capture binding, full scalar-row conservation and independent
+replay used for the tooltip attribution. No renderer or fixture fix is included.
+
 ## Candidate-only tooltip scalar styles share an unequal-state owner
 
 The [focused verification](material-tooltip-unpaired-style-verification.json)
