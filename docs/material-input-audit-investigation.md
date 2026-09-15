@@ -3,6 +3,37 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Origin aliases: all 750 measured-node identities established
+
+The [alias survey](material-transform-origin-alias-survey.json) and
+[verification record](material-transform-origin-alias-verification.json) join all
+**750 observations / 19 alias names** from the preceding survey to their captured
+reference nodes. Existing generated-owner, paginator and dialog proofs are reused;
+unique parity attributes, component ownership and exact bottom-sheet item order
+cover the remaining aliases. Every selected reference matches the exact **89**
+scalar property names and values; candidate identity/type and all three captured
+style stages are checked independently. This establishes measurement identity,
+not equivalent component structure or origin semantics.
+
+**691** observations also have matching scalar/tree rule evidence. The remaining
+**59** preserve the existing `.cdk-global-overlay-wrapper { z-index:1000 }`
+CSS-layer capture gap: **25 bottom-sheet / 34 snackbar** cases. Nothing is waived
+or normalized. All 750 complete case/element records, tree hashes, owner paths,
+origin values, method and rule gaps are checked in; this is not a sample.
+
+`node scripts/audit-material-transform-origin-aliases.mjs` and its `--check` replay
+both exit **0**. They hash-check **4,622** frozen tree files and pass **171**
+mutation rejections across all 19 aliases, including a substituted property key
+that keeps the snapshot at 89 keys. The read-only replay reproduces all
+**1,304,295 bytes** exactly. Independent verification checks six source hashes,
+all 750 unique raw case/element links and the exact 59 preserved layer gaps.
+
+No renderer, canonical fixture or classifier changed. All **587** origin groups
+remain unresolved; the last full replay still has **3,800** unresolved groups.
+Next work is the origin/default/reference-box investigation, followed by main
+proof-inventory and full-harness integration, current canonical regeneration and
+the complete enforced parity matrix. Mapping success is not input equivalence.
+
 ## Origin ancestry survey: declaration stages and generated aliases separated
 
 The [authorship survey](material-transform-origin-authorship-survey.json) repeats

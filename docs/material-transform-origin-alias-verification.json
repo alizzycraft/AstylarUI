@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "kind": "origin-alias-proof-verification",
+  "baselineCommit": "5814e42",
+  "scope": "Audit-only mapping evidence. No renderer, canonical fixture, existing classifier or prior capture modified.",
+  "artifact": "docs/material-transform-origin-alias-survey.json",
+  "artifactBytes": 1304295,
+  "artifactSha256": "acbdd2a5feefe7ba4fd98e89451a370ca347ca29c9b76e190212006a5d4fe8bc",
+  "verification": [
+    {
+      "command": "node scripts/audit-material-transform-origin-aliases.mjs",
+      "exitCode": 0,
+      "result": "Generated all 750 observations and passed 171 mutation-rejection controls; checked 4622 frozen tree files."
+    },
+    {
+      "command": "node scripts/audit-material-transform-origin-aliases.mjs --check",
+      "exitCode": 0,
+      "result": "Replayed every observation and mutation, independently regenerated identical JSON and compared the complete stored artifact without writes."
+    },
+    {
+      "command": "node --input-type=module -e \"import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';const file='docs/material-transform-origin-alias-survey.json',bytes=readFileSync(file),r=JSON.parse(bytes);const hash=v=>createHash('sha256').update(v).digest('hex');for(const f of r.sourceFingerprints)assert.equal(hash(readFileSync(f.file,'utf8').replace(/\\r\\n/g,'\\n')),f.sha256,f.file);assert.equal(hash(readFileSync(r.priorSurvey.file,'utf8').replace(/\\r\\n/g,'\\n')),r.priorSurvey.sha256);const rawBytes=readFileSync(r.capturePath);assert.equal(hash(rawBytes),r.captureSha256);const raw=JSON.parse(rawBytes),byCase=new Map();for(const[k,entries]of[['static',raw.results],['interaction',raw.interactions]])for(const e of entries)byCase.set(k+':'+e.family+'@'+e.profile+'/'+e.viewport.id+(e.state?'/'+e.state:''),e);const ids=new Set();for(const row of r.observations){const key=row.case+'#'+row.element;assert.ok(!ids.has(key));ids.add(key);const e=byCase.get(row.case),i=e.styleInputs.filter(i=>i.id===row.element);assert.equal(i.length,1);assert.deepEqual(row.inputTrees,e.inputTrees);assert.equal(row.referenceOrigin,i[0].reference.transformOrigin);assert.equal(row.candidateOrigin,'<omitted>');assert.equal(i[0].astylar.transformOrigin,undefined);assert.equal(row.checkedReferenceProperties,89);assert.equal(row.inputEquivalent,false);assert.equal(row.computedCandidateOriginVerified,false);}assert.equal(ids.size,750);const gaps=r.observations.filter(o=>o.status==='mapped-with-scalar-rule-gap');assert.equal(gaps.length,59);for(const g of gaps){assert.ok(['bottom-sheet-overlay','snack-bar-overlay'].includes(g.element));assert.deepEqual(g.missingRules,[{selector:'.cdk-global-overlay-wrapper',declarations:{'z-index':{value:'1000',important:false}}}]);assert.deepEqual(g.extraRules,[]);}assert.equal(r.observations.filter(o=>o.status==='mapped').length,691);assert.equal(r.mutationControls.length,171);assert.ok(r.mutationControls.every(c=>c.status==='unresolved'));console.log(JSON.stringify({sourceFingerprints:r.sourceFingerprints.length,uniqueCaseElementPairs:ids.size,mapped:691,preservedLayerGaps:gaps.length,mutationControls:r.mutationControls.length,bytes:bytes.length,sha256:hash(bytes)}));\"",
+      "exitCode": 0,
+      "result": {
+        "sourceFingerprints": 6,
+        "uniqueCaseElementPairs": 750,
+        "mapped": 691,
+        "preservedLayerGaps": 59,
+        "mutationControls": 171,
+        "bytes": 1304295,
+        "sha256": "acbdd2a5feefe7ba4fd98e89451a370ca347ca29c9b76e190212006a5d4fe8bc"
+      }
+    }
+  ],
+  "proofBoundaries": {
+    "reused": "Existing generated-owner proofs for six targets, existing paginator text paths, and the full existing dialog structure proof. Additional unique parity-attribute/component ownership checks and exact bottom-sheet list order follow the maintained referenceTarget/referenceGeneratedTextTarget lookup.",
+    "observation": "All 19 alias names and 750 case/element pairs from the preceding authorship survey are preserved. Every selected reference node matches all 89 exact scalar property names and values; candidate identity/type and all three scalar/tree style stages agree.",
+    "ruleGaps": "691 observations have matching reference scalar/tree rules. The other 59 are exactly the known .cdk-global-overlay-wrapper z-index:1000 layer-rule omission: 25 bottom-sheet and 34 snackbar overlay observations. Their missing declarations are retained in full.",
+    "notProven": "A measured-node mapping does not prove equivalent structure, authored origin defaults, transform-box semantics, candidate computed origin, layout or final raster. All 587 original origin difference groups remain unresolved.",
+    "classifierEffect": "No changes; unresolved count remains 3800 from bdda076 full replay."
+  },
+  "developmentNotes": [
+    "The first additional scalar-schema binding attempted an unavailable export from benchmark.config.mjs and failed before writing evidence. It now reads and validates the existing literal 89-property declaration without executing/importing the parity runner.",
+    "The final proof rejects replacement of a real scalar key with an unknown key even when the key count remains 89.",
+    "The prior checked-in survey's text hash normalizes CRLF to LF, as source fingerprints do, so Git checkout line-ending conversion does not falsely invalidate provenance. Frozen raw capture/tree bytes remain hash-checked unchanged."
+  ],
+  "pending": [
+    "Join the now-proven aliases to the complete origin ancestry/default/reference-box investigation.",
+    "Integrate the final origin proof into the main source/proof inventory and registered full harness before final acceptance.",
+    "Regenerate and check current canonical reports and run the complete enforced parity matrix after audit changes."
+  ]
+}
