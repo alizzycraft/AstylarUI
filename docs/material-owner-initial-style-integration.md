@@ -158,3 +158,37 @@ canonical regeneration for the two updated test-source fingerprints are next.
 Remaining obligations include inherited/used-value consumption, wrapping,
 visibility, hit testing, plugin/core ownership, all other unresolved input
 differences and the full goal acceptance matrix. No UI issue is marked fixed.
+
+## Test-expectation refresh: canonical generation and full-row conservation
+
+After `04b7b4a`, canonical generation completed with exit 1 **only** for the
+2,812 unattributed groups. Coverage remains 436 static / 1,875 interaction cases,
+8,339 groups / 386,891 occurrences and 132 source findings; input equivalence
+remains false.
+
+```powershell
+node scripts/verify-material-owner-initial-integration.mjs
+node scripts/verify-material-owner-test-refresh.mjs
+```
+
+Both gates exit 0. The original integration gate preserves the exact 326-group
+membership, all scalar projections and all 8,013 unrelated complete rows.
+The new gate additionally compares **every complete one of the 8,339 rows**
+and the full summary with commit `37fbb5a13f4ccfbef1d6249edda3ac3dad8902d9`.
+All are identical, including the 326 owner witnesses. Their complete-row SHA-256
+is `bab20490a8fcbcb7bc39d0fdf327dc2ecc8675bc21df50cefbd241bfdc036e70`.
+
+The 156 source paths are unchanged, and every fingerprint matches current source.
+Only `input-equivalence-audit.spec.mjs` and
+`slider-border-canonical-integration.spec.mjs` have changed hashes, as intended.
+The human report is identical apart from source line references; the verifier
+checks that separately. This does not assert equality of all other machine-report
+sections; a full no-write replay has been launched for that obligation and is
+still pending at this checkpoint.
+
+The refreshed compressed payload is 48,413,260 bytes, SHA-256
+`41e9c7c896086ef0b50f3872e9af509b3171c9d0dac6e82f62c550bff9c264af`.
+Its manifest records 1,795,180,227 decoded bytes, SHA-256
+`ebe493b1e3c2f7db81513d99e054db432969a8268b9372955aa6e02419cb829c`.
+The full 43-file rerun remains live; all 47 start-of-run source hashes were
+rechecked unchanged during execution. No terminal pass is claimed yet.

@@ -17,8 +17,11 @@ two preserved failures (source-fingerprint count and historical non-border row
 hash); all 47 start-of-run source hashes remained unchanged. No-write replay
 then completed with only the strict 2,812-unattributed failure. The two stale
 expectations were corrected after exact delta proof; three focused tests pass,
-with the historical hash retained. Full rerun and refreshed source metadata
-remain required. The linked integration record retains the original failures.
+with the historical hash retained. Refreshed canonical generation now exits 1
+only for the same 2,812-unattributed failure. Independent verification preserves
+all 8,339 complete discrepancy rows and the summary, with only the two intended
+test-source hashes changed. Full rerun and the new no-write replay remain live.
+The linked integration record retains the original failures and exact hashes.
 
 ## Overlay ancestor-context capture limitation
 
