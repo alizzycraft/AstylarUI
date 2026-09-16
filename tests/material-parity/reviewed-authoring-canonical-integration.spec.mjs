@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
 import test from 'node:test';
 import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import path from 'node:path';
@@ -94,13 +95,17 @@ test('reviewed authoring production integration preserves raw rows and prior cla
   assert.equal(audit.buttonFixedWidthInputs.observations.length, audit.buttonPillRadiusInputs.observations.length);
   const matchingCoreOwners = audit.buttonFixedWidthInputs.observations.filter(o => o.element === 'core-primary').length;
   assert.equal(widths.reduce((n, r) => n + r.occurrences, 0), audit.buttonFixedWidthInputs.observations.length - matchingCoreOwners);
-  const selected = new Set([...flow, ...radius, ...later, ...widths].map(r => JSON.stringify(scalar(r))));
+  const boxes = audit.discrepancies.filter(r => r.attribution === buttonBoxSizingAttribution);
+  assert.equal(boxes.length, 9);
+  assert.equal(audit.buttonBoxSizingInputs.observations.length, audit.buttonPillRadiusInputs.observations.length);
+  assert.equal(boxes.reduce((n, r) => n + r.occurrences, 0), audit.buttonBoxSizingInputs.observations.length);
+  const selected = new Set([...flow, ...radius, ...later, ...widths, ...boxes].map(r => JSON.stringify(scalar(r))));
   const oldSelected = previous.discrepancies.filter(r => selected.has(JSON.stringify(scalar(r))));
-  assert.equal(oldSelected.length, 179);
+  assert.equal(oldSelected.length, 188);
   assert.ok(oldSelected.every(r => r.attribution === 'unresolved'));
   const others = r => r.discrepancies.filter(d => !selected.has(JSON.stringify(scalar(d))));
   assert.equal(hash(JSON.stringify(others(audit))), hash(JSON.stringify(others(previous))));
-  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => /root flow height|button pill radius|button flex|button host request|button fixed width/.test(e)));
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => /root flow height|button pill radius|button flex|button host request|button fixed width|button box sizing/.test(e)));
 }));
 
 test('reviewed authoring production validation rejects detached evidence and inflated claims', () => withCapture((raw, options) => {

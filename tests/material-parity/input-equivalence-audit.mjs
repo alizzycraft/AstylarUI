@@ -25,6 +25,9 @@ import { buttonFixedWidthAttribution, classifyButtonFixedWidthInput,
 import { collectOwnerGridInitialInputs, validateOwnerGridInitialInputs } from './owner-grid-initial-source-binding.mjs';
 import { ownerGridInitialAttribution, classifyOwnerGridInitialInput } from './owner-grid-initial-classification.mjs';
 import { validateOwnerGridInitialClassifications } from './owner-grid-initial-coverage.mjs';
+import { collectButtonBoxSizingInputs, validateButtonBoxSizingInputs } from './button-box-sizing-source-binding.mjs';
+import { buttonBoxSizingAttribution, classifyButtonBoxSizingInput } from './button-box-sizing-classification.mjs';
+import { validateButtonBoxSizingClassifications } from './button-box-sizing-coverage.mjs';
 import { sliderInputBoxAttribution, collectSliderInputBoxes, classifySliderInputBox,
   validateSliderInputBoxes, validateSliderInputBoxClassifications } from './slider-input-box-source-binding.mjs';
 import { sliderBorderDefaultAttribution, collectSliderBorderDefaults, classifySliderBorderDefault,
@@ -181,6 +184,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const buttonHostRequestInputs = collectButtonHostRequestInputs(parityReport, { root, parityPath: options.parityPath });
   const buttonFixedWidthInputs = collectButtonFixedWidthInputs(parityReport, { root, parityPath: options.parityPath });
   const ownerGridInitialInputs = collectOwnerGridInitialInputs(parityReport, { root, parityPath: options.parityPath });
+  const buttonBoxSizingInputs = collectButtonBoxSizingInputs(parityReport, { root, parityPath: options.parityPath });
   const normalLineBoxes = options.normalLineBoxPath
     ? loadNormalLineBoxReport({ root, reportPath: path.relative(root, path.resolve(root, options.normalLineBoxPath)).replaceAll('\\', '/'), cases, inventory: elementInventory,
       controlTypography: rawControlTypography, expectedProvenance: parityReport.captureProvenance })
@@ -199,7 +203,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence, tooltipWrappingInputs, rootShadowInputs, rootFlowHeightInputs, buttonPillRadiusInputs, buttonFlexInputs, buttonHostRequestInputs, buttonFixedWidthInputs, ownerGridInitialInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence, tooltipWrappingInputs, rootShadowInputs, rootFlowHeightInputs, buttonPillRadiusInputs, buttonFlexInputs, buttonHostRequestInputs, buttonFixedWidthInputs, ownerGridInitialInputs, buttonBoxSizingInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -288,6 +292,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     buttonHostRequestInputs,
     buttonFixedWidthInputs,
     ownerGridInitialInputs,
+    buttonBoxSizingInputs,
     sliderInputBoxes,
     sliderBorderDefaults,
     rootHeightInputs,
@@ -313,6 +318,15 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
+  if (report.buttonBoxSizingInputs?.binding?.status === 'bound') {
+    errors.push(...validateButtonBoxSizingInputs(report.buttonBoxSizingInputs, { root }));
+    errors.push(...validateButtonBoxSizingClassifications(report.buttonBoxSizingInputs, report.discrepancies, { root }));
+    if (report.buttonBoxSizingInputs.groups.length && report.summary?.inputEquivalent)
+      errors.push('button box sizing observation-stage attribution does not establish input equivalence');
+  } else if (requireComplete || report.buttonBoxSizingInputs?.binding?.status === 'invalid' ||
+      report.buttonBoxSizingInputs?.observations?.length || report.discrepancies?.some(d => d.attribution === buttonBoxSizingAttribution)) {
+    errors.push('button box sizing attribution lacks independently bound original capture evidence');
+  }
   if (report.ownerGridInitialInputs?.binding?.status === 'bound') {
     errors.push(...validateOwnerGridInitialInputs(report.ownerGridInitialInputs, { root }));
     errors.push(...validateOwnerGridInitialClassifications(report.ownerGridInitialInputs,
@@ -400,7 +414,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.tooltipUnpairedStyles, report.sliderInputBoxes, report.sliderBorderDefaults,
         report.fieldHostInitialStyleInputs, replayedEvidence, report.tooltipWrappingInputs, report.rootShadowInputs,
         report.rootFlowHeightInputs, report.buttonPillRadiusInputs, report.buttonFlexInputs, report.buttonHostRequestInputs,
-        report.buttonFixedWidthInputs, report.ownerGridInitialInputs);
+        report.buttonFixedWidthInputs, report.ownerGridInitialInputs, report.buttonBoxSizingInputs);
       const selected = rows => rows.filter(r => r.attribution === ownerInitialStyleAttribution);
       if (JSON.stringify(selected(replayedRows)) !== JSON.stringify(selected(report.discrepancies)))
         errors.push('owner initial-style attributions lack replayed original precedence, values and exact case coverage');
@@ -1306,6 +1320,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Shared button formatting: ${report.buttonFlexInputs.observations.length} independently bound owners retain explicit Material inline-flex/center/center requests versus omitted candidate authoring and block/stretch/flex-start local defaults. ${report.discrepancies.filter(d => d.attribution === buttonFlexAttribution).length} groups receive unequal-authoring attribution only; native-value/label-span composition, used layout and text-centering remain independent.`,
     `Shared button host requests: ${report.buttonHostRequestInputs.observations.length} independently bound owners retain explicit reference relative/min-width:64px/vertical-align:middle requests versus core absolute placement or absent own-stage candidate values. ${report.discrepancies.filter(d => d.attribution === buttonHostRequestAttribution).length} groups retain those authoring differences without inventing computed defaults. Original source rules precede later parity fixes; containing blocks, used layout, composition and raster cause remain unproven.`,
     `Fixed button width authoring: ${report.buttonFixedWidthInputs.observations.length} independently bound owners retain ${report.buttonFixedWidthInputs.groups.length} unequal authored-width groups, including ${report.buttonFixedWidthInputs.observations.filter(o => o.element === 'core-primary').length} core owners whose widths normalize equally. ${report.discrepancies.filter(d => d.attribution === buttonFixedWidthAttribution).length} scalar groups receive attribution; the separate authoring ledger is never filtered by numerical similarity. Used dimensions, intrinsic sizing and raster cause remain unproven.`,
+    `Button box-sizing observation stages: ${report.buttonBoxSizingInputs.observations.length} independently source-bound owners retain browser border-box and omitted candidate local declarations, with ${report.buttonBoxSizingInputs.observations.filter(o => o.proof.observedDeclaredBorderBox).length} measured static cases and ${report.buttonBoxSizingInputs.observations.filter(o => !o.proof.observedDeclaredBorderBox).length} original interaction geometry gaps. ${report.discrepancies.filter(d => d.attribution === buttonBoxSizingAttribution).length} groups receive bounded observation-stage attribution. No candidate computed default, full layout, interaction geometry or rendering equivalence is inferred; fixed-width authoring remains independently unequal.`,
     `Field-host initial styles: ${report.fieldHostInitialStyleInputs.length} observations retain browser computed defaults and candidate local omissions across captured ancestry. ${report.discrepancies.filter(d => d.attribution === fieldHostInitialStyleAttribution).length} groups are attributed to the unequal observation stages, without synthesizing candidate computed values. Component token authoring, inherited-value consumption, wrapping, hit testing, visibility and final rendering remain independent obligations.`,
     `Remaining owner initial styles: ${report.ownerInitialStyleEvidence?.observations?.length ?? 0} captured eligible property observations are independently source-bound; ${report.discrepancies.filter(d => d.attribution === ownerInitialStyleAttribution).length} previously unresolved groups receive observation-stage attribution only. Existing classifications retain precedence. Explicit requests, mapping/ancestry gaps and negative observations are preserved; no candidate computed values or rendering equivalence are inferred.`,
     `Grid-template observation stages: ${report.ownerGridInitialInputs.observations.length} independently source-bound original property observations retain browser-computed none and omitted candidate local fields, including ${report.ownerGridInitialInputs.observations.filter(o => o.proof.issues.length).length} review gaps. ${report.discrepancies.filter(d => d.attribution === ownerGridInitialAttribution).length} additional groups receive observation-stage attribution only after prior classifications retain precedence. Earlier non-grid evidence, explicit requests and mapping/motion gaps remain separate. No candidate computed value, implicit-track sizing or rendering equivalence is inferred.`,
@@ -1355,7 +1370,8 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence = { observations: [] }, tooltipWrappingInputs = { observations: [] }, rootShadowInputs = { observations: [] }, rootFlowHeightInputs = { observations: [] }, buttonPillRadiusInputs = { observations: [] }, buttonFlexInputs = { observations: [] }, buttonHostRequestInputs = { observations: [] }, buttonFixedWidthInputs = { observations: [] }, ownerGridInitialInputs = { observations: [] }) {
+function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence = { observations: [] }, tooltipWrappingInputs = { observations: [] }, rootShadowInputs = { observations: [] }, rootFlowHeightInputs = { observations: [] }, buttonPillRadiusInputs = { observations: [] }, buttonFlexInputs = { observations: [] }, buttonHostRequestInputs = { observations: [] }, buttonFixedWidthInputs = { observations: [] }, ownerGridInitialInputs = { observations: [] }, buttonBoxSizingInputs = { observations: [] }) {
+  const buttonBoxSizingByCaseId = new Map(buttonBoxSizingInputs.observations.map(o => [JSON.stringify([o.case, o.proof.element]), o]));
   const ownerGridByCaseIdProperty = new Map(ownerGridInitialInputs.observations.map(o => [JSON.stringify([o.case, o.proof.element, o.proof.property]), o]));
   const buttonFixedWidthByCaseId = new Map(buttonFixedWidthInputs.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
   const buttonFlexByCaseId = new Map(buttonFlexInputs.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
@@ -1493,6 +1509,9 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
         if (classification.attribution === 'unresolved') classification = classifyOwnerGridInitialInput(
           input, property, referenceValue, astylarValue,
           ownerGridByCaseIdProperty.get(JSON.stringify([key, input.id, property]))) ?? classification;
+        if (classification.attribution === 'unresolved') classification = classifyButtonBoxSizingInput(
+          input, property, referenceValue, astylarValue,
+          buttonBoxSizingByCaseId.get(JSON.stringify([key, input.id]))) ?? classification;
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
           classification.classification, classification.attribution ?? null, classification.justification]);
         let entry = grouped.get(signature);
@@ -1509,7 +1528,7 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
-            ...([ownerGridInitialAttribution, buttonFixedWidthAttribution, buttonFlexAttribution, buttonHostRequestAttribution, rootFlowHeightAttribution, buttonPillRadiusAttribution, rootShadowAttribution, tooltipWrappingAttribution, ownerInitialStyleAttribution, fieldHostInitialStyleAttribution, sliderBorderDefaultAttribution, sliderInputBoxAttribution, tooltipUnpairedStyleAttribution, originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
+            ...([buttonBoxSizingAttribution, ownerGridInitialAttribution, buttonFixedWidthAttribution, buttonFlexAttribution, buttonHostRequestAttribution, rootFlowHeightAttribution, buttonPillRadiusAttribution, rootShadowAttribution, tooltipWrappingAttribution, ownerInitialStyleAttribution, fieldHostInitialStyleAttribution, sliderBorderDefaultAttribution, sliderInputBoxAttribution, tooltipUnpairedStyleAttribution, originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
               'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, fieldHostAlignmentAttribution, fieldHostWeightTrackingAttribution, rootTypographyAttribution, rootInitialStyleAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution, rootBoxSizingAttribution, containerCaretAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
@@ -8377,6 +8396,14 @@ function sourceFingerprints(root) {
     'tests/material-parity/button-fixed-width-classification.mjs',
     'tests/material-parity/button-fixed-width-classification.spec.mjs',
     'tests/material-parity/button-fixed-width-canonical-integration.spec.mjs',
+    'tests/material-parity/button-box-sizing-input-evidence.mjs',
+    'tests/material-parity/button-box-sizing-input-evidence.spec.mjs',
+    'tests/material-parity/button-box-sizing-source-binding.mjs',
+    'tests/material-parity/button-box-sizing-source-binding.spec.mjs',
+    'tests/material-parity/button-box-sizing-classification.mjs',
+    'tests/material-parity/button-box-sizing-classification.spec.mjs',
+    'tests/material-parity/button-box-sizing-coverage.mjs',
+    'tests/material-parity/button-box-sizing-canonical-integration.spec.mjs',
     'tests/material-parity/owner-grid-initial-evidence.mjs',
     'tests/material-parity/owner-grid-initial-evidence.spec.mjs',
     'tests/material-parity/owner-grid-initial-source-binding.mjs',

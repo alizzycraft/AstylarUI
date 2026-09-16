@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { isDeepStrictEqual } from 'node:util';
+import { buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
 import test from 'node:test';
 import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import path from 'node:path';
@@ -72,13 +74,17 @@ test('button requests production integration preserves raw values and prior clas
     assert.equal(laterWidths.reduce((n, r) => n + r.occurrences, 0), expectedOwners - matchingCoreOwners);
     assert.deepEqual(raw, inputBefore);
     assert.deepEqual(audit.discrepancies.map(scalar), previous.discrepancies.map(scalar));
-    const keys = new Set([...selected, ...laterWidths].map(r => JSON.stringify(scalar(r))));
+    const boxes = audit.discrepancies.filter(r => r.attribution === buttonBoxSizingAttribution);
+    assert.equal(boxes.length, 9);
+    assert.equal(audit.buttonBoxSizingInputs.observations.length, expectedOwners);
+    assert.equal(boxes.reduce((n, r) => n + r.occurrences, 0), expectedOwners);
+    const keys = new Set([...selected, ...laterWidths, ...boxes].map(r => JSON.stringify(scalar(r))));
     const old = previous.discrepancies.filter(r => keys.has(JSON.stringify(scalar(r))));
-    assert.equal(old.length, 62); assert.ok(old.every(r => r.attribution === 'unresolved'));
+    assert.equal(old.length, 71); assert.ok(old.every(r => r.attribution === 'unresolved'));
     const others = r => r.discrepancies.filter(d => !keys.has(JSON.stringify(scalar(d))));
-    assert.deepEqual(others(audit), others(previous));
+    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'complete unrelated rows remain unchanged after explicitly reviewed later width/box-sizing groups');
     const errors = validateMaterialInputAudit(audit, { requireComplete: false });
-    assert.deepEqual(errors.filter(e => /button flex|button host request|button fixed width/.test(e)), []);
+    assert.deepEqual(errors.filter(e => /button flex|button host request|button fixed width|button box sizing/.test(e)), []);
     for (const row of selected) {
       assert.equal(row.reviewEvidence.inputEquivalent, false);
       assert.equal(row.reviewEvidence.candidateUsedLayoutVerified, false);
@@ -92,9 +98,9 @@ test('button requests production integration preserves raw values and prior clas
     assert.ok(invalid.some(e => e.includes('button flex')));
     assert.ok(invalid.some(e => e.includes('button host request')));
     console.log(JSON.stringify({ diagnosticCases: raw.results.length + raw.interactions.length,
-      sourceBoundOwners: expectedOwners, newGroups: selected.length + laterWidths.length,
+      sourceBoundOwners: expectedOwners, newGroups: selected.length + laterWidths.length + boxes.length,
       formattingHostGroups: selected.length, widthGroups: laterWidths.length, matchingCoreOwnersRetained: matchingCoreOwners,
-      observations: [...selected, ...laterWidths].reduce((n, r) => n + r.occurrences, 0),
+      boxSizingGroups: boxes.length, observations: [...selected, ...laterWidths, ...boxes].reduce((n, r) => n + r.occurrences, 0),
       unchangedScalarRows: audit.discrepancies.length,
       unchangedCompleteRows: others(audit).length,
       unchangedCompleteRowsSha256: hash(JSON.stringify(others(audit))),

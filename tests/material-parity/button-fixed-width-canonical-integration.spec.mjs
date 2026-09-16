@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { isDeepStrictEqual } from 'node:util';
+import { buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
 import test from 'node:test';
 import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import path from 'node:path';
@@ -62,19 +64,25 @@ test('button fixed widths production integration preserves matching authoring an
     for (const r of [previous, audit]) assert.equal(r.discrepancies.filter(d => d.element === 'core-primary' && d.property === 'width').length, 0);
     assert.deepEqual(raw, inputBefore);
     assert.deepEqual(audit.discrepancies.map(scalar), previous.discrepancies.map(scalar));
-    const keys = new Set(rows.map(r => JSON.stringify(scalar(r))));
+    const boxes = audit.discrepancies.filter(r => r.attribution === buttonBoxSizingAttribution);
+    assert.equal(boxes.length, 9);
+    assert.equal(audit.buttonBoxSizingInputs.observations.length, 600);
+    assert.equal(boxes.reduce((n, r) => n + r.occurrences, 0), 600);
+    const keys = new Set([...rows, ...boxes].map(r => JSON.stringify(scalar(r))));
     const old = previous.discrepancies.filter(r => keys.has(JSON.stringify(scalar(r))));
-    assert.equal(old.length, 8); assert.ok(old.every(r => r.attribution === 'unresolved'));
-    for (const row of rows) {
+    assert.equal(old.length, 17); assert.ok(old.every(r => r.attribution === 'unresolved'));
+    for (const row of [...rows, ...boxes]) {
       const before = old.find(r => JSON.stringify(scalar(r)) === JSON.stringify(scalar(row)));
       assert.deepEqual(row.referenceAuthoredExamples, before.referenceAuthoredExamples);
       assert.deepEqual(row.astylarAuthoredExamples, before.astylarAuthoredExamples);
     }
     const others = r => r.discrepancies.filter(d => !keys.has(JSON.stringify(scalar(d))));
-    assert.deepEqual(others(audit), others(previous));
+    // Exact structural equality, with a bounded assertion diagnostic rather
+    // than a multi-megabyte rendering of the complete captured trees on failure.
+    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'all complete rows outside the eight width and nine box-sizing groups remain unchanged');
     assert.match(renderMaterialInputAuditMarkdown(audit), /Fixed button width authoring: 600[^\n]*9[^\n]*52/);
     const errors = validateMaterialInputAudit(audit, { requireComplete: false });
-    assert.deepEqual(errors.filter(e => /button fixed width/.test(e)), []);
+    assert.deepEqual(errors.filter(e => /button fixed width|button box sizing/.test(e)), []);
     for (const mutate of [r => { delete r.buttonFixedWidthInputs; }, r => {
       r.buttonFixedWidthInputs.observations = r.buttonFixedWidthInputs.observations.filter(o => o.element !== 'core-primary');
       r.buttonFixedWidthInputs.groups = r.buttonFixedWidthInputs.groups.filter(g => g.element !== 'core-primary');
@@ -85,7 +93,7 @@ test('button fixed widths production integration preserves matching authoring an
     }
     console.log(JSON.stringify({ baselineCommit, diagnosticCases: 480, sourceBoundOwners: 600,
       authoringGroups: 9, retainedScalarMatchingOwners: 52, attributedScalarGroups: rows.length,
-      attributedScalarObservations: 548, unchangedScalarRows: audit.discrepancies.length,
+      attributedScalarObservations: 548, laterBoxSizingGroups: boxes.length, unchangedScalarRows: audit.discrepancies.length,
       unchangedCompleteRows: others(audit).length, unchangedCompleteRowsSha256: hash(JSON.stringify(others(audit))),
       inputEquivalent: false, limitation: 'Actual production normalization/precedence with all original button owners; full unrelated-family report conservation and final enforced matrix remain separate.' }));
   } finally {

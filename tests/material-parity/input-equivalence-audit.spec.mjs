@@ -1373,15 +1373,16 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 196);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 196);
+  assert.equal(audit.sourceFingerprints.length, 204);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 204);
   // The original 129-source inventory gained one tooltip binding and three
   // slider binding files, followed by ten range-border, five field-host and
   // eight shared owner-attribution sources and six tooltip wrapping/proof
   // dependencies, four root-shadow sources and seven root-flow/button-radius
   // binding/proof sources, seven button formatting/host request sources and
   // seven fixed-width authoring/binding/classification/integration sources and
-  // nine grid observation/binding/classification/coverage/integration sources.
+  // nine grid observation/binding/classification/coverage/integration sources,
+  // then eight button box-sizing observation/binding/coverage sources.
   // No previous source was removed.
   // Require the actual entries/digests, not only a count.
   for (const file of ['tests/material-parity/tooltip-unpaired-style-evidence.mjs',
@@ -1417,6 +1418,14 @@ test('records source fingerprints and actual visual acceptance fields', () => {
     'tests/material-parity/button-fixed-width-classification.spec.mjs',
     'tests/material-parity/button-fixed-width-canonical-integration.spec.mjs',
     'tests/material-parity/owner-grid-initial-evidence.mjs',
+    'tests/material-parity/button-box-sizing-input-evidence.mjs',
+    'tests/material-parity/button-box-sizing-input-evidence.spec.mjs',
+    'tests/material-parity/button-box-sizing-source-binding.mjs',
+    'tests/material-parity/button-box-sizing-source-binding.spec.mjs',
+    'tests/material-parity/button-box-sizing-classification.mjs',
+    'tests/material-parity/button-box-sizing-classification.spec.mjs',
+    'tests/material-parity/button-box-sizing-coverage.mjs',
+    'tests/material-parity/button-box-sizing-canonical-integration.spec.mjs',
     'tests/material-parity/owner-grid-initial-evidence.spec.mjs',
     'tests/material-parity/owner-grid-initial-source-binding.mjs',
     'tests/material-parity/owner-grid-initial-source-binding.spec.mjs',

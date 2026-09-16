@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
 import test from 'node:test';
 import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -62,9 +63,12 @@ test('owner grid production integration preserves original scalars, earlier prec
     assert.ok(added.length > 0, 'production builder must attribute independently reviewed grid observations');
     assert.equal(hash(raw), before);
     assert.deepEqual(audit.discrepancies.map(scalar), previous.discrepancies.map(scalar));
-    const signatures = new Set(added.map(r => JSON.stringify(scalar(r))));
+    const boxes = audit.discrepancies.filter(r => r.attribution === buttonBoxSizingAttribution);
+    assert.equal(boxes.length, 9);
+    assert.equal(boxes.reduce((n, r) => n + r.occurrences, 0), audit.buttonBoxSizingInputs.observations.length);
+    const signatures = new Set([...added, ...boxes].map(r => JSON.stringify(scalar(r))));
     const old = previous.discrepancies.filter(r => signatures.has(JSON.stringify(scalar(r))));
-    assert.equal(old.length, added.length); assert.ok(old.every(r => r.attribution === 'unresolved'));
+    assert.equal(old.length, added.length + 9); assert.ok(old.every(r => r.attribution === 'unresolved'));
     for (const row of added) {
       const previousRow = old.find(r => JSON.stringify(scalar(r)) === JSON.stringify(scalar(row)));
       assert.deepEqual(row.referenceAuthoredExamples, previousRow.referenceAuthoredExamples);
@@ -85,7 +89,7 @@ test('owner grid production integration preserves original scalars, earlier prec
     assert.ok(binding.observations.some(o => o.proof.issues.length), 'negative observations remain');
     assert.equal(audit.summary.inputEquivalent, false);
     assert.match(renderMaterialInputAuditMarkdown(audit), /Grid-template observation stages:/);
-    assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => /owner grid/.test(e)), []);
+    assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => /owner grid|button box sizing/.test(e)), []);
     for (const mutate of [
       a => { delete a.ownerGridInitialInputs; },
       a => { a.ownerGridInitialInputs.observations.splice(a.ownerGridInitialInputs.observations.findIndex(o => o.proof.issues.length), 1); },
@@ -97,7 +101,7 @@ test('owner grid production integration preserves original scalars, earlier prec
     }
     console.log(JSON.stringify({ baselineCommit, staticCases: results.length, interactionCases: interactions.length,
       eligibleObservations: binding.observations.length, addedGroups: added.length,
-      addedOccurrences: added.reduce((n, r) => n + r.occurrences, 0), unchangedScalarRows: audit.discrepancies.length,
+      addedOccurrences: added.reduce((n, r) => n + r.occurrences, 0), laterBoxSizingGroups: boxes.length, unchangedScalarRows: audit.discrepancies.length,
       unchangedCompleteRows: other(audit).length, unchangedCompleteRowsSha256: hash(other(audit)),
       fullCanonicalConservationVerified: false, inputEquivalent: false }));
   } finally {
