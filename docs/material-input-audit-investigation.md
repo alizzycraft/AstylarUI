@@ -3,6 +3,21 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete harness inventory closes a test-selection gap
+
+The [harness coverage review](material-audit-harness-coverage.md) finds 29
+Material audit test files omitted by the existing 43-file package command.
+The separate discovery runner includes all 65 Material files plus eight
+general/TTS files, preserving every legacy entry and including its own new
+inventory test. Its machine-readable plan contains all 73 files.
+
+Real-child verification exposed and corrected a false-green condition in the
+new runner: inherited Node test context skipped child files and returned 0.
+The retained deliberately failing-child control now observes exit 1. All four
+runner tests pass (558.9314ms); the full 73-file suite has not yet run. No prior
+direct run is claimed to have skipped its tests. The package command, renderer,
+reference inputs and all 187 frozen canonical dependencies remain unchanged.
+
 ## Complete fixed-width report conserved
 
 Full generation finishes with exit **1** solely for **2,595** unattributed
