@@ -3,6 +3,20 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Field-host geometry matches despite different layout inputs
+
+The [original field-host layout survey](material-field-host-layout-inputs.md)
+binds 4,616 observations across all 577 cases in six comparison families.
+It distinguishes 54 layout-authoring mismatch groups from 18 width
+observation-stage groups: both sides request width 100%, but the scalar audit
+compares browser pixels with a candidate percentage. All 72 measured static
+host boxes match despite candidate heights authored 2–6 px larger; 505
+interaction geometry gaps remain explicit. Reference in-flow wrapper composition
+is replaced by absolute candidate children inside a different parent layout.
+The first confirmed divergence is authoring; flex shrink is only a hypothesis
+for the matching smaller measured boxes, not a proven renderer diagnosis.
+No canonical reclassification or renderer/comparison change is made.
+
 ## Field-host layout requests checked through all followed revisions
 
 The [shared field-host layout history](material-field-host-layout-history.md)
