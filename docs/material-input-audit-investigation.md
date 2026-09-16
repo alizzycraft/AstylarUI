@@ -3,6 +3,25 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete harness failed; grid source joins verified separately
+
+The original 73-file audit harness has finished with terminal exit 1:
+**777 passed / 19 failed**, 796 reported tests, 2,936,241.3939ms. Fourteen
+failures concern stale saved provenance/replay metadata, one fails the slider
+border integration's unrelated-record checksum, and four are test-process
+crashes. These are separate failure categories, not a passing suite. The
+[harness failure record](material-audit-harness-coverage.md#first-complete-run-failed)
+preserves the log digest, affected tests and required follow-up.
+
+The new [grid source binding and scalar joins](material-owner-grid-initial-survey.md#original-source-binding-and-scalar-joins)
+are verified separately: source replay 3/3 passed (207,751.714ms), the added
+bounded-error assertion 1/1 passed (24,573.6367ms), and classification 2/2 passed
+(1,638.9712ms). An earlier native crash is retained, not called a pass. These
+modules are not integrated into the canonical builder. Current discovery has
+77 files; the earlier full run did not include four subsequent test additions.
+The canonical count remains 2,595 unresolved groups. No renderer or fixture
+input changed.
+
 ## Grid-template omission review preserves the computed-value boundary
 
 The [owner grid survey](material-owner-grid-initial-survey.md) reopens all
