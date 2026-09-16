@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared button host requests traced
+
+The [host-request survey](material-button-host-request-audit.md) retains all 600
+original button owners and 27 groups / 1,800 observations. Explicit Material
+position/min-width/vertical-align requests differ from candidate authoring:
+52 core button owners request absolute positioning; the remaining 1,748 property
+observations retain absent own-stage values without fabricated computed defaults.
+Full tree/scalar/stage joins and fourteen negative controls pass (2/2 tests).
+The shared base and core absolute rule are unchanged from the initial showcase;
+no later compensation motive is inferred. Used layout, host versus native text
+alignment and composition remain separate. Main classifier binding/conservation
+are pending; none of the 173 sources used by the live no-write replay changed.
+
 ## Root-flow/button-radius canonical conservation verified
 
 Full regeneration completed with **436/436 static and 1,875/1,875 interaction
@@ -20,7 +33,7 @@ It independently reopens 164 root and 600 button owner proofs, checks exact
 case/state/value/claim coverage, preserves the 26 single-root controls, and
 permits only the expected summary deltas. Source inventory rises from 166 to
 173, with only the main audit, its spec and the shadow integration spec changed
-among prior dependencies. The three later evidence/replay commits did not
+among prior dependencies. Subsequent evidence/replay commits did not
 change any of those frozen sources.
 
 The new gzip is **49,435,335 bytes**, SHA-256
