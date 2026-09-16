@@ -3,7 +3,7 @@
   "kind": "remaining-overlay-ancestry-review",
   "source": {
     "file": "docs/material-owner-initial-style-mappings.json",
-    "sha256": "de9cf5d2106530022d2a565accc0cdffbb36f1780b217cff0ad3e610ad822b3e"
+    "sha256": "97afc07502b0c4d3d18414863484d7c2faeb48de8a72da5f5158977c76c63136"
   },
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
@@ -111950,7 +111950,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "7c36b66a5ae597ce0cfb55069b88e46edaeae92dbb3d0d6956aa03798539765c"
+      "sha256": "ec6a79768159c2c62e8fce22516837fd254f9bde18044cc00fe37e79ef8c7b36"
     },
     {
       "file": "tests/material-parity/generated-node-mapping-evidence.mjs",

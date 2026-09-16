@@ -116,7 +116,7 @@ Log: `artifacts/material-parity/button-box-sizing-historical-recheck.log`,
 SHA-256 `516c6a6f371966e5d98381f25dda5fd1af75583fcbe596e940dab59458803862`.
 These are separate verified runs, not a claimed single four-test terminal pass.
 
-## Verification still pending
+## Evidence provenance replays
 
 ### Completed root/field case-index provenance replay
 
@@ -137,7 +137,8 @@ The case-index run (session **33225**) exits **0**, **10/10 passed**,
 The field-host initial-style generator and no-write replay both exit 0.
 The subsequent three-file run (session **39155**) exits **0**, **14/14 passed**,
 **163,620.1638ms**, with zero failures, skips, cancellations or todos.
-Log: `artifacts/material-parity/button-box-sizing-provenance-replay.log`.
+Log: `artifacts/material-parity/button-box-sizing-provenance-replay.log`, SHA-256
+`dd56e6f56f401893d0942dee2c031a3cbb97ec5b6f249c5e72d95b94bdb86e54`.
 
 Independent deep comparisons against `58ac4bb` retain every non-fingerprint
 field in all twelve reports. Their unchanged data hashes match the prior grid
@@ -148,6 +149,33 @@ field-initial report changes builder and parent typography-index fingerprints.
 The complete 2,311 root cases, 577 field cases, original tree hashes, scalar
 values, classifications, case membership and uncertainty flags are preserved.
 These are proof replays, not blind acceptance of new source hashes.
+
+### Completed owner/overlay provenance replay
+
+```powershell
+node scripts/audit-material-owner-initial-membership.mjs
+node scripts/audit-material-owner-initial-mappings.mjs
+node scripts/audit-material-remaining-overlay-ancestry.mjs
+node --test --test-concurrency=1 tests/material-parity/owner-initial-style-membership.spec.mjs tests/material-parity/owner-initial-style-mappings.spec.mjs tests/material-parity/remaining-overlay-ancestry-review.spec.mjs
+```
+
+All three generators exit 0. Session **11175** then exits **0**, **14/14 tests
+passed**, **76,545.1521ms**, zero failures, skips, cancellations or todos.
+Log: `artifacts/material-parity/button-box-sizing-owner-provenance-replay.log`,
+SHA-256 `26be9177727dee3c318a2bb3b81d05b3edbd8d169870008488d3197a770694ce`.
+The membership and mapping reports retain all non-fingerprint data, with hashes
+`e7b4cff4aa3cd86047654d19373d36137c97240086cfc5942eeaa13c5b08d320`
+and `1789a08d0cadeff09a5ed25a24723daff4b53142a4f703bed4bcacc5896678c6`.
+The remaining-overlay report changes only its parent mapping digest and audit
+builder fingerprint; all other data retains SHA-256
+`09a267525e65e8314e1a240fc07ed3423c051d2a18e9e3e49e5326564051046c`.
+The 600 membership groups, 31,508 observations, 636
+separately reviewed static observations, 51 split groups, 48 overlay groups,
+1,424 overlay observations, 50 cases, 178 owners and 18 tooltip context gaps
+are unchanged. No frozen runtime capture or historical overlay-mapping receipt
+was rewritten. The tests include independent no-write source replay.
+
+## Verification still pending
 
 Full canonical generation/conservation,
 source-provenance replays, full no-write validation and the final current harness
