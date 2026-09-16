@@ -3,7 +3,7 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Button box-sizing production evidence integrated; full report pending
+## Button box-sizing full report conserved; 2,486 groups remain unresolved
 
 The [source-bound button box-sizing integration](material-button-box-sizing-canonical-integration.md)
 now runs in the production audit builder. It attributes computed-versus-local
@@ -21,12 +21,17 @@ The metadata replays pass 10 case-index checks, 14 root/field checks and 14
 owner/overlay checks, preserving all original non-metadata findings. No renderer,
 plugin behavior or canonical comparison input is changed.
 
-The complete canonical generation has been launched but its result is still
-pending. The new full-report conservation script correctly rejects the old
-saved report (zero rather than nine new attributions). Do not yet reduce the
-saved unresolved total below 2,495 or claim complete canonical conservation.
-Full no-write replay, the current complete harness, the enforced comparison
-matrix and the remaining root-cause audit are still required.
+Complete canonical generation now exits 1 solely for 2,486 unresolved groups.
+The full-report conservation script rejects the old report and passes the new
+one against the actual saved `0165f76` baseline: all 8,339 scalar rows and all
+8,330 unrelated complete findings are unchanged. Exactly nine groups covering
+600 observations gain bounded attribution; all 492 interaction geometry gaps
+remain. Earlier grid and fixed-width ledgers, all source cases and every false
+equivalence flag are preserved. The human report changes only the supported
+paragraph, unresolved count and source locations. Full producer no-write replay
+is running separately. The current complete harness, enforced comparison matrix
+and remaining root-cause audit are still required; no input or rendering parity
+claim follows from these conservation checks.
 
 ## Full grid canonical conservation verified; 2,495 groups remain unresolved
 

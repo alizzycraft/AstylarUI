@@ -177,8 +177,51 @@ was rewritten. The tests include independent no-write source replay.
 
 ## Verification still pending
 
-Full canonical generation/conservation,
-source-provenance replays, full no-write validation and the final current harness
-and enforced comparison matrix remain pending. The checked-in canonical report
-has not yet been regenerated for this integration, so its unresolved count must
-not be described as updated. No renderer or canonical comparison input is changed.
+Full no-write validation, the final current harness, the enforced comparison
+matrix and the remaining root-cause audit remain pending. No renderer or
+canonical comparison input is changed.
+
+## Complete canonical conservation
+
+```powershell
+node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+node scripts/verify-material-button-box-sizing-integration.mjs
+```
+
+Generation (session **42494**) terminated with exit **1** solely because
+**2,486 groups still lack root-cause attribution**. It reports full capture
+coverage of **436/436 static** and **1,875/1,875 interaction** cases, **8,339**
+unique differences, **386,891** occurrences, **132** source findings, and
+`inputEquivalent: false`. There was no reported integrity-validation error.
+Log: `artifacts/material-parity/button-box-sizing-canonical-generation.log`,
+SHA-256 `7f72210d16afa59a3767611706c3338219a3c2ba8336a5ed00f87a7bfa8b6bf1`.
+
+The conservation script first rejected the old saved report with `0 !== 9`
+(exit 1). After generation it passes against the actual saved report at
+`0165f76cc0f634482aeca21dd686ad745beddfc8`. Its final run, session **52690**,
+exits **0**, preserving every one of the **8,339 scalar rows** and every field
+of all **8,330 unrelated complete rows**, SHA-256
+`4bba542201a4d6b985defcb2c9fbe797d252a6be66e2904fd5906e5e47e892f7`.
+Only the nine reviewed groups / 600 observations receive the supported
+classification. Original authored examples, values, cases and uncertainty
+flags remain. All 2,311 source cases, 108 static measured observations and
+492 interaction geometry gaps are independently replayed. The full fixed-width
+and grid ledgers remain exactly unchanged.
+
+The source inventory preserves all 196 previous files and adds exactly eight,
+for **204**. Seven existing dependency digests change: the builder and its
+test, four independently verified historical integration tests and the replayed
+field-initial report. Every digest matches its current source. The human report
+changes only the supported box-sizing paragraph, unresolved count and source
+line locations. No numerical normalization or historical baseline is replaced.
+Final conservation log:
+`artifacts/material-parity/button-box-sizing-canonical-conservation-final.log`,
+SHA-256 `0a125f801b6ccefcc159c9db36b9963ee011b2fb51a89e3cbd171e2ce8db173f`.
+
+Saved compressed payload: **51,193,437 bytes**, SHA-256
+`dc3a0681ddbbb85b256db9b3616280d80727c33c96ee016f3cd15b0c0b91e853`.
+Decoded payload: **1,919,161,504 bytes**, SHA-256
+`7d41f09b27bc7dfd0ec6652e3ae2f4fa1e40633fd96634f71b5c440dd79597c6`.
+The full producer `--check` replay is a separate pending gate, not implied by
+this bounded projection comparison. Capture coverage is not completed audit
+coverage or rendering acceptance.
