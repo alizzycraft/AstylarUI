@@ -48,6 +48,11 @@ claim is made.
 
 ## Remaining acceptance
 
+Current discovery after the standalone grid-coverage and button-width-history
+tests contains **79 files** (71 Material plus eight general/TTS). Their focused
+3/3 and 2/2 passes do not extend the earlier 73-file full result. The next full
+run must include both new files as well as the four intervening additions.
+
 The first 73-file full execution has now finished and failed, as recorded below.
 Its failures must be investigated before claiming complete harness verification.
 Do not weaken source-fingerprint checks or substitute a partial run. Revalidate

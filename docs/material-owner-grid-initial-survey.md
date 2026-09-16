@@ -17,6 +17,42 @@ owner's declarations support the narrower observation-stage description
 rendering-equivalence flags remain false, including for positive observations.
 No canonical attribution is changed.
 
+## Complete classification coverage and precedence checks
+
+`owner-grid-initial-coverage.mjs` now independently reopens the hash-bound
+original scalar capture and checks every eligible owner/property in original
+order, including all 2,856 gaps. It matches case, family, profile, viewport,
+state, owner/property identity and the complete input digest before constructing
+expected classification coverage. Source paths are restricted to the real
+Material artifact directory. Duplicate cases, owners and earlier proofs fail.
+
+The earlier non-grid classifier retains precedence: **74 existing groups /
+4,742 observations** are checked alongside the proposed **100 additional groups /
+6,226 observations**, not excluded from conservation. Every classified row must
+retain exact values, evidence, justification, owner, complete reviewed cases,
+sample cases, states and occurrence counts. A changed attribution cannot opt a
+row out of checking. This validator must be used with the existing full grid
+tree/declaration replay and non-grid inventory validation; scalar coverage alone
+does not prove those declarations or candidate computed layout.
+
+```powershell
+node --test tests/material-parity/owner-grid-initial-coverage.spec.mjs
+```
+
+Terminal exit **0**, **3/3 pass**, no skips or cancellations,
+**39,511.4537ms**. The test reuses the committed canonical non-grid rows, rebuilds
+their proofs from all original trees, and checks direct and JSON-round-trip
+validation. Ten row mutations, six evidence mutations and two earlier-proof
+controls reject lost/duplicated coverage, attribution substitution, altered
+values, invented equivalence, dropped negative observations, changed provenance,
+reordered observations and missing/duplicate prior proofs. Diagnostics remain
+bounded rather than serializing the whole capture on failure.
+
+This is a verified standalone prerequisite, **not production integration**.
+The canonical audit remains unchanged at 2,595 unresolved groups. Actual builder
+integration, full unrelated-row conservation, canonical regeneration and full
+acceptance remain required.
+
 ## Provenance and coverage
 
 - Original report: `artifacts/material-parity/current-ancestry-audit/latest-report.json`.

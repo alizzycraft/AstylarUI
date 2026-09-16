@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Grid coverage validates earlier precedence and every proposed row
+
+The [grid coverage check](material-owner-grid-initial-survey.md#complete-classification-coverage-and-precedence-checks)
+passes 3/3 (39,511.4537ms), retaining the 74 earlier non-grid groups / 4,742
+observations while validating the proposed 100 additional groups / 6,226
+observations. All 13,824 eligible original observations, including 2,856 gaps,
+participate in exact source/state joins. Eighteen negative controls reject lost
+coverage and unsupported claims. Canonical integration is still pending; these
+checks do not establish candidate computed grid layout or reduce the current
+2,595 unresolved groups.
+
 ## Fixed button widths checked across the followed source history
 
 The [102-revision history review](material-button-fixed-width-audit.md#followed-source-history-not-just-endpoint-comparison)
