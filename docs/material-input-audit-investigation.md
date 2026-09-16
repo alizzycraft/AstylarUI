@@ -3,6 +3,25 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete fixed-width report conserved
+
+Full generation finishes with exit **1** solely for **2,595** unattributed
+groups. The [width conservation gate](material-button-fixed-width-audit.md#full-canonical-width-conservation)
+exits **0**: all 8,339 scalar records and all 8,331 unrelated complete records
+are unchanged; eight groups / 548 observations receive the intended authoring
+attribution. The independent nine-group ledger preserves all 600 original
+owners, including 52 scalar-matching core owners. All 2,311 original cases are
+replayed, including 1,831 cases without a selected button.
+
+Coverage remains 436 static / 1,875 interaction cases, 386,891 observations and
+132 source findings, with 187 source fingerprints. The human report changes
+only two evidence lines, three counts and verified source-line references.
+The saved compressed report has SHA-256
+`de4473ec4d60f3707a8d71c802efd7e0bf612565f9a73e75acd017944d91b221`.
+The complete no-write replay is running with dependencies frozen. Previous
+pending-generation statements below are historical. No final harness, enforced
+matrix, completed attribution or renderer fix is claimed.
+
 ## Native-button box-sizing omission distinguished from used dimensions
 
 The [public box-sizing proof](material-button-box-sizing-public-proof.md)
@@ -18,7 +37,7 @@ passes **2/2** with rejection controls, and report generation/no-write replay
 both exit 0. Source, installed-package and log fingerprints plus complete paired
 inputs/measurements are retained in the machine proof. No original Material
 observation was reclassified and none of the 187 frozen canonical dependencies
-changed. Full width-report generation is still running separately.
+changed. The subsequently completed width report is recorded above.
 
 ## Fixed-width production integration verified
 

@@ -215,3 +215,44 @@ The flow/radius test (**126,155.7999 ms**) preserves its exact existing evidence
 and explicitly checks the eight later width groups before conserving all
 unrelated records. These are the selected integration tests, not reruns of
 every test in those files or the full harness.
+
+## Full canonical width conservation
+
+The complete canonical generation now finishes with exit **1**, solely because
+**2,595** groups remain unattributed. Coverage stays **436/436 static** and
+**1,875/1,875 interaction**, **8,339** groups / **386,891** observations and
+**132** source findings. This is not input-equivalence acceptance.
+
+```powershell
+node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+node scripts/verify-material-button-width-integration.mjs
+```
+
+The full conservation gate exits **0** against the actual saved report from
+`30357b9f8c7b95da668914032557c5f7416c81db`. All **8,339** scalar records are
+unchanged, as are all **8,331** unrelated complete records (SHA-256
+`b89d0e5998ae95f615df1dc53518528119fc567c8810bcf56ec91e412bbbd1ec`).
+Only **eight** width groups / **548** observations gain attribution. Original
+source replay revalidates all 2,311 captures, all 600 owners, the nine-group
+ledger and its 52 scalar-matching core owners. The expected seven sources are
+added and only the four intended earlier fingerprints change (187 total).
+
+The ordered human report is independently conserved after accounting for two
+new evidence lines, three count changes, and verified source-line movements:
+eight references unchanged, two moved by one line and 34 moved by eight lines.
+The unchanged normalized ordered text has SHA-256
+`c66c1732afcb4475a16c958b670e74b800e907cd556e6df4a6df7870942a9beb`.
+The first line-movement check incorrectly assumed every main-test reference
+was after the insertion; source-diff inspection confirmed the eight earlier
+references must remain stationary. The corrected exact check passes without
+changing the generated report.
+
+Saved gzip: **50,401,408 bytes**, SHA-256
+`de4473ec4d60f3707a8d71c802efd7e0bf612565f9a73e75acd017944d91b221`.
+Decoded payload: **1,890,634,491 bytes**, SHA-256
+`aa8d889ab041c9cdfc5dad89377ef2c27a6b3511161a3e0ac4b7f7d7ceb06cf7`.
+
+The full command with `--check` is now running against these saved files with
+all 187 dependencies held unchanged. Its completion, the complete harness and
+the final enforced matrix are still pending. No renderer or canonical input
+was changed, and no used-layout/raster claim is inferred from attribution.
