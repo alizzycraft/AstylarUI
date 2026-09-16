@@ -145,3 +145,20 @@ production normalizer or classification precedence. Production integration,
 complete-row conservation and final all-case replay remain pending. This
 increment does not change the canonical unresolved count (**2,774**) or any
 comparison/renderer source.
+
+## Production integration proof
+
+The main audit now independently binds this original evidence and consults the
+radius classifier only for previously unresolved properties. The combined
+authoring regression executes the actual c391a6f predecessor with unchanged
+normalization and shared mappings. It requires 108 new physical-radius groups
+across representative theme/state cases, every scalar projection unchanged,
+and every unrelated complete classification unchanged. Mutations removing
+evidence or claiming rendering equivalence fail validation.
+
+`node --test tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs`
+passes **2/2**, zero failures/skips/cancellations, **737,618.2584 ms**. The separate
+source-binding replay also passes all five tests over all 600 original owners.
+Complete canonical regeneration and conservation of all 2,400 radius observations
+remain pending. This proves classifier integration, not candidate used corner
+paint, clipping or rendering equivalence, and changes no canonical fixture.

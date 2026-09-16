@@ -11,6 +11,10 @@ import { tooltipWrappingAttribution, collectTooltipWrappingInputs, classifyToolt
   validateTooltipWrappingInputs, validateTooltipWrappingClassifications } from './tooltip-wrapping-source-binding.mjs';
 import { rootShadowAttribution, collectRootShadowInputs, classifyRootShadowInput,
   validateRootShadowInputs, validateRootShadowClassifications } from './root-shadow-source-binding.mjs';
+import { rootFlowHeightAttribution, collectRootFlowHeightInputs, classifyRootFlowHeightInput,
+  validateRootFlowHeightInputs, validateRootFlowHeightClassifications } from './root-flow-height-source-binding.mjs';
+import { buttonPillRadiusAttribution, collectButtonPillRadiusInputs, classifyButtonPillRadiusInput,
+  validateButtonPillRadiusInputs, validateButtonPillRadiusClassifications } from './button-pill-radius-source-binding.mjs';
 import { sliderInputBoxAttribution, collectSliderInputBoxes, classifySliderInputBox,
   validateSliderInputBoxes, validateSliderInputBoxClassifications } from './slider-input-box-source-binding.mjs';
 import { sliderBorderDefaultAttribution, collectSliderBorderDefaults, classifySliderBorderDefault,
@@ -161,6 +165,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const sliderBorderDefaults = collectSliderBorderDefaults(parityReport, { root, parityPath: options.parityPath });
   const tooltipWrappingInputs = collectTooltipWrappingInputs(parityReport, { root, parityPath: options.parityPath });
   const rootShadowInputs = collectRootShadowInputs(parityReport, { root, parityPath: options.parityPath });
+  const rootFlowHeightInputs = collectRootFlowHeightInputs(parityReport, { root, parityPath: options.parityPath });
+  const buttonPillRadiusInputs = collectButtonPillRadiusInputs(parityReport, { root, parityPath: options.parityPath });
   const normalLineBoxes = options.normalLineBoxPath
     ? loadNormalLineBoxReport({ root, reportPath: path.relative(root, path.resolve(root, options.normalLineBoxPath)).replaceAll('\\', '/'), cases, inventory: elementInventory,
       controlTypography: rawControlTypography, expectedProvenance: parityReport.captureProvenance })
@@ -179,7 +185,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence, tooltipWrappingInputs, rootShadowInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence, tooltipWrappingInputs, rootShadowInputs, rootFlowHeightInputs, buttonPillRadiusInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -261,6 +267,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     tooltipUnpairedStyles,
     tooltipWrappingInputs,
     rootShadowInputs,
+    rootFlowHeightInputs,
+    buttonPillRadiusInputs,
     sliderInputBoxes,
     sliderBorderDefaults,
     rootHeightInputs,
@@ -286,6 +294,22 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
+  if (report.rootFlowHeightInputs?.binding?.status === 'bound') {
+    errors.push(...validateRootFlowHeightInputs(report.rootFlowHeightInputs, { root }));
+    errors.push(...validateRootFlowHeightClassifications(report.rootFlowHeightInputs,
+      report.discrepancies, canonicalStyle, equivalentValue));
+  } else if (requireComplete || report.rootFlowHeightInputs?.binding?.status === 'invalid' ||
+      report.rootFlowHeightInputs?.observations?.length || report.discrepancies?.some(d => d.attribution === rootFlowHeightAttribution)) {
+    errors.push('root flow height attribution lacks independently bound original capture evidence');
+  }
+  if (report.buttonPillRadiusInputs?.binding?.status === 'bound') {
+    errors.push(...validateButtonPillRadiusInputs(report.buttonPillRadiusInputs, { root }));
+    errors.push(...validateButtonPillRadiusClassifications(report.buttonPillRadiusInputs,
+      report.discrepancies, canonicalStyle, equivalentValue));
+  } else if (requireComplete || report.buttonPillRadiusInputs?.binding?.status === 'invalid' ||
+      report.buttonPillRadiusInputs?.observations?.length || report.discrepancies?.some(d => d.attribution === buttonPillRadiusAttribution)) {
+    errors.push('button pill radius attribution lacks independently bound original capture evidence');
+  }
   if (report.rootShadowInputs?.binding?.status === 'bound') {
     errors.push(...validateRootShadowInputs(report.rootShadowInputs, { root }));
     errors.push(...validateRootShadowClassifications(report.rootShadowInputs,
@@ -319,7 +343,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.rootColorInputs, report.fieldColorInputs, report.rootHeightInputs, report.containerCaretInputs,
         report.fieldHostAlignmentInputs, report.rootInitialStyleInputs, report.fieldHostWeightTrackingInputs,
         report.tooltipUnpairedStyles, report.sliderInputBoxes, report.sliderBorderDefaults,
-        report.fieldHostInitialStyleInputs, replayedEvidence, report.tooltipWrappingInputs, report.rootShadowInputs);
+        report.fieldHostInitialStyleInputs, replayedEvidence, report.tooltipWrappingInputs, report.rootShadowInputs,
+        report.rootFlowHeightInputs, report.buttonPillRadiusInputs);
       const selected = rows => rows.filter(r => r.attribution === ownerInitialStyleAttribution);
       if (JSON.stringify(selected(replayedRows)) !== JSON.stringify(selected(report.discrepancies)))
         errors.push('owner initial-style attributions lack replayed original precedence, values and exact case coverage');
@@ -1220,6 +1245,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     `Unpaired tooltip scalar styles: ${report.tooltipUnpairedStyles.observations.length} original candidate-only popup captures independently bind their scalar and full-tree owner evidence. ${report.discrepancies.filter(d => d.attribution === tooltipUnpairedStyleAttribution).length} style groups retain all values and occurrences under the unequal-presence authoring defect; no reference styles or rendered equivalence are invented.`,
     `Tooltip wrapping inputs: ${report.tooltipWrappingInputs.observations.length} source-bound hover/held owners retain reference normal/anywhere wrapping versus candidate nowrap and omitted overflowWrap/wordWrap requests. ${report.discrepancies.filter(d => d.attribution === tooltipWrappingAttribution).length} groups receive unequal-authoring attribution only after existing classifications retain precedence. Original displacement, blur, clipping, external ancestry, motion/settlement and rendered equivalence remain separate obligations.`,
     `Shared container shadows: ${report.rootShadowInputs.observations.length} independently source-bound root owners retain reference alpha 34/255 versus explicitly authored candidate alpha 0.14. ${report.discrepancies.filter(d => d.attribution === rootShadowAttribution).length} groups receive unequal-authoring attribution after existing classifications retain precedence. No candidate used paint, shadow raster, clipping or rendering equivalence is inferred.`,
+    `Repeated-root flow authoring: ${report.rootFlowHeightInputs.observations.length} independently bound root observations include single-rule negative controls. ${report.discrepancies.filter(d => d.attribution === rootFlowHeightAttribution).length} groups retain reference block-flow defaults versus explicit candidate column flex/16px gap despite an additional height-only responsive rule. Prior classifications retain precedence; responsive height behavior, used layout and rendering equivalence are not inferred.`,
+    `Shared button radius authoring: ${report.buttonPillRadiusInputs.observations.length} independently bound owners retain Material full-pill requests computing to 9999px versus theme-scaled fixed candidate radii. ${report.discrepancies.filter(d => d.attribution === buttonPillRadiusAttribution).length} groups receive unequal-authoring attribution only. Browser shape coincidence at constrained heights does not establish equivalent intent, candidate used paint, clipping or rendering equivalence.`,
     `Field-host initial styles: ${report.fieldHostInitialStyleInputs.length} observations retain browser computed defaults and candidate local omissions across captured ancestry. ${report.discrepancies.filter(d => d.attribution === fieldHostInitialStyleAttribution).length} groups are attributed to the unequal observation stages, without synthesizing candidate computed values. Component token authoring, inherited-value consumption, wrapping, hit testing, visibility and final rendering remain independent obligations.`,
     `Remaining owner initial styles: ${report.ownerInitialStyleEvidence?.observations?.length ?? 0} captured eligible property observations are independently source-bound; ${report.discrepancies.filter(d => d.attribution === ownerInitialStyleAttribution).length} previously unresolved groups receive observation-stage attribution only. Existing classifications retain precedence. Explicit requests, mapping/ancestry gaps and negative observations are preserved; no candidate computed values or rendering equivalence are inferred.`,
     `Slider native box requests: ${report.sliderInputBoxes.observations.length} independently source-bound owners retain explicit reference padding/content-box requests versus candidate omissions and generic defaults. ${report.discrepancies.filter(d => d.attribution === sliderInputBoxAttribution).length} groups preserve the original values and complete case coverage; this is unequal input authoring, not proof of used-box, drag or raster equivalence.`,
@@ -1268,7 +1295,9 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence = { observations: [] }, tooltipWrappingInputs = { observations: [] }, rootShadowInputs = { observations: [] }) {
+function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence = { observations: [] }, tooltipWrappingInputs = { observations: [] }, rootShadowInputs = { observations: [] }, rootFlowHeightInputs = { observations: [] }, buttonPillRadiusInputs = { observations: [] }) {
+  const rootFlowHeightByCaseId = new Map(rootFlowHeightInputs.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
+  const buttonPillRadiusByCaseId = new Map(buttonPillRadiusInputs.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
   const rootShadowByCaseId = new Map(rootShadowInputs.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
   const tooltipWrappingByCaseId = new Map(tooltipWrappingInputs.observations.map(p => [JSON.stringify([p.case, p.element]), p]));
   const ownerInitialByCaseIdProperty = new Map(ownerInitialStyleEvidence.observations.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
@@ -1382,6 +1411,12 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
         if (classification.attribution === 'unresolved') classification = classifyRootShadowInput(
           input, property, referenceValue, astylarValue,
           rootShadowByCaseId.get(JSON.stringify([key, input.id])), canonicalStyle) ?? classification;
+        if (classification.attribution === 'unresolved') classification = classifyRootFlowHeightInput(
+          input, property, referenceValue, astylarValue,
+          rootFlowHeightByCaseId.get(JSON.stringify([key, input.id])), canonicalStyle) ?? classification;
+        if (classification.attribution === 'unresolved') classification = classifyButtonPillRadiusInput(
+          input, property, referenceValue, astylarValue,
+          buttonPillRadiusByCaseId.get(JSON.stringify([key, input.id])), canonicalStyle) ?? classification;
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
           classification.classification, classification.attribution ?? null, classification.justification]);
         let entry = grouped.get(signature);
@@ -1398,7 +1433,7 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
-            ...([rootShadowAttribution, tooltipWrappingAttribution, ownerInitialStyleAttribution, fieldHostInitialStyleAttribution, sliderBorderDefaultAttribution, sliderInputBoxAttribution, tooltipUnpairedStyleAttribution, originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
+            ...([rootFlowHeightAttribution, buttonPillRadiusAttribution, rootShadowAttribution, tooltipWrappingAttribution, ownerInitialStyleAttribution, fieldHostInitialStyleAttribution, sliderBorderDefaultAttribution, sliderInputBoxAttribution, tooltipUnpairedStyleAttribution, originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
               'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, fieldHostAlignmentAttribution, fieldHostWeightTrackingAttribution, rootTypographyAttribution, rootInitialStyleAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution, rootBoxSizingAttribution, containerCaretAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
@@ -8245,6 +8280,13 @@ function sourceFingerprints(root) {
     'tests/material-parity/root-shadow-source-binding.mjs',
     'tests/material-parity/root-shadow-source-binding.spec.mjs',
     'tests/material-parity/root-shadow-canonical-integration.spec.mjs',
+    'tests/material-parity/root-flow-height-override-evidence.mjs',
+    'tests/material-parity/root-flow-height-source-binding.mjs',
+    'tests/material-parity/root-flow-height-source-binding.spec.mjs',
+    'tests/material-parity/button-pill-radius-evidence.mjs',
+    'tests/material-parity/button-pill-radius-source-binding.mjs',
+    'tests/material-parity/button-pill-radius-source-binding.spec.mjs',
+    'tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs',
     'tests/material-parity/slider-input-box-evidence.mjs',
     'tests/material-parity/slider-input-box-source-binding.mjs',
     'tests/material-parity/slider-input-box-source-binding.spec.mjs',
@@ -8266,6 +8308,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs', /test\('reviewed authoring production integration preserves/,
+      'root flow and button radius authoring with prior production precedence', 'Original trees and all local style stages bind unequal root formatting and fixed-radius versus full-pill requests. The actual committed prior classifier supplies the comparison, with unchanged normalization and aliases. Diagnostic selection preserves all repeated-root cases and single-root controls plus button theme/state coverage, all scalar rows and unrelated complete classifications. Mutation controls reject detached evidence and inflated claims. Complete original-report conservation remains a separate gate; neither used layout nor candidate paint/raster equivalence is established.'),
     proof(root, 'tests/material-parity/root-shadow-canonical-integration.spec.mjs', /test\('root shadow production integration preserves/,
       'shared root shadow source binding and production precedence', 'Original full-tree/scalar proofs retain unequal authored alpha values. A diagnostic population covers every family/state and compares the current production classifier with its actual committed predecessor, preserving all scalar projections and unrelated complete rows. Independent original-source validation and mutation controls reject incomplete or overclaimed evidence. All-case canonical conservation remains a separate gate; this is not candidate shadow-paint or raster verification.'),
     proof(root, 'tests/material-parity/tooltip-wrapping-canonical-integration.spec.mjs', /test\('tooltip wrapping production integration preserves/,

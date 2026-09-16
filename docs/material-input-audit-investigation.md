@@ -3,6 +3,78 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Root-flow and shared-button authoring integration
+
+The prepared original-source binders are now connected to the production audit,
+strictly after existing classification precedence. They retain all raw values
+and full negative populations: root flow remains an unequal block-versus-flex
+request despite an additional height-only rule; button radii remain unequal
+full-pill-versus-fixed requests despite conditional browser pixel coincidence.
+Neither finding proves candidate used layout, paint, clipping or raster parity.
+
+The new `reviewed-authoring-canonical-integration.spec.mjs` executes the actual
+prior pipeline from `c391a6fb8002ac1d11ec8cbb2bb027d6d8fa80a3`. AST checks prove
+only import paths are relocated, while alias mapping and style normalization
+remain identical. All 164 root-family cases, including 26 single-rule controls,
+and representative button theme/state cases retain their original full trees.
+The test requires exactly nine new flow groups and 108 new radius groups, every
+raw scalar row unchanged and every unrelated complete record unchanged. Ten
+mutation controls cover detached evidence, missing observations/classifications,
+lost cases and false rendering-equivalence claims.
+
+Before integration, the regression failed as required (`0 !== 9`, 57,298.8947 ms).
+The new full-report conservation gate also rejected the old canonical report
+(`0 !== 117`). Its immutable baseline is the c391a6f compressed artifact with
+SHA-256 `216ed2c105393ad0ddccb112f682ac672c7e7a9c9d9c1547fbe67e78c0e5698a`.
+It requires all 8,339 scalar rows and 8,222 unrelated complete records unchanged,
+exact original-source coverage for the 117 newly reviewed groups, and only the
+specified source/summary changes. This is not a passing regenerated-report claim.
+
+The source-inventory test passes (1/1, 1,378.441 ms): all prior 166 dependencies
+remain, plus seven binder/proof dependencies. Structural source comparison finds
+171 functions on both sides and only six changed audit/report integration
+functions; no normalizer, mapping, renderer or canonical comparison was edited.
+The initial four-file companion run completed with **12/13 passing**, zero
+skips/cancellations, in **287,629.7737 ms**. All nine source-binding tests and
+both tooltip tests passed. The remaining failure exposed a historical assertion
+in the shadow integration test: its pre-shadow baseline also predates the newly
+reviewed root-flow groups. Independent original-tree inspection shows that its
+family/state-only selection contains thirteen repeated-rule button/toolbar
+owners and six single-rule paginator controls. That test now explicitly requires
+the six applicable groups, their source-validated coverage and prior unresolved status,
+while retaining equality for all raw scalars and every other complete record.
+It does not silently exclude new differences or change the shadow evidence.
+The new c391a6f-based integration test separately requires that every earlier
+shadow classification remain unchanged and covers all nine flow groups. The first
+shadow rerun rejected an incorrect nine-group expectation for its narrower
+selection (1/2 passing, 180,185.0055 ms). The source-derived six-group correction
+now passes **2/2**, zero failures/skips/cancellations, **198,139.5792 ms**, without
+changing the diagnostic population or its inputs.
+
+The new production regression has completed: **2/2 pass**, zero failures,
+skips or cancellations, **737,618.2584 ms**. It proves the expected 117-group
+change in its diagnostic population against the real c391a6f pipeline, with
+every raw scalar projection and unrelated complete classification unchanged.
+All ten mutation controls reject incomplete or overclaimed evidence. This
+focused result is not full canonical conservation or rendering acceptance.
+
+Full report regeneration/replay remain pending. The last verified canonical
+unresolved count is still **2,774**. Verification commands for this increment:
+
+```powershell
+node --test tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs
+node --test --test-concurrency=1 tests/material-parity/root-flow-height-source-binding.spec.mjs tests/material-parity/button-pill-radius-source-binding.spec.mjs tests/material-parity/root-shadow-canonical-integration.spec.mjs tests/material-parity/tooltip-wrapping-canonical-integration.spec.mjs
+node --test tests/material-parity/root-shadow-canonical-integration.spec.mjs
+node --test --test-name-pattern='records source fingerprints' tests/material-parity/input-equivalence-audit.spec.mjs
+node scripts/verify-material-reviewed-authoring-integration.mjs
+git diff --check
+```
+
+The conservation command intentionally fails against the not-yet-regenerated
+report; its required positive run remains outstanding. No fixture, renderer or
+reference source was changed, and no global harness or enforced matrix pass is
+claimed by these focused results.
+
 ## Shared button formatting omissions traced
 
 The [shared button formatting survey](material-button-flex-input-audit.md)

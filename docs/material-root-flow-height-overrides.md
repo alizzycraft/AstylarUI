@@ -104,3 +104,20 @@ The focused test uses a local explicit expansion of captured `gap:16px` into
 the two axes; it does not establish production normalization or precedence.
 Canonical integration and complete-row conservation remain required. Original
 reports, all captured declarations and renderer behavior are unchanged.
+
+## Production integration proof
+
+The main audit now retains and independently validates this source binding,
+and consults its classifier only after all earlier classifications decline.
+The actual prior production module at c391a6f supplies the comparison baseline;
+normalization and shared mappings remain unchanged. The combined authoring
+integration proof retains all 164 original root-family cases and requires all
+nine new direction/gap groups (414 observations), the 26 single-rule controls,
+unchanged raw scalar projections and unchanged unrelated complete records.
+Source-loss, missing-row, lost-case and false-equivalence mutations are rejected.
+
+`node --test tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs`
+passes **2/2**, zero failures/skips/cancellations, **737,618.2584 ms**. This is
+diagnostic production-classifier evidence, not used-layout or height verification.
+Complete canonical regeneration and its independent conservation gate remain
+pending; no canonical input or renderer behavior has been edited.
