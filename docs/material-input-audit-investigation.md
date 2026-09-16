@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared button formatting omissions traced
+
+The [shared button formatting survey](material-button-flex-input-audit.md)
+retains 600 original owners / 480 cases and 27 groups / 1,800 observations.
+Explicit Material inline-flex and two-axis centering requests are absent from
+candidate authoring; all three candidate local stages retain generic block/
+stretch/flex-start values. Native-value and reference-label composition stay
+distinct, with no used-layout or text-offset claim. Two tests pass, including
+complete source replay and fourteen negative controls. No renderer or canonical
+inputs changed; classification integration is pending.
+
 ## Original overlay context replayed after shared-shadow integration
 
 The [91-state overlay survey](material-original-overlay-context-survey.md#replay-after-shared-shadow-integration)
