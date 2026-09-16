@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Nine case indices and their field-host dependency replayed
+
+The [original-source provenance replay](material-audit-harness-coverage.md#original-case-index-provenance-replay-after-grid-integration)
+passes all ten selected case-index checks and all four field-host initial-style
+checks. Nine indices change one source fingerprint each; the dependent field
+report changes two. Every other JSON field is independently verified unchanged.
+All original case/tree coverage and false-equivalence flags remain intact. This
+repairs specific stale-evidence failures, not renderer behavior or full-suite
+acceptance; other historical provenance and full canonical conservation remain
+separate outstanding checks.
+
 ## Grid observation-stage evidence integrated without claiming equivalence
 
 The [production grid integration](material-owner-grid-initial-survey.md#production-integration-and-conservation)
