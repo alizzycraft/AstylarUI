@@ -118,6 +118,37 @@ These are separate verified runs, not a claimed single four-test terminal pass.
 
 ## Verification still pending
 
+### Completed root/field case-index provenance replay
+
+The nine existing case-index proofs were replayed after updating only their
+audit-builder fingerprint. The root box-model companion was also checked:
+
+```powershell
+node --test --test-name-pattern="container caret case index|root box model case index|root height case index|field host color case index|root color case index|root typography case index|field host alignment case index|field host case index|non-widget appearance case index|button appearance case index" tests/material-parity/input-equivalence-audit.spec.mjs
+node scripts/audit-material-field-host-initial-styles.mjs
+node scripts/audit-material-field-host-initial-styles.mjs --check
+node --test --test-concurrency=1 tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs tests/material-parity/field-host-initial-style-evidence.spec.mjs
+```
+
+The case-index run (session **33225**) exits **0**, **10/10 passed**,
+**39,092.7006ms**. Log:
+`artifacts/material-parity/button-box-sizing-case-index-replay.log`, SHA-256
+`913b1fcef96ef8e2640184a6ac348f15011afb3c3d67e73b29ce51138ba84946`.
+The field-host initial-style generator and no-write replay both exit 0.
+The subsequent three-file run (session **39155**) exits **0**, **14/14 passed**,
+**163,620.1638ms**, with zero failures, skips, cancellations or todos.
+Log: `artifacts/material-parity/button-box-sizing-provenance-replay.log`.
+
+Independent deep comparisons against `58ac4bb` retain every non-fingerprint
+field in all twelve reports. Their unchanged data hashes match the prior grid
+replay recorded in `docs/material-audit-harness-coverage.md`. Nine case indices
+and the field weight/tracking index change only the builder fingerprint; the
+root-initial index changes builder and builder-test fingerprints; the dependent
+field-initial report changes builder and parent typography-index fingerprints.
+The complete 2,311 root cases, 577 field cases, original tree hashes, scalar
+values, classifications, case membership and uncertainty flags are preserved.
+These are proof replays, not blind acceptance of new source hashes.
+
 Full canonical generation/conservation,
 source-provenance replays, full no-write validation and the final current harness
 and enforced comparison matrix remain pending. The checked-in canonical report

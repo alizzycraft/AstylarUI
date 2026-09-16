@@ -8,7 +8,7 @@
   "sourceFingerprints": [
     {
       "file": "docs/material-field-host-typography-audit.json",
-      "sha256": "c1be6dc2a338ea936c40d23c8d5f1213ddc038a05722b46bd2ddd9fb84ac2095"
+      "sha256": "cc1b7f31c7b57b2197f088bcc926ec7a94e536680b0630054e2bc5a9a7c02908"
     },
     {
       "file": "scripts/audit-material-field-host-initial-styles.mjs",
@@ -36,7 +36,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "7c36b66a5ae597ce0cfb55069b88e46edaeae92dbb3d0d6956aa03798539765c"
+      "sha256": "ec6a79768159c2c62e8fce22516837fd254f9bde18044cc00fe37e79ef8c7b36"
     }
   ],
   "caseCount": 577,
