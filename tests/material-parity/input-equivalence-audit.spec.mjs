@@ -1373,8 +1373,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 204);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 204);
+  assert.equal(audit.sourceFingerprints.length, 209);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 209);
   // The original 129-source inventory gained one tooltip binding and three
   // slider binding files, followed by ten range-border, five field-host and
   // eight shared owner-attribution sources and six tooltip wrapping/proof
@@ -1382,10 +1382,16 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   // binding/proof sources, seven button formatting/host request sources and
   // seven fixed-width authoring/binding/classification/integration sources and
   // nine grid observation/binding/classification/coverage/integration sources,
-  // then eight button box-sizing observation/binding/coverage sources.
+  // then eight button box-sizing observation/binding/coverage sources and five
+  // field-host layout observation/binding/integration sources.
   // No previous source was removed.
   // Require the actual entries/digests, not only a count.
   for (const file of ['tests/material-parity/tooltip-unpaired-style-evidence.mjs',
+    'tests/material-parity/field-host-layout-input-evidence.mjs',
+    'tests/material-parity/field-host-layout-input-evidence.spec.mjs',
+    'tests/material-parity/field-host-layout-source-binding.mjs',
+    'tests/material-parity/field-host-layout-source-binding.spec.mjs',
+    'tests/material-parity/field-host-layout-canonical-integration.spec.mjs',
     'tests/material-parity/tooltip-wrapping-input-evidence.mjs',
     'tests/material-parity/tooltip-wrapping-source-binding.mjs',
     'tests/material-parity/tooltip-wrapping-source-binding.spec.mjs',

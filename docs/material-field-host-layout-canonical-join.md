@@ -5,6 +5,11 @@ canonical audit: **577 cases, 72 groups, 4,616 property observations**. No
 canonical classification has been changed yet. The join reveals that promoting
 only currently `unresolved` groups would miss six unjustified equivalence claims.
 
+Follow-up: the [production integration](material-field-host-layout-canonical-integration.md)
+now passes a 607-case old/new-builder proof covering the complete field-host
+population. This join remains bound to the saved pre-integration canonical
+report; it is not rewritten to pretend complete report regeneration has occurred.
+
 | Current canonical treatment | Groups | Source-backed disposition for integration |
 | --- | ---: | --- |
 | Unresolved harness discrepancy | 48 | Different host layout authoring |

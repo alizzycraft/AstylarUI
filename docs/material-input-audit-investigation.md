@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Field-host production classification preserves original evidence
+
+The [production integration](material-field-host-layout-canonical-integration.md)
+passes its actual prior/current-builder comparison across 607 diagnostic cases,
+including all 577 original field hosts and 30 negative families. All 5,965 scalar
+rows and 5,893 unrelated complete findings remain unchanged. Exactly 72 groups /
+4,616 observations gain source-backed attribution: 54 authoring groups and 18
+width observation-stage groups, including correction of six unsupported generic
+minimum-width equivalence labels. The saved full report is not yet regenerated;
+2,438 unresolved groups is only the expected post-integration count. Historical
+compatibility checks, provenance replay, complete canonical conservation and the
+final enforced matrix remain outstanding. No renderer or comparison input changed.
+
 ## Complete 87-file audit-harness snapshot passes
 
 `node scripts/run-material-audit-harness.mjs` finishes in session **6319** with

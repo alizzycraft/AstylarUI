@@ -5,7 +5,7 @@
   "canonicalIntegration": false,
   "survey": {
     "file": "docs/material-field-host-layout-inputs.json",
-    "sha256": "65bcdf940abf92663eec1810149cb33ee1efd5ebf8305e3505085bde4891983f"
+    "sha256": "e6679a04d0413db182db4be133fcc9c9319af1b8bacc0f4d698cbf12c2005884"
   },
   "originalCapture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
