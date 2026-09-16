@@ -68,11 +68,38 @@ node scripts/audit-material-field-host-layout-join.mjs --check
   Log `layout-binding-tests.log` in the same directory is **1,012 bytes**,
   SHA-256 `67748b72382d779365e631a7366275fb3ed9a132ff8d181e57b6a332262866c8`.
 
+## Historical integration regression replay
+
+The earlier button-box integration first failed its complete-row conservation
+assertion (session 87523, exit 1, 27,619.3895 ms): its baseline correctly retained
+the old field-host classifications. The test was not made to ignore arbitrary
+differences. Both affected all-family integration tests now explicitly check the
+later field-host population, original scalars, six former minimum-width
+equivalence labels, and independent production source/coverage validation before
+requiring every remaining complete finding to match. Their original button/grid
+counts, precedence checks and mutation controls remain intact.
+
+```powershell
+node --test --test-concurrency=1 tests/material-parity/button-box-sizing-canonical-integration.spec.mjs tests/material-parity/owner-grid-initial-canonical-integration.spec.mjs
+```
+
+Session **59639** exits **0**, **2/2 passing**, zero failures/skips/cancellations/
+todos, **374,835.8926 ms**. Both diagnostic captures contain exactly **48** later
+field-host groups. The button-box proof preserves all **6,554** scalar rows and
+**6,497** unrelated complete findings (SHA-256
+`408a11b8973b946417bae4a7d9e33183204acb99ee17ac8268c9bb4a335e95e6`).
+The grid proof preserves all **6,423** scalar rows and **6,266** unrelated complete
+findings (SHA-256
+`7d961c07460aa4c36ede63acb0258765d9b0cf7c6284a05bc69d35e11d7f4aea`).
+The log is `artifacts/material-parity/field-host-flow-input-audit/layout-legacy-integration-replay.log`,
+SHA-256 `79ee2c14eb749ff4f304a5638bde9b9920cb808794e85c64222b8c360d7e7f65`.
+These scoped replays do not substitute for the full current harness.
+
 ## Still required
 
-1. Review historical integration tests against these newly justified changes;
-   preserve their original controls and validate later classifications explicitly
-   rather than weakening unrelated-row conservation assertions.
+1. Run the remaining historical integration tests in the complete current harness;
+   the two affected all-family checks above now pass with explicit later-change
+   validation and unchanged original controls.
 2. Replay dependent current provenance receipts affected by builder/test
    fingerprints, preserving every non-metadata finding. Historical receipts must
    not be blindly rewritten to current metadata.

@@ -9,6 +9,7 @@ import ts from 'typescript';
 import { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInputAuditMarkdown } from './input-equivalence-audit.mjs';
 import { buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
+import { fieldHostLayoutAttribution, fieldHostWidthAttribution } from './field-host-layout-source-binding.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs', baselineCommit = '0165f76';
 const source = execFileSync('git', ['show', `${baselineCommit}:${moduleFile}`], { maxBuffer: 4 * 1024 * 1024 }).toString();
@@ -66,6 +67,19 @@ test('button box sizing production integration preserves all scalar inputs earli
       'wholeElementInputEquivalent', 'widthAuthoringEquivalent', 'inputEquivalent', 'renderingEquivalent'])
       assert.equal(row.reviewEvidence[flag], false);
   }
+  // Retain the original nine-group proof above. Later field-host attribution
+  // must be independently replayed, not treated as an arbitrary ignored diff.
+  const fields = audit.discrepancies.filter(r => [fieldHostLayoutAttribution, fieldHostWidthAttribution].includes(r.attribution));
+  assert.equal(fields.length, 48);
+  assert.equal(audit.fieldHostLayoutInputs.observations.length, 6);
+  assert.equal(fields.reduce((n, r) => n + r.occurrences, 0), 48);
+  assert.equal(fields.filter(r => r.attribution === fieldHostWidthAttribution).length, 6);
+  const previousFields = previous.discrepancies.filter(r => fields.some(f => JSON.stringify(scalar(f)) === JSON.stringify(scalar(r))));
+  assert.equal(previousFields.length, 48);
+  assert.equal(previousFields.filter(r => r.classification === 'equivalent-representation').length, 6);
+  assert.ok(previousFields.filter(r => r.classification === 'equivalent-representation').every(r => r.property === 'minWidth'));
+  assert.ok(previousFields.filter(r => r.classification !== 'equivalent-representation').every(r => r.classification === 'parity-harness-defect'));
+  for (const row of fields) signatures.add(JSON.stringify(scalar(row)));
   const other = report => report.discrepancies.filter(r => !signatures.has(JSON.stringify(scalar(r))));
   assert.equal(hash(other(audit)), hash(other(previous)), 'complete unrelated rows unchanged');
   const binding = audit.buttonBoxSizingInputs;
@@ -79,7 +93,7 @@ test('button box sizing production integration preserves all scalar inputs earli
   assert.deepEqual(audit.ownerGridInitialInputs, previous.ownerGridInitialInputs);
   assert.equal(audit.summary.inputEquivalent, false);
   assert.match(renderMaterialInputAuditMarkdown(audit), /Button box-sizing observation stages:/);
-  assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => /button box sizing/.test(e)), []);
+  assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => /button box sizing|field-host layout/.test(e)), []);
   for (const mutate of [
     a => { delete a.buttonBoxSizingInputs; },
     a => { a.buttonBoxSizingInputs.observations.splice(a.buttonBoxSizingInputs.observations.findIndex(o => !o.proof.observedDeclaredBorderBox), 1); },
@@ -92,7 +106,7 @@ test('button box sizing production integration preserves all scalar inputs earli
   console.log(JSON.stringify({ baselineCommit, staticCases: results.length, interactionCases: interactions.length,
     originalOwners: binding.observations.length, measuredCases: 9,
     geometryGapCases: binding.observations.filter(o => !o.proof.observedDeclaredBorderBox).length,
-    addedGroups: added.length, unchangedScalarRows: audit.discrepancies.length,
+    addedGroups: added.length, laterFieldHostGroups: fields.length, unchangedScalarRows: audit.discrepancies.length,
     unchangedCompleteRows: other(audit).length, unchangedCompleteRowsSha256: hash(other(audit)),
     fullCanonicalConservationVerified: false, inputEquivalent: false, retainedDiagnosticCapture: file }));
 });

@@ -10,6 +10,7 @@ import ts from 'typescript';
 import { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInputAuditMarkdown } from './input-equivalence-audit.mjs';
 import { ownerGridInitialAttribution } from './owner-grid-initial-classification.mjs';
 import { nonGridTemplateAttribution } from './grid-template-input-evidence.mjs';
+import { fieldHostLayoutAttribution, fieldHostWidthAttribution } from './field-host-layout-source-binding.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const baselineCommit = '364f46a309319201317919b6a23dd1aadd08f405';
@@ -77,6 +78,17 @@ test('owner grid production integration preserves original scalars, earlier prec
       for (const flag of ['computedCandidateVerified', 'gridLayoutEquivalent', 'renderingEquivalent', 'wholeElementInputEquivalent'])
         assert.equal(row.reviewEvidence[flag], false);
     }
+    // Keep the original grid/box-sizing precedence assertions above intact.
+    // Check the later source-bound host changes explicitly before conservation.
+    const fields = audit.discrepancies.filter(r => [fieldHostLayoutAttribution, fieldHostWidthAttribution].includes(r.attribution));
+    assert.deepEqual([...new Set(fields.map(r => r.family))].sort(), ['autocomplete', 'datepicker', 'form-field', 'input', 'select', 'timepicker']);
+    assert.equal(fields.reduce((n, r) => n + r.occurrences, 0), audit.fieldHostLayoutInputs.observations.length * 8);
+    const previousFields = previous.discrepancies.filter(r => fields.some(f => JSON.stringify(scalar(f)) === JSON.stringify(scalar(r))));
+    assert.equal(previousFields.length, fields.length);
+    assert.equal(previousFields.filter(r => r.classification === 'equivalent-representation').length, 6);
+    assert.ok(previousFields.filter(r => r.classification === 'equivalent-representation').every(r => r.property === 'minWidth'));
+    assert.ok(previousFields.filter(r => r.classification !== 'equivalent-representation').every(r => r.classification === 'parity-harness-defect'));
+    for (const row of fields) signatures.add(JSON.stringify(scalar(row)));
     const other = report => report.discrepancies.filter(r => !signatures.has(JSON.stringify(scalar(r))));
     assert.equal(hash(other(audit)), hash(other(previous)), 'complete unrelated rows unchanged');
     assert.deepEqual(audit.discrepancies.filter(r => r.attribution === nonGridTemplateAttribution),
@@ -89,7 +101,7 @@ test('owner grid production integration preserves original scalars, earlier prec
     assert.ok(binding.observations.some(o => o.proof.issues.length), 'negative observations remain');
     assert.equal(audit.summary.inputEquivalent, false);
     assert.match(renderMaterialInputAuditMarkdown(audit), /Grid-template observation stages:/);
-    assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => /owner grid|button box sizing/.test(e)), []);
+    assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => /owner grid|button box sizing|field-host layout/.test(e)), []);
     for (const mutate of [
       a => { delete a.ownerGridInitialInputs; },
       a => { a.ownerGridInitialInputs.observations.splice(a.ownerGridInitialInputs.observations.findIndex(o => o.proof.issues.length), 1); },
@@ -101,7 +113,7 @@ test('owner grid production integration preserves original scalars, earlier prec
     }
     console.log(JSON.stringify({ baselineCommit, staticCases: results.length, interactionCases: interactions.length,
       eligibleObservations: binding.observations.length, addedGroups: added.length,
-      addedOccurrences: added.reduce((n, r) => n + r.occurrences, 0), laterBoxSizingGroups: boxes.length, unchangedScalarRows: audit.discrepancies.length,
+      addedOccurrences: added.reduce((n, r) => n + r.occurrences, 0), laterBoxSizingGroups: boxes.length, laterFieldHostGroups: fields.length, unchangedScalarRows: audit.discrepancies.length,
       unchangedCompleteRows: other(audit).length, unchangedCompleteRowsSha256: hash(other(audit)),
       fullCanonicalConservationVerified: false, inputEquivalent: false }));
   } finally {
