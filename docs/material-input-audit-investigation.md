@@ -3,6 +3,31 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Button box-sizing production evidence integrated; full report pending
+
+The [source-bound button box-sizing integration](material-button-box-sizing-canonical-integration.md)
+now runs in the production audit builder. It attributes computed-versus-local
+observation stages without inventing candidate computed defaults or clearing
+the independent fixed-width authoring mismatch. The full original evidence
+retains 600 owners, 108 static measured boxes and 492 interaction geometry gaps.
+The bounded old/new integration preserves 6,554 scalar rows and all 6,545
+unrelated complete rows. All four historical compatibility checks have verified
+passes across separately recorded runs; a lost terminal result was not assumed
+to pass, and its two unverified checks were rerun with a saved log.
+
+Commits `58ac4bb`, `c320260` and `c8a34de` separately record production
+integration, root/field provenance replay and owner/overlay provenance replay.
+The metadata replays pass 10 case-index checks, 14 root/field checks and 14
+owner/overlay checks, preserving all original non-metadata findings. No renderer,
+plugin behavior or canonical comparison input is changed.
+
+The complete canonical generation has been launched but its result is still
+pending. The new full-report conservation script correctly rejects the old
+saved report (zero rather than nine new attributions). Do not yet reduce the
+saved unresolved total below 2,495 or claim complete canonical conservation.
+Full no-write replay, the current complete harness, the enforced comparison
+matrix and the remaining root-cause audit are still required.
+
 ## Full grid canonical conservation verified; 2,495 groups remain unresolved
 
 The [complete grid conservation gate](material-owner-grid-initial-survey.md#full-canonical-conservation-verified)
