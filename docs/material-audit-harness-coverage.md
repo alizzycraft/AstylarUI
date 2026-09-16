@@ -60,6 +60,33 @@ their outcomes or input equivalence.
 
 ## First complete run failed
 
+### Subsequent slider checksum investigation
+
+The isolated failing command
+`node --test --test-name-pattern="preserves raw values" tests/material-parity/slider-border-canonical-integration.spec.mjs`
+reproduced failure 683 with exit 1 (2,454.8862ms). The bound/unbound record
+comparison identified the additional `slider-root / boxShadow` attribution
+introduced by the independently verified root-shadow integration `3f7c94d`.
+The prior historical guard from `04b7b4a` rolled back the 22 owner-stage
+attributions but did not account for this later one-row/two-case finding.
+
+The test now first verifies the exact shadow values (reference alpha 0.133;
+candidate alpha 0.14), authoring-defect classification, both original case IDs,
+two source-bound observations and false equivalence/paint claims. Only that
+specific row joins the existing 22-row historical projection. All 220 projected
+complete records then reproduce the **unchanged** original checksum
+`4e1f09fc03af948aec7b2d1d927ee13c298b6439ceaa3bb0145a72122eb315ee`.
+No captured values, normalizer, classification implementation or expected
+historical hash changed. Five added negative controls reject missing/shortened
+shadow evidence, dropped cases, changed values and fabricated equivalence.
+
+`node --test tests/material-parity/slider-border-canonical-integration.spec.mjs`
+now passes **3/3**, exit 0, **10,874.6678ms**. This resolves the isolated
+conservation-test maintenance issue, not the slider rendering/interaction
+defects or the failed full suite. The original 777/19 result below is retained.
+The changed test is a canonical source fingerprint, so the canonical saved
+report must be regenerated/rechecked after the pending audit integrations.
+
 Command: `node scripts/run-material-audit-harness.mjs`.
 
 The run launched with the 73-file inventory at `270cd55`. It finished with

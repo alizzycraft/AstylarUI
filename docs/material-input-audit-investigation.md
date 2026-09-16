@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Slider integration checksum failure traced without replacing its baseline
+
+The [isolated checksum investigation](material-audit-harness-coverage.md#subsequent-slider-checksum-investigation)
+finds one later root-shadow attribution missing from the slider test's historical
+projection. Exact source/value/case checks now account for that row while keeping
+the original 220-record checksum unchanged. Three focused tests pass
+(10,874.6678ms), including five new shadow-evidence rejection controls. No
+renderer, fixture, normalizer or classification implementation changed. The
+failed full run remains recorded; this is one resolved test-maintenance issue,
+not a passing full suite. Its updated source fingerprint requires later
+canonical regeneration alongside the remaining audit changes.
+
 ## Complete harness failed; grid source joins verified separately
 
 The original 73-file audit harness has finished with terminal exit 1:

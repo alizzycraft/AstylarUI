@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { buildMaterialInputAudit, validateMaterialInputAudit } from './input-equivalence-audit.mjs';
 import { sliderBorderDefaultAttribution } from './slider-border-default-source-binding.mjs';
 import { ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
+import { rootShadowAttribution } from './root-shadow-source-binding.mjs';
 
 const prior = JSON.parse(readFileSync('docs/material-slider-border-defaults.json'));
 const bytes = readFileSync(prior.capture.file);
@@ -48,8 +49,9 @@ test('slider border canonical integration preserves raw values and attributes on
   assert.deepEqual(audit.discrepancies.map(signature), unbound.discrepancies.map(signature));
   // Frozen before integration at 165ec49, using these same two original cases.
   // Retain the historical complete-row guard. Only the 22 explicitly reviewed
-  // later owner-stage attributions may be projected back to unresolved; every
-  // other complete row must still reproduce the original frozen digest.
+  // owner-stage attributions and the later single root-shadow authoring finding
+  // may be projected back to unresolved; all 220 complete rows must still
+  // reproduce the original frozen digest. Do not replace the historical hash.
   const otherRows = audit.discrepancies.filter(row => !rows.includes(row));
   assert.equal(otherRows.length, 220);
   const shared = otherRows.filter(row => row.attribution === ownerInitialStyleAttribution);
@@ -66,14 +68,39 @@ test('slider border canonical integration preserves raw values and attributes on
     assert.equal(row.reviewEvidence.computedCandidateVerified, false);
     assert.equal(row.reviewEvidence.renderingEquivalent, false);
   }
+  const shadows = otherRows.filter(row => row.attribution === rootShadowAttribution);
+  assert.equal(shadows.length, 1);
+  const shadow = shadows[0];
+  assert.deepEqual([shadow.family, shadow.element, shadow.property, shadow.reference, shadow.astylar,
+    shadow.classification, shadow.occurrences], ['slider', 'slider-root', 'boxShadow',
+    'rgba(0,0,0,0.133) 0 2px 8px 0', '0 2px 8px rgba(0,0,0,0.14)', 'application-plugin-authoring-defect', 2]);
+  assert.deepEqual(shadow.reviewedCases, ['static:slider@light/desktop', 'interaction:slider@light/desktop-dpr1/focus']);
+  for (const flag of ['inputEquivalent', 'originalRasterCauseProven', 'candidateUsedPaintVerified', 'renderingEquivalent'])
+    assert.equal(shadow.reviewEvidence[flag], false);
+  assert.equal(audit.rootShadowInputs.observations.length, 2);
+  const later = new Set([...shared, shadow]);
   const historicalRows = otherRows.map(row => {
-    if (row.attribution !== ownerInitialStyleAttribution) return row;
+    if (!later.has(row)) return row;
     const previous = oldRows.get(signature(row)); assert.equal(previous.attribution, 'unresolved'); return previous;
   });
   assert.equal(createHash('sha256').update(JSON.stringify(historicalRows)).digest('hex'),
     '4e1f09fc03af948aec7b2d1d927ee13c298b6439ceaa3bb0145a72122eb315ee');
   const errors = validateMaterialInputAudit(audit, { root, requireComplete: false });
-  assert.ok(!errors.some(error => error.includes('slider border') || error.includes('owner initial-style')));
+  assert.ok(!errors.some(error => error.includes('slider border') || error.includes('owner initial-style') || error.includes('root shadow')));
+}));
+
+test('slider integration retains exact source validation for the later shadow attribution', () => withCapture(({ raw, root, options }) => {
+  const audit = buildMaterialInputAudit(raw, options);
+  for (const mutate of [
+    r => { delete r.rootShadowInputs; },
+    r => { r.rootShadowInputs.observations.pop(); },
+    r => { r.discrepancies.find(d => d.attribution === rootShadowAttribution).reviewedCases.pop(); },
+    r => { r.discrepancies.find(d => d.attribution === rootShadowAttribution).reference = '0 2px 8px rgba(0,0,0,0.14)'; },
+    r => { r.discrepancies.find(d => d.attribution === rootShadowAttribution).reviewEvidence.inputEquivalent = true; },
+  ]) {
+    const changed = structuredClone(audit); mutate(changed);
+    assert.ok(validateMaterialInputAudit(changed, { root, requireComplete: false }).some(e => e.includes('root shadow')));
+  }
 }));
 
 test('slider border canonical validation rejects missing sources altered scalars and fabricated parity', () => withCapture(({ raw, root, options }) => {
