@@ -105,7 +105,7 @@ remain required before integration. The canonical attribution count is still
 **2,810** after the separate tooltip integration; this increment does not change
 it. No renderer or canonical example was modified.
 
-## Canonical integration; full-report regeneration pending
+## Canonical integration preparation
 
 The production builder now retains independent root-shadow binding and invokes
 the classifier only for still-unresolved rows, after all earlier classifications
@@ -154,4 +154,44 @@ and focused-proof inventory changed. No normalization or renderer function was
 edited. Do not claim **2,774** remaining until the full regeneration and its
 conservation gate finish; the last verified canonical checkpoint is **2,810**.
 Final no-write replay, full harness, historical-survey provenance review and
-enforced matrix remain required.
+enforced matrix remain required. The preceding paragraphs record the preparation
+checkpoint; the completed regeneration and conservation result follow below.
+
+## Full-report regeneration and conservation verified
+
+The full original-report regeneration has now terminated with exit **1**, with
+the single reported error **2,774 resolved-style differences still lack
+root-cause attribution**. It preserves 436 static and 1,875 interaction cases,
+8,339 discrepancy groups, 386,891 occurrences and 132 source findings. Input
+equivalence remains **false**. This is expected failing audit evidence, not an
+accepted parity result.
+
+```powershell
+node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+node scripts/verify-material-root-shadow-integration.mjs
+```
+
+The conservation gate exits **0** against the immutable pre-integration report
+at `502ea44a064d49cd4c273bd93dfb5d51f6adbc87`. It verifies:
+
+- All **8,339 scalar projections unchanged**, including values, occurrence
+  counts, captured case samples and state lists.
+- All **8,303 unrelated complete discrepancy records unchanged**, SHA-256
+  `1f0dbebf23db6d11100ec60cd32b9118a726c99bc9d37bf5340a0fda4c60e8eb`.
+- Exactly **36** newly classified groups / **2,311** observations; every
+  original shadow owner independently replayed with source/tree digests and
+  exact reviewed-case membership. Authored examples are unchanged.
+- Only the corresponding classification totals and unresolved count change;
+  rendering, paint and input-equivalence claims remain false.
+- Exactly **166** source fingerprints: all 162 earlier entries retained, the
+  four declared shadow evidence/proof modules added, and only the main audit
+  module and its source-inventory test changed among existing sources.
+
+The new compressed report is **48,964,575 bytes**, SHA-256
+`216ed2c105393ad0ddccb112f682ac672c7e7a9c9d9c1547fbe67e78c0e5698a`.
+Its decoded payload is **1,833,194,934 bytes**, SHA-256
+`1c11b825df642982d5fe0c3f8f574a8f683543c8b9e98be72acda65d15691237`.
+
+A separate full `--check` no-write replay has started and remains pending.
+The full harness, historical-survey provenance review and final enforced matrix
+also remain incomplete. No renderer or canonical comparison input changed.

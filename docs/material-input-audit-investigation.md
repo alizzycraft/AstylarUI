@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared-shadow canonical report conserved
+
+The [full root-shadow report verification](material-root-shadow-input-audit.md#full-report-regeneration-and-conservation-verified)
+now proves all 8,339 scalar rows and all 8,303 unrelated complete discrepancy
+records unchanged. Exactly 36 shadow groups / 2,311 original observations gain
+source-backed authoring classifications. The canonical unresolved count is
+**2,774**, not zero; coverage remains 436 static plus 1,875 interaction cases,
+and input equivalence is false. Generation exits 1 for that remaining count;
+the independent conservation gate exits 0. Full no-write replay is running;
+full-harness and final enforced-matrix acceptance remain pending.
+
 ## Shared button pill-radius inputs traced
 
 The [button radius audit](material-button-pill-radius-audit.md) preserves 600
@@ -27,7 +38,7 @@ verify any responsive height behavior.
 
 ## Shared-shadow production integration prepared
 
-The [root-shadow integration](material-root-shadow-input-audit.md#canonical-integration-full-report-regeneration-pending)
+The [root-shadow integration](material-root-shadow-input-audit.md#canonical-integration-preparation)
 now preserves production classification precedence, with independent source and
 complete coverage validation. Six binding/integration tests pass; the two
 tooltip integration tests and the source-inventory test also pass. A 277-case
