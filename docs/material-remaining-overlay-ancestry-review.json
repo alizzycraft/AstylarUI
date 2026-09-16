@@ -3,7 +3,7 @@
   "kind": "remaining-overlay-ancestry-review",
   "source": {
     "file": "docs/material-owner-initial-style-mappings.json",
-    "sha256": "e7aaeb33cb9bbc2ba4e67e4a9fc61167116682fc594690b47d2c7989bb167539"
+    "sha256": "de9cf5d2106530022d2a565accc0cdffbb36f1780b217cff0ad3e610ad822b3e"
   },
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
@@ -111934,7 +111934,7 @@
     },
     {
       "file": "tests/material-parity/original-overlay-context-survey.mjs",
-      "sha256": "4735b18559d079078dd269d8154b57f41e97e4d61d4b0c72b3c6db0bc969ade1"
+      "sha256": "393928864474a49bf1f839bc3aee9f21b8d1618cf05126d199885d18da1cbd17"
     },
     {
       "file": "tests/material-parity/overlay-owner-declaration-review.mjs",
@@ -111950,7 +111950,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "fb97f72a543cff1f6c4e1f163f8b92f98c7dbbacbaa4a37d0571432045201392"
+      "sha256": "7c36b66a5ae597ce0cfb55069b88e46edaeae92dbb3d0d6956aa03798539765c"
     },
     {
       "file": "tests/material-parity/generated-node-mapping-evidence.mjs",

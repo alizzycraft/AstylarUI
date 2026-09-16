@@ -1,5 +1,39 @@
 # Complete audit harness coverage
 
+## Owner mapping and remaining-overlay provenance replay after grid integration
+
+The membership, owner-mapping and remaining-overlay generators have each
+completed with exit 0 against the current builder. Membership and mapping retain
+all 600 historical groups / 31,508 observations, 636 separately preserved static
+observations and 51 split groups; 326 mapping groups retain complete bounded
+observation-stage evidence. Only three source fingerprints change across those
+two reports. Their non-fingerprint JSON digests remain
+`e7b4cff4aa3cd86047654d19373d36137c97240086cfc5942eeaa13c5b08d320`
+and `1789a08d0cadeff09a5ed25a24723daff4b53142a4f703bed4bcacc5896678c6`.
+
+The remaining-overlay report changes its parent mapping digest and two source
+fingerprints, retaining every other field (SHA-256
+`09a267525e65e8314e1a240fc07ed3423c051d2a18e9e3e49e5326564051046c`).
+Its 48 groups / 1,424 observations / 50 cases / 178 owners / 263 declaration
+patterns are unchanged. All 160 fresh reference-owner matches, 356 identity
+negative controls and 18 tooltip external-context gaps remain explicit.
+The original 91-state capture and its hash-bound overlay-mapping receipt were
+not rewritten to current metadata. Historical producer identity and current
+proof replay remain separate obligations.
+
+```powershell
+node scripts/audit-material-owner-initial-membership.mjs
+node scripts/audit-material-owner-initial-mappings.mjs
+node scripts/audit-material-remaining-overlay-ancestry.mjs
+node --test --test-concurrency=1 tests/material-parity/owner-initial-style-membership.spec.mjs tests/material-parity/owner-initial-style-mappings.spec.mjs tests/material-parity/remaining-overlay-ancestry-review.spec.mjs
+```
+
+The complete three-file test run exits **0**, **14/14 passed**,
+**71,077.4586ms**. It includes no-write generation checks, original-tree replay,
+mapping/coverage mutation controls, all overlay declaration traces and retained
+tooltip context gaps. No canonical scalar attribution or renderer behavior
+changes. These targeted results do not replace the complete current harness.
+
 ## Original case-index provenance replay after grid integration
 
 The subsequent root-initial-style and field-host weight/tracking replay also
