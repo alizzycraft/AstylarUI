@@ -3,6 +3,23 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Original button boxes distinguish measured evidence from interaction gaps
+
+The [source-bound box-sizing survey](material-button-box-sizing-input-survey.md)
+reviews all 600 shared-button observations across 480 selected cases, retaining
+the 1,831 negative cases in the full 2,311-case source inventory. The 108 static
+captured border boxes match the declared candidate sizes; 492 interaction
+observations explicitly lack retained geometry. No interaction success is
+inferred from a static measurement or a local-style omission.
+
+Exact reference rules, native owner correspondence and all three candidate
+style stages are preserved. The independent fixed-width authoring mismatch
+remains visible. Generation and no-write replay exit 0; focused source/geometry
+tests pass 2/2 (6,164.3808ms), including negative and invented-interaction-geometry
+controls. No canonical attribution changed. The existing running harness keeps
+its original 73-file inventory; this new focused test is additional evidence,
+and the next full discovery will contain 74 files (66 Material).
+
 ## Complete harness inventory closes a test-selection gap
 
 The [harness coverage review](material-audit-harness-coverage.md) finds 29
