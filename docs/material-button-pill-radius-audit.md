@@ -162,3 +162,17 @@ source-binding replay also passes all five tests over all 600 original owners.
 Complete canonical regeneration and conservation of all 2,400 radius observations
 remain pending. This proves classifier integration, not candidate used corner
 paint, clipping or rendering equivalence, and changes no canonical fixture.
+
+## Complete canonical conservation verified
+
+Full regeneration now retains exactly **108** radius groups / **2,400** original
+observations, bound to all **600** reviewed owners and all 2,311 capture cases.
+The combined conservation gate exits 0, proving that every scalar projection
+and all 8,222 complete records unrelated to the 117-group flow/radius increment
+remain unchanged. The full-pill-versus-fixed distinction is preserved; no radius
+is rewritten or accepted as equivalent because current pixels may coincide.
+
+Canonical input equivalence remains false, with **2,657** unattributed groups.
+Regeneration exits 1 solely for that remaining count. Full no-write replay,
+full-harness and final enforced-matrix acceptance remain pending. Used corner
+paint, clipping, hit testing and original raster cause remain unproven here.

@@ -3,6 +3,47 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Root-flow/button-radius canonical conservation verified
+
+Full regeneration completed with **436/436 static and 1,875/1,875 interaction
+cases**, all **8,339 scalar groups / 386,891 occurrences**, and 132 source findings.
+It exits **1 solely for 2,657 unattributed groups**, preserving honest incomplete
+audit status. Exactly 117 previously unresolved groups gain reviewed authoring
+classifications: nine root-flow groups / 414 observations and 108 button-radius
+groups / 2,400 observations. Input equivalence remains **false**.
+
+`node scripts/verify-material-reviewed-authoring-integration.mjs` exits **0**.
+Against immutable c391a6f evidence, it proves every scalar projection unchanged
+and every one of the **8,222 unrelated complete records** deeply equal, SHA-256
+`6d5f50784dc0a73761b5b8655a61b8e39b647960b79bc0309672a83b9bff934d`.
+It independently reopens 164 root and 600 button owner proofs, checks exact
+case/state/value/claim coverage, preserves the 26 single-root controls, and
+permits only the expected summary deltas. Source inventory rises from 166 to
+173, with only the main audit, its spec and the shadow integration spec changed
+among prior dependencies. The three later evidence/replay commits did not
+change any of those frozen sources.
+
+The new gzip is **49,435,335 bytes**, SHA-256
+`6afd29eb890f8d2912530d5497182b9ac37749b29e9552bf119a0642c2cf3bbe`;
+decoded content is **1,853,907,744 bytes**, SHA-256
+`4bcf55b5a1666b542c5a427c57f2a7836afc1521255e2615f0f9cd84fbad276d`.
+An independent complete human-report comparison permits only three added
+reviewed-evidence lines, the three expected count changes, and updated test
+source-line references. Its remaining normalized text retains SHA-256
+`63aef75a32c4bc04106cc6a9ba0f6088d9365411aaf9678fa1538bb5a9d3f259`.
+
+```powershell
+node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+node scripts/verify-material-reviewed-authoring-integration.mjs
+```
+
+Full no-write replay, final full-harness and complete enforced-matrix acceptance
+remain pending. These are source/classification conservation results, not new
+candidate rendering evidence or proof that the user-visible defects are fixed.
+Shared button-formatting binding is prepared separately and is not included in
+these 117 groups. Other suspected host requests remain unclassified pending
+their full source/context proofs.
+
 ## Overlay context replay after authoring integration
 
 The [original overlay survey](material-original-overlay-context-survey.md#replay-after-root-flowbutton-radius-integration)

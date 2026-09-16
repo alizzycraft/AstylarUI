@@ -121,3 +121,17 @@ passes **2/2**, zero failures/skips/cancellations, **737,618.2584 ms**. This is
 diagnostic production-classifier evidence, not used-layout or height verification.
 Complete canonical regeneration and its independent conservation gate remain
 pending; no canonical input or renderer behavior has been edited.
+
+## Complete canonical conservation verified
+
+Full regeneration retains all 2,311 original cases and now classifies exactly
+the nine reviewed root-flow groups / 414 observations. All 26 single-rule
+controls keep their prior classifications. The independent combined conservation
+gate (`node scripts/verify-material-reviewed-authoring-integration.mjs`) exits 0:
+all 8,339 scalar projections and 8,222 records unrelated to this flow/radius
+increment are unchanged, and only the 117 planned attributions differ.
+
+The canonical unresolved count is **2,657**; input equivalence remains false.
+Regeneration exits 1 solely for that remaining count. Full no-write replay and
+final acceptance are pending. This verifies source-backed classification, not
+responsive height behavior, candidate used layout, or original raster cause.
