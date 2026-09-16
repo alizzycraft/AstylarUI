@@ -256,3 +256,24 @@ The full command with `--check` is now running against these saved files with
 all 187 dependencies held unchanged. Its completion, the complete harness and
 the final enforced matrix are still pending. No renderer or canonical input
 was changed, and no used-layout/raster claim is inferred from attribution.
+
+## Complete fixed-width no-write replay
+
+The full no-write command has now completed with exit **1**, solely for the
+**2,595** remaining unattributed groups. It reports neither source-fingerprint
+drift nor saved-report mismatch. Coverage remains 436/436 static and
+1,875/1,875 interaction cases, with 8,339 groups / 386,891 observations and
+132 source findings. All 187 fingerprinted dependencies and the canonical
+payload stayed unchanged through the run.
+
+```powershell
+node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit --check
+```
+
+This completes reproducibility verification of the fixed-width attribution
+increment, not the full audit. The saved gzip SHA-256 remains
+`de4473ec4d60f3707a8d71c802efd7e0bf612565f9a73e75acd017944d91b221`.
+The running 73-file harness is separate evidence; the subsequent original
+button-box survey has its own focused tests, and current discovery requires
+74 files for a future full run. Complete attribution and the final enforced
+comparison matrix remain required.

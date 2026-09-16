@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete fixed-width no-write replay finished
+
+The complete canonical `--check` has finished with exit **1** solely for the
+**2,595** remaining attribution gaps. It reports no fingerprint drift or saved
+report mismatch. Coverage remains 436/436 static and 1,875/1,875 interaction
+cases, 8,339 groups / 386,891 observations, 132 source findings and 187 source
+fingerprints. The saved payload is unchanged. The exact command and limits are
+recorded in the [width replay record](material-button-fixed-width-audit.md#complete-fixed-width-no-write-replay).
+
+The ongoing 73-file harness has not yet finished. Subsequent button-box survey
+tests are recorded separately; current discovery includes 74 files. These are
+audit-evidence increments, not renderer changes or completed equivalence.
+
 ## Original button boxes distinguish measured evidence from interaction gaps
 
 The [source-bound box-sizing survey](material-button-box-sizing-input-survey.md)
