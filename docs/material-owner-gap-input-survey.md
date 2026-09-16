@@ -74,8 +74,11 @@ The original source requests are in
   the candidate from a native checkbox input to a composed role-checkbox `div`.
   This is direct evidence of changed composition, not proof of why the renderer
   required it or that the resulting spacing is equivalent.
-- Line 697: chip-set `gap: '8px'`; the current line is attributed to `00de46ce`.
-  Its introduction and relationship to reference wrappers require further review.
+- Line 697: chip-set gap first appears as `10px` in `7159b1d`, then changes to
+  `8px` in `00de46ce`. The [complete chip history/structure proof](material-chip-spacing-input-history.md)
+  checks all 76 original chip cases and confirms a negative-margin reference
+  wrapper plus child margins versus direct candidate gap composition. The
+  renderer cause and wrapping-output consequences remain unproven.
 - Lines 683 and 792: grid-list `gap: '0'` and dialog-actions `gap: '8px'` already
   exist in the original `2f44011` showcase commit. Later line edits alone must
   not be presented as introducing those gap requests.

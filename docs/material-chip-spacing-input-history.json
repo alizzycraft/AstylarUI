@@ -1,0 +1,19 @@
+{
+  "kind": "chip-spacing-history-and-original-structure",
+  "sourceFile": "examples/material-showcase/src/app/astylar.component.ts",
+  "introduction": "7159b1d5266ed4bc03b56581b8034526abae892b",
+  "adjustment": "00de46ceffc78850115fca006a9680f8044efe75",
+  "cases": 76,
+  "staticCases": 12,
+  "interactionCases": 64,
+  "propertyObservations": 152,
+  "originalCaseProjectionSha256": "8d634bf9494c5cdc3feb8e9f504ebde8bdf0d14d0dd4d08d4fe0aa1de0512804",
+  "findings": [
+    "reference negative-margin wrapper and chip margins replaced by direct candidate gap",
+    "chip-set gap introduced at 10px then changed to 8px in showcase-only adjustment",
+    "adjustment removes earlier label offset; this is not evidence that removal was wrong"
+  ],
+  "inputEquivalent": false,
+  "rendererCauseConfirmed": false,
+  "limitation": "Structure and local request evidence only; no used-gap, wrapping-output, or historical causal proof."
+}
