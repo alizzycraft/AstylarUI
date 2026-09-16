@@ -11,10 +11,13 @@ including all 577 original field hosts and 30 negative families. All 5,965 scala
 rows and 5,893 unrelated complete findings remain unchanged. Exactly 72 groups /
 4,616 observations gain source-backed attribution: 54 authoring groups and 18
 width observation-stage groups, including correction of six unsupported generic
-minimum-width equivalence labels. The saved full report is not yet regenerated;
-2,438 unresolved groups is only the expected post-integration count. Historical
-compatibility checks, provenance replay, complete canonical conservation and the
-final enforced matrix remain outstanding. No renderer or comparison input changed.
+minimum-width equivalence labels. Full saved-report generation and conservation
+now confirm **2,438** unresolved groups: all 8,339 raw scalar rows and all 8,267
+unrelated complete findings are unchanged across 436 static and 1,875 interaction
+cases. Original host replay, historical compatibility checks and dependent
+provenance replay pass. Complete no-write replay, the current 90-file harness,
+remaining root-cause attribution and the final enforced matrix remain outstanding.
+No renderer or comparison input changed.
 
 ## Complete 87-file audit-harness snapshot passes
 

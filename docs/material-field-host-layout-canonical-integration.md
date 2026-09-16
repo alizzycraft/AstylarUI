@@ -5,7 +5,9 @@ evidence. It distinguishes unequal authored layout requests from the shared-widt
 observation-stage mismatch, and gives source-backed minimum-width requests
 precedence over the former generic zero-versus-omission equivalence shortcut.
 Renderer code, plugins, reference input, comparison authoring and thresholds are
-unchanged. The saved full canonical report has **not** yet been regenerated.
+unchanged. The full canonical report has now been regenerated and its bounded
+conservation check passes. Complete no-write replay and the current full harness
+remain separate outstanding gates.
 
 ## Actual old/new builder proof
 
@@ -95,6 +97,54 @@ The log is `artifacts/material-parity/field-host-flow-input-audit/layout-legacy-
 SHA-256 `79ee2c14eb749ff4f304a5638bde9b9920cb808794e85c64222b8c360d7e7f65`.
 These scoped replays do not substitute for the full current harness.
 
+## Complete saved-report conservation
+
+Generation session **87671** finishes with exit **1** solely because **2,438**
+resolved-style signatures still lack root-cause attribution. It retains all
+**436/436 static + 1,875/1,875 interaction** cases, **8,339** groups,
+**386,891** occurrences and **132** source findings. Input equivalence remains
+false. This expected incomplete-audit result is not final acceptance.
+
+```powershell
+node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+node scripts/verify-material-field-host-layout-integration.mjs
+```
+
+The verifier compares the actual committed saved payload at
+`1834d32421378fcd575d74a68689906ece11b4ff`, not a reconstructed old builder.
+Session **4788** exits **0**. All **8,339** original scalar rows and all **8,267**
+unrelated complete findings are unchanged. The latter have SHA-256
+`308c17923219470257fe78645afc0ae8ca6670e34e66a2977d335764624c6f19`.
+Exactly **72** groups / **4,616** observations change as described above:
+54 authoring groups and 18 observation-stage groups. The summary changes only
+by the supported reclassification: unresolved **2,486 → 2,438**, authoring
+**805 → 859**, equivalence **2,088 → 2,082**, harness **5,110 → 5,062**.
+
+Coverage, previous fixed-width/grid/box-sizing ledgers, authored examples and
+explicit false equivalence/computed-value/causal flags are conserved. All **209**
+source fingerprints match current normalized bytes. Original-capture replay
+independently validates every one of the 577 hosts, including 72 measured static
+boxes and 505 interaction geometry gaps. Human-report changes are restricted to
+the supported paragraph, counts and moved source locations. A pre-generation
+negative control rejected the old report (**0 != 72** reviewed groups); it was
+not accepted as current evidence.
+
+The new compressed payload is **51,469,342 bytes**, SHA-256
+`39ca1c9adbc05df351e72126e126ca722214556cfe5a8da23d4be86f8af0d992`;
+decoded **1,923,780,358 bytes**, SHA-256
+`75b767a7d4b4c94ce9a7ee1fa01bb7c19dc0afaf43b29ff3b5e3574b0fca742b`.
+Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `layout-full-generation.log`, 350 bytes, SHA-256
+  `37b3f9c7e36e949ee4ca5046fc3878866d76581828e767a9553bfa419ba98372`.
+- `layout-full-conservation.log`, 1,489 bytes, SHA-256
+  `86f6a311506bbf90b077872c77a7d4ed6044872e7c8f1a0764de0685c74fc825`.
+
+This checks the full discrepancy population, selected earlier ledgers, source
+inventory, summary and original field-host replay. It does **not** replace full
+no-write regeneration or establish candidate computed layout, original renderer
+causality or rendering equivalence.
+
 ## Still required
 
 1. Run the remaining historical integration tests in the complete current harness;
@@ -104,12 +154,7 @@ These scoped replays do not substitute for the full current harness.
    now passes with every non-metadata finding conserved across 17 updated JSON
    reports. Include those checks in the complete current harness; the historical
    membership join is pinned to its pre-integration committed canonical payload.
-3. Generate the complete canonical report and compare it against the actual saved
-   pre-integration report: every original scalar row, every unrelated complete
-   finding, full case/state coverage and earlier ledgers must be conserved.
-   Subject to that verification, unresolved groups should decrease by **48**,
-   from **2,486** to **2,438**. That is an expectation, not a verified new total.
-4. Run complete no-write validation, the current full harness and the unfiltered
+3. Run complete no-write validation, the current full harness and the unfiltered
    enforced parity matrix. The earlier 842-test/87-file harness predates this
    production integration and cannot verify it.
 

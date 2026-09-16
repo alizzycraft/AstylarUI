@@ -44,9 +44,12 @@ Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
 
 Current complete harness discovery is **90 files**: **82** Material, four general
 parity, and four TTS, retaining all **43** legacy files. This inventory is not a
-test pass. Full current report generation/conservation, no-write validation,
-complete harness execution, remaining attribution and enforced parity remain
-outstanding. The earlier 87-file run does not cover this integration.
+test pass. Full current report generation and the
+[saved-report conservation check](material-field-host-layout-canonical-integration.md#complete-saved-report-conservation)
+now confirm 2,438 unresolved groups while preserving every original scalar and
+all unrelated complete findings. No-write validation, complete harness execution,
+remaining attribution and enforced parity remain outstanding. The earlier
+87-file run does not cover this integration.
 
 ## Owner mapping and remaining-overlay provenance replay after grid integration
 
