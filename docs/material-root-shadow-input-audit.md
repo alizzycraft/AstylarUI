@@ -192,6 +192,15 @@ The new compressed report is **48,964,575 bytes**, SHA-256
 Its decoded payload is **1,833,194,934 bytes**, SHA-256
 `1c11b825df642982d5fe0c3f8f574a8f683543c8b9e98be72acda65d15691237`.
 
-A separate full `--check` no-write replay has started and remains pending.
-The full harness, historical-survey provenance review and final enforced matrix
-also remain incomplete. No renderer or canonical comparison input changed.
+A separate full no-write replay of the same command with `--check` has now
+terminated with exit **1**, reporting only **2,774 resolved-style differences
+still lack root-cause attribution**. It reports the same 436 static / 1,875
+interaction coverage, 8,339 groups, 386,891 occurrences and 132 source findings.
+There are no stale-report, fingerprint or source-binding errors in that terminal
+result. This verifies reproducibility of the current failing audit report, not
+input equivalence or renderer acceptance. Its source files remained unchanged
+throughout the run.
+
+The full harness, remaining historical-survey provenance review and final
+enforced matrix remain incomplete. No renderer or canonical comparison input
+changed.

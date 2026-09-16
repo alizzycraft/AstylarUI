@@ -41,8 +41,10 @@ records unchanged. Exactly 36 shadow groups / 2,311 original observations gain
 source-backed authoring classifications. The canonical unresolved count is
 **2,774**, not zero; coverage remains 436 static plus 1,875 interaction cases,
 and input equivalence is false. Generation exits 1 for that remaining count;
-the independent conservation gate exits 0. Full no-write replay is running;
-full-harness and final enforced-matrix acceptance remain pending.
+the independent conservation gate exits 0. Full no-write replay has now also
+terminated: exit 1 for only the same 2,774 unattributed groups, with no stale-
+report or source-binding errors. Full-harness and final enforced-matrix
+acceptance remain pending.
 
 ## Shared button pill-radius inputs traced
 
