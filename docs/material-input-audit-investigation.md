@@ -3,6 +3,25 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Width-only attribution prepared without losing authoring coverage
+
+The [width classification proof](material-button-fixed-width-audit.md#width-classification-and-independent-scalar-replay)
+passes **3/3** tests, zero failures/skips/cancellations, **24,664.2777 ms**.
+Independent original-scalar replay requires all 600 owners before accepting the
+eight numerically unequal width groups / 548 observations; omitting the 52
+numerically matching core owners still fails. Original full style objects and
+hashes are used rather than invented defaults or reduced replacement styles.
+An added production-ordering control exposed capture-order assumptions in the
+new validator (**1 failed**, **12,251.2177 ms**); its expected group ordering is
+now corrected, with all values and per-group case/state order preserved.
+The thirteen proof mutations, twelve row mutations, source-digest mutation and
+scalar-matching population-loss control remain rejecting.
+
+This prepares a classifier and coverage validator only. The main normalizer,
+classifier precedence, canonical report and 180 frozen replay dependencies are
+unchanged. Actual production integration and complete-report conservation remain
+pending; no renderer/layout/raster equivalence is claimed.
+
 ## Fixed-width source binding retains non-scalar authoring differences
 
 The [width audit](material-button-fixed-width-audit.md#compact-original-source-binding)

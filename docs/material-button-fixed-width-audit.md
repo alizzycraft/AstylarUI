@@ -120,3 +120,39 @@ missing owners, changed hashes/rules, duplicated cases, missing states and all
 five inflated equivalence/layout/raster claims. JSON round-trip replay passes.
 No canonical classifier, renderer, fixture or frozen audit dependency changed.
 Canonical integration and production-normalizer verification remain pending.
+
+## Width classification and independent scalar replay
+
+The separate `button-fixed-width-classification.mjs` module prepares width-only
+attribution without changing the canonical audit yet. The classifier requires
+the complete original input hash, exact width requests, local values, source
+revision, label/value correspondence and five explicitly false layout/raster/
+equivalence flags. The classification validator independently reopens the bound
+original scalar report and applies its supplied callbacks to actual full style
+objects, not manufactured width-only styles. It is used together with the tree
+and rule replay in `validateButtonFixedWidthInputs`.
+
+The validator requires all **600** original owners before filtering numerical
+matches, then checks exact grouped values, classification, ownership, evidence,
+case lists, states and occurrence counts for the **eight** scalar groups /
+**548** observations. Deleting the 52 core owners remains an error even though
+it leaves those eight scalar groups unchanged.
+
+```powershell
+node --test tests/material-parity/button-fixed-width-classification.spec.mjs
+```
+
+Result: **3/3 pass**, zero failures/skips/cancellations, **24,664.2777 ms**.
+Thirteen proof mutations plus detached input/property/value controls are
+rejected; twelve row mutations, dropped scalar-matching owners and changed
+source digest are independently rejected. A production-ordering control first
+failed (**1 failed**, **12,251.2177 ms**) because the expected groups still used
+capture order. Sorting expected groups by the main report's family/element/
+property ordering fixes that audit-validator defect without changing values,
+case/state ordering or the main normalizer. The final full focused run is the
+three-test result above.
+
+Tests still use an explicit arithmetic diagnostic callback, not the production
+pipeline. Actual production normalization, preceding-classification conservation,
+main-report integration and complete-report replay are the next gates. No
+renderer, comparison inputs or any of the 180 frozen audit sources changed.
