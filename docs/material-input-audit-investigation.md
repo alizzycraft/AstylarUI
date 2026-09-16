@@ -3,6 +3,49 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Button formatting/host production integration verified
+
+The main audit now retains both independently source-bound button proof sets
+and consults their classifiers only after previous classifiers decline. Raw
+values, normalizers and shared mappings are unchanged. Seven evidence/test
+dependencies are added; the source-inventory test passes with **180** unique
+fingerprinted files (**1/1**, **1,393.7298 ms**).
+
+The new production test executes the actual prior module from
+`61659474f71dbf5eb02cae07243adb8fef8aec03`, relocating only its import URLs.
+Before integration it fails at **0 versus 27** expected groups
+(**128,492.1246 ms**). The separate full-report conservation gate likewise fails
+before regeneration at **0 versus 54**, rather than accepting the old report.
+The intended increment is 27 flex and 27 host-request groups, not any changed
+authored input or a claim of fixed renderer output.
+
+The new production test now passes **1/1**, zero failures/skips/cancellations,
+**438,937.1255 ms**. Its 1,087 diagnostic cases bind 283 button owners, exactly
+54 groups / 1,698 property observations, all 2,938 unchanged scalar rows and
+2,884 unchanged unrelated complete classifications (SHA-256
+`6e3dc872805282a9e75d84d6b24fcee60d5799a4a3cc4c2c5c025204127a6ee4`).
+The production validator rejects missing binding for either proof set.
+
+The targeted earlier-authoring compatibility test also passes **1/1**,
+**133,957.2539 ms**, retaining all 164 root-family cases, original flow/radius
+coverage, single-rule controls and unrelated records. It explicitly validates
+the new button findings rather than broadly ignoring changed classifications.
+An independent AST comparison preserves all 171 function names and bodies of
+the 165 functions outside collection/build/validation/report/source inventory.
+Normalization and shared mappings remain unchanged.
+
+```powershell
+node --test tests/material-parity/button-requests-canonical-integration.spec.mjs
+node --test --test-name-pattern="reviewed authoring production integration preserves" tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs
+node --test --test-name-pattern="records source fingerprints" tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Complete canonical regeneration, all-case conservation and no-write validation
+remain pending; the checked-in canonical report still contains **2,657**
+unattributed groups and 173 source fingerprints. The proposed 54-group reduction
+is not yet reported as a completed canonical result. Full-harness and final
+enforced-matrix acceptance remain separate requirements.
+
 ## Shared button host-request binding verified
 
 The [host-request source binding](material-button-host-request-audit.md#original-source-binding-and-classification-protection)

@@ -130,3 +130,26 @@ direct captured properties, not the production normalizer. Production
 integration, precedence and complete-row conservation remain pending. This
 increment changes no canonical classifications, renderer, comparison input or
 any of the 173 sources frozen for the ongoing flow/radius report regeneration.
+
+## Production classification integration
+
+The main audit now binds both button formatting and host-request evidence,
+consulting their classifiers only after existing classifiers decline. Original
+raw values and all normalizers remain unchanged. The new regression executes
+the actual prior audit module at `61659474f71dbf5eb02cae07243adb8fef8aec03`,
+with only import URLs relocated, across 1,087 diagnostic family/profile/state
+cases and 283 button owners. It requires exactly 27 formatting plus 27 host
+groups / 1,698 observations, all 2,938 unchanged scalar records and all 2,884
+unrelated complete classifications unchanged. Missing binding is rejected by
+the production validator.
+
+`node --test tests/material-parity/button-requests-canonical-integration.spec.mjs`
+first failed at 0 versus 27 expected groups (**128,492.1246 ms**), then passed
+**1/1**, zero failures/skips/cancellations, **438,937.1255 ms**. The earlier
+root-flow/radius integration's targeted compatibility test also passes **1/1**,
+**133,957.2539 ms**, preserving its existing findings and negative controls.
+
+Complete canonical regeneration and all-case conservation remain pending. This
+is source-bound authoring attribution, not native-value/label-span composition,
+used flex layout, text centering or rendering-equivalence proof. No renderer or
+canonical comparison was edited.

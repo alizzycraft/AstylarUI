@@ -1373,13 +1373,14 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 173);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 173);
+  assert.equal(audit.sourceFingerprints.length, 180);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 180);
   // The original 129-source inventory gained one tooltip binding and three
   // slider binding files, followed by ten range-border, five field-host and
   // eight shared owner-attribution sources and six tooltip wrapping/proof
   // dependencies, four root-shadow sources and seven root-flow/button-radius
-  // binding/proof sources. No previous source was removed.
+  // binding/proof sources and seven button formatting/host request sources.
+  // No previous source was removed.
   // Require the actual entries/digests, not only a count.
   for (const file of ['tests/material-parity/tooltip-unpaired-style-evidence.mjs',
     'tests/material-parity/tooltip-wrapping-input-evidence.mjs',
@@ -1399,6 +1400,13 @@ test('records source fingerprints and actual visual acceptance fields', () => {
     'tests/material-parity/button-pill-radius-source-binding.mjs',
     'tests/material-parity/button-pill-radius-source-binding.spec.mjs',
     'tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs',
+    'tests/material-parity/button-flex-input-evidence.mjs',
+    'tests/material-parity/button-flex-source-binding.mjs',
+    'tests/material-parity/button-flex-source-binding.spec.mjs',
+    'tests/material-parity/button-host-request-evidence.mjs',
+    'tests/material-parity/button-host-request-source-binding.mjs',
+    'tests/material-parity/button-host-request-source-binding.spec.mjs',
+    'tests/material-parity/button-requests-canonical-integration.spec.mjs',
     'tests/material-parity/slider-input-box-evidence.mjs',
     'tests/material-parity/slider-input-box-source-binding.mjs',
     'tests/material-parity/slider-input-box-source-binding.spec.mjs',

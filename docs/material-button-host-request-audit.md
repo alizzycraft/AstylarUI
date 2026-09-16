@@ -120,3 +120,22 @@ pending; neither canonical classifications nor renderer behavior changed. The
 next integration must also retain the separate button-flex proof and conserve
 every raw value and every unrelated classification, without promoting any of
 these authoring differences to rendering equivalence or proven core causation.
+
+## Production classification integration
+
+The main audit now binds both prepared button proof sets and classifies only
+previously unresolved properties. The production integration test executes the
+actual preceding audit module at `61659474f71dbf5eb02cae07243adb8fef8aec03`,
+with unchanged normalization and shared mappings. Across 1,087 diagnostic cases
+and 283 button owners, it requires exactly 27 host plus 27 formatting groups /
+1,698 observations, unchanged raw scalar values, and all 2,884 unrelated complete
+records unchanged. The production validator rejects missing evidence for either
+binding; absent host values remain absent, not manufactured defaults.
+
+`node --test tests/material-parity/button-requests-canonical-integration.spec.mjs`
+passes **1/1**, zero failures/skips/cancellations, **438,937.1255 ms**, after its
+pre-integration failure at 0 versus 27 expected groups. The earlier-authoring
+targeted compatibility test passes **1/1**, **133,957.2539 ms**. Full canonical
+regeneration, all-case conservation and no-write validation remain pending.
+No host authoring, plugin or renderer behavior was modified, and composition,
+containing blocks, used dimensions and original raster cause remain unproven.

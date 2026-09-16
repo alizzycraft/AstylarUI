@@ -9,6 +9,8 @@ import ts from 'typescript';
 import { buildMaterialInputAudit, validateMaterialInputAudit } from './input-equivalence-audit.mjs';
 import { rootFlowHeightAttribution } from './root-flow-height-source-binding.mjs';
 import { buttonPillRadiusAttribution } from './button-pill-radius-source-binding.mjs';
+import { buttonFlexAttribution } from './button-flex-source-binding.mjs';
+import { buttonHostRequestAttribution } from './button-host-request-source-binding.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
 
 const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
@@ -77,13 +79,21 @@ test('reviewed authoring production integration preserves raw rows and prior cla
   assert.ok(radius.every(r => r.reference === '9999px' && ['15px', '20px', '30px'].includes(r.astylar)));
   assert.deepEqual(raw, inputBefore);
   assert.deepEqual(audit.discrepancies.map(scalar), previous.discrepancies.map(scalar));
-  const selected = new Set([...flow, ...radius].map(r => JSON.stringify(scalar(r))));
+  // Later shared-button findings are independently bound. Require their exact
+  // coverage and validation; do not broadly exclude unrelated changed rows.
+  const later = audit.discrepancies.filter(r => [buttonFlexAttribution, buttonHostRequestAttribution].includes(r.attribution));
+  for (const attribution of [buttonFlexAttribution, buttonHostRequestAttribution]) {
+    const rows = later.filter(r => r.attribution === attribution);
+    assert.equal(rows.length, 27);
+    assert.equal(rows.reduce((sum, r) => sum + r.occurrences, 0), audit.buttonPillRadiusInputs.observations.length * 3);
+  }
+  const selected = new Set([...flow, ...radius, ...later].map(r => JSON.stringify(scalar(r))));
   const oldSelected = previous.discrepancies.filter(r => selected.has(JSON.stringify(scalar(r))));
-  assert.equal(oldSelected.length, 117);
+  assert.equal(oldSelected.length, 171);
   assert.ok(oldSelected.every(r => r.attribution === 'unresolved'));
   const others = r => r.discrepancies.filter(d => !selected.has(JSON.stringify(scalar(d))));
   assert.equal(hash(JSON.stringify(others(audit))), hash(JSON.stringify(others(previous))));
-  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => /root flow height|button pill radius/.test(e)));
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => /root flow height|button pill radius|button flex|button host request/.test(e)));
 }));
 
 test('reviewed authoring production validation rejects detached evidence and inflated claims', () => withCapture((raw, options) => {
