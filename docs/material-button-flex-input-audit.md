@@ -153,3 +153,17 @@ Complete canonical regeneration and all-case conservation remain pending. This
 is source-bound authoring attribution, not native-value/label-span composition,
 used flex layout, text centering or rendering-equivalence proof. No renderer or
 canonical comparison was edited.
+
+## Complete original-report conservation
+
+Canonical generation now includes all **600** original formatting owners and
+**27 groups / 1,800 observations**. The combined formatting/host conservation
+gate, `node scripts/verify-material-button-requests-integration.mjs`, exits **0**:
+all **8,339** raw scalar rows and **8,285** unrelated complete records match the
+committed preceding report. Both original-source bindings independently replay
+all **2,311** cases, including **1,831** negative-selection cases each. Exactly
+54 groups receive new authoring attribution across the two bindings, leaving
+**2,603** unattributed groups as the generation command's sole validation error.
+All **180** source fingerprints are checked. See the investigation's complete
+conservation entry for payload and unchanged-record hashes. Full no-write
+replay remains pending; no used-layout or renderer-parity claim is implied.

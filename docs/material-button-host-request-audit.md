@@ -139,3 +139,18 @@ targeted compatibility test passes **1/1**, **133,957.2539 ms**. Full canonical
 regeneration, all-case conservation and no-write validation remain pending.
 No host authoring, plugin or renderer behavior was modified, and composition,
 containing blocks, used dimensions and original raster cause remain unproven.
+
+## Complete original-report conservation
+
+Canonical generation now includes all **600** original host owners and
+**27 groups / 1,800 observations**, without manufacturing absent computed
+defaults. `node scripts/verify-material-button-requests-integration.mjs` exits
+**0**, independently replaying both button bindings over all **2,311** original
+cases and retaining **1,831** negative-selection cases each. All **8,339** raw
+scalar rows and **8,285** unrelated complete records match the preceding
+committed report; exactly 54 formatting/host groups receive new attribution.
+Generation's sole validation error is the remaining **2,603** unattributed
+groups, not a claimed input-equivalence pass. All **180** source fingerprints
+are checked. The investigation records exact payload and conservation hashes.
+Full no-write replay remains pending; used layout, containing blocks and
+native-value/label-span composition still require their own proof.

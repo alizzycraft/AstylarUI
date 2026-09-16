@@ -3,6 +3,37 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete button formatting/host report conservation
+
+Full canonical generation finished with **436/436 static** and **1,875/1,875
+interaction** cases, **8,339** discrepancy groups / **386,891** observations,
+and **132** source findings. Its sole validation error is **2,603** groups still
+requiring attribution; input equivalence remains false. The earlier pending
+generation notes below describe their respective historical increments.
+
+`node scripts/verify-material-button-requests-integration.mjs` now exits **0**.
+Against committed baseline `61659474f71dbf5eb02cae07243adb8fef8aec03`, all **8,339**
+raw scalar rows remain unchanged and all **8,285** unrelated complete records
+remain byte-for-byte equivalent after JSON serialization (SHA-256
+`b6ab0f9e4012cecce3947aa979d08d58cc038ca757aa8469b69967c6abdc9021`).
+Exactly **54** previously unresolved groups / **3,600** observations receive
+authoring attribution: 27 formatting and 27 host-request groups. Each binding
+independently reopens all **2,311** cases, retains **600** selected owners and
+**1,831** negative-selection cases, and verifies original tree/source evidence.
+The verifier also checks the complete summary, the seven added dependencies,
+the only three changed preceding fingerprints, and all **180** current sources.
+
+The complete ordered human report was compared after removing only its three
+new evidence lines, reversing its three expected count updates, and ignoring
+changed test line references. Everything else matches (normalized SHA-256
+`092af44530c3fbe7e6f4c5b65b0c0a23e51719845bef2168cf6c362876810eb4`).
+The new compressed payload SHA-256 is
+`54c169f55862984ab80e77ba47d8a0361c9da207f38ff061f54bb9064507b126`.
+
+Full no-write replay remains pending. This increment changes report evidence
+only; it does not establish used layout, composition, raster equivalence or a
+renderer fix. The full harness and final enforced matrix remain required.
+
 ## Button fixed-width authoring includes scalar-matching cases
 
 The [complete width survey](material-button-fixed-width-audit.md) retains **600**
