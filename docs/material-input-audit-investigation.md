@@ -3,6 +3,20 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Field-host source membership reveals six unjustified equivalence labels
+
+The [canonical membership join](material-field-host-layout-canonical-join.md)
+binds all 72 field-host layout groups / 4,616 observations to 577 original cases,
+including 72 static measurements and 505 interaction geometry gaps. It finds
+48 unresolved groups, six generic minimum-width equivalence labels and 18 generic
+width observation-stage groups. The six zero-versus-omission equivalence claims
+do not account for the explicit reference minimum-width rule or different layout
+contexts. Production integration must therefore run before that generic fallback,
+not only after unresolved classification. Two focused tests and no-write replay
+pass; canonical classification/counts and all renderer/comparison inputs remain
+unchanged. The linked plan separates 54 authoring groups from 18 observation-stage
+groups without claiming the separate inline-flow defect caused every original.
+
 ## Reference-like inline field flow exposes a core parent-sizing defect
 
 The [equal-input field-flow probe](material-field-host-flow-public-proof.md)
