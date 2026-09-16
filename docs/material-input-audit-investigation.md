@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Gap survey separates local omissions, authored spacing and review gaps
+
+The [owner gap survey](material-owner-gap-input-survey.md) reopens all 2,311
+original cases and accounts for 162 unresolved gap groups / 9,254 observations.
+It distinguishes 92 property-local omission groups, 16 explicit candidate-gap
+groups, 30 remaining motion-rule groups and 24 owner-mapping groups. All raw
+requests and three candidate stages are preserved. Four focused tests pass,
+including complete no-write replay and canonical byte-conservation controls.
+This is triage evidence, not new canonical classification or rendering equivalence;
+the canonical unresolved count remains 2,438. The complete current harness now
+contains 91 files and still requires execution.
+
 ## Field-host production classification preserves original evidence
 
 The [production integration](material-field-host-layout-canonical-integration.md)
@@ -15,7 +27,7 @@ minimum-width equivalence labels. Full saved-report generation and conservation
 now confirm **2,438** unresolved groups: all 8,339 raw scalar rows and all 8,267
 unrelated complete findings are unchanged across 436 static and 1,875 interaction
 cases. Original host replay, historical compatibility checks and dependent
-provenance replay pass. Complete no-write replay, the current 90-file harness,
+provenance replay pass. Complete no-write replay, the current full harness,
 remaining root-cause attribution and the final enforced matrix remain outstanding.
 No renderer or comparison input changed.
 

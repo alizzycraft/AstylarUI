@@ -1,5 +1,18 @@
 # Complete audit harness coverage
 
+## Owner gap survey coverage
+
+The [source-bound gap survey](material-owner-gap-input-survey.md) adds one focused
+spec: **4/4 passing**, exit **0**, **26,992.2993 ms**. It replays every original
+case with the actual production normalization functions and preserves canonical
+report bytes. Provenance, alias, request and style-stage negative controls remain
+separate from any claim of computed or rendered equivalence.
+
+Current discovery is **91 files**: 83 Material, four general parity and four TTS,
+including all 43 legacy files. The last complete 87-file run predates both the
+field-host integration and this survey. Complete current execution remains
+outstanding; the focused pass must not be presented as an unfiltered harness pass.
+
 ## Field-host layout integration: provenance closure
 
 After production integration `a73537f` and historical regression compatibility
@@ -42,7 +55,7 @@ Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
 - `layout-provenance-closure.log`, SHA-256
   `60d494aad17771f6048dd4949c9c4bcd0d60f36bbed77706df64a15a553c151f`.
 
-Current complete harness discovery is **90 files**: **82** Material, four general
+At this closure, complete harness discovery was **90 files**: **82** Material, four general
 parity, and four TTS, retaining all **43** legacy files. This inventory is not a
 test pass. Full current report generation and the
 [saved-report conservation check](material-field-host-layout-canonical-integration.md#complete-saved-report-conservation)
