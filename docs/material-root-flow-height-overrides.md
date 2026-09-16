@@ -132,6 +132,9 @@ all 8,339 scalar projections and 8,222 records unrelated to this flow/radius
 increment are unchanged, and only the 117 planned attributions differ.
 
 The canonical unresolved count is **2,657**; input equivalence remains false.
-Regeneration exits 1 solely for that remaining count. Full no-write replay and
-final acceptance are pending. This verifies source-backed classification, not
+Regeneration and the subsequent full no-write replay both exit 1 solely for that
+remaining count. Replay retains 436 static / 1,875 interaction cases, all 8,339
+groups / 386,891 occurrences and 132 source findings, without stale-source or
+report-drift errors. Full-harness and final enforced-matrix acceptance remain
+pending. This verifies source-backed classification, not
 responsive height behavior, candidate used layout, or original raster cause.

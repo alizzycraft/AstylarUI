@@ -173,6 +173,9 @@ remain unchanged. The full-pill-versus-fixed distinction is preserved; no radius
 is rewritten or accepted as equivalent because current pixels may coincide.
 
 Canonical input equivalence remains false, with **2,657** unattributed groups.
-Regeneration exits 1 solely for that remaining count. Full no-write replay,
-full-harness and final enforced-matrix acceptance remain pending. Used corner
+Regeneration and the subsequent full no-write replay both exit 1 solely for that
+remaining count. Replay retains 436 static / 1,875 interaction cases, all 8,339
+groups / 386,891 occurrences and 132 source findings, without stale-source or
+report-drift errors. Full-harness and final enforced-matrix acceptance remain
+pending. Used corner
 paint, clipping, hit testing and original raster cause remain unproven here.

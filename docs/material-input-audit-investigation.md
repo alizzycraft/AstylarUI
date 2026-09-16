@@ -14,7 +14,7 @@ Full tree/scalar/stage joins and fourteen negative controls pass (2/2 tests).
 The shared base and core absolute rule are unchanged from the initial showcase;
 no later compensation motive is inferred. Used layout, host versus native text
 alignment and composition remain separate. Main classifier binding/conservation
-are pending; none of the 173 sources used by the live no-write replay changed.
+are pending; none of the 173 sources used by the now-completed no-write replay changed.
 
 ## Root-flow/button-radius canonical conservation verified
 
@@ -50,8 +50,13 @@ node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-par
 node scripts/verify-material-reviewed-authoring-integration.mjs
 ```
 
-Full no-write replay, final full-harness and complete enforced-matrix acceptance
-remain pending. These are source/classification conservation results, not new
+The same generation command with `--check` has now completed at commit
+`17e13e5968053d9596ddfa7142f93d6fef2b5043`. It exits **1 solely for the same
+2,657 unattributed groups**, with identical coverage, group/occurrence counts and
+132 source findings; no stale-source or report-drift error is reported. All 173
+fingerprinted sources remained unchanged throughout generation and replay.
+Final full-harness and complete enforced-matrix acceptance remain pending.
+These are source/classification conservation results, not new
 candidate rendering evidence or proof that the user-visible defects are fixed.
 Shared button-formatting binding is prepared separately and is not included in
 these 117 groups. Other suspected host requests remain unclassified pending
