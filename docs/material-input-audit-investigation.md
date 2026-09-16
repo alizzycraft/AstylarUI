@@ -41,7 +41,8 @@ one against the actual saved `0165f76` baseline: all 8,339 scalar rows and all
 remain. Earlier grid and fixed-width ledgers, all source cases and every false
 equivalence flag are preserved. The human report changes only the supported
 paragraph, unresolved count and source locations. Full producer no-write replay
-is running separately. The current complete harness, enforced comparison matrix
+has also completed with no source/report drift, exiting 1 solely for the same
+2,486 unresolved groups. The current complete harness, enforced comparison matrix
 and remaining root-cause audit are still required; no input or rendering parity
 claim follows from these conservation checks.
 

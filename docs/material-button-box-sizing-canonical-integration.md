@@ -177,8 +177,8 @@ was rewritten. The tests include independent no-write source replay.
 
 ## Verification still pending
 
-Full no-write validation, the final current harness, the enforced comparison
-matrix and the remaining root-cause audit remain pending. No renderer or
+The final current harness, the enforced comparison matrix and the remaining
+root-cause audit remain pending. No renderer or
 canonical comparison input is changed.
 
 ## Complete canonical conservation
@@ -222,6 +222,30 @@ Saved compressed payload: **51,193,437 bytes**, SHA-256
 `dc3a0681ddbbb85b256db9b3616280d80727c33c96ee016f3cd15b0c0b91e853`.
 Decoded payload: **1,919,161,504 bytes**, SHA-256
 `7d41f09b27bc7dfd0ec6652e3ae2f4fa1e40633fd96634f71b5c440dd79597c6`.
-The full producer `--check` replay is a separate pending gate, not implied by
-this bounded projection comparison. Capture coverage is not completed audit
-coverage or rendering acceptance.
+The full producer `--check` replay is a separate gate, documented below rather
+than inferred from this bounded projection comparison. Capture coverage is not
+completed audit coverage or rendering acceptance.
+
+## Complete producer no-write replay
+
+```powershell
+node scripts/run-material-input-audit.mjs --check --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+```
+
+Session **68380** terminates with exit **1** solely for the **2,486 unresolved
+groups**. The producer independently rebuilds and validates the complete report,
+then checks the encoded saved payload and exact human report without writing.
+There is no source-fingerprint drift, saved-report mismatch or other reported
+integrity failure. All 204 recorded dependencies remain current. Coverage stays
+436/436 static and 1,875/1,875 interaction, with 8,339 differences / 386,891
+occurrences / 132 source findings and no input-equivalence claim. The compressed
+and decoded hashes above are unchanged.
+
+Log: `artifacts/material-parity/button-box-sizing-canonical-no-write.log`,
+SHA-256 `c8e3c7aa6f49a3c3ffd88f7555c20dec4ffc1cdcee156e70b7424ef8815bd998`.
+This completes reproducibility verification of this audit increment, not the
+remaining classifications or final enforced matrix. The separate field-host
+layout-history test added while this replay ran changes no consumed dependency;
+current complete harness discovery contains **84 files** (76 Material, four
+general and four TTS), including all 43 files in the legacy command. Its focused
+pass must not be added to the earlier 80-file/828-test complete-run totals.
