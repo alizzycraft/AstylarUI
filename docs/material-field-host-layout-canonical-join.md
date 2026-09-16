@@ -95,9 +95,21 @@ altered scalar values, incorrect occurrence counts, reordered samples/states,
 and upgraded equivalence/core-cause claims. The machine artifact is
 `docs/material-field-host-layout-canonical-join.json`.
 
-The live 87-file harness run began before this new test existed and does not
-include it. Its eventual result must remain labelled as that snapshot, separate
-from this focused verification; the current discovered inventory has 88 files.
+The 87-file harness run began before this new test existed and does not include
+it. It completed with **842/842 passing**, exit **0**, no failures/skips/
+cancellations/todos, **4,162,034.7547 ms**. Its result remains labelled as that
+snapshot, separate from this focused verification; the current discovered
+inventory has 88 files. The original inventory includes all 43 legacy files,
+79 Material files, four general parity files and four TTS files. No inventoried
+test file changed between start commit `b059b4345b5d513b9eecf1b4a804498e31094d41`
+and join commit `de9743963048ec57bf1eec1137d994b4874a4c8b`.
+
+Command: `node scripts/run-material-audit-harness.mjs`, terminal session **6319**.
+Log: `artifacts/material-parity/field-host-flow-input-audit/full-harness.log`,
+**332,728 bytes**, SHA-256
+`ee240b5398527fd1049bcd34c6074c2be6e9c4bcdc3520fd48e6c7f4effac0f9`.
+This harness validates audit evidence, including retained failing browser logs;
+it is not a renderer parity pass or the complete enforced comparison matrix.
 
 The canonical report remains at its prior 2,486 unresolved groups. This increment
 prepares an evidence-backed integration; it does not reduce that count, fix the

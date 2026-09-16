@@ -3,6 +3,20 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete 87-file audit-harness snapshot passes
+
+`node scripts/run-material-audit-harness.mjs` finishes in session **6319** with
+exit **0**, **842/842 passing**, zero failures/skips/cancellations/todos,
+**4,162,034.7547 ms**. The pinned inventory contains 79 Material, four general
+parity and four TTS files, retaining all 43 legacy files. It includes the new
+inline-flow failure-log proof but predates the separately verified field-layout
+canonical-join test. The current discovery has 88 files; do not represent this
+87-file snapshot plus a focused run as one complete current run. The exact log
+digest and scope are recorded in the [join verification](material-field-host-layout-canonical-join.md#verification).
+This is audit harness evidence, not passing renderer parity. The enforced
+comparison matrix and canonical source-backed classification integration remain
+outstanding; the recorded canonical unresolved count remains 2,486.
+
 ## Field-host source membership reveals six unjustified equivalence labels
 
 The [canonical membership join](material-field-host-layout-canonical-join.md)
