@@ -90,3 +90,33 @@ canonical classifier or frozen regeneration dependency changed.
 Main-report integration is pending. It must retain all nine authored-input
 groups, including the core group absent from the scalar-difference list, rather
 than changing normalization or manufacturing a numerical discrepancy.
+
+## Compact original-source binding
+
+`tests/material-parity/button-fixed-width-source-binding.mjs` now prepares an
+independently replayable binding for later canonical integration. It compares
+the caller's complete selected inputs to the reopened original report before
+retaining compact input hashes, verifies both tree digests in all **2,311**
+cases, and requires exact class-based owner inventory. It retains **1,831**
+negative-selection cases and all **600** owners / **nine** authoring groups.
+The full proof matches the existing durable survey without duplicating complete
+scalar captures in each observation.
+
+The authoring ledger is constructed before scalar filtering. All **52** core
+owners remain unequal-authoring findings. A separate three-decimal arithmetic
+control produces only **eight** scalar groups / **548** observations, explicitly
+not a production-normalizer or classification-precedence test. Integration must
+retain both populations without manufacturing a core scalar discrepancy.
+
+```powershell
+node --test tests/material-parity/button-fixed-width-source-binding.spec.mjs
+```
+
+Result: **3/3 pass**, zero failures/skips/cancellations, **200,300.9284 ms**.
+Four caller-population mutations are rejected before deriving accepted proof;
+unbound and out-of-boundary sources are also rejected. Fourteen independent
+source-replay mutations reject dropped matching groups, lost negative cases,
+missing owners, changed hashes/rules, duplicated cases, missing states and all
+five inflated equivalence/layout/raster claims. JSON round-trip replay passes.
+No canonical classifier, renderer, fixture or frozen audit dependency changed.
+Canonical integration and production-normalizer verification remain pending.

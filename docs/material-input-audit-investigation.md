@@ -3,6 +3,27 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Fixed-width source binding retains non-scalar authoring differences
+
+The [width audit](material-button-fixed-width-audit.md#compact-original-source-binding)
+now has a compact original-source binder and **3/3** passing tests
+(**200,300.9284 ms**, zero failures/skips/cancellations). Both original trees are
+digest-checked in all **2,311** cases, complete class selection retains **600**
+owners and **1,831** negative cases, and all nine authoring groups survive.
+The 52 core owners remain unequal inputs even though their widths match under
+the separate three-decimal arithmetic control. Four caller-population and
+fourteen independent replay mutations are rejected. Input hashes replace
+duplicated full captures only after original-source equality is established.
+Canonical integration remains pending; the ongoing full no-write audit's 180
+fingerprinted sources remain untouched.
+
+Final harness coverage also requires explicit attention: the current
+`parity:harness:check` script lists **36** Material spec files, whereas there
+are now **62** Material `.spec.mjs` files. A final run of only that older list
+cannot establish complete audit-test coverage. No package script has been
+changed in this increment; final verification must include the additional
+tests as well as the existing non-Material harness tests and enforced matrix.
+
 ## Complete button formatting/host report conservation
 
 Full canonical generation finished with **436/436 static** and **1,875/1,875
