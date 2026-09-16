@@ -154,3 +154,9 @@ groups, not a claimed input-equivalence pass. All **180** source fingerprints
 are checked. The investigation records exact payload and conservation hashes.
 Full no-write replay remains pending; used layout, containing blocks and
 native-value/label-span composition still require their own proof.
+
+The subsequent complete canonical **no-write replay** has now finished: exit
+**1**, solely the existing **2,603** unattributed groups. No source drift or
+saved-report mismatch is reported. All 436 static / 1,875 interaction cases and
+180 frozen dependencies are retained. The investigation records the exact
+command; reproducibility does not establish used layout or rendering parity.

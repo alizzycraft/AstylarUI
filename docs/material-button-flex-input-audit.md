@@ -167,3 +167,9 @@ all **2,311** cases, including **1,831** negative-selection cases each. Exactly
 All **180** source fingerprints are checked. See the investigation's complete
 conservation entry for payload and unchanged-record hashes. Full no-write
 replay remains pending; no used-layout or renderer-parity claim is implied.
+
+The subsequent complete canonical **no-write replay** has now finished: exit
+**1**, solely the existing **2,603** unattributed groups. No source drift or
+saved-report mismatch is reported. It retains all 436 static / 1,875 interaction
+cases and all 180 frozen dependencies. The exact command is recorded in the
+investigation; this establishes report reproducibility, not renderer parity.

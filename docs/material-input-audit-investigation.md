@@ -3,6 +3,24 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete button formatting/host no-write replay
+
+The full canonical no-write command has now finished with exit **1**, solely
+because **2,603** resolved-style groups still lack attribution. It reports no
+source-fingerprint drift or saved-report mismatch. Coverage remains **436/436
+static** and **1,875/1,875 interaction** cases, **8,339** groups / **386,891**
+observations, and **132** source findings; input equivalence remains false.
+All 180 fingerprinted dependencies stayed unchanged through the run. The
+preceding pending replay notes are historical, not a new acceptance claim.
+
+```powershell
+node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit --check
+```
+
+This verifies reproducibility of the saved formatting/host attribution report,
+not completed attribution, renderer fixes, output parity, or the final enforced
+matrix. Width production integration remains the next bounded evidence step.
+
 ## Width-only attribution prepared without losing authoring coverage
 
 The [width classification proof](material-button-fixed-width-audit.md#width-classification-and-independent-scalar-replay)
