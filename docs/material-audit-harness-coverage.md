@@ -60,6 +60,42 @@ their outcomes or input equivalence.
 
 ## First complete run failed
 
+### Replayed owner-membership and field weight/tracking provenance
+
+The four stale-provenance failures 58, 635, 638 and 639 were replayed before
+their saved fingerprints were updated. The two original-source generators
+`node scripts/audit-material-owner-initial-membership.mjs` and
+`node scripts/audit-material-owner-initial-mappings.mjs` both exited 0.
+They preserve 600 groups / 31,508 unresolved observations, 636 separately
+reviewed static observations across 51 split groups, and 326 groups with complete
+captured observation-stage mapping evidence. These are the historical survey's
+counts, not new canonical resolutions.
+
+Independent JSON comparisons with the preceding commit prove every field other
+than `sourceFingerprints` unchanged. The SHA-256 values of those complete
+non-fingerprint projections are:
+
+- Membership: `e7b4cff4aa3cd86047654d19373d36137c97240086cfc5942eeaa13c5b08d320`.
+- Mappings: `1789a08d0cadeff09a5ed25a24723daff4b53142a4f703bed4bcacc5896678c6`.
+- Field weight/tracking: `76c82d3bcca1d4e8c0f24ae08dbcce04a32d619793f0ff3d81aeb7b64fb3e012`.
+
+The field weight/tracking projection was independently rebuilt from the original
+capture before its fingerprint update: all 577 cases / 1,154 proofs / 12 scalar
+groups match the saved report. Its exact groups hash is
+`f61b09390fefa65baf73b0a1ed38b3e11b03f99c9f6d98ef7d9a34bf33599cbe`.
+Only the main-audit source fingerprints change in these three reports, plus the
+mapping report's dependent membership-file fingerprint. No groups, case lists,
+proofs, scalar values, classifications or equivalence flags change.
+
+Verification command:
+
+`node --test --test-concurrency=1 tests/material-parity/field-host-weight-tracking-evidence.spec.mjs tests/material-parity/owner-initial-style-membership.spec.mjs tests/material-parity/owner-initial-style-mappings.spec.mjs`
+
+Result: **14/14 pass**, terminal exit 0, **184,678.2952ms**, no skipped,
+cancelled or failed tests. This includes complete no-write generation checks
+and the negative mapping/membership/provenance controls. It does not resolve
+the other stale reports, allocation crashes or overall input-equivalence gaps.
+
 ### Subsequent slider checksum investigation
 
 The isolated failing command

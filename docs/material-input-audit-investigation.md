@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Owner-membership and field weight/tracking provenance replayed
+
+The [provenance replay](material-audit-harness-coverage.md#replayed-owner-membership-and-field-weighttracking-provenance)
+resolves four isolated saved-evidence failures without changing any findings.
+Original-source generators and independent full JSON projection comparisons
+preserve all 600 owner groups, 31,508 unresolved observations, 636 separately
+reviewed static observations, and all 577 field cases / 1,154 weight/tracking
+proofs. Only four provenance hashes across three reports change. The complete
+focused three-file run passes 14/14 (184,678.2952ms), including no-write replays.
+The original failed full run remains recorded; further failures and the full
+77-file rerun are still required. Canonical attribution is unchanged.
+
 ## Slider integration checksum failure traced without replacing its baseline
 
 The [isolated checksum investigation](material-audit-harness-coverage.md#subsequent-slider-checksum-investigation)
