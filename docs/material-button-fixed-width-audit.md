@@ -51,6 +51,31 @@ edit occurred, or that the original constants were obtained by measurement.
 These fixed requests already existed at the initial endpoint; they cannot be
 attributed solely to a subsequent parity fix.
 
+### Followed source history, not just endpoint comparison
+
+The separate [historical ledger](material-button-width-history.json) extends
+that endpoint proof to **102 revisions** returned by
+`git log --follow --format=%H 9f713c0930ea5c3692e96f5f62a05d38863abcb8 -- examples/material-showcase/src/app/astylar.component.ts`.
+Each revision's source blob is reopened and parsed as TypeScript. All nine
+selected selector/width expressions, including conditional branches, are
+identical in every returned revision. The ledger records each commit, its source
+SHA-256 and its extracted-expression SHA-256. This closes the intermediate-edit
+uncertainty for these expressions in that followed history, not other branches,
+uncommitted edits, other style properties, or their runtime effects. The initial
+constants' derivation remains unproven.
+
+```powershell
+node scripts/audit-material-button-width-history.mjs
+node scripts/audit-material-button-width-history.mjs --check
+node --test tests/material-parity/button-width-history.spec.mjs
+```
+
+The generator completed with exit 0. The focused tests passed **2/2** with no
+skips or cancellations in **7,477.3528ms**: complete historical replay, changed
+and removed request controls, unrelated-object conservation and parse-error
+rejection. This adds history evidence without modifying the original authoring
+ledger, classifications, renderer or fixtures.
+
 ## Implementation boundary and remaining uncertainty
 
 When fixes are authorized, restore content-dependent width authoring together

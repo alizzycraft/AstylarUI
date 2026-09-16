@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Fixed button widths checked across the followed source history
+
+The [102-revision history review](material-button-fixed-width-audit.md#followed-source-history-not-just-endpoint-comparison)
+shows the nine selected width expressions unchanged throughout the followed
+source history, not just at its endpoints. These requests originated in the
+initial showcase; later edits to these expressions do not explain their current
+authoring discrepancy. Their initial derivation and independent runtime effects
+remain unproven. The separate machine ledger and two passing tests preserve
+source-blob and expression digests without changing canonical inputs.
+
 ## Larger authoring crash has a terminal isolated replay
 
 The [unchanged authoring-integration test](material-audit-harness-coverage.md#larger-authoring-crash-isolated-without-changing-the-test)
