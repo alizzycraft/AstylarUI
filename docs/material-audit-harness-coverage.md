@@ -62,8 +62,10 @@ parity, and four TTS, retaining all **43** legacy files. This inventory is not a
 test pass. Full current report generation and the
 [saved-report conservation check](material-field-host-layout-canonical-integration.md#complete-saved-report-conservation)
 now confirm 2,438 unresolved groups while preserving every original scalar and
-all unrelated complete findings. No-write validation, complete harness execution,
-remaining attribution and enforced parity remain outstanding. The earlier
+all unrelated complete findings. The complete no-write replay now reproduces
+the saved report (session 81972, exit 1 solely for 2,438 unresolved groups;
+1,445,138 ms). Complete harness execution, remaining attribution and enforced
+parity remain outstanding. The earlier
 87-file run does not cover this integration.
 
 ## Owner mapping and remaining-overlay provenance replay after grid integration

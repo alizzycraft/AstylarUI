@@ -30,8 +30,10 @@ minimum-width equivalence labels. Full saved-report generation and conservation
 now confirm **2,438** unresolved groups: all 8,339 raw scalar rows and all 8,267
 unrelated complete findings are unchanged across 436 static and 1,875 interaction
 cases. Original host replay, historical compatibility checks and dependent
-provenance replay pass. Complete no-write replay, the current full harness,
-remaining root-cause attribution and the final enforced matrix remain outstanding.
+provenance replay pass. Complete no-write replay now reproduces the saved report:
+session 81972, 1,445,138 ms, exit 1 solely for the 2,438 unresolved groups. The
+current full harness, remaining root-cause attribution and the final enforced
+matrix remain outstanding.
 No renderer or comparison input changed.
 
 ## Complete 87-file audit-harness snapshot passes

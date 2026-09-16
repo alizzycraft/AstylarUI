@@ -145,6 +145,26 @@ inventory, summary and original field-host replay. It does **not** replace full
 no-write regeneration or establish candidate computed layout, original renderer
 causality or rendering equivalence.
 
+## Complete no-write replay
+
+Session **81972** is terminal: exit **1**, **1,445,138 ms**. The full command
+below reproduced the saved machine payload and human report without assertion
+failure. The sole reported error is the **2,438** unresolved resolved-style
+differences. Thus reproducibility passes, but audit completeness still fails.
+All **436/436** static and **1,875/1,875** interaction cases, **8,339** groups,
+**386,891** occurrences and **132** source findings remain accounted for.
+
+```powershell
+node scripts/run-material-input-audit.mjs --check --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+```
+
+Log: `artifacts/material-parity/field-host-flow-input-audit/layout-full-no-write.log`,
+**350 bytes**, SHA-256
+`6d4f1cf1b791fefaba565ed96347b9ff9428e988c5643485e4d357b0f97b31c7`.
+The command's check branch verifies the regenerated stream and exact human
+report before printing its summary and completeness errors. This does not
+establish rendering equivalence or close any remaining root-cause attribution.
+
 ## Still required
 
 1. Run the remaining historical integration tests in the complete current harness;
@@ -154,8 +174,9 @@ causality or rendering equivalence.
    now passes with every non-metadata finding conserved across 17 updated JSON
    reports. Include those checks in the complete current harness; the historical
    membership join is pinned to its pre-integration committed canonical payload.
-3. Run complete no-write validation, the current full harness and the unfiltered
-   enforced parity matrix. The earlier 842-test/87-file harness predates this
+3. Complete no-write validation now reproduces the saved evidence as documented
+   above. Run the current full harness and the unfiltered enforced parity matrix.
+   The earlier 842-test/87-file harness predates this
    production integration and cannot verify it.
 
 The separate equal-input inline-parent sizing defect remains core evidence. It
