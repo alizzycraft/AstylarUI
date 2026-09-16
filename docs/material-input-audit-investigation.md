@@ -3,6 +3,28 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Grid-template omission review preserves the computed-value boundary
+
+The [owner grid survey](material-owner-grid-initial-survey.md) reopens all
+2,311 original cases and reviews 13,824 eligible observations in 233 groups.
+10,968 support the narrower captured-none/local-omission description; 2,856
+retain explicit-grid, motion or owner-mapping gaps. It does not infer candidate
+computed values or prove equivalent grid layout. No canonical attribution
+changed; 2,595 groups remain unresolved.
+
+Focused original-source and browser controls pass 4/4 (14,869.905ms), including
+DPR 1/2 evidence that implicit browser grids can serialize used track sizes
+despite omitted authored templates. Complete no-write survey replay exits 0.
+An exploratory canonical join scopes 100 gap-free groups / 6,226 observations
+for later exact integration, not automatic resolution. Explicit grid-list
+columns remain outside omission eligibility.
+
+The 73-file harness remains live and has reported failures, including stale
+source-fingerprint evidence; its complete result and failure review are pending.
+Its frozen source inputs are unchanged. Current discovery contains 75 files;
+the two later additions are verified separately, not claimed as covered by that
+running suite.
+
 ## Complete fixed-width no-write replay finished
 
 The complete canonical `--check` has finished with exit **1** solely for the
