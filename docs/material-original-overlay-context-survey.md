@@ -150,3 +150,20 @@ replay over retained evidence, not a fresh browser/candidate rendering capture.
 The seven enumerated-alias gaps, external-context limits and unsupported
 candidate-equivalence claims remain unchanged. Other historical surveys and
 the complete enforced matrix still need their own verification.
+
+### Replay after root-flow/button-radius integration
+
+The source-bound authoring integration changes the current audit-module digest
+to `25a58594bc30e4e7213738766514eeaef02d334eb6024bc91fe5f54a980c1602`.
+Generation, no-write replay and all five tests pass again: **5/5**, zero
+failures/skips/cancellations, **3,597.1518 ms**, using the same three commands
+above. This retains all **91 states, 200 owner proofs and 17,654 root properties**.
+
+An independent recursive comparison with the preceding committed survey proves
+that only `historicalAuditSource.currentSha256` and `sourceFingerprints.4.sha256`
+change. The complete remaining projection is deeply equal and retains SHA-256
+`4679b5eee977df406caac8a490d4115adb38c78597439be4d4f4119633f4858f`.
+The original capture receipt, its historical Git revision, all observations and
+all seven alias gaps are unchanged. No source hash was substituted for the
+historical receipt. This is current-reader verification, not a fresh browser or
+candidate render, and does not establish candidate overlay/raster equivalence.

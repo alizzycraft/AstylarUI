@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Overlay context replay after authoring integration
+
+The [original overlay survey](material-original-overlay-context-survey.md#replay-after-root-flowbutton-radius-integration)
+passes generation, no-write replay and all five tests against the integrated
+audit module. All 91 states, 200 original owner proofs and 17,654 root properties
+are unchanged. An independent recursive comparison proves exactly two current-
+verifier digest updates and identical remaining survey evidence. Historical
+receipts, seven alias gaps and candidate/rendering limitations remain intact.
+This is not a blanket historical-source waiver or a new rendering capture.
+
 ## Shared button formatting source binding prepared
 
 The [button-formatting source binding](material-button-flex-input-audit.md#original-source-binding-prepared)
