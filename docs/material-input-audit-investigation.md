@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Explicit gaps conceal different requested compositions
+
+The [full explicit-gap composition review](material-explicit-gap-composition.md)
+verifies all 16 groups / 1,032 observations across 296 original cases. It traces
+reference positioned indicators, nested padding, retained chip graphics,
+margin-based wrapping and absolute grid tiles against candidate direct flex/grid
+gap composition. All original declaration digests match; complete no-write
+replay and 40 rejection controls pass. These are separately classified unequal
+authoring requests, not a demonstrated renderer cause or canonical integration.
+The implementation boundary is to reduce equivalent structure through shared
+CSS-space layout, not tune another component-specific gap.
+
 ## Exact gap membership is verified without changing attribution
 
 The [canonical membership join](material-owner-gap-canonical-join.md) now binds
