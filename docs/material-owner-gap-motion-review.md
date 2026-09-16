@@ -38,6 +38,12 @@ discarded or guessed from those empty fields. The separate
 boundary in six cases and verifies all 32 original dialog captures; it is not a
 renderer failure attribution.
 
+The subsequent [original-state dialog replay](material-dialog-motion-context-survey.md)
+now supplies fresh resolved reference motion for all 32 cases: transition target
+and animation name `none`, with no active owner animation. It verifies all 89
+original owner scalars per case and remains distinct from the original unrecorded
+motion values, candidate computed behavior and canonical attribution.
+
 ## Verification and limits
 
 ```powershell
