@@ -3,6 +3,22 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Reference-like inline field flow exposes a core parent-sizing defect
+
+The [equal-input field-flow probe](material-field-host-flow-public-proof.md)
+finishes twice with **2 FAILED, 2 SUCCESS**: both inline-flex widths fail while
+both flex controls pass. All twelve state observations repeat identically.
+Host/child sizes match, but the inline parent retains 340 px height instead of
+134/154 px and displaces the following sibling. Source inspection identifies
+inline flow measuring children and committing parent height before descendant
+layout; block flow finalizes descendants first. This is a core CSS layout
+finding, not a reason to change the comparison to flex or add an offset.
+The failing browser assertions are preserved; two evidence-reader tests and
+no-write replay pass. A composed Material reproduction and internal causal trace
+remain outstanding. No production code is fixed and no canonical observation is
+reclassified. The linked plan prioritizes general measurement/finalization
+before removing historical fixed-height/absolute-child composition.
+
 ## Public equal-input probe confirms a bounded field-host shrink mechanism
 
 The [field-host shrink probe](material-field-host-shrink-public-proof.md) passes

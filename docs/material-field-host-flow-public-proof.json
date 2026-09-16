@@ -1,0 +1,4688 @@
+{
+  "schemaVersion": 1,
+  "evidenceId": "field-host-inline-parent-auto-height-public-proof",
+  "baselineCommit": "8267a2d31db6d9a27fcb95953f7a8a7ed3fb4280",
+  "branch": "codex/material-ui-showcase",
+  "command": "npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/field-host-flow-input-audit.spec.ts",
+  "logs": [
+    {
+      "file": "artifacts/material-parity/field-host-flow-input-audit/test.log",
+      "sha256": "5884195163bb9c153cadaf64ade24e3ce2f90abde07cdcedaa12185211fbb0dc",
+      "result": "TOTAL: 2 FAILED, 2 SUCCESS",
+      "terminalSession": 92712,
+      "exitCode": 1,
+      "exitEvidence": "terminal exit observed during original run"
+    },
+    {
+      "file": "artifacts/material-parity/field-host-flow-input-audit/repeat.log",
+      "sha256": "983bf94319e539cf11664c02e83d13fe63de5bde8410c7d428b802b807b4f65d",
+      "result": "TOTAL: 2 FAILED, 2 SUCCESS",
+      "terminalSession": 13035,
+      "exitCode": null,
+      "exitEvidence": "session handle expired before exit code was recovered; complete Karma terminal summary retained"
+    }
+  ],
+  "environment": {
+    "astylarui": "0.2.0",
+    "angular": "20.3.29",
+    "material": "20.0.5",
+    "babylon": "8.56.2",
+    "dpr": 1,
+    "canvasCssSize": [
+      480,
+      400
+    ],
+    "settlement": "reference document.fonts.ready then surface.whenSettled()",
+    "warning": "NG0914: zoneless change detection with Zone.js loaded by Karma polyfills"
+  },
+  "sourceFingerprints": [
+    {
+      "file": "scripts/audit-material-field-host-flow.mjs",
+      "sha256": "3ee47c50b3216bef64aa4b0efd9bef11ac0bb5e3448b52df0124e0a8d6c5a945"
+    },
+    {
+      "file": "tests/material-parity/field-host-flow-log-proof.spec.mjs",
+      "sha256": "f6a8e0bbd2c38da93542180d3c42d187e76a61f2f858afcceb1ae41b6b59505a"
+    },
+    {
+      "file": "examples/material-showcase/src/app/field-host-flow-input-audit.spec.ts",
+      "sha256": "ae44fa6b7655b20188220d7650d2e7b3e5c5076aaa1361ba3e23b405fdc38600"
+    },
+    {
+      "file": "examples/material-showcase/angular.json",
+      "sha256": "b3f9cc12f51cbf366176d92efc74c722cc459d5bd0edeb635be9f74c72c05106"
+    },
+    {
+      "file": "examples/material-showcase/src/styles.scss",
+      "sha256": "addc773ab7fadb0e0fabf498ea99b2dd45026af9e7f9c16214509d4faf290505"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/package.json",
+      "sha256": "8299fd2ab139be5603ec418f6b58ae94b98e3c170dbab594c19834e7de92b582"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-creation.service.ts",
+      "sha256": "bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-creation.service.js",
+      "sha256": "68e45ca7b851ddeac40f6f55d3e2f176768b47dd6ad8e0d8eefa5c2a77d28ef3"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-dimension.service.ts",
+      "sha256": "24d3c910ec0f054f0ec2de1808420f3e6571708a13348eea0887d040c9aa3d30"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js",
+      "sha256": "0a65a1659a51062ab41cda030c4f030b15bcf5328c85fb1a3597628c05cf190c"
+    },
+    {
+      "file": "src/app/services/dom/elements/flex.service.ts",
+      "sha256": "37668d3443e104b9bfa8896c7e9ff65f48a00625138bc8d46a3cb9e6ba82d55f"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/flex.service.js",
+      "sha256": "1c587dbb1b2386dc176984cfc0ae725ae6d92a2be4a7605a92598bfdb14b13dd"
+    }
+  ],
+  "rawRecords": 24,
+  "cases": [
+    {
+      "display": "flex",
+      "width": 120,
+      "step": "grown",
+      "subscriptHeight": 40,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "120px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "40px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:120px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:40px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 154
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 154
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "96px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 96
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 96
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "96px",
+            "width": "120px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 40
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 40
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "40px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "40px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "40px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 170,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 170,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    },
+    {
+      "display": "flex",
+      "width": 120,
+      "step": "initial",
+      "subscriptHeight": 20,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "120px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "20px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:120px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:20px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 134
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 134
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "76px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 76
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 76
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "76px",
+            "width": "120px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 20
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 20
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "20px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    },
+    {
+      "display": "flex",
+      "width": 120,
+      "step": "restored",
+      "subscriptHeight": 20,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "120px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "20px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:120px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:20px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 134
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 134
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "76px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 76
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 76
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "76px",
+            "width": "120px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 20
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 20
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "20px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    },
+    {
+      "display": "flex",
+      "width": 240,
+      "step": "grown",
+      "subscriptHeight": 40,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "240px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "40px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:240px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:40px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 154
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 154
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "96px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 96
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 96
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "96px",
+            "width": "240px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 40
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 40
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "40px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "40px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "40px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 170,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 170,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    },
+    {
+      "display": "flex",
+      "width": 240,
+      "step": "initial",
+      "subscriptHeight": 20,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "240px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "20px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:240px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:20px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 134
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 134
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "76px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 76
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 76
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "76px",
+            "width": "240px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 20
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 20
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "20px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    },
+    {
+      "display": "flex",
+      "width": 240,
+      "step": "restored",
+      "subscriptHeight": 20,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "240px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "20px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:240px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:20px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 134
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 134
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "76px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 76
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 76
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "76px",
+            "width": "240px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 20
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 20
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "20px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    },
+    {
+      "display": "inline-flex",
+      "width": 120,
+      "step": "grown",
+      "subscriptHeight": 40,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "120px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "inline-flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "40px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:120px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:inline-flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:40px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 154
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "96px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 96
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 96
+          },
+          "browserStyle": {
+            "display": "inline-flex",
+            "height": "96px",
+            "width": "120px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 40
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 40
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "40px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "40px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "40px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 170,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 356,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    },
+    {
+      "display": "inline-flex",
+      "width": 120,
+      "step": "initial",
+      "subscriptHeight": 20,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "120px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "inline-flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "20px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:120px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:inline-flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:20px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 134
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "76px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 76
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 76
+          },
+          "browserStyle": {
+            "display": "inline-flex",
+            "height": "76px",
+            "width": "120px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 20
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 20
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "20px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 356,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    },
+    {
+      "display": "inline-flex",
+      "width": 120,
+      "step": "restored",
+      "subscriptHeight": 20,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "120px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "inline-flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "20px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:120px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:inline-flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:20px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 134
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 178,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "76px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "120px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 76
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 76
+          },
+          "browserStyle": {
+            "display": "inline-flex",
+            "height": "76px",
+            "width": "120px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 120,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 20
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 120,
+            "height": 20
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "20px",
+            "width": "120px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 356,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    },
+    {
+      "display": "inline-flex",
+      "width": 240,
+      "step": "grown",
+      "subscriptHeight": 40,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "240px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "inline-flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "40px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:240px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:inline-flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:40px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 154
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "96px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 96
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 96
+          },
+          "browserStyle": {
+            "display": "inline-flex",
+            "height": "96px",
+            "width": "240px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 40
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 40
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "40px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "40px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "40px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 170,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 356,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    },
+    {
+      "display": "inline-flex",
+      "width": 240,
+      "step": "initial",
+      "subscriptHeight": 20,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "240px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "inline-flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "20px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:240px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:inline-flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:20px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 134
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "76px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 76
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 76
+          },
+          "browserStyle": {
+            "display": "inline-flex",
+            "height": "76px",
+            "width": "240px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 20
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 20
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "20px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 356,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    },
+    {
+      "display": "inline-flex",
+      "width": 240,
+      "step": "restored",
+      "subscriptHeight": 20,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "main",
+              "id": "flow-frame",
+              "children": [
+                {
+                  "type": "section",
+                  "id": "flow-section",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "flow-host",
+                      "children": [
+                        {
+                          "type": "div",
+                          "id": "flow-field"
+                        },
+                        {
+                          "type": "div",
+                          "id": "flow-subscript"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "id": "flow-following"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#flow-frame",
+            "position": "absolute",
+            "top": "16px",
+            "left": "16px",
+            "width": "400px",
+            "height": "340px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "display": "block",
+            "boxSizing": "border-box",
+            "background": "#ffffff"
+          },
+          {
+            "selector": "#flow-section",
+            "display": "block",
+            "width": "240px",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#flow-host",
+            "display": "inline-flex",
+            "flexDirection": "column",
+            "minWidth": "0",
+            "width": "100%",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "boxSizing": "content-box",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "24px",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#flow-field",
+            "position": "relative",
+            "display": "flex",
+            "height": "56px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          },
+          {
+            "selector": "#flow-subscript",
+            "position": "relative",
+            "display": "block",
+            "height": "20px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#999999"
+          },
+          {
+            "selector": "#flow-following",
+            "display": "block",
+            "width": "100%",
+            "height": "8px",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#111111"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#flow-frame{position:absolute;top:16px;left:16px;width:400px;height:340px;margin:0;padding:0;border-width:0;display:block;box-sizing:border-box;background:#ffffff}\n#flow-section{display:block;width:240px;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#eeeeee}\n#flow-host{display:inline-flex;flex-direction:column;min-width:0;width:100%;margin:0;padding:0;border-width:0;box-sizing:content-box;font-family:Arial;font-size:16px;line-height:24px;background:#ddccff}\n#flow-field{position:relative;display:flex;height:56px;margin:0;padding:0;border-width:0;background:#6750a4}\n#flow-subscript{position:relative;display:block;height:20px;margin:0;padding:0;border-width:0;background:#999999}\n#flow-following{display:block;width:100%;height:8px;margin:0;padding:0;border-width:0;background:#111111}",
+      "measurements": [
+        {
+          "id": "flow-frame",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 400,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "340px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "absolute",
+            "boxSizing": "border-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            },
+            {
+              "display": "block",
+              "height": "340px",
+              "width": "400px",
+              "flexDirection": "row",
+              "boxSizing": "border-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-section",
+          "reference": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 134
+          },
+          "actual": {
+            "x": 16,
+            "y": 16,
+            "width": 298,
+            "height": 340
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "76px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "block",
+              "height": "<omitted>",
+              "width": "240px",
+              "flexDirection": "row",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-host",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 76
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 76
+          },
+          "browserStyle": {
+            "display": "inline-flex",
+            "height": "76px",
+            "width": "240px",
+            "flexDirection": "column",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            },
+            {
+              "display": "inline-flex",
+              "height": "<omitted>",
+              "width": "100%",
+              "flexDirection": "column",
+              "boxSizing": "content-box"
+            }
+          ]
+        },
+        {
+          "id": "flow-field",
+          "reference": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "actual": {
+            "x": 45,
+            "y": 45,
+            "width": 240,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "56px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "flex",
+              "height": "56px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-subscript",
+          "reference": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 20
+          },
+          "actual": {
+            "x": 45,
+            "y": 101,
+            "width": 240,
+            "height": 20
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "20px",
+            "width": "240px",
+            "flexDirection": "row",
+            "position": "relative",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "20px",
+              "width": "<omitted>",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        },
+        {
+          "id": "flow-following",
+          "reference": {
+            "x": 16,
+            "y": 150,
+            "width": 400,
+            "height": 8
+          },
+          "actual": {
+            "x": 16,
+            "y": 356,
+            "width": 400,
+            "height": 8
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "8px",
+            "width": "400px",
+            "flexDirection": "row",
+            "position": "static",
+            "boxSizing": "content-box",
+            "verticalAlign": "baseline"
+          },
+          "stages": [
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            },
+            {
+              "display": "block",
+              "height": "8px",
+              "width": "100%",
+              "flexDirection": "row",
+              "boxSizing": "<omitted>"
+            }
+          ]
+        }
+      ],
+      "renderSize": [
+        480,
+        400
+      ],
+      "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence."
+    }
+  ],
+  "mismatches": [
+    {
+      "case": "inline-flex/120/grown",
+      "element": "flow-following",
+      "property": "y",
+      "reference": 170,
+      "actual": 356,
+      "error": 186
+    },
+    {
+      "case": "inline-flex/120/grown",
+      "element": "flow-section",
+      "property": "height",
+      "reference": 154,
+      "actual": 340,
+      "error": 186
+    },
+    {
+      "case": "inline-flex/120/initial",
+      "element": "flow-following",
+      "property": "y",
+      "reference": 150,
+      "actual": 356,
+      "error": 206
+    },
+    {
+      "case": "inline-flex/120/initial",
+      "element": "flow-section",
+      "property": "height",
+      "reference": 134,
+      "actual": 340,
+      "error": 206
+    },
+    {
+      "case": "inline-flex/120/restored",
+      "element": "flow-following",
+      "property": "y",
+      "reference": 150,
+      "actual": 356,
+      "error": 206
+    },
+    {
+      "case": "inline-flex/120/restored",
+      "element": "flow-section",
+      "property": "height",
+      "reference": 134,
+      "actual": 340,
+      "error": 206
+    },
+    {
+      "case": "inline-flex/240/grown",
+      "element": "flow-following",
+      "property": "y",
+      "reference": 170,
+      "actual": 356,
+      "error": 186
+    },
+    {
+      "case": "inline-flex/240/grown",
+      "element": "flow-section",
+      "property": "height",
+      "reference": 154,
+      "actual": 340,
+      "error": 186
+    },
+    {
+      "case": "inline-flex/240/initial",
+      "element": "flow-following",
+      "property": "y",
+      "reference": 150,
+      "actual": 356,
+      "error": 206
+    },
+    {
+      "case": "inline-flex/240/initial",
+      "element": "flow-section",
+      "property": "height",
+      "reference": 134,
+      "actual": 340,
+      "error": 206
+    },
+    {
+      "case": "inline-flex/240/restored",
+      "element": "flow-following",
+      "property": "y",
+      "reference": 150,
+      "actual": 356,
+      "error": 206
+    },
+    {
+      "case": "inline-flex/240/restored",
+      "element": "flow-section",
+      "property": "height",
+      "reference": 134,
+      "actual": 340,
+      "error": 206
+    }
+  ],
+  "scope": "Equal-input auto-height column host and block section with two empty in-flow wrappers and a following sibling; geometry/update proof, not Material controls, typography or raster equivalence.",
+  "classification": "confirmed-core-inline-parent-auto-height-defect",
+  "rendererDefectProven": true,
+  "materialInputEquivalent": false,
+  "originalCaseCausalTraceComplete": false,
+  "originalObservationsReclassified": 0,
+  "sourceDiagnosis": {
+    "owner": "ElementCreationService.layoutInlineChildren",
+    "earliestIncorrectStage": "inline flow consumes provisional descendant dimensions when calculating parent line height",
+    "evidenceKind": "repeated equal-input public geometry proof plus source-order inspection; no internal runtime trace or corrective intervention",
+    "locations": [
+      "src/app/services/dom/elements/element-creation.service.ts:870",
+      "src/app/services/dom/elements/element-creation.service.ts:914",
+      "src/app/services/dom/elements/element-creation.service.ts:1000",
+      "src/app/services/dom/elements/element-creation.service.ts:1112",
+      "src/app/services/dom/elements/element-dimension.service.ts:118",
+      "src/app/services/dom/elements/element-dimension.service.ts:593",
+      "src/app/services/dom/elements/flex.service.ts:435"
+    ],
+    "mechanism": "Inline flow reads child dimensions and commits parent height before processing child descendants. Flex descendant layout later corrects host height without recomputing the parent. Block flow processes descendants before consuming child dimensions.",
+    "ownership": "Core CSS layout finalization, not a plugin replacement layout or Babylon coordinate correction."
+  },
+  "conclusion": "Both runs fail the same two inline-flex tests and pass two flex controls. Across twelve state observations, only inline parent height and following-sibling y differ (12 property failures). Final host/child boxes match. Keep the failing parity assertions; flex is a diagnostic control, never a substitute comparison input."
+}
