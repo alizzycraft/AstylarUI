@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Field-host layout requests checked through all followed revisions
+
+The [shared field-host layout history](material-field-host-layout-history.md)
+replays 102 source revisions and retains the exact ten selected request
+expressions. Fixed density-dependent height, explicit border-box and omitted
+formatting properties already occur in the initial showcase; no later edit to
+those expressions explains their present form. Their initial rationale,
+referenced theme values, surrounding cascade and renderer behavior remain
+separate questions. Generation, 2/2 history/extractor tests and no-write replay
+pass without reclassifying any canonical difference. This is not evidence that
+the field host shares native-button sizing behavior.
+
 ## Button box-sizing full report conserved; 2,486 groups remain unresolved
 
 The [source-bound button box-sizing integration](material-button-box-sizing-canonical-integration.md)
