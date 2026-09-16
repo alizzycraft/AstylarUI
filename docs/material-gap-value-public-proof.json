@@ -1,0 +1,5987 @@
+{
+  "schemaVersion": 1,
+  "kind": "gap-value-equal-input-public-proof",
+  "baselineCommit": "91e141a7e346c926eea9d496d24a472e155c4f39",
+  "branch": "codex/material-ui-showcase",
+  "command": "npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/gap-value-input-audit.spec.ts --progress=false",
+  "logs": [
+    {
+      "file": "artifacts/material-parity/gap-value-input-audit/browser-proof.log",
+      "sha256": "60247bfa64b28fabe2cbe6090f52c6c7cd0d83bb15c92168db926cf20ea09bb4",
+      "bytes": 239128,
+      "terminalSession": 5257,
+      "exitCode": 1,
+      "failed": 10,
+      "passed": 14
+    },
+    {
+      "file": "artifacts/material-parity/gap-value-input-audit/browser-proof-repeat.log",
+      "sha256": "fe38ec484c992f65fffbb629438f4374c254ebd5ce66e49eea69e1abfc2566ab",
+      "bytes": 239116,
+      "terminalSession": 81036,
+      "exitCode": 1,
+      "failed": 10,
+      "passed": 14
+    }
+  ],
+  "build": {
+    "file": "artifacts/material-parity/gap-value-input-audit/build.log",
+    "sha256": "e805487e9516f036af12eafa6c9d07c9fb213109f4dddc85458f41b2eedd29ff",
+    "bytes": 109482,
+    "terminalSession": 49389,
+    "exitCode": 0,
+    "command": "npm --prefix examples/material-showcase run build -- --output-path=dist/material-gap-value-audit",
+    "scope": "Separate application build; frozen reference server output is not replaced. Test compilation is proven by the two browser runs."
+  },
+  "environment": {
+    "astylarui": "0.2.0",
+    "angular": "20.3.29",
+    "babylon": "8.56.2",
+    "dpr": 1,
+    "canvasCssSize": [
+      640,
+      360
+    ],
+    "settlement": "surface.whenSettled(); empty boxes need no font asset",
+    "acceptedWarning": "NG0914: zoneless tests with existing Zone.js Karma polyfills"
+  },
+  "sourceFingerprints": [
+    {
+      "file": "scripts/audit-material-gap-value-proof.mjs",
+      "sha256": "39b78d881d87771d51a568e0128ce0fec3048deb14340ada33f7601b301a5686"
+    },
+    {
+      "file": "scripts/check-material-gap-value-proof.mjs",
+      "sha256": "89e92712cbd65caededa224ca684a094cb11022b3d9559f6074b7dfffb3ff565"
+    },
+    {
+      "file": "examples/material-showcase/src/app/gap-value-input-audit.spec.ts",
+      "sha256": "9dd4db65375a0e85cb5b43dd9bad738953b7bfadf1d9d543d012aaa5159cba11"
+    },
+    {
+      "file": "examples/material-showcase/angular.json",
+      "sha256": "b3f9cc12f51cbf366176d92efc74c722cc459d5bd0edeb635be9f74c72c05106"
+    },
+    {
+      "file": "examples/material-showcase/src/styles.scss",
+      "sha256": "addc773ab7fadb0e0fabf498ea99b2dd45026af9e7f9c16214509d4faf290505"
+    },
+    {
+      "file": "docs/compatibility/capabilities.json",
+      "sha256": "7bde70f23f806570bc3eb8b30a627677f11ef26b134e7d57a4d15f943266c0be"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/package.json",
+      "sha256": "8299fd2ab139be5603ec418f6b58ae94b98e3c170dbab594c19834e7de92b582"
+    },
+    {
+      "file": "src/app/services/dom/elements/flex.service.ts",
+      "sha256": "37668d3443e104b9bfa8896c7e9ff65f48a00625138bc8d46a3cb9e6ba82d55f"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/flex.service.js",
+      "sha256": "1c587dbb1b2386dc176984cfc0ae725ae6d92a2be4a7605a92598bfdb14b13dd"
+    },
+    {
+      "file": "src/app/services/dom/elements/grid.service.ts",
+      "sha256": "b01021281a7f140ec97388ebb4bc22be6762c1ad155f6045b9c4e25016d53829"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/grid.service.js",
+      "sha256": "77035a34302ae398796b48392aac61d72174748810f0ec008d7137f0d34da785"
+    },
+    {
+      "file": "src/app/services/dom/elements/flex-layout.service.ts",
+      "sha256": "c109db8be8bfb040c29eada22e28b60470af9ce8bb6ac23ed947f2ed71031563"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/flex-layout.service.js",
+      "sha256": "9bdfa5dd8c2bc4602924e3dfae7b3c682a553ff7428859a5f826232d14afc79e"
+    }
+  ],
+  "rawRecords": 48,
+  "cases": [
+    {
+      "mode": "flex-column",
+      "variant": "font-relative",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "70px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "1em"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:70px;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:1em}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 0,
+            "y": 21,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 42,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 40,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 21,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 40,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "1em"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "1em"
+      },
+      "browserGap": {
+        "rowGap": "20px",
+        "columnGap": "20px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-column",
+      "variant": "normal",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "70px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "normal"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:70px;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:normal}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "normal"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "normal"
+      },
+      "browserGap": {
+        "rowGap": "normal",
+        "columnGap": "normal",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-column",
+      "variant": "omitted",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "70px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:70px;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px"
+      },
+      "browserGap": {
+        "rowGap": "normal",
+        "columnGap": "normal",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-column",
+      "variant": "one-pixel-value",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "70px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "8px"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:70px;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:8px}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 28,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 28,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 28,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 28,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "8px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "8px"
+      },
+      "browserGap": {
+        "rowGap": "8px",
+        "columnGap": "8px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-column",
+      "variant": "percentage",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "70px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "10%"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:70px;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:10%}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 0,
+            "y": 30,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 27,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 30,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 34,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 30,
+            "y": 30,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 34,
+            "y": 27,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "10%"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "10%"
+      },
+      "browserGap": {
+        "rowGap": "10%",
+        "columnGap": "10%",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-column",
+      "variant": "separate-longhands",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "70px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "rowGap": "8px",
+            "columnGap": "16px"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:70px;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;row-gap:8px;column-gap:16px}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 28,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 28,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "rowGap": "8px",
+        "columnGap": "16px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "rowGap": "8px",
+        "columnGap": "16px"
+      },
+      "browserGap": {
+        "rowGap": "8px",
+        "columnGap": "16px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-column",
+      "variant": "two-pixel-values",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "70px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "8px 16px"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:70px;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:8px 16px}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 28,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 28,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "8px 16px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "8px 16px"
+      },
+      "browserGap": {
+        "rowGap": "8px",
+        "columnGap": "16px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-column",
+      "variant": "zero",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "70px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "0"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:70px;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:0}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 70
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "0"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "column",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "70px",
+        "gap": "0"
+      },
+      "browserGap": {
+        "rowGap": "0px",
+        "columnGap": "0px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-row",
+      "variant": "font-relative",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "70px",
+            "height": "90px",
+            "display": "flex",
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "1em"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:70px;height:90px;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:1em}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 21,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 40,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 42,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 0,
+            "y": 21,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 40,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "1em"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "1em"
+      },
+      "browserGap": {
+        "rowGap": "20px",
+        "columnGap": "20px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-row",
+      "variant": "normal",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "70px",
+            "height": "90px",
+            "display": "flex",
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "normal"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:70px;height:90px;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:normal}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 40,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 40,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "normal"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "normal"
+      },
+      "browserGap": {
+        "rowGap": "normal",
+        "columnGap": "normal",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-row",
+      "variant": "omitted",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "70px",
+            "height": "90px",
+            "display": "flex",
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:70px;height:90px;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 40,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 40,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px"
+      },
+      "browserGap": {
+        "rowGap": "normal",
+        "columnGap": "normal",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-row",
+      "variant": "one-pixel-value",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "70px",
+            "height": "90px",
+            "display": "flex",
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "8px"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:70px;height:90px;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:8px}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 28,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 28,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 28,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 28,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "8px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "8px"
+      },
+      "browserGap": {
+        "rowGap": "8px",
+        "columnGap": "8px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-row",
+      "variant": "percentage",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "70px",
+            "height": "90px",
+            "display": "flex",
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "10%"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:70px;height:90px;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:10%}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 30,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 27,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 30,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 29,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 30,
+            "y": 30,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 27,
+            "y": 29,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "10%"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "10%"
+      },
+      "browserGap": {
+        "rowGap": "10%",
+        "columnGap": "10%",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-row",
+      "variant": "separate-longhands",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "70px",
+            "height": "90px",
+            "display": "flex",
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "rowGap": "8px",
+            "columnGap": "16px"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:70px;height:90px;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;row-gap:8px;column-gap:16px}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 36,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 36,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "rowGap": "8px",
+        "columnGap": "16px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "rowGap": "8px",
+        "columnGap": "16px"
+      },
+      "browserGap": {
+        "rowGap": "8px",
+        "columnGap": "16px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-row",
+      "variant": "two-pixel-values",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "70px",
+            "height": "90px",
+            "display": "flex",
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "8px 16px"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:70px;height:90px;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:8px 16px}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 28,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 28,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "8px 16px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "8px 16px"
+      },
+      "browserGap": {
+        "rowGap": "8px",
+        "columnGap": "16px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "flex-row",
+      "variant": "zero",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "70px",
+            "height": "90px",
+            "display": "flex",
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+            "justifyContent": "flex-start",
+            "alignItems": "flex-start",
+            "alignContent": "flex-start",
+            "gap": "0"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:70px;height:90px;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:flex-start;align-content:flex-start;gap:0}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 70,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 40,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 40,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "0"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "flex",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+        "alignItems": "flex-start",
+        "alignContent": "flex-start",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "70px",
+        "height": "90px",
+        "gap": "0"
+      },
+      "browserGap": {
+        "rowGap": "0px",
+        "columnGap": "0px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "grid",
+      "variant": "font-relative",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "90px",
+            "display": "grid",
+            "gridTemplateColumns": "20px 20px",
+            "gridTemplateRows": "20px 20px",
+            "gap": "1em"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:90px;display:grid;grid-template-columns:20px 20px;grid-template-rows:20px 20px;gap:1em}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 21,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 40,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 21,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 21,
+            "y": 21,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 40,
+            "y": 40,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "1em"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "1em"
+      },
+      "browserGap": {
+        "rowGap": "20px",
+        "columnGap": "20px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "grid",
+      "variant": "normal",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "90px",
+            "display": "grid",
+            "gridTemplateColumns": "20px 20px",
+            "gridTemplateRows": "20px 20px",
+            "gap": "normal"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:90px;display:grid;grid-template-columns:20px 20px;grid-template-rows:20px 20px;gap:normal}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 20,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "normal"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "normal"
+      },
+      "browserGap": {
+        "rowGap": "normal",
+        "columnGap": "normal",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "grid",
+      "variant": "omitted",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "90px",
+            "display": "grid",
+            "gridTemplateColumns": "20px 20px",
+            "gridTemplateRows": "20px 20px"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:90px;display:grid;grid-template-columns:20px 20px;grid-template-rows:20px 20px}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 20,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px"
+      },
+      "browserGap": {
+        "rowGap": "normal",
+        "columnGap": "normal",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "grid",
+      "variant": "one-pixel-value",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "90px",
+            "display": "grid",
+            "gridTemplateColumns": "20px 20px",
+            "gridTemplateRows": "20px 20px",
+            "gap": "8px"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:90px;display:grid;grid-template-columns:20px 20px;grid-template-rows:20px 20px;gap:8px}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 28,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 28,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 28,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 28,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "8px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "8px"
+      },
+      "browserGap": {
+        "rowGap": "8px",
+        "columnGap": "8px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "grid",
+      "variant": "percentage",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "90px",
+            "display": "grid",
+            "gridTemplateColumns": "20px 20px",
+            "gridTemplateRows": "20px 20px",
+            "gap": "10%"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:90px;display:grid;grid-template-columns:20px 20px;grid-template-rows:20px 20px;gap:10%}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 30,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 34,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 30,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 29,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 30,
+            "y": 30,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 34,
+            "y": 29,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "10%"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "10%"
+      },
+      "browserGap": {
+        "rowGap": "10%",
+        "columnGap": "10%",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "grid",
+      "variant": "separate-longhands",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "90px",
+            "display": "grid",
+            "gridTemplateColumns": "20px 20px",
+            "gridTemplateRows": "20px 20px",
+            "rowGap": "8px",
+            "columnGap": "16px"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:90px;display:grid;grid-template-columns:20px 20px;grid-template-rows:20px 20px;row-gap:8px;column-gap:16px}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 36,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 36,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "rowGap": "8px",
+        "columnGap": "16px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "rowGap": "8px",
+        "columnGap": "16px"
+      },
+      "browserGap": {
+        "rowGap": "8px",
+        "columnGap": "16px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "grid",
+      "variant": "two-pixel-values",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "90px",
+            "display": "grid",
+            "gridTemplateColumns": "20px 20px",
+            "gridTemplateRows": "20px 20px",
+            "gap": "8px 16px"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:90px;display:grid;grid-template-columns:20px 20px;grid-template-rows:20px 20px;gap:8px 16px}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 28,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 28,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 36,
+            "y": 28,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "8px 16px"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "8px 16px"
+      },
+      "browserGap": {
+        "rowGap": "8px",
+        "columnGap": "16px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    },
+    {
+      "mode": "grid",
+      "variant": "zero",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "div",
+              "id": "gap-host",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "gap-one",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-two",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-three",
+                  "class": "gap-item"
+                },
+                {
+                  "type": "div",
+                  "id": "gap-four",
+                  "class": "gap-item"
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "*",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "fontSize": "20px"
+          },
+          {
+            "selector": "#gap-host",
+            "width": "140px",
+            "height": "90px",
+            "display": "grid",
+            "gridTemplateColumns": "20px 20px",
+            "gridTemplateRows": "20px 20px",
+            "gap": "0"
+          },
+          {
+            "selector": ".gap-item",
+            "width": "20px",
+            "height": "20px",
+            "flexShrink": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "*{box-sizing:border-box;margin:0;padding:0;border-width:0;font-size:20px}\n#gap-host{width:140px;height:90px;display:grid;grid-template-columns:20px 20px;grid-template-rows:20px 20px;gap:0}\n.gap-item{width:20px;height:20px;flex-shrink:0;background:#6750a4}",
+      "observations": [
+        {
+          "id": "gap-host",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 140,
+            "height": 90
+          }
+        },
+        {
+          "id": "gap-one",
+          "actual": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-two",
+          "actual": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 0,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-three",
+          "actual": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 0,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        },
+        {
+          "id": "gap-four",
+          "actual": {
+            "x": 20,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          },
+          "reference": {
+            "x": 20,
+            "y": 20,
+            "width": 20,
+            "height": 20
+          }
+        }
+      ],
+      "normal": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "0"
+      },
+      "effective": {
+        "selector": "#gap-host",
+        "display": "grid",
+        "margin": "0",
+        "padding": "0",
+        "borderWidth": "0",
+        "borderStyle": "none",
+        "borderColor": "transparent",
+        "borderRadius": "0",
+        "background": "transparent",
+        "opacity": "1.0",
+        "flexDirection": "row",
+        "flexWrap": "nowrap",
+        "justifyContent": "flex-start",
+        "alignItems": "stretch",
+        "alignContent": "stretch",
+        "order": "0",
+        "flexGrow": "0",
+        "flexShrink": "1",
+        "flexBasis": "auto",
+        "alignSelf": "auto",
+        "cursor": "default",
+        "boxSizing": "border-box",
+        "fontSize": "20px",
+        "width": "140px",
+        "height": "90px",
+        "gridTemplateColumns": "20px 20px",
+        "gridTemplateRows": "20px 20px",
+        "gap": "0"
+      },
+      "browserGap": {
+        "rowGap": "0px",
+        "columnGap": "0px",
+        "fontSize": "20px"
+      },
+      "diagnostics": [],
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "scope": "Equal authored gap inputs and projected box geometry; not glyph raster or original Material cause."
+    }
+  ],
+  "failedCases": [
+    "flex-column/font-relative",
+    "flex-column/percentage",
+    "flex-column/separate-longhands",
+    "flex-column/two-pixel-values",
+    "flex-row/font-relative",
+    "flex-row/percentage",
+    "flex-row/two-pixel-values",
+    "grid/font-relative",
+    "grid/percentage",
+    "grid/two-pixel-values"
+  ],
+  "mismatches": [
+    {
+      "case": "flex-column/font-relative",
+      "element": "gap-two",
+      "property": "y",
+      "reference": 40,
+      "actual": 21,
+      "error": 19
+    },
+    {
+      "case": "flex-column/font-relative",
+      "element": "gap-three",
+      "property": "x",
+      "reference": 40,
+      "actual": 0,
+      "error": 40
+    },
+    {
+      "case": "flex-column/font-relative",
+      "element": "gap-three",
+      "property": "y",
+      "reference": 0,
+      "actual": 42,
+      "error": 42
+    },
+    {
+      "case": "flex-column/font-relative",
+      "element": "gap-four",
+      "property": "x",
+      "reference": 40,
+      "actual": 21,
+      "error": 19
+    },
+    {
+      "case": "flex-column/font-relative",
+      "element": "gap-four",
+      "property": "y",
+      "reference": 40,
+      "actual": 0,
+      "error": 40
+    },
+    {
+      "case": "flex-column/percentage",
+      "element": "gap-two",
+      "property": "y",
+      "reference": 27,
+      "actual": 30,
+      "error": 3
+    },
+    {
+      "case": "flex-column/percentage",
+      "element": "gap-three",
+      "property": "x",
+      "reference": 34,
+      "actual": 30,
+      "error": 4
+    },
+    {
+      "case": "flex-column/percentage",
+      "element": "gap-four",
+      "property": "x",
+      "reference": 34,
+      "actual": 30,
+      "error": 4
+    },
+    {
+      "case": "flex-column/percentage",
+      "element": "gap-four",
+      "property": "y",
+      "reference": 27,
+      "actual": 30,
+      "error": 3
+    },
+    {
+      "case": "flex-column/separate-longhands",
+      "element": "gap-three",
+      "property": "x",
+      "reference": 36,
+      "actual": 28,
+      "error": 8
+    },
+    {
+      "case": "flex-column/separate-longhands",
+      "element": "gap-four",
+      "property": "x",
+      "reference": 36,
+      "actual": 28,
+      "error": 8
+    },
+    {
+      "case": "flex-column/two-pixel-values",
+      "element": "gap-three",
+      "property": "x",
+      "reference": 36,
+      "actual": 28,
+      "error": 8
+    },
+    {
+      "case": "flex-column/two-pixel-values",
+      "element": "gap-four",
+      "property": "x",
+      "reference": 36,
+      "actual": 28,
+      "error": 8
+    },
+    {
+      "case": "flex-row/font-relative",
+      "element": "gap-two",
+      "property": "x",
+      "reference": 40,
+      "actual": 21,
+      "error": 19
+    },
+    {
+      "case": "flex-row/font-relative",
+      "element": "gap-three",
+      "property": "x",
+      "reference": 0,
+      "actual": 42,
+      "error": 42
+    },
+    {
+      "case": "flex-row/font-relative",
+      "element": "gap-three",
+      "property": "y",
+      "reference": 40,
+      "actual": 0,
+      "error": 40
+    },
+    {
+      "case": "flex-row/font-relative",
+      "element": "gap-four",
+      "property": "x",
+      "reference": 40,
+      "actual": 0,
+      "error": 40
+    },
+    {
+      "case": "flex-row/font-relative",
+      "element": "gap-four",
+      "property": "y",
+      "reference": 40,
+      "actual": 21,
+      "error": 19
+    },
+    {
+      "case": "flex-row/percentage",
+      "element": "gap-two",
+      "property": "x",
+      "reference": 27,
+      "actual": 30,
+      "error": 3
+    },
+    {
+      "case": "flex-row/percentage",
+      "element": "gap-three",
+      "property": "y",
+      "reference": 29,
+      "actual": 30,
+      "error": 1
+    },
+    {
+      "case": "flex-row/percentage",
+      "element": "gap-four",
+      "property": "x",
+      "reference": 27,
+      "actual": 30,
+      "error": 3
+    },
+    {
+      "case": "flex-row/percentage",
+      "element": "gap-four",
+      "property": "y",
+      "reference": 29,
+      "actual": 30,
+      "error": 1
+    },
+    {
+      "case": "flex-row/two-pixel-values",
+      "element": "gap-two",
+      "property": "x",
+      "reference": 36,
+      "actual": 28,
+      "error": 8
+    },
+    {
+      "case": "flex-row/two-pixel-values",
+      "element": "gap-four",
+      "property": "x",
+      "reference": 36,
+      "actual": 28,
+      "error": 8
+    },
+    {
+      "case": "grid/font-relative",
+      "element": "gap-two",
+      "property": "x",
+      "reference": 40,
+      "actual": 21,
+      "error": 19
+    },
+    {
+      "case": "grid/font-relative",
+      "element": "gap-three",
+      "property": "y",
+      "reference": 40,
+      "actual": 21,
+      "error": 19
+    },
+    {
+      "case": "grid/font-relative",
+      "element": "gap-four",
+      "property": "x",
+      "reference": 40,
+      "actual": 21,
+      "error": 19
+    },
+    {
+      "case": "grid/font-relative",
+      "element": "gap-four",
+      "property": "y",
+      "reference": 40,
+      "actual": 21,
+      "error": 19
+    },
+    {
+      "case": "grid/percentage",
+      "element": "gap-two",
+      "property": "x",
+      "reference": 34,
+      "actual": 30,
+      "error": 4
+    },
+    {
+      "case": "grid/percentage",
+      "element": "gap-three",
+      "property": "y",
+      "reference": 29,
+      "actual": 30,
+      "error": 1
+    },
+    {
+      "case": "grid/percentage",
+      "element": "gap-four",
+      "property": "x",
+      "reference": 34,
+      "actual": 30,
+      "error": 4
+    },
+    {
+      "case": "grid/percentage",
+      "element": "gap-four",
+      "property": "y",
+      "reference": 29,
+      "actual": 30,
+      "error": 1
+    },
+    {
+      "case": "grid/two-pixel-values",
+      "element": "gap-two",
+      "property": "x",
+      "reference": 36,
+      "actual": 28,
+      "error": 8
+    },
+    {
+      "case": "grid/two-pixel-values",
+      "element": "gap-four",
+      "property": "x",
+      "reference": 36,
+      "actual": 28,
+      "error": 8
+    }
+  ],
+  "consumers": [
+    {
+      "source": {
+        "method": "parseGapProperties",
+        "file": "src/app/services/dom/elements/flex.service.ts",
+        "line": 1389,
+        "sha256": "fbb5141b44d82b48adbe7842e4c505fe05826227c7725cb878ad88c144819697"
+      },
+      "installed": {
+        "method": "parseGapProperties",
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/flex.service.js",
+        "line": 950,
+        "sha256": "172d8eea739466da93e0e2a756ea22d610c9491f9052f7eb7eebe47de7c35726"
+      },
+      "records": [
+        {
+          "case": "flex-column/font-relative",
+          "result": {
+            "gap": 1,
+            "rowGap": 1,
+            "columnGap": 1
+          }
+        },
+        {
+          "case": "flex-column/normal",
+          "result": {
+            "gap": 0,
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "flex-column/omitted",
+          "result": {
+            "gap": 0,
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "flex-column/one-pixel-value",
+          "result": {
+            "gap": 8,
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "flex-column/percentage",
+          "result": {
+            "gap": 10,
+            "rowGap": 10,
+            "columnGap": 10
+          }
+        },
+        {
+          "case": "flex-column/separate-longhands",
+          "result": {
+            "gap": 0,
+            "rowGap": 8,
+            "columnGap": 16
+          }
+        },
+        {
+          "case": "flex-column/two-pixel-values",
+          "result": {
+            "gap": 8,
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "flex-column/zero",
+          "result": {
+            "gap": 0,
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "flex-row/font-relative",
+          "result": {
+            "gap": 1,
+            "rowGap": 1,
+            "columnGap": 1
+          }
+        },
+        {
+          "case": "flex-row/normal",
+          "result": {
+            "gap": 0,
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "flex-row/omitted",
+          "result": {
+            "gap": 0,
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "flex-row/one-pixel-value",
+          "result": {
+            "gap": 8,
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "flex-row/percentage",
+          "result": {
+            "gap": 10,
+            "rowGap": 10,
+            "columnGap": 10
+          }
+        },
+        {
+          "case": "flex-row/separate-longhands",
+          "result": {
+            "gap": 0,
+            "rowGap": 8,
+            "columnGap": 16
+          }
+        },
+        {
+          "case": "flex-row/two-pixel-values",
+          "result": {
+            "gap": 8,
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "flex-row/zero",
+          "result": {
+            "gap": 0,
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "grid/font-relative",
+          "result": {
+            "gap": 1,
+            "rowGap": 1,
+            "columnGap": 1
+          }
+        },
+        {
+          "case": "grid/normal",
+          "result": {
+            "gap": 0,
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "grid/omitted",
+          "result": {
+            "gap": 0,
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "grid/one-pixel-value",
+          "result": {
+            "gap": 8,
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "grid/percentage",
+          "result": {
+            "gap": 10,
+            "rowGap": 10,
+            "columnGap": 10
+          }
+        },
+        {
+          "case": "grid/separate-longhands",
+          "result": {
+            "gap": 0,
+            "rowGap": 8,
+            "columnGap": 16
+          }
+        },
+        {
+          "case": "grid/two-pixel-values",
+          "result": {
+            "gap": 8,
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "grid/zero",
+          "result": {
+            "gap": 0,
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        }
+      ],
+      "scope": "Execution of unchanged extracted method bodies; source diagnostic, not a live internal runtime trace."
+    },
+    {
+      "source": {
+        "method": "parseLength",
+        "file": "src/app/services/dom/elements/grid.service.ts",
+        "line": 278,
+        "sha256": "89293f541add3cd4eee39b7dbe97238a47484cc127b33c205e2654eb4105f140"
+      },
+      "installed": {
+        "method": "parseLength",
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/grid.service.js",
+        "line": 159,
+        "sha256": "5a8fe6a07778d9fb98d3ea957055ffdf953541ac0aba739d6502e89ec19d829f"
+      },
+      "records": [
+        {
+          "case": "flex-column/font-relative",
+          "result": {
+            "rowGap": 1,
+            "columnGap": 1
+          }
+        },
+        {
+          "case": "flex-column/normal",
+          "result": {
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "flex-column/omitted",
+          "result": {
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "flex-column/one-pixel-value",
+          "result": {
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "flex-column/percentage",
+          "result": {
+            "rowGap": 10,
+            "columnGap": 10
+          }
+        },
+        {
+          "case": "flex-column/separate-longhands",
+          "result": {
+            "rowGap": 8,
+            "columnGap": 16
+          }
+        },
+        {
+          "case": "flex-column/two-pixel-values",
+          "result": {
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "flex-column/zero",
+          "result": {
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "flex-row/font-relative",
+          "result": {
+            "rowGap": 1,
+            "columnGap": 1
+          }
+        },
+        {
+          "case": "flex-row/normal",
+          "result": {
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "flex-row/omitted",
+          "result": {
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "flex-row/one-pixel-value",
+          "result": {
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "flex-row/percentage",
+          "result": {
+            "rowGap": 10,
+            "columnGap": 10
+          }
+        },
+        {
+          "case": "flex-row/separate-longhands",
+          "result": {
+            "rowGap": 8,
+            "columnGap": 16
+          }
+        },
+        {
+          "case": "flex-row/two-pixel-values",
+          "result": {
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "flex-row/zero",
+          "result": {
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "grid/font-relative",
+          "result": {
+            "rowGap": 1,
+            "columnGap": 1
+          }
+        },
+        {
+          "case": "grid/normal",
+          "result": {
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "grid/omitted",
+          "result": {
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        },
+        {
+          "case": "grid/one-pixel-value",
+          "result": {
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "grid/percentage",
+          "result": {
+            "rowGap": 10,
+            "columnGap": 10
+          }
+        },
+        {
+          "case": "grid/separate-longhands",
+          "result": {
+            "rowGap": 8,
+            "columnGap": 16
+          }
+        },
+        {
+          "case": "grid/two-pixel-values",
+          "result": {
+            "rowGap": 8,
+            "columnGap": 8
+          }
+        },
+        {
+          "case": "grid/zero",
+          "result": {
+            "rowGap": 0,
+            "columnGap": 0
+          }
+        }
+      ],
+      "scope": "Execution of unchanged extracted method bodies; source diagnostic, not a live internal runtime trace."
+    },
+    {
+      "source": {
+        "method": "alignContentFlexStart",
+        "file": "src/app/services/dom/elements/flex-layout.service.ts",
+        "line": 133,
+        "sha256": "9b5d68ca8a9dbac6eb81bd144e01bbada0b00bb212f58a08f52e09c088944b73"
+      },
+      "installed": {
+        "method": "alignContentFlexStart",
+        "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/flex-layout.service.js",
+        "line": 51,
+        "sha256": "94efbebaca7ab32be3fd6398f2f6dc2a79038712edb7a0473041ad85367424f4"
+      },
+      "records": [
+        {
+          "case": "flex-column/font-relative",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-column/normal",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-column/omitted",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-column/one-pixel-value",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-column/percentage",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-column/separate-longhands",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-column/two-pixel-values",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-column/zero",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-row/font-relative",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-row/normal",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-row/omitted",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-row/one-pixel-value",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-row/percentage",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-row/separate-longhands",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-row/two-pixel-values",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "flex-row/zero",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "grid/font-relative",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "grid/normal",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "grid/omitted",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "grid/one-pixel-value",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "grid/percentage",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "grid/separate-longhands",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "grid/two-pixel-values",
+          "result": [
+            0,
+            28
+          ]
+        },
+        {
+          "case": "grid/zero",
+          "result": [
+            0,
+            28
+          ]
+        }
+      ],
+      "scope": "Execution of unchanged extracted method bodies; source diagnostic, not a live internal runtime trace."
+    }
+  ],
+  "classification": "confirmed-core-css-gap-behavior-discrepancies",
+  "originalMaterialCauseProven": false,
+  "originalObservationsReclassified": 0,
+  "limits": [
+    "Typed public inputs only; loaded stylesheet translation is not exercised.",
+    "Repeated DPR1 empty-box geometry, not raster, full unit grammar, dynamic updates or original Material causality.",
+    "Catalog groups flex gap with a compatible supported-length/shorthand subset and lists percent/em units; exact per-property grammar is not separately specified.",
+    "Source execution supports ownership diagnosis without a corrective intervention or live internal trace."
+  ],
+  "implementationOrder": [
+    "Resolve two-value gap shorthand and CSS units in core CSS-space used-value calculation shared by flex/grid consumers.",
+    "Select cross-line gap by flex direction rather than always using rowGap.",
+    "Keep these exact paired inputs; do not repair Material examples by expanding values, replacing units or changing direction.",
+    "Extend reverse axes, padding/percent bases, intrinsic/cyclic percentages, updates and DPR before broad compatibility claims."
+  ]
+}

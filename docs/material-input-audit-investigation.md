@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Equal gap inputs expose core parsing and axis failures
+
+The [public gap probe](material-gap-value-public-proof.md) repeats 24 cases
+through the package-root API. Both runs retain 10 failures and 14 controls
+passing, with 34 geometry failures: two-value shorthand loses its second value,
+relative gap units become raw numbers, and column wrapping uses row gap between
+columns. Public normal/effective declarations remain unchanged. Current source
+and installed-package method execution support CSS-space used-value/axis
+ownership; no internal runtime trace or corrective intervention is claimed.
+The independent reader, 21 rejection controls, no-write replay and separate
+application build pass. Most original Material gaps use passing single-pixel
+values, so this proof does not automatically explain or reclassify those cases.
+
 ## Explicit gaps conceal different requested compositions
 
 The [full explicit-gap composition review](material-explicit-gap-composition.md)
