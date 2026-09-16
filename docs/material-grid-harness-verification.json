@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "kind": "complete-material-audit-harness-grid-integration-verification",
+  "branch": "codex/material-ui-showcase",
+  "launchCommit": "14aa5b5",
+  "command": "node scripts/run-material-audit-harness.mjs",
+  "terminalSession": 52997,
+  "exitCode": 0,
+  "log": {
+    "file": "artifacts/material-parity/grid-integration-full-harness/test.log",
+    "bytes": 326452,
+    "sha256": "89ce9de1a3322b094cfed613b79604396aa40292141d3d48f7b220c7864aa3e7"
+  },
+  "launchInventory": {
+    "files": 80,
+    "materialFiles": 72,
+    "generalFiles": 4,
+    "ttsFiles": 4,
+    "legacyFilesRetained": 43,
+    "testConcurrency": 1,
+    "selectedFilesChangedDuringRun": []
+  },
+  "result": {
+    "tests": 828,
+    "suites": 0,
+    "pass": 828,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "durationMs": 4045374.2352
+  },
+  "laterFocusedEvidenceNotIncludedInRun": [
+    {
+      "commit": "93f5344",
+      "file": "tests/material-parity/button-box-sizing-source-binding.spec.mjs",
+      "tests": 2,
+      "pass": 2,
+      "exitCode": 0,
+      "durationMs": 27159.4575
+    },
+    {
+      "commit": "f0cc806",
+      "file": "tests/material-parity/button-box-sizing-classification.spec.mjs",
+      "tests": 3,
+      "pass": 3,
+      "exitCode": 0,
+      "durationMs": 14951.7548
+    }
+  ],
+  "currentDiscoveredInventoryAtRecording": {
+    "files": 82,
+    "materialFiles": 74,
+    "generalFiles": 4,
+    "ttsFiles": 4,
+    "legacyFilesRetained": 43
+  },
+  "inputEquivalent": false,
+  "auditComplete": false,
+  "finalCurrentHarnessVerified": false,
+  "finalEnforcedComparisonMatrixVerified": false,
+  "limitation": "This terminal pass verifies the complete 80-file launch inventory, not the later 82-file inventory. It does not erase the earlier 73-file failed baseline, resolve the remaining canonical input differences, or substitute for final enforced Material comparison evidence."
+}
