@@ -107,6 +107,68 @@ new files. Current discovery includes 75 files (67 Material plus eight general
 and TTS). The next complete run must include that full inventory. This increment
 does not change any source or survey consumed by the live 73-file run.
 
+## Original-source binding and scalar joins
+
+`tests/material-parity/owner-grid-initial-source-binding.mjs` now binds the
+survey to its original report rather than trusting a copied proof. It compares
+the caller's complete case/eligible-input population with the reopened source,
+checks unique case and selected-owner/property identities, resolves source paths
+inside the real Material artifact directory, and reopens both digest-checked
+trees for every case. The resulting captures, observations and groups exactly
+match the durable survey, including every negative observation. Validation
+reconstructs the full ledger and rejects deletion of gaps, altered case coverage,
+changed digests and invented equivalence flags. This is property-input binding,
+not a claim that independent control-state or raster evidence was reviewed.
+
+The initial focused execution terminated with a native V8 allocation/check
+failure: exit 1, zero passing tests, 209,826.7647ms. A separate PowerShell command
+also encountered a CLR error, and the concurrent full harness recorded several
+allocation crashes. The exact initiating cause of the new test's native crash
+is not proven. Do not describe this as a diagnosed renderer or grid failure.
+
+To prevent a rejected large caller population from expanding into an enormous
+assertion message, the binder uses `isDeepStrictEqual` plus a bounded assertion
+message instead of asking `assert.deepEqual` to format both full populations.
+An isolated replay then matched all 2,311 captures, 13,824 observations and 233
+groups. The subsequent complete focused execution finished with exit 0:
+
+`node --test tests/material-parity/owner-grid-initial-source-binding.spec.mjs`
+
+**3/3 passed**, 207,751.714ms. This includes nine changed-population controls,
+unbound/out-of-artifact source controls and ten full-ledger mutation controls.
+The crash remains part of the record; the rerun does not retroactively turn it
+into a passing result.
+
+After adding an explicit assertion that rejected caller populations produce
+messages shorter than 400 characters, the targeted command
+`node --test --test-name-pattern="changed caller eligibility" tests/material-parity/owner-grid-initial-source-binding.spec.mjs`
+passed **1/1**, exit 0, 24,573.6367ms. The complete 3/3 run above preceded only
+this additional test assertion; no binder implementation changed afterward.
+
+`tests/material-parity/owner-grid-initial-classification.mjs` provides a separate
+scalar join for a source-validated observation. It accepts only the exact
+property/input digest, reference `none`, candidate omission in all three stages,
+reviewed mapping/types/display, inspection provenance and bounded false claims.
+Its classification is `parity-harness-defect` with attribution
+`reviewed-owner-grid-template-observation-stage`; it is not input or renderer
+equivalence. The complete source validator remains mandatory, not replaceable
+by this scalar join.
+
+`node --test tests/material-parity/owner-grid-initial-classification.spec.mjs`
+finished with exit 0: **2/2 passed**, 1,638.9712ms. All 10,968 positive and 2,856
+negative outcomes are checked against original scalars. Fourteen proof mutations,
+three property/value controls and three explicit-stage controls reject detached
+or inflated claims, including a recomputed digest over an explicit declaration.
+
+Neither module is integrated into the canonical builder yet. Production
+precedence, complete classification coverage and unrelated-row conservation
+remain required before updating the canonical result. No renderer, plugin,
+reference or existing canonical survey dependency changed. Current complete
+test discovery now contains 77 files (69 Material plus eight general/TTS).
+The earlier 73-file suite finished with 777 passes / 19 failures; it cannot
+establish coverage of the four later additions. Its failures are recorded in
+the [complete harness review](material-audit-harness-coverage.md#first-complete-run-failed).
+
 ## Ownership and implementation order
 
 ### Existing core failures remain authoritative
