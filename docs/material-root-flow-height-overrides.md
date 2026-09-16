@@ -78,3 +78,29 @@ Do not replace these values with different tuned gaps or responsive heights.
 Reuse the existing DPR 1/2 block-versus-column-flex sensitivity proof and the
 independent intrinsic-height/anonymous-flex core reproductions; this supplement
 does not turn those prior diagnostic results into whole-showcase acceptance.
+
+## Original-source binding prepared
+
+`root-flow-height-source-binding.mjs` independently reopens the original report,
+checks its complete button/toolbar/paginator population against the caller, and
+hash-checks both original trees for each case. All **164** owner proofs are
+retained, including the **26 single-rule controls**. Only the **138** repeated-rule
+owners are eligible for the new attribution; their three properties form nine
+groups / 414 observations. The single-rule controls are deliberately ineligible
+so their existing canonical classification can retain precedence.
+
+Validation separately replays the complete source and requires exact
+owner/state/value coverage for every new classification. Negative controls
+reject lost controls, altered height-rule receipts, caller-selected populations,
+missing scalar owners, forged provenance and height/raster overclaims. No height
+property can receive this direction/gap attribution.
+
+```powershell
+node --test tests/material-parity/root-flow-height-source-binding.spec.mjs
+```
+
+Result: **4/4 pass**, zero failures/skips/cancellations, **16,758.6465 ms**.
+The focused test uses a local explicit expansion of captured `gap:16px` into
+the two axes; it does not establish production normalization or precedence.
+Canonical integration and complete-row conservation remain required. Original
+reports, all captured declarations and renderer behavior are unchanged.

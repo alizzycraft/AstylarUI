@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Repeated-root flow source binding prepared
+
+The [repeated height-rule flow audit](material-root-flow-height-overrides.md#original-source-binding-prepared)
+now independently binds all 164 original cases. Its new attribution accepts only
+the 138 repeated-rule owners / 414 direction-gap observations; 26 single-rule
+controls remain retained and ineligible, preserving their earlier classification.
+Four tests pass with complete source replay and corruption/coverage controls.
+Production integration is pending; this does not change the canonical count or
+verify any responsive height behavior.
+
 ## Shared-shadow production integration prepared
 
 The [root-shadow integration](material-root-shadow-input-audit.md#canonical-integration-full-report-regeneration-pending)
