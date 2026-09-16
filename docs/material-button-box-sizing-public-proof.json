@@ -1,0 +1,648 @@
+{
+  "schemaVersion": 1,
+  "evidenceId": "native-button-declared-box-sizing-public-proof",
+  "baselineCommit": "a576a81131977ceb974d433995379dc27b0da46e",
+  "branch": "codex/material-ui-showcase",
+  "classification": "bounded-used-box-equivalence-despite-local-style-omission",
+  "command": "npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/button-box-sizing-input-audit.spec.ts",
+  "log": {
+    "file": "artifacts/material-parity/button-box-sizing-input-audit/test.log",
+    "sha256": "84df8d257e2675cd74fae88e242e63542203a30a4897ba3ee769b10132009245",
+    "result": "TOTAL: 6 SUCCESS",
+    "terminalHandleAvailableAtRecovery": false,
+    "processExitCodeRecovered": false
+  },
+  "environment": {
+    "astylarui": "0.2.0",
+    "angular": "20.3.29",
+    "material": "20.0.5",
+    "babylon": "8.56.2",
+    "dpr": 1,
+    "canvasCssSize": [
+      400,
+      180
+    ],
+    "font": "Arial",
+    "settlement": "reference document.fonts.ready then surface.whenSettled()",
+    "warning": "NG0914: zoneless change detection with Zone.js loaded by Karma polyfills"
+  },
+  "sourceFingerprints": [
+    {
+      "file": "scripts/audit-material-button-box-sizing.mjs",
+      "sha256": "ff35a1bf1fa041426ca38249ded1c421c7d50cb5f253047f659605226545a521"
+    },
+    {
+      "file": "tests/material-parity/button-box-sizing-log-proof.spec.mjs",
+      "sha256": "678d4188539944ff1793e0c9a7e8306702ef5df6d86a5ceeef2ed05531591389"
+    },
+    {
+      "file": "examples/material-showcase/src/app/button-box-sizing-input-audit.spec.ts",
+      "sha256": "84c3d723e03e1328ff458ad6673123beee8120ccc712f0a42753207904b136d4"
+    },
+    {
+      "file": "examples/material-showcase/angular.json",
+      "sha256": "b3f9cc12f51cbf366176d92efc74c722cc459d5bd0edeb635be9f74c72c05106"
+    },
+    {
+      "file": "examples/material-showcase/src/styles.scss",
+      "sha256": "addc773ab7fadb0e0fabf498ea99b2dd45026af9e7f9c16214509d4faf290505"
+    },
+    {
+      "file": "src/app/config/browser-defaults.ts",
+      "sha256": "c429bec0fa047e71148f4ce743868a4c89986fde28cc7d11076bb7afa89993f3"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-dimension.service.ts",
+      "sha256": "24d3c910ec0f054f0ec2de1808420f3e6571708a13348eea0887d040c9aa3d30"
+    },
+    {
+      "file": "src/app/services/dom/input/button.manager.ts",
+      "sha256": "270c57f672c2f54bd5bd6b0e255e0207912fa9fa8bedbf983b765e6a3f207aa5"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/package.json",
+      "sha256": "8299fd2ab139be5603ec418f6b58ae94b98e3c170dbab594c19834e7de92b582"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/config/browser-defaults.js",
+      "sha256": "5a0f4ced0db345b5a26b3b8606d5198c3462dfcfbd3ed842105d697bfde8530b"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js",
+      "sha256": "0a65a1659a51062ab41cda030c4f030b15bcf5328c85fb1a3597628c05cf190c"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/input/button.manager.js",
+      "sha256": "bbd2d47f5691736ad21e16b240211ef40ee36557080158083dc890ec7f07b369"
+    }
+  ],
+  "rawRecords": 12,
+  "cases": [
+    {
+      "mode": "border-box",
+      "width": 120,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "button",
+              "id": "button-box-sizing-probe",
+              "value": "Probe"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#button-box-sizing-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "120px",
+            "height": "44px",
+            "margin": "0",
+            "padding": "6px 14px",
+            "borderWidth": "2px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0px",
+            "appearance": "none",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "20px",
+            "fontWeight": "400",
+            "color": "#123456",
+            "background": "#eeeeee",
+            "boxSizing": "border-box"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#button-box-sizing-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;margin:0;padding:6px 14px;border-width:2px;border-style:solid;border-color:#123456;border-radius:0px;appearance:none;font-family:Arial;font-size:16px;line-height:20px;font-weight:400;color:#123456;background:#eeeeee;box-sizing:border-box}",
+      "stages": [
+        {
+          "width": "120px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "border-box"
+        },
+        {
+          "width": "120px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "border-box"
+        }
+      ],
+      "browserStyle": {
+        "boxSizing": "border-box",
+        "width": "120px",
+        "height": "44px",
+        "padding": "6px 14px",
+        "borderWidth": "2px"
+      },
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "expected": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "renderSize": [
+        400,
+        180
+      ],
+      "scope": "Native button declared pixel sizes with nonzero padding/border; not auto/intrinsic sizing, label composition, clipping, hit testing or raster equivalence."
+    },
+    {
+      "mode": "content-box",
+      "width": 120,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "button",
+              "id": "button-box-sizing-probe",
+              "value": "Probe"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#button-box-sizing-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "120px",
+            "height": "44px",
+            "margin": "0",
+            "padding": "6px 14px",
+            "borderWidth": "2px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0px",
+            "appearance": "none",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "20px",
+            "fontWeight": "400",
+            "color": "#123456",
+            "background": "#eeeeee",
+            "boxSizing": "content-box"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#button-box-sizing-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;margin:0;padding:6px 14px;border-width:2px;border-style:solid;border-color:#123456;border-radius:0px;appearance:none;font-family:Arial;font-size:16px;line-height:20px;font-weight:400;color:#123456;background:#eeeeee;box-sizing:content-box}",
+      "stages": [
+        {
+          "width": "120px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "content-box"
+        },
+        {
+          "width": "120px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "content-box"
+        }
+      ],
+      "browserStyle": {
+        "boxSizing": "content-box",
+        "width": "120px",
+        "height": "44px",
+        "padding": "6px 14px",
+        "borderWidth": "2px"
+      },
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 152,
+        "height": 60
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 152,
+        "height": 60
+      },
+      "expected": {
+        "x": 32,
+        "y": 32,
+        "width": 152,
+        "height": 60
+      },
+      "renderSize": [
+        400,
+        180
+      ],
+      "scope": "Native button declared pixel sizes with nonzero padding/border; not auto/intrinsic sizing, label composition, clipping, hit testing or raster equivalence."
+    },
+    {
+      "mode": "omitted",
+      "width": 120,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "button",
+              "id": "button-box-sizing-probe",
+              "value": "Probe"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#button-box-sizing-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "120px",
+            "height": "44px",
+            "margin": "0",
+            "padding": "6px 14px",
+            "borderWidth": "2px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0px",
+            "appearance": "none",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "20px",
+            "fontWeight": "400",
+            "color": "#123456",
+            "background": "#eeeeee"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#button-box-sizing-probe{position:absolute;display:block;left:32px;top:32px;width:120px;height:44px;margin:0;padding:6px 14px;border-width:2px;border-style:solid;border-color:#123456;border-radius:0px;appearance:none;font-family:Arial;font-size:16px;line-height:20px;font-weight:400;color:#123456;background:#eeeeee}",
+      "stages": [
+        {
+          "width": "120px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "<omitted>"
+        },
+        {
+          "width": "120px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "<omitted>"
+        }
+      ],
+      "browserStyle": {
+        "boxSizing": "border-box",
+        "width": "120px",
+        "height": "44px",
+        "padding": "6px 14px",
+        "borderWidth": "2px"
+      },
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "expected": {
+        "x": 32,
+        "y": 32,
+        "width": 120,
+        "height": 44
+      },
+      "renderSize": [
+        400,
+        180
+      ],
+      "scope": "Native button declared pixel sizes with nonzero padding/border; not auto/intrinsic sizing, label composition, clipping, hit testing or raster equivalence."
+    },
+    {
+      "mode": "border-box",
+      "width": 240,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "button",
+              "id": "button-box-sizing-probe",
+              "value": "Probe"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#button-box-sizing-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "240px",
+            "height": "44px",
+            "margin": "0",
+            "padding": "6px 14px",
+            "borderWidth": "2px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0px",
+            "appearance": "none",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "20px",
+            "fontWeight": "400",
+            "color": "#123456",
+            "background": "#eeeeee",
+            "boxSizing": "border-box"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#button-box-sizing-probe{position:absolute;display:block;left:32px;top:32px;width:240px;height:44px;margin:0;padding:6px 14px;border-width:2px;border-style:solid;border-color:#123456;border-radius:0px;appearance:none;font-family:Arial;font-size:16px;line-height:20px;font-weight:400;color:#123456;background:#eeeeee;box-sizing:border-box}",
+      "stages": [
+        {
+          "width": "240px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "border-box"
+        },
+        {
+          "width": "240px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "border-box"
+        }
+      ],
+      "browserStyle": {
+        "boxSizing": "border-box",
+        "width": "240px",
+        "height": "44px",
+        "padding": "6px 14px",
+        "borderWidth": "2px"
+      },
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 240,
+        "height": 44
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 240,
+        "height": 44
+      },
+      "expected": {
+        "x": 32,
+        "y": 32,
+        "width": 240,
+        "height": 44
+      },
+      "renderSize": [
+        400,
+        180
+      ],
+      "scope": "Native button declared pixel sizes with nonzero padding/border; not auto/intrinsic sizing, label composition, clipping, hit testing or raster equivalence."
+    },
+    {
+      "mode": "content-box",
+      "width": 240,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "button",
+              "id": "button-box-sizing-probe",
+              "value": "Probe"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#button-box-sizing-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "240px",
+            "height": "44px",
+            "margin": "0",
+            "padding": "6px 14px",
+            "borderWidth": "2px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0px",
+            "appearance": "none",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "20px",
+            "fontWeight": "400",
+            "color": "#123456",
+            "background": "#eeeeee",
+            "boxSizing": "content-box"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#button-box-sizing-probe{position:absolute;display:block;left:32px;top:32px;width:240px;height:44px;margin:0;padding:6px 14px;border-width:2px;border-style:solid;border-color:#123456;border-radius:0px;appearance:none;font-family:Arial;font-size:16px;line-height:20px;font-weight:400;color:#123456;background:#eeeeee;box-sizing:content-box}",
+      "stages": [
+        {
+          "width": "240px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "content-box"
+        },
+        {
+          "width": "240px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "content-box"
+        }
+      ],
+      "browserStyle": {
+        "boxSizing": "content-box",
+        "width": "240px",
+        "height": "44px",
+        "padding": "6px 14px",
+        "borderWidth": "2px"
+      },
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 272,
+        "height": 60
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 272,
+        "height": 60
+      },
+      "expected": {
+        "x": 32,
+        "y": 32,
+        "width": 272,
+        "height": 60
+      },
+      "renderSize": [
+        400,
+        180
+      ],
+      "scope": "Native button declared pixel sizes with nonzero padding/border; not auto/intrinsic sizing, label composition, clipping, hit testing or raster equivalence."
+    },
+    {
+      "mode": "omitted",
+      "width": 240,
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "button",
+              "id": "button-box-sizing-probe",
+              "value": "Probe"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#button-box-sizing-probe",
+            "position": "absolute",
+            "display": "block",
+            "left": "32px",
+            "top": "32px",
+            "width": "240px",
+            "height": "44px",
+            "margin": "0",
+            "padding": "6px 14px",
+            "borderWidth": "2px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0px",
+            "appearance": "none",
+            "fontFamily": "Arial",
+            "fontSize": "16px",
+            "lineHeight": "20px",
+            "fontWeight": "400",
+            "color": "#123456",
+            "background": "#eeeeee"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#button-box-sizing-probe{position:absolute;display:block;left:32px;top:32px;width:240px;height:44px;margin:0;padding:6px 14px;border-width:2px;border-style:solid;border-color:#123456;border-radius:0px;appearance:none;font-family:Arial;font-size:16px;line-height:20px;font-weight:400;color:#123456;background:#eeeeee}",
+      "stages": [
+        {
+          "width": "240px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "<omitted>"
+        },
+        {
+          "width": "240px",
+          "height": "44px",
+          "padding": "6px 14px",
+          "borderWidth": "2px",
+          "boxSizing": "<omitted>"
+        }
+      ],
+      "browserStyle": {
+        "boxSizing": "border-box",
+        "width": "240px",
+        "height": "44px",
+        "padding": "6px 14px",
+        "borderWidth": "2px"
+      },
+      "reference": {
+        "x": 32,
+        "y": 32,
+        "width": 240,
+        "height": 44
+      },
+      "actual": {
+        "x": 32,
+        "y": 32,
+        "width": 240,
+        "height": 44
+      },
+      "expected": {
+        "x": 32,
+        "y": 32,
+        "width": 240,
+        "height": 44
+      },
+      "renderSize": [
+        400,
+        180
+      ],
+      "scope": "Native button declared pixel sizes with nonzero padding/border; not auto/intrinsic sizing, label composition, clipping, hit testing or raster equivalence."
+    }
+  ],
+  "originalMaterialObservationsReclassified": 0,
+  "materialInputEquivalenceProven": false,
+  "scope": "Native button declared pixel sizes with nonzero padding/border; not auto/intrinsic sizing, label composition, clipping, hit testing or raster equivalence.",
+  "conclusion": "An omitted local boxSizing field does not establish content-box consumption. In these six public native-button cases the final border box matches the native browser. No conclusion about auto/intrinsic Material sizing, whole-control rendering or other element defaults."
+}

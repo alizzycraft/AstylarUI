@@ -3,6 +3,23 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Native-button box-sizing omission distinguished from used dimensions
+
+The [public box-sizing proof](material-button-box-sizing-public-proof.md)
+records six equal-input browser cases: two declared widths with omitted,
+border-box and content-box requests, nonzero padding and borders. The final
+border boxes match exactly while omitted `boxSizing` remains absent from
+Astylar's local style snapshots. This establishes a bounded stage distinction,
+not whole-control equivalence or a Material intrinsic-sizing diagnosis.
+
+The recovered browser log records **6 SUCCESS**; its old process handle was
+unavailable, so no process exit code is claimed. The independent log reader
+passes **2/2** with rejection controls, and report generation/no-write replay
+both exit 0. Source, installed-package and log fingerprints plus complete paired
+inputs/measurements are retained in the machine proof. No original Material
+observation was reclassified and none of the 187 frozen canonical dependencies
+changed. Full width-report generation is still running separately.
+
 ## Fixed-width production integration verified
 
 The main audit now retains the source-bound fixed-width authoring ledger before
