@@ -3,6 +3,15 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Original overlay context replayed after shared-shadow integration
+
+The [91-state overlay survey](material-original-overlay-context-survey.md#replay-after-shared-shadow-integration)
+again passes complete owner-proof replay and all five tests. Its generated diff
+changes only two current-verifier hash fields; an independent recursive diff
+proves every historical receipt, observation and remaining limitation unchanged.
+This is not a new browser or candidate render and does not change classification
+counts. Other historical surveys remain separate verification obligations.
+
 ## Shared button pill-radius source binding prepared
 
 The [button-radius source binding](material-button-pill-radius-audit.md#original-source-binding-prepared)

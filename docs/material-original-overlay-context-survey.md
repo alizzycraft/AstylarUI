@@ -119,3 +119,34 @@ Generation and `--check` both exited 0. New negative controls reject relabelling
 the historical receipt with today's hash, a different file, and corrupted Git
 source bytes. This correction does not establish candidate rendering parity,
 change canonical attribution, or repair other historical surveys automatically.
+
+### Replay after shared-shadow integration
+
+The current audit-module digest changed again when shared-shadow classification
+was integrated. Replaying this survey against that module verifies the same
+**91 states, 200 original owner proofs and 17,654 root properties**. The original
+capture receipt still verifies against the same historical Git blob; neither
+its recorded digest nor any capture, observation or claim was rewritten.
+
+The generated JSON diff contains exactly two changed fields:
+`historicalAuditSource.currentSha256` and the current audit module's entry in
+`sourceFingerprints`. Both now record
+`f65b07b91a914dc722e77062320651b3c95f0a28550e36359989db0703c62c1a`.
+An independent recursive diff against the previous committed survey asserts
+that exact two-field change set. Excluding current-source fingerprints and only
+the changing current digest, the entire survey is deeply equal, SHA-256
+`4679b5eee977df406caac8a490d4115adb38c78597439be4d4f4119633f4858f`.
+That projection retains the historical receipt and its verification scope.
+
+```powershell
+node scripts/audit-material-original-overlay-context.mjs
+node scripts/audit-material-original-overlay-context.mjs --check
+node --test tests/material-parity/original-overlay-context-survey.spec.mjs
+```
+
+Generation and no-write replay exit **0**. Tests: **5/5 pass**, zero
+failures/skips/cancellations, **3,562.2379 ms**. This is current-reader proof
+replay over retained evidence, not a fresh browser/candidate rendering capture.
+The seven enumerated-alias gaps, external-context limits and unsupported
+candidate-equivalence claims remain unchanged. Other historical surveys and
+the complete enforced matrix still need their own verification.

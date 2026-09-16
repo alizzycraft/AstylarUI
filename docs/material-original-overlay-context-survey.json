@@ -10,7 +10,7 @@
     "file": "tests/material-parity/input-equivalence-audit.mjs",
     "recordedSha256": "fb97f72a543cff1f6c4e1f163f8b92f98c7dbbacbaa4a37d0571432045201392",
     "historicalSourceCommit": "65487aeba6a26f9715f302f92b4ee454161a94ef",
-    "currentSha256": "c00cef561be90f9d67fbb98bad7a04898b369b0b5348eb310636cbee45334a66",
+    "currentSha256": "f65b07b91a914dc722e77062320651b3c95f0a28550e36359989db0703c62c1a",
     "exactCurrentSourceMatch": false,
     "scope": "Historical source receipt only; current mapping behavior requires complete owner-proof replay and negative controls."
   },
@@ -6057,7 +6057,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "c00cef561be90f9d67fbb98bad7a04898b369b0b5348eb310636cbee45334a66"
+      "sha256": "f65b07b91a914dc722e77062320651b3c95f0a28550e36359989db0703c62c1a"
     }
   ]
 }
