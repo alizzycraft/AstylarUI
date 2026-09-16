@@ -3,6 +3,28 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete 91-file pre-gap-integration harness passes
+
+`node scripts/run-material-audit-harness.mjs` completed in session **37733**
+with exit **0**, **854/854 passing**, no failures, skips, cancellations or
+todos, and **5,930,438.4609 ms** test duration (**5,930,739 ms** wrapper elapsed).
+Its startup inventory contains 83 Material, four general parity and four TTS
+files, preserving all 43 legacy files. The run started at
+`52ec6325f1a534ba2243ee1e77b5c9e27ea64214`; its tested sources were left unchanged
+until terminal completion. Later independent gap tests were not retroactively
+added to that running inventory.
+
+The log is
+`artifacts/material-parity/field-host-flow-input-audit/full-harness-layout-gap.log`,
+337,678 bytes, SHA-256
+`1764bd2b3d8d9b9c515ad33c11b7f0595b0268b629f4f06f62dc4854be433135`.
+This is a passing audit-harness snapshot, not passing renderer parity or a
+completed audit. The current gap integration and its new source/coverage tests
+require their own verification and a subsequent complete current run. The
+saved canonical report still has **2,438 unresolved** groups until verified
+regeneration; neither the enforced rendering matrix nor the remaining audit
+classifications is waived.
+
 ## Gap observation-stage classifications are source-bound
 
 The [complete gap ledger and coverage checks](material-owner-gap-observation-stage.md)
