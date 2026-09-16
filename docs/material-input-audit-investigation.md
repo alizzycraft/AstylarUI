@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared button pill-radius source binding prepared
+
+The [button-radius source binding](material-button-pill-radius-audit.md#original-source-binding-prepared)
+now retains all 2,311 original cases, 1,831 negatives and 600 reviewed owners.
+Five tests pass with independent source replay and exact 108-group / 2,400
+property-observation coverage, including corruption and false-equivalence
+controls. Production integration and conservation remain pending; this does not
+change the 2,774 canonical unresolved count or imply candidate corner-paint
+verification. No comparison or renderer input changed.
+
 ## Shared-shadow canonical report conserved
 
 The [full root-shadow report verification](material-root-shadow-input-audit.md#full-report-regeneration-and-conservation-verified)

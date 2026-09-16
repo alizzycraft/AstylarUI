@@ -111,3 +111,37 @@ complete rule and exact scalar/full-tree join; it does not discard that input.
 No canonical classification, renderer, reference or comparison input changes
 are included. Production classification integration and full-report conservation
 are pending. The complete audit and enforced matrix remain incomplete.
+
+## Original-source binding prepared
+
+`tests/material-parity/button-pill-radius-source-binding.mjs` independently
+reopens the original report and both original trees for every case, checks
+report/tree digests and confines resolved paths to Material artifacts. The
+binding retains all **2,311 cases**, including **1,831 negative cases**, and
+all **600 reviewed button owners**. Caller-supplied subsets, duplicate cases,
+changed values or removed selected owners cannot replace the original source.
+
+The classifier accepts only the four reviewed physical corner properties and
+retains the full-pill-versus-fixed authoring distinction. It does not turn
+conditional browser shape coincidence into input or rendering equivalence.
+The classification validator requires exact case/owner/property/value coverage,
+occurrences, states, evidence, ownership and claim limits across **108 groups /
+2,400 observations**. Independent source replay rejects changed shorthand
+traces, lost negative cases and unsupported paint claims.
+
+Separate diagnostic reports may intentionally select only other scalar owners;
+their cases and original trees remain retained without inventing omitted button
+observations. This does not allow deletion from the bound original population.
+
+```powershell
+node --test tests/material-parity/button-pill-radius-source-binding.spec.mjs
+```
+
+Result: **5/5 pass**, zero failures/skips/cancellations, **64,436.6699 ms**.
+Thirteen classification mutations, source/population mutations and four direct
+claim mutations fail as required. The local normalization callback expands only
+the captured uniform radius shorthand; it is deliberately not evidence of the
+production normalizer or classification precedence. Production integration,
+complete-row conservation and final all-case replay remain pending. This
+increment does not change the canonical unresolved count (**2,774**) or any
+comparison/renderer source.
