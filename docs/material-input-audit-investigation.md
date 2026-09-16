@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Gap observation-stage classifications are source-bound
+
+The [complete gap ledger and coverage checks](material-owner-gap-observation-stage.md)
+reopen all 2,311 original cases, preserving 13,876 observations rather than only
+the unresolved subset. They reproduce every original digest and membership in
+the 162-group gap survey. The classifier identifies 108 groups / 6,320
+observations as unequal diagnostic stages and retains 7,556 negative/review
+observations. Nine focused tests pass, including source replay, exact classified
+coverage and mutation rejection. No candidate computed value, used gap or
+rendering equivalence is inferred. Canonical integration is the next step;
+the 2,438 unresolved canonical groups are unchanged.
+
 ## Equal gap inputs expose core parsing and axis failures
 
 The [public gap probe](material-gap-value-public-proof.md) repeats 24 cases
