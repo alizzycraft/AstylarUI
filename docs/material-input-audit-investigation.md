@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Full grid canonical conservation verified; 2,495 groups remain unresolved
+
+The [complete grid conservation gate](material-owner-grid-initial-survey.md#full-canonical-conservation-verified)
+passes against the actual prior saved report. All 8,339 scalar records and
+8,239 unrelated complete records are unchanged; 100 groups / 6,226 observations
+receive only observation-stage attribution. All 2,311 original cases and 2,856
+grid review gaps remain in the independently replayed ledger. Generation exits
+1 solely for the 2,495 unresolved groups, not a report-integrity error. The
+human report and exact source membership are also conserved. Complete no-write
+replay, current full harness and final enforced matrix are still pending; input
+equivalence is not established.
+
 ## Nine case indices and their field-host dependency replayed
 
 The [original-source provenance replay](material-audit-harness-coverage.md#original-case-index-provenance-replay-after-grid-integration)

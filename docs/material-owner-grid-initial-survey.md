@@ -21,6 +21,54 @@ has not yet been regenerated.
 
 ## Production integration and conservation
 
+### Full canonical conservation verified
+
+The complete regeneration finished with exit **1**, solely because **2,495**
+resolved-style groups still lack root-cause attribution. It retained all
+**436/436 static** and **1,875/1,875 interaction** cases, **8,339** scalar groups,
+**386,891** occurrences and **132** source findings. Input equivalence remains
+false; this is not acceptance or a renderer fix.
+
+```powershell
+node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+node scripts/verify-material-grid-integration.mjs
+```
+
+The independent conservation command initially rejected the preceding saved
+report (exit 1, zero versus 100 required grid groups). Against the regenerated
+report it exits **0**. Relative to the actual saved report at `9a60909`, all
+**8,339 scalar records** and **8,239 unrelated complete records** are unchanged.
+The latter records retain SHA-256
+`de91923052b1af91e8895f07831fd5a6c87dbbe8f4e0451ec4b9b98db57c8d2c`.
+Exactly 100 groups / 6,226 observations gain the bounded observation-stage
+attribution. Their original authored examples remain intact. The entire grid
+ledger is replayed from all 2,311 original captures, retaining all 13,824 eligible
+observations and all 2,856 review gaps. Earlier non-grid evidence remains exact.
+
+Source membership is 196, with precisely nine new grid dependencies and four
+changed earlier fingerprints: audit builder, its test, the independently
+replayed field-host initial-style index and the slider integration test. No
+previous source is removed. Summary conservation permits only the 100-group
+reduction in unresolved attribution; no classification totals or equivalence
+flags are changed.
+
+The human report is conserved in order after accounting for two added grid
+evidence lines, one unresolved-count line, and independently checked source-line
+movements. One slider reference moves by two lines and 34 main-test references
+move by ten lines; their target source lines match the earlier committed source
+at `43452db`. The resulting unchanged ordered text has SHA-256
+`501ea98794d1bfd2b90712b7605f3117f65f869462ad5a59c687e2cf57345f22`.
+
+Saved gzip: **51,021,493 bytes**, SHA-256
+`179a46186cb9ab0d20fa0ac241c578e64f2754614ae0e47b19d7ec683d2b4258`.
+Decoded payload: **1,916,451,099 bytes**, SHA-256
+`2b87d96d29d930e3b893e4f025afbebaf0fded9f8b14f36bf7fd8ad02da34bff`.
+The complete no-write `--check`, current 80-file harness and final enforced
+comparison matrix remain required. Conservation is not candidate computed-grid,
+used-layout or raster proof.
+
+### Diagnostic integration history
+
 The production builder now retains the complete source-bound grid ledger and
 applies the grid observation-stage classifier only after every earlier
 classification. Validation replays original tree evidence and exact scalar
