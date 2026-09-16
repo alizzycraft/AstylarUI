@@ -101,3 +101,32 @@ definitely unrelated selector remains an accepted control.
 No renderer or canonical comparison input changed. Production binding,
 classification integration and full-report conservation remain pending. This
 standalone survey does not change the canonical **2,774** unresolved count.
+
+## Original-source binding prepared
+
+`button-flex-source-binding.mjs` independently reopens the original capture and
+hash-checks both trees for every case. Its caller population must match the
+source exactly. It retains all **2,311 cases**, including **1,831 negative
+cases**, and all **600** reviewed button owners. The existing original proof
+checks explicit reference formatting, candidate omission, every local stage,
+and the label/value correspondence without declaring composition equivalent.
+
+The classifier accepts only display, align-items and justify-content, preserving
+the first divergence as unequal authoring. Classification validation requires
+exact source owner/state/value coverage, evidence, ownership, occurrences and
+sample-case order for all **27 groups / 1,800 observations**. Independent replay
+rejects removed negative cases, changed rules, lost owners and layout overclaims.
+Separate diagnostic reports may select other scalar owners, but must still
+match their independently reopened source; no missing button is invented.
+
+```powershell
+node --test tests/material-parity/button-flex-source-binding.spec.mjs
+```
+
+Result: **5/5 pass**, zero failures/skips/cancellations, **66,175.8605 ms**.
+Thirteen classification mutations, source/population mutations, four direct
+claim mutations and a label-mismatch mutation are rejected. These tests use
+direct captured properties, not the production normalizer. Production
+integration, precedence and complete-row conservation remain pending. This
+increment changes no canonical classifications, renderer, comparison input or
+any of the 173 sources frozen for the ongoing flow/radius report regeneration.

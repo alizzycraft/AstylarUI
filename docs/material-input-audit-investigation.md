@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared button formatting source binding prepared
+
+The [button-formatting source binding](material-button-flex-input-audit.md#original-source-binding-prepared)
+now independently replays all 2,311 original cases, 600 reviewed owners and
+1,831 negatives. Five tests pass (66,175.8605 ms), including exact coverage for
+27 groups / 1,800 property observations and rejection of source loss, forged
+composition and layout/equivalence overclaims. Production classification
+integration remains pending. This separate increment leaves the 173 sources
+used by the ongoing flow/radius canonical regeneration unchanged; no renderer,
+reference or comparison input was edited.
+
 ## Root-flow and shared-button authoring integration
 
 The prepared original-source binders are now connected to the production audit,
