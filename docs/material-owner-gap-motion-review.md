@@ -33,8 +33,10 @@ transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0,
 ```
 
 The enumerated longhand declaration fields are empty. The shorthand must not be
-discarded or guessed from those empty fields. A separate browser proof is being
-recorded for that boundary; it is not a renderer failure attribution.
+discarded or guessed from those empty fields. The separate
+[browser proof](material-motion-cssom-capture-proof.md) now reproduces that
+boundary in six cases and verifies all 32 original dialog captures; it is not a
+renderer failure attribution.
 
 ## Verification and limits
 

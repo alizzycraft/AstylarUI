@@ -1,0 +1,1596 @@
+{
+  "schemaVersion": 1,
+  "kind": "browser-cssom-motion-capture-proof",
+  "browser": "152.0.7977.76",
+  "parent": {
+    "file": "docs/material-owner-gap-input-survey.json",
+    "sha256": "e84544b3e587f18e2577fc75fafcf1ad85aa9280e810ad89f875de4c168d0fd2"
+  },
+  "capture": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+  },
+  "originalDialogCases": [
+    {
+      "case": "interaction:dialog@light/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "f3f7728c9c4fbc6bdae1aedacfb2ac15529d96634499fc5ee2879b5ac62dfbb5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@light/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "824223a0cdb6e0a64c0ca3d2ec3b091b1d54423604ddfaf3737becb1ccf3302b"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@light/desktop-dpr1/open-hover-content",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open-hover-content/reference-input-tree.json",
+          "sha256": "2f7bd9a2fb62918033636fdcf991bb1eb54f6581e9e0348bae63378d08a0aab9"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+          "sha256": "57a20e2587559f483d2e3b53a79857ee58165c28122ea4c595b5f6fd43a556d7"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@light/desktop-dpr1/open",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@light/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@light/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "824223a0cdb6e0a64c0ca3d2ec3b091b1d54423604ddfaf3737becb1ccf3302b"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@light/desktop-dpr2/open-hover-content",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open-hover-content/reference-input-tree.json",
+          "sha256": "2f7bd9a2fb62918033636fdcf991bb1eb54f6581e9e0348bae63378d08a0aab9"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+          "sha256": "57a20e2587559f483d2e3b53a79857ee58165c28122ea4c595b5f6fd43a556d7"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@light/desktop-dpr2/open",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@dark/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@dark/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "c1c209fa2d9493074c27162441a044475ca13099492b787a860008bae7139d9f"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@dark/desktop-dpr1/open-hover-content",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open-hover-content/reference-input-tree.json",
+          "sha256": "dee00cc64afe931dcf375e8043d8c84070b1781d69fd7d691c19e92b5099bf4c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+          "sha256": "c4045457b8b796f536cc3028b7ef9236aa4dc0f2a404db4fd4213ffdaa8acd75"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@dark/desktop-dpr1/open",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@dark/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@dark/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "78cb53cffbf6188c2ebe3b4d1bef2ba1119bbfef43712c5b8fbe8a9967c51a49"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "c1c209fa2d9493074c27162441a044475ca13099492b787a860008bae7139d9f"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@dark/desktop-dpr2/open-hover-content",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open-hover-content/reference-input-tree.json",
+          "sha256": "3f29c0aaf514a083da27d366da9ca9bbc51ce76f2cf6b796fc556f9f51dee8eb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+          "sha256": "c4045457b8b796f536cc3028b7ef9236aa4dc0f2a404db4fd4213ffdaa8acd75"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@dark/desktop-dpr2/open",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@contrast/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "3f7622b87f5b72aadfa10d573465e749131b1e5fb3b93b190c10de1b7e49a752"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@contrast/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "b72347150eba2cef2653ffb12f031215d46b53ce785c41378749fc7d27969583"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@contrast/desktop-dpr1/open-hover-content",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open-hover-content/reference-input-tree.json",
+          "sha256": "2ac26d042c63e32676ef9245edd751359cb0a88224e1091417a038317916f079"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+          "sha256": "b45eee212a95d34fd9e17d6f04da09748fe56daf70bf8dca2bc2f027d200cfcb"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@contrast/desktop-dpr1/open",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "8ae07cd82437c053793da6003f6242b0fcbd3ff0e401afe7a8044b90c9c5b63a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "3f7622b87f5b72aadfa10d573465e749131b1e5fb3b93b190c10de1b7e49a752"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@contrast/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "93350e31a0948885e25e8495463626e0c9145e8cd0878c79f033e90c242e2d45"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@contrast/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "8ae07cd82437c053793da6003f6242b0fcbd3ff0e401afe7a8044b90c9c5b63a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "728cce48d2100e12183376c5d0a6c26444eac110db1dcc48988c2bdb49663752"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@contrast/desktop-dpr2/open-hover-content",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open-hover-content/reference-input-tree.json",
+          "sha256": "57deb9c509fac36860cea282ec0a0ee6ad840322fcea02591b7070bc0592dc0a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+          "sha256": "c26b3fd51d23cde67fda8e46d4902f45177b4e958a7e00679c19af5437fa49de"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@contrast/desktop-dpr2/open",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "93350e31a0948885e25e8495463626e0c9145e8cd0878c79f033e90c242e2d45"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@custom/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "9740555c0fad7b539c4aa194282536c6082abda7040e4c84044791728ecfb4f1"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@custom/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "e659f4b9504bcc47f16f891633baeec8e3cff1149b2228c71c35576d2bd21ca0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "3f415ca727f125cf57655f01abbdd57d5ea7d778cff6079575d86e013451417c"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@custom/desktop-dpr1/open-hover-content",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open-hover-content/reference-input-tree.json",
+          "sha256": "efb81c3ba441bbba4fe7d92955a2fcde5d43e89f3eecbc5591fd9b9dbad27647"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+          "sha256": "746164cb03d2873744015d4eff8625b6be16851a66d1d8aef9db4a0c57aae626"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@custom/desktop-dpr1/open",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "9740555c0fad7b539c4aa194282536c6082abda7040e4c84044791728ecfb4f1"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@custom/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "e659f4b9504bcc47f16f891633baeec8e3cff1149b2228c71c35576d2bd21ca0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "42ff42079f2acbe35474e83f2df817208d8ca46ec485299135d6c472a2634acd"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@custom/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "dcf8487cfec77c9ec1d56d4b010f0c750b0689d71f61f9d2c9d1ecfd7dcc92f0"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@custom/desktop-dpr2/open-hover-content",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open-hover-content/reference-input-tree.json",
+          "sha256": "c28e8b8698716035bc8084d844ec44fa4a6ea5b298a3f122c869abb91c49371b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+          "sha256": "6b1fdf5f7496ae81cfac08786b726e0582a3551ce666bc3ab2a05c28e254fa93"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    },
+    {
+      "case": "interaction:dialog@custom/desktop-dpr2/open",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "42ff42079f2acbe35474e83f2df817208d8ca46ec485299135d6c472a2634acd"
+        }
+      },
+      "owner": "overlay:0/1/0/1/0/0",
+      "source": "sheet:9/7",
+      "cssText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+      "longhands": {
+        "transition-property": {
+          "value": "",
+          "important": false
+        },
+        "transition-duration": {
+          "value": "",
+          "important": false
+        },
+        "transition-timing-function": {
+          "value": "",
+          "important": false
+        },
+        "transition-delay": {
+          "value": "",
+          "important": false
+        },
+        "transition-behavior": {
+          "value": "",
+          "important": false
+        }
+      },
+      "scalarRetainsCssText": false
+    }
+  ],
+  "source": [
+    {
+      "file": "scripts/verify-material-motion-cssom-capture.mjs",
+      "sha256": "fcaee07d55e0af1914bb38db023741eb835782a6d1d2a1a5d9c1c515f6c26310"
+    },
+    {
+      "file": "tests/material-parity/input-tree-evidence.mjs",
+      "sha256": "06197edaf92b2296e3e0564771f307a1036ce7bc5eb13d8e242a5c420e7a7e3b"
+    }
+  ],
+  "cases": [
+    {
+      "scenario": {
+        "id": "literal-transform",
+        "transition": "transform 200ms ease",
+        "expectedProperty": "transform",
+        "expectedDuration": "0.2s",
+        "empty": false
+      },
+      "rules": [
+        {
+          "source": "sheet:0/0",
+          "selector": ".owner",
+          "cssText": "transition: transform 200ms;",
+          "declarations": {
+            "transition-behavior": {
+              "value": "normal",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "200ms",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "ease",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "0s",
+              "important": false
+            },
+            "transition-property": {
+              "value": "transform",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        }
+      ],
+      "inline": {},
+      "computed": {
+        "transitionProperty": "transform",
+        "transitionDuration": "0.2s"
+      }
+    },
+    {
+      "scenario": {
+        "id": "variable-fallback",
+        "transition": "transform var(--duration, 0ms) ease",
+        "expectedProperty": "transform",
+        "expectedDuration": "0s",
+        "empty": true
+      },
+      "rules": [
+        {
+          "source": "sheet:0/0",
+          "selector": ".owner",
+          "cssText": "transition: transform var(--duration, 0ms) ease;",
+          "declarations": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        }
+      ],
+      "inline": {},
+      "computed": {
+        "transitionProperty": "transform",
+        "transitionDuration": "0s"
+      }
+    },
+    {
+      "scenario": {
+        "id": "variable-duration",
+        "transition": "transform var(--duration, 0ms) ease",
+        "variable": "240ms",
+        "expectedProperty": "transform",
+        "expectedDuration": "0.24s",
+        "empty": true
+      },
+      "rules": [
+        {
+          "source": "sheet:0/0",
+          "selector": ".owner",
+          "cssText": "transition: transform var(--duration, 0ms) ease;",
+          "declarations": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        }
+      ],
+      "inline": {
+        "--duration": {
+          "value": "240ms",
+          "important": false
+        }
+      },
+      "computed": {
+        "transitionProperty": "transform",
+        "transitionDuration": "0.24s"
+      }
+    },
+    {
+      "scenario": {
+        "id": "variable-gap",
+        "transition": "gap var(--duration, 0ms) ease",
+        "expectedProperty": "gap",
+        "expectedDuration": "0s",
+        "empty": true
+      },
+      "rules": [
+        {
+          "source": "sheet:0/0",
+          "selector": ".owner",
+          "cssText": "transition: gap var(--duration, 0ms) ease;",
+          "declarations": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        }
+      ],
+      "inline": {},
+      "computed": {
+        "transitionProperty": "gap",
+        "transitionDuration": "0s"
+      }
+    },
+    {
+      "scenario": {
+        "id": "variable-adds-gap",
+        "transition": "transform var(--duration, 0ms) ease",
+        "variable": "0ms, gap 10s",
+        "expectedProperty": "transform, gap",
+        "expectedDuration": "0s, 10s",
+        "empty": true
+      },
+      "rules": [
+        {
+          "source": "sheet:0/0",
+          "selector": ".owner",
+          "cssText": "transition: transform var(--duration, 0ms) ease;",
+          "declarations": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        }
+      ],
+      "inline": {
+        "--duration": {
+          "value": "0ms, gap 10s",
+          "important": false
+        }
+      },
+      "computed": {
+        "transitionProperty": "transform, gap",
+        "transitionDuration": "0s, 10s"
+      }
+    },
+    {
+      "scenario": {
+        "id": "override-none",
+        "transition": "transform var(--duration, 0ms) ease",
+        "variable": "0ms, gap 10s",
+        "override": true,
+        "expectedProperty": "none",
+        "expectedDuration": "0s",
+        "empty": true
+      },
+      "rules": [
+        {
+          "source": "sheet:0/0",
+          "selector": ".owner",
+          "cssText": "transition: transform var(--duration, 0ms) ease;",
+          "declarations": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        },
+        {
+          "source": "sheet:0/1",
+          "selector": ".owner",
+          "cssText": "transition: none !important;",
+          "declarations": {
+            "transition-behavior": {
+              "value": "normal",
+              "important": true
+            },
+            "transition-duration": {
+              "value": "0s",
+              "important": true
+            },
+            "transition-timing-function": {
+              "value": "ease",
+              "important": true
+            },
+            "transition-delay": {
+              "value": "0s",
+              "important": true
+            },
+            "transition-property": {
+              "value": "none",
+              "important": true
+            }
+          },
+          "conditions": [],
+          "active": true
+        }
+      ],
+      "inline": {
+        "--duration": {
+          "value": "0ms, gap 10s",
+          "important": false
+        }
+      },
+      "computed": {
+        "transitionProperty": "none",
+        "transitionDuration": "0s"
+      }
+    }
+  ],
+  "assertionsPassed": true,
+  "conclusion": "Enumerated empty transition longhands do not imply missing authored transition, no transition, or a non-gap target. Retain shorthand text and resolve variables/cascade through the browser.",
+  "limitation": "Isolated browser/capture proof, not a renderer reproduction or evidence of the original dialog variable values."
+}

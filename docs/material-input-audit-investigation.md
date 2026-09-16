@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Motion review exposes an authored-style capture boundary
+
+The [gap motion review](material-owner-gap-motion-review.md) replays all 34
+motion-only groups / 1,784 observations. In 32 groups, captured local motion
+declarations do not name a direct gap target. This is not a computed-style or
+rendering equivalence claim. Two dialog groups retain empty authored longhands.
+The [CSSOM browser proof](material-motion-cssom-capture-proof.md) verifies all
+32 original dialog cases and six fresh Chrome controls: variable-containing
+shorthands can expose empty longhands even when computed transition targets
+include `gap`. Full trees retain the shorthand text; scalar authored-rule lists
+do not. Those two groups remain unresolved pending their actual resolved context.
+Neither increment changes the canonical 2,438 unresolved count or renderer code.
+
 ## Gap survey separates local omissions, authored spacing and review gaps
 
 The [owner gap survey](material-owner-gap-input-survey.md) reopens all 2,311
