@@ -1,0 +1,2415 @@
+{
+  "schemaVersion": 1,
+  "evidenceId": "field-host-fixed-parent-shrink-public-proof",
+  "baselineCommit": "4c3e5c3b6bf8e61c17a1a779b3705db2bf0cc593",
+  "branch": "codex/material-ui-showcase",
+  "command": "npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/field-host-shrink-input-audit.spec.ts",
+  "log": {
+    "file": "artifacts/material-parity/field-host-shrink-input-audit/test.log",
+    "sha256": "9ebe1e3e1f27e88a6b7573b00bcd8d56eddb117fc2f81e1bdf5ba2626d158550",
+    "result": "TOTAL: 12 SUCCESS",
+    "terminalSession": 73237,
+    "exitCode": 0
+  },
+  "environment": {
+    "astylarui": "0.2.0",
+    "angular": "20.3.29",
+    "material": "20.0.5",
+    "babylon": "8.56.2",
+    "dpr": 1,
+    "canvasCssSize": [
+      400,
+      280
+    ],
+    "settlement": "reference document.fonts.ready then surface.whenSettled()",
+    "warning": "NG0914: zoneless change detection with Zone.js loaded by Karma polyfills"
+  },
+  "sourceFingerprints": [
+    {
+      "file": "scripts/audit-material-field-host-shrink.mjs",
+      "sha256": "adad41793e3a3ef4e9c6c80cf8b97f7ddb2d9b9683ad949d717942184fe4262d"
+    },
+    {
+      "file": "tests/material-parity/field-host-shrink-log-proof.spec.mjs",
+      "sha256": "9a9c2e9a8b4f69cf59d901967bc415c44a237f9563c2c24046d143dfc8aeca7d"
+    },
+    {
+      "file": "examples/material-showcase/src/app/field-host-shrink-input-audit.spec.ts",
+      "sha256": "32ce6acbe6cae8c533180b9c34249bc6d1f9c04ce9e6aa3f29b3b9f231bc741c"
+    },
+    {
+      "file": "examples/material-showcase/angular.json",
+      "sha256": "b3f9cc12f51cbf366176d92efc74c722cc459d5bd0edeb635be9f74c72c05106"
+    },
+    {
+      "file": "examples/material-showcase/src/styles.scss",
+      "sha256": "addc773ab7fadb0e0fabf498ea99b2dd45026af9e7f9c16214509d4faf290505"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/package.json",
+      "sha256": "8299fd2ab139be5603ec418f6b58ae94b98e3c170dbab594c19834e7de92b582"
+    },
+    {
+      "file": "src/app/services/dom/elements/flex-layout.service.ts",
+      "sha256": "c109db8be8bfb040c29eada22e28b60470af9ce8bb6ac23ed947f2ed71031563"
+    },
+    {
+      "file": "src/app/services/dom/elements/flex.service.ts",
+      "sha256": "37668d3443e104b9bfa8896c7e9ff65f48a00625138bc8d46a3cb9e6ba82d55f"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-dimension.service.ts",
+      "sha256": "24d3c910ec0f054f0ec2de1808420f3e6571708a13348eea0887d040c9aa3d30"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/flex-layout.service.js",
+      "sha256": "9bdfa5dd8c2bc4602924e3dfae7b3c682a553ff7428859a5f826232d14afc79e"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/flex.service.js",
+      "sha256": "1c587dbb1b2386dc176984cfc0ae725ae6d92a2be4a7605a92598bfdb14b13dd"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/elements/element-dimension.service.js",
+      "sha256": "0a65a1659a51062ab41cda030c4f030b15bcf5328c85fb1a3597628c05cf190c"
+    }
+  ],
+  "rawRecords": 24,
+  "cases": [
+    {
+      "profile": "compact",
+      "parentHeight": 126,
+      "hostHeight": 70,
+      "extraRoom": 0,
+      "shrink": "0",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "126px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "70px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "0",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:126px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:70px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:0;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "70px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "70px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 126
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 126
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 126
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "126px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 70
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 70
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 70
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "70px",
+            "flexShrink": "0",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    },
+    {
+      "profile": "compact",
+      "parentHeight": 126,
+      "hostHeight": 70,
+      "extraRoom": 0,
+      "shrink": "1",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "126px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "70px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "1",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:126px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:70px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:1;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "70px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "70px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 126
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 126
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 126
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "126px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 68
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 68
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 68
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "68px",
+            "flexShrink": "1",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    },
+    {
+      "profile": "compact",
+      "parentHeight": 126,
+      "hostHeight": 70,
+      "extraRoom": 40,
+      "shrink": "0",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "166px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "70px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "0",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:166px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:70px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:0;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "70px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "70px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 166
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 166
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 166
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "166px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 70
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 70
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 70
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "70px",
+            "flexShrink": "0",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    },
+    {
+      "profile": "compact",
+      "parentHeight": 126,
+      "hostHeight": 70,
+      "extraRoom": 40,
+      "shrink": "1",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "166px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "70px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "1",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:166px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:70px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:1;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "70px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "70px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 166
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 166
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 166
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "166px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 70
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 70
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 70
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "70px",
+            "flexShrink": "1",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    },
+    {
+      "profile": "contrast",
+      "parentHeight": 114,
+      "hostHeight": 62,
+      "extraRoom": 0,
+      "shrink": "0",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "114px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "62px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "0",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:114px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:62px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:0;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "62px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "62px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 114
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 114
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 114
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "114px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 62
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 62
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 62
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "62px",
+            "flexShrink": "0",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    },
+    {
+      "profile": "contrast",
+      "parentHeight": 114,
+      "hostHeight": 62,
+      "extraRoom": 0,
+      "shrink": "1",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "114px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "62px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "1",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:114px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:62px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:1;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "62px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "62px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 114
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 114
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 114
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "114px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 56
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 56
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 56
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "56px",
+            "flexShrink": "1",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    },
+    {
+      "profile": "contrast",
+      "parentHeight": 114,
+      "hostHeight": 62,
+      "extraRoom": 40,
+      "shrink": "0",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "154px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "62px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "0",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:154px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:62px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:0;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "62px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "62px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 154
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 154
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 154
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "154px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 62
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 62
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 62
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "62px",
+            "flexShrink": "0",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    },
+    {
+      "profile": "contrast",
+      "parentHeight": 114,
+      "hostHeight": 62,
+      "extraRoom": 40,
+      "shrink": "1",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "154px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "62px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "1",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:154px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:62px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:1;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "62px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "62px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 154
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 154
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 154
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "154px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 62
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 62
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 62
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "62px",
+            "flexShrink": "1",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    },
+    {
+      "profile": "normal",
+      "parentHeight": 134,
+      "hostHeight": 78,
+      "extraRoom": 0,
+      "shrink": "0",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "134px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "78px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "0",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:134px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:78px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:0;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "78px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "78px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 134
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 134
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 134
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "134px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 78
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 78
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 78
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "78px",
+            "flexShrink": "0",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    },
+    {
+      "profile": "normal",
+      "parentHeight": 134,
+      "hostHeight": 78,
+      "extraRoom": 0,
+      "shrink": "1",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "134px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "78px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "1",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:134px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:78px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:1;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "78px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "78px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 134
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 134
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 134
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "134px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 76
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 76
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 76
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "76px",
+            "flexShrink": "1",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    },
+    {
+      "profile": "normal",
+      "parentHeight": 134,
+      "hostHeight": 78,
+      "extraRoom": 40,
+      "shrink": "0",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "174px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "78px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "0",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:174px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:78px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:0;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "78px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "78px",
+          "flexShrink": "0",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 174
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 174
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 174
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "174px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 78
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 78
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 78
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "78px",
+            "flexShrink": "0",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    },
+    {
+      "profile": "normal",
+      "parentHeight": 134,
+      "hostHeight": 78,
+      "extraRoom": 40,
+      "shrink": "1",
+      "dpr": 1,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "site": {
+        "root": {
+          "children": [
+            {
+              "type": "section",
+              "id": "shrink-parent",
+              "children": [
+                {
+                  "type": "div",
+                  "id": "shrink-host",
+                  "children": [
+                    {
+                      "type": "div",
+                      "id": "shrink-absolute-child"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "styles": [
+          {
+            "selector": "body",
+            "margin": "0",
+            "padding": "0"
+          },
+          {
+            "selector": "#shrink-parent",
+            "position": "absolute",
+            "left": "32px",
+            "top": "32px",
+            "width": "300px",
+            "height": "174px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "28px",
+            "borderWidth": "1px",
+            "borderStyle": "solid",
+            "borderColor": "#123456",
+            "borderRadius": "0",
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "16px",
+            "background": "#eeeeee"
+          },
+          {
+            "selector": "#shrink-host",
+            "position": "relative",
+            "display": "block",
+            "width": "100%",
+            "height": "78px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "alignSelf": "flex-start",
+            "flexGrow": "0",
+            "flexShrink": "1",
+            "flexBasis": "auto",
+            "background": "#ddccff"
+          },
+          {
+            "selector": "#shrink-absolute-child",
+            "position": "absolute",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "24px",
+            "boxSizing": "border-box",
+            "margin": "0",
+            "padding": "0",
+            "borderWidth": "0",
+            "background": "#6750a4"
+          }
+        ]
+      },
+      "css": "body{margin:0;padding:0}\n#shrink-parent{position:absolute;left:32px;top:32px;width:300px;height:174px;box-sizing:border-box;margin:0;padding:28px;border-width:1px;border-style:solid;border-color:#123456;border-radius:0;display:flex;flex-direction:column;gap:16px;background:#eeeeee}\n#shrink-host{position:relative;display:block;width:100%;height:78px;box-sizing:border-box;margin:0;padding:0;border-width:0;align-self:flex-start;flex-grow:0;flex-shrink:1;flex-basis:auto;background:#ddccff}\n#shrink-absolute-child{position:absolute;top:0;left:0;width:100%;height:24px;box-sizing:border-box;margin:0;padding:0;border-width:0;background:#6750a4}",
+      "stages": [
+        {
+          "height": "78px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        },
+        {
+          "height": "78px",
+          "flexShrink": "1",
+          "flexBasis": "auto",
+          "boxSizing": "border-box",
+          "position": "relative"
+        }
+      ],
+      "measurements": [
+        {
+          "id": "shrink-parent",
+          "expected": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 174
+          },
+          "reference": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 174
+          },
+          "actual": {
+            "x": 32,
+            "y": 32,
+            "width": 300,
+            "height": 174
+          },
+          "browserStyle": {
+            "display": "flex",
+            "height": "174px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-host",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 78
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 78
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 78
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "78px",
+            "flexShrink": "1",
+            "position": "relative",
+            "boxSizing": "border-box"
+          }
+        },
+        {
+          "id": "shrink-absolute-child",
+          "expected": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "reference": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "actual": {
+            "x": 61,
+            "y": 61,
+            "width": 242,
+            "height": 24
+          },
+          "browserStyle": {
+            "display": "block",
+            "height": "24px",
+            "flexShrink": "1",
+            "position": "absolute",
+            "boxSizing": "border-box"
+          }
+        }
+      ],
+      "renderSize": [
+        400,
+        280
+      ],
+      "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence."
+    }
+  ],
+  "scope": "Identical fixed-height flex parent and block host with an absolute child; shrink mechanism only, not Material input or raster equivalence.",
+  "classification": "bounded-equal-input-flex-shrink-mechanism-confirmed",
+  "originalCaseCausalTraceComplete": false,
+  "materialInputEquivalent": false,
+  "rendererDefectProven": false,
+  "originalObservationsReclassified": 0,
+  "conclusion": "Both renderers shrink the isolated candidate-like host to 76/56/68px only when constrained by the original parent heights and flex-shrink:1. Disabling shrink or adding 40px parent room retains authored 78/62/70px on both sides. This confirms a sufficient ordinary flex-sizing mechanism for matching boxes, not equivalence to Material auto-height/in-flow composition or a core defect."
+}

@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Public equal-input probe confirms a bounded field-host shrink mechanism
+
+The [field-host shrink probe](material-field-host-shrink-public-proof.md) passes
+12/12 real-browser cases through package-root APIs. Both sides reduce authored
+78/62/70 px hosts to 76/56/68 px under the candidate-like parent constraint;
+disabling shrink or adding parent room removes the reduction. The original
+local-style-versus-measured-height difference is therefore consistent with a
+demonstrated ordinary flex mechanism, not sufficient evidence of a core sizing
+bug. The Material authoring discrepancy remains; testing its auto-height and
+in-flow wrapper inputs is still required. Two log/receipt tests and no-write
+replay pass. No original observation is reclassified and no renderer is fixed.
+
 ## Field-host geometry matches despite different layout inputs
 
 The [original field-host layout survey](material-field-host-layout-inputs.md)

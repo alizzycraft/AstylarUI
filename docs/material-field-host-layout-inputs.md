@@ -58,6 +58,13 @@ host reports `flex-shrink: 1`. Flex shrink is a plausible explanation for the
 smaller measured height, **not yet a demonstrated causal diagnosis**. Matching
 boxes cannot validate this substituted parent/child formatting system.
 
+Follow-up: the [12-case public shrink probe](material-field-host-shrink-public-proof.md)
+now demonstrates this sufficient mechanism with identical paired inputs and
+two interventions: disabling shrink and adding parent room. It does not supply
+a complete original-case causal trace or establish Material input equivalence.
+The frozen standalone survey's limits are retained rather than retroactively
+claiming that its original scalar observations proved the mechanism.
+
 ## Source and historical origin
 
 - `examples/material-showcase/src/app/astylar.component.ts:540`: shared host rule.
