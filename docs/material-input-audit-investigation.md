@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared button host-request binding verified
+
+The [host-request source binding](material-button-host-request-audit.md#original-source-binding-and-classification-protection)
+replays all 2,311 original cases and 600 selected owners, preserving 1,831
+negative cases and exactly matching the original survey proofs. All five tests
+pass (**63,421.7937 ms**). Exact 27-group / 1,800-observation coverage is required;
+52 explicit absolute values remain separate from 1,748 absent own-stage values.
+Negative controls reject coverage loss, forged state/value/evidence/ownership,
+invented defaults, false composition and unsupported layout/equivalence claims.
+This prepares source-bound classification but does not alter the main audit.
+Production precedence, joint integration with the prepared button-flex binding,
+and full conservation remain pending. No comparison input or renderer changed.
+
 ## Shared button host requests traced
 
 The [host-request survey](material-button-host-request-audit.md) retains all 600

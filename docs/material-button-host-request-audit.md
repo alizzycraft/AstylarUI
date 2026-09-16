@@ -85,3 +85,38 @@ digests and complete owner/property/case coverage are independently replayed.
 No renderer, canonical comparison or canonical classification changed. Source
 binding into the main classifier, precedence and full-report conservation are
 still pending; the canonical report remains at 2,657 unattributed groups.
+
+## Original-source binding and classification protection
+
+`button-host-request-source-binding.mjs` independently reopens the original
+report and both digest-checked trees for all **2,311** cases. It binds all **600**
+selected owners and retains the **1,831** cases without selected scalar owners.
+The observation proofs exactly match the checked-in survey. Missing or duplicate
+cases, changed scalar values and removed owners are rejected before attribution.
+
+The bounded classifier covers **27 groups / 1,800 observations** and requires
+exact owner identity, source provenance, reference requests, candidate presence
+or absence, and all five false claim flags. Its validator requires complete
+case/state/value coverage, exact evidence and ownership, and independent source
+replay. JSON round-tripping is tested: omitting an undefined scalar does not
+invent an authored null, `static`, zero or equivalent default. All **52** explicit
+absolute-position observations remain distinct from **1,748** absent own-stage
+values. Diagnostic reports selecting other scalar owners retain their source
+cases without inventing button observations.
+
+```powershell
+node --test tests/material-parity/button-host-request-source-binding.spec.mjs
+```
+
+Result: **5/5 pass**, zero failures/skips/cancellations, **63,421.7937 ms**.
+Thirteen classification mutations, source/population mutations, five false-claim
+mutations, four invented-default substitutions, false core absence and changed
+label composition are rejected. A no-button diagnostic remains a positive
+control.
+
+This uses direct captured-property callbacks, not the production normalizer or
+classification precedence. Main integration and full-report conservation remain
+pending; neither canonical classifications nor renderer behavior changed. The
+next integration must also retain the separate button-flex proof and conserve
+every raw value and every unrelated classification, without promoting any of
+these authoring differences to rendering equivalence or proven core causation.
