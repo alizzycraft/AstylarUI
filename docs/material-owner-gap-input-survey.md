@@ -38,6 +38,11 @@ module. Their source digest is recorded. It does not add a separate CSS gap
 normalizer or populate omitted raw fields. All 162 counts now agree; count
 agreement is still distinguished from a complete canonical membership proof.
 
+The subsequent [exact membership join](material-owner-gap-canonical-join.md)
+now verifies every ordered original case, state, sample and tree descriptor
+against the actual saved canonical rows. That proof closes the membership
+question without changing the survey's semantic limitations or classifications.
+
 ## Reviewed generated owners
 
 The initial survey at `61e52156817a923d0c890d08f3cd3fd4bfa23ec6` had 24
@@ -119,5 +124,5 @@ The log is `artifacts/material-parity/field-host-flow-input-audit/owner-gap-mapp
 The current full harness discovers this new spec in addition to the previous
 90 files: **91 total**, comprising 83 Material, four general parity and four TTS
 specs, retaining all 43 legacy files. A focused pass is not a complete current harness or enforced parity
-result. Canonical integration, exact membership binding, remaining review cases,
+result. Exact membership binding is now separately verified above. Canonical integration, remaining review cases,
 used-gap public proofs and final matrix acceptance remain outstanding.

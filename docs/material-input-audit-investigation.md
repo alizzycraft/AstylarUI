@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Exact gap membership is verified without changing attribution
+
+The [canonical membership join](material-owner-gap-canonical-join.md) now binds
+all 162 unresolved gap groups / 9,254 observations / 2,311 original cases to
+the actual saved canonical report, including complete ordered membership,
+samples, states and input-tree descriptors. It retains the 1,032 raw longhand
+omissions with explicit shorthand requests. Saved-report replay, 21 rejection
+controls and canonical byte conservation pass. This is provenance evidence,
+not computed-style, structural or rendering equivalence; 2,438 canonical
+groups remain unresolved. These standalone checks are separate from the live
+91-file harness launched at `52ec632`.
+
 ## Motion review exposes an authored-style capture boundary
 
 The follow-up [dialog reference replay](material-dialog-motion-context-survey.md)
