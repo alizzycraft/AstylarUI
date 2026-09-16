@@ -23,11 +23,11 @@
   "sourceFingerprints": [
     {
       "file": "scripts/audit-material-owner-gap-inputs.mjs",
-      "sha256": "f373cefdcef62c712ea52b77af608ec306a49a5e44589c360e8233428d3437b9"
+      "sha256": "ee6c5cc4b2344960f9347d3b09853e7c49c5655383999223ad2e0fead5a882e6"
     },
     {
       "file": "tests/material-parity/owner-gap-input-evidence.mjs",
-      "sha256": "c82dc02cfaf607830d2e327b1f85d1c1220c43c5436f6519d00188eae9d8940c"
+      "sha256": "c6150f6f96ed35de8735d65dfabffbf1c9a7617cdf1b16d7e55690d3ad1bb813"
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.mjs",
@@ -40,6 +40,18 @@
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
       "sha256": "e27f04f63a1930c4fcb80e1b7d7545b7dd4f72efdc4e92a905c97596a9c33b27"
+    },
+    {
+      "file": "tests/material-parity/origin-alias-mapping-evidence.mjs",
+      "sha256": "bd6a621438f2053d7edacc3d669e927f3306753c636849ff5df8e724b3fc472d"
+    },
+    {
+      "file": "tests/material-parity/generated-node-mapping-evidence.mjs",
+      "sha256": "c21d439f33323e576d19153db104bd6e2245a9d216dc3a157d4187c116c7aa41"
+    },
+    {
+      "file": "tests/material-parity/run-material-parity.mjs",
+      "sha256": "c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10"
     }
   ],
   "groupCount": 162,
@@ -47,7 +59,7 @@
   "canonicalOccurrences": 9254,
   "observations": 9254,
   "exactCountGroups": 162,
-  "localOmissionGroupsWithMatchingCount": 92,
+  "localOmissionGroupsWithMatchingCount": 108,
   "canonicalIntegration": false,
   "inputEquivalent": false,
   "computedCandidateVerified": false,
@@ -659,7 +671,7 @@
         "interaction:badge@custom/desktop-dpr2/activate-leave"
       ],
       "reasons": {
-        "owner-mapping": [
+        "relevant-authored-request": [
           "static:badge@light/desktop",
           "static:badge@light/tablet",
           "static:badge@light/mobile",
@@ -715,26 +727,128 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "relevant-authored-request": {
           "case": "static:badge@light/desktop",
           "proof": {
             "element": "badge-count",
             "property": "columnGap",
             "issues": [
               {
-                "reason": "owner-mapping"
+                "reason": "relevant-authored-request",
+                "side": "reference"
               }
             ],
             "disposition": "requires-specific-review",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "frame/2/0/1",
+            "astylarNode": "root/0/2/0/1",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "frame/2/0/1",
+              "candidateNode": "root/0/2/0/1",
+              "referenceType": "span",
+              "candidateType": "span",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "8px 8px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "frame/2/0/1",
+                "frame/2/0",
+                "frame/2",
+                "frame"
+              ],
+              "candidatePath": [
+                "root/0/2/0/1",
+                "root/0/2/0",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "block",
+              "astylar": "block"
+            },
+            "requests": {
+              "reference": [
+                {
+                  "source": ".mat-badge-content",
+                  "declarations": {
+                    "transition-behavior": {
+                      "value": "normal",
+                      "important": false
+                    },
+                    "transition-duration": {
+                      "value": "200ms",
+                      "important": false
+                    },
+                    "transition-timing-function": {
+                      "value": "ease-in-out",
+                      "important": false
+                    },
+                    "transition-delay": {
+                      "value": "0s",
+                      "important": false
+                    },
+                    "transition-property": {
+                      "value": "transform",
+                      "important": false
+                    }
+                  }
+                },
+                {
+                  "source": ".ng-animate-disabled .mat-badge-content, .mat-badge-content._mat-animation-noopable",
+                  "declarations": {
+                    "transition-behavior": {
+                      "value": "normal",
+                      "important": false
+                    },
+                    "transition-duration": {
+                      "value": "0s",
+                      "important": false
+                    },
+                    "transition-timing-function": {
+                      "value": "ease",
+                      "important": false
+                    },
+                    "transition-delay": {
+                      "value": "0s",
+                      "important": false
+                    },
+                    "transition-property": {
+                      "value": "none",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 3,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
       "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "6a5b9dd53fec7626395f0e3a8cb18bbaa8853bce67e8b3ad91185fa4791ae426"
+      "proofSha256": "47ef17eda3b7d20baabd187a7889aad91689458945185ba6e81b09edae73b361"
     },
     {
       "family": "badge",
@@ -798,7 +912,7 @@
         "interaction:badge@custom/desktop-dpr2/activate-leave"
       ],
       "reasons": {
-        "owner-mapping": [
+        "relevant-authored-request": [
           "static:badge@light/desktop",
           "static:badge@light/tablet",
           "static:badge@light/mobile",
@@ -854,26 +968,128 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "relevant-authored-request": {
           "case": "static:badge@light/desktop",
           "proof": {
             "element": "badge-count",
             "property": "rowGap",
             "issues": [
               {
-                "reason": "owner-mapping"
+                "reason": "relevant-authored-request",
+                "side": "reference"
               }
             ],
             "disposition": "requires-specific-review",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "frame/2/0/1",
+            "astylarNode": "root/0/2/0/1",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "frame/2/0/1",
+              "candidateNode": "root/0/2/0/1",
+              "referenceType": "span",
+              "candidateType": "span",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "8px 8px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "frame/2/0/1",
+                "frame/2/0",
+                "frame/2",
+                "frame"
+              ],
+              "candidatePath": [
+                "root/0/2/0/1",
+                "root/0/2/0",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "block",
+              "astylar": "block"
+            },
+            "requests": {
+              "reference": [
+                {
+                  "source": ".mat-badge-content",
+                  "declarations": {
+                    "transition-behavior": {
+                      "value": "normal",
+                      "important": false
+                    },
+                    "transition-duration": {
+                      "value": "200ms",
+                      "important": false
+                    },
+                    "transition-timing-function": {
+                      "value": "ease-in-out",
+                      "important": false
+                    },
+                    "transition-delay": {
+                      "value": "0s",
+                      "important": false
+                    },
+                    "transition-property": {
+                      "value": "transform",
+                      "important": false
+                    }
+                  }
+                },
+                {
+                  "source": ".ng-animate-disabled .mat-badge-content, .mat-badge-content._mat-animation-noopable",
+                  "declarations": {
+                    "transition-behavior": {
+                      "value": "normal",
+                      "important": false
+                    },
+                    "transition-duration": {
+                      "value": "0s",
+                      "important": false
+                    },
+                    "transition-timing-function": {
+                      "value": "ease",
+                      "important": false
+                    },
+                    "transition-delay": {
+                      "value": "0s",
+                      "important": false
+                    },
+                    "transition-property": {
+                      "value": "none",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 3,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
       "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "ca1cad6286ccd735672acd6566bc0c9c8b6608e91e1ead2ebe0f0c4c644b8242"
+      "proofSha256": "fccc1a81bb06bc108da62de3a5f0543d27a7734f8b6bd2f222e7d43e8aa1d567"
     },
     {
       "family": "badge",
@@ -1534,7 +1750,7 @@
         "interaction:bottom-sheet@light/comparison-pane-dpr1/activate"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
           "interaction:bottom-sheet@light/desktop-dpr1/open",
@@ -1563,26 +1779,75 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "proof": {
             "element": "bottom-sheet-copy",
             "property": "columnGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/1/0/1/0/1",
+            "astylarNode": "root/0/2/1/0/1",
+            "mapping": "existing-overlay-owner-and-exact-list-order",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-overlay-owner-and-exact-list-order",
+              "referenceNode": "overlay:0/1/0/1/0/1",
+              "candidateNode": "root/0/2/1/0/1",
+              "referenceType": "a",
+              "candidateType": "button",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "240px 24px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/1/0/1/0/1",
+                "overlay:0/1/0/1/0",
+                "overlay:0/1/0/1",
+                "overlay:0/1/0",
+                "overlay:0/1",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1/0/1",
+                "root/0/2/1/0",
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "block"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "fe451d62da6ffab7f80aa74c470c1ed7234764cb9701cebb9ea9a8f7f9db2974"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "d250b0d7793cca07e03c3244a8628160c97f8d7950a5345e5c7fbb0ec4935c13"
     },
     {
       "family": "bottom-sheet",
@@ -1619,7 +1884,7 @@
         "interaction:bottom-sheet@light/comparison-pane-dpr1/activate"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
           "interaction:bottom-sheet@light/desktop-dpr1/open",
@@ -1648,26 +1913,75 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "proof": {
             "element": "bottom-sheet-copy",
             "property": "rowGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/1/0/1/0/1",
+            "astylarNode": "root/0/2/1/0/1",
+            "mapping": "existing-overlay-owner-and-exact-list-order",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-overlay-owner-and-exact-list-order",
+              "referenceNode": "overlay:0/1/0/1/0/1",
+              "candidateNode": "root/0/2/1/0/1",
+              "referenceType": "a",
+              "candidateType": "button",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "240px 24px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/1/0/1/0/1",
+                "overlay:0/1/0/1/0",
+                "overlay:0/1/0/1",
+                "overlay:0/1/0",
+                "overlay:0/1",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1/0/1",
+                "root/0/2/1/0",
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "block"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "28063e66123061215daaea9612bbe9f78798eab6bb8f9517337d8da91c63bb68"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "41f3097a90926c79fb17f32b977563cf18d37b23dcd0c3ad0f629108cfd88a87"
     },
     {
       "family": "bottom-sheet",
@@ -1704,7 +2018,7 @@
         "interaction:bottom-sheet@light/comparison-pane-dpr1/activate"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
           "interaction:bottom-sheet@light/desktop-dpr1/open",
@@ -1733,26 +2047,75 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "proof": {
             "element": "bottom-sheet-dismiss",
             "property": "columnGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/1/0/1/0/0",
+            "astylarNode": "root/0/2/1/0/0",
+            "mapping": "existing-overlay-owner-and-exact-list-order",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-overlay-owner-and-exact-list-order",
+              "referenceNode": "overlay:0/1/0/1/0/0",
+              "candidateNode": "root/0/2/1/0/0",
+              "referenceType": "a",
+              "candidateType": "button",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "240px 24px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/1/0/1/0/0",
+                "overlay:0/1/0/1/0",
+                "overlay:0/1/0/1",
+                "overlay:0/1/0",
+                "overlay:0/1",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1/0/0",
+                "root/0/2/1/0",
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "block"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "774f56e63e2f84ee4d7215a31b352dca3295f9bc60a474f38909dff34d6f96bd"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "ad31ee3034e930f0504090171f7d7928e332acab3520bff798e7be413dc19151"
     },
     {
       "family": "bottom-sheet",
@@ -1789,7 +2152,7 @@
         "interaction:bottom-sheet@light/comparison-pane-dpr1/activate"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
           "interaction:bottom-sheet@light/desktop-dpr1/open",
@@ -1818,26 +2181,75 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "proof": {
             "element": "bottom-sheet-dismiss",
             "property": "rowGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/1/0/1/0/0",
+            "astylarNode": "root/0/2/1/0/0",
+            "mapping": "existing-overlay-owner-and-exact-list-order",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-overlay-owner-and-exact-list-order",
+              "referenceNode": "overlay:0/1/0/1/0/0",
+              "candidateNode": "root/0/2/1/0/0",
+              "referenceType": "a",
+              "candidateType": "button",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "240px 24px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/1/0/1/0/0",
+                "overlay:0/1/0/1/0",
+                "overlay:0/1/0/1",
+                "overlay:0/1/0",
+                "overlay:0/1",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1/0/0",
+                "root/0/2/1/0",
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "block"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "4cc1d8641259fcadef8b12b534825b9bde23cbdf8fc81a1d8f6c0cfc57dad059"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "788bc8f531a512e0806ab7736d1efeb516301121bb294be576767d89bb48bbe1"
     },
     {
       "family": "bottom-sheet",
@@ -1874,7 +2286,7 @@
         "interaction:bottom-sheet@light/comparison-pane-dpr1/activate"
       ],
       "reasons": {
-        "owner-mapping": [
+        "scalar-authored-rule-gap": [
           "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
           "interaction:bottom-sheet@light/desktop-dpr1/open",
@@ -1903,26 +2315,83 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "scalar-authored-rule-gap": {
           "case": "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "proof": {
             "element": "bottom-sheet-overlay",
             "property": "columnGap",
             "issues": [
               {
-                "reason": "owner-mapping"
+                "reason": "scalar-authored-rule-gap"
               }
             ],
             "disposition": "requires-specific-review",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/1",
+            "astylarNode": "root/0/2/1",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped-with-scalar-rule-gap",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "overlay:0/1",
+              "candidateNode": "root/0/2/1",
+              "referenceType": "div",
+              "candidateType": "div",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "720px 500px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/1",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
       "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "84dc238ab00ba52bb13e6bca9eb03962750e4c697a52f3027a217c38d9d3e5bc"
+      "proofSha256": "9d6c2441f6adb82cca117e26a99e447bdeb7f08987452a24e80df41e1f5118be"
     },
     {
       "family": "bottom-sheet",
@@ -1959,7 +2428,7 @@
         "interaction:bottom-sheet@light/comparison-pane-dpr1/activate"
       ],
       "reasons": {
-        "owner-mapping": [
+        "scalar-authored-rule-gap": [
           "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
           "interaction:bottom-sheet@light/desktop-dpr1/open",
@@ -1988,26 +2457,83 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "scalar-authored-rule-gap": {
           "case": "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "proof": {
             "element": "bottom-sheet-overlay",
             "property": "rowGap",
             "issues": [
               {
-                "reason": "owner-mapping"
+                "reason": "scalar-authored-rule-gap"
               }
             ],
             "disposition": "requires-specific-review",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/1",
+            "astylarNode": "root/0/2/1",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped-with-scalar-rule-gap",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "overlay:0/1",
+              "candidateNode": "root/0/2/1",
+              "referenceType": "div",
+              "candidateType": "div",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "720px 500px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/1",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
       "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "9e992e72fcdf7e6be73bf2ed4664687d325f50710c998154c0f204a1e019c1d7"
+      "proofSha256": "0d2a682130275c65339817d4201feb2cc931825b3a23f0ae90039042854f33a6"
     },
     {
       "family": "bottom-sheet",
@@ -2044,7 +2570,7 @@
         "interaction:bottom-sheet@light/comparison-pane-dpr1/activate"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
           "interaction:bottom-sheet@light/desktop-dpr1/open",
@@ -2073,26 +2599,72 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "proof": {
             "element": "bottom-sheet-panel",
             "property": "columnGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/1/0/1",
+            "astylarNode": "root/0/2/1/0",
+            "mapping": "existing-overlay-owner-and-exact-list-order",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-overlay-owner-and-exact-list-order",
+              "referenceNode": "overlay:0/1/0/1",
+              "candidateNode": "root/0/2/1/0",
+              "referenceType": "mat-bottom-sheet-container",
+              "candidateType": "section",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "256px 64px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/1/0/1",
+                "overlay:0/1/0",
+                "overlay:0/1",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1/0",
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "block",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "ef63f7778eebb73dfb79bc740266b315817cec9ce9ef2fd8aa6d39b40139fc25"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "1cfe03d6a32f57dbff7a27051576c051be2a231a02d2ee1f5e04c213a7b66f0c"
     },
     {
       "family": "bottom-sheet",
@@ -2129,7 +2701,7 @@
         "interaction:bottom-sheet@light/comparison-pane-dpr1/activate"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
           "interaction:bottom-sheet@light/desktop-dpr1/open",
@@ -2158,26 +2730,72 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "interaction:bottom-sheet@light/desktop-dpr1/activate",
           "proof": {
             "element": "bottom-sheet-panel",
             "property": "rowGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/1/0/1",
+            "astylarNode": "root/0/2/1/0",
+            "mapping": "existing-overlay-owner-and-exact-list-order",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-overlay-owner-and-exact-list-order",
+              "referenceNode": "overlay:0/1/0/1",
+              "candidateNode": "root/0/2/1/0",
+              "referenceType": "mat-bottom-sheet-container",
+              "candidateType": "section",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "256px 64px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/1/0/1",
+                "overlay:0/1/0",
+                "overlay:0/1",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1/0",
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "block",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "1f54bbf3c6fcad19fd945863a3fbee5850375f30e79363fe72f157b63702d175"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "6ebc5283475414458211a0c9919d383792e25266511d9173138085ba53acc4d7"
     },
     {
       "family": "bottom-sheet",
@@ -12991,7 +13609,7 @@
         "interaction:dialog@custom/desktop-dpr2/open"
       ],
       "reasons": {
-        "owner-mapping": [
+        "relevant-authored-request": [
           "interaction:dialog@light/desktop-dpr1/activate",
           "interaction:dialog@light/desktop-dpr1/activate-leave",
           "interaction:dialog@light/desktop-dpr1/open-hover-content",
@@ -13027,26 +13645,130 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "relevant-authored-request": {
           "case": "interaction:dialog@light/desktop-dpr1/activate",
           "proof": {
             "element": "dialog-panel",
             "property": "columnGap",
             "issues": [
               {
-                "reason": "owner-mapping"
+                "reason": "relevant-authored-request",
+                "side": "reference"
               }
             ],
             "disposition": "requires-specific-review",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/1/0/1/0/0",
+            "astylarNode": "root/0/2/1/0",
+            "mapping": "existing-dialog-full-structure-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-dialog-full-structure-proof",
+              "referenceNode": "overlay:0/1/0/1/0/0",
+              "candidateNode": "root/0/2/1/0",
+              "referenceType": "div",
+              "candidateType": "section",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "140px 80.5px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/1/0/1/0/0",
+                "overlay:0/1/0/1/0",
+                "overlay:0/1/0/1",
+                "overlay:0/1/0",
+                "overlay:0/1",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1/0",
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [
+                {
+                  "source": ".mat-mdc-dialog-surface",
+                  "declarations": {
+                    "transition-property": {
+                      "value": "",
+                      "important": false
+                    },
+                    "transition-duration": {
+                      "value": "",
+                      "important": false
+                    },
+                    "transition-timing-function": {
+                      "value": "",
+                      "important": false
+                    },
+                    "transition-delay": {
+                      "value": "",
+                      "important": false
+                    },
+                    "transition-behavior": {
+                      "value": "",
+                      "important": false
+                    }
+                  }
+                },
+                {
+                  "source": "._mat-animation-noopable .mat-mdc-dialog-surface",
+                  "declarations": {
+                    "transition-behavior": {
+                      "value": "normal",
+                      "important": false
+                    },
+                    "transition-duration": {
+                      "value": "0s",
+                      "important": false
+                    },
+                    "transition-timing-function": {
+                      "value": "ease",
+                      "important": false
+                    },
+                    "transition-delay": {
+                      "value": "0s",
+                      "important": false
+                    },
+                    "transition-property": {
+                      "value": "none",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 5,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
       "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "84e706833ef3e0d69b466fd02d35080e4db5e300a3e3c376d6808b19758afda6"
+      "proofSha256": "bf57b9d9feaf60fecb6668236e7d2651d1f0287a402e137d7273c5a7f6648aea"
     },
     {
       "family": "dialog",
@@ -13090,7 +13812,7 @@
         "interaction:dialog@custom/desktop-dpr2/open"
       ],
       "reasons": {
-        "owner-mapping": [
+        "relevant-authored-request": [
           "interaction:dialog@light/desktop-dpr1/activate",
           "interaction:dialog@light/desktop-dpr1/activate-leave",
           "interaction:dialog@light/desktop-dpr1/open-hover-content",
@@ -13126,26 +13848,130 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "relevant-authored-request": {
           "case": "interaction:dialog@light/desktop-dpr1/activate",
           "proof": {
             "element": "dialog-panel",
             "property": "rowGap",
             "issues": [
               {
-                "reason": "owner-mapping"
+                "reason": "relevant-authored-request",
+                "side": "reference"
               }
             ],
             "disposition": "requires-specific-review",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/1/0/1/0/0",
+            "astylarNode": "root/0/2/1/0",
+            "mapping": "existing-dialog-full-structure-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-dialog-full-structure-proof",
+              "referenceNode": "overlay:0/1/0/1/0/0",
+              "candidateNode": "root/0/2/1/0",
+              "referenceType": "div",
+              "candidateType": "section",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "140px 80.5px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/1/0/1/0/0",
+                "overlay:0/1/0/1/0",
+                "overlay:0/1/0/1",
+                "overlay:0/1/0",
+                "overlay:0/1",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1/0",
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [
+                {
+                  "source": ".mat-mdc-dialog-surface",
+                  "declarations": {
+                    "transition-property": {
+                      "value": "",
+                      "important": false
+                    },
+                    "transition-duration": {
+                      "value": "",
+                      "important": false
+                    },
+                    "transition-timing-function": {
+                      "value": "",
+                      "important": false
+                    },
+                    "transition-delay": {
+                      "value": "",
+                      "important": false
+                    },
+                    "transition-behavior": {
+                      "value": "",
+                      "important": false
+                    }
+                  }
+                },
+                {
+                  "source": "._mat-animation-noopable .mat-mdc-dialog-surface",
+                  "declarations": {
+                    "transition-behavior": {
+                      "value": "normal",
+                      "important": false
+                    },
+                    "transition-duration": {
+                      "value": "0s",
+                      "important": false
+                    },
+                    "transition-timing-function": {
+                      "value": "ease",
+                      "important": false
+                    },
+                    "transition-delay": {
+                      "value": "0s",
+                      "important": false
+                    },
+                    "transition-property": {
+                      "value": "none",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 5,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
       "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "d42a3e804c9b6fb99531310e43b3d6aa733449378c511ea57db6a677bf0fdde4"
+      "proofSha256": "e10cdd734fc33c5e5952a155d989077521704bba74299bcd948f177ccc04a5e9"
     },
     {
       "family": "dialog",
@@ -19339,7 +20165,7 @@
         "interaction:paginator@custom/desktop-dpr2/activate-leave"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "static:paginator@light/desktop",
           "static:paginator@light/tablet",
           "static:paginator@light/mobile",
@@ -19395,26 +20221,77 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "static:paginator@light/desktop",
           "proof": {
             "element": "paginator-range",
             "property": "columnGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "frame/2/0/0/0/1/0",
+            "astylarNode": "root/0/2/0/0/1/0",
+            "mapping": "existing-paginator-text-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-paginator-text-owner-proof",
+              "referenceNode": "frame/2/0/0/0/1/0",
+              "candidateNode": "root/0/2/0/0/1/0",
+              "referenceType": "div",
+              "candidateType": "span",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "38.2344px 8px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "frame/2/0/0/0/1/0",
+                "frame/2/0/0/0/1",
+                "frame/2/0/0/0",
+                "frame/2/0/0",
+                "frame/2/0",
+                "frame/2",
+                "frame"
+              ],
+              "candidatePath": [
+                "root/0/2/0/0/1/0",
+                "root/0/2/0/0/1",
+                "root/0/2/0/0",
+                "root/0/2/0",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "block",
+              "astylar": "block"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 2,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "d30b5000413735ad485af844fbce4f124cb9445f7dcde10377c5f1d5ef730aa3"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "6340ef764c52d821593e66ff1812c9617f90e574807156cbfce68838d68538fb"
     },
     {
       "family": "paginator",
@@ -19478,7 +20355,7 @@
         "interaction:paginator@custom/desktop-dpr2/activate-leave"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "static:paginator@light/desktop",
           "static:paginator@light/tablet",
           "static:paginator@light/mobile",
@@ -19534,26 +20411,77 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "static:paginator@light/desktop",
           "proof": {
             "element": "paginator-range",
             "property": "rowGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "frame/2/0/0/0/1/0",
+            "astylarNode": "root/0/2/0/0/1/0",
+            "mapping": "existing-paginator-text-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-paginator-text-owner-proof",
+              "referenceNode": "frame/2/0/0/0/1/0",
+              "candidateNode": "root/0/2/0/0/1/0",
+              "referenceType": "div",
+              "candidateType": "span",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "38.2344px 8px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "frame/2/0/0/0/1/0",
+                "frame/2/0/0/0/1",
+                "frame/2/0/0/0",
+                "frame/2/0/0",
+                "frame/2/0",
+                "frame/2",
+                "frame"
+              ],
+              "candidatePath": [
+                "root/0/2/0/0/1/0",
+                "root/0/2/0/0/1",
+                "root/0/2/0/0",
+                "root/0/2/0",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "block",
+              "astylar": "block"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 2,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "cf58ad1444fd8a3f56a9e406299c9fa4683a72e99001200a9fabba411c121f87"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "09a4b273af02853504802702fb132af8037da8c8c4e38709197974fee8fd8e94"
     },
     {
       "family": "paginator",
@@ -19617,7 +20545,7 @@
         "interaction:paginator@custom/desktop-dpr2/activate-leave"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "static:paginator@light/desktop",
           "static:paginator@light/tablet",
           "static:paginator@light/mobile",
@@ -19673,26 +20601,77 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "static:paginator@light/desktop",
           "proof": {
             "element": "paginator-size",
             "property": "columnGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "frame/2/0/0/0/0/0",
+            "astylarNode": "root/0/2/0/0/0/0",
+            "mapping": "existing-paginator-text-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-paginator-text-owner-proof",
+              "referenceNode": "frame/2/0/0/0/0/0",
+              "candidateNode": "root/0/2/0/0/0/0",
+              "referenceType": "div",
+              "candidateType": "span",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "44.3359px 8px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "frame/2/0/0/0/0/0",
+                "frame/2/0/0/0/0",
+                "frame/2/0/0/0",
+                "frame/2/0/0",
+                "frame/2/0",
+                "frame/2",
+                "frame"
+              ],
+              "candidatePath": [
+                "root/0/2/0/0/0/0",
+                "root/0/2/0/0/0",
+                "root/0/2/0/0",
+                "root/0/2/0",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "block",
+              "astylar": "block"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 2,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "77b28926d99a284465d1fc7c23a4037f4c7118a2f1bf7ee828216eb81a47bc02"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "9528f37eafd999d43d63e170a7b76434e814693c6d80417a5016c79a63e99f56"
     },
     {
       "family": "paginator",
@@ -19756,7 +20735,7 @@
         "interaction:paginator@custom/desktop-dpr2/activate-leave"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "static:paginator@light/desktop",
           "static:paginator@light/tablet",
           "static:paginator@light/mobile",
@@ -19812,26 +20791,77 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "static:paginator@light/desktop",
           "proof": {
             "element": "paginator-size",
             "property": "rowGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "frame/2/0/0/0/0/0",
+            "astylarNode": "root/0/2/0/0/0/0",
+            "mapping": "existing-paginator-text-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-paginator-text-owner-proof",
+              "referenceNode": "frame/2/0/0/0/0/0",
+              "candidateNode": "root/0/2/0/0/0/0",
+              "referenceType": "div",
+              "candidateType": "span",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "44.3359px 8px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "frame/2/0/0/0/0/0",
+                "frame/2/0/0/0/0",
+                "frame/2/0/0/0",
+                "frame/2/0/0",
+                "frame/2/0",
+                "frame/2",
+                "frame"
+              ],
+              "candidatePath": [
+                "root/0/2/0/0/0/0",
+                "root/0/2/0/0/0",
+                "root/0/2/0/0",
+                "root/0/2/0",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "block",
+              "astylar": "block"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 2,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "184f025a4386957780cebf14ab5facdb74d081bb10f1ace4fd08b8f1b8e8653e"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "7fcde5a04f93c6d99b498109c80143587b53dbcc1a3ac0f23d8ab833ec43ef5a"
     },
     {
       "family": "progress-bar",
@@ -24379,7 +25409,7 @@
         "interaction:snack-bar@light/comparison/activate-twice"
       ],
       "reasons": {
-        "owner-mapping": [
+        "scalar-authored-rule-gap": [
           "interaction:snack-bar@light/desktop-dpr1/activate",
           "interaction:snack-bar@light/desktop-dpr1/activate-leave",
           "interaction:snack-bar@light/desktop-dpr1/activate-twice",
@@ -24417,26 +25447,83 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "scalar-authored-rule-gap": {
           "case": "interaction:snack-bar@light/desktop-dpr1/activate",
           "proof": {
             "element": "snack-bar-overlay",
             "property": "columnGap",
             "issues": [
               {
-                "reason": "owner-mapping"
+                "reason": "scalar-authored-rule-gap"
               }
             ],
             "disposition": "requires-specific-review",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/0",
+            "astylarNode": "root/0/2/1",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped-with-scalar-rule-gap",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "overlay:0/0",
+              "candidateNode": "root/0/2/1",
+              "referenceType": "div",
+              "candidateType": "div",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "720px 500px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/0",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
       "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "7117604eacbc2997701ea162363fe096be75a35adc7029e8b94ada59102c5b58"
+      "proofSha256": "3a3c602c554980fbe004fe984380ed440535c7f9fa46ee309641b8e6314a028d"
     },
     {
       "family": "snack-bar",
@@ -24482,7 +25569,7 @@
         "interaction:snack-bar@light/comparison/activate-twice"
       ],
       "reasons": {
-        "owner-mapping": [
+        "scalar-authored-rule-gap": [
           "interaction:snack-bar@light/desktop-dpr1/activate",
           "interaction:snack-bar@light/desktop-dpr1/activate-leave",
           "interaction:snack-bar@light/desktop-dpr1/activate-twice",
@@ -24520,26 +25607,83 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "scalar-authored-rule-gap": {
           "case": "interaction:snack-bar@light/desktop-dpr1/activate",
           "proof": {
             "element": "snack-bar-overlay",
             "property": "rowGap",
             "issues": [
               {
-                "reason": "owner-mapping"
+                "reason": "scalar-authored-rule-gap"
               }
             ],
             "disposition": "requires-specific-review",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/0",
+            "astylarNode": "root/0/2/1",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped-with-scalar-rule-gap",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "overlay:0/0",
+              "candidateNode": "root/0/2/1",
+              "referenceType": "div",
+              "candidateType": "div",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "720px 500px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/0",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
       "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "d0c96573e3084c67a5321c37ebe89a1b2ed58890e4644486142383be0b7d7bd0"
+      "proofSha256": "70e5152058182fb0420caeba9af8f04a5805c193cfd1cad0479e0ee33a2cdf8b"
     },
     {
       "family": "snack-bar",
@@ -25173,7 +26317,7 @@
         "interaction:snack-bar@light/comparison/activate-twice"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "interaction:snack-bar@light/desktop-dpr1/activate",
           "interaction:snack-bar@light/desktop-dpr1/activate-leave",
           "interaction:snack-bar@light/desktop-dpr1/activate-twice",
@@ -25211,26 +26355,73 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "interaction:snack-bar@light/desktop-dpr1/activate",
           "proof": {
             "element": "snack-bar-surface",
             "property": "columnGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/0/0/0/0",
+            "astylarNode": "root/0/2/1/0",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "overlay:0/0/0/0/0",
+              "candidateNode": "root/0/2/1/0",
+              "referenceType": "div",
+              "candidateType": "div",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "172px 24px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/0/0/0/0",
+                "overlay:0/0/0/0",
+                "overlay:0/0/0",
+                "overlay:0/0",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1/0",
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "2bb070db62f40a71fd37e993a9735136ddd3733838c0b006526afd7dd153f825"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "56844c5ddfea269a2fc14522eaa560a55bd9ddbf9e809cde1be82a88c47fdd90"
     },
     {
       "family": "snack-bar",
@@ -25276,7 +26467,7 @@
         "interaction:snack-bar@light/comparison/activate-twice"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "interaction:snack-bar@light/desktop-dpr1/activate",
           "interaction:snack-bar@light/desktop-dpr1/activate-leave",
           "interaction:snack-bar@light/desktop-dpr1/activate-twice",
@@ -25314,26 +26505,73 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "interaction:snack-bar@light/desktop-dpr1/activate",
           "proof": {
             "element": "snack-bar-surface",
             "property": "rowGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/0/0/0/0",
+            "astylarNode": "root/0/2/1/0",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "overlay:0/0/0/0/0",
+              "candidateNode": "root/0/2/1/0",
+              "referenceType": "div",
+              "candidateType": "div",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "172px 24px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/0/0/0/0",
+                "overlay:0/0/0/0",
+                "overlay:0/0/0",
+                "overlay:0/0",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/1/0",
+                "root/0/2/1",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "flex",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 6,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "5b0db3bf5e34a512065d8d244684b273181fa0df0860c00b120361004e5ca0e1"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "51f7a7eca235e46344bdad292ad1ff5acf8aaea8c4b0d84cbd9773e6cafea7ac"
     },
     {
       "family": "sort",
@@ -26509,7 +27747,7 @@
         "interaction:stepper@custom/desktop-dpr2/selected"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "static:stepper@light/desktop",
           "static:stepper@light/tablet",
           "static:stepper@light/mobile",
@@ -26581,26 +27819,76 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "static:stepper@light/desktop",
           "proof": {
             "element": "stepper-content",
             "property": "columnGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "frame/2/0/0/1/0/0",
+            "astylarNode": "root/0/2/0/1/0",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "frame/2/0/0/1/0/0",
+              "candidateNode": "root/0/2/0/1/0",
+              "referenceType": "span",
+              "candidateType": "span",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "0px 0px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "frame/2/0/0/1/0/0",
+                "frame/2/0/0/1/0",
+                "frame/2/0/0/1",
+                "frame/2/0/0",
+                "frame/2/0",
+                "frame/2",
+                "frame"
+              ],
+              "candidatePath": [
+                "root/0/2/0/1/0",
+                "root/0/2/0/1",
+                "root/0/2/0",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "inline",
+              "astylar": "inline"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 3,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "0352d40ce41631d882947e0fd9ec9268945b1e97146b77b1468bd909152c58db"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "3d1b9e758004b254cf342d6c42d9193f9961e8d2be55fc2a326f123d4feba4a8"
     },
     {
       "family": "stepper",
@@ -26680,7 +27968,7 @@
         "interaction:stepper@custom/desktop-dpr2/selected"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "static:stepper@light/desktop",
           "static:stepper@light/tablet",
           "static:stepper@light/mobile",
@@ -26752,26 +28040,76 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "static:stepper@light/desktop",
           "proof": {
             "element": "stepper-content",
             "property": "rowGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "frame/2/0/0/1/0/0",
+            "astylarNode": "root/0/2/0/1/0",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "frame/2/0/0/1/0/0",
+              "candidateNode": "root/0/2/0/1/0",
+              "referenceType": "span",
+              "candidateType": "span",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "0px 0px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "frame/2/0/0/1/0/0",
+                "frame/2/0/0/1/0",
+                "frame/2/0/0/1",
+                "frame/2/0/0",
+                "frame/2/0",
+                "frame/2",
+                "frame"
+              ],
+              "candidatePath": [
+                "root/0/2/0/1/0",
+                "root/0/2/0/1",
+                "root/0/2/0",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "inline",
+              "astylar": "inline"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 3,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "9cb5ae85bdc4e7a9f63b8017469edaca71966d383f7cf9e4f5a6864b1a88d519"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "ff18a627b3ac600eac205cdcf1f46aa1493309beda841e90174ec8c6b588121e"
     },
     {
       "family": "stepper",
@@ -30655,7 +31993,7 @@
         "interaction:tooltip@light/comparison/held"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "interaction:tooltip@light/desktop-dpr1/hover",
           "interaction:tooltip@light/desktop-dpr1/held",
           "interaction:tooltip@light/desktop-dpr2/hover",
@@ -30677,26 +32015,74 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "interaction:tooltip@light/desktop-dpr1/hover",
           "proof": {
             "element": "tooltip-popup",
             "property": "columnGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/0/0/0/0/0",
+            "astylarNode": "root/0/2/0/1",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "overlay:0/0/0/0/0/0",
+              "candidateNode": "root/0/2/0/1",
+              "referenceType": "div",
+              "candidateType": "div",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "53.4062px 12px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/0/0/0/0/0",
+                "overlay:0/0/0/0/0",
+                "overlay:0/0/0/0",
+                "overlay:0/0/0",
+                "overlay:0/0",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/0/1",
+                "root/0/2/0",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "block",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 7,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "be09117afcb2f3f2e56b03fb15cfdf0d8a1ba90b77935430d90c2a4e0f37e141"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "4b17d55e0027e82b7d5376b9541a157e8fd90ec93178bc4ece9191087aeef8b9"
     },
     {
       "family": "tooltip",
@@ -30726,7 +32112,7 @@
         "interaction:tooltip@light/comparison/held"
       ],
       "reasons": {
-        "owner-mapping": [
+        "captured-normal-versus-local-omission": [
           "interaction:tooltip@light/desktop-dpr1/hover",
           "interaction:tooltip@light/desktop-dpr1/held",
           "interaction:tooltip@light/desktop-dpr2/hover",
@@ -30748,26 +32134,74 @@
         ]
       },
       "witnesses": {
-        "owner-mapping": {
+        "captured-normal-versus-local-omission": {
           "case": "interaction:tooltip@light/desktop-dpr1/hover",
           "proof": {
             "element": "tooltip-popup",
             "property": "rowGap",
-            "issues": [
-              {
-                "reason": "owner-mapping"
-              }
-            ],
-            "disposition": "requires-specific-review",
+            "issues": [],
+            "disposition": "captured-normal-versus-local-omission",
             "computedCandidateVerified": false,
             "renderingEquivalent": false,
-            "inputEquivalent": false
+            "inputEquivalent": false,
+            "referenceNode": "overlay:0/0/0/0/0/0",
+            "astylarNode": "root/0/2/0/1",
+            "mapping": "existing-generated-owner-proof",
+            "generatedIdentity": {
+              "status": "mapped",
+              "method": "existing-generated-owner-proof",
+              "referenceNode": "overlay:0/0/0/0/0/0",
+              "candidateNode": "root/0/2/0/1",
+              "referenceType": "div",
+              "candidateType": "div",
+              "checkedReferenceProperties": 89,
+              "referenceOrigin": "53.4062px 12px",
+              "candidateOrigin": "<omitted>",
+              "missingRules": [],
+              "extraRules": [],
+              "referencePath": [
+                "overlay:0/0/0/0/0/0",
+                "overlay:0/0/0/0/0",
+                "overlay:0/0/0/0",
+                "overlay:0/0/0",
+                "overlay:0/0",
+                "overlay:0"
+              ],
+              "candidatePath": [
+                "root/0/2/0/1",
+                "root/0/2/0",
+                "root/0/2",
+                "root/0",
+                "root"
+              ],
+              "inputEquivalent": false,
+              "computedCandidateOriginVerified": false,
+              "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+            },
+            "referenceComputed": "normal",
+            "candidateLocal": "<omitted>",
+            "formatting": {
+              "reference": "block",
+              "astylar": "flex"
+            },
+            "requests": {
+              "reference": [],
+              "astylar": []
+            },
+            "candidateStages": {
+              "resolvedStyle": {},
+              "normalResolvedStyle": {},
+              "interactionResolvedStyle": {}
+            },
+            "source": "core-style-inspection",
+            "revision": 7,
+            "limit": "Local request/stage evidence only; structural equivalence, inherited reset requests, used gaps, descendants and renderer causality are not established."
           }
         }
       },
       "originalCountMatchesCanonical": true,
-      "allOriginalCasesHaveLocalOmissionEvidence": false,
-      "proofSha256": "9af3f34c5a085057c2103554a578f64e704068dfa9c2c79c38d1a31e05108486"
+      "allOriginalCasesHaveLocalOmissionEvidence": true,
+      "proofSha256": "a3800a27333682ac2c4bbd7573afdb81b0b4553322a3c3feea6c8445eb870407"
     },
     {
       "family": "tooltip",
@@ -61682,7 +63116,8 @@
   "limits": [
     "Survey only; the canonical classifications and their raw values are unchanged.",
     "Every selected original case is reviewed; aggregate count agreement alone does not prove exact canonical membership.",
-    "Unique shared IDs or captured aliases map diagnostic owners, not equivalent formatting structure or child composition.",
+    "Unique shared IDs, captured aliases and existing component-owner proofs map diagnostic owners, not equivalent formatting structure or child composition.",
+    "Generated-owner proofs validate all 89 original reference scalar fields and all three candidate stages; scalar authored-rule gaps remain explicit.",
     "Explicit shorthand/longhand/reset/motion declarations, unknown selectors and incomplete mappings remain review cases.",
     "The local inspection neither invents candidate computed defaults nor proves used gaps or renderer causality."
   ]

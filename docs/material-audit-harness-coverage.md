@@ -3,7 +3,9 @@
 ## Owner gap survey coverage
 
 The [source-bound gap survey](material-owner-gap-input-survey.md) adds one focused
-spec: **4/4 passing**, exit **0**, **26,992.2993 ms**. It replays every original
+spec. Its generated-owner expansion now passes **6/6**, exit **0**,
+**31,917.8792 ms**, including all 12 generated identities, 48 negative controls
+and exact conservation against the initial survey. It replays every original
 case with the actual production normalization functions and preserves canonical
 report bytes. Provenance, alias, request and style-stage negative controls remain
 separate from any claim of computed or rendered equivalence.

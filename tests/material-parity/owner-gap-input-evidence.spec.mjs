@@ -11,7 +11,7 @@ const report = JSON.parse(readFileSync(reportFile));
 const bytes = readFileSync(report.capture.file); assert.equal(hash(bytes), report.capture.sha256);
 const raw = JSON.parse(bytes);
 function original(family, element) {
-  const entry = raw.results.find(e => e.family === family);
+  const entry = [...raw.results, ...raw.interactions].find(e => e.family === family && e.styleInputs.some(i => i.id === element));
   const trees = {};
   for (const side of ['reference', 'astylar']) {
     const descriptor = entry.inputTrees[side], bytes = readFileSync(descriptor.file);
@@ -97,7 +97,7 @@ test('gap survey rejects provenance, mapping, alias, shorthand, reset, motion an
 test('full original gap population replays with explicit review cases and no canonical mutation', () => {
   assert.equal(report.groupCount, 162); assert.equal(report.originalCaseCount, 2311);
   assert.equal(report.observations, 9254); assert.equal(report.canonicalOccurrences, 9254);
-  assert.equal(report.exactCountGroups, 162); assert.equal(report.localOmissionGroupsWithMatchingCount, 92);
+  assert.equal(report.exactCountGroups, 162); assert.equal(report.localOmissionGroupsWithMatchingCount, 108);
   assert.equal(report.canonicalIntegration, false); assert.equal(report.computedCandidateVerified, false);
   assert.equal(report.renderingEquivalent, false); assert.equal(report.inputEquivalent, false);
   for (const g of report.groups) {
@@ -112,4 +112,59 @@ test('full original gap population replays with explicit review cases and no can
   assert.equal(output.observations, 9254); assert.equal(output.exactCountGroups, 162);
   assert.deepEqual(canonicalFiles.map(file => hash(readFileSync(file))), before);
   assert.equal(hash(readFileSync(reportFile)), surveyBefore);
+});
+
+test('generated gap owners reuse component ownership and all 89 scalar fields while preserving rule gaps', () => {
+  const owners = [['badge', 'badge-count'], ['bottom-sheet', 'bottom-sheet-copy'],
+    ['bottom-sheet', 'bottom-sheet-dismiss'], ['bottom-sheet', 'bottom-sheet-overlay'],
+    ['bottom-sheet', 'bottom-sheet-panel'], ['dialog', 'dialog-panel'],
+    ['paginator', 'paginator-range'], ['paginator', 'paginator-size'],
+    ['snack-bar', 'snack-bar-overlay'], ['snack-bar', 'snack-bar-surface'],
+    ['stepper', 'stepper-content'], ['tooltip', 'tooltip-popup']];
+  for (const [family, id] of owners) {
+    const value = original(family, id), before = JSON.stringify(value);
+    assert.equal(inspect(value).disposition, 'requires-specific-review', `${id} without reviewed identity`);
+    const check = v => inspectOwnerGapInput(v.input, 'rowGap', v.reference, v.candidate, { family });
+    const proof = check(value);
+    assert.ok(['mapped', 'mapped-with-scalar-rule-gap'].includes(proof.generatedIdentity.status), id);
+    assert.equal(proof.generatedIdentity.checkedReferenceProperties, 89);
+    assert.equal(proof.generatedIdentity.inputEquivalent, false); assert.equal(proof.inputEquivalent, false);
+    assert.equal(JSON.stringify(value), before, `${id} must not receive a synthetic identity`);
+    for (const mutate of [
+      v => { v.input.reference.fontStyle = '__changed__'; },
+      v => { delete v.input.reference.fontStyle; },
+      v => { v.candidate.nodes.push({ ...structuredClone(an(v)), key: 'duplicate-generated-owner' }); },
+      v => { v.reference.nodes.find(n => n.key === proof.referenceNode).parent = '__missing__'; },
+    ]) {
+      const changed = structuredClone(value); mutate(changed);
+      assert.equal(check(changed).disposition, 'requires-specific-review', `${id} forged identity`);
+      assert.ok(check(changed).issues.some(i => i.reason === 'owner-mapping'), `${id} identity must reject independently of its other issues`);
+    }
+    if (id.endsWith('-overlay')) {
+      assert.equal(proof.disposition, 'requires-specific-review');
+      assert.ok(proof.issues.some(i => i.reason === 'scalar-authored-rule-gap'));
+      assert.ok(proof.generatedIdentity.missingRules.length > 0);
+    }
+  }
+});
+
+test('reviewed mapping changes only the 24 previously unmapped groups and preserves every original membership', () => {
+  const previous = JSON.parse(execFileSync('git', ['show', '61e52156817a923d0c890d08f3cd3fd4bfa23ec6:docs/material-owner-gap-input-survey.json'], { maxBuffer: 8 * 1024 * 1024 }));
+  assert.deepEqual(report.cases, previous.cases); assert.deepEqual(report.capture, previous.capture);
+  assert.deepEqual(report.productionNormalization, previous.productionNormalization);
+  let changed = 0, observations = 0;
+  for (const [index, group] of report.groups.entries()) {
+    const prior = previous.groups[index];
+    for (const p of ['family', 'element', 'property', 'reference', 'candidate', 'canonicalOccurrences', 'originalCases', 'originalCountMatchesCanonical'])
+      assert.deepEqual(group[p], prior[p]);
+    if (Object.hasOwn(prior.reasons, 'owner-mapping')) {
+      changed++; observations += group.originalCases.length;
+      assert.equal(Object.hasOwn(group.reasons, 'owner-mapping'), false);
+      for (const witness of Object.values(group.witnesses)) {
+        assert.ok(witness.proof.generatedIdentity); assert.equal(witness.proof.inputEquivalent, false);
+      }
+    } else assert.deepEqual(group, prior, 'all other complete group evidence must be conserved');
+  }
+  assert.equal(changed, 24); assert.equal(observations, 884);
+  assert.equal(report.groups.filter(g => Object.hasOwn(g.reasons, 'scalar-authored-rule-gap')).length, 4);
 });

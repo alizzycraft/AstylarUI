@@ -72,7 +72,7 @@ for (const e of entries) {
   cases.push({ case: caseKey, inputTrees: e.inputTrees });
   for (const { input, property, group } of matches) {
     assert.ok(!group.originalCases.includes(caseKey));
-    const proof = inspectOwnerGapInput(input, property, trees.reference, trees.astylar);
+    const proof = inspectOwnerGapInput(input, property, trees.reference, trees.astylar, { family: e.family });
     group.originalCases.push(caseKey); group.proofHasher.update(JSON.stringify({ case: caseKey, proof }) + '\n');
     const reasons = [...new Set(proof.issues.map(i => i.reason))];
     if (!reasons.length) reasons.push(proof.disposition);
@@ -87,7 +87,9 @@ const findings = [...groups.values()].map(({ proofHasher, ...g }) => ({ ...g,
     Object.keys(g.reasons).length === 1 && Object.hasOwn(g.reasons, 'captured-normal-versus-local-omission'),
   proofSha256: proofHasher.digest('hex') }));
 const sources = ['scripts/audit-material-owner-gap-inputs.mjs', 'tests/material-parity/owner-gap-input-evidence.mjs',
-  'tests/material-parity/root-initial-style-evidence.mjs', 'tests/material-parity/border-initial-input-evidence.mjs', auditModule];
+  'tests/material-parity/root-initial-style-evidence.mjs', 'tests/material-parity/border-initial-input-evidence.mjs', auditModule,
+  'tests/material-parity/origin-alias-mapping-evidence.mjs', 'tests/material-parity/generated-node-mapping-evidence.mjs',
+  'tests/material-parity/run-material-parity.mjs'];
 const result = { schemaVersion: 1, kind: 'owner-gap-local-input-survey', baselineRevision,
   baselineCompressedSha256: manifest.compressedSha256, capture,
   productionNormalization: { module: auditModule, functions: normalizationNames, sha256: hash(normalizationSource.replaceAll('\r\n', '\n')) },
@@ -101,7 +103,8 @@ const result = { schemaVersion: 1, kind: 'owner-gap-local-input-survey', baselin
   groups: findings, cases,
   limits: ['Survey only; the canonical classifications and their raw values are unchanged.',
     'Every selected original case is reviewed; aggregate count agreement alone does not prove exact canonical membership.',
-    'Unique shared IDs or captured aliases map diagnostic owners, not equivalent formatting structure or child composition.',
+    'Unique shared IDs, captured aliases and existing component-owner proofs map diagnostic owners, not equivalent formatting structure or child composition.',
+    'Generated-owner proofs validate all 89 original reference scalar fields and all three candidate stages; scalar authored-rule gaps remain explicit.',
     'Explicit shorthand/longhand/reset/motion declarations, unknown selectors and incomplete mappings remain review cases.',
     'The local inspection neither invents candidate computed defaults nor proves used gaps or renderer causality.'] };
 const target = 'docs/material-owner-gap-input-survey.json';

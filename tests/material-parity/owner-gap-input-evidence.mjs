@@ -1,5 +1,6 @@
 import { isDeepStrictEqual } from 'node:util';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 
 export const ownerGapProperties = Object.freeze(['columnGap', 'rowGap']);
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -11,7 +12,7 @@ const project = declarations => Object.fromEntries(Object.entries(declarations).
 // A property-local survey, not a cascade resolver or a canonical classification.
 // In particular, a normal browser keyword and a missing local field are never
 // converted to synthetic zero or accepted as computed/rendered equivalence.
-export function inspectOwnerGapInput(input, property, reference, candidate) {
+export function inspectOwnerGapInput(input, property, reference, candidate, { family } = {}) {
   const issues = [];
   const issue = (reason, detail = {}) => issues.push({ reason, ...detail });
   const finish = extra => ({ element: input?.id, property, issues,
@@ -31,11 +32,22 @@ export function inspectOwnerGapInput(input, property, reference, candidate) {
   }
   const ids = reference.nodes.filter(n => n.attributes?.id === input.id);
   const aliases = reference.nodes.filter(n => n.attributes?.['data-parity-id'] === input.id);
-  const rn = ids.length ? one(ids) : one(aliases);
+  let rn = ids.length ? one(ids) : one(aliases);
   const an = one(candidate.nodes.filter(n => n.authored?.id === input.id));
+  let generatedIdentity;
+  if (!rn && ids.length === 0 && typeof family === 'string') {
+    // Reuse the existing component-owner proof and exact 89-field scalar check.
+    // Never inject a diagnostic ID or select the first similar-looking node.
+    generatedIdentity = resolveOriginAliasPair({ family }, reference, candidate, input);
+    if (['mapped', 'mapped-with-scalar-rule-gap'].includes(generatedIdentity.status) &&
+        generatedIdentity.candidateNode === an?.key) {
+      rn = one(reference.nodes.filter(n => n.key === generatedIdentity.referenceNode));
+      if (generatedIdentity.status === 'mapped-with-scalar-rule-gap') issue('scalar-authored-rule-gap');
+    }
+  }
   if (!rn || !an || input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
       input.referenceStructure.type !== rn.type || input.astylarStructure.type !== an.authored.type) {
-    issue('owner-mapping'); return finish();
+    issue('owner-mapping'); return finish(generatedIdentity ? { generatedIdentity } : {});
   }
   const stages = ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'];
   const scalarStages = ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'];
@@ -84,7 +96,8 @@ export function inspectOwnerGapInput(input, property, reference, candidate) {
     issue('relevant-authored-request', { side });
   if (Object.values(candidateStages).some(value => Object.keys(value).length)) issue('candidate-local-gap-or-motion-value');
   return finish({ referenceNode: rn.key, astylarNode: an.key,
-    mapping: ids.length ? 'unique-shared-id' : 'unique-reference-data-parity-id',
+    mapping: generatedIdentity?.method ?? (ids.length ? 'unique-shared-id' : 'unique-reference-data-parity-id'),
+    ...(generatedIdentity ? { generatedIdentity } : {}),
     referenceComputed: input.reference[property], candidateLocal: input.astylar[property] ?? '<omitted>',
     formatting: { reference: reference.styles[rn.style]?.display, astylar: an.resolvedStyle.display },
     requests, candidateStages, source: candidate.resolvedStyleSource, revision: candidate.resolvedStyleRevision,

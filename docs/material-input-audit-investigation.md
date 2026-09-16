@@ -7,10 +7,13 @@ The machine report is generated separately from the full benchmark output.
 
 The [owner gap survey](material-owner-gap-input-survey.md) reopens all 2,311
 original cases and accounts for 162 unresolved gap groups / 9,254 observations.
-It distinguishes 92 property-local omission groups, 16 explicit candidate-gap
-groups, 30 remaining motion-rule groups and 24 owner-mapping groups. All raw
-requests and three candidate stages are preserved. Four focused tests pass,
-including complete no-write replay and canonical byte-conservation controls.
+It distinguishes 108 property-local omission groups, 16 explicit candidate-gap
+groups, 34 remaining motion-rule groups and four scalar authored-rule gaps. Existing
+component-ownership proofs resolve the earlier 24 mapping groups / 884 observations
+while preserving every other complete group and all original case lists. All raw
+requests and three candidate stages are preserved. Six focused tests pass,
+including 48 generated-identity negative controls, complete no-write replay and
+canonical byte-conservation controls.
 This is triage evidence, not new canonical classification or rendering equivalence;
 the canonical unresolved count remains 2,438. The complete current harness now
 contains 91 files and still requires execution.
