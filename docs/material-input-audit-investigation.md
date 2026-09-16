@@ -3,6 +3,14 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Larger authoring crash has a terminal isolated replay
+
+The [unchanged authoring-integration test](material-audit-harness-coverage.md#larger-authoring-crash-isolated-without-changing-the-test)
+passes 2/2 (890,317.2708ms), including actual historical/current builder
+conservation and evidence rejection checks. All four previously crashed files
+now have isolated terminal results. Their original failures remain recorded;
+neither the initiating crash cause nor full-suite stability is established.
+
 ## Root-style evidence replayed without changing findings
 
 The [root-style provenance replay](material-audit-harness-coverage.md#root-style-provenance-replay-and-isolated-crash-checks)

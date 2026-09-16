@@ -60,6 +60,23 @@ their outcomes or input equivalence.
 
 ## First complete run failed
 
+### Larger authoring crash isolated without changing the test
+
+`node --test tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs`
+completed with terminal exit **0**, **2/2 pass**, no skips or cancellations,
+**890,317.2708ms**. Neither this test nor its consumed implementation was changed
+during the isolated replay. The first test (137,746.9028ms) executes the actual
+historical/current builders, conserves raw rows and unrelated classifications,
+and verifies prior precedence plus later fixed-width coverage. The second
+(750,126.3361ms) rejects detached evidence and inflated claims in both root-flow
+and button-radius attribution.
+
+The earlier native exit 3221226505 remains an unexplained failed full-run result.
+The isolated pass does not identify its initiating cause or prove complete-suite
+resource stability. Together with the smaller 15-test replay, all four formerly
+crashed files now have terminal isolated results; the full current harness and
+remaining stale evidence reports still require verification.
+
 ### Root-style provenance replay and isolated crash checks
 
 The three smaller files that crashed in the full run were run in isolation:
