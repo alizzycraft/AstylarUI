@@ -3,6 +3,21 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Button fixed-width authoring includes scalar-matching cases
+
+The [complete width survey](material-button-fixed-width-audit.md) retains **600**
+original owners in **480** cases / nine groups, including 52 core-button owners
+whose measured and authored widths normalize to the same scalar. All reference
+width requests are omitted; candidate rules request fixed pixel widths. This
+is unequal authoring even when its resulting scalar difference is absent.
+Exact full-tree/scalar/stage checks and thirteen negative controls pass
+(**2/2**, **4,885.7267 ms**); generation and no-write replay exit 0.
+Initial/current AST width expressions agree, without inferring author motive
+or unchanged whole rules. Used dimensions, intrinsic sizing and composition
+remain separate. No canonical classification or any of the 180 frozen sources
+used by the live full regeneration changed; integration must preserve this
+authored-input coverage independently of scalar-difference coverage.
+
 ## Button formatting/host production integration verified
 
 The main audit now retains both independently source-bound button proof sets
