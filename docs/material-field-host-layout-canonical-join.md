@@ -9,6 +9,11 @@ Follow-up: the [production integration](material-field-host-layout-canonical-int
 now passes a 607-case old/new-builder proof covering the complete field-host
 population. This join remains bound to the saved pre-integration canonical
 report; it is not rewritten to pretend complete report regeneration has occurred.
+The reader now reopens the manifest and compressed payload from commit
+`b059b4345b5d513b9eecf1b4a804498e31094d41`, validating their original digest.
+This makes the historical comparison independent of subsequent regeneration of
+the working-tree canonical report. Original source-case membership is still
+replayed; the historical classification counts are not replaced with current ones.
 
 | Current canonical treatment | Groups | Source-backed disposition for integration |
 | --- | ---: | --- |

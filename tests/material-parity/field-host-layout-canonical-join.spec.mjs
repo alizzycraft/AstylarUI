@@ -14,6 +14,8 @@ test('all original field-host layout groups map to canonical values, counts, sta
     .every(r => r.property === 'minWidth' && r.referenceAuthored === '0px' && r.candidateAuthored === '<omitted>'));
   assert.deepEqual(report.counts.proposedClassifications, { 'application-plugin-authoring-defect': 54, 'parity-harness-defect': 18 });
   assert.equal(report.canonicalIntegration, false);
+  assert.equal(report.canonical.revision, 'b059b4345b5d513b9eecf1b4a804498e31094d41');
+  assert.equal(report.canonical.compressedSha256, 'dc3a0681ddbbb85b256db9b3616280d80727c33c96ee016f3cd15b0c0b91e853');
 });
 
 test('membership join rejects dropped, duplicated, reordered or reassigned evidence and unjustified claims', async () => {

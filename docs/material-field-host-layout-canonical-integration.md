@@ -100,9 +100,10 @@ These scoped replays do not substitute for the full current harness.
 1. Run the remaining historical integration tests in the complete current harness;
    the two affected all-family checks above now pass with explicit later-change
    validation and unchanged original controls.
-2. Replay dependent current provenance receipts affected by builder/test
-   fingerprints, preserving every non-metadata finding. Historical receipts must
-   not be blindly rewritten to current metadata.
+2. The [dependent provenance replay](material-audit-harness-coverage.md#field-host-layout-integration-provenance-closure)
+   now passes with every non-metadata finding conserved across 17 updated JSON
+   reports. Include those checks in the complete current harness; the historical
+   membership join is pinned to its pre-integration committed canonical payload.
 3. Generate the complete canonical report and compare it against the actual saved
    pre-integration report: every original scalar row, every unrelated complete
    finding, full case/state coverage and earlier ledgers must be conserved.

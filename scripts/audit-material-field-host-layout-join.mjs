@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Readable } from 'node:stream';
 import { createGunzip } from 'node:zlib';
@@ -9,6 +10,9 @@ import Parser from 'jsonparse';
 
 const surveyFile = 'docs/material-field-host-layout-inputs.json';
 const manifestFile = 'docs/material-input-equivalence-audit.json';
+// This receipt records the pre-integration classifications. Reopen their exact
+// committed bytes so regenerating today's canonical report cannot rewrite history.
+const canonicalRevision = 'b059b4345b5d513b9eecf1b4a804498e31094d41';
 const target = 'docs/material-field-host-layout-canonical-join.json';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const caseKey = (kind, e) => `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
@@ -19,9 +23,10 @@ const scalar = v => v === '<omitted>' || v === undefined ? null : v === '0px' ? 
 const signature = (family, element, property, reference, candidate) => JSON.stringify([family, element, property, scalar(reference), scalar(candidate)]);
 
 export async function readCanonicalFieldHostRows() {
-  const manifest = JSON.parse(readFileSync(manifestFile));
+  const historicalFile = file => execFileSync('git', ['show', `${canonicalRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 });
+  const manifest = JSON.parse(historicalFile(manifestFile));
   assert.match(manifest.payload, /^material-input-equivalence-audit[^/\\]*\.gz$/);
-  const bytes = readFileSync(`docs/${manifest.payload}`);
+  const bytes = historicalFile(`docs/${manifest.payload}`);
   assert.equal(bytes.length, manifest.compressedBytes); assert.equal(hash(bytes), manifest.compressedSha256);
   const parser = new Parser(), projection = {}; let done = false;
   parser.onValue = function(value) {
@@ -34,7 +39,7 @@ export async function readCanonicalFieldHostRows() {
   };
   for await (const bytesPart of Readable.from([bytes]).pipe(createGunzip())) { parser.write(bytesPart); if (done) break; }
   assert.ok(done, 'missing canonical discrepancy section');
-  return { manifest, ...projection };
+  return { revision: canonicalRevision, manifest, ...projection };
 }
 
 export function joinFieldHostLayout({ survey, original, discrepancies }) {
@@ -123,7 +128,7 @@ export async function buildFieldHostLayoutJoin() {
   return { schemaVersion: 1, evidenceId: 'field-host-layout-canonical-membership-join',
     baselineCommit: 'b059b4345b5d513b9eecf1b4a804498e31094d41', canonicalIntegration: false,
     survey: { file: surveyFile, sha256: hash(surveyBytes) }, originalCapture: survey.capture,
-    canonical: { manifest: manifestFile, compressedSha256: canonical.manifest.compressedSha256, totalGroups: canonical.discrepancies.length },
+    canonical: { revision: canonical.revision, manifest: manifestFile, compressedSha256: canonical.manifest.compressedSha256, totalGroups: canonical.discrepancies.length },
     sourceFingerprints: ['scripts/audit-material-field-host-layout-join.mjs', 'tests/material-parity/field-host-layout-canonical-join.spec.mjs']
       .map(file => ({ file, sha256: hash(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')) })),
     counts: { cases: 577, groups: rows.length, propertyObservations: 4616, measuredCases: 72, geometryGapCases: 505,

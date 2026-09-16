@@ -1,5 +1,53 @@
 # Complete audit harness coverage
 
+## Field-host layout integration: provenance closure
+
+After production integration `a73537f` and historical regression compatibility
+`cdd28fc`, the current evidence dependencies were replayed. Independent JSON
+comparison against `a73537f` checks every field of all **17** changed reports:
+only source fingerprints, the layout join's survey digest, the remaining-overlay
+mapping digest, and the explicit historical canonical revision change. Every
+non-metadata finding is unchanged. Each new fingerprint was checked against
+current normalized source bytes; the original capture hashes remain unchanged.
+
+- Ten original case-index checks pass **10/10**, exit **0**, **59,862.5701 ms**.
+- Root initial style, field-host weight/tracking and initial style, owner
+  membership/mapping, and remaining-overlay evidence pass **28/28**, exit **0**,
+  **343,618.8147 ms**, with no failures, skips, cancellations or todos.
+- Field-host layout survey and historical membership join pass **4/4**, exit
+  **0**, **24,654.0716 ms**. Survey, join and field-host initial-style no-write
+  checks also exit **0**.
+
+The membership join reopens the exact pre-integration canonical manifest and
+compressed payload from `b059b4345b5d513b9eecf1b4a804498e31094d41`, validating
+SHA-256 `dc3a0681ddbbb85b256db9b3616280d80727c33c96ee016f3cd15b0c0b91e853`.
+Its six historical minimum-width equivalence labels remain historical evidence;
+future regeneration of the current report cannot silently replace them. The
+first replay correctly rejected the stale typography-index dependency. Rebuilding
+the survey and then its dependent join restored the verified chain.
+
+```powershell
+node --test --test-name-pattern="container caret case index|root box model case index|root height case index|field host color case index|root color case index|root typography case index|field host alignment case index|field host case index|non-widget appearance case index|button appearance case index" tests/material-parity/input-equivalence-audit.spec.mjs
+node --test --test-concurrency=1 tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs tests/material-parity/field-host-initial-style-evidence.spec.mjs tests/material-parity/owner-initial-style-membership.spec.mjs tests/material-parity/owner-initial-style-mappings.spec.mjs tests/material-parity/remaining-overlay-ancestry-review.spec.mjs
+node --test tests/material-parity/field-host-layout-input-evidence.spec.mjs tests/material-parity/field-host-layout-canonical-join.spec.mjs
+node scripts/audit-material-field-host-layout-inputs.mjs --check
+node scripts/audit-material-field-host-layout-join.mjs --check
+node scripts/audit-material-field-host-initial-styles.mjs --check
+```
+
+Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `layout-case-index-replay.log`, SHA-256
+  `2bf903cb2ed4b3dbd3f1226657f484825858d4de3e5868c8e41cd013c9204be9`.
+- `layout-provenance-closure.log`, SHA-256
+  `60d494aad17771f6048dd4949c9c4bcd0d60f36bbed77706df64a15a553c151f`.
+
+Current complete harness discovery is **90 files**: **82** Material, four general
+parity, and four TTS, retaining all **43** legacy files. This inventory is not a
+test pass. Full current report generation/conservation, no-write validation,
+complete harness execution, remaining attribution and enforced parity remain
+outstanding. The earlier 87-file run does not cover this integration.
+
 ## Owner mapping and remaining-overlay provenance replay after grid integration
 
 The membership, owner-mapping and remaining-overlay generators have each

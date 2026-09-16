@@ -5,13 +5,14 @@
   "canonicalIntegration": false,
   "survey": {
     "file": "docs/material-field-host-layout-inputs.json",
-    "sha256": "e6679a04d0413db182db4be133fcc9c9319af1b8bacc0f4d698cbf12c2005884"
+    "sha256": "69ec7150ec31e59ef5236bb865ce82ce7403ed353015e7a558088329440b9ca9"
   },
   "originalCapture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
     "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
   },
   "canonical": {
+    "revision": "b059b4345b5d513b9eecf1b4a804498e31094d41",
     "manifest": "docs/material-input-equivalence-audit.json",
     "compressedSha256": "dc3a0681ddbbb85b256db9b3616280d80727c33c96ee016f3cd15b0c0b91e853",
     "totalGroups": 8339
@@ -19,11 +20,11 @@
   "sourceFingerprints": [
     {
       "file": "scripts/audit-material-field-host-layout-join.mjs",
-      "sha256": "555979a941f00e2326c1f00cc4a6487549f23403b240c809d1a29cc225a0e9af"
+      "sha256": "7252ce10cd59c2fe2e630a40e9d643ecb161a52736fd0fac66b424841ba25636"
     },
     {
       "file": "tests/material-parity/field-host-layout-canonical-join.spec.mjs",
-      "sha256": "6422114c9396dd57de5397ec4281077fd739740b84bff087f9ab783ba0e5660d"
+      "sha256": "19419c4afa1eee975f3e45d5b416f665253dc2db8c327e52ba7b742cfaf5202c"
     }
   ],
   "counts": {
