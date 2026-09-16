@@ -12,8 +12,9 @@ receive only observation-stage attribution. All 2,311 original cases and 2,856
 grid review gaps remain in the independently replayed ledger. Generation exits
 1 solely for the 2,495 unresolved groups, not a report-integrity error. The
 human report and exact source membership are also conserved. Complete no-write
-replay, current full harness and final enforced matrix are still pending; input
-equivalence is not established.
+replay has since finished with no source/report drift, exiting 1 solely for
+those 2,495 unresolved groups. The current full harness and final enforced
+matrix remain pending; input equivalence is not established.
 
 ## Nine case indices and their field-host dependency replayed
 

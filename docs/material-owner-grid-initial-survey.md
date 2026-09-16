@@ -67,6 +67,18 @@ The complete no-write `--check`, current 80-file harness and final enforced
 comparison matrix remain required. Conservation is not candidate computed-grid,
 used-layout or raster proof.
 
+### Complete no-write replay
+
+The complete generation command above, with `--check` appended, has now finished
+with exit **1**, solely for **2,495** unresolved resolved-style differences.
+There is no source-fingerprint drift, decoded saved-report mismatch or human
+report mismatch. It replays the same complete 436 static / 1,875 interaction
+capture, 8,339 groups, 386,891 observations and 132 source findings. All 196
+fingerprinted dependencies were held unchanged, and the saved payload retains
+the compressed and decoded digests recorded above. This verifies report
+reproducibility, not input equivalence, renderer correctness, the complete
+current test harness or the final enforced comparison matrix.
+
 ### Diagnostic integration history
 
 The production builder now retains the complete source-bound grid ledger and
