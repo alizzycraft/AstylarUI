@@ -60,6 +60,22 @@ artifacts; neither a digest nor this membership join replaces the tree test.
 
 ## Integration plan
 
+Preparation now exists in `tests/material-parity/field-host-layout-source-binding.mjs`:
+the independent collector, classifier and classification-coverage validator
+reopen the original capture and decoded trees. They preserve **2,311** capture
+cases, **577** selected hosts, **1,734** negative cases, **72** groups and all
+**4,616** property observations. Every complete selected proof digest matches
+the earlier standalone survey. Static measurements and interaction geometry
+gaps remain distinct. The core composition module is not yet wired to these
+helpers in this preparation increment.
+
+`node --test tests/material-parity/field-host-layout-source-binding.spec.mjs`
+passes **3/3**, zero failures/skips/cancellations/todos, **41,499.6952 ms**, exit
+**0** (session **95683**). Tests cover source replay, preserved input, complete
+positive/negative population, all case/state/property coverage and mutation
+rejection. The isolated classifier tests use only the eight-property scalar
+contract; actual production normalization and precedence remain the next gate.
+
 1. Add a source-bound production classifier using the reviewed declarations,
    owner identity, all state cases and source-tree proof. Preserve explicit false
    flags for whole-input equivalence and complete original renderer causality.
