@@ -9,6 +9,7 @@ import ts from 'typescript';
 import { buildMaterialInputAudit, validateMaterialInputAudit } from './input-equivalence-audit.mjs';
 import { buttonFlexAttribution } from './button-flex-source-binding.mjs';
 import { buttonHostRequestAttribution } from './button-host-request-source-binding.mjs';
+import { buttonFixedWidthAttribution } from './button-fixed-width-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
 
 const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
@@ -63,15 +64,21 @@ test('button requests production integration preserves raw values and prior clas
     assert.equal(audit.buttonFlexInputs.observations.length, expectedOwners);
     assert.equal(audit.buttonHostRequestInputs.observations.length, expectedOwners);
     assert.equal(selected.reduce((n, r) => n + r.occurrences, 0), expectedOwners * 6);
+    const laterWidths = audit.discrepancies.filter(r => r.attribution === buttonFixedWidthAttribution);
+    assert.equal(laterWidths.length, 8);
+    assert.equal(audit.buttonFixedWidthInputs.observations.length, expectedOwners);
+    assert.equal(audit.buttonFixedWidthInputs.groups.length, 9);
+    const matchingCoreOwners = audit.buttonFixedWidthInputs.observations.filter(o => o.element === 'core-primary').length;
+    assert.equal(laterWidths.reduce((n, r) => n + r.occurrences, 0), expectedOwners - matchingCoreOwners);
     assert.deepEqual(raw, inputBefore);
     assert.deepEqual(audit.discrepancies.map(scalar), previous.discrepancies.map(scalar));
-    const keys = new Set(selected.map(r => JSON.stringify(scalar(r))));
+    const keys = new Set([...selected, ...laterWidths].map(r => JSON.stringify(scalar(r))));
     const old = previous.discrepancies.filter(r => keys.has(JSON.stringify(scalar(r))));
-    assert.equal(old.length, 54); assert.ok(old.every(r => r.attribution === 'unresolved'));
+    assert.equal(old.length, 62); assert.ok(old.every(r => r.attribution === 'unresolved'));
     const others = r => r.discrepancies.filter(d => !keys.has(JSON.stringify(scalar(d))));
     assert.deepEqual(others(audit), others(previous));
     const errors = validateMaterialInputAudit(audit, { requireComplete: false });
-    assert.deepEqual(errors.filter(e => /button flex|button host request/.test(e)), []);
+    assert.deepEqual(errors.filter(e => /button flex|button host request|button fixed width/.test(e)), []);
     for (const row of selected) {
       assert.equal(row.reviewEvidence.inputEquivalent, false);
       assert.equal(row.reviewEvidence.candidateUsedLayoutVerified, false);
@@ -85,8 +92,9 @@ test('button requests production integration preserves raw values and prior clas
     assert.ok(invalid.some(e => e.includes('button flex')));
     assert.ok(invalid.some(e => e.includes('button host request')));
     console.log(JSON.stringify({ diagnosticCases: raw.results.length + raw.interactions.length,
-      sourceBoundOwners: expectedOwners, newGroups: selected.length,
-      observations: selected.reduce((n, r) => n + r.occurrences, 0),
+      sourceBoundOwners: expectedOwners, newGroups: selected.length + laterWidths.length,
+      formattingHostGroups: selected.length, widthGroups: laterWidths.length, matchingCoreOwnersRetained: matchingCoreOwners,
+      observations: [...selected, ...laterWidths].reduce((n, r) => n + r.occurrences, 0),
       unchangedScalarRows: audit.discrepancies.length,
       unchangedCompleteRows: others(audit).length,
       unchangedCompleteRowsSha256: hash(JSON.stringify(others(audit))),

@@ -3,6 +3,45 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Fixed-width production integration verified
+
+The main audit now retains the source-bound fixed-width authoring ledger before
+scalar filtering and classifies only still-unresolved width rows. All nine
+authoring groups / 600 original owners remain visible, including the 52 core
+owners with matching normalized widths. The source-bound ledger also prevents
+a false input-equivalence verdict; no numerical discrepancy is manufactured.
+
+The [production width proof](material-button-fixed-width-audit.md#production-integration-verification)
+executes the actual prior module from
+`30357b9f8c7b95da668914032557c5f7416c81db`, relocating only import URLs.
+Before integration it fails at **0 versus 8** expected groups
+(**83,873.285 ms**); afterward it passes **1/1**, zero failures/skips/cancellations,
+**321,594.3434 ms**. All 480 original button cases retain 1,201 unchanged scalar
+records and 1,193 unchanged unrelated complete records (SHA-256
+`a3c46f409efe25aeca4bd20b758cd702c1a70546fa91a3ef18e762bc82dfe62c`).
+Only eight width groups / 548 observations gain authoring attribution. Missing
+binding and lost scalar-matching owners are rejected by production validation.
+
+Two targeted earlier-classifier compatibility tests pass **2/2**,
+**584,532.8766 ms**. Formatting/host evidence retains 54 earlier groups plus
+eight later width groups, all 2,938 scalar records, 24 scalar-matching core
+owners and all 2,876 unrelated complete records (SHA-256
+`7cdadfc4e877b671a2ae5ce7a7fef70101b86bb526acaa4405dfcd78dc341f61`).
+The root-flow/radius check retains its prior exact evidence and conserves
+unrelated records after independently checking the later width findings.
+These are targeted integration tests, not a full harness run.
+
+The source-inventory test passes **1/1**, **1,365.9775 ms**, with **187** unique
+dependencies. An independent AST comparison preserves all 171 function names
+and exact text of the 165 functions outside collection/build/validation/report
+and evidence inventory; normalization and shared mappings remain unchanged.
+The full-report conservation gate correctly fails against the preceding report
+at **0 versus 8** groups. Complete regeneration, its 8,331-unrelated-row gate,
+and no-write replay are still pending. The checked-in canonical report still
+has **2,603** unattributed groups / 180 sources; the expected eight-group
+reduction is not yet a verified full-report result. No renderer or canonical
+comparison input changed.
+
 ## Complete button formatting/host no-write replay
 
 The full canonical no-write command has now finished with exit **1**, solely

@@ -156,3 +156,62 @@ Tests still use an explicit arithmetic diagnostic callback, not the production
 pipeline. Actual production normalization, preceding-classification conservation,
 main-report integration and complete-report replay are the next gates. No
 renderer, comparison inputs or any of the 180 frozen audit sources changed.
+
+## Production integration verification
+
+The main audit now collects the independent width ledger before discrepancy
+filtering, retains all nine authoring groups, and consults the width classifier
+only for still-unresolved scalar differences. The full ledger also prevents a
+false input-equivalence verdict when unequal authored widths happen to match
+numerically. The main validator independently replays both source binding and
+the original scalar population. The human report exposes both populations.
+
+```powershell
+node --test tests/material-parity/button-fixed-width-canonical-integration.spec.mjs
+node --test --test-name-pattern="records source fingerprints" tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+The production test executes the actual preceding module from
+`30357b9f8c7b95da668914032557c5f7416c81db`, relocating only import URLs. Before
+integration it fails at **0 versus 8** expected width groups (**83,873.285 ms**).
+After integration it passes **1/1**, zero failures/skips/cancellations,
+**321,594.3434 ms**. All **480** original button cases / **600** owners are
+included, with **nine** authoring groups and **eight** scalar groups / **548**
+observations. All **1,201** scalar rows are unchanged, as are all **1,193**
+unrelated complete records (SHA-256
+`a3c46f409efe25aeca4bd20b758cd702c1a70546fa91a3ef18e762bc82dfe62c`).
+All 52 core owners remain in the ledger, and neither old nor new production
+output invents a core width discrepancy. Missing binding and removal of those
+scalar-matching owners are rejected by production validation.
+
+The source-inventory test passes **1/1**, **1,365.9775 ms**, with all **187**
+unique current dependencies. Independent AST comparison preserves all 171 main
+function names and the exact text of the 165 functions outside collection,
+build, validation, report rendering and evidence inventory. Normalization and
+shared mappings are unchanged.
+
+The full original-report conservation command,
+`node scripts/verify-material-button-width-integration.mjs`, correctly fails
+against the old canonical report at **0 versus 8** groups. Its forward gate
+requires all 8,339 scalar rows and all 8,331 unrelated complete records to stay
+unchanged, plus exact original-source replay of the entire nine-group ledger.
+The expected remaining count is 2,595, but canonical regeneration/conservation
+and no-write replay are not yet completed. No full harness or enforced-matrix
+pass is claimed here.
+
+The two targeted earlier-classifier compatibility checks also pass **2/2**,
+zero failures/skips/cancellations, **584,532.8766 ms**:
+
+```powershell
+node --test --test-concurrency=1 --test-name-pattern="button requests production integration preserves|reviewed authoring production integration preserves" tests/material-parity/button-requests-canonical-integration.spec.mjs tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs
+```
+
+The formatting/host test (**453,506.8044 ms**) retains 1,087 diagnostic cases,
+283 owners, 54 prior formatting/host groups and eight width groups, including
+24 scalar-matching core owners. All 2,938 scalar records and 2,876 unrelated
+complete records are unchanged (SHA-256
+`7cdadfc4e877b671a2ae5ce7a7fef70101b86bb526acaa4405dfcd78dc341f61`).
+The flow/radius test (**126,155.7999 ms**) preserves its exact existing evidence
+and explicitly checks the eight later width groups before conserving all
+unrelated records. These are the selected integration tests, not reruns of
+every test in those files or the full harness.

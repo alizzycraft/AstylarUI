@@ -11,6 +11,7 @@ import { rootFlowHeightAttribution } from './root-flow-height-source-binding.mjs
 import { buttonPillRadiusAttribution } from './button-pill-radius-source-binding.mjs';
 import { buttonFlexAttribution } from './button-flex-source-binding.mjs';
 import { buttonHostRequestAttribution } from './button-host-request-source-binding.mjs';
+import { buttonFixedWidthAttribution } from './button-fixed-width-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
 
 const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
@@ -87,13 +88,19 @@ test('reviewed authoring production integration preserves raw rows and prior cla
     assert.equal(rows.length, 27);
     assert.equal(rows.reduce((sum, r) => sum + r.occurrences, 0), audit.buttonPillRadiusInputs.observations.length * 3);
   }
-  const selected = new Set([...flow, ...radius, ...later].map(r => JSON.stringify(scalar(r))));
+  const widths = audit.discrepancies.filter(r => r.attribution === buttonFixedWidthAttribution);
+  assert.equal(widths.length, 8);
+  assert.equal(audit.buttonFixedWidthInputs.groups.length, 9);
+  assert.equal(audit.buttonFixedWidthInputs.observations.length, audit.buttonPillRadiusInputs.observations.length);
+  const matchingCoreOwners = audit.buttonFixedWidthInputs.observations.filter(o => o.element === 'core-primary').length;
+  assert.equal(widths.reduce((n, r) => n + r.occurrences, 0), audit.buttonFixedWidthInputs.observations.length - matchingCoreOwners);
+  const selected = new Set([...flow, ...radius, ...later, ...widths].map(r => JSON.stringify(scalar(r))));
   const oldSelected = previous.discrepancies.filter(r => selected.has(JSON.stringify(scalar(r))));
-  assert.equal(oldSelected.length, 171);
+  assert.equal(oldSelected.length, 179);
   assert.ok(oldSelected.every(r => r.attribution === 'unresolved'));
   const others = r => r.discrepancies.filter(d => !selected.has(JSON.stringify(scalar(d))));
   assert.equal(hash(JSON.stringify(others(audit))), hash(JSON.stringify(others(previous))));
-  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => /root flow height|button pill radius|button flex|button host request/.test(e)));
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => /root flow height|button pill radius|button flex|button host request|button fixed width/.test(e)));
 }));
 
 test('reviewed authoring production validation rejects detached evidence and inflated claims', () => withCapture((raw, options) => {
