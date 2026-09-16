@@ -2,6 +2,24 @@
 
 ## Original case-index provenance replay after grid integration
 
+The subsequent root-initial-style and field-host weight/tracking replay also
+completed against the integrated grid builder:
+
+```powershell
+node --test --test-concurrency=1 tests/material-parity/root-initial-style-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs
+```
+
+Exit **0**, **10/10 passed**, **139,971.0977ms**. The root proof independently
+replays all 2,311 cases / 30,043 observations / 468 groups; the field proof
+replays all 577 cases / 1,154 weight/tracking observations / 12 groups. Both
+files include malformed-evidence and false-claim rejection tests. Their saved
+reports change only two builder/test fingerprints and one builder fingerprint,
+respectively. Every non-fingerprint JSON field is unchanged, retaining digests
+`a43e00eeb2d4223a28b0b6feafd91776fca883ffea15ab135a4ac2954dd83286`
+and `76c82d3bcca1d4e8c0f24ae08dbcce04a32d619793f0ff3d81aeb7b64fb3e012`.
+This supersedes their earlier metadata-only staleness, not the original failed
+full-harness record or the need for a new complete run.
+
 At `c6c2077`, nine saved case indices still fingerprinted the older audit builder
 `fb97f72a543cff1f6c4e1f163f8b92f98c7dbbacbaa4a37d0571432045201392`.
 Only that fingerprint in each index changes to the current normalized source hash
