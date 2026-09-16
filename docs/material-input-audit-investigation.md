@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared button pill-radius inputs traced
+
+The [button radius audit](material-button-pill-radius-audit.md) preserves 600
+owners across 480 cases, with 108 groups / 2,400 corner-property observations.
+Material's full-pill request is replaced by a fixed theme-scaled radius. The
+base candidate rule dates to the initial showcase unchanged, so this is not
+evidence of a later compensating patch. Four tests pass, including full original
+owner replay and 18 browser-only paired shape controls at DPR 1 and 2. Those
+controls demonstrate why matching corner pixels at today's constrained height
+do not establish equivalent authored intent. Candidate paint remains unproven;
+canonical integration is pending. No renderer or comparison inputs changed.
+
 ## Repeated-root flow source binding prepared
 
 The [repeated height-rule flow audit](material-root-flow-height-overrides.md#original-source-binding-prepared)
