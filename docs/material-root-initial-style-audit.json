@@ -14,11 +14,11 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "fb97f72a543cff1f6c4e1f163f8b92f98c7dbbacbaa4a37d0571432045201392"
+      "sha256": "889d722b6fdd90e67dcfcac83e420fc037a262404361d5dd25862c1cbd353d36"
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.spec.mjs",
-      "sha256": "8d3988160f1afe2dabf15d04af6c1696fd9c25a30c660b653c695316f80ca7e8"
+      "sha256": "b4f9a331fe4ef774c3b96cad3b087f5e44a9d33011684663646b2659fc71fc92"
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.mjs",

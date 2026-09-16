@@ -3,6 +3,15 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Root-style evidence replayed without changing findings
+
+The [root-style provenance replay](material-audit-harness-coverage.md#root-style-provenance-replay-and-isolated-crash-checks)
+preserves all 2,311 cases / 30,043 observations / 468 groups and changes only two
+saved source fingerprints. The complete three-file isolation check now passes
+15/15 (45,117.4033ms). Earlier allocation crashes did not reproduce, but their
+cause is not established. This is evidence maintenance, not a renderer fix,
+computed-style equivalence claim, or a replacement for full-suite verification.
+
 ## Owner-membership and field weight/tracking provenance replayed
 
 The [provenance replay](material-audit-harness-coverage.md#replayed-owner-membership-and-field-weighttracking-provenance)

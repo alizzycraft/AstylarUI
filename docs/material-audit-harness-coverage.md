@@ -60,6 +60,39 @@ their outcomes or input equivalence.
 
 ## First complete run failed
 
+### Root-style provenance replay and isolated crash checks
+
+The three smaller files that crashed in the full run were run in isolation:
+`root-flow-height-source-binding.spec.mjs`, `root-inherited-default-proof.spec.mjs`
+and `root-initial-style-evidence.spec.mjs`. The first isolated run completed
+normally with **14 passes / 1 failure** (41,228.1457ms). The failure was stale
+root-initial source provenance, reached after matching the complete original
+30,043-observation index. No native allocation failure reproduced.
+
+Only the main audit and its test's two fingerprints in
+`material-root-initial-style-audit.json` were updated. An independent comparison
+against `dafdfbf` verifies that every non-fingerprint field remains unchanged:
+2,311 cases, 468 groups and 30,043 property observations. The complete JSON
+projection excluding `sourceFingerprints` has SHA-256
+`a43e00eeb2d4223a28b0b6feafd91776fca883ffea15ab135a4ac2954dd83286`.
+Every current source fingerprint also independently matches its file.
+
+The subsequent process's terminal output was lost. A process inventory confirmed
+no test process remained, so the same complete three-file command was repeated
+for reliable evidence:
+
+```powershell
+node --test --test-concurrency=1 tests/material-parity/root-inherited-default-proof.spec.mjs tests/material-parity/root-flow-height-source-binding.spec.mjs tests/material-parity/root-initial-style-evidence.spec.mjs
+```
+
+Result: terminal exit **0**, **15/15 pass**, no skips or cancellations,
+**45,117.4033ms**. This includes the complete root-index replay, all 164 original
+flow-height observations and 26 controls, exact scalar joins, and rejection of
+forged evidence or broader equivalence claims. The causes of the earlier native
+crashes remain unproven; this isolated result does not replace the failed full
+run or prove resource stability of the complete suite. The larger reviewed-
+authoring file still needs its isolated replay.
+
 ### Replayed owner-membership and field weight/tracking provenance
 
 The four stale-provenance failures 58, 635, 638 and 639 were replayed before
