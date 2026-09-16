@@ -109,6 +109,32 @@ does not change any source or survey consumed by the live 73-file run.
 
 ## Ownership and implementation order
 
+### Existing core failures remain authoritative
+
+Reuse the earlier public-API grid reductions rather than treating this survey
+as their replacement. `examples/material-showcase/src/app/grid-template-initial-audit.spec.ts`
+(history `5baf74b`, expanded by `77b2098`) contains the equal-input active-grid
+`none` cases and omitted / `1fr` / literal controls, plus two-child block/flex
+controls. The existing finding in `tests/material-parity/input-equivalence-policy.mjs`
+records four explicit-`none` failures: the candidate assigns zero CSS track
+extent before projection while the browser stretches the item to 120/240px.
+That demonstrated core parser/implicit-track defect is not explained away by
+an observation-stage omission review.
+
+The separate grid-list substitution is already recorded as
+`fixture-grid-list-missing-reference-gutter`, introduced with the original
+showcase in `2f44011`. The reference uses positioned tiles with percentage
+`calc` widths/offsets and a 1px gutter; candidate `.grid-list` at
+`examples/material-showcase/src/app/astylar.component.ts:683` uses fractional
+tracks and zero gap. The corresponding paired reductions remain in
+`examples/material-showcase/src/app/input-equivalence-proof.spec.ts:172`.
+Existing evidence distinguishes direct expression support, successful loaded-CSS
+expression resolution and an independent opposing-inset/inner-height defect.
+Do not rerun or rewrite these completed investigations merely because this
+survey finds their related scalar column difference still awaiting a source
+link in the canonical classifier. The next action is exact evidence binding,
+not a new fixture-side grid approximation.
+
 The immediate owner is input-audit observation-stage classification, not the
 grid renderer. First establish correspondence and exact authored requests;
 then separate local inspection omissions from used-grid evidence. Keep explicit
