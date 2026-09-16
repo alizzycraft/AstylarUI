@@ -7,6 +7,7 @@ import { buildMaterialInputAudit, validateMaterialInputAudit } from './input-equ
 import { sliderBorderDefaultAttribution } from './slider-border-default-source-binding.mjs';
 import { ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
 import { rootShadowAttribution } from './root-shadow-source-binding.mjs';
+import { ownerGridInitialAttribution } from './owner-grid-initial-classification.mjs';
 
 const prior = JSON.parse(readFileSync('docs/material-slider-border-defaults.json'));
 const bytes = readFileSync(prior.capture.file);
@@ -49,7 +50,8 @@ test('slider border canonical integration preserves raw values and attributes on
   assert.deepEqual(audit.discrepancies.map(signature), unbound.discrepancies.map(signature));
   // Frozen before integration at 165ec49, using these same two original cases.
   // Retain the historical complete-row guard. Only the 22 explicitly reviewed
-  // owner-stage attributions and the later single root-shadow authoring finding
+  // owner-stage attributions, the later single root-shadow authoring finding,
+  // and six source-bound grid observation-stage rows
   // may be projected back to unresolved; all 220 complete rows must still
   // reproduce the original frozen digest. Do not replace the historical hash.
   const otherRows = audit.discrepancies.filter(row => !rows.includes(row));
@@ -78,7 +80,20 @@ test('slider border canonical integration preserves raw values and attributes on
   for (const flag of ['inputEquivalent', 'originalRasterCauseProven', 'candidateUsedPaintVerified', 'renderingEquivalent'])
     assert.equal(shadow.reviewEvidence[flag], false);
   assert.equal(audit.rootShadowInputs.observations.length, 2);
-  const later = new Set([...shared, shadow]);
+  const grids = otherRows.filter(row => row.attribution === ownerGridInitialAttribution);
+  assert.deepEqual(grids.map(row => [row.element, row.property]),
+    ['slider-primary', 'slider-start', 'slider-visual'].flatMap(element =>
+      ['gridTemplateColumns', 'gridTemplateRows'].map(property => [element, property])));
+  assert.equal(audit.ownerGridInitialInputs.observations.length, 16);
+  for (const row of grids) {
+    assert.equal(row.classification, 'parity-harness-defect');
+    assert.equal(row.reference, 'none'); assert.equal(row.astylar, undefined);
+    assert.equal(row.occurrences, 2);
+    assert.deepEqual(row.reviewedCases, ['static:slider@light/desktop', 'interaction:slider@light/desktop-dpr1/focus']);
+    for (const flag of ['computedCandidateVerified', 'gridLayoutEquivalent', 'renderingEquivalent', 'wholeElementInputEquivalent'])
+      assert.equal(row.reviewEvidence[flag], false);
+  }
+  const later = new Set([...shared, shadow, ...grids]);
   const historicalRows = otherRows.map(row => {
     if (!later.has(row)) return row;
     const previous = oldRows.get(signature(row)); assert.equal(previous.attribution, 'unresolved'); return previous;
@@ -86,7 +101,20 @@ test('slider border canonical integration preserves raw values and attributes on
   assert.equal(createHash('sha256').update(JSON.stringify(historicalRows)).digest('hex'),
     '4e1f09fc03af948aec7b2d1d927ee13c298b6439ceaa3bb0145a72122eb315ee');
   const errors = validateMaterialInputAudit(audit, { root, requireComplete: false });
-  assert.ok(!errors.some(error => error.includes('slider border') || error.includes('owner initial-style') || error.includes('root shadow')));
+  assert.ok(!errors.some(error => error.includes('slider border') || error.includes('owner initial-style') || error.includes('root shadow') || error.includes('owner grid')));
+}));
+
+test('slider integration retains exact source validation for later grid observation-stage rows', () => withCapture(({ raw, options }) => {
+  const audit = buildMaterialInputAudit(raw, options);
+  for (const mutate of [
+    r => { delete r.ownerGridInitialInputs; },
+    r => { r.ownerGridInitialInputs.observations.pop(); },
+    r => { r.discrepancies.find(d => d.attribution === ownerGridInitialAttribution).reviewedCases.pop(); },
+    r => { r.discrepancies.find(d => d.attribution === ownerGridInitialAttribution).reviewEvidence.gridLayoutEquivalent = true; },
+  ]) {
+    const changed = structuredClone(audit); mutate(changed);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(e => e.includes('owner grid')));
+  }
 }));
 
 test('slider integration retains exact source validation for the later shadow attribution', () => withCapture(({ raw, root, options }) => {

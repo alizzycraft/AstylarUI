@@ -15,7 +15,58 @@ original scalar inputs and paired trees. It records only whether the captured
 owner's declarations support the narrower observation-stage description
 `captured-none-versus-local-omission`. Its computed-candidate, grid-layout and
 rendering-equivalence flags remain false, including for positive observations.
-No canonical attribution is changed.
+The standalone survey changes no canonical attribution. The production integration
+below now consumes independently bound evidence; the saved full canonical report
+has not yet been regenerated.
+
+## Production integration and conservation
+
+The production builder now retains the complete source-bound grid ledger and
+applies the grid observation-stage classifier only after every earlier
+classification. Validation replays original tree evidence and exact scalar
+coverage, including negative observations and earlier non-grid precedence.
+No candidate computed `none` is synthesized. Source inventory grows from 187 to
+196 files, adding all nine grid evidence, binding, classification, coverage and
+integration sources without removing an existing dependency.
+
+`node --test tests/material-parity/owner-grid-initial-canonical-integration.spec.mjs`
+first failed before integration (0/1 passed, 25,167.4791ms): the real production
+builder did not attribute independently reviewed grid observations. The test
+loads the actual prior builder from `364f46a309319201317919b6a23dd1aadd08f405`,
+verifies unchanged normalization/template mappings, and changes only its relative
+import locations. It retains all scalar inputs in 36 static cases (every family)
+and 74 representative interaction cases from the original capture.
+
+After integration it passed 1/1 (116,142.5656ms). A final replay including the
+additional false-summary-equivalence rejection passed **1/1**, exit 0,
+**138,661.0266ms**. Its 683 eligible observations include review gaps. It adds
+100 groups / 240 occurrences in this diagnostic population, preserving all
+6,423 scalar rows and 6,323 complete unrelated records with SHA-256
+`9fe0caab68908fa3f3a926e21d4267947f3fb6a771e2b3f86ded21b649e482a5`.
+Four negative controls reject missing binding, a lost negative observation,
+fabricated grid-layout equivalence and fabricated summary input equivalence.
+This is not the full 2,311-case canonical conservation gate.
+
+The existing slider integration exposed a second historical conservation failure:
+the original expected digest remained
+`4e1f09fc03af948aec7b2d1d927ee13c298b6439ceaa3bb0145a72122eb315ee`,
+while the new complete rows produced
+`38e27c5fdd6dc5bc5401db8d2ad7b69200598b275cbeb2e040481027a0ce6a41`.
+The exact difference is six new grid observation-stage rows: columns and rows
+on `slider-primary`, `slider-start` and `slider-visual`, each covering the same
+two original cases. The test now validates those exact identities, values,
+case lists, 16-observation ledger and false equivalence flags before projecting
+only those six rows back to their prior unresolved records. The original
+220-row checksum is unchanged, not replaced or broadly filtered.
+
+`node --test tests/material-parity/slider-border-canonical-integration.spec.mjs`
+then passed **4/4**, exit 0, **13,912.6353ms**, including four new full-validator
+negative controls. The source-fingerprint assertion also passed in the earlier
+two-test diagnostic command; that command correctly exited 1 for the slider
+checksum failure. No renderer, plugin or canonical comparison input was edited.
+Full canonical regeneration/conservation and the complete current harness remain
+required. Current discovery contains 80 files; no focused result replaces that
+complete run or the enforced comparison matrix.
 
 ## Complete classification coverage and precedence checks
 
@@ -196,7 +247,7 @@ negative outcomes are checked against original scalars. Fourteen proof mutations
 three property/value controls and three explicit-stage controls reject detached
 or inflated claims, including a recomputed digest over an explicit declaration.
 
-Neither module is integrated into the canonical builder yet. Production
+At that earlier verification point neither module was integrated into the canonical builder. Production
 precedence, complete classification coverage and unrelated-row conservation
 remain required before updating the canonical result. No renderer, plugin,
 reference or existing canonical survey dependency changed. Current complete

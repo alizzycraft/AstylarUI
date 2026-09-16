@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Grid observation-stage evidence integrated without claiming equivalence
+
+The [production grid integration](material-owner-grid-initial-survey.md#production-integration-and-conservation)
+passes its actual prior/current-builder check over all 36 families and 74
+interaction cases: 6,423 scalar rows and 6,323 unrelated complete records are
+unchanged. Missing evidence and false equivalence claims fail validation. The
+slider's original historical digest is preserved after separately validating
+the exact six additional grid rows; its complete integration file passes 4/4.
+These checks classify unequal observation stages, not computed layout or output
+equivalence. The saved full report remains at its earlier 2,595 unresolved
+groups until complete regeneration and conservation are verified. Source
+provenance refresh and full current-suite/matrix verification remain pending.
+
 ## Grid coverage validates earlier precedence and every proposed row
 
 The [grid coverage check](material-owner-grid-initial-survey.md#complete-classification-coverage-and-precedence-checks)

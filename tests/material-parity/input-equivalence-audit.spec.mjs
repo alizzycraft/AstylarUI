@@ -1373,14 +1373,15 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 187);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 187);
+  assert.equal(audit.sourceFingerprints.length, 196);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 196);
   // The original 129-source inventory gained one tooltip binding and three
   // slider binding files, followed by ten range-border, five field-host and
   // eight shared owner-attribution sources and six tooltip wrapping/proof
   // dependencies, four root-shadow sources and seven root-flow/button-radius
   // binding/proof sources, seven button formatting/host request sources and
-  // seven fixed-width authoring/binding/classification/integration sources.
+  // seven fixed-width authoring/binding/classification/integration sources and
+  // nine grid observation/binding/classification/coverage/integration sources.
   // No previous source was removed.
   // Require the actual entries/digests, not only a count.
   for (const file of ['tests/material-parity/tooltip-unpaired-style-evidence.mjs',
@@ -1415,6 +1416,15 @@ test('records source fingerprints and actual visual acceptance fields', () => {
     'tests/material-parity/button-fixed-width-classification.mjs',
     'tests/material-parity/button-fixed-width-classification.spec.mjs',
     'tests/material-parity/button-fixed-width-canonical-integration.spec.mjs',
+    'tests/material-parity/owner-grid-initial-evidence.mjs',
+    'tests/material-parity/owner-grid-initial-evidence.spec.mjs',
+    'tests/material-parity/owner-grid-initial-source-binding.mjs',
+    'tests/material-parity/owner-grid-initial-source-binding.spec.mjs',
+    'tests/material-parity/owner-grid-initial-classification.mjs',
+    'tests/material-parity/owner-grid-initial-classification.spec.mjs',
+    'tests/material-parity/owner-grid-initial-coverage.mjs',
+    'tests/material-parity/owner-grid-initial-coverage.spec.mjs',
+    'tests/material-parity/owner-grid-initial-canonical-integration.spec.mjs',
     'tests/material-parity/slider-input-box-evidence.mjs',
     'tests/material-parity/slider-input-box-source-binding.mjs',
     'tests/material-parity/slider-input-box-source-binding.spec.mjs',
