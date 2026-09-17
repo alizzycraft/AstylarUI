@@ -109,6 +109,33 @@ The terminal log is
 SHA-256 `1a30aa7e2c7a9969f844471b3060194c179936fe6086482579a61d4f7db7ef46`.
 The failed run is retained, not reported as a pass or evidence of completed audit.
 
+### Receipt conservation and complete regression rerun
+
+The nine case-index receipts were advanced to the current audit-module hash
+without changing their original findings. Each whole JSON object was compared
+against commit `0587fb6ca2143ab82630d2fabd885535ddd0bb55` after projecting only
+that single source-fingerprint field back to its original value. All nine full
+objects match exactly. No captured input, tree descriptor, membership, value,
+classification or other source receipt changed. This is receipt refresh plus
+original-case verification, not regeneration of the findings.
+
+The same complete three-file command recorded above now passes **395/395**,
+exit **0**, no failures, skips, cancellations or todos, **774,552.957 ms**.
+It includes each index's existing original-capture reconstruction checks, not
+just fingerprint comparisons. The prior failed run remains retained separately.
+
+Evidence under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `explicit-gap-nine-receipt-conservation.log`: exact nine-file conservation,
+  SHA-256 `af813b4e14732177eefba4ca193f6df4169af87674328bde64bc5689b293bd31`.
+- `explicit-gap-audit-regressions-after-receipts.log`: terminal full result,
+  SHA-256 `1212ffb13c76272c7a7e0085c72c47537e05e8ed0dc31fc36c853994793a4675`.
+
+This closes the nine failures above. The full current 106-file audit harness,
+canonical generation/conservation and complete enforced parity matrix remain
+separate outstanding requirements; this result does not establish rendering
+parity or completion of all input-difference investigations.
+
 The [existing composition review](material-explicit-gap-composition.md) already
 classifies the eight owners' unequal spacing/structure inputs. This increment
 does not replace or reimplement that review. It binds its complete verified

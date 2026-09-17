@@ -17,7 +17,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "c57c725b10a0b94bf9c21ccf85e3764f47bccd9d629d004010429fd239c820c1"
+      "sha256": "d423b0b17978bc11a5db77195a3f2baf7cd35f141154763b556f45a711e6391c"
     },
     {
       "file": "tests/material-parity/input-equivalence-policy.mjs",

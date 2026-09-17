@@ -13,9 +13,10 @@ intact. Eight added rejection controls prevent broad exclusions or fabricated
 claims. The separate remaining-gap classifier passes **2/2** tests on all 1,902
 original observations with 34 rejection controls and leaves 64 dialog motion
 observations unresolved. That classifier is preparation, not production wiring.
-The nine stale receipt failures in the broader 395-test run still require
-receipt conservation and original-case replay. Full canonical refresh, current
-full harness and enforced parity remain outstanding.
+The nine stale receipt failures in the broader run are now closed: exact
+nine-file non-provenance conservation and all original-case checks pass in the
+complete **395/395** audit/CLI/codec rerun. Full canonical refresh, current full
+harness and enforced parity remain outstanding.
 
 ## Remaining gap reviews retain complete original membership
 
