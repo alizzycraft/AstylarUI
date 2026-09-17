@@ -3,6 +3,24 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Shared button paint uses different composition inputs
+
+The [source-bound button paint survey](material-button-state-paint-survey.md)
+replays 146 shared hosts across all 114 original hover/held cases containing
+them. In 114 active-layer observations, HTML retains the base background and a
+translucent child pseudo-element; the candidate authors an opaque replacement
+host background. The other 32 inactive controls remain retained for review.
+Two focused tests and full no-write replay pass, including 14 mutation controls.
+This is unequal paint authoring even where screenshot similarity is high, not
+proof that the renderer cannot support equivalent layers.
+
+Seventeen held observations (eight core, nine tooltip) retain the candidate's
+declared hover host color while the reference layer opacity is 0.12. Core's
+sibling plugin paint is retained but not evaluated by this survey; a pointer
+state/generation trace is still needed before assigning an interaction cause.
+Initial preblending predates the later active/focus selector correction. No
+renderer or fixture input was changed, and canonical attribution is unchanged.
+
 ## Complete 91-file pre-gap-integration harness passes
 
 `node scripts/run-material-audit-harness.mjs` completed in session **37733**
