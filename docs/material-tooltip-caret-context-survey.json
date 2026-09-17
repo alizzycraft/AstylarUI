@@ -1,0 +1,3823 @@
+{
+  "schemaVersion": 1,
+  "kind": "original-tooltip-caret-reference-context-survey",
+  "capture": {
+    "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/latest-report.json",
+    "sha256": "9e4ded2820106f4b7f92ba8d6e8a3c5e998efe097f669f661ddd47d04da9c7fd"
+  },
+  "browser": "152.0.7977.76",
+  "cases": 18,
+  "originalScalarChecks": 1602,
+  "rootProperties": 3816,
+  "missingEnumeratedAliases": [
+    "flex",
+    "gap",
+    "gridColumn",
+    "gridRow",
+    "margin",
+    "padding",
+    "whiteSpace"
+  ],
+  "observations": [
+    {
+      "case": "interaction:tooltip@dark/desktop-dpr2/held",
+      "source": {
+        "case": "interaction:tooltip@dark/desktop-dpr2/held",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/4a355264f46f15bd8e066ea892eb446216f9fb6ac033a11c53300f9f64e6fd19.json",
+        "sha256": "1dacbd032d3aab67f534c3ae03bb76f9b9acf31c6771087926d3c95af4096986"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/dark/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "f38d323e5650b8bd9e7e7729b69dc3007f3444760685e4fa6064126026bf7a68"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/dark/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "b1c9c1cec995cb2a2b157b2528ee663ac16f9bf1afd764d9ec55b82cec7f93c8"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "dark",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "held",
+      "heldDuringCapture": true,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 221.078px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@light/desktop-dpr2/hover",
+      "source": {
+        "case": "interaction:tooltip@light/desktop-dpr2/hover",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/d09d019de56730cae949c54c363595de4fbcc9a83a15f7d784720892689e7944.json",
+        "sha256": "77fe709a31dbe9ef1018cc0c236d40c5f97aeacc4ffcf3bf967525527dd1858f"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "5cff789e49c7a1abe36c2cdbfb9e134d94f8d08ca15d68507230e87fd9f73841"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "3f4e69afa565d89b06ab466ef302d9288e534f3e05b3b64a522eda3ab65e8a6a"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "light",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "hover",
+      "heldDuringCapture": false,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 221.078px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@custom/desktop-dpr1/held",
+      "source": {
+        "case": "interaction:tooltip@custom/desktop-dpr1/held",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/ed8443b10e9f63e7aef9389eb1738f8d6040885cf30a66b2bec4bd1c65c8bc24.json",
+        "sha256": "f38b19d993847925b31c533d848e68f088a1219c0dc53949c957434e94b63adf"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/custom/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "190c02cb4ab994eadb39b0b65f214fec8437bd33cf96cc12629b23c8a72e9231"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/custom/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "bf72b12a212dd110dcf214e494f88534a11edccc26035214fca3b3c5aa432141"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "custom",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "held",
+      "heldDuringCapture": true,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 214.344px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@light/comparison/held",
+      "source": {
+        "case": "interaction:tooltip@light/comparison/held",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/afa3e9096932860b31bbfff188db252b9759deb6cbe39c0c8c7efc3589dafed1.json",
+        "sha256": "b0268869c87c2b31807f8d7ba0a1fe3735f08d2c32be929ec8b6147ce5d3f8e6"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/comparison/held/reference-input-tree.json",
+          "sha256": "2d2dde53128201e56e8b968653cab6e5f433c4f3ba35cfc143d253ec6887a257"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/comparison/held/astylar-input-tree.json",
+          "sha256": "543f54316d40611c308bf62e49dabde0830e9dd3fe8754f3857bd1b7eebd3af7"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "light",
+      "viewport": {
+        "id": "comparison",
+        "width": 609,
+        "height": 844,
+        "deviceScaleFactor": 1
+      },
+      "state": "held",
+      "heldDuringCapture": true,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 221.078px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@custom/desktop-dpr1/hover",
+      "source": {
+        "case": "interaction:tooltip@custom/desktop-dpr1/hover",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/1bf37ce5a0a7f89091554a198a0af72c5381f7c370cc550b4895a927755f5cf0.json",
+        "sha256": "3c34cd26b758de229bcdf8d906527f7de1a450359990efce9d6e437157425497"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/custom/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "ac638d56ec1ffb263147a8ca80f6365a7b1025f67b4bd71210427fbff299b918"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/custom/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "2cb0a6ecf1c91e6df76154e97e29fbe0913364cf9490655a6f5b5a2282196b0e"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "custom",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "hover",
+      "heldDuringCapture": false,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 214.344px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@dark/desktop-dpr2/hover",
+      "source": {
+        "case": "interaction:tooltip@dark/desktop-dpr2/hover",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/258eaa5b92c6efc94b3fbc7473d072b6478f4bbf021e36a2a0f9b01d70897c0b.json",
+        "sha256": "687654a6a7c1708c07c229696f3d1d169210b012841c00fffd857bb644e0f2b9"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/dark/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "99a0ccb31bf48ff3e686a3e65b7ebd0b7ac900c778b3f4bd16eefc11c31ecdcf"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/dark/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "20e3bde7b2b0c7f8f4034f13ea4b23e1bf221036497641cfec24bfd570758727"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "dark",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "hover",
+      "heldDuringCapture": false,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 221.078px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@light/desktop-dpr2/held",
+      "source": {
+        "case": "interaction:tooltip@light/desktop-dpr2/held",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/564d5a3e6fefb5f2d32510b26ef15e6994cc5e67ef86afecee0d1a273de45c8c.json",
+        "sha256": "7f2edd8dc2b0aace8efa16e16ad2b15f7fe0aefc44777eda06fda337af76a905"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "06b60687b4dd05d2db0d76281e97c1b6f9745ff6bde6749ef47dc677662645ed"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "543f54316d40611c308bf62e49dabde0830e9dd3fe8754f3857bd1b7eebd3af7"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "light",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "held",
+      "heldDuringCapture": true,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 221.078px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@custom/desktop-dpr2/hover",
+      "source": {
+        "case": "interaction:tooltip@custom/desktop-dpr2/hover",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/03992ba91dee4fa72e428b0df1b79b944eaf3ba22d2403c9dd2a24c0f88d053b.json",
+        "sha256": "c0d5bed8d44cf1799d8db90dda1777e3cbf014a553327306f15e1d2dd2da8b8b"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/custom/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "ac638d56ec1ffb263147a8ca80f6365a7b1025f67b4bd71210427fbff299b918"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/custom/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "4b1d856ab48b081604765e805433ea213a20687bf5ae3654887bb46a6814596d"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "custom",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "hover",
+      "heldDuringCapture": false,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 214.344px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@dark/desktop-dpr1/hover",
+      "source": {
+        "case": "interaction:tooltip@dark/desktop-dpr1/hover",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/d2f591f892b56eba03f7a8ee3df6caf9e43890b1012226ac8a38dae0604c2a9d.json",
+        "sha256": "d495d7d7ff49f1565b1845c44c533de9cdafa02f74a397c690ddd60cb1bd259e"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/dark/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "99a0ccb31bf48ff3e686a3e65b7ebd0b7ac900c778b3f4bd16eefc11c31ecdcf"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/dark/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "20e3bde7b2b0c7f8f4034f13ea4b23e1bf221036497641cfec24bfd570758727"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "dark",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "hover",
+      "heldDuringCapture": false,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 221.078px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@contrast/desktop-dpr2/held",
+      "source": {
+        "case": "interaction:tooltip@contrast/desktop-dpr2/held",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/ea8866b3dd0fb2d2f5321a30a331a7c676f53dcb25ec4f2837254cbefd5db53c.json",
+        "sha256": "b78424cfadc56371ec5ffce73c7235acbbeacd3da75dda9340b473e068b13de7"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/contrast/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "4f0a1212371e8f001578c6ebbb6823affedc459a4c3a8dd7249034e9fcd62aea"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/contrast/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "81fd8608800cd5ed7083ab839c46cc40308fe13920ca2736e216f89d8920a8db"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "contrast",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "held",
+      "heldDuringCapture": true,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 201.547px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@contrast/desktop-dpr2/hover",
+      "source": {
+        "case": "interaction:tooltip@contrast/desktop-dpr2/hover",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/8f986a2969348d11f06584e3301b6d4c29ac9372535a1d8e9b66d75ea10b994d.json",
+        "sha256": "2f1e93a6b10a8c6e933cee08febb797e5e9912032277f42baf14075c70453db5"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/contrast/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "f99cb1ea85328d23c90adcc5fe1a2e316d1e5befd1937479e66629810cb0e69f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "a01f99dcef93da35c27b176c471186d52ee18c9a5f39b613daa5ecd999fa9ec4"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "contrast",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "hover",
+      "heldDuringCapture": false,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 201.547px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@light/desktop-dpr1/held",
+      "source": {
+        "case": "interaction:tooltip@light/desktop-dpr1/held",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/dbd1cbd253f7724d2b2513bb5b95c5acf98f88455eea875a4f30dbc8b3a4a5c3.json",
+        "sha256": "6f5dc48f445817df61ccc08a65f87da9d0f3b4a13b6c9ebd7200d0c31cc3bd8e"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "06b60687b4dd05d2db0d76281e97c1b6f9745ff6bde6749ef47dc677662645ed"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "543f54316d40611c308bf62e49dabde0830e9dd3fe8754f3857bd1b7eebd3af7"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "light",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "held",
+      "heldDuringCapture": true,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 221.078px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@contrast/desktop-dpr1/held",
+      "source": {
+        "case": "interaction:tooltip@contrast/desktop-dpr1/held",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/2a974d721f731432eba3c2581c6ffb9b065aa25869bfd4f0347a07db8bd84afd.json",
+        "sha256": "187ffb204f96084f4dc384beaecc6c8ed5ebc508e2f6a29f50b43a6cc94f389a"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/contrast/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "4f0a1212371e8f001578c6ebbb6823affedc459a4c3a8dd7249034e9fcd62aea"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/contrast/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "b05f94641450fd274647ee55f546321e7d4023c9d9b7f2de5ca74db2ff9ceb85"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "contrast",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "held",
+      "heldDuringCapture": true,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 201.547px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@contrast/desktop-dpr1/hover",
+      "source": {
+        "case": "interaction:tooltip@contrast/desktop-dpr1/hover",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/5bcdce6df883b0e10fd394ebd3a459984869e0d2bffc2722beae6da9e6d03002.json",
+        "sha256": "6da7e135caf8b00e3da9e47ddad49572b045e6160a514c278c6513c84761d0f5"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/contrast/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "f99cb1ea85328d23c90adcc5fe1a2e316d1e5befd1937479e66629810cb0e69f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "8a671b90ea14f39866d2e8d22933ad4f6064f9e4a364e9e971f8b0e757708fc5"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "contrast",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "hover",
+      "heldDuringCapture": false,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 201.547px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@custom/desktop-dpr2/held",
+      "source": {
+        "case": "interaction:tooltip@custom/desktop-dpr2/held",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/14b5ceacc3dbdc104aa434b449467e50f38b29222227875fb50c147f692fd239.json",
+        "sha256": "c6983e710441cd215af7414b2283b6add777c896507e297653cc0768664390cf"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/custom/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "190c02cb4ab994eadb39b0b65f214fec8437bd33cf96cc12629b23c8a72e9231"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/custom/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "d0832a40f4124118f53e0365cd8e71fb39990591a740c7193293c8a9b411ca23"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "custom",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "held",
+      "heldDuringCapture": true,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 214.344px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@light/desktop-dpr1/hover",
+      "source": {
+        "case": "interaction:tooltip@light/desktop-dpr1/hover",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/4c9bb4b851205630a82c90c5f476604a7479467f435f8b089b969577ebfeabff.json",
+        "sha256": "9f7345f18114ff89822b9b81ffb315d95f1c440180caa77a04c7dd549ff07bd4"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "5cff789e49c7a1abe36c2cdbfb9e134d94f8d08ca15d68507230e87fd9f73841"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "3f4e69afa565d89b06ab466ef302d9288e534f3e05b3b64a522eda3ab65e8a6a"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "light",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "hover",
+      "heldDuringCapture": false,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 221.078px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@dark/desktop-dpr1/held",
+      "source": {
+        "case": "interaction:tooltip@dark/desktop-dpr1/held",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/0fd3e394d09292f9c94548f78f15bde39fa1e65c6af2e5231f554fa0c0b8af2f.json",
+        "sha256": "f4e1f9e03389320d3c10904c8c3aeb0bd580a8fe8b043907cd3cc44666ea3d82"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/dark/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "f38d323e5650b8bd9e7e7729b69dc3007f3444760685e4fa6064126026bf7a68"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/dark/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "b1c9c1cec995cb2a2b157b2528ee663ac16f9bf1afd764d9ec55b82cec7f93c8"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "dark",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "held",
+      "heldDuringCapture": true,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 221.078px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    },
+    {
+      "case": "interaction:tooltip@light/comparison/hover",
+      "source": {
+        "case": "interaction:tooltip@light/comparison/hover",
+        "file": "artifacts/material-parity/tooltip-caret-context-audit-v1/7d5ded7e939bdc01c5db86c7d5c7f5c9819d64b913e0d03cb14904aeea500e94.json",
+        "sha256": "be570a895311e402e106a4ebebae192f028a8059a96e8423892c388dceadaff6"
+      },
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/comparison/hover/reference-input-tree.json",
+          "sha256": "517f96331a025fce0fe7212522ceef647aa3ba97149f65c04042e67393319256"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tooltip/light/comparison/hover/astylar-input-tree.json",
+          "sha256": "3f4e69afa565d89b06ab466ef302d9288e534f3e05b3b64a522eda3ab65e8a6a"
+        }
+      },
+      "originalProofSha256": "b44e8800e3a8e7dc5f17d41c16cfc24083652e4a78585871be8cc35dc4ec5b75",
+      "profile": "light",
+      "viewport": {
+        "id": "comparison",
+        "width": 609,
+        "height": 844,
+        "deviceScaleFactor": 1
+      },
+      "state": "hover",
+      "heldDuringCapture": false,
+      "checkedOriginalScalarProperties": 89,
+      "freshOwnerPath": [
+        {
+          "node": "overlay:0/0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mat-mdc-tooltip-surface mdc-tooltip__surface"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(245, 239, 244)",
+          "color": "rgb(245, 239, 244)"
+        },
+        {
+          "node": "overlay:0/0/0/0/0",
+          "type": "div",
+          "attributes": {
+            "class": "mdc-tooltip mat-mdc-tooltip mat-mdc-tooltip-show _mat-animation-noopable",
+            "style": "transform-origin: center top;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0/0",
+          "type": "mat-tooltip-component",
+          "attributes": {
+            "aria-hidden": "true"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0/0",
+          "type": "div",
+          "attributes": {
+            "id": "cdk-overlay-0",
+            "class": "cdk-overlay-pane mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below",
+            "style": "top: 221.078px; left: 80.5625px; transform: translateY(8px);"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0/0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-connected-position-bounding-box",
+            "dir": "ltr",
+            "style": "top: 0px; left: 0px; height: 100%; width: 100%;"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        },
+        {
+          "node": "overlay:0",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "motion": {
+            "transitionProperty": "all",
+            "transitionDuration": "0s",
+            "transitionDelay": "0s",
+            "transitionTimingFunction": "ease",
+            "transitionBehavior": "normal",
+            "animationName": "none",
+            "animationDuration": "0s",
+            "animationDelay": "0s",
+            "animationPlayState": "running"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)"
+        }
+      ],
+      "freshExternalContext": [
+        {
+          "node": "html/1/15",
+          "parent": "html/1",
+          "type": "div",
+          "attributes": {
+            "class": "cdk-overlay-container"
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html/1",
+          "parent": "html",
+          "type": "body",
+          "attributes": {
+            "ngcm": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        },
+        {
+          "node": "html",
+          "parent": null,
+          "type": "html",
+          "attributes": {
+            "lang": "en",
+            "data-beasties-container": ""
+          },
+          "caretColor": "rgb(0, 0, 0)",
+          "color": "rgb(0, 0, 0)",
+          "transform": "none",
+          "translate": "none",
+          "scale": "none",
+          "rotate": "none",
+          "zoom": "1",
+          "fontSize": "16px",
+          "lineHeight": "normal"
+        }
+      ]
+    }
+  ],
+  "canonicalAttributionChanged": false,
+  "candidateReplayed": false,
+  "historicalExternalContextVerified": false,
+  "historicalMotionVerified": false,
+  "renderingEquivalent": false,
+  "limitation": "Fresh reference-only external context and owner motion at original hover/held boundaries. Original scalar/identity proofs match, but unrecorded historical motion/ancestry and candidate computed/visible behavior remain unproven.",
+  "sourceFingerprints": [
+    {
+      "file": "scripts/audit-material-tooltip-caret-context.mjs",
+      "sha256": "e7825df977a07b9240dc0a48f4ea8b723f52fecd8bc9ae7ab620f30afd837489"
+    },
+    {
+      "file": "tests/material-parity/owner-caret-input-evidence.mjs",
+      "sha256": "e3d45570927eed67666783b17381374561df7f08210b275cb03f75648dfd2d51"
+    },
+    {
+      "file": "tests/material-parity/origin-alias-mapping-evidence.mjs",
+      "sha256": "bd6a621438f2053d7edacc3d669e927f3306753c636849ff5df8e724b3fc472d"
+    }
+  ]
+}

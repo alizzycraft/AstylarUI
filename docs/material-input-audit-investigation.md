@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Tooltip hover/held reference context now has a source-bound replay
+
+The [18-case tooltip context survey](material-tooltip-caret-context-survey.md)
+reproduces all original owner proofs and 1,602 scalar measurements while recording
+fresh external ancestry and motion. Both the tooltip leaf and show/noop ancestor
+resolve to zero-duration transitions and no named animation at capture time.
+The no-write replay, 34 rejection controls and two changed-measurement controls
+pass. This supplies missing fresh reference context for the overlay investigation;
+it does not establish historical unrecorded values, candidate behavior or the
+cause of tooltip displacement/blur. Canonical classifications remain unchanged.
+
 ## Full-harness field-host failures isolated to stale dependent receipts
 
 The [read-only receipt diagnostic](material-field-host-receipt-diagnostic.md)
