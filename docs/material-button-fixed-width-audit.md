@@ -385,3 +385,40 @@ As with the width guard, a bounded correction must independently authenticate
 the later population and preserve all unrelated-row comparisons. The existing
 test is not changed during the running full harness, and neither diagnostic is
 a corrected-test pass or an input/rendering-equivalence claim.
+
+### Reviewed-authoring guard: independently diagnosed population
+
+The remaining historical guard is replayed from committed test revision
+`5673538793165f93cd7ec40fe20600d155fba905`, against its original production baseline
+`c391a6fb8002ac1d11ec8cbb2bb027d6d8fa80a3`:
+
+```powershell
+node --test-name-pattern="reviewed authoring production integration" scripts/diagnose-material-button-width-conservation.mjs --authoring
+```
+
+This explicitly **focused diagnostic** selects only the failing conservation
+test, not the separate negative-control test. The prior unfiltered full-harness
+result remains authoritative for the complete file; this command is not a full
+file pass. The diagnostic retains the original assertion and exits **1** (one
+test, zero pass, one fail; duration **136,526.0582 ms**).
+
+All **471 selected cases**, **2,944 ordered scalar rows** and the **188 original
+selected groups** are preserved. Exactly **18** additional rows change from
+unresolved to the later motion-gap observation-stage attribution. Their
+**758 observations** are independently authenticated by the existing source and
+coverage guard; zero changed identities remain unexplained. Original authored
+examples are unchanged. The other **2,738 complete rows** remain identical,
+with ordered row-digest SHA-256
+`ef282525083a09b8de90d1a7948c9c49e80267b6d2d0e7a8377748e0a821ba9f`.
+
+Original test source SHA-256:
+`801e9a598bbbb3f1a91e0ac1396273b1dc7f9c3cbbc00e2d5ce8f9cce718a8f4`.
+Complete log:
+`artifacts/material-parity/field-host-flow-input-audit/reviewed-authoring-conservation-diagnostic.log`,
+SHA-256 `e64958ea6c627f6f21e1a66d78b71e5e683276499efb93f04f22acf7e4f543a0`.
+
+All three diagnostic modes now read the original tests from that committed
+revision, so correcting a live historical guard does not erase the original
+failure reproduction. Import relocation still targets the current audit modules
+and changes no other original statements. No canonical classifications, renderer
+behavior or comparison authoring change in this diagnostic increment.

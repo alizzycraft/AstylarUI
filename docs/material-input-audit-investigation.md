@@ -8,9 +8,11 @@ The machine report is generated separately from the full benchmark output.
 The [complete 110-file run](material-audit-full-harness-110-result.md) terminated
 with exit 1: 898 TAP entries, 882 passed, 16 failed, zero skipped or cancelled.
 Its full log and failure inventory are preserved. Several metadata/conservation
-failures already have independent diagnostics; reviewed-authoring conservation,
-remaining-overlay metadata and root initial metadata still need their specific
-follow-up. The owner-grid allocation failure is being rerun unchanged in isolation.
+failures already have independent diagnostics, including reviewed-authoring
+conservation (18 source-bound later groups / 758 observations; every other
+complete row unchanged). Remaining-overlay metadata and root initial metadata
+still need their specific follow-up. The unchanged owner-grid isolated rerun
+passed all three tests; the original allocation-failure cause remains unproven.
 This is not an enforced rendering-parity result or a completed input audit.
 
 ## Filtered caret captures retain explicit missing-population evidence

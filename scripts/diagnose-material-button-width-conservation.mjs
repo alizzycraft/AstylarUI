@@ -1,21 +1,27 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
+import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 
 // Diagnostic-only replay: retain the original test, its inputs and its failing
 // assertion. Add a bounded report immediately before that assertion rather than
 // weakening the test or editing dependencies of the running full harness.
 const args = process.argv.slice(2);
-assert.ok(args.length === 0 || (args.length === 1 && args[0] === '--requests'), 'only --requests is accepted');
-const requests = args.length === 1;
-const file = requests ? 'tests/material-parity/button-requests-canonical-integration.spec.mjs'
+assert.ok(args.length === 0 || (args.length === 1 && ['--requests', '--authoring'].includes(args[0])), 'only --requests or --authoring is accepted');
+const requests = args[0] === '--requests', authoring = args[0] === '--authoring';
+const file = authoring ? 'tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs'
+  : requests ? 'tests/material-parity/button-requests-canonical-integration.spec.mjs'
   : 'tests/material-parity/button-fixed-width-canonical-integration.spec.mjs';
-const source = readFileSync(file, 'utf8');
-const anchor = requests
+// Preserve the original failure even after the live historical guards are
+// corrected. Relative imports still resolve to the current audit pipeline.
+const sourceRevision = '5673538793165f93cd7ec40fe20600d155fba905';
+const source = execFileSync('git', ['show', `${sourceRevision}:${file}`], { encoding: 'utf8' });
+const anchor = authoring
+  ? '  assert.equal(hash(JSON.stringify(others(audit))), hash(JSON.stringify(others(previous))));'
+  : requests
   ? "    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'complete unrelated rows remain unchanged after explicitly reviewed later width/box-sizing groups');"
   : "    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'all complete rows outside the eight width and nine box-sizing groups remain unchanged');";
 assert.equal(source.split(anchor).length, 2, 'the reviewed conservation assertion must occur exactly once');
@@ -27,11 +33,11 @@ const insertion = `
     for (let i = 0; i < currentOther.length; i++) {
       const before = priorOther[i], after = currentOther[i];
       assert.deepEqual(scalar(after), scalar(before), 'diagnostic original ordered scalar');
-      if (isDeepStrictEqual(after, before)) { unchanged.push(hash(JSON.stringify(after))); continue; }
+      if (diagnosticDeepEqual(after, before)) { unchanged.push(hash(JSON.stringify(after))); continue; }
       changed.push({ identity: [after.family, after.element, after.property], occurrences: after.occurrences,
         previousAttribution: before.attribution, currentAttribution: after.attribution,
         previousClassification: before.classification, currentClassification: after.classification,
-        originalAuthoredExamplesUnchanged: isDeepStrictEqual(
+        originalAuthoredExamplesUnchanged: diagnosticDeepEqual(
           [before.referenceAuthoredExamples, before.astylarAuthoredExamples],
           [after.referenceAuthoredExamples, after.astylarAuthoredExamples]),
         previousCompleteSha256: hash(JSON.stringify(before)), currentCompleteSha256: hash(JSON.stringify(after)) });
@@ -40,14 +46,14 @@ const insertion = `
     try {
       const later = assertDiagnosticLaterGapClassifications(audit, previous);
       const unaccounted = currentOther.filter((row, i) =>
-        !isDeepStrictEqual(row, priorOther[i]) && !later.has(JSON.stringify(scalar(row))));
+        !diagnosticDeepEqual(row, priorOther[i]) && !later.has(JSON.stringify(scalar(row))));
       laterGapProof = { verified: true, sourceBoundSignatures: later.size,
         remainingChangedIdentities: unaccounted.map(r => [r.family, r.element, r.property]) };
     } catch (error) { laterGapProof = { verified: false, error: String(error) }; }
-    console.log(JSON.stringify({ kind: ${JSON.stringify(requests ? 'button-requests-historical-conservation-diagnostic' : 'button-fixed-width-historical-conservation-diagnostic')},
-      source: ${JSON.stringify(file)}, sourceSha256: ${JSON.stringify(sourceSha256)}, baselineCommit,
+    console.log(JSON.stringify({ kind: ${JSON.stringify(authoring ? 'reviewed-authoring-historical-conservation-diagnostic' : requests ? 'button-requests-historical-conservation-diagnostic' : 'button-fixed-width-historical-conservation-diagnostic')},
+      source: ${JSON.stringify(file)}, sourceRevision: ${JSON.stringify(sourceRevision)}, sourceSha256: ${JSON.stringify(sourceSha256)}, baselineCommit,
       diagnosticCases: raw.results.length + raw.interactions.length,
-      unchangedScalarRows: audit.discrepancies.length, ${requests ? 'originalFormattingWidthAndBoxGroups' : 'originalWidthAndBoxGroups'}: keys.size,
+      unchangedScalarRows: audit.discrepancies.length, originalSelectedGroups: ${authoring ? 'selected' : 'keys'}.size,
       changedOtherRows: changed.length, unchangedOtherRows: unchanged.length,
       unchangedOrderedRowDigestsSha256: hash(JSON.stringify(unchanged)), changed, laterGapProof,
       originalAssertionRetained: true, inputEquivalent: false, renderingEquivalent: false,
@@ -73,5 +79,5 @@ for (let i = 0; i < parsed.statements.length; i++) {
   assert.equal(omitImportPath(parsed.statements[i], parsed), omitImportPath(moved.statements[i], moved));
 }
 const helper = pathToFileURL(path.resolve('tests/material-parity/owner-gap-integration-conservation.mjs')).href;
-const executable = `import { assertLaterGapClassifications as assertDiagnosticLaterGapClassifications } from ${JSON.stringify(helper)};\n` + relocated;
+const executable = `import { assertLaterGapClassifications as assertDiagnosticLaterGapClassifications } from ${JSON.stringify(helper)};\nimport { isDeepStrictEqual as diagnosticDeepEqual } from 'node:util';\n` + relocated;
 await import(`data:text/javascript;base64,${Buffer.from(executable).toString('base64')}`);
