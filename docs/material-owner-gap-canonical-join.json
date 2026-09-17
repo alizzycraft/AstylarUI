@@ -6,7 +6,7 @@
   "canonicalTotalGroups": 8339,
   "survey": {
     "file": "docs/material-owner-gap-input-survey.json",
-    "sha256": "87a4ad1ce3ea1f4b94a134ef4bae8bbfa9d01843e1d3bb1aafec1d852e7795c9"
+    "sha256": "91ca74fcd02a8933287054a19e70f852720d2c3540597352fe7aba82e0037788"
   },
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",

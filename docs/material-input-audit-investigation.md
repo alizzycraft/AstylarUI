@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Explicit spacing composition reaches production attribution
+
+The [production integration proof](material-explicit-gap-canonical-binding.md#production-integration-verified-on-the-complete-explicit-gap-population)
+passes **9/9** tests over all 296 original explicit-gap cases. The actual prior
+and current builders preserve 892 scalar rows and all 876 unrelated complete
+findings; only the 16 existing unequal-authoring groups gain their source-bound
+classification. The source-inventory check also passes **1/1**, retaining every
+prior entry. Original composition and membership evidence is replayed rather
+than replaced. No renderer or canonical fixture changed. Full-report refresh,
+historical guards, complete current harness and enforced parity are still
+pending; the saved canonical snapshot remains at 2,330 unresolved groups.
+
 ## Complete 95-file harness finishes; both exposed regressions are corrected
 
 The [full-run record and focused corrections](material-owner-gap-canonical-integration.md#complete-95-file-harness-two-failures-and-focused-corrections)

@@ -79,7 +79,13 @@ function loadReplayedProof(root) {
   // A changed report cannot authenticate itself by changing its own hash fields.
   const committed = execFileSync('git', ['show', `${proofRevision}:${proofFile}`],
     { cwd: root, maxBuffer: 4 * 1024 * 1024 });
-  assert.deepEqual(proof, JSON.parse(committed), 'explicit gap binding differs from verified baseline');
+  const baseline = JSON.parse(committed);
+  assert.deepEqual({ ...proof,
+    composition: { ...proof.composition, sha256: baseline.composition.sha256 },
+    join: { ...proof.join, sha256: baseline.join.sha256 },
+    sourceFingerprints: proof.sourceFingerprints.map((source, index) =>
+      ({ ...source, sha256: baseline.sourceFingerprints[index]?.sha256 })) }, baseline,
+    'explicit gap binding evidence differs beyond independently replayed dependency receipts');
   for (const source of proof.sourceFingerprints) assert.equal(
     hash(readFileSync(path.resolve(root, source.file), 'utf8').replaceAll('\r\n', '\n')), source.sha256,
     'explicit gap binding source changed');
@@ -96,6 +102,13 @@ function loadReplayedProof(root) {
   const replay = JSON.parse(output.trim());
   assert.deepEqual(replay, { groups: 16, owners: 8, cases: 296, propertyObservations: 1032,
     negativeControls: 40, canonicalIntegration: false, canonicalUnchanged: true });
+  // Replay the binding too: it checks all original memberships and requires the
+  // eight production normalization/mapping functions to match the pinned source.
+  const bindingReplay = JSON.parse(execFileSync(process.execPath,
+    ['scripts/bind-material-explicit-gap-composition.mjs', '--check'],
+    { cwd: root, encoding: 'utf8', maxBuffer: 1024 * 1024 }).trim());
+  assert.deepEqual(bindingReplay, { groups: 16, owners: 8, cases: 296, observations: 1032,
+    canonicalUnresolved: 2330, canonicalIntegration: false });
   return { proof, descriptor: { file: proofFile, sha256: hash(bytes), revision: proofRevision },
     verifier: { file: verifier, sha256: hash(readFileSync(path.resolve(root, verifier), 'utf8').replaceAll('\r\n', '\n')),
       result: replay } };

@@ -7,6 +7,7 @@ import { createGunzip } from 'node:zlib';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import Parser from 'jsonparse';
+import ts from 'typescript';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const explicitGapCanonicalRevision = '3f55f189708dcf4ab640fc18f797a44f5b39bab6';
@@ -80,13 +81,30 @@ export async function loadExplicitGapBindingInputs() {
   const compositionBytes = readFileSync(compositionFile), composition = JSON.parse(compositionBytes);
   const joinBytes = readFileSync(joinFile); assert.equal(hash(joinBytes), composition.join.sha256);
   const join = JSON.parse(joinBytes);
-  assert.deepEqual(composition, JSON.parse(git(compositionFile)), 'use the committed complete composition proof');
-  assert.deepEqual(join, JSON.parse(git(joinFile)), 'use the committed independent canonical join');
+  const originalComposition = JSON.parse(git(compositionFile)), originalJoin = JSON.parse(git(joinFile));
+  // Only dependency receipt hashes may advance after independently replaying
+  // the same proof. Every finding, scalar, tree digest and membership stays fixed.
+  assert.deepEqual({ ...composition,
+    survey: { ...composition.survey, sha256: originalComposition.survey.sha256 },
+    join: { ...composition.join, sha256: originalComposition.join.sha256 } }, originalComposition,
+    'complete composition evidence changed beyond dependency receipts');
+  assert.deepEqual({ ...join, survey: { ...join.survey, sha256: originalJoin.survey.sha256 } }, originalJoin,
+    'independent canonical join changed beyond its survey receipt');
   assert.equal(hash(readFileSync(composition.sourceFingerprint.file, 'utf8').replaceAll('\r\n', '\n')), composition.sourceFingerprint.sha256);
   const surveyBytes = readFileSync(composition.survey.file); assert.equal(hash(surveyBytes), composition.survey.sha256);
   const survey = JSON.parse(surveyBytes);
   for (const source of survey.sourceFingerprints)
     assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256);
+  const auditFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const parsed = bytes => ts.createSourceFile(auditFile, bytes.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const previous = parsed(git(auditFile)), current = parsed(readFileSync(auditFile));
+  const functionText = (file, name) => {
+    const matches = file.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
+    assert.equal(matches.length, 1); return matches[0].getText(file);
+  };
+  for (const name of ['canonicalStyle', 'expandQuad', 'expandPair', 'splitCssTerms', 'normalizeValue',
+    'normalizeColor', 'formatNumber', 'reviewedTemplateTextMappings'])
+    assert.equal(functionText(current, name), functionText(previous, name), `unchanged original gap dependency ${name}`);
   const rawBytes = readFileSync(join.capture.file); assert.equal(hash(rawBytes), join.capture.sha256);
   const raw = JSON.parse(rawBytes), inputs = new Map();
   for (const [kind, entries] of [['static', raw.results], ['interaction', raw.interactions]]) for (const entry of entries) {

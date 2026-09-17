@@ -7,11 +7,11 @@
   "canonicalUnresolvedGroups": 2330,
   "composition": {
     "file": "docs/material-explicit-gap-composition.json",
-    "sha256": "cffb76cf52593287bd1e934a32f3f6839c180d7d521df5af32834bf7541553c2"
+    "sha256": "7052ea921d48c31a3dd7e590bf4ec2560353a2e555d10ae2fa8e9d0efffc1842"
   },
   "join": {
     "file": "docs/material-owner-gap-canonical-join.json",
-    "sha256": "fcbc7c6c50e4d28daf8ad77c4e8e0312cd81dc501aab0bf55a84de6340266afc"
+    "sha256": "f6838588bf4fce3bfeceef0c1e45b0044d6e6078b267f59bcd866bda886058ea"
   },
   "counts": {
     "groups": 16,
@@ -18888,7 +18888,7 @@
   "sourceFingerprints": [
     {
       "file": "scripts/bind-material-explicit-gap-composition.mjs",
-      "sha256": "26671f49d3bd6f6ccd5c770a866e0e3d291547953fbbb517b49929bcbd10540c"
+      "sha256": "37088f12fed4eeef4f9ca5e9601e9d169342729dc13a129e29ccfcd96a1008f4"
     },
     {
       "file": "tests/material-parity/explicit-gap-canonical-binding.spec.mjs",

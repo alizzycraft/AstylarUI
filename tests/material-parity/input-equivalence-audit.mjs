@@ -33,6 +33,9 @@ import { collectBoundFieldHostLayout, validateBoundFieldHostLayout, classifyFiel
 import { collectOwnerGapInputs, validateOwnerGapInputs } from './owner-gap-source-binding.mjs';
 import { classifyOwnerGapInput, ownerGapAttribution } from './owner-gap-classification.mjs';
 import { validateOwnerGapClassifications } from './owner-gap-coverage.mjs';
+import { collectExplicitGapInputs, validateExplicitGapInputs, explicitGapClassificationContexts } from './explicit-gap-source-binding.mjs';
+import { classifyExplicitGapComposition, explicitGapAttribution } from './explicit-gap-classification.mjs';
+import { validateExplicitGapClassifications } from './explicit-gap-coverage.mjs';
 import { sliderInputBoxAttribution, collectSliderInputBoxes, classifySliderInputBox,
   validateSliderInputBoxes, validateSliderInputBoxClassifications } from './slider-input-box-source-binding.mjs';
 import { sliderBorderDefaultAttribution, collectSliderBorderDefaults, classifySliderBorderDefault,
@@ -192,6 +195,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const buttonBoxSizingInputs = collectButtonBoxSizingInputs(parityReport, { root, parityPath: options.parityPath });
   const fieldHostLayoutInputs = collectBoundFieldHostLayout(parityReport, { root, parityPath: options.parityPath, collectInventory: collectFullTreeInventory });
   const ownerGapInputs = collectOwnerGapInputs(parityReport, { root, parityPath: options.parityPath });
+  const explicitGapInputs = collectExplicitGapInputs(parityReport, { root, parityPath: options.parityPath });
   const normalLineBoxes = options.normalLineBoxPath
     ? loadNormalLineBoxReport({ root, reportPath: path.relative(root, path.resolve(root, options.normalLineBoxPath)).replaceAll('\\', '/'), cases, inventory: elementInventory,
       controlTypography: rawControlTypography, expectedProvenance: parityReport.captureProvenance })
@@ -210,7 +214,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence, tooltipWrappingInputs, rootShadowInputs, rootFlowHeightInputs, buttonPillRadiusInputs, buttonFlexInputs, buttonHostRequestInputs, buttonFixedWidthInputs, ownerGridInitialInputs, buttonBoxSizingInputs, fieldHostLayoutInputs, ownerGapInputs);
+  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence, tooltipWrappingInputs, rootShadowInputs, rootFlowHeightInputs, buttonPillRadiusInputs, buttonFlexInputs, buttonHostRequestInputs, buttonFixedWidthInputs, ownerGridInitialInputs, buttonBoxSizingInputs, fieldHostLayoutInputs, ownerGapInputs, explicitGapInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -302,6 +306,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     buttonBoxSizingInputs,
     fieldHostLayoutInputs,
     ownerGapInputs,
+    explicitGapInputs,
     sliderInputBoxes,
     sliderBorderDefaults,
     rootHeightInputs,
@@ -327,6 +332,15 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
+  if (report.explicitGapInputs?.binding?.status === 'bound') {
+    errors.push(...validateExplicitGapInputs(report.explicitGapInputs, { root, requireComplete }));
+    errors.push(...validateExplicitGapClassifications(report.explicitGapInputs, report.discrepancies, { root, requireComplete }));
+    if (report.explicitGapInputs.observations.length && report.summary?.inputEquivalent)
+      errors.push('explicit gap authoring differences do not establish input equivalence');
+  } else if (requireComplete || report.explicitGapInputs?.binding?.status === 'invalid' ||
+      report.explicitGapInputs?.observations?.length || report.discrepancies?.some(d => d.attribution === explicitGapAttribution)) {
+    errors.push('explicit gap attribution lacks independently bound original capture evidence');
+  }
   if (report.ownerGapInputs?.binding?.status === 'bound') {
     errors.push(...validateOwnerGapInputs(report.ownerGapInputs, { root }));
     errors.push(...validateOwnerGapClassifications(report.ownerGapInputs, report.discrepancies, { root }));
@@ -441,7 +455,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.tooltipUnpairedStyles, report.sliderInputBoxes, report.sliderBorderDefaults,
         report.fieldHostInitialStyleInputs, replayedEvidence, report.tooltipWrappingInputs, report.rootShadowInputs,
         report.rootFlowHeightInputs, report.buttonPillRadiusInputs, report.buttonFlexInputs, report.buttonHostRequestInputs,
-        report.buttonFixedWidthInputs, report.ownerGridInitialInputs, report.buttonBoxSizingInputs, report.fieldHostLayoutInputs, report.ownerGapInputs);
+        report.buttonFixedWidthInputs, report.ownerGridInitialInputs, report.buttonBoxSizingInputs, report.fieldHostLayoutInputs, report.ownerGapInputs, report.explicitGapInputs);
       const selected = rows => rows.filter(r => r.attribution === ownerInitialStyleAttribution);
       if (JSON.stringify(selected(replayedRows)) !== JSON.stringify(selected(report.discrepancies)))
         errors.push('owner initial-style attributions lack replayed original precedence, values and exact case coverage');
@@ -1245,6 +1259,8 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     '## Verdict',
     '',
+    `Explicit gap composition: ${report.explicitGapInputs?.observations.length ?? 0} original observations support ${report.discrepancies.filter(d => d.attribution === explicitGapAttribution).length} unequal application/plugin spacing groups. Full composition replay and independent source coverage preserve explicit shorthand, raw omitted longhands, all original memberships and prior classifications. Missing proof observations: ${report.explicitGapInputs?.coverage?.missing.length ?? 'unbound'}. This is not computed-gap, layout or rendering equivalence; equivalent-input core reductions remain required before removing the substitutions.`,
+    '',
     `Visual parity is ${report.coverage.visualParityGreen ? 'green' : 'not green'}, but input equivalence is **${report.summary.inputEquivalent ? 'established' : 'not established'}**. ` +
       `The audit found ${report.summary.uniqueStyleDifferences} unique normalized input differences across ${report.summary.totalStyleDifferenceOccurrences} occurrences.`,
     '',
@@ -1400,7 +1416,8 @@ export function renderMaterialInputAuditMarkdown(report) {
   return lines.join('\n');
 }
 
-function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence = { observations: [] }, tooltipWrappingInputs = { observations: [] }, rootShadowInputs = { observations: [] }, rootFlowHeightInputs = { observations: [] }, buttonPillRadiusInputs = { observations: [] }, buttonFlexInputs = { observations: [] }, buttonHostRequestInputs = { observations: [] }, buttonFixedWidthInputs = { observations: [] }, ownerGridInitialInputs = { observations: [] }, buttonBoxSizingInputs = { observations: [] }, fieldHostLayoutInputs = { observations: [] }, ownerGapInputs = { observations: [] }) {
+function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence = { observations: [] }, tooltipWrappingInputs = { observations: [] }, rootShadowInputs = { observations: [] }, rootFlowHeightInputs = { observations: [] }, buttonPillRadiusInputs = { observations: [] }, buttonFlexInputs = { observations: [] }, buttonHostRequestInputs = { observations: [] }, buttonFixedWidthInputs = { observations: [] }, ownerGridInitialInputs = { observations: [] }, buttonBoxSizingInputs = { observations: [] }, fieldHostLayoutInputs = { observations: [] }, ownerGapInputs = { observations: [] }, explicitGapInputs = { observations: [], groups: [] }) {
+  const explicitGapByCaseIdProperty = explicitGapClassificationContexts(explicitGapInputs);
   const ownerGapByCaseIdProperty = new Map(ownerGapInputs.observations.map(o => [JSON.stringify([o.case, o.proof.element, o.proof.property]), o]));
   const fieldHostLayoutByCaseId = new Map(fieldHostLayoutInputs.observations.map(o => [JSON.stringify([o.case, o.proof.element]), o]));
   const buttonBoxSizingByCaseId = new Map(buttonBoxSizingInputs.observations.map(o => [JSON.stringify([o.case, o.proof.element]), o]));
@@ -1549,6 +1566,9 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
         if (classification.attribution === 'unresolved') classification = classifyOwnerGapInput(
           input, property, referenceValue, astylarValue,
           ownerGapByCaseIdProperty.get(JSON.stringify([key, input.id, property]))) ?? classification;
+        if (classification.attribution === 'unresolved') classification = classifyExplicitGapComposition(
+          input, property, referenceValue, astylarValue,
+          explicitGapByCaseIdProperty.get(JSON.stringify([key, input.id, property]))) ?? classification;
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
           classification.classification, classification.attribution ?? null, classification.justification]);
         let entry = grouped.get(signature);
@@ -1565,7 +1585,7 @@ function collectStyleDiscrepancies(cases, originStageEvidence, retainedTypograph
             recommendedOwner: classification.owner,
             ...(classification.attribution ? { attribution: classification.attribution } : {}),
             ...(classification.reviewEvidence ? { reviewEvidence: classification.reviewEvidence } : {}),
-            ...([ownerGapAttribution, fieldHostLayoutAttribution, fieldHostWidthAttribution, buttonBoxSizingAttribution, ownerGridInitialAttribution, buttonFixedWidthAttribution, buttonFlexAttribution, buttonHostRequestAttribution, rootFlowHeightAttribution, buttonPillRadiusAttribution, rootShadowAttribution, tooltipWrappingAttribution, ownerInitialStyleAttribution, fieldHostInitialStyleAttribution, sliderBorderDefaultAttribution, sliderInputBoxAttribution, tooltipUnpairedStyleAttribution, originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
+            ...([explicitGapAttribution, ownerGapAttribution, fieldHostLayoutAttribution, fieldHostWidthAttribution, buttonBoxSizingAttribution, ownerGridInitialAttribution, buttonFixedWidthAttribution, buttonFlexAttribution, buttonHostRequestAttribution, rootFlowHeightAttribution, buttonPillRadiusAttribution, rootShadowAttribution, tooltipWrappingAttribution, ownerInitialStyleAttribution, fieldHostInitialStyleAttribution, sliderBorderDefaultAttribution, sliderInputBoxAttribution, tooltipUnpairedStyleAttribution, originStageAttribution, borderInitialAttribution, buttonBorderResetAttribution, outlineTokenAttribution, chipOutlineAttribution,
               'reviewed-root-flow-dependency', nonGridTemplateAttribution, 'reviewed-button-typography-host-input', chipHostTypographyAttribution, fieldHostTypographyAttribution, fieldHostAlignmentAttribution, fieldHostWeightTrackingAttribution, rootTypographyAttribution, rootInitialStyleAttribution, appearanceInitialAttribution, buttonAppearanceAttribution, rootColorAttribution, fieldColorAttribution, rootHeightAttribution, rootBoxSizingAttribution, containerCaretAttribution].includes(classification.attribution) ? { reviewedCases: [] } : {}),
             occurrences: 0,
             cases: [],
@@ -8455,6 +8475,17 @@ function sourceFingerprints(root) {
     'tests/material-parity/owner-gap-coverage.spec.mjs',
     'tests/material-parity/owner-gap-integration-conservation.mjs',
     'tests/material-parity/owner-gap-canonical-integration.spec.mjs',
+    'tests/material-parity/explicit-gap-classification.mjs',
+    'tests/material-parity/explicit-gap-classification.spec.mjs',
+    'tests/material-parity/explicit-gap-source-binding.mjs',
+    'tests/material-parity/explicit-gap-source-binding.spec.mjs',
+    'tests/material-parity/explicit-gap-coverage.mjs',
+    'tests/material-parity/explicit-gap-coverage.spec.mjs',
+    'tests/material-parity/explicit-gap-canonical-integration.spec.mjs',
+    'tests/material-parity/explicit-gap-canonical-binding.spec.mjs',
+    'scripts/bind-material-explicit-gap-composition.mjs',
+    'scripts/audit-material-explicit-gap-composition.mjs',
+    'docs/material-explicit-gap-canonical-binding.json',
     'tests/material-parity/owner-grid-initial-evidence.mjs',
     'tests/material-parity/owner-grid-initial-evidence.spec.mjs',
     'tests/material-parity/owner-grid-initial-source-binding.mjs',
@@ -8485,6 +8516,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'tests/material-parity/explicit-gap-canonical-integration.spec.mjs', /test\('production explicit-gap integration preserves/,
+      'explicit spacing composition with original-source replay and complete classification coverage', 'Existing full-tree composition proofs bind all 16 groups and 1,032 original observations. Production classification retains unequal application/plugin requests, explicit shorthand and raw omitted longhands. Independent coverage rejects missing owners and findings; prior/current builder conservation must preserve every scalar and unrelated complete finding. This does not establish computed gap, layout equivalence, historical motivation or renderer causality.'),
     proof(root, 'tests/material-parity/owner-gap-canonical-integration.spec.mjs', /test\('owner gap production integration preserves/,
       'gap observation-stage source binding with exact coverage and prior precedence', 'Every original normal-versus-local-omission observation is retained, including explicit requests and motion review cases. Independently hash-bound tree replay and exact classified coverage explain diagnostic-stage differences without inventing candidate computed defaults or used spacing. Actual prior/current builders preserve normalization, earlier attribution, all scalar rows and unrelated complete records. Public gap grammar, unit and axis failures remain independent findings; full canonical conservation and rendering verification remain separate gates.'),
     proof(root, 'tests/material-parity/owner-grid-initial-canonical-integration.spec.mjs', /test\('owner grid production integration preserves/,

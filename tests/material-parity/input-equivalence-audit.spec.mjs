@@ -1373,8 +1373,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 218);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 218);
+  assert.equal(audit.sourceFingerprints.length, 229);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 229);
   // The original 129-source inventory gained one tooltip binding and three
   // slider binding files, followed by ten range-border, five field-host and
   // eight shared owner-attribution sources and six tooltip wrapping/proof
@@ -1384,7 +1384,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   // nine grid observation/binding/classification/coverage/integration sources,
   // then eight button box-sizing observation/binding/coverage sources and five
   // field-host layout observation/binding/integration sources and nine gap
-  // observation/binding/coverage/integration sources.
+  // observation/binding/coverage/integration sources, then eleven explicit-gap
+  // classification, original-source binding, coverage and existing-proof sources.
   // No previous source was removed.
   // Require the actual entries/digests, not only a count.
   for (const file of ['tests/material-parity/tooltip-unpaired-style-evidence.mjs',
@@ -1397,6 +1398,17 @@ test('records source fingerprints and actual visual acceptance fields', () => {
     'tests/material-parity/owner-gap-coverage.spec.mjs',
     'tests/material-parity/owner-gap-integration-conservation.mjs',
     'tests/material-parity/owner-gap-canonical-integration.spec.mjs',
+    'tests/material-parity/explicit-gap-classification.mjs',
+    'tests/material-parity/explicit-gap-classification.spec.mjs',
+    'tests/material-parity/explicit-gap-source-binding.mjs',
+    'tests/material-parity/explicit-gap-source-binding.spec.mjs',
+    'tests/material-parity/explicit-gap-coverage.mjs',
+    'tests/material-parity/explicit-gap-coverage.spec.mjs',
+    'tests/material-parity/explicit-gap-canonical-integration.spec.mjs',
+    'tests/material-parity/explicit-gap-canonical-binding.spec.mjs',
+    'scripts/bind-material-explicit-gap-composition.mjs',
+    'scripts/audit-material-explicit-gap-composition.mjs',
+    'docs/material-explicit-gap-canonical-binding.json',
     'tests/material-parity/field-host-layout-input-evidence.mjs',
     'tests/material-parity/field-host-layout-input-evidence.spec.mjs',
     'tests/material-parity/field-host-layout-source-binding.mjs',
