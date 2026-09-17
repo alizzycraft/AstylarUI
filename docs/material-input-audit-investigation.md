@@ -3,6 +3,20 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Remaining caret-color population surveyed without an equivalence waiver
+
+The [complete original caret survey](material-owner-caret-input-survey.md)
+retains **145 groups / 4,050 observations / 1,734 cases**, with exact original
+count agreement for every group. Eighty-six groups have no relevant request in
+their reviewed captured frame/page ancestry; 59 remain specific review cases
+for motion requests, overlay context or input-control ownership. The survey
+does not infer candidate computed caret color from text color or claim the
+empty-input caret bug is fixed. All original raw values remain present.
+Four new tests, including 24 altered-evidence controls and full no-write replay,
+pass. The existing four caret sensitivity/exposure tests also pass, including
+the DPR 1/2 ancestor-color counterexample. Canonical membership and production
+classification are still separate; no unresolved count is silently reduced.
+
 ## Bounded motion/capture reviews integrated; pending motion remains explicit
 
 Commit `175956e` integrates the [source-bound gap reviews](material-gap-review-membership.md#production-integration-and-original-input-conservation)
