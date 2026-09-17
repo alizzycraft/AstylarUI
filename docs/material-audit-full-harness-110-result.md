@@ -26,7 +26,7 @@ SHA-256 `db04c1432ac9575b105d59e7438dbdef6549a315cf1746d233c7c8a7ea680a55`.
 | 13, 51 | Button fixed-width and button-request historical integration | Read-only diagnostics already preserve all original scalars and unrelated rows, identifying exactly 18 later independently source-bound gap classifications in each case. Update only these historical comparison boundaries, then rerun the original focused tests. See `material-button-fixed-width-audit.md`. |
 | 80, 84, 97 | Field-host layout join, layout inputs, weight/tracking | Independent complete calculation replay isolates changed source receipts while preserving all non-receipt evidence. Refresh dependencies in order and rerun original tests. See `material-field-host-receipt-diagnostic.md`; the executable evidence is `scripts/diagnose-material-field-host-receipts.mjs`. |
 | 659, 661, 662, 664 | Original overlay context and historical mapping | The stale mapping receipt interrupts both positive and negative paths. The single-field in-memory proposal permits complete original replay, but is not a production pass. Refresh the saved current-source metadata, retain historical provenance, and rerun all unchanged controls. See `material-overlay-mapping-receipt-diagnostic.md`. |
-| File entry 71 | `owner-grid-initial-source-binding.spec.mjs` | Node exited 134 with a semi-space allocation failure. The run overlapped other heavy diagnostic work at that time; causality is not established. Rerun this unchanged file alone before deciding whether it needs a test/harness correction. |
+| File entry 71 | `owner-grid-initial-source-binding.spec.mjs` | Node exited 134 with a semi-space allocation failure. The unchanged isolated rerun passed all three tests (see below). The original resource-failure cause remains unproven; retain the failure and verify the file again in the next full run. |
 | 716, 719, 720 | Owner initial-style mappings and membership | Both complete generators were independently replayed: 600 groups / 31,508 observations plus 636 preserved static observations, with unchanged non-receipt data. Refresh membership before mappings, then rerun the original tests. See `material-owner-initial-receipts-diagnostic.md`. |
 | 735 | Remaining-overlay ancestry index | The test reports the old audit-module source fingerprint. Diagnose/replay the complete index after its membership/mapping dependencies are refreshed; do not assume all other evidence is unchanged. |
 | 740 | Reviewed-authoring historical integration | Original raw scalar conservation passes before the unrelated-row digest assertion fails. Later legitimate classifications are a hypothesis, not yet an independently isolated explanation for this particular test. Enumerate every changed complete row against its historical baseline and prove each exception before updating the guard. |
@@ -41,6 +41,28 @@ The reviewed-authoring unrelated-row digests are current
 versus prior
 `bdeaf465e0d346e0f6a29d4d906af91ed80ab65c1d2f2fbd24218e212b449dc2`.
 These are observed failures, not replacement expected values.
+
+## Unchanged isolated grid source-binding rerun
+
+After the full harness was confirmed terminal, run alone:
+
+```powershell
+node --test tests/material-parity/owner-grid-initial-source-binding.spec.mjs
+```
+
+The complete TAP log reports **3 tests, 3 passed, 0 failed**, no cancellations,
+skips or todos, duration **216,424.1318 ms**. It includes full source binding,
+caller-eligibility rejection and original-evidence mutation controls. The Node
+processes are absent after the terminal TAP summary. The test and its dependencies
+were unchanged; no higher memory limit or reduced case population was used.
+
+Log: `artifacts/material-parity/field-host-flow-input-audit/owner-grid-source-binding-isolated.log`,
+SHA-256 `846dad01b93a203398e6280da5967acbc08d8c764947711c86018950fe8fc501`.
+
+This demonstrates that the earlier out-of-memory failure does not reproduce in
+this isolated run. It does **not** establish contention as its cause or replace
+the required next complete harness run. No test correction is justified by this
+evidence alone.
 
 ## Scope and next gate
 
