@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Full-harness field-host failures isolated to stale dependent receipts
+
+The [read-only receipt diagnostic](material-field-host-receipt-diagnostic.md)
+replays 577 field-host cases. All 72 layout groups / 4,616 observations, complete
+non-receipt survey fields and historical join rows remain unchanged; two source
+fingerprints are stale. Weight/tracking retains all 1,154 proofs and 12 complete
+groups, with only the audit-module receipt stale. The original failure is retained
+(four passes / one failure in the diagnostic suite), not relabeled as a pass.
+Receipt refresh and focused/full reruns are deferred until the running harness
+is terminal so its dependencies remain unchanged.
+
 ## Original caret attribution candidate preserves every pending group
 
 The [bounded classifier and complete original replay](material-owner-caret-attribution.md)
