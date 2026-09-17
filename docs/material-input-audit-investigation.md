@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Owner initial-style report failures preserve all observation evidence
+
+The [read-only membership/mapping diagnosis](material-owner-initial-receipts-diagnostic.md)
+replays both complete original calculations: 600 groups / 31,508 observations,
+with 636 prior static observations retained separately. Exactly one current-source
+fingerprint differs in each saved report; every non-receipt field is unchanged.
+The diagnostic leaves the original failing checks and live harness dependencies
+untouched. Dependency-ordered metadata refresh and original-test reruns remain
+pending; no new canonical attribution or renderer-equivalence claim is made.
+
 ## Range caret review preserves separate control-input differences
 
 The [complete range caret review](material-range-caret-input-survey.md) scans all
