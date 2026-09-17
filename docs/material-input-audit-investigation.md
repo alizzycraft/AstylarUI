@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Filtered caret captures retain explicit missing-population evidence
+
+The [subset source boundary](material-owner-caret-subset-binding.md) replays the
+complete original proof before projecting exact supplied members. Its four-case
+diagnostic retains two reviewed and two unresolved observations and explicitly
+lists the other 4,046 observations as missing. Fifteen rejection controls pass,
+including a forged complete flag and changed persisted scalar input. Default
+validation requires the complete source population. Canonical integration remains
+pending; no renderer or canonical input data changed.
+
 ## Caret source join verifies every original proof before producing classifications
 
 The [complete-capture source binding](material-owner-caret-source-binding.md)

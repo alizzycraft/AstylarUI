@@ -72,13 +72,13 @@ changed to pass the retry.
 
 ## Integration limits
 
-This binder currently accepts the **complete pinned original capture**, not
+This strict binder accepts the **complete pinned original capture**, not
 arbitrary or filtered capture files. Missing input paths return an unbound result;
-changed captures return an explicit invalid result. Before canonical integration,
-account for the harness's isolated subset captures without silently dropping
-coverage obligations: authenticate their membership against the same originals,
-track missing observations explicitly, and require full membership for complete
-audit acceptance. A subset must never be promoted to full-corpus evidence.
+changed captures return an explicit invalid result. The separate
+[audit subset boundary](material-owner-caret-subset-binding.md) now authenticates
+focused capture membership against those same originals, records missing
+observations explicitly and requires full membership by default. It retains this
+complete replay underneath the projection. A subset is not full-corpus evidence.
 
 The canonical builder does not yet import this module; the existing live harness
 and dependencies remain unchanged. Add focused inventory only after that run
