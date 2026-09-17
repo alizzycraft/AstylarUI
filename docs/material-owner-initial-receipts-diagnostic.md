@@ -1,5 +1,47 @@
 # Owner initial-style reports: source metadata failure isolated
 
+## Verified refresh after caret integration
+
+The original generators were rerun, each followed by its unchanged no-write
+check, in dependency order:
+
+```powershell
+node scripts/audit-material-owner-initial-membership.mjs
+node scripts/audit-material-owner-initial-membership.mjs --check
+node scripts/audit-material-owner-initial-mappings.mjs
+node scripts/audit-material-owner-initial-mappings.mjs --check
+node --test --test-concurrency=1 tests/material-parity/owner-initial-style-membership.spec.mjs tests/material-parity/owner-initial-style-mappings.spec.mjs
+```
+
+All four generator/check commands exit **0**. The original focused suites pass
+**9/9**, exit **0**, **102,695.1132 ms**, with no failed, cancelled, skipped or
+todo tests. Complete reports still cover **600 groups / 31,508 observations**,
+retaining **636 previously reviewed static observations** across **51 split
+groups**. The mapping survey's 326 captured observation-stage groups are not
+new claims of candidate computed-style or rendering equivalence.
+
+Whole-object comparison against `0465940` verifies exactly three changed
+receipts: the current audit-module hash in both reports, and the refreshed
+membership report's hash in the mappings report. Every non-provenance field is
+identical, including the two non-receipt digests in the historical table below.
+Each replacement receipt was independently checked against actual current bytes.
+
+Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `caret-owner-initial-refresh-generators.log`, SHA-256
+  `0f8dc32f633ab9676dfb9ac07632d1e8afb1c439f15d12303682c1002c83be97`.
+- `caret-owner-initial-receipt-conservation.log`, SHA-256
+  `a22a62f8ff4677e23ae3210f6054fae3777ee1c1e406590b20a514c7e1b295d3`.
+- `caret-owner-initial-refresh-focused.log`, SHA-256
+  `ff65508a8e80a92c63450a1726de2e40acdc6e2fdd71d1d153d05a2e1c51bc47`.
+
+The earlier stale-state diagnostic below is historical evidence, not an
+acceptance command after refreshing its preconditions. Canonical regeneration,
+remaining classifications, the complete current harness, and the enforced
+rendering matrix remain outstanding.
+
+## Earlier stale-receipt investigation
+
 The unfiltered audit harness reports stale owner membership and mapping reports
 (tests 716, 719 and 720). The read-only diagnostic
 `scripts/diagnose-material-owner-initial-receipts.mjs` independently reruns both

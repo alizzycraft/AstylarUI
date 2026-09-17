@@ -9,7 +9,7 @@
   "sourceFingerprints": [
     {
       "file": "docs/material-owner-initial-style-membership.json",
-      "sha256": "be948b9c544a241ef67550fe386fe99588b7a4256bf75db1b73b76ea49e3b586"
+      "sha256": "8a877ffe109396fa1baffdcc59283bdbeea4881e52c0055a7872d4fbe769f09c"
     },
     {
       "file": "scripts/audit-material-owner-initial-mappings.mjs",
@@ -25,7 +25,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "c57c725b10a0b94bf9c21ccf85e3764f47bccd9d629d004010429fd239c820c1"
+      "sha256": "b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73"
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.mjs",
