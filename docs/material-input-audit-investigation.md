@@ -10,8 +10,10 @@ with exit 1: 898 TAP entries, 882 passed, 16 failed, zero skipped or cancelled.
 Its full log and failure inventory are preserved. Several metadata/conservation
 failures already have independent diagnostics, including reviewed-authoring
 conservation (18 source-bound later groups / 758 observations; every other
-complete row unchanged). Remaining-overlay metadata and root initial metadata
-still need their specific follow-up. The unchanged owner-grid isolated rerun
+complete row unchanged). Root initial metadata now has a
+[complete replay diagnosis](material-root-initial-receipt-diagnostic.md): two stale
+receipts, all 30,043 observations preserved. Remaining-overlay metadata still
+needs its specific follow-up. The unchanged owner-grid isolated rerun
 passed all three tests; the original allocation-failure cause remains unproven.
 This is not an enforced rendering-parity result or a completed input audit.
 
