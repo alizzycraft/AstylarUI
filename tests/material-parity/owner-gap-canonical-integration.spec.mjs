@@ -8,6 +8,7 @@ import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInputAuditMarkdown } from './input-equivalence-audit.mjs';
 import { ownerGapAttribution } from './owner-gap-classification.mjs';
+import { explicitGapAttribution } from './explicit-gap-classification.mjs';
 import { assertLaterGapClassifications, gapScalarProjection as scalar } from './owner-gap-integration-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -59,6 +60,9 @@ test('owner gap production integration preserves all scalars prior precedence an
   const other = report => report.discrepancies.filter(row => !selected.has(JSON.stringify(scalar(row))));
   assert.equal(hash(other(audit)), hash(other(previous)), 'every unrelated complete row remains identical');
   const added = audit.discrepancies.filter(row => row.attribution === ownerGapAttribution);
+  const explicit = audit.discrepancies.filter(row => row.attribution === explicitGapAttribution);
+  assert.equal(explicit.length, 16, 'all eight explicit-spacing owners are present in this historical diagnostic');
+  assert.equal(selected.size, added.length + explicit.length);
   assert.equal(added.reduce((n, row) => n + row.occurrences, 0),
     audit.ownerGapInputs.observations.filter(o => !o.proof.issues.length).length);
   assert.ok(audit.ownerGapInputs.observations.some(o => o.proof.issues.length), 'negative cases remain present');
@@ -75,8 +79,24 @@ test('owner gap production integration preserves all scalars prior precedence an
     const changed = structuredClone(audit); mutate(changed);
     assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(e => /owner gap/.test(e)));
   }
+  // A historical guard may account for later findings only after their own
+  // independent original-source and full-membership checks; no broad gap skip.
+  for (const mutate of [
+    a => { delete a.explicitGapInputs; },
+    a => { a.explicitGapInputs.observations.pop(); },
+    a => { a.explicitGapInputs.groups.pop(); },
+    a => { a.explicitGapInputs.binding.proof.sha256 = '0'.repeat(64); },
+    a => { a.discrepancies = a.discrepancies.filter(row => row.attribution !== explicitGapAttribution); },
+    a => { a.discrepancies.find(row => row.attribution === explicitGapAttribution).reviewedCases.pop(); },
+    a => { a.discrepancies.find(row => row.attribution === explicitGapAttribution).astylar = '99px'; },
+    a => { a.discrepancies.find(row => row.attribution === explicitGapAttribution).reviewEvidence.rendererCauseProven = true; },
+  ]) {
+    const changed = structuredClone(audit); mutate(changed);
+    assert.throws(() => assertLaterGapClassifications(changed, previous));
+  }
   console.log(JSON.stringify({ baselineCommit, staticCases: results.length, interactionCases: interactions.length,
     originalObservations: audit.ownerGapInputs.observations.length, attributedGroups: added.length,
+    laterExplicitGroups: explicit.length, laterExplicitObservations: explicit.reduce((n, row) => n + row.occurrences, 0),
     attributedOccurrences: added.reduce((n, row) => n + row.occurrences, 0), unchangedScalarRows: audit.discrepancies.length,
     unchangedCompleteRows: other(audit).length, unchangedCompleteRowsSha256: hash(other(audit)),
     fullCanonicalConservationVerified: false, inputEquivalent: false, retainedDiagnosticCapture: file }));

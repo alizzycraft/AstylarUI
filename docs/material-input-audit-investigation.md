@@ -3,6 +3,20 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Explicit-spacing historical guards verified
+
+The [historical integration replay](material-explicit-gap-canonical-binding.md#historical-integration-conservation-after-explicit-spacing-attribution)
+passes **11/11** tests across the six existing integration suites. The later
+explicit-spacing findings are accounted for only after independent source and
+full membership validation; original scalar and unrelated-row assertions remain
+intact. Eight added rejection controls prevent broad exclusions or fabricated
+claims. The separate remaining-gap classifier passes **2/2** tests on all 1,902
+original observations with 34 rejection controls and leaves 64 dialog motion
+observations unresolved. That classifier is preparation, not production wiring.
+The nine stale receipt failures in the broader 395-test run still require
+receipt conservation and original-case replay. Full canonical refresh, current
+full harness and enforced parity remain outstanding.
+
 ## Remaining gap reviews retain complete original membership
 
 The [new membership binding](material-gap-review-membership.md) reuses the

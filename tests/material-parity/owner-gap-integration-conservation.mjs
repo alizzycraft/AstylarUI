@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import { ownerGapAttribution } from './owner-gap-classification.mjs';
 import { validateOwnerGapClassifications } from './owner-gap-coverage.mjs';
+import { explicitGapAttribution } from './explicit-gap-classification.mjs';
+import { validateExplicitGapInputs } from './explicit-gap-source-binding.mjs';
+import { validateExplicitGapClassifications } from './explicit-gap-coverage.mjs';
 
 export const gapScalarProjection = row => [row.family, row.element, row.property, row.reference,
   row.astylar, row.occurrences, row.cases, row.states];
@@ -27,5 +30,26 @@ export function assertLaterGapClassifications(audit, previous, options = {}) {
     signatures.add(key);
   }
   assert.equal(signatures.size, added.length);
+  // Explicit spacing is a separate, later authoring finding, not a widening of
+  // the normal/local-omission classifier. Authenticate its full proof and exact
+  // selected source population before accounting for it in historical tests.
+  assert.equal(audit.explicitGapInputs?.binding?.status, 'bound');
+  const diagnostic = { ...options, requireComplete: false };
+  assert.deepEqual(validateExplicitGapClassifications(audit.explicitGapInputs, audit.discrepancies, diagnostic), []);
+  assert.deepEqual(validateExplicitGapInputs(audit.explicitGapInputs, diagnostic), []);
+  const explicit = audit.discrepancies.filter(row => row.attribution === explicitGapAttribution);
+  for (const row of explicit) {
+    const key = JSON.stringify(gapScalarProjection(row)), prior = before.get(key);
+    assert.ok(prior, 'explicit gap classification must retain its complete prior scalar row');
+    assert.equal(prior.attribution, 'unresolved');
+    assert.equal(row.classification, 'application-plugin-authoring-defect');
+    assert.deepEqual(row.referenceAuthoredExamples, prior.referenceAuthoredExamples);
+    assert.deepEqual(row.astylarAuthoredExamples, prior.astylarAuthoredExamples);
+    for (const flag of ['inputEquivalent', 'wholeElementInputEquivalent', 'usedGapVerified', 'rendererCauseProven'])
+      assert.equal(row.reviewEvidence[flag], false);
+    assert.ok(!signatures.has(key), 'explicit and normal-gap attribution populations must be disjoint');
+    signatures.add(key);
+  }
+  assert.equal(signatures.size, added.length + explicit.length);
   return signatures;
 }
