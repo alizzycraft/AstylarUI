@@ -52,6 +52,35 @@ altered scalar-loss proof/tree ownership and fabricated equivalence.
 
 ## Owning-boundary follow-up and limits
 
+### Bounded classifier preparation
+
+`tests/material-parity/gap-review-classification.mjs` now consumes this verified
+membership without changing production audit precedence or the canonical report.
+It attributes 1,720 local-motion observations to the unequal observation-stage
+boundary and 118 overlay observations to the original scalar capture defect.
+The 64 unresolved dialog observations return no classification. All six
+equivalence/computed-value/used-gap/rendering/cause flags remain false.
+
+The classifier is not an independent authenticator: its future production
+consumer must replay source authentication and enforce complete coverage before
+using any finding. The focused test already reopens the original capture,
+checks its full hash, and replays the original full-tree membership verifiers.
+
+```powershell
+node --test tests/material-parity/gap-review-classification.spec.mjs
+```
+
+Result: **2/2 pass**, no failures, skips, cancellations or todos;
+**20,987.2655 ms**. Every one of the 1,902 observations is checked, including
+the unresolved population. The second test rejects **34** altered inputs across
+the two attributable kinds. Stage mutations rehash the changed input to ensure
+that the declaration guards independently reject them rather than merely
+failing a stale hash. The retained log is
+`artifacts/material-parity/field-host-flow-input-audit/gap-review-classification-focused.log`,
+SHA-256 `e53fc5689ee6ede1f0e22fc002d1b6e70a9b118cc7ee602f9556786fe7fb37ac`.
+
+### Remaining work
+
 1. Consume the local-motion evidence as a bounded observation-stage finding,
    retaining the authored transition/animation requests. Do not equate missing
    candidate declarations with browser-computed gaps or waive animation parity.
