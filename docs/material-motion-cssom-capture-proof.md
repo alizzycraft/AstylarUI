@@ -75,3 +75,21 @@ original dialog captures. No-write replay exactly matches the saved machine
 receipt. This proof was added after the full 91-file harness began at `52ec632`;
 its results are separate, not added to that run's totals. Renderer behavior,
 canonical classifications and comparison inputs remain unchanged.
+
+## Explicit-spacing integration provenance replay
+
+After the audit module's explicit-spacing integration, the no-write browser
+replay failed only because the gap survey's dependency receipt had advanced.
+The failure is retained in
+`artifacts/material-parity/field-host-flow-input-audit/dialog-cssom-explicit-gap-before.log`.
+Both commands above were then rerun with the unchanged verifier and exited **0**,
+each exercising all six browser controls in Chrome **152.0.7977.76** and all 32
+original dialog cases. Only `parent.sha256` changed in the machine report.
+
+Projecting that field back and comparing the complete object against commit
+`8819be6beb92e4fa6a892567ca5dab0e383dc527` confirms that every original case,
+tree, rule, longhand, browser scenario, computed result and conclusion is
+unchanged. The conserved original object's SHA-256 is
+`2a04a74147b06485ce6c4ffe200159dd1deba99db028b44b1d654d8649842d5b`.
+This authenticates the existing capture-stage finding; it does not establish
+original resolved motion, candidate computed gaps or rendering equivalence.
