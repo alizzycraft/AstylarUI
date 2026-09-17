@@ -1,5 +1,44 @@
 # Complete audit harness coverage
 
+## Current inventory: caret proof commands are registered
+
+Automatic discovery now includes **111 files**: **103 Material**, four general
+parity and four TTS, retaining all **43 legacy files**. The new
+`owner-caret-proof-commands.spec.mjs` executes the actual complete-source coverage,
+source-binding and subset-binding commands, including their original mutation
+and canonical-file conservation checks. The inventory test explicitly requires
+this registration. Sections below retain historical inventories, not current
+execution claims.
+
+```powershell
+node --test tests/material-parity/owner-caret-proof-commands.spec.mjs
+node --test tests/parity/material-audit-harness-inventory.spec.mjs
+```
+
+Both commands exit **0**. The registered caret file passes **3/3** in
+**220,730.0542 ms**, preserving **45 rejection controls** (17 coverage, 13 source,
+15 subset). It verifies **2,311 original cases / 4,050 observations**, **118
+planned groups / 3,154 reviewed observations**, and **896 retained pending
+observations**. The four-case subset explicitly retains missing populations;
+it cannot claim completeness. Canonical integration remains separate.
+
+The inventory/runner controls pass **4/4** in **551.2085 ms**, including nested
+discovery, rejected lost legacy coverage, child failure propagation and refusal
+to accept filtered execution as complete. Neither focused command has failed,
+skipped, cancelled or todo tests.
+
+Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `owner-caret-registered-proofs.log`, SHA-256
+  `b079ffd2f44d431835c2ffce276ac391c2f7cdc91897b186ac8daa0a5edb1567`.
+- `caret-proof-harness-inventory.log`, SHA-256
+  `4c42b764e31b817bb74dcffa3361ae8248aeaf5310ec3c81420979aba81df537`.
+
+The last [complete run](material-audit-full-harness-110-result.md) covered 110
+files and failed; it did not execute this newly registered file. The complete
+current 111-file harness and final enforced rendering-parity matrix remain
+outstanding. These focused results do not establish rendering equivalence.
+
 ## Owner gap survey coverage
 
 The [source-bound gap survey](material-owner-gap-input-survey.md) adds one focused

@@ -67,8 +67,11 @@ evidence alone.
 ## Scope and next gate
 
 No existing harness dependencies were changed while this run was live. New
-standalone audit checks developed alongside it are not included in the 110-file
-inventory and must be registered and exercised by the next complete run.
+standalone checks developed alongside it were not included in its inventory.
+The caret coverage/source/subset commands are now registered in a new three-test
+file and pass their focused run; current discovery is 111 files. See
+`material-audit-harness-coverage.md`. The next complete run must execute that full
+current inventory.
 The run was not filtered, restarted, or reinterpreted as green.
 
 This is an audit-harness result, not the final enforced rendering-parity matrix.
