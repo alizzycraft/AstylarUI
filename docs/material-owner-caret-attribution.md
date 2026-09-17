@@ -96,8 +96,10 @@ not imported by the canonical audit builder and does not alter the existing
 remains **2,278**. No renderer, plugin, reference, comparison input or threshold
 changed.
 
-Before integration, add the canonical source/coverage join and enforce exact
-expected classifications independently of their presence in the output. Run
+The [independent output-coverage check](material-owner-caret-coverage.md) now
+derives all planned classifications and pending membership from the original
+cases. Before integration, add the canonical source join and invoke that coverage
+validator against the actual complete output, not a selected passing subset. Run
 prior/current conservation for all original scalars and unrelated complete rows,
 then regenerate and no-write replay the complete canonical audit. Keep the 27
 specific-review groups and false equivalence claims intact. Register focused

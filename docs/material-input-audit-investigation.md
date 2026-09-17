@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Caret attribution now has an independent planned-output coverage check
+
+The [coverage check](material-owner-caret-coverage.md) authenticates and fully
+replays the attribution candidate, then separately enumerates all 2,311 original
+cases to prepare 118 reviewed groups / 3,154 observations and retain 27 pending
+groups / 896 observations. Seventeen rejection controls and three positive
+controls pass, including complete membership beyond the displayed case sample.
+Canonical source integration and prior/current conservation remain pending;
+the canonical unresolved count stays 2,278.
+
 ## Owner initial-style report failures preserve all observation evidence
 
 The [read-only membership/mapping diagnosis](material-owner-initial-receipts-diagnostic.md)
