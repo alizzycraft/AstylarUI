@@ -3,6 +3,20 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Existing explicit-gap composition proof binds to the canonical baseline
+
+The [canonical membership binding](material-explicit-gap-canonical-binding.md)
+connects the already verified 16 explicit-gap authoring groups to all 1,032
+original scalar observations and their unchanged full canonical row hashes.
+All eight owners and 296 cases remain present, including exact raw omitted
+longhands versus explicit candidate shorthand and original state/sample order.
+The existing composition verifier passes unchanged with 40 negative controls;
+the new binding tests pass 2/2 with 14 additional rejection controls. This
+prepares integration of existing evidence rather than introducing another
+composition implementation. Canonical integration is still pending and the
+canonical unresolved count remains 2,330. The later-added independent test is
+not part of the running 95-file harness's inventory.
+
 ## Public update reproduction proves premature release through semantic focus
 
 The [public held-update proof](material-button-held-update-root-cause.md) now
