@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## All retained overlay caret observations now have declaration/context evidence
+
+The [complete overlay survey](material-overlay-caret-context-survey.md) replays
+13 groups / 378 observations / 109 original cases and 33,642 original scalar
+comparisons. It retains motion requests in 210 observations, every original
+declaration and all 59 scalar/full-tree rule gaps. The legacy context replay is
+explicitly conditional on a single in-memory receipt proposal; the on-disk
+reader still fails. Generation, no-write replay and the final 15-negative /
+13-changed-evidence / 12-conservation controls pass. An initial allocation failure
+and a separate full-harness child allocation failure remain recorded. Neither
+canonical classifications nor renderer/fixture inputs changed.
+
 ## Overlay mapping receipt failure isolated without altering the live harness
 
 The [read-only overlay receipt diagnostic](material-overlay-mapping-receipt-diagnostic.md)
