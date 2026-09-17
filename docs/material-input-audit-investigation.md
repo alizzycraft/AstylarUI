@@ -3,6 +3,25 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Public update reproduction proves premature release through semantic focus
+
+The [public held-update proof](material-button-held-update-root-cause.md) now
+confirms a core causal path: an update queues semantic focus synchronization,
+focusing the semantic button blurs the canvas, Babylon generates a device
+release, and Astylar dispatches pointer-up/click before the native release.
+All 24 update-while-held cases fail; all 16 no-update/after-release controls pass
+across DPR 1/2, two repeats and passive stack tracing on/off. Identical document
+updates fail on the reuse path too: rebuild is not required. Twelve captured
+stacks are bound to their served JavaScript instructions. The two focused
+verifier tests pass, retaining 17 rejection controls.
+
+Fixing core gesture/focus continuity belongs ahead of component active-paint
+tuning in the implementation plan. The public reduction does not retrospectively
+prove the historical Material call stacks or resolve its independent paint-input
+differences. No renderer or canonical fixture was changed. The 95-file harness
+does not include this later independent spec; full current verification remains
+pending, and the canonical report retains 2,330 unresolved groups.
+
 ## Held-button replay exposes pre-release activation
 
 The [temporal audit](material-button-held-temporal-audit.md) replays all 57
@@ -12,9 +31,10 @@ rebuild/settlement and emit public pointer-up/click before any native release.
 Forty controls retain pressed state until release. The HTML button stays active
 in every held capture, and all settled candidate style stages match the
 originals. Two focused tests retain 20 mutation controls and corrupt-capture
-rejection. Source-level focus/blur tracing and a public compatible-update
-reduction remain pending; the temporal result is not yet a proved causal code
-path. No renderer/fixture change or canonical reclassification was made.
+rejection. The public compatible-update reduction above now proves a causal
+focus/blur path separately; the historical temporal result alone still does not
+prove that code path. No renderer/fixture change or canonical reclassification
+was made.
 
 ## Four remaining gap groups retain known CSS-layer capture loss
 

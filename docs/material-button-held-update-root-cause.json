@@ -1,0 +1,2474 @@
+{
+  "schemaVersion": 1,
+  "kind": "public-button-held-update-root-cause",
+  "report": {
+    "file": "artifacts/material-parity/button-held-update-audit/latest-report.json",
+    "sha256": "f89b54300e81419eb415746a4aa4c167e420cdbaaa5b3c156d1b84aac8e83032"
+  },
+  "browser": "152.0.7977.76",
+  "packages": {
+    "@angular/core": "20.3.29",
+    "@angular/platform-browser": "20.3.29",
+    "@babylonjs/core": "8.56.2",
+    "astylarui": "0.2.0",
+    "esbuild": "0.28.1"
+  },
+  "sources": [
+    {
+      "file": "scripts/record-button-held-update-audit.mjs",
+      "sha256": "3b701d50e674ae246c0481bcdc48dc9870da087826a839062679e298c294e1b7"
+    },
+    {
+      "file": "tests/material-parity/button-held-update-evidence.mjs",
+      "sha256": "619ac14e58288468fdabedaf1f2264488471a71ad8c55ff4bc325bdc738b931c"
+    },
+    {
+      "file": "tests/material-parity/button-held-update-evidence.spec.mjs",
+      "sha256": "373e3875135140dd66a180ae50c9994386ded677d3d63c5d2dd93b4886a7d731"
+    },
+    {
+      "file": "src/lib/astylar.ts",
+      "sha256": "e72cfb8e8e1d91c5a4de9002de3ae98f76f1ed26112251b47fde3b77b13f1094"
+    },
+    {
+      "file": "src/lib/astylar-semantic-bridge.ts",
+      "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+    },
+    {
+      "file": "src/lib/astylar-interaction-runtime.ts",
+      "sha256": "10a7d573ae5f8da3db51675327720f6fb70d2c3547da35e69f48e21e092e35b7"
+    },
+    {
+      "file": ".agents/skills/astylarui-developer/references/reconciliation.md",
+      "sha256": "38179189ec2055a40e6e8eaac54a76b1b8e9c7f1e45ba7581f60fc2c5e51508b"
+    }
+  ],
+  "cases": 40,
+  "failedCases": 24,
+  "passingControls": 16,
+  "failedChecks": 96,
+  "tracedCauseCases": 12,
+  "observedBoundaries": 240,
+  "observations": [
+    {
+      "scenario": "none",
+      "dpr": 1,
+      "repetition": 1,
+      "stackTracing": false,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "none-dpr1-repeat1-stacksfalse-astylar.png",
+        "sha256": "a86b5016a431b24c4f2dc4d9788d717379c0f30ddd478d5aab70a9ed1e913f66"
+      }
+    },
+    {
+      "scenario": "equivalent",
+      "dpr": 1,
+      "repetition": 1,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "reuse",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "equivalent-dpr1-repeat1-stacksfalse-astylar.png",
+        "sha256": "1225d69adad174849f8874379f91075fca74d93a7145a3eee692c1ffdb71e7f3"
+      }
+    },
+    {
+      "scenario": "sibling-text",
+      "dpr": 1,
+      "repetition": 1,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "sibling-text-dpr1-repeat1-stacksfalse-astylar.png",
+        "sha256": "63ff5fddc9c9d9f9a2fdb853dda62da05e23b7b9a7f8221646055593041a7734"
+      }
+    },
+    {
+      "scenario": "sibling-paint",
+      "dpr": 1,
+      "repetition": 1,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "sibling-paint-dpr1-repeat1-stacksfalse-astylar.png",
+        "sha256": "1225d69adad174849f8874379f91075fca74d93a7145a3eee692c1ffdb71e7f3"
+      }
+    },
+    {
+      "scenario": "after-release",
+      "dpr": 1,
+      "repetition": 1,
+      "stackTracing": false,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "after-release-dpr1-repeat1-stacksfalse-astylar.png",
+        "sha256": "a86b5016a431b24c4f2dc4d9788d717379c0f30ddd478d5aab70a9ed1e913f66"
+      }
+    },
+    {
+      "scenario": "none",
+      "dpr": 1,
+      "repetition": 1,
+      "stackTracing": true,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "none-dpr1-repeat1-stackstrue-astylar.png",
+        "sha256": "a86b5016a431b24c4f2dc4d9788d717379c0f30ddd478d5aab70a9ed1e913f66"
+      }
+    },
+    {
+      "scenario": "equivalent",
+      "dpr": 1,
+      "repetition": 1,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "reuse",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "equivalent-dpr1-repeat1-stackstrue-astylar.png",
+        "sha256": "1225d69adad174849f8874379f91075fca74d93a7145a3eee692c1ffdb71e7f3"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "sibling-text",
+      "dpr": 1,
+      "repetition": 1,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "sibling-text-dpr1-repeat1-stackstrue-astylar.png",
+        "sha256": "63ff5fddc9c9d9f9a2fdb853dda62da05e23b7b9a7f8221646055593041a7734"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "sibling-paint",
+      "dpr": 1,
+      "repetition": 1,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "sibling-paint-dpr1-repeat1-stackstrue-astylar.png",
+        "sha256": "1225d69adad174849f8874379f91075fca74d93a7145a3eee692c1ffdb71e7f3"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "after-release",
+      "dpr": 1,
+      "repetition": 1,
+      "stackTracing": true,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "after-release-dpr1-repeat1-stackstrue-astylar.png",
+        "sha256": "a86b5016a431b24c4f2dc4d9788d717379c0f30ddd478d5aab70a9ed1e913f66"
+      }
+    },
+    {
+      "scenario": "none",
+      "dpr": 1,
+      "repetition": 2,
+      "stackTracing": false,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "none-dpr1-repeat2-stacksfalse-astylar.png",
+        "sha256": "a86b5016a431b24c4f2dc4d9788d717379c0f30ddd478d5aab70a9ed1e913f66"
+      }
+    },
+    {
+      "scenario": "equivalent",
+      "dpr": 1,
+      "repetition": 2,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "reuse",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "equivalent-dpr1-repeat2-stacksfalse-astylar.png",
+        "sha256": "1225d69adad174849f8874379f91075fca74d93a7145a3eee692c1ffdb71e7f3"
+      }
+    },
+    {
+      "scenario": "sibling-text",
+      "dpr": 1,
+      "repetition": 2,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "sibling-text-dpr1-repeat2-stacksfalse-astylar.png",
+        "sha256": "63ff5fddc9c9d9f9a2fdb853dda62da05e23b7b9a7f8221646055593041a7734"
+      }
+    },
+    {
+      "scenario": "sibling-paint",
+      "dpr": 1,
+      "repetition": 2,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "sibling-paint-dpr1-repeat2-stacksfalse-astylar.png",
+        "sha256": "1225d69adad174849f8874379f91075fca74d93a7145a3eee692c1ffdb71e7f3"
+      }
+    },
+    {
+      "scenario": "after-release",
+      "dpr": 1,
+      "repetition": 2,
+      "stackTracing": false,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "after-release-dpr1-repeat2-stacksfalse-astylar.png",
+        "sha256": "a86b5016a431b24c4f2dc4d9788d717379c0f30ddd478d5aab70a9ed1e913f66"
+      }
+    },
+    {
+      "scenario": "none",
+      "dpr": 1,
+      "repetition": 2,
+      "stackTracing": true,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "none-dpr1-repeat2-stackstrue-astylar.png",
+        "sha256": "a86b5016a431b24c4f2dc4d9788d717379c0f30ddd478d5aab70a9ed1e913f66"
+      }
+    },
+    {
+      "scenario": "equivalent",
+      "dpr": 1,
+      "repetition": 2,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "reuse",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "equivalent-dpr1-repeat2-stackstrue-astylar.png",
+        "sha256": "1225d69adad174849f8874379f91075fca74d93a7145a3eee692c1ffdb71e7f3"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "sibling-text",
+      "dpr": 1,
+      "repetition": 2,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "sibling-text-dpr1-repeat2-stackstrue-astylar.png",
+        "sha256": "63ff5fddc9c9d9f9a2fdb853dda62da05e23b7b9a7f8221646055593041a7734"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "sibling-paint",
+      "dpr": 1,
+      "repetition": 2,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "sibling-paint-dpr1-repeat2-stackstrue-astylar.png",
+        "sha256": "1225d69adad174849f8874379f91075fca74d93a7145a3eee692c1ffdb71e7f3"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "after-release",
+      "dpr": 1,
+      "repetition": 2,
+      "stackTracing": true,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "after-release-dpr1-repeat2-stackstrue-astylar.png",
+        "sha256": "a86b5016a431b24c4f2dc4d9788d717379c0f30ddd478d5aab70a9ed1e913f66"
+      }
+    },
+    {
+      "scenario": "none",
+      "dpr": 2,
+      "repetition": 1,
+      "stackTracing": false,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "none-dpr2-repeat1-stacksfalse-astylar.png",
+        "sha256": "c4dfa3052116d5811fe605a6fbef99249d347c41cd9e31c98075ad596a30432e"
+      }
+    },
+    {
+      "scenario": "equivalent",
+      "dpr": 2,
+      "repetition": 1,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "reuse",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "equivalent-dpr2-repeat1-stacksfalse-astylar.png",
+        "sha256": "599acf963334a1301c33ab003f8e0d734854643080124009bfaf20b5788a0efe"
+      }
+    },
+    {
+      "scenario": "sibling-text",
+      "dpr": 2,
+      "repetition": 1,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "sibling-text-dpr2-repeat1-stacksfalse-astylar.png",
+        "sha256": "b3fa76ad39503d4c1d78fd1eaa1f9101146059f71d33c6bd5c9e00d4bd10d4b9"
+      }
+    },
+    {
+      "scenario": "sibling-paint",
+      "dpr": 2,
+      "repetition": 1,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "sibling-paint-dpr2-repeat1-stacksfalse-astylar.png",
+        "sha256": "599acf963334a1301c33ab003f8e0d734854643080124009bfaf20b5788a0efe"
+      }
+    },
+    {
+      "scenario": "after-release",
+      "dpr": 2,
+      "repetition": 1,
+      "stackTracing": false,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "after-release-dpr2-repeat1-stacksfalse-astylar.png",
+        "sha256": "c4dfa3052116d5811fe605a6fbef99249d347c41cd9e31c98075ad596a30432e"
+      }
+    },
+    {
+      "scenario": "none",
+      "dpr": 2,
+      "repetition": 1,
+      "stackTracing": true,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "none-dpr2-repeat1-stackstrue-astylar.png",
+        "sha256": "c4dfa3052116d5811fe605a6fbef99249d347c41cd9e31c98075ad596a30432e"
+      }
+    },
+    {
+      "scenario": "equivalent",
+      "dpr": 2,
+      "repetition": 1,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "reuse",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "equivalent-dpr2-repeat1-stackstrue-astylar.png",
+        "sha256": "599acf963334a1301c33ab003f8e0d734854643080124009bfaf20b5788a0efe"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "sibling-text",
+      "dpr": 2,
+      "repetition": 1,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "sibling-text-dpr2-repeat1-stackstrue-astylar.png",
+        "sha256": "b3fa76ad39503d4c1d78fd1eaa1f9101146059f71d33c6bd5c9e00d4bd10d4b9"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "sibling-paint",
+      "dpr": 2,
+      "repetition": 1,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "sibling-paint-dpr2-repeat1-stackstrue-astylar.png",
+        "sha256": "599acf963334a1301c33ab003f8e0d734854643080124009bfaf20b5788a0efe"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "after-release",
+      "dpr": 2,
+      "repetition": 1,
+      "stackTracing": true,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "after-release-dpr2-repeat1-stackstrue-astylar.png",
+        "sha256": "c4dfa3052116d5811fe605a6fbef99249d347c41cd9e31c98075ad596a30432e"
+      }
+    },
+    {
+      "scenario": "none",
+      "dpr": 2,
+      "repetition": 2,
+      "stackTracing": false,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "none-dpr2-repeat2-stacksfalse-astylar.png",
+        "sha256": "c4dfa3052116d5811fe605a6fbef99249d347c41cd9e31c98075ad596a30432e"
+      }
+    },
+    {
+      "scenario": "equivalent",
+      "dpr": 2,
+      "repetition": 2,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "reuse",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "equivalent-dpr2-repeat2-stacksfalse-astylar.png",
+        "sha256": "599acf963334a1301c33ab003f8e0d734854643080124009bfaf20b5788a0efe"
+      }
+    },
+    {
+      "scenario": "sibling-text",
+      "dpr": 2,
+      "repetition": 2,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "sibling-text-dpr2-repeat2-stacksfalse-astylar.png",
+        "sha256": "b3fa76ad39503d4c1d78fd1eaa1f9101146059f71d33c6bd5c9e00d4bd10d4b9"
+      }
+    },
+    {
+      "scenario": "sibling-paint",
+      "dpr": 2,
+      "repetition": 2,
+      "stackTracing": false,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "sibling-paint-dpr2-repeat2-stacksfalse-astylar.png",
+        "sha256": "599acf963334a1301c33ab003f8e0d734854643080124009bfaf20b5788a0efe"
+      }
+    },
+    {
+      "scenario": "after-release",
+      "dpr": 2,
+      "repetition": 2,
+      "stackTracing": false,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "after-release-dpr2-repeat2-stacksfalse-astylar.png",
+        "sha256": "c4dfa3052116d5811fe605a6fbef99249d347c41cd9e31c98075ad596a30432e"
+      }
+    },
+    {
+      "scenario": "none",
+      "dpr": 2,
+      "repetition": 2,
+      "stackTracing": true,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "none-dpr2-repeat2-stackstrue-astylar.png",
+        "sha256": "c4dfa3052116d5811fe605a6fbef99249d347c41cd9e31c98075ad596a30432e"
+      }
+    },
+    {
+      "scenario": "equivalent",
+      "dpr": 2,
+      "repetition": 2,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "reuse",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "equivalent-dpr2-repeat2-stackstrue-astylar.png",
+        "sha256": "599acf963334a1301c33ab003f8e0d734854643080124009bfaf20b5788a0efe"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "sibling-text",
+      "dpr": 2,
+      "repetition": 2,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "sibling-text-dpr2-repeat2-stackstrue-astylar.png",
+        "sha256": "b3fa76ad39503d4c1d78fd1eaa1f9101146059f71d33c6bd5c9e00d4bd10d4b9"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "sibling-paint",
+      "dpr": 2,
+      "repetition": 2,
+      "stackTracing": true,
+      "failed": true,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": false,
+        "held-after-update:release-count": false,
+        "held-after-update:click-count": false,
+        "held-after-update:active-style": false,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "rebuild",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": null,
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "BUTTON",
+        "id": "astylar-semantic-1-first",
+        "authoredId": "first"
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 1,
+      "publicClicksBeforeExplicitRelease": 1,
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "screenshot": {
+        "file": "sibling-paint-dpr2-repeat2-stackstrue-astylar.png",
+        "sha256": "599acf963334a1301c33ab003f8e0d734854643080124009bfaf20b5788a0efe"
+      },
+      "releaseStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396541:14)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12",
+      "clickStack": "Error: passive audit observation\n    at stack (http://127.0.0.1:59302/audit.js:400980:12)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:401020:60)\n    at Object.onEvent (http://127.0.0.1:59302/audit.js:400103:35)\n    at AstylarEventDispatcher.dispatch (http://127.0.0.1:59302/audit.js:396124:27)\n    at AstylarInteractionRuntime.dispatchPointer (http://127.0.0.1:59302/audit.js:396710:28)\n    at AstylarInteractionRuntime.activateAndClick (http://127.0.0.1:59302/audit.js:396940:38)\n    at AstylarInteractionRuntime.handlePointer (http://127.0.0.1:59302/audit.js:396550:31)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:396202:12)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at _InputManager._processPointerUp (http://127.0.0.1:59302/audit.js:29413:37)\n    at http://127.0.0.1:59302/audit.js:29732:18\n    at _InputManager._initClickEvent (http://127.0.0.1:59302/audit.js:29518:19)\n    at _InputManager._onPointerUp (http://127.0.0.1:59302/audit.js:29680:16)\n    at Observer.callback (http://127.0.0.1:59302/audit.js:29782:24)\n    at _Observable.notifyObservers (http://127.0.0.1:59302/audit.js:322:43)\n    at DeviceSourceManager._onInputChanged (http://127.0.0.1:59302/audit.js:28989:75)\n    at WebDeviceInputSystem.onInputChanged [as _onInputChanged] (http://127.0.0.1:59302/audit.js:28852:23)\n    at HTMLCanvasElement._pointerBlurEvent (http://127.0.0.1:59302/audit.js:28625:22)\n    at _AstylarSemanticBridge.syncFocus (http://127.0.0.1:59302/audit.js:397987:12)\n    at http://127.0.0.1:59302/audit.js:397879:12"
+    },
+    {
+      "scenario": "after-release",
+      "dpr": 2,
+      "repetition": 2,
+      "stackTracing": true,
+      "failed": false,
+      "checks": {
+        "initial:pressed": true,
+        "initial:release-count": true,
+        "initial:click-count": true,
+        "initial:active-style": true,
+        "hover:pressed": true,
+        "hover:release-count": true,
+        "hover:click-count": true,
+        "hover:active-style": true,
+        "held-before-update:pressed": true,
+        "held-before-update:release-count": true,
+        "held-before-update:click-count": true,
+        "held-before-update:active-style": true,
+        "held-after-update:pressed": true,
+        "held-after-update:release-count": true,
+        "held-after-update:click-count": true,
+        "held-after-update:active-style": true,
+        "released:pressed": true,
+        "released:release-count": true,
+        "released:click-count": true,
+        "released:active-style": true,
+        "after-release-update:pressed": true,
+        "after-release-update:release-count": true,
+        "after-release-update:click-count": true,
+        "after-release-update:active-style": true
+      },
+      "strategy": "initial",
+      "pressedBeforeUpdate": "first",
+      "pressedAfterUpdate": "first",
+      "nativeFocusBeforeUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeFocusAfterUpdate": {
+        "tag": "CANVAS",
+        "id": "audit-stage",
+        "authoredId": null
+      },
+      "nativeReleasesBeforeExplicitRelease": 0,
+      "publicReleasesBeforeExplicitRelease": 0,
+      "publicClicksBeforeExplicitRelease": 0,
+      "causeFrames": [],
+      "screenshot": {
+        "file": "after-release-dpr2-repeat2-stackstrue-astylar.png",
+        "sha256": "c4dfa3052116d5811fe605a6fbef99249d347c41cd9e31c98075ad596a30432e"
+      }
+    }
+  ],
+  "classification": "confirmed-core-defect",
+  "owner": "semantic-focus synchronization, visual reconciliation, and device-input integration",
+  "cause": "A compatible public update queues semantic focus synchronization during an active pointer hold. Focusing the semantic node blurs the canvas; Babylon generates a button release from its blur handler, and Astylar dispatches pointerup/click and drops active state before native release.",
+  "causeProvenInPublicReduction": true,
+  "materialHistoricalCauseProven": false,
+  "canonicalAttributionChanged": false,
+  "renderingEquivalent": false,
+  "limitation": "The installed-package public reduction proves the current causal path with and without stack tracing. It does not retroactively observe original Material call stacks, prove visual parity or implement a fix. Console error messages are not collected by this producer; page exceptions and structured diagnostics are checked."
+}
