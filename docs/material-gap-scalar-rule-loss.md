@@ -1,5 +1,27 @@
 # Gap review: four groups retain a demonstrated scalar-layer capture defect
 
+## Provenance replay after explicit-spacing integration
+
+Following `7cc8e93`, the unchanged generator and `--check` replay both exit **0**
+against the current parent survey. All **four groups / 59 cases / 118
+observations** and **17 negative controls** are retained. Complete report
+comparison proves that only `parent.sha256` changed; restoring that one receipt
+reproduces prior evidence SHA-256
+`6a8778c8ca747d9b48225dbcaa64a165c0cf97a1c9af37f45c7bb95e29eecec7`.
+
+```powershell
+node scripts/audit-material-gap-scalar-rule-loss.mjs
+node scripts/audit-material-gap-scalar-rule-loss.mjs --check
+```
+
+The combined log is
+`artifacts/material-parity/field-host-flow-input-audit/explicit-gap-motion-layer-provenance.log`,
+SHA-256 `4bcc16543f3273fcb2380fcc6a48665f58192daf7bdbd2be7e7e0cc7458d8ace`.
+No original scalar evidence, tree, rule, finding or canonical file changed.
+This confirms current proof provenance, not that correcting the capture rule
+would fix overlay positioning or establish equivalent gap inputs. Canonical
+integration and the broader audit remain required.
+
 The [machine evidence](material-gap-scalar-rule-loss.json) binds the four
 remaining scalar-rule-gap groups to all their original observations: **25
 bottom-sheet and 34 snackbar cases**, each contributing `rowGap` and `columnGap`,

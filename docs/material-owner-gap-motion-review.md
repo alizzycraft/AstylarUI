@@ -1,5 +1,31 @@
 # Owner gap motion declarations: property-local review
 
+## Provenance replay after explicit-spacing integration
+
+The production integration in `7cc8e93` advances the parent gap survey's audit
+source receipt. The existing motion generator and its `--check` replay both
+exit **0** against that current parent, reproducing all **34 groups / 1,784
+observations**, **two positive / 21 negative controls**, 32 locally non-gap
+target groups and two remaining review groups. A complete object comparison
+against the prior report confirms that **only `parent.sha256` changed**;
+restoring that one descriptor reproduces the prior evidence SHA-256
+`7c0c95fe48c88262d9e850a809ab988690b4c464b0a98e411836194707266662`.
+
+```powershell
+node scripts/audit-material-gap-motion-requests.mjs
+node scripts/audit-material-gap-motion-requests.mjs --check
+```
+
+The retained combined motion/layer replay log is
+`artifacts/material-parity/field-host-flow-input-audit/explicit-gap-motion-layer-provenance.log`,
+SHA-256 `4bcc16543f3273fcb2380fcc6a48665f58192daf7bdbd2be7e7e0cc7458d8ace`.
+The original trees, values, memberships, dispositions and canonical audit files
+are unchanged. This refresh does not promote local target observations into
+resolved motion, candidate computed gap, input equivalence or rendering proof.
+Canonical integration of these groups and the complete audit remain pending;
+the saved overall canonical snapshot still has **2,330 unresolved groups**.
+The older counts below describe their recorded historical checkpoints.
+
 The [machine report](material-owner-gap-motion-review.json) reviews all **34**
 motion-only groups from the [gap survey](material-owner-gap-input-survey.md):
 **1,784 property observations across 676 distinct original cases**. The verifier
