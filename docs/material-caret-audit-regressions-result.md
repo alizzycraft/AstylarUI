@@ -44,3 +44,38 @@ expected red baseline against the old canonical report. This three-file result
 is not a current 113-file harness run, a canonical regeneration, or enforced
 rendering-parity acceptance. Those requirements and the broader audit remain
 incomplete.
+
+## Nine case-index receipts refreshed after the failed baseline
+
+Each of the nine affected JSON indexes now records the current audit-module
+hash. A complete-object comparison against `e76192d` confirms exactly one
+changed source fingerprint per file and no other changed value. Original
+authored values, omissions, cases, groups, evidence, and classifications are
+unchanged. The comparison also checks that the replacement hash matches the
+actual normalized module bytes; it is not an arbitrary accepted value.
+
+All original case-index tests were then executed unchanged:
+
+```powershell
+node --test --test-name-pattern='case index' tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+**11/11 pass**, exit **0**, **43,602.8545 ms**, no reported failures, skips,
+cancellations or todos. This deliberately focused command selects the nine
+previous failures plus the existing root-box and generated-mapping tests; it
+does not claim to rerun the complete 395-test command. The assertions previously
+unreachable after the stale-hash guard now pass, including full captured case
+coverage, raw tree hashes, source mappings, observation membership, and explicit
+limits on rendering claims. No original test assertion was edited.
+
+Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `caret-nine-case-index-conservation.log`, SHA-256
+  `e34a4ec39ab0bcbed43511a502009689eeb5db915a5ddb3f57c838df2d95897c`.
+- `caret-case-index-provenance-recheck.log`, SHA-256
+  `734e0cd48718ef48b77c35cab5b337f9b0b643c650d111babb27866be6a676d2`.
+
+The field-host typography index's updated receipt changes its file digest.
+Dependent layout/initial-style reports still require their separately proven
+provenance refresh, followed by unchanged focused tests. Immutable historical
+caret proof parents and prior run records must remain intact.
