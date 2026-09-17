@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Remaining gap reviews retain complete original membership
+
+The [new membership binding](material-gap-review-membership.md) reuses the
+existing full-tree motion and scalar-layer proofs and original canonical join
+for **38 groups / 1,902 observations / 676 cases**. It retains all raw omitted
+candidate fields, ordered membership and source/tree hashes. The two dialog
+motion groups remain `requires-review`; fresh resolved context is not substituted
+for original unrecorded values. Generation/no-write replay and **2/2 tests**
+with 22 rejection controls pass. Current production integration and broader
+canonical conservation remain separate; no renderer or comparison input changed.
+
 ## Explicit spacing composition reaches production attribution
 
 The [production integration proof](material-explicit-gap-canonical-binding.md#production-integration-verified-on-the-complete-explicit-gap-population)
