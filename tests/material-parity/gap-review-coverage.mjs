@@ -44,7 +44,7 @@ export function expectedGapReviewClassifications(evidence, { root = process.cwd(
       assert.ok(classified, 'source-bound gap review classification missing');
       const key = JSON.stringify([entry.family, input.id, property]);
       if (!expected.has(key)) expected.set(key, { family: entry.family, element: input.id, property,
-        reference: 'normal', astylar: '<omitted>', classification: classified.classification,
+        reference: 'normal', astylar: undefined, classification: classified.classification,
         attribution: classified.attribution, recommendedOwner: classified.owner, justification: classified.justification,
         reviewEvidence: classified.reviewEvidence, reviewedCases: [], occurrences: 0, cases: [], states: [] });
       const row = expected.get(key); row.reviewedCases.push(caseId); row.occurrences++;

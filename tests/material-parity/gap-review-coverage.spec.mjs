@@ -15,7 +15,8 @@ test('gap review coverage conserves every attributable original membership and k
   assert.equal(rows.filter(r => r.family === 'dialog' && r.element === 'dialog-panel').length, 0);
   for (const row of rows) {
     const proof = evidence.groups.find(g => g.family === row.family && g.element === row.element && g.property === row.property);
-    assert.equal(row.reference, 'normal'); assert.equal(row.astylar, '<omitted>');
+    assert.equal(row.reference, 'normal'); assert.equal(row.astylar, undefined);
+    assert.equal(row.reviewEvidence.rawCandidateLonghand, '<omitted>', 'display marker stays only in review evidence');
     assert.equal(row.reviewEvidence.inputEquivalent, false); assert.equal(row.reviewEvidence.rendererCauseProven, false);
     assert.deepEqual(row.reviewedCases, proof.observations.map(o => o.case));
     assert.deepEqual(row.cases, row.reviewedCases.slice(0, 12)); assert.equal(row.occurrences, row.reviewedCases.length);
@@ -27,6 +28,7 @@ test('gap review coverage rejects missing relabeled reordered and fabricated fin
   const mutations = [
     x => { x.pop(); }, x => { x[0].attribution = 'unresolved'; },
     x => { x[0].classification = 'equivalent-representation'; }, x => { x[0].astylar = '0px'; },
+    x => { x[0].astylar = '<omitted>'; },
     x => { x[0].occurrences--; }, x => { x[0].reviewedCases.pop(); },
     x => { x[0].reviewedCases.reverse(); }, x => { x[0].cases.reverse(); },
     x => { x[0].states.pop(); }, x => { x[0].reviewEvidence.renderingEquivalent = true; },

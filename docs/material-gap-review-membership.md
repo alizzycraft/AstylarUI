@@ -123,6 +123,19 @@ inventory check, not a full harness execution or acceptance claim.
 
 ### Remaining work
 
+Production-boundary inspection found that the prepared coverage rows used the
+display marker `"<omitted>"` for the candidate value. The established production
+scalar contract instead retains an absent value as `undefined`. The coverage
+consumer and its assertions now preserve that raw absence; the display marker
+remains only in review evidence. No production normalizer or original input
+was changed. A new negative control rejects using the display marker as data.
+
+`node --test tests/material-parity/gap-review-coverage.spec.mjs` passes **2/2**,
+exit 0, no failures/skips/cancellations/todos, **45,273.7743 ms**, with **16**
+coverage rejection controls. The result is retained as
+`artifacts/material-parity/field-host-flow-input-audit/gap-review-coverage-raw-omission.log`.
+Actual prior/current production integration remains a separate check.
+
 1. Consume the local-motion evidence as a bounded observation-stage finding,
    retaining the authored transition/animation requests. Do not equate missing
    candidate declarations with browser-computed gaps or waive animation parity.
