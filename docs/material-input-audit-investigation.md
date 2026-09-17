@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Four remaining gap groups retain known CSS-layer capture loss
+
+The [scalar-layer gap review](material-gap-scalar-rule-loss.md) verifies all 59
+original bottom-sheet/snackbar cases and 118 property observations against the
+earlier complete group digests. Their generated owners and all 89 reference
+scalars match, but the scalar authored list omits the full tree's layered
+overlay z-index declaration. This links all four groups to the previously
+demonstrated scalar collector defect without repairing historical evidence or
+inventing candidate computed gaps. Generation, no-write replay and 17 rejection
+controls pass. Canonical integration remains pending; 2,330 groups remain
+unresolved in the canonical report. The missing stacking rule is not claimed
+to cause gap layout or overlay placement symptoms.
+
 ## Gap production integration preserves original evidence
 
 The [integration record](material-owner-gap-canonical-integration.md) now
