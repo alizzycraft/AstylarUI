@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Range caret review preserves separate control-input differences
+
+The [complete range caret review](material-range-caret-input-survey.md) scans all
+2,311 original cases and replays four groups / 156 observations / 78 cases,
+including every original 89-field scalar/proof. Both owners are range inputs,
+with no captured caret/reset/motion requests; browser computed caret values stay
+separate from candidate local omissions. The review also preserves 78 minimum,
+78 maximum and 156 step differences instead of treating equal starting values
+as equivalent controls. Generation, no-write replay, 18 rejection controls,
+six changed-evidence controls and 14 conservation controls pass. No canonical
+classification or visible/interaction parity claim changed.
+
 ## All retained overlay caret observations now have declaration/context evidence
 
 The [complete overlay survey](material-overlay-caret-context-survey.md) replays
