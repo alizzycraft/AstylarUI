@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Held-button replay exposes pre-release activation
+
+The [temporal audit](material-button-held-temporal-audit.md) replays all 57
+primary held-button cases against the frozen original build. All acquire the
+correct pressed ID; eight core and nine tooltip cases then lose it during
+rebuild/settlement and emit public pointer-up/click before any native release.
+Forty controls retain pressed state until release. The HTML button stays active
+in every held capture, and all settled candidate style stages match the
+originals. Two focused tests retain 20 mutation controls and corrupt-capture
+rejection. Source-level focus/blur tracing and a public compatible-update
+reduction remain pending; the temporal result is not yet a proved causal code
+path. No renderer/fixture change or canonical reclassification was made.
+
 ## Four remaining gap groups retain known CSS-layer capture loss
 
 The [scalar-layer gap review](material-gap-scalar-rule-loss.md) verifies all 59
