@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { isDeepStrictEqual } from 'node:util';
 import ts from 'typescript';
-import { collectOwnerCaretAttribution, ownerCaretAttributionFile } from './audit-material-owner-caret-attribution.mjs';
+import { collectOwnerCaretInputs } from '../tests/material-parity/owner-caret-source-binding.mjs';
 import { expectedOwnerCaretAttributionRows, validateOwnerCaretAttributionRows } from '../tests/material-parity/owner-caret-attribution-coverage.mjs';
 
 assert.equal(process.argv.length, 2);
@@ -11,14 +10,16 @@ const hash = x => createHash('sha256').update(x).digest('hex');
 const files = ['docs/material-input-equivalence-audit.json', 'docs/material-input-equivalence-audit.json.gz',
   'docs/material-input-equivalence-audit.md'];
 const before = files.map(f => hash(readFileSync(f)));
-const saved = JSON.parse(readFileSync(ownerCaretAttributionFile));
-for (const s of saved.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n')), s.sha256);
-delete saved.sourceFingerprints;
-const replay = collectOwnerCaretAttribution();
-assert.ok(isDeepStrictEqual(saved, replay), 'complete original attribution replay differs');
+const saved = JSON.parse(readFileSync('docs/material-owner-caret-attribution.json'));
 const parent = JSON.parse(readFileSync(saved.parent.file));
 const raw = JSON.parse(readFileSync(saved.capture.file));
 assert.equal(hash(readFileSync(saved.capture.file)), saved.capture.sha256);
+// Authenticate immutable committed proof/parent bytes and reconstruct every
+// original scalar/tree classification. Only the seven executed normalization
+// functions, not unrelated canonical-builder code, belong to this proof's
+// executable boundary. The binder records both whole-module source digests.
+const replay = collectOwnerCaretInputs(raw, { parityPath: saved.capture.file });
+assert.equal(replay.binding.status, 'bound', replay.binding.error);
 const source = readFileSync(parent.productionNormalization.module, 'utf8');
 const parsed = ts.createSourceFile(parent.productionNormalization.module, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
 const functions = parent.productionNormalization.functions.map(name => {
@@ -27,7 +28,8 @@ const functions = parent.productionNormalization.functions.map(name => {
 }).join('\n');
 assert.equal(hash(functions.replaceAll('\r\n', '\n')), parent.productionNormalization.sha256);
 const normalize = new Function(functions + '\nreturn canonicalStyle;')();
-const expected = expectedOwnerCaretAttributionRows(replay, parent, raw, normalize);
+const expected = expectedOwnerCaretAttributionRows(saved, parent, raw, normalize);
+assert.deepEqual(expected, replay.plannedCoverage, 'independent scalar coverage differs from authenticated replay');
 assert.deepEqual([expected.originalCasesScanned, expected.reviewedGroups, expected.reviewedObservations,
   expected.pendingGroups, expected.pendingObservations], [2311, 118, 3154, 27, 896]);
 assert.deepEqual(validateOwnerCaretAttributionRows(expected, expected.rows), []);
@@ -55,4 +57,6 @@ assert.deepEqual(files.map(f => hash(readFileSync(f))), before);
 const { rows, pending, ...summary } = expected;
 console.log(JSON.stringify({ ...summary, plannedRowsSha256: hash(JSON.stringify(rows)),
   pendingMembershipSha256: hash(JSON.stringify(pending)), negativeControls: mutations.length,
-  positiveControls: 3, fullOriginalAttributionReplayMatches: true, canonicalUnchanged: true }));
+  positiveControls: 3, fullOriginalAttributionReplayMatches: true, canonicalUnchanged: true,
+  normalizationFunctions: replay.binding.productionNormalization.functions.length,
+  sourceChecks: replay.binding.sources }));

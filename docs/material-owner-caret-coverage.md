@@ -4,10 +4,12 @@ This adds the coverage boundary needed before integrating the
 [caret-attribution candidate](material-owner-caret-attribution.md). It does not
 change canonical classifications or repair the renderer.
 
-`scripts/check-material-owner-caret-coverage.mjs` authenticates the saved
-candidate's source fingerprints and independently replays its complete original
-scalar/tree attribution calculation. It requires exact equality with the saved
-report. The parent is pinned and authenticated by that replay. The check then
+`scripts/check-material-owner-caret-coverage.mjs` uses the complete source binder
+to authenticate the candidate and parent against their immutable committed
+records and independently replay every original scalar/tree classification.
+All proof dependencies retain whole-source checks, except the canonical builder:
+only its seven executed normalization functions are pinned, with both historical
+and current whole-file digests recorded. The check then
 extracts and verifies the original production normalization functions by AST;
 it does not implement substitute color normalization.
 
@@ -66,10 +68,16 @@ remain unchanged. The canonical unresolved count is still **2,278**.
 
 ## Remaining integration obligations
 
-The active unfiltered harness is not changed underneath its run. These modules
-are not imported into the canonical builder, and no new test inventory is
-registered while that run is live. Once it terminates, integrate the authenticated
-source join, invoke complete coverage validation, and add focused test inventory.
+The previous full harness is terminal. All three complete caret commands are now
+registered in automatic discovery. After the coverage command adopted the
+authenticated executed-function boundary, their unchanged full test file passed
+3/3 (exit 0; 222,938.5748 ms), retaining the 17 coverage, 13 source and 15 subset
+rejection controls. The original proof reports and canonical audit were unchanged.
+Log: `artifacts/material-parity/field-host-flow-input-audit/caret-proof-executed-boundary-recheck.log`.
+
+These modules are not yet imported into the canonical builder. Integrate the
+authenticated source join, invoke complete coverage validation, and add the
+production integration proof.
 Compare previous/current canonical reports to preserve every raw scalar,
 property-presence distinction, authored example and unrelated complete row.
 Regenerate and no-write replay the canonical audit, then run the complete current
