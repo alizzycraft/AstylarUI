@@ -3,6 +3,34 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Bounded motion/capture reviews integrated; pending motion remains explicit
+
+Commit `175956e` integrates the [source-bound gap reviews](material-gap-review-membership.md#production-integration-and-original-input-conservation)
+after earlier production classifications. All **9/9** focused tests pass.
+Across the complete 676-case reviewed-owner population, the actual prior/current
+builders preserve **2,173 scalar rows** and **2,137 unrelated complete findings**.
+Only the 36 independently reviewed groups receive capture/observation-stage
+attribution; the 64 original dialog-motion observations remain unresolved.
+The seven dependent proof replays preserve every non-provenance field. Neither
+raw omission nor existing classifications are normalized away.
+
+Commit `a98ef5d` separately binds the [pending shorthand capture loss](material-pending-motion-capture-binding.md)
+to all **32 original cases / 64 property observations**. No-write replay and
+**2/2** focused tests pass, including 17 negative controls. This proves that
+scalar capture omitted text retained by the original full-tree record; it does
+not recover original resolved motion or establish a renderer cause. The six
+browser CSSOM controls are replayed, not replaced by a guessed CSS parser.
+
+Both commits are pushed to `codex/material-ui-showcase`. The current complete
+audit-harness discovery contains **108 files**: 100 Material, four general and
+four TTS, retaining all 43 legacy files. Inventory completeness is not a passing
+execution. Historical conservation and the current audit/CLI/codec regression
+run are in progress separately; their terminal results are not yet claimed.
+The saved canonical report still has **2,330 unresolved groups**. Canonical
+refresh, full-corpus conservation, the complete current harness and the enforced
+parity matrix remain outstanding. No renderer, plugin, reference or canonical
+comparison input was changed by these audit increments.
+
 ## Explicit-spacing historical guards verified
 
 The [historical integration replay](material-explicit-gap-canonical-binding.md#historical-integration-conservation-after-explicit-spacing-attribution)
