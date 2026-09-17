@@ -8,6 +8,7 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { buildMaterialInputAudit, validateMaterialInputAudit } from './input-equivalence-audit.mjs';
 import { tooltipWrappingAttribution } from './tooltip-wrapping-source-binding.mjs';
+import { assertLaterGapClassifications } from './owner-gap-integration-conservation.mjs';
 
 // A separate diagnostic report retains the original full trees and every tooltip
 // state, with only the target scalar owner selected for the integration proof.
@@ -68,6 +69,7 @@ test('tooltip wrapping production integration preserves scalar values and existi
   assert.deepEqual(audit.discrepancies.map(projection), previous.discrepancies.map(projection));
   const selected = new Set(rows.map(r => JSON.stringify(projection(r))));
   assert.ok(previous.discrepancies.filter(r => selected.has(JSON.stringify(projection(r)))).every(r => r.attribution === 'unresolved'));
+  for (const signature of assertLaterGapClassifications(audit, previous)) selected.add(signature);
   const others = report => report.discrepancies.filter(r => !selected.has(JSON.stringify(projection(r))));
   assert.equal(createHash('sha256').update(JSON.stringify(others(audit))).digest('hex'),
     createHash('sha256').update(JSON.stringify(others(previous))).digest('hex'), 'every unrelated complete row must be identical');

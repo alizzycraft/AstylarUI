@@ -68,3 +68,32 @@ files are not modified by these controls.
 These standalone scripts were added after the full 91-file harness started at
 `52ec632`. Their results are separate; they are not added to that run's totals.
 The complete enforced parity matrix and broader audit remain outstanding.
+
+## Gap-integration provenance refresh
+
+Integrating the source-bound gap classifier changed the audit module's full
+source fingerprint, without changing the frozen runtime or the eight reused
+action functions. The earlier browser capture was not rewritten. A separate
+current-source capture completed in session **14800**, exit **0**:
+
+```powershell
+node scripts/capture-material-dialog-motion-context.mjs --base-url=http://127.0.0.1:4431 --checkpoint=artifacts/material-parity/current-ancestry-audit/checkpoint --output=artifacts/material-parity/dialog-motion-gap-integration-audit
+node scripts/audit-material-dialog-motion-context.mjs
+node scripts/audit-material-dialog-motion-context.mjs --check
+node scripts/check-material-dialog-motion-context.mjs
+```
+
+The reader now binds that separate directory. Generation, no-write replay and
+all **21 negative / two changed-observation controls** exit **0**. All **32**
+cases and **2,848** original scalar checks pass. Complete observation objects,
+excluding their fresh file descriptors, are identical to the prior survey:
+all 32 still have no transition target, animation name or active owner animation.
+The five other gap receipts were regenerated with their existing checks; their
+only changes are dependency digests, not findings, raw values or membership.
+
+The original `dialog-motion-current-ancestry-audit/latest-report.json` remains
+SHA-256 `fc85c8cf50ecd9064b0f0206e5cc9b99017d31dff158c1b77b687b8bfe859e6b`;
+all 32 of its referenced case-file digests also remain unchanged. This refresh
+does not turn fresh observations into historical ones or establish candidate
+rendering equivalence. Full canonical integration and current-harness
+verification remain separate requirements.

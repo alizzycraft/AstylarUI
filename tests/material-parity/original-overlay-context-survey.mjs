@@ -5,7 +5,8 @@ import path from 'node:path';
 import ts from 'typescript';
 import { originalCaseKey } from './owner-initial-style-membership.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
-import { originalOverlayAuditSourceFile, verifyHistoricalAuditModuleSource } from './historical-audit-module-source.mjs';
+import { originalOverlayAuditSourceFile, verifyHistoricalAuditModuleSource,
+  verifyHistoricalOverlayMappingSource } from './historical-audit-module-source.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export function collectOriginalOverlayContextSurvey(reportFile, { root = process.cwd(), readBytes = readFileSync } = {}) {
@@ -45,7 +46,8 @@ export function collectOriginalOverlayContextSurvey(reportFile, { root = process
     const functions = parsed.statements.filter(node => ts.isFunctionDeclaration(node) && node.name?.text === item.name);
     assert.equal(functions.length, 1); assert.equal(hash(functions[0].getText(parsed)), item.sha256);
   }
-  const mapping = JSON.parse(hashed(raw.mappingSurvey, true));
+  const { mapping, evidence: historicalMappingSource } = verifyHistoricalOverlayMappingSource(
+    raw.mappingSurvey, read(raw.mappingSurvey.file, true), { root, readCurrentSource: file => read(file, true) });
   const expectedCases = mapping.cases.map(c => c.case);
   assert.equal(raw.cases, 91); assert.equal(expectedCases.length, 91);
   assert.deepEqual(raw.results.map(r => r.case).sort(), [...expectedCases].sort());
@@ -110,7 +112,7 @@ export function collectOriginalOverlayContextSurvey(reportFile, { root = process
   }
   assert.equal(owners, 200);
   return { schemaVersion: 1, kind: 'original-overlay-reference-context-survey', capture: { file: reportFile, sha256: hash(bytes) },
-    browser: raw.browser, historicalAuditSource, cases: rows.length, matchedOriginalOwners: owners, rootProperties,
+    browser: raw.browser, historicalAuditSource, historicalMappingSource, cases: rows.length, matchedOriginalOwners: owners, rootProperties,
     missingEnumeratedAliases: [...missingAliases].sort(), observations: rows,
     canonicalAttributionChanged: false, candidateReplayed: false, renderingEquivalent: false,
     limitation: 'Original reference action functions and mapped owner styles are replayed. External context is freshly observed; no historical unrecorded ancestor values, fresh candidate behavior or final raster equivalence is inferred.' };

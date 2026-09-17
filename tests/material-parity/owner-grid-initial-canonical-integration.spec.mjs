@@ -11,6 +11,7 @@ import { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInpu
 import { ownerGridInitialAttribution } from './owner-grid-initial-classification.mjs';
 import { nonGridTemplateAttribution } from './grid-template-input-evidence.mjs';
 import { fieldHostLayoutAttribution, fieldHostWidthAttribution } from './field-host-layout-source-binding.mjs';
+import { assertLaterGapClassifications } from './owner-gap-integration-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const baselineCommit = '364f46a309319201317919b6a23dd1aadd08f405';
@@ -89,6 +90,7 @@ test('owner grid production integration preserves original scalars, earlier prec
     assert.ok(previousFields.filter(r => r.classification === 'equivalent-representation').every(r => r.property === 'minWidth'));
     assert.ok(previousFields.filter(r => r.classification !== 'equivalent-representation').every(r => r.classification === 'parity-harness-defect'));
     for (const row of fields) signatures.add(JSON.stringify(scalar(row)));
+    for (const signature of assertLaterGapClassifications(audit, previous)) signatures.add(signature);
     const other = report => report.discrepancies.filter(r => !signatures.has(JSON.stringify(scalar(r))));
     assert.equal(hash(other(audit)), hash(other(previous)), 'complete unrelated rows unchanged');
     assert.deepEqual(audit.discrepancies.filter(r => r.attribution === nonGridTemplateAttribution),

@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "kind": "original-dialog-reference-motion-context-survey",
   "capture": {
-    "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/latest-report.json",
-    "sha256": "fc85c8cf50ecd9064b0f0206e5cc9b99017d31dff158c1b77b687b8bfe859e6b"
+    "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/latest-report.json",
+    "sha256": "079016d5f210d4532c4d03e3fae260020a773b8b39fae849c85564199a1967ff"
   },
   "browser": "152.0.7977.76",
   "cases": 32,
@@ -16,7 +16,7 @@
       "case": "interaction:dialog@dark/desktop-dpr1/activate",
       "source": {
         "case": "interaction:dialog@dark/desktop-dpr1/activate",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/b921d380cba1a20cbf7957217ae243e0fa24c64697b671a7dbce0470d7e9e2c7.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/b921d380cba1a20cbf7957217ae243e0fa24c64697b671a7dbce0470d7e9e2c7.json",
         "sha256": "8f01f7713bafd15183ac175ec59d5c797d0fc47853ee061eccafad129f7b63ce"
       },
       "profile": "dark",
@@ -47,8 +47,8 @@
       "case": "interaction:dialog@dark/desktop-dpr1/activate-leave",
       "source": {
         "case": "interaction:dialog@dark/desktop-dpr1/activate-leave",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/ca768b005f747d0271247fbe8f4bd365da4b9560123f2218a4d75bd6bab47f7c.json",
-        "sha256": "69881c2334eabc76b76b70b8fa17a1bbd15d0436c7f300968d0a81b190960feb"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/ca768b005f747d0271247fbe8f4bd365da4b9560123f2218a4d75bd6bab47f7c.json",
+        "sha256": "b3965e9185cb5c013663c6440273240a8f4e6ed2c6c51bfb7fcb2a428dfbbf41"
       },
       "profile": "dark",
       "viewport": {
@@ -78,7 +78,7 @@
       "case": "interaction:dialog@contrast/desktop-dpr2/open",
       "source": {
         "case": "interaction:dialog@contrast/desktop-dpr2/open",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/f7a1f98d30ff053cd18ab856916ae9f4f16a20d51d8f29eaa34fb23785c19589.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/f7a1f98d30ff053cd18ab856916ae9f4f16a20d51d8f29eaa34fb23785c19589.json",
         "sha256": "ddc2d5b3f895633e1b1d92631f4ceaffe295d2f5740ff1a181e973d98318c244"
       },
       "profile": "contrast",
@@ -109,7 +109,7 @@
       "case": "interaction:dialog@custom/desktop-dpr1/open-hover-content",
       "source": {
         "case": "interaction:dialog@custom/desktop-dpr1/open-hover-content",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/486c25e7236f1410e55d3238d8b3d0c5b8f1e9d933b038e7e6e93e3bce8cd507.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/486c25e7236f1410e55d3238d8b3d0c5b8f1e9d933b038e7e6e93e3bce8cd507.json",
         "sha256": "2022cf6c504dcc70fa14b6c04b68983f963e99be1cd5addb0defbd8f22fffa02"
       },
       "profile": "custom",
@@ -140,7 +140,7 @@
       "case": "interaction:dialog@dark/desktop-dpr2/activate",
       "source": {
         "case": "interaction:dialog@dark/desktop-dpr2/activate",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/cea62540248a8d36c481dd1efc54e62c50c928e717892e99a1464a4ceb2eb9bf.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/cea62540248a8d36c481dd1efc54e62c50c928e717892e99a1464a4ceb2eb9bf.json",
         "sha256": "68d80282f46e1a7874d9e33bec92a37fdb248c0a4ab3cb80ddc39e9a24fcdb18"
       },
       "profile": "dark",
@@ -171,8 +171,8 @@
       "case": "interaction:dialog@custom/desktop-dpr2/open",
       "source": {
         "case": "interaction:dialog@custom/desktop-dpr2/open",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/52ae0a792f3970859ca181681c27ae9ed1e97e9e46b2ef98aa66033536b5e3fd.json",
-        "sha256": "64a7d3b8842a83714a0f1afaa9de79eb13a6b6390224f8e51ce5e5f3228b7d39"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/52ae0a792f3970859ca181681c27ae9ed1e97e9e46b2ef98aa66033536b5e3fd.json",
+        "sha256": "0bc9665256e335f3846ff9e566f1e1fbcb9dc342df82955f40f13f9830360a3e"
       },
       "profile": "custom",
       "viewport": {
@@ -202,7 +202,7 @@
       "case": "interaction:dialog@contrast/desktop-dpr1/activate-leave",
       "source": {
         "case": "interaction:dialog@contrast/desktop-dpr1/activate-leave",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/1606d72ea079e1c7e37df8d09119be944038d8378acfacae73b7f73c192ed31b.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/1606d72ea079e1c7e37df8d09119be944038d8378acfacae73b7f73c192ed31b.json",
         "sha256": "1911af1416488df90d8d6d95971659bc1d857d3b0846bed7077bcf1bc9b02dbf"
       },
       "profile": "contrast",
@@ -233,7 +233,7 @@
       "case": "interaction:dialog@contrast/desktop-dpr2/open-hover-content",
       "source": {
         "case": "interaction:dialog@contrast/desktop-dpr2/open-hover-content",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/03b8a9c74a15f9c56c2b2b6b6bc0d49d4c1d7a9511748818cff85bd29332c7c7.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/03b8a9c74a15f9c56c2b2b6b6bc0d49d4c1d7a9511748818cff85bd29332c7c7.json",
         "sha256": "0f1fb9ac8938e454f84dc4d452977d335a9c0dec69131fa9f0f51697ab9ce562"
       },
       "profile": "contrast",
@@ -264,8 +264,8 @@
       "case": "interaction:dialog@dark/desktop-dpr1/open",
       "source": {
         "case": "interaction:dialog@dark/desktop-dpr1/open",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/4036c9af910da97687e7ea06da7d34a451511598e53b4767c18b1f2442c53a27.json",
-        "sha256": "7d56eb3618cffc686084dfb230dbf9f718cbee8301c417d6f11e9570a9cdf2e9"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/4036c9af910da97687e7ea06da7d34a451511598e53b4767c18b1f2442c53a27.json",
+        "sha256": "2f92e56651583c3af4c22afcc65a823a83b849780b6ed98cd856d96c668a3278"
       },
       "profile": "dark",
       "viewport": {
@@ -295,8 +295,8 @@
       "case": "interaction:dialog@custom/desktop-dpr2/activate-leave",
       "source": {
         "case": "interaction:dialog@custom/desktop-dpr2/activate-leave",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/7872752b53dc467c6ccc669c5d7b449a32bc68e5ff40525816ec63efab82b2ff.json",
-        "sha256": "6eb997e9aba41de15dcb42bc16781a4234ea64dcf4bfe3b509d1b3b8dad7c47a"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/7872752b53dc467c6ccc669c5d7b449a32bc68e5ff40525816ec63efab82b2ff.json",
+        "sha256": "ca7e25dde3ed0049c3f5332858f44fbbcdd4d0bd30a4424b05f9ea9a5e398b39"
       },
       "profile": "custom",
       "viewport": {
@@ -326,7 +326,7 @@
       "case": "interaction:dialog@light/desktop-dpr1/open-hover-content",
       "source": {
         "case": "interaction:dialog@light/desktop-dpr1/open-hover-content",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/8293515d9dd9831791e3291e0d342ec0904eb6ce8d19f20ac917d288c28f13d0.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/8293515d9dd9831791e3291e0d342ec0904eb6ce8d19f20ac917d288c28f13d0.json",
         "sha256": "7cdeb3aee1b2c315e9988aeea53575ed36d27db1a67e8ede5e6ac6b6fbe9a6a5"
       },
       "profile": "light",
@@ -357,8 +357,8 @@
       "case": "interaction:dialog@custom/desktop-dpr1/activate",
       "source": {
         "case": "interaction:dialog@custom/desktop-dpr1/activate",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/942a6f3a4377bd09ddee8877a1b43b0b7f43c9a4ab47c7cabe97aa6b0c90538d.json",
-        "sha256": "929f0483ee50ae8023732c51848c90242177b5c2b0f8b4c9e0402144b33b3da2"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/942a6f3a4377bd09ddee8877a1b43b0b7f43c9a4ab47c7cabe97aa6b0c90538d.json",
+        "sha256": "a7b8ecadb1233c894259ed51a5391d77d2dded70eef135a3b732a829a26dc194"
       },
       "profile": "custom",
       "viewport": {
@@ -388,8 +388,8 @@
       "case": "interaction:dialog@contrast/desktop-dpr1/open-hover-content",
       "source": {
         "case": "interaction:dialog@contrast/desktop-dpr1/open-hover-content",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/edd1a97fe452856737b0959434c6ab2d6d30c5d133279040b8cbc577160edfbb.json",
-        "sha256": "2b078cc4a2751dafe8f912749a4540e4d1a46a659d39219ee629f392d4a446b7"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/edd1a97fe452856737b0959434c6ab2d6d30c5d133279040b8cbc577160edfbb.json",
+        "sha256": "06399511b5534ca769b9b7615e8d38f5663f9cc0435410ec69979a3363e8ff43"
       },
       "profile": "contrast",
       "viewport": {
@@ -419,7 +419,7 @@
       "case": "interaction:dialog@dark/desktop-dpr2/activate-leave",
       "source": {
         "case": "interaction:dialog@dark/desktop-dpr2/activate-leave",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/1e211f094ece69b9c0b25375a51b73b69c45563f9b24632eb930c3ede3cc8250.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/1e211f094ece69b9c0b25375a51b73b69c45563f9b24632eb930c3ede3cc8250.json",
         "sha256": "2c6d05e1c3da6507c8b069ff5164a4f0e423ecef2d036885b3e3def901934816"
       },
       "profile": "dark",
@@ -450,8 +450,8 @@
       "case": "interaction:dialog@light/desktop-dpr2/open-hover-content",
       "source": {
         "case": "interaction:dialog@light/desktop-dpr2/open-hover-content",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/daab31c8b8ec875d380244b654b808cd5a674f3a8c62f882c0a07d98367a421a.json",
-        "sha256": "2753073e1d69525370c1ec3752bc11ca1d2120cc00e64e2c9670a15ddf2e7045"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/daab31c8b8ec875d380244b654b808cd5a674f3a8c62f882c0a07d98367a421a.json",
+        "sha256": "46864cd2f0e843486094bf070a8f1d558e54faee808be75ca029c7eb1277bd03"
       },
       "profile": "light",
       "viewport": {
@@ -481,7 +481,7 @@
       "case": "interaction:dialog@light/desktop-dpr1/activate-leave",
       "source": {
         "case": "interaction:dialog@light/desktop-dpr1/activate-leave",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/f51d0903f1a24c42847199bce8e2b7171f525f62f7b0bbc0d066195a09ca3290.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/f51d0903f1a24c42847199bce8e2b7171f525f62f7b0bbc0d066195a09ca3290.json",
         "sha256": "62053ebce9b2efc2c7b635baf79fb8a04fb30113118d3fa7e8bf7c1cf768feba"
       },
       "profile": "light",
@@ -512,7 +512,7 @@
       "case": "interaction:dialog@light/desktop-dpr2/activate",
       "source": {
         "case": "interaction:dialog@light/desktop-dpr2/activate",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/1845a9e00503872106608831d667bf98dfbf78d05fe64f65273b457dc97793a3.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/1845a9e00503872106608831d667bf98dfbf78d05fe64f65273b457dc97793a3.json",
         "sha256": "2ac7436817c091b69bc524abe7fb37d5116688aef6ea1cf78eabd6c2f2ab0850"
       },
       "profile": "light",
@@ -543,8 +543,8 @@
       "case": "interaction:dialog@contrast/desktop-dpr1/open",
       "source": {
         "case": "interaction:dialog@contrast/desktop-dpr1/open",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/0a82a8aed66b6b9ece0f76341f99a45dbe0542a0ccd3d8a3b28d0a77ad1e9296.json",
-        "sha256": "75619762b3a4db85521c04ce3c41b2209ba9bcfdeba90153677cc85879f643f6"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/0a82a8aed66b6b9ece0f76341f99a45dbe0542a0ccd3d8a3b28d0a77ad1e9296.json",
+        "sha256": "2162f40a857125f8176eee53c5fc4422efca09555d4cfb09b5a1d5b4befad16a"
       },
       "profile": "contrast",
       "viewport": {
@@ -574,7 +574,7 @@
       "case": "interaction:dialog@dark/desktop-dpr2/open",
       "source": {
         "case": "interaction:dialog@dark/desktop-dpr2/open",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/cfd54b71aae7cdddc9790692c5e7ed99c9e77f73eaff80eb69e0b4b144f063fe.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/cfd54b71aae7cdddc9790692c5e7ed99c9e77f73eaff80eb69e0b4b144f063fe.json",
         "sha256": "3e128d93dfbc0f59588542c972e491dfd9f328922682ddde4d0275ec8fe89ca4"
       },
       "profile": "dark",
@@ -605,7 +605,7 @@
       "case": "interaction:dialog@light/desktop-dpr2/activate-leave",
       "source": {
         "case": "interaction:dialog@light/desktop-dpr2/activate-leave",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/f537f60b0a187b7449982b3a10923610d6ed3ad057ab721ac91339f30bfc1fdc.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/f537f60b0a187b7449982b3a10923610d6ed3ad057ab721ac91339f30bfc1fdc.json",
         "sha256": "222ae7bcf6108f73f90c43434acf33ba408433db0c9657a129a978b45aee0be1"
       },
       "profile": "light",
@@ -636,7 +636,7 @@
       "case": "interaction:dialog@custom/desktop-dpr1/activate-leave",
       "source": {
         "case": "interaction:dialog@custom/desktop-dpr1/activate-leave",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/4fd046d3f65f49302f320f9034aab1a9483814291915b573a35c9be573b5dff8.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/4fd046d3f65f49302f320f9034aab1a9483814291915b573a35c9be573b5dff8.json",
         "sha256": "2ab7cfa56ed21c464b84f9997cb3611e7158bf7c799313b38efa42b653941ee0"
       },
       "profile": "custom",
@@ -667,7 +667,7 @@
       "case": "interaction:dialog@light/desktop-dpr2/open",
       "source": {
         "case": "interaction:dialog@light/desktop-dpr2/open",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/d0c72f149077971d9cf27ef5d318c4730e1ba135f7e57d73104cdca9b54d701a.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/d0c72f149077971d9cf27ef5d318c4730e1ba135f7e57d73104cdca9b54d701a.json",
         "sha256": "99d3731f31a653b4bedc9d4594f5471fffea7a13f89abfe83f965469181cf13a"
       },
       "profile": "light",
@@ -698,8 +698,8 @@
       "case": "interaction:dialog@light/desktop-dpr1/activate",
       "source": {
         "case": "interaction:dialog@light/desktop-dpr1/activate",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/74c4ffb821b70e2f5ca2b28bd90644e829435860b4364648aea00abe551c6ba3.json",
-        "sha256": "76237f0a5035b3502216cac51180b3044269c0009b26e0f45c9b53392e9dbbdc"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/74c4ffb821b70e2f5ca2b28bd90644e829435860b4364648aea00abe551c6ba3.json",
+        "sha256": "03c0568df35fdef44fc7c34b22c5b76bd31df7fbf28ee3c8b3e20a8b03c4af3a"
       },
       "profile": "light",
       "viewport": {
@@ -729,8 +729,8 @@
       "case": "interaction:dialog@contrast/desktop-dpr2/activate-leave",
       "source": {
         "case": "interaction:dialog@contrast/desktop-dpr2/activate-leave",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/385e6f98334c4a3de38559aa144773505e57a2b4ccaeb073cd313493ffc356fa.json",
-        "sha256": "f54b30de1616e9f13396b79b76c51661f802cb4cd09b09be7254554251e3f0f4"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/385e6f98334c4a3de38559aa144773505e57a2b4ccaeb073cd313493ffc356fa.json",
+        "sha256": "28fda9c1a603a3738cb39cdbc0e63f33165169b37823150cf74c33e0b2e56289"
       },
       "profile": "contrast",
       "viewport": {
@@ -760,8 +760,8 @@
       "case": "interaction:dialog@custom/desktop-dpr2/activate",
       "source": {
         "case": "interaction:dialog@custom/desktop-dpr2/activate",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/8e365e7d1a0dedb815d26ddd3c9e81af8cad253a59c80b7467bc5bd167ad060e.json",
-        "sha256": "caa0c9bb357192c381fddf7182eccc938319e9f2313205bed48c25aa7f99b5c5"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/8e365e7d1a0dedb815d26ddd3c9e81af8cad253a59c80b7467bc5bd167ad060e.json",
+        "sha256": "29dd3b3b94d4936c742b38ee84de73ac045a596cdaddaaecdc2c51ca81c1a3e8"
       },
       "profile": "custom",
       "viewport": {
@@ -791,8 +791,8 @@
       "case": "interaction:dialog@contrast/desktop-dpr1/activate",
       "source": {
         "case": "interaction:dialog@contrast/desktop-dpr1/activate",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/65566c18e76d484ab97a0b1fc7522f827df6ffce98177216b31c1b9864312091.json",
-        "sha256": "e74e0250d13ce7ef96da31136a083faaa163b2b4b9de3148aac5e11b48fdfb3e"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/65566c18e76d484ab97a0b1fc7522f827df6ffce98177216b31c1b9864312091.json",
+        "sha256": "743619192e02b1a77444f08c717f70a405b0bdc844565817dffb214f91e4ae95"
       },
       "profile": "contrast",
       "viewport": {
@@ -822,8 +822,8 @@
       "case": "interaction:dialog@contrast/desktop-dpr2/activate",
       "source": {
         "case": "interaction:dialog@contrast/desktop-dpr2/activate",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/ee488121fe26843be97a75f771be408da98a75b9979e3cfe6f941c479254439b.json",
-        "sha256": "7858c95ed44eadf90f9ebfff0528651984ff263695ce0774b395ed54a97f6e78"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/ee488121fe26843be97a75f771be408da98a75b9979e3cfe6f941c479254439b.json",
+        "sha256": "e1288429688bf153416811b0f26f0e4f7dfa83733bb75a81293f6630a092d121"
       },
       "profile": "contrast",
       "viewport": {
@@ -853,8 +853,8 @@
       "case": "interaction:dialog@dark/desktop-dpr2/open-hover-content",
       "source": {
         "case": "interaction:dialog@dark/desktop-dpr2/open-hover-content",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/93c9bb202e0f2e2d22a298cb7730c90f23eea51ec43896a997098330e7be558f.json",
-        "sha256": "07e54ff88a4964c78598a9de25dfc915e5c92804976b972e0d079784fbea60df"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/93c9bb202e0f2e2d22a298cb7730c90f23eea51ec43896a997098330e7be558f.json",
+        "sha256": "0a2ec429793c5853e30fa7e8bb2d114eb73796f1c974ec89a8e6c1989b0549ee"
       },
       "profile": "dark",
       "viewport": {
@@ -884,7 +884,7 @@
       "case": "interaction:dialog@light/desktop-dpr1/open",
       "source": {
         "case": "interaction:dialog@light/desktop-dpr1/open",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/34c8ee070aba5922cd45fc83ee43e46538e6914ba3cb599bfc4979c5420b7348.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/34c8ee070aba5922cd45fc83ee43e46538e6914ba3cb599bfc4979c5420b7348.json",
         "sha256": "954f548616fee66eb38c342c5e1368e68714023810c86204ab5e3e73e36e6bea"
       },
       "profile": "light",
@@ -915,7 +915,7 @@
       "case": "interaction:dialog@dark/desktop-dpr1/open-hover-content",
       "source": {
         "case": "interaction:dialog@dark/desktop-dpr1/open-hover-content",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/b0aab5ca9e5ded959dc88f9ac556e256ae01cfb56b2b20d74fe3a26d27170642.json",
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/b0aab5ca9e5ded959dc88f9ac556e256ae01cfb56b2b20d74fe3a26d27170642.json",
         "sha256": "d14c7651e9b6e592d7f4c50a7b8e88d16b395f609115402431313fe1359192b8"
       },
       "profile": "dark",
@@ -946,8 +946,8 @@
       "case": "interaction:dialog@custom/desktop-dpr2/open-hover-content",
       "source": {
         "case": "interaction:dialog@custom/desktop-dpr2/open-hover-content",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/b71b8e1ca65542d3b6dadad24e66a680752f6e49770d1e5093ec1db9d9cf9601.json",
-        "sha256": "0035835ec64c05c4a47b9d1ce044d3b689efad3dcdf55bd8ae004cebeecdab18"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/b71b8e1ca65542d3b6dadad24e66a680752f6e49770d1e5093ec1db9d9cf9601.json",
+        "sha256": "21677bef32038e37d2e261b773519b2d556c8ee3a09d5fe8980d3aae03317e2c"
       },
       "profile": "custom",
       "viewport": {
@@ -977,8 +977,8 @@
       "case": "interaction:dialog@custom/desktop-dpr1/open",
       "source": {
         "case": "interaction:dialog@custom/desktop-dpr1/open",
-        "file": "artifacts/material-parity/dialog-motion-current-ancestry-audit/de36f39b114b2aa099013d14aad8a0851755ae4c5db50c3299dfdd91bf0c69e7.json",
-        "sha256": "76edabacdda94a7dbd7a4815f77a5aac90dbba2eb530e6700eafbfa191924f9d"
+        "file": "artifacts/material-parity/dialog-motion-gap-integration-audit/de36f39b114b2aa099013d14aad8a0851755ae4c5db50c3299dfdd91bf0c69e7.json",
+        "sha256": "ad376d123f45b5c0cce36499709e43566e462c651c58bc67c4b58e12bb750ab3"
       },
       "profile": "custom",
       "viewport": {
@@ -1013,7 +1013,7 @@
   "sourceFingerprints": [
     {
       "file": "scripts/audit-material-dialog-motion-context.mjs",
-      "sha256": "9fe746d092e0fb59bb1629164cf215e3f3c7b516c0478c14a7dd8f659b5fb7b8"
+      "sha256": "ce7854d11226e301ee1afeaa4992d869bee50e222cdc8d447f86d9e7e956722e"
     },
     {
       "file": "tests/material-parity/origin-alias-mapping-evidence.mjs",

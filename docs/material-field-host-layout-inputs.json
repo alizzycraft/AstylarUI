@@ -8,7 +8,7 @@
   "sourceFingerprints": [
     {
       "file": "docs/material-field-host-typography-audit.json",
-      "sha256": "c7991c46143acedb88ba419c4051fb0cf4ba5d36297d7a1243a2227a6b24f2f3"
+      "sha256": "dd9c514ec8900e3200b4dec35d945c20f5e0426224de56b1d434d360afa9fa17"
     },
     {
       "file": "docs/material-field-host-layout-history.json",
@@ -40,7 +40,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "e27f04f63a1930c4fcb80e1b7d7545b7dd4f72efdc4e92a905c97596a9c33b27"
+      "sha256": "c57c725b10a0b94bf9c21ccf85e3764f47bccd9d629d004010429fd239c820c1"
     },
     {
       "file": "examples/material-showcase/src/app/astylar.component.ts",

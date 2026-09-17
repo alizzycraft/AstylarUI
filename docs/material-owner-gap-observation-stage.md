@@ -74,14 +74,17 @@ exits **0**: **3/3 passing**, zero failures, skips, cancellations or todos,
 - `owner-gap-coverage-tests.log`: 954 bytes, SHA-256
   `ad30b7730e9c6b741a3a2fe54281e62cf21d96ff906c18191d6f667c4332a36f`.
 
-Canonical integration is still pending. The production audit must collect and
-validate this ledger, add the classifier only after earlier attribution has
-retained precedence, preserve full reviewed-case membership, and enforce the
-independent coverage check. Integration must also verify that the remaining
+The [production integration](material-owner-gap-canonical-integration.md)
+now passes focused prior/current-builder checks and full saved-payload
+conservation. The production audit collects and validates this ledger, adds
+the classifier only after earlier attribution retains precedence, preserves
+full reviewed-case membership, and enforces the independent coverage check.
+Saved-payload verification confirms that the remaining
 54 unresolved gap groups and every unrelated canonical row are conserved.
-Until that integration and complete regeneration pass, the canonical count is
-still **2,438 unresolved**, not 2,330.
+The generated canonical count is now **2,330 unresolved**. Full no-write
+replay remains pending; the reduced count is not an input-equivalence claim.
 
-The running 91-file harness started before these two new spec files existed.
-Their focused results are separate evidence; neither that live run nor these
-checks alone establishes complete current-harness or enforced parity acceptance.
+The earlier 91-file harness started before these two new spec files existed.
+Its passing result and these focused results are separate evidence. The current
+95-file harness is now running; no complete current-harness or enforced parity
+acceptance is claimed yet.

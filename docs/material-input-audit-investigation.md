@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Gap production integration preserves original evidence
+
+The [integration record](material-owner-gap-canonical-integration.md) now
+verifies full canonical generation and saved-payload conservation: all 8,339
+scalar rows and 8,231 unrelated complete findings are unchanged. Exactly 108
+groups / 6,320 observations gain bounded observation-stage attribution; all
+54 remaining gap groups / 2,934 observations remain. The generated audit still
+fails honestly on **2,330 unresolved** groups and does not establish input or
+rendering equivalence. All 395 audit/CLI/codec regression tests pass. Full
+no-write replay and the new 95-file complete harness are running; neither is
+claimed complete. Earlier 2,438 counts below describe the pre-integration
+snapshot, not the current generated report.
+
 ## Shared button paint uses different composition inputs
 
 The [source-bound button paint survey](material-button-state-paint-survey.md)

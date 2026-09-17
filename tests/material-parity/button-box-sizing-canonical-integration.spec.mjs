@@ -10,6 +10,7 @@ import { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInpu
 import { buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
 import { fieldHostLayoutAttribution, fieldHostWidthAttribution } from './field-host-layout-source-binding.mjs';
+import { assertLaterGapClassifications } from './owner-gap-integration-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs', baselineCommit = '0165f76';
 const source = execFileSync('git', ['show', `${baselineCommit}:${moduleFile}`], { maxBuffer: 4 * 1024 * 1024 }).toString();
@@ -80,6 +81,7 @@ test('button box sizing production integration preserves all scalar inputs earli
   assert.ok(previousFields.filter(r => r.classification === 'equivalent-representation').every(r => r.property === 'minWidth'));
   assert.ok(previousFields.filter(r => r.classification !== 'equivalent-representation').every(r => r.classification === 'parity-harness-defect'));
   for (const row of fields) signatures.add(JSON.stringify(scalar(row)));
+  for (const signature of assertLaterGapClassifications(audit, previous)) signatures.add(signature);
   const other = report => report.discrepancies.filter(r => !signatures.has(JSON.stringify(scalar(r))));
   assert.equal(hash(other(audit)), hash(other(previous)), 'complete unrelated rows unchanged');
   const binding = audit.buttonBoxSizingInputs;

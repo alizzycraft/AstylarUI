@@ -5,7 +5,8 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { collectOriginalOverlayContextSurvey } from './original-overlay-context-survey.mjs';
 import { originalOverlayAuditSourceCommit, originalOverlayAuditSourceFile,
-  verifyHistoricalAuditModuleSource } from './historical-audit-module-source.mjs';
+  verifyHistoricalAuditModuleSource, originalOverlayMappingSourceCommit,
+  originalOverlayMappingSourceFile, verifyHistoricalOverlayMappingSource } from './historical-audit-module-source.mjs';
 import { execFileSync } from 'node:child_process';
 
 const file = 'artifacts/material-parity/original-overlay-context-current-ancestry-audit/latest-report.json';
@@ -19,7 +20,7 @@ function probe(mutate) {
   const record = mutateRecord => {
     const item = raw.results[0], data = JSON.parse(readFileSync(item.file)); mutateRecord(data); item.sha256 = put(item.file, data);
   };
-  mutate({ raw, record }); put(file, raw);
+  mutate({ raw, record, put }); put(file, raw);
   return collectOriginalOverlayContextSurvey(file, { root, readBytes: name => overrides.get(name) ?? readFileSync(name) });
 }
 
@@ -33,6 +34,11 @@ test('original overlay context reader replays all 91 states and 200 original own
   assert.equal(result.historicalAuditSource.historicalSourceCommit, originalOverlayAuditSourceCommit);
   assert.equal(result.historicalAuditSource.recordedSha256, baseline.capture.sources.find(s => s.file === originalOverlayAuditSourceFile).sha256);
   assert.equal(result.historicalAuditSource.currentSha256, hash(readFileSync(originalOverlayAuditSourceFile)));
+  assert.equal(result.historicalMappingSource.historicalSourceCommit, originalOverlayMappingSourceCommit);
+  assert.equal(result.historicalMappingSource.recordedSha256, baseline.mappingSurvey.sha256);
+  assert.equal(result.historicalMappingSource.currentSha256, hash(readFileSync(originalOverlayMappingSourceFile)));
+  assert.equal(result.historicalMappingSource.exactMappingDataMatch, true);
+  assert.equal(result.historicalMappingSource.inputEquivalent, false);
   assert.deepEqual(result.missingEnumeratedAliases, ['flex', 'gap', 'gridColumn', 'gridRow', 'margin', 'padding', 'whiteSpace']);
 });
 
@@ -79,4 +85,35 @@ test('historical source verification preserves the recorded digest and distingui
   assert.throws(() => verifyHistoricalAuditModuleSource({ ...recorded, file: 'different.mjs' }, current));
   assert.throws(() => verifyHistoricalAuditModuleSource(recorded, current, { readRevision: () => Buffer.from('corrupt history') }), /Historical audit-module receipt/);
   assert.throws(() => probe(({ raw }) => { raw.capture.sources.find(s => s.file === originalOverlayAuditSourceFile).sha256 = hash(current); }), /Historical audit-module receipt/);
+});
+
+test('historical mapping verification permits only independently bound lineage refreshes', () => {
+  const recorded = baseline.mappingSurvey, before = structuredClone(recorded);
+  const currentBytes = readFileSync(originalOverlayMappingSourceFile), current = JSON.parse(currentBytes);
+  const result = verifyHistoricalOverlayMappingSource(recorded, currentBytes);
+  assert.deepEqual(recorded, before);
+  assert.equal(result.evidence.recordedSha256, '36507ec938f338be4e6e6840a88ac8866045f4914852a62c25f7d7ff1ca4bd13');
+  assert.equal(result.evidence.exactCurrentSourceMatch, false);
+  for (const mutate of [
+    r => { r.cases.pop(); }, r => { r.cases[1] = r.cases[0]; },
+    r => { r.observations.pop(); }, r => { r.observations[0].proof.checkedReferenceProperties--; },
+    r => { r.groups[0].occurrences++; }, r => { r.capture.sha256 = '0'.repeat(64); },
+    r => { r.inputSurvey.file = 'package.json'; }, r => { r.inputSurvey.sha256 = '0'.repeat(64); },
+    r => { r.sourceFingerprints.pop(); }, r => { r.sourceFingerprints[0].sha256 = '0'.repeat(64); },
+    r => { r.sourceFingerprints[0].extra = 'unreviewed'; },
+    r => { r.renderingEquivalent = true; }, r => { r.computedCandidateVerified = true; },
+  ]) {
+    const changed = structuredClone(current); mutate(changed);
+    assert.throws(() => verifyHistoricalOverlayMappingSource(recorded, Buffer.from(JSON.stringify(changed))));
+  }
+  assert.throws(() => verifyHistoricalOverlayMappingSource({ ...recorded, file: 'other.json' }, currentBytes));
+  assert.throws(() => verifyHistoricalOverlayMappingSource({ ...recorded, sha256: hash(currentBytes) }, currentBytes), /Historical overlay mapping receipt/);
+  assert.throws(() => verifyHistoricalOverlayMappingSource(recorded, currentBytes,
+    { readRevision: () => currentBytes }), /Historical overlay mapping receipt/);
+  assert.throws(() => verifyHistoricalOverlayMappingSource(recorded, currentBytes,
+    { readCurrentSource: () => Buffer.from('changed dependency') }), /Current mapping source/);
+  assert.throws(() => probe(({ raw }) => { raw.mappingSurvey.sha256 = hash(currentBytes); }), /Historical overlay mapping receipt/);
+  assert.throws(() => probe(({ put }) => {
+    const changed = structuredClone(current); changed.observations.pop(); put(originalOverlayMappingSourceFile, changed);
+  }), /Current overlay mapping data/);
 });

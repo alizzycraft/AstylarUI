@@ -167,3 +167,55 @@ The original capture receipt, its historical Git revision, all observations and
 all seven alias gaps are unchanged. No source hash was substituted for the
 historical receipt. This is current-reader verification, not a fresh browser or
 candidate render, and does not establish candidate overlay/raster equivalence.
+
+### Historical mapping identity after gap integration
+
+Regenerating the mapping report after gap integration changed its dependency
+digests. The historical browser capture still correctly points to the earlier
+mapping bytes. The reader previously tried to satisfy that historical digest
+with today's file, failing even when every case and mapping proof was unchanged.
+The one-test red baseline exits **1** in
+`field-host-flow-input-audit/owner-gap-historical-mapping-before.log`.
+
+The reader now verifies the captured mapping digest against the exact Git blob
+retained at `cab0cc3cc53b3728bb4022b89e0fe47168c18bae`. This is a revision
+containing the recorded bytes, not an assertion that it was the browser-capture
+commit. Every current mapping field except source fingerprints and the parent
+report digest must match those historical bytes exactly. The current source
+inventory, every current source hash and the current parent-report bytes are
+independently checked. The original and fresh owner-proof replay remains
+mandatory; parent-report semantics are separately covered by its original
+membership/mapping replay, not inferred from a changed hash.
+
+```powershell
+node --test tests/material-parity/original-overlay-context-survey.spec.mjs
+node scripts/audit-material-original-overlay-context.mjs
+node scripts/audit-material-original-overlay-context.mjs --check
+node scripts/audit-material-remaining-overlay-ancestry.mjs
+```
+
+All **6/6** tests pass, exit **0**, zero skips/cancellations/todos,
+**7,087.2412 ms**. New controls reject altered membership, duplicate cases,
+missing owners, changed proof values/counts, a wrong capture/parent/source,
+extra provenance fields, corrupted or relabelled history, and unsupported
+computed/rendering claims. Integration controls prove the reader actually
+rejects changed mapping bytes and forged capture descriptors.
+
+Generation, no-write replay and the remaining-ancestry generator also exit **0**.
+The reader retains **91 states, 200 owner proofs and 17,654 root properties**.
+The remaining-ancestry review retains **48 groups / 1,424 observations**,
+including all 18 pending-context owners and 356 identity rejection controls.
+
+The original capture remains SHA-256
+`74813a6a0872c7215e338639d395279a5e0016bfb3b0a44123e4994a8501489e`;
+all 91 referenced case files also keep their recorded hashes. Except for the
+new historical-mapping receipt and current-source metadata, the complete
+survey remains deeply equal, SHA-256
+`4679b5eee977df406caac8a490d4115adb38c78597439be4d4f4119633f4858f`.
+The passing test log is 1,665 bytes, SHA-256
+`8237f795a3781e741961cf271620ef982a5aaa3720c8a8ca164e864d715841bf`,
+at `artifacts/material-parity/field-host-flow-input-audit/owner-gap-historical-mapping-after.log`.
+
+This is historical identity plus current-reader verification, not a fresh
+browser capture, a changed historical observation, or candidate rendering
+equivalence. The canonical audit and enforced parity remain separate gates.

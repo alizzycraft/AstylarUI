@@ -10,9 +10,21 @@
     "file": "tests/material-parity/input-equivalence-audit.mjs",
     "recordedSha256": "fb97f72a543cff1f6c4e1f163f8b92f98c7dbbacbaa4a37d0571432045201392",
     "historicalSourceCommit": "65487aeba6a26f9715f302f92b4ee454161a94ef",
-    "currentSha256": "25a58594bc30e4e7213738766514eeaef02d334eb6024bc91fe5f54a980c1602",
+    "currentSha256": "c57c725b10a0b94bf9c21ccf85e3764f47bccd9d629d004010429fd239c820c1",
     "exactCurrentSourceMatch": false,
     "scope": "Historical source receipt only; current mapping behavior requires complete owner-proof replay and negative controls."
+  },
+  "historicalMappingSource": {
+    "file": "docs/material-overlay-owner-mapping-survey.json",
+    "recordedSha256": "36507ec938f338be4e6e6840a88ac8866045f4914852a62c25f7d7ff1ca4bd13",
+    "historicalSourceCommit": "cab0cc3cc53b3728bb4022b89e0fe47168c18bae",
+    "currentSha256": "c5acd99d242b0c59ec5121318fe30b83113b7a7b1efbdaf5a643d0a74232a9cc",
+    "exactCurrentSourceMatch": false,
+    "mappingDataSha256": "7570513ecee8d5a2033bc3670a3133c6a183df7d39216c391cc86e267101bdbf",
+    "exactMappingDataMatch": true,
+    "inputEquivalent": false,
+    "renderingEquivalent": false,
+    "scope": "Historical mapping bytes are hash-bound to committed evidence. Every current field except source fingerprints and the parent-report digest must match exactly; current sources and parent bytes are separately hash-checked. Complete original/fresh owner-proof replay remains required. This does not assert parent-report semantic or rendering equivalence."
   },
   "cases": 91,
   "matchedOriginalOwners": 200,
@@ -6045,19 +6057,19 @@
     },
     {
       "file": "tests/material-parity/original-overlay-context-survey.mjs",
-      "sha256": "393928864474a49bf1f839bc3aee9f21b8d1618cf05126d199885d18da1cbd17"
+      "sha256": "71422c360dcd115e4ee2f49162f3de882d757435aab1f531840355c7eea32c93"
     },
     {
       "file": "tests/material-parity/historical-audit-module-source.mjs",
-      "sha256": "4c05eddcff0260c5f1e55e1b4d4ca40965562120ca2993ac171a5c157249c624"
+      "sha256": "9601bb709f62bd96cab1fa4f53d1ffe5e940563704bce3bcf9afe46f90656131"
     },
     {
       "file": "tests/material-parity/original-overlay-context-survey.spec.mjs",
-      "sha256": "23cad44f533ac1eae156a3b6599dadbed8fa0514b5956d18e157787f85cb8dfd"
+      "sha256": "9198e25c152d702d18ce2b82604a368fa94135be584c7127d1735d9155faae1a"
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "25a58594bc30e4e7213738766514eeaef02d334eb6024bc91fe5f54a980c1602"
+      "sha256": "c57c725b10a0b94bf9c21ccf85e3764f47bccd9d629d004010429fd239c820c1"
     }
   ]
 }

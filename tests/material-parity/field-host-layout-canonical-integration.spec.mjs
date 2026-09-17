@@ -8,6 +8,7 @@ import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInputAuditMarkdown } from './input-equivalence-audit.mjs';
 import { fieldHostLayoutAttribution, fieldHostWidthAttribution } from './field-host-layout-source-binding.mjs';
+import { assertLaterGapClassifications } from './owner-gap-integration-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs', baselineCommit = 'f987b7f';
 const source = execFileSync('git', ['show', `${baselineCommit}:${moduleFile}`], { maxBuffer: 4 * 1024 * 1024 }).toString();
@@ -67,6 +68,7 @@ test('production field-host classification binds all source cases and supersedes
     for (const flag of ['inputEquivalent', 'computedCandidateVerified', 'rendererCauseProven', 'wholeElementInputEquivalent', 'originalRendererCauseProven'])
       assert.equal(row.reviewEvidence[flag], false);
   }
+  for (const signature of assertLaterGapClassifications(audit, previous)) signatures.add(signature);
   const other = report => report.discrepancies.filter(r => !signatures.has(JSON.stringify(scalar(r))));
   assert.equal(hash(other(audit)), hash(other(previous)), 'all unrelated complete rows unchanged');
   const binding = audit.fieldHostLayoutInputs;

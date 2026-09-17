@@ -7,7 +7,9 @@ import ts from 'typescript';
 import { resolveOriginAliasPair } from '../tests/material-parity/origin-alias-mapping-evidence.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-export const dialogMotionCaptureFile = 'artifacts/material-parity/dialog-motion-current-ancestry-audit/latest-report.json';
+// The earlier capture stays immutable. This independent replay binds the gap
+// integration's source fingerprints without relabelling historical evidence.
+export const dialogMotionCaptureFile = 'artifacts/material-parity/dialog-motion-gap-integration-audit/latest-report.json';
 export function collectDialogMotionContext({ readBytes = readFileSync } = {}) {
   const root = process.cwd();
   const inside = (base, file) => { const r = path.relative(base, file); return r && r !== '..' && !r.startsWith(`..${path.sep}`) && !path.isAbsolute(r); };

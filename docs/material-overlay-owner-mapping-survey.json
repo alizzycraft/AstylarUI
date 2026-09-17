@@ -3,7 +3,7 @@
   "kind": "overlay-owner-identity-gap-survey",
   "inputSurvey": {
     "file": "docs/material-owner-initial-style-mappings.json",
-    "sha256": "e7aaeb33cb9bbc2ba4e67e4a9fc61167116682fc594690b47d2c7989bb167539"
+    "sha256": "3c6964d637fbf065c6e77e8501389da597c73a9799931dad3bd9a8e59090f350"
   },
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
@@ -33,7 +33,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "fb97f72a543cff1f6c4e1f163f8b92f98c7dbbacbaa4a37d0571432045201392"
+      "sha256": "c57c725b10a0b94bf9c21ccf85e3764f47bccd9d629d004010429fd239c820c1"
     },
     {
       "file": "tests/material-parity/run-material-parity.mjs",
