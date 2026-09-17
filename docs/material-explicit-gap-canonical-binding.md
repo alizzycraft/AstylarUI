@@ -75,6 +75,43 @@ changed by the retained increment.
 
 ## Remaining work
 
+### Prepared classifier, not yet integrated
+
+`tests/material-parity/explicit-gap-classification.mjs` now consumes the verified
+composition binding without reimplementing the original-tree review. Its focused
+spec first reproduces the saved binding against the committed composition proof,
+original scalar inputs and canonical baseline, then exercises all **16 groups /
+eight owners / 296 cases / 1,032 observations** through the classifier.
+
+The classifier retains the reference `normal`, explicit candidate shorthand and
+raw omitted longhand separately. Every result carries original tree/input and
+composition hashes. It explicitly denies whole-element input equivalence,
+computed/used-gap verification, historical motivation and confirmed renderer
+causality. The ownership recommendation requires an equivalent-input core layout
+reduction before removing the plugin/application substitution, not another gap
+adjustment. It is a consumer of independently validated evidence, not a standalone
+authenticator or a replacement for the complete composition replay.
+
+```powershell
+node --test tests/material-parity/explicit-gap-classification.spec.mjs
+```
+
+Result: exit **0**, **2/2 tests**, no failures/skips/cancellations/todos,
+**3,512.4672 ms**. Thirty rejection controls cover wrong properties/cases/owners,
+missing or duplicated memberships, changed raw input evidence, unsupported
+equivalence/cause claims and differing local style stages. The stage controls
+rehash the changed scalar input deliberately, ensuring that the explicit-stage
+guards reject them independently of the input-hash guard. All 1,032 observations
+also reject an unrelated property. The log is
+`artifacts/material-parity/field-host-flow-input-audit/explicit-gap-classification-focused.log`.
+
+This is an independent preparation step while the 95-file harness continues.
+No file in that run's test/dependency inventory was edited. Production collection,
+classification precedence, complete coverage validation, canonical generation
+and conservation remain pending. The new classifier is **not wired into the
+canonical report**, which still has 2,330 unresolved groups. The later-added spec
+must be included in a subsequent complete current harness run.
+
 Integrate this source-bound authoring evidence into the production classifier
 with existing classification precedence, exact full-case coverage and original
 scalar preservation. Run complete canonical generation/no-write/conservation

@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Explicit-gap classifier preserves the unequal-input finding
+
+The [prepared classifier](material-explicit-gap-canonical-binding.md#prepared-classifier-not-yet-integrated)
+accepts all 1,032 independently bound observations in 16 groups and rejects 30
+mutated evidence/claim controls. Its two focused tests pass. It preserves raw
+omitted longhands and explicit shorthand, assigns the existing application/plugin
+authoring classification, and does not infer computed gaps, equivalent layouts
+or renderer causality. This adds the classifier consumer of the existing proof,
+not another composition investigation. Production integration and complete
+canonical conservation are still pending; the canonical unresolved count remains
+2,330. The live 95-file harness's dependencies were left unchanged, and the new
+independent spec is outside that run's original inventory.
+
 ## Existing explicit-gap composition proof binds to the canonical baseline
 
 The [canonical membership binding](material-explicit-gap-canonical-binding.md)
