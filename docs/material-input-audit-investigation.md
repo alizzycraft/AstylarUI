@@ -28,6 +28,13 @@ for original unrecorded values. Generation/no-write replay and **2/2 tests**
 with 22 rejection controls pass. Current production integration and broader
 canonical conservation remain separate; no renderer or comparison input changed.
 
+The source-authentication and coverage consumers now pass another **4/4** tests.
+They reopen the original proof/captures, retain all 1,902 observations and derive
+the 36 attributable groups independently of the reported findings. The 64
+dialog observations remain unresolved; new hashes alone, incomplete memberships
+or fabricated equivalence cannot satisfy these validators. Production integration
+has not yet consumed this preparation.
+
 ## Explicit spacing composition reaches production attribution
 
 The [production integration proof](material-explicit-gap-canonical-binding.md#production-integration-verified-on-the-complete-explicit-gap-population)

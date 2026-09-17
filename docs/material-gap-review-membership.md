@@ -79,6 +79,48 @@ failing a stale hash. The retained log is
 `artifacts/material-parity/field-host-flow-input-audit/gap-review-classification-focused.log`,
 SHA-256 `e53fc5689ee6ede1f0e22fc002d1b6e70a9b118cc7ee602f9556786fe7fb37ac`.
 
+### Source authentication and complete classification coverage
+
+The new `gap-review-source-binding.mjs` authenticates the complete membership
+against committed revision `8c03c9f3c09bba73f0c92f278c6412e0de1f8aaa`, checks
+each dependency digest, and invokes the existing membership CLI with `--check`.
+That CLI reopens the original canonical join, original tree evidence and existing
+motion/scalar-loss controls. The binding retains all 2,311 capture descriptors,
+including 676 cases containing these owners, and all 1,902 property observations.
+Its coverage explicitly distinguishes 1,838 attributable observations from 64
+unresolved observations. Neither incomplete source membership nor an altered
+whole scalar record can silently become complete evidence.
+
+The separate `gap-review-coverage.mjs` derives its expected findings from the
+original capture and full proof population, not from whichever findings remain
+in an audit. It checks all **36 attributable groups / 1,838 observations**, full
+ordered memberships, display samples, states, classifications, ownership and
+limits. It rejects fabricated dialog-panel attribution and preserves all 64
+unresolved observations in the source ledger. Both source authentication and
+classification coverage must be called by future production integration.
+
+```powershell
+node --test tests/material-parity/gap-review-source-binding.spec.mjs
+node --test tests/material-parity/gap-review-coverage.spec.mjs
+```
+
+Results: **2/2 pass** in **59,150.5737 ms** and **2/2 pass** in
+**38,620.3805 ms**, respectively; both exit 0 with no failures, skips,
+cancellations or todos. Source tests include ten changed scalar/tree/identity
+populations, missing-owner coverage, changed evidence and a false completeness
+claim. Coverage tests reject fifteen changed findings or ledgers, including
+dropping/relabeling/reordering findings and fabricating renderer equivalence.
+
+Logs are retained under
+`artifacts/material-parity/field-host-flow-input-audit/` as
+`gap-review-source-binding-focused.log` and `gap-review-coverage-focused.log`.
+Their SHA-256 values are respectively
+`5b4d2ff1a1157c37af4484426cebcfefc28613c106a3f585777d24ef9b80c316`
+and `2b1143c55c0dfb87e8f81e2d559339a1b2238664397067f1a885815a58a6316a`.
+The current full harness inventory includes all four gap-review specs and all
+43 legacy files: **106 files** (98 Material, four general, four TTS). This is an
+inventory check, not a full harness execution or acceptance claim.
+
 ### Remaining work
 
 1. Consume the local-motion evidence as a bounded observation-stage finding,
@@ -91,8 +133,9 @@ SHA-256 `e53fc5689ee6ede1f0e22fc002d1b6e70a9b118cc7ee602f9556786fe7fb37ac`.
 3. Correct scalar grouping-rule capture in its shared harness owner during a
    later implementation phase, then recapture separately. The missing z-index
    declaration must not be retroactively inserted into the original inputs.
-4. Integrate these findings with independent source/coverage validation and
-   current production precedence/conservation checks. The new spec must enter
+4. Integrate these findings using the now-tested independent source/coverage
+   validators, then run current production precedence/conservation checks.
+   The new specs must enter
    the next full current harness inventory, not be added to an earlier run's
    counts. The complete enforced parity matrix is still required.
 
