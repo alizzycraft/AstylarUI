@@ -14,6 +14,12 @@ as a test pass. The corrective test change is pending completion of the running
 unfiltered 110-file harness so its dependencies stay stable. No renderer or
 canonical comparison change is involved.
 
+The [formatting/host guard replay](material-button-fixed-width-audit.md#formattinghost-historical-guard-has-the-same-bounded-failure)
+independently confirms the same 18 later classifications against its own older
+baseline and 1,087-case population. All 2,938 scalars and 2,849 unrelated complete
+rows are conserved, with zero additional changes after source/coverage review.
+Its original failing assertion is also retained pending the bounded correction.
+
 ## Public bidirectional range proof confirms shared premature release
 
 The [public range reproduction](material-public-range-drag-audit.md) covers both

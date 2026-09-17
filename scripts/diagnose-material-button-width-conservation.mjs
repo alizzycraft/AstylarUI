@@ -9,9 +9,15 @@ import ts from 'typescript';
 // Diagnostic-only replay: retain the original test, its inputs and its failing
 // assertion. Add a bounded report immediately before that assertion rather than
 // weakening the test or editing dependencies of the running full harness.
-const file = 'tests/material-parity/button-fixed-width-canonical-integration.spec.mjs';
+const args = process.argv.slice(2);
+assert.ok(args.length === 0 || (args.length === 1 && args[0] === '--requests'), 'only --requests is accepted');
+const requests = args.length === 1;
+const file = requests ? 'tests/material-parity/button-requests-canonical-integration.spec.mjs'
+  : 'tests/material-parity/button-fixed-width-canonical-integration.spec.mjs';
 const source = readFileSync(file, 'utf8');
-const anchor = "    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'all complete rows outside the eight width and nine box-sizing groups remain unchanged');";
+const anchor = requests
+  ? "    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'complete unrelated rows remain unchanged after explicitly reviewed later width/box-sizing groups');"
+  : "    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'all complete rows outside the eight width and nine box-sizing groups remain unchanged');";
 assert.equal(source.split(anchor).length, 2, 'the reviewed conservation assertion must occur exactly once');
 const sourceSha256 = createHash('sha256').update(source).digest('hex');
 const insertion = `
@@ -38,10 +44,10 @@ const insertion = `
       laterGapProof = { verified: true, sourceBoundSignatures: later.size,
         remainingChangedIdentities: unaccounted.map(r => [r.family, r.element, r.property]) };
     } catch (error) { laterGapProof = { verified: false, error: String(error) }; }
-    console.log(JSON.stringify({ kind: 'button-fixed-width-historical-conservation-diagnostic',
+    console.log(JSON.stringify({ kind: ${JSON.stringify(requests ? 'button-requests-historical-conservation-diagnostic' : 'button-fixed-width-historical-conservation-diagnostic')},
       source: ${JSON.stringify(file)}, sourceSha256: ${JSON.stringify(sourceSha256)}, baselineCommit,
       diagnosticCases: raw.results.length + raw.interactions.length,
-      unchangedScalarRows: audit.discrepancies.length, originalWidthAndBoxGroups: keys.size,
+      unchangedScalarRows: audit.discrepancies.length, ${requests ? 'originalFormattingWidthAndBoxGroups' : 'originalWidthAndBoxGroups'}: keys.size,
       changedOtherRows: changed.length, unchangedOtherRows: unchanged.length,
       unchangedOrderedRowDigestsSha256: hash(JSON.stringify(unchanged)), changed, laterGapProof,
       originalAssertionRetained: true, inputEquivalent: false, renderingEquivalent: false,

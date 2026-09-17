@@ -352,3 +352,36 @@ width/box/scalar checks. Do not exempt every gap property or attribution name.
 Then rerun the corrected focused test and the complete current harness. No
 renderer, plugin, canonical comparison input or existing test changed in this
 diagnostic increment; full audit acceptance remains incomplete.
+
+### Formatting/host historical guard has the same bounded failure
+
+The still-running full harness also fails the earlier button formatting/host
+integration guard at its unrelated-row assertion. A second independent replay
+uses that original test and its older production baseline, not the width test's
+selected population:
+
+```powershell
+node scripts/diagnose-material-button-width-conservation.mjs --requests
+```
+
+The source is `tests/material-parity/button-requests-canonical-integration.spec.mjs`,
+SHA-256 `3a0defff81c8344b018c56d3f2526962c3c5baf977d1c78d469317355b440222`,
+with production baseline `61659474f71dbf5eb02cae07243adb8fef8aec03`. All **1,087
+selected cases**, **2,938 original scalar rows** and the **71** existing
+formatting/host/width/box groups remain intact. Exactly **18** additional rows
+change, all to the later motion-gap observation-stage classification; the
+independent source/coverage guard verifies those exact 18 signatures and leaves
+**zero** other changed identities. Their original authored examples are retained.
+
+The other **2,849 complete rows** remain unchanged, with ordered row-digest
+SHA-256 `4e16aa5246c256205e9011dbeae15f0a966425be5c37e9275439817c0f3c629c`.
+The original assertion remains and the diagnostic exits **1**, **0 pass / 1 fail**,
+no skips/cancellations/todos, **271,456.5145 ms**. Complete receipts and the failure
+are retained in
+`artifacts/material-parity/field-host-flow-input-audit/button-requests-conservation-diagnostic.log`,
+SHA-256 `74210c04ca3156160a2fe3db4a68d9878903174b1db78f578b7993124c1b5d71`.
+
+As with the width guard, a bounded correction must independently authenticate
+the later population and preserve all unrelated-row comparisons. The existing
+test is not changed during the running full harness, and neither diagnostic is
+a corrected-test pass or an input/rendering-equivalence claim.
