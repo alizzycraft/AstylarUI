@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Current full-harness button-width failure has a bounded explanation
+
+The [unchanged-test diagnostic](material-button-fixed-width-audit.md#later-full-harness-failure-isolated-without-changing-the-test)
+isolates exactly 18 later motion-gap classifications behind the historical
+button-width conservation failure. Independent source/coverage replay accounts
+for all 18; 1,201 original scalar rows and 1,166 unrelated complete rows remain
+unchanged. The original failing assertion is retained, and this is not reported
+as a test pass. The corrective test change is pending completion of the running
+unfiltered 110-file harness so its dependencies stay stable. No renderer or
+canonical comparison change is involved.
+
 ## Public bidirectional range proof confirms shared premature release
 
 The [public range reproduction](material-public-range-drag-audit.md) covers both

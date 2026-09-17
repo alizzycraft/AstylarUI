@@ -324,3 +324,7 @@ The unfiltered 110-file audit harness remains a separate running check. It has
 reported a historical button-fixed-width conservation assertion failure; that
 failure is retained and requires diagnosis, not a broad unrelated-row exemption.
 The enforced parity matrix and remaining attribution work are still outstanding.
+
+Commit `ae5ec7a` is pushed to `codex/material-ui-showcase`. GitHub accepted the
+push with its large-file warning: the lossless gzip is 50.26 MB, above its 50 MB
+recommendation. No evidence was removed or reduced to suppress that warning.

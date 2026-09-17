@@ -302,3 +302,53 @@ The running 73-file harness is separate evidence; the subsequent original
 button-box survey has its own focused tests, and current discovery requires
 74 files for a future full run. Complete attribution and the final enforced
 comparison matrix remain required.
+
+## Later full-harness failure isolated without changing the test
+
+The subsequent unfiltered **110-file** harness reports a failure in
+`button-fixed-width-canonical-integration.spec.mjs`: the historical test accounts
+for eight width and nine box-sizing classifications, but still expects every
+other complete row to equal its pre-width baseline at
+`30357b9f8c7b95da668914032557c5f7416c81db`.
+
+An isolated diagnostic replays that **unchanged test** and inserts a bounded
+report immediately before its original conservation assertion. The script checks
+that the assertion occurs exactly once, that removing only its inserted report
+recovers the complete original source, and that import relocation changes no
+other statements. It never substitutes a passing assertion or edits the current
+harness dependency. Source SHA-256:
+`d11e8860fe26054de19607c825838c4d292bedf0f7bdefe5b7dc87c362a2b514`.
+
+```powershell
+node scripts/diagnose-material-button-width-conservation.mjs
+```
+
+The run retains all **480 original cases**, **600 button owners** and **1,201
+ordered scalar rows**. Beyond the 17 already-accounted width/box groups, exactly
+**18** complete rows change: `rowGap` and `columnGap` for each of the nine button
+owners. All change from unresolved to
+`reviewed-motion-gap-observation-stage`; their authored examples remain identical.
+The **1,200** affected property observations are the same 600 button observations
+for each gap axis, not 1,200 additional owners.
+
+The independent `assertLaterGapClassifications` source/coverage replay validates
+exactly those **18** signatures, including original scalar/authoring preservation
+and false equivalence/causality flags. **Zero** changed identities remain
+unaccounted for. The other **1,166 complete rows** are unchanged; their ordered
+row-digest SHA-256 is
+`4ff464ad11dddd783c59e07b72661f28b53ff5b7b0100533c41ebc2a2c2dc5fd`.
+
+The command intentionally still exits **1** at the original assertion: **0 pass,
+1 fail**, no skips/cancellations/todos, **178,259.8495 ms**. This is a diagnosed
+historical-guard mismatch, not a corrected-test pass. Its complete row receipts
+and original failure are retained in
+`artifacts/material-parity/field-host-flow-input-audit/button-fixed-width-conservation-diagnostic.log`,
+SHA-256 `9205503a8ac5a581378986288a8ee85b871afabed9cbe2605dbdf60a286237d7`.
+
+After the running full harness finishes, the bounded correction is to authenticate
+these later gap findings through that existing independent guard before comparing
+unrelated rows, assert the exact observed population, and retain all existing
+width/box/scalar checks. Do not exempt every gap property or attribution name.
+Then rerun the corrected focused test and the complete current harness. No
+renderer, plugin, canonical comparison input or existing test changed in this
+diagnostic increment; full audit acceptance remains incomplete.
