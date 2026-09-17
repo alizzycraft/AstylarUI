@@ -15,7 +15,14 @@ empty-input caret bug is fixed. All original raw values remain present.
 Four new tests, including 24 altered-evidence controls and full no-write replay,
 pass. The existing four caret sensitivity/exposure tests also pass, including
 the DPR 1/2 ancestor-color counterexample. Canonical membership and production
-classification are still separate; no unresolved count is silently reduced.
+classification were separate at that increment; no unresolved count was reduced.
+
+The subsequent [exact membership replay](material-owner-caret-input-survey.md#exact-canonical-membership-replay)
+now independently scans all 2,311 original cases and verifies every ordered
+observation in all 145 groups, including cases beyond the canonical sample.
+The updated suite passes **5/5**, with 17 additional rejection controls. All
+existing survey groups, observations and case descriptors remain unchanged;
+production classification and rendering equivalence are still not claimed.
 
 ## Bounded motion/capture reviews integrated; pending motion remains explicit
 

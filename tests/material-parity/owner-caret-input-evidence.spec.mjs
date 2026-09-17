@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
 import { inspectOwnerCaretInput } from './owner-caret-input-evidence.mjs';
+import { bindOwnerCaretMembership } from './owner-caret-canonical-membership.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -88,4 +89,56 @@ test('owner caret survey replays every original case without changing canonical 
   assert.equal(slider.length, 4); assert.equal(slider.reduce((n, g) => n + g.observations.length, 0), 156);
   assert.ok(slider.every(g => g.observations.every(o => o.reasons.includes('editable-or-input-owner-needs-separate-proof'))));
   assert.equal(survey.descendantCaretVerified, false); assert.equal(survey.inputEquivalent, false);
+  assert.equal(survey.membership.groups, 145); assert.equal(survey.membership.originalCasesScanned, 2311);
+  assert.equal(survey.membership.observations, 4050);
+  assert.equal(survey.membership.selectedCaseCount, survey.cases.length);
+  assert.equal(survey.membership.selectedCasesSha256, hash(JSON.stringify(survey.cases)));
+  assert.equal(survey.membership.memberships.filter(g => g.observations > 12).length > 0, true);
+  for (const flag of ['inputEquivalent', 'computedCandidateVerified', 'renderingEquivalent', 'rendererCauseProven'])
+    assert.equal(survey.membership[flag], false);
+});
+
+test('caret membership rejects equal-count substitutions beyond the canonical sample and altered raw provenance', () => {
+  const input = { id: 'label', reference: { caretColor: 'rgb(1, 2, 3)', color: 'rgb(1, 2, 3)' }, astylar: {} };
+  const original = { results: Array.from({ length: 14 }, (_, i) => ({ family: 'example', profile: 'light',
+    viewport: { id: `v${i}` }, inputTrees: { reference: { sha256: `r${i}` }, astylar: { sha256: `a${i}` } },
+    styleInputs: [structuredClone(input)] })), interactions: [] };
+  original.interactions.push({ ...structuredClone(original.results[0]), state: 'hover' });
+  const observations = [...original.results, ...original.interactions].map(e => ({
+    case: `${e.state ? 'interaction' : 'static'}:example@light/${e.viewport.id}${e.state ? '/' + e.state : ''}`,
+    inputSha256: hash(JSON.stringify(e.styleInputs[0])), inputTrees: structuredClone(e.inputTrees),
+    referenceRaw: input.reference.caretColor, referenceColorRaw: input.reference.color, candidateRaw: '<omitted>' }));
+  const row = { family: 'example', element: 'label', property: 'caretColor', reference: input.reference.caretColor,
+    attribution: 'unresolved', classification: 'unresolved', occurrences: observations.length,
+    cases: observations.slice(0, 12).map(o => o.case), states: ['static', 'hover'] };
+  const group = { family: row.family, element: row.element, property: row.property, reference: row.reference,
+    candidate: '<omitted>', canonicalRowSha256: hash(JSON.stringify(row)), canonicalOccurrences: observations.length,
+    originalCountMatchesCanonical: true, observations };
+  const base = { groups: [group], rows: [row], original };
+  const bind = x => bindOwnerCaretMembership(x.groups, x.rows, x.original, style => style);
+  const before = JSON.stringify(base), result = bind(base);
+  assert.equal(result.observations, 15); assert.equal(result.originalCasesScanned, 15);
+  assert.equal(result.memberships[0].canonicalSample.length, 12); assert.equal(JSON.stringify(base), before);
+  const mutations = [
+    x => { x.groups.pop(); },
+    x => { x.groups.push(structuredClone(x.groups[0])); x.rows.push(structuredClone(x.rows[0])); },
+    x => { x.groups[0].observations[13].case = x.groups[0].observations[12].case; },
+    x => { [x.groups[0].observations[12], x.groups[0].observations[13]] = [x.groups[0].observations[13], x.groups[0].observations[12]]; },
+    x => { x.groups[0].observations[13].inputSha256 = '0'.repeat(64); },
+    x => { x.groups[0].observations[13].inputTrees.astylar.sha256 = 'changed'; },
+    x => { x.groups[0].observations[13].referenceRaw = 'red'; },
+    x => { x.groups[0].observations[13].referenceColorRaw = 'red'; },
+    x => { x.groups[0].observations[13].candidateRaw = 'auto'; },
+    x => { x.groups[0].canonicalRowSha256 = '0'.repeat(64); },
+    x => { x.rows[0].cases.reverse(); x.groups[0].canonicalRowSha256 = hash(JSON.stringify(x.rows[0])); },
+    x => { x.rows[0].states.pop(); x.groups[0].canonicalRowSha256 = hash(JSON.stringify(x.rows[0])); },
+    x => { x.rows[0].attribution = 'equivalent'; },
+    x => { x.rows[0].astylar = '<omitted>'; },
+    x => { x.original.results.push(structuredClone(x.original.results[0])); },
+    x => { x.original.results[0].styleInputs.push(structuredClone(x.original.results[0].styleInputs[0])); },
+    x => { x.original.results[13].styleInputs[0].astylar.caretColor = '<omitted>'; },
+  ];
+  for (const [i, mutate] of mutations.entries()) {
+    const x = structuredClone(base); mutate(x); assert.throws(() => bind(x), `mutation ${i}`);
+  }
 });

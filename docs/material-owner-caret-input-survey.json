@@ -23,11 +23,15 @@
   "sourceFingerprints": [
     {
       "file": "scripts/audit-material-owner-caret-inputs.mjs",
-      "sha256": "e9b4eda397f745803b98d56560b6660ba18d1109e148a032c016f3fc67e957e2"
+      "sha256": "a639879cfe69558e19cc7b07bf2cd77364f8cb70988c69af379f999ae642d8ed"
     },
     {
       "file": "tests/material-parity/owner-caret-input-evidence.mjs",
       "sha256": "e3d45570927eed67666783b17381374561df7f08210b275cb03f75648dfd2d51"
+    },
+    {
+      "file": "tests/material-parity/owner-caret-canonical-membership.mjs",
+      "sha256": "0f862599156ec57173a164bdc0f86b6493d5d0f992e75b3bcbdaa744206e6dab"
     },
     {
       "file": "tests/material-parity/root-initial-style-evidence.mjs",
@@ -131992,6 +131996,4418 @@
       }
     }
   ],
+  "membership": {
+    "groups": 145,
+    "originalCasesScanned": 2311,
+    "observations": 4050,
+    "memberships": [
+      {
+        "family": "badge",
+        "element": "badge-count",
+        "property": "caretColor",
+        "reference": "rgba(255,255,255,1)",
+        "canonicalRowSha256": "5c081aaf3d965d1a53d15e690c79b2459437347c7b66ae3b9ababa6bd92bdcd8",
+        "originalMembershipSha256": "e21aa7941e8a8342cc1fbeec1b2bef3b1fa30c31e58b9949334316ace24aca7d",
+        "observations": 39,
+        "canonicalSample": [
+          "static:badge@light/desktop",
+          "static:badge@light/tablet",
+          "static:badge@light/mobile",
+          "static:badge@contrast/desktop",
+          "static:badge@contrast/tablet",
+          "static:badge@contrast/mobile",
+          "static:badge@custom/desktop",
+          "static:badge@custom/tablet",
+          "static:badge@custom/mobile",
+          "interaction:badge@light/desktop-dpr1/focus",
+          "interaction:badge@light/desktop-dpr1/hover",
+          "interaction:badge@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "badge",
+        "element": "badge-count",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "fd81c0f818be962d6fd414d9becba7e92b60ff4b8d837680960c4dd553506cbe",
+        "originalMembershipSha256": "6473d0fb4e426753fffc12bfc50a711fe87daf88c70cb44e4a31f9ca6eea2123",
+        "observations": 13,
+        "canonicalSample": [
+          "static:badge@dark/desktop",
+          "static:badge@dark/tablet",
+          "static:badge@dark/mobile",
+          "interaction:badge@dark/desktop-dpr1/focus",
+          "interaction:badge@dark/desktop-dpr1/hover",
+          "interaction:badge@dark/desktop-dpr1/held",
+          "interaction:badge@dark/desktop-dpr1/activate",
+          "interaction:badge@dark/desktop-dpr1/activate-leave",
+          "interaction:badge@dark/desktop-dpr2/focus",
+          "interaction:badge@dark/desktop-dpr2/hover",
+          "interaction:badge@dark/desktop-dpr2/held",
+          "interaction:badge@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "badge",
+        "element": "badge-label",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "d2e57176e355936c4ab639fe4460a4b58e44d1df6c04e42e6091ff348e37b2b8",
+        "originalMembershipSha256": "56af274d8c00e688ac16a15feeae1b3fe737b5265a3183ce618609fc7b7f36ec",
+        "observations": 39,
+        "canonicalSample": [
+          "static:badge@light/desktop",
+          "static:badge@light/tablet",
+          "static:badge@light/mobile",
+          "static:badge@contrast/desktop",
+          "static:badge@contrast/tablet",
+          "static:badge@contrast/mobile",
+          "static:badge@custom/desktop",
+          "static:badge@custom/tablet",
+          "static:badge@custom/mobile",
+          "interaction:badge@light/desktop-dpr1/focus",
+          "interaction:badge@light/desktop-dpr1/hover",
+          "interaction:badge@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "badge",
+        "element": "badge-label",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "22c37ea5b0686fda1ae7b1381878157aa5339f4c499f7b9855fe59e68daba90d",
+        "originalMembershipSha256": "a7a12065ac35d25ebf56e5fd460eacd3775c2fe37756a9bc270cedd5d899e221",
+        "observations": 13,
+        "canonicalSample": [
+          "static:badge@dark/desktop",
+          "static:badge@dark/tablet",
+          "static:badge@dark/mobile",
+          "interaction:badge@dark/desktop-dpr1/focus",
+          "interaction:badge@dark/desktop-dpr1/hover",
+          "interaction:badge@dark/desktop-dpr1/held",
+          "interaction:badge@dark/desktop-dpr1/activate",
+          "interaction:badge@dark/desktop-dpr1/activate-leave",
+          "interaction:badge@dark/desktop-dpr2/focus",
+          "interaction:badge@dark/desktop-dpr2/hover",
+          "interaction:badge@dark/desktop-dpr2/held",
+          "interaction:badge@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "badge",
+        "element": "badge-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "4a8c16cf201410f74c88a9b806747fd623525c866d1b8a4b81990618c12572a6",
+        "originalMembershipSha256": "f1736b3de643edfced0c82780345b672a46df73cc48e09a308abcae074b7005c",
+        "observations": 39,
+        "canonicalSample": [
+          "static:badge@light/desktop",
+          "static:badge@light/tablet",
+          "static:badge@light/mobile",
+          "static:badge@contrast/desktop",
+          "static:badge@contrast/tablet",
+          "static:badge@contrast/mobile",
+          "static:badge@custom/desktop",
+          "static:badge@custom/tablet",
+          "static:badge@custom/mobile",
+          "interaction:badge@light/desktop-dpr1/focus",
+          "interaction:badge@light/desktop-dpr1/hover",
+          "interaction:badge@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "badge",
+        "element": "badge-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "5a191a2d7fdc2fae0b00c2743a3d13fc48767aa11b44e0ad6dfb396bdb5d0735",
+        "originalMembershipSha256": "b95e4f5a62bc11353b957f2f331834555cffed3a24bcc313173fde817037df1e",
+        "observations": 13,
+        "canonicalSample": [
+          "static:badge@dark/desktop",
+          "static:badge@dark/tablet",
+          "static:badge@dark/mobile",
+          "interaction:badge@dark/desktop-dpr1/focus",
+          "interaction:badge@dark/desktop-dpr1/hover",
+          "interaction:badge@dark/desktop-dpr1/held",
+          "interaction:badge@dark/desktop-dpr1/activate",
+          "interaction:badge@dark/desktop-dpr1/activate-leave",
+          "interaction:badge@dark/desktop-dpr2/focus",
+          "interaction:badge@dark/desktop-dpr2/hover",
+          "interaction:badge@dark/desktop-dpr2/held",
+          "interaction:badge@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "bottom-sheet",
+        "element": "bottom-sheet-copy",
+        "property": "caretColor",
+        "reference": "rgba(29,27,30,1)",
+        "canonicalRowSha256": "dab721c9ba47043c9c43abe658f4270363bcaf0de82af4c4f93805ef61eaa205",
+        "originalMembershipSha256": "59accea1019fa55b30bd292723a197812f7ff91402ea6d46b29309e2b89b3771",
+        "observations": 25,
+        "canonicalSample": [
+          "interaction:bottom-sheet@light/desktop-dpr1/activate",
+          "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
+          "interaction:bottom-sheet@light/desktop-dpr1/open",
+          "interaction:bottom-sheet@light/desktop-dpr2/activate",
+          "interaction:bottom-sheet@light/desktop-dpr2/activate-leave",
+          "interaction:bottom-sheet@light/desktop-dpr2/open",
+          "interaction:bottom-sheet@dark/desktop-dpr1/activate",
+          "interaction:bottom-sheet@dark/desktop-dpr1/activate-leave",
+          "interaction:bottom-sheet@dark/desktop-dpr1/open",
+          "interaction:bottom-sheet@dark/desktop-dpr2/activate",
+          "interaction:bottom-sheet@dark/desktop-dpr2/activate-leave",
+          "interaction:bottom-sheet@dark/desktop-dpr2/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "open"
+        ]
+      },
+      {
+        "family": "bottom-sheet",
+        "element": "bottom-sheet-dismiss",
+        "property": "caretColor",
+        "reference": "rgba(29,27,30,1)",
+        "canonicalRowSha256": "d130933e339f74071ef84262489086d37ecdc0d75c3c79c7c28b57f09fffc709",
+        "originalMembershipSha256": "c1b8c1c4d18a8d80ec128102899565b0547a14110819168380ad794dc777eb67",
+        "observations": 25,
+        "canonicalSample": [
+          "interaction:bottom-sheet@light/desktop-dpr1/activate",
+          "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
+          "interaction:bottom-sheet@light/desktop-dpr1/open",
+          "interaction:bottom-sheet@light/desktop-dpr2/activate",
+          "interaction:bottom-sheet@light/desktop-dpr2/activate-leave",
+          "interaction:bottom-sheet@light/desktop-dpr2/open",
+          "interaction:bottom-sheet@dark/desktop-dpr1/activate",
+          "interaction:bottom-sheet@dark/desktop-dpr1/activate-leave",
+          "interaction:bottom-sheet@dark/desktop-dpr1/open",
+          "interaction:bottom-sheet@dark/desktop-dpr2/activate",
+          "interaction:bottom-sheet@dark/desktop-dpr2/activate-leave",
+          "interaction:bottom-sheet@dark/desktop-dpr2/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "open"
+        ]
+      },
+      {
+        "family": "bottom-sheet",
+        "element": "bottom-sheet-overlay",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "b9faa34f25e14cd05d356f74ef1b246cb16f4f6ee3b678c8626c63818d7e37be",
+        "originalMembershipSha256": "903f0ba65d20ee01286adbbe2afb0d729b0b1752be239cd10b0ff4e8cba9c105",
+        "observations": 25,
+        "canonicalSample": [
+          "interaction:bottom-sheet@light/desktop-dpr1/activate",
+          "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
+          "interaction:bottom-sheet@light/desktop-dpr1/open",
+          "interaction:bottom-sheet@light/desktop-dpr2/activate",
+          "interaction:bottom-sheet@light/desktop-dpr2/activate-leave",
+          "interaction:bottom-sheet@light/desktop-dpr2/open",
+          "interaction:bottom-sheet@dark/desktop-dpr1/activate",
+          "interaction:bottom-sheet@dark/desktop-dpr1/activate-leave",
+          "interaction:bottom-sheet@dark/desktop-dpr1/open",
+          "interaction:bottom-sheet@dark/desktop-dpr2/activate",
+          "interaction:bottom-sheet@dark/desktop-dpr2/activate-leave",
+          "interaction:bottom-sheet@dark/desktop-dpr2/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "open"
+        ]
+      },
+      {
+        "family": "bottom-sheet",
+        "element": "bottom-sheet-panel",
+        "property": "caretColor",
+        "reference": "rgba(29,27,30,1)",
+        "canonicalRowSha256": "990d188eae9d0cb7690333673fd1a9a28456c3099fcc92ada716857365b2cf4e",
+        "originalMembershipSha256": "97167e41fcbe9a51b41f43b4fb280922882d17fa58c1986d9ba8b5c5b9798d36",
+        "observations": 25,
+        "canonicalSample": [
+          "interaction:bottom-sheet@light/desktop-dpr1/activate",
+          "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
+          "interaction:bottom-sheet@light/desktop-dpr1/open",
+          "interaction:bottom-sheet@light/desktop-dpr2/activate",
+          "interaction:bottom-sheet@light/desktop-dpr2/activate-leave",
+          "interaction:bottom-sheet@light/desktop-dpr2/open",
+          "interaction:bottom-sheet@dark/desktop-dpr1/activate",
+          "interaction:bottom-sheet@dark/desktop-dpr1/activate-leave",
+          "interaction:bottom-sheet@dark/desktop-dpr1/open",
+          "interaction:bottom-sheet@dark/desktop-dpr2/activate",
+          "interaction:bottom-sheet@dark/desktop-dpr2/activate-leave",
+          "interaction:bottom-sheet@dark/desktop-dpr2/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "open"
+        ]
+      },
+      {
+        "family": "bottom-sheet",
+        "element": "bottom-sheet-primary",
+        "property": "caretColor",
+        "reference": "rgba(255,255,255,1)",
+        "canonicalRowSha256": "bebe22a24da738b0f8311d60ca723f8f02a52d82e7c2cb2411ce57a190c60b41",
+        "originalMembershipSha256": "18931c453f659929b3abaffcd8633924790017b574c9369c9dc3597f2fd3c5c6",
+        "observations": 47,
+        "canonicalSample": [
+          "static:bottom-sheet@light/desktop",
+          "static:bottom-sheet@light/tablet",
+          "static:bottom-sheet@light/mobile",
+          "static:bottom-sheet@contrast/desktop",
+          "static:bottom-sheet@contrast/tablet",
+          "static:bottom-sheet@contrast/mobile",
+          "static:bottom-sheet@custom/desktop",
+          "static:bottom-sheet@custom/tablet",
+          "static:bottom-sheet@custom/mobile",
+          "interaction:bottom-sheet@light/desktop-dpr1/focus",
+          "interaction:bottom-sheet@light/desktop-dpr1/hover",
+          "interaction:bottom-sheet@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "open",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "bottom-sheet",
+        "element": "bottom-sheet-primary",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "c2aa07c534b60709b45109114dca2e118ce8d70574dfa1c75c99d90cc7e24ea8",
+        "originalMembershipSha256": "f2ed33daf1c77093821669b6adc6ad373394a6b346d2bed339a22acf3085163b",
+        "observations": 16,
+        "canonicalSample": [
+          "static:bottom-sheet@dark/desktop",
+          "static:bottom-sheet@dark/tablet",
+          "static:bottom-sheet@dark/mobile",
+          "interaction:bottom-sheet@dark/desktop-dpr1/focus",
+          "interaction:bottom-sheet@dark/desktop-dpr1/hover",
+          "interaction:bottom-sheet@dark/desktop-dpr1/held",
+          "interaction:bottom-sheet@dark/desktop-dpr1/activate",
+          "interaction:bottom-sheet@dark/desktop-dpr1/activate-leave",
+          "interaction:bottom-sheet@dark/desktop-dpr1/open",
+          "interaction:bottom-sheet@dark/desktop-dpr2/focus",
+          "interaction:bottom-sheet@dark/desktop-dpr2/hover",
+          "interaction:bottom-sheet@dark/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "open",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "button",
+        "element": "button-disabled",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,0.38)",
+        "canonicalRowSha256": "83cf59f9a7948f724ec632b12326540c1a4ce8dfb85990858f4b3b39e062d2cb",
+        "originalMembershipSha256": "0e9e1320676cb9338d9fd6dcab736a9cf5bdcdb68a84652de794875eb9fb860f",
+        "observations": 45,
+        "canonicalSample": [
+          "static:button@light/desktop",
+          "static:button@light/tablet",
+          "static:button@light/mobile",
+          "static:button@contrast/desktop",
+          "static:button@contrast/tablet",
+          "static:button@contrast/mobile",
+          "static:button@custom/desktop",
+          "static:button@custom/tablet",
+          "static:button@custom/mobile",
+          "interaction:button@light/desktop-dpr1/focus",
+          "interaction:button@light/desktop-dpr1/hover",
+          "interaction:button@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled"
+        ]
+      },
+      {
+        "family": "button",
+        "element": "button-disabled",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,0.38)",
+        "canonicalRowSha256": "b2918aaeb6744c0ef4ec5a4b3438b76a0a92fc1d5b51e5852c8cc7e63562461b",
+        "originalMembershipSha256": "276a09728f76c7b5b33d010ac54fb50560ea5f00627391638f5612e1d378d46f",
+        "observations": 15,
+        "canonicalSample": [
+          "static:button@dark/desktop",
+          "static:button@dark/tablet",
+          "static:button@dark/mobile",
+          "interaction:button@dark/desktop-dpr1/focus",
+          "interaction:button@dark/desktop-dpr1/hover",
+          "interaction:button@dark/desktop-dpr1/held",
+          "interaction:button@dark/desktop-dpr1/activate",
+          "interaction:button@dark/desktop-dpr1/activate-leave",
+          "interaction:button@dark/desktop-dpr1/disabled",
+          "interaction:button@dark/desktop-dpr2/focus",
+          "interaction:button@dark/desktop-dpr2/hover",
+          "interaction:button@dark/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled"
+        ]
+      },
+      {
+        "family": "button",
+        "element": "button-primary",
+        "property": "caretColor",
+        "reference": "rgba(255,255,255,1)",
+        "canonicalRowSha256": "3c56c30ef7d31842c9e10a5e64f3c2bff4d7013a78d507fef48b44a43e5a8126",
+        "originalMembershipSha256": "4d1e5191882180385c92390f03c98b79d36b0ba9ed294219b5f8f1824451acc5",
+        "observations": 45,
+        "canonicalSample": [
+          "static:button@light/desktop",
+          "static:button@light/tablet",
+          "static:button@light/mobile",
+          "static:button@contrast/desktop",
+          "static:button@contrast/tablet",
+          "static:button@contrast/mobile",
+          "static:button@custom/desktop",
+          "static:button@custom/tablet",
+          "static:button@custom/mobile",
+          "interaction:button@light/desktop-dpr1/focus",
+          "interaction:button@light/desktop-dpr1/hover",
+          "interaction:button@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled"
+        ]
+      },
+      {
+        "family": "button",
+        "element": "button-primary",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "daea9788953f71549a69a41c49c99136a4a00099635e6e6e4546ef6f782059e4",
+        "originalMembershipSha256": "ae0c2ca1ee8cdbf65a0adc6711224f50c553295700def13b88c223808b9c21d7",
+        "observations": 15,
+        "canonicalSample": [
+          "static:button@dark/desktop",
+          "static:button@dark/tablet",
+          "static:button@dark/mobile",
+          "interaction:button@dark/desktop-dpr1/focus",
+          "interaction:button@dark/desktop-dpr1/hover",
+          "interaction:button@dark/desktop-dpr1/held",
+          "interaction:button@dark/desktop-dpr1/activate",
+          "interaction:button@dark/desktop-dpr1/activate-leave",
+          "interaction:button@dark/desktop-dpr1/disabled",
+          "interaction:button@dark/desktop-dpr2/focus",
+          "interaction:button@dark/desktop-dpr2/hover",
+          "interaction:button@dark/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled"
+        ]
+      },
+      {
+        "family": "button",
+        "element": "button-secondary",
+        "property": "caretColor",
+        "reference": "rgba(103,80,164,1)",
+        "canonicalRowSha256": "6e47b60dd22e51ba7af5923acf7c2c5c2636b807fb86b6b2e4dd553affd2c6fd",
+        "originalMembershipSha256": "a2f68aaaaede306f2e0dc5f97290444dea6641fa4779875e3e15eb564a624a58",
+        "observations": 15,
+        "canonicalSample": [
+          "static:button@light/desktop",
+          "static:button@light/tablet",
+          "static:button@light/mobile",
+          "interaction:button@light/desktop-dpr1/focus",
+          "interaction:button@light/desktop-dpr1/hover",
+          "interaction:button@light/desktop-dpr1/held",
+          "interaction:button@light/desktop-dpr1/activate",
+          "interaction:button@light/desktop-dpr1/activate-leave",
+          "interaction:button@light/desktop-dpr1/disabled",
+          "interaction:button@light/desktop-dpr2/focus",
+          "interaction:button@light/desktop-dpr2/hover",
+          "interaction:button@light/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled"
+        ]
+      },
+      {
+        "family": "button",
+        "element": "button-secondary",
+        "property": "caretColor",
+        "reference": "rgba(208,188,255,1)",
+        "canonicalRowSha256": "4ac380f7ce41e44f469fa2002bc5826e4ea5d4eb4fd344abb65c511a80fe4ebe",
+        "originalMembershipSha256": "44daa94b99502c3d1d7fdafa2bb53566bb660ca961a8dea916b33cd1f02fa2f9",
+        "observations": 15,
+        "canonicalSample": [
+          "static:button@dark/desktop",
+          "static:button@dark/tablet",
+          "static:button@dark/mobile",
+          "interaction:button@dark/desktop-dpr1/focus",
+          "interaction:button@dark/desktop-dpr1/hover",
+          "interaction:button@dark/desktop-dpr1/held",
+          "interaction:button@dark/desktop-dpr1/activate",
+          "interaction:button@dark/desktop-dpr1/activate-leave",
+          "interaction:button@dark/desktop-dpr1/disabled",
+          "interaction:button@dark/desktop-dpr2/focus",
+          "interaction:button@dark/desktop-dpr2/hover",
+          "interaction:button@dark/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled"
+        ]
+      },
+      {
+        "family": "button",
+        "element": "button-secondary",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "4572a5f74277a7fbf42632beffa7960feacdbadf0f6a1fc84f91cf73586897f3",
+        "originalMembershipSha256": "9319897a52f77ccd9135e97403b6800234f51b00154b6c2b60d4a1b1a452efdf",
+        "observations": 15,
+        "canonicalSample": [
+          "static:button@contrast/desktop",
+          "static:button@contrast/tablet",
+          "static:button@contrast/mobile",
+          "interaction:button@contrast/desktop-dpr1/focus",
+          "interaction:button@contrast/desktop-dpr1/hover",
+          "interaction:button@contrast/desktop-dpr1/held",
+          "interaction:button@contrast/desktop-dpr1/activate",
+          "interaction:button@contrast/desktop-dpr1/activate-leave",
+          "interaction:button@contrast/desktop-dpr1/disabled",
+          "interaction:button@contrast/desktop-dpr2/focus",
+          "interaction:button@contrast/desktop-dpr2/hover",
+          "interaction:button@contrast/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled"
+        ]
+      },
+      {
+        "family": "button",
+        "element": "button-secondary",
+        "property": "caretColor",
+        "reference": "rgba(0,106,106,1)",
+        "canonicalRowSha256": "3a8f07d19e2f1f02dd62c35dc61170ef9a77e9dcddda6a3bea638fe7b140adae",
+        "originalMembershipSha256": "c8221306b24e73874b610ae5418196d1e952e87a4ed658fc7cec35f3a7047dd4",
+        "observations": 15,
+        "canonicalSample": [
+          "static:button@custom/desktop",
+          "static:button@custom/tablet",
+          "static:button@custom/mobile",
+          "interaction:button@custom/desktop-dpr1/focus",
+          "interaction:button@custom/desktop-dpr1/hover",
+          "interaction:button@custom/desktop-dpr1/held",
+          "interaction:button@custom/desktop-dpr1/activate",
+          "interaction:button@custom/desktop-dpr1/activate-leave",
+          "interaction:button@custom/desktop-dpr1/disabled",
+          "interaction:button@custom/desktop-dpr2/focus",
+          "interaction:button@custom/desktop-dpr2/hover",
+          "interaction:button@custom/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled"
+        ]
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-one",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "8fcc89a2725620dc1bf48b825f9b7283d01fc981d9b46cea583bfed5333944e3",
+        "originalMembershipSha256": "fa9f8a79d8fa0cf3d1a9aa0f2a6abdd7af065b4ad602caa3935f3d814e456299",
+        "observations": 51,
+        "canonicalSample": [
+          "static:button-toggle@light/desktop",
+          "static:button-toggle@light/tablet",
+          "static:button-toggle@light/mobile",
+          "static:button-toggle@contrast/desktop",
+          "static:button-toggle@contrast/tablet",
+          "static:button-toggle@contrast/mobile",
+          "static:button-toggle@custom/desktop",
+          "static:button-toggle@custom/tablet",
+          "static:button-toggle@custom/mobile",
+          "interaction:button-toggle@light/desktop-dpr1/focus",
+          "interaction:button-toggle@light/desktop-dpr1/hover",
+          "interaction:button-toggle@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-one",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "acb5f8c1e9f9419fd4e96737c623fa54a733faf6dbdc4d26dcf4ccf25600d6e7",
+        "originalMembershipSha256": "2bc27ae6a8241171bb1565b5a6c7dd1f89eab8f0638665c61dfbfe0390524197",
+        "observations": 17,
+        "canonicalSample": [
+          "static:button-toggle@dark/desktop",
+          "static:button-toggle@dark/tablet",
+          "static:button-toggle@dark/mobile",
+          "interaction:button-toggle@dark/desktop-dpr1/focus",
+          "interaction:button-toggle@dark/desktop-dpr1/hover",
+          "interaction:button-toggle@dark/desktop-dpr1/held",
+          "interaction:button-toggle@dark/desktop-dpr1/activate",
+          "interaction:button-toggle@dark/desktop-dpr1/activate-leave",
+          "interaction:button-toggle@dark/desktop-dpr1/disabled",
+          "interaction:button-toggle@dark/desktop-dpr1/selected",
+          "interaction:button-toggle@dark/desktop-dpr2/focus",
+          "interaction:button-toggle@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "0f063af75c5f83b7042ab20d69f6ca71c9158383ef3d6cd13de80bd48b4dc4ba",
+        "originalMembershipSha256": "298d71e90826df982664206e13626ea7fbc0ff902711dfbacd1786a585a1637e",
+        "observations": 51,
+        "canonicalSample": [
+          "static:button-toggle@light/desktop",
+          "static:button-toggle@light/tablet",
+          "static:button-toggle@light/mobile",
+          "static:button-toggle@contrast/desktop",
+          "static:button-toggle@contrast/tablet",
+          "static:button-toggle@contrast/mobile",
+          "static:button-toggle@custom/desktop",
+          "static:button-toggle@custom/tablet",
+          "static:button-toggle@custom/mobile",
+          "interaction:button-toggle@light/desktop-dpr1/focus",
+          "interaction:button-toggle@light/desktop-dpr1/hover",
+          "interaction:button-toggle@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "9a38e6169864500165846a975b2ebf6c2718649e08b5d46ed73450d538bcfb90",
+        "originalMembershipSha256": "c6c02f1b7f13db2e670a089c0a374bb8c90f2d8c007974820f5ef23f862ccd6a",
+        "observations": 17,
+        "canonicalSample": [
+          "static:button-toggle@dark/desktop",
+          "static:button-toggle@dark/tablet",
+          "static:button-toggle@dark/mobile",
+          "interaction:button-toggle@dark/desktop-dpr1/focus",
+          "interaction:button-toggle@dark/desktop-dpr1/hover",
+          "interaction:button-toggle@dark/desktop-dpr1/held",
+          "interaction:button-toggle@dark/desktop-dpr1/activate",
+          "interaction:button-toggle@dark/desktop-dpr1/activate-leave",
+          "interaction:button-toggle@dark/desktop-dpr1/disabled",
+          "interaction:button-toggle@dark/desktop-dpr1/selected",
+          "interaction:button-toggle@dark/desktop-dpr2/focus",
+          "interaction:button-toggle@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-two",
+        "property": "caretColor",
+        "reference": "rgba(75,67,87,1)",
+        "canonicalRowSha256": "6b4d5908053bf876690df419cbd13e9f86f86a940be4d8b3d27d271f522475a9",
+        "originalMembershipSha256": "92ba64e02f1ca289c7488a8dddd8756b3751e2d377300d4d7a575667916fee58",
+        "observations": 68,
+        "canonicalSample": [
+          "static:button-toggle@light/desktop",
+          "static:button-toggle@light/tablet",
+          "static:button-toggle@light/mobile",
+          "static:button-toggle@dark/desktop",
+          "static:button-toggle@dark/tablet",
+          "static:button-toggle@dark/mobile",
+          "static:button-toggle@contrast/desktop",
+          "static:button-toggle@contrast/tablet",
+          "static:button-toggle@contrast/mobile",
+          "static:button-toggle@custom/desktop",
+          "static:button-toggle@custom/tablet",
+          "static:button-toggle@custom/mobile"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "card",
+        "element": "card-copy",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "93dce8c9c38e7feae48755ff465946563f7684565512f595dceae4fc136d9a03",
+        "originalMembershipSha256": "0ee5a313e939e2d8c9a4c26c3470a80f0d9171366be7721d9a92627b1f92571a",
+        "observations": 39,
+        "canonicalSample": [
+          "static:card@light/desktop",
+          "static:card@light/tablet",
+          "static:card@light/mobile",
+          "static:card@contrast/desktop",
+          "static:card@contrast/tablet",
+          "static:card@contrast/mobile",
+          "static:card@custom/desktop",
+          "static:card@custom/tablet",
+          "static:card@custom/mobile",
+          "interaction:card@light/desktop-dpr1/focus",
+          "interaction:card@light/desktop-dpr1/hover",
+          "interaction:card@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "card",
+        "element": "card-copy",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "7ae81598ecbc1131b2b231d59988ad551b4f14f2ae23cbbb4b8473085f443edd",
+        "originalMembershipSha256": "8f7e78a63a7510ee4c9ebda38db668c1d9e1cad815db22a27e2a296c8e1cc865",
+        "observations": 13,
+        "canonicalSample": [
+          "static:card@dark/desktop",
+          "static:card@dark/tablet",
+          "static:card@dark/mobile",
+          "interaction:card@dark/desktop-dpr1/focus",
+          "interaction:card@dark/desktop-dpr1/hover",
+          "interaction:card@dark/desktop-dpr1/held",
+          "interaction:card@dark/desktop-dpr1/activate",
+          "interaction:card@dark/desktop-dpr1/activate-leave",
+          "interaction:card@dark/desktop-dpr2/focus",
+          "interaction:card@dark/desktop-dpr2/hover",
+          "interaction:card@dark/desktop-dpr2/held",
+          "interaction:card@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "card",
+        "element": "card-open",
+        "property": "caretColor",
+        "reference": "rgba(103,80,164,1)",
+        "canonicalRowSha256": "ac93ba7776bf53ad01d426573ef85f35b978244d2b7ec2aa8e50db3a2558319e",
+        "originalMembershipSha256": "3f1863ce1a8bf28172b5a7e3f2809170fba8a96f5776d44ec96f0e01b5473ee8",
+        "observations": 13,
+        "canonicalSample": [
+          "static:card@light/desktop",
+          "static:card@light/tablet",
+          "static:card@light/mobile",
+          "interaction:card@light/desktop-dpr1/focus",
+          "interaction:card@light/desktop-dpr1/hover",
+          "interaction:card@light/desktop-dpr1/held",
+          "interaction:card@light/desktop-dpr1/activate",
+          "interaction:card@light/desktop-dpr1/activate-leave",
+          "interaction:card@light/desktop-dpr2/focus",
+          "interaction:card@light/desktop-dpr2/hover",
+          "interaction:card@light/desktop-dpr2/held",
+          "interaction:card@light/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "card",
+        "element": "card-open",
+        "property": "caretColor",
+        "reference": "rgba(208,188,255,1)",
+        "canonicalRowSha256": "fbfb0069cd19092b9308bb3f7ac418eac3c9a7cfe62d025839fdc51dcd7bd347",
+        "originalMembershipSha256": "80e55eae5b4cbc6b477e0650e6469bb36399a0495bb6b5e3306c6f8e1d83bcaa",
+        "observations": 13,
+        "canonicalSample": [
+          "static:card@dark/desktop",
+          "static:card@dark/tablet",
+          "static:card@dark/mobile",
+          "interaction:card@dark/desktop-dpr1/focus",
+          "interaction:card@dark/desktop-dpr1/hover",
+          "interaction:card@dark/desktop-dpr1/held",
+          "interaction:card@dark/desktop-dpr1/activate",
+          "interaction:card@dark/desktop-dpr1/activate-leave",
+          "interaction:card@dark/desktop-dpr2/focus",
+          "interaction:card@dark/desktop-dpr2/hover",
+          "interaction:card@dark/desktop-dpr2/held",
+          "interaction:card@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "card",
+        "element": "card-open",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "f5689a97188194045cce0bca9fdd47d35520a292b7fed132dc54acd8ce0fddde",
+        "originalMembershipSha256": "5c393d6324bd4d3ad5e6fe5f990904decf41eb86f00700eb27521a0df6596f5f",
+        "observations": 13,
+        "canonicalSample": [
+          "static:card@contrast/desktop",
+          "static:card@contrast/tablet",
+          "static:card@contrast/mobile",
+          "interaction:card@contrast/desktop-dpr1/focus",
+          "interaction:card@contrast/desktop-dpr1/hover",
+          "interaction:card@contrast/desktop-dpr1/held",
+          "interaction:card@contrast/desktop-dpr1/activate",
+          "interaction:card@contrast/desktop-dpr1/activate-leave",
+          "interaction:card@contrast/desktop-dpr2/focus",
+          "interaction:card@contrast/desktop-dpr2/hover",
+          "interaction:card@contrast/desktop-dpr2/held",
+          "interaction:card@contrast/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "card",
+        "element": "card-open",
+        "property": "caretColor",
+        "reference": "rgba(0,106,106,1)",
+        "canonicalRowSha256": "d43ad9e898aae050ecf1c68fe928699075290382d8040f336d2d003adf21ed2b",
+        "originalMembershipSha256": "1cb17e887ca88332215c90ef3ca4571a81aa87b16e378de196a2f4ee61584531",
+        "observations": 13,
+        "canonicalSample": [
+          "static:card@custom/desktop",
+          "static:card@custom/tablet",
+          "static:card@custom/mobile",
+          "interaction:card@custom/desktop-dpr1/focus",
+          "interaction:card@custom/desktop-dpr1/hover",
+          "interaction:card@custom/desktop-dpr1/held",
+          "interaction:card@custom/desktop-dpr1/activate",
+          "interaction:card@custom/desktop-dpr1/activate-leave",
+          "interaction:card@custom/desktop-dpr2/focus",
+          "interaction:card@custom/desktop-dpr2/hover",
+          "interaction:card@custom/desktop-dpr2/held",
+          "interaction:card@custom/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "card",
+        "element": "card-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "8a904df7b477628a90d25a0c1e0566fbeac26237b7b0f2a5a5fcf37ba8d25a21",
+        "originalMembershipSha256": "7c559cbe1ca11d9714b3cbbced4a44043a68ef0b2609bbc32c83012883362aa4",
+        "observations": 39,
+        "canonicalSample": [
+          "static:card@light/desktop",
+          "static:card@light/tablet",
+          "static:card@light/mobile",
+          "static:card@contrast/desktop",
+          "static:card@contrast/tablet",
+          "static:card@contrast/mobile",
+          "static:card@custom/desktop",
+          "static:card@custom/tablet",
+          "static:card@custom/mobile",
+          "interaction:card@light/desktop-dpr1/focus",
+          "interaction:card@light/desktop-dpr1/hover",
+          "interaction:card@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "card",
+        "element": "card-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "698d2c29c3029ded45acaca16e2cda940b610e7fcbec1b4b5140512ef591ad0b",
+        "originalMembershipSha256": "9393400b53d2e962b4a5bed519f74190960767d71fba1e897102f566a358e147",
+        "observations": 13,
+        "canonicalSample": [
+          "static:card@dark/desktop",
+          "static:card@dark/tablet",
+          "static:card@dark/mobile",
+          "interaction:card@dark/desktop-dpr1/focus",
+          "interaction:card@dark/desktop-dpr1/hover",
+          "interaction:card@dark/desktop-dpr1/held",
+          "interaction:card@dark/desktop-dpr1/activate",
+          "interaction:card@dark/desktop-dpr1/activate-leave",
+          "interaction:card@dark/desktop-dpr2/focus",
+          "interaction:card@dark/desktop-dpr2/hover",
+          "interaction:card@dark/desktop-dpr2/held",
+          "interaction:card@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "card",
+        "element": "card-title",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "e40c3ece287ec82c0a0f6ac3a93e372b212f83cdbe7d8e335126ab1073e9b5d5",
+        "originalMembershipSha256": "f8aa6f9a507d0e02b18842432e7d9eccaa5d7e4638c86f9683f5c8f9474097c0",
+        "observations": 39,
+        "canonicalSample": [
+          "static:card@light/desktop",
+          "static:card@light/tablet",
+          "static:card@light/mobile",
+          "static:card@contrast/desktop",
+          "static:card@contrast/tablet",
+          "static:card@contrast/mobile",
+          "static:card@custom/desktop",
+          "static:card@custom/tablet",
+          "static:card@custom/mobile",
+          "interaction:card@light/desktop-dpr1/focus",
+          "interaction:card@light/desktop-dpr1/hover",
+          "interaction:card@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "card",
+        "element": "card-title",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "4a12f8dbf4e7e2ec88c782197161e60ef36230451e0a47b55866ccf0004961db",
+        "originalMembershipSha256": "c5c880d418661c50ebd475dee5814f64270db32624c9b6348c97fb5717a5c7f5",
+        "observations": 13,
+        "canonicalSample": [
+          "static:card@dark/desktop",
+          "static:card@dark/tablet",
+          "static:card@dark/mobile",
+          "interaction:card@dark/desktop-dpr1/focus",
+          "interaction:card@dark/desktop-dpr1/hover",
+          "interaction:card@dark/desktop-dpr1/held",
+          "interaction:card@dark/desktop-dpr1/activate",
+          "interaction:card@dark/desktop-dpr1/activate-leave",
+          "interaction:card@dark/desktop-dpr2/focus",
+          "interaction:card@dark/desktop-dpr2/hover",
+          "interaction:card@dark/desktop-dpr2/held",
+          "interaction:card@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "checkbox",
+        "element": "checkbox-label",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "0f6eff32019a8476c70e6f964f3ec3aa6711a0d239a2c2c9a3d4289b3f9b29c9",
+        "originalMembershipSha256": "abe6b715ba66a889f6a7888e3a59752b745fc9c3bee21652a32133260464eaca",
+        "observations": 45,
+        "canonicalSample": [
+          "static:checkbox@light/desktop",
+          "static:checkbox@light/tablet",
+          "static:checkbox@light/mobile",
+          "static:checkbox@contrast/desktop",
+          "static:checkbox@contrast/tablet",
+          "static:checkbox@contrast/mobile",
+          "static:checkbox@custom/desktop",
+          "static:checkbox@custom/tablet",
+          "static:checkbox@custom/mobile",
+          "interaction:checkbox@light/desktop-dpr1/focus",
+          "interaction:checkbox@light/desktop-dpr1/hover",
+          "interaction:checkbox@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "selected"
+        ]
+      },
+      {
+        "family": "checkbox",
+        "element": "checkbox-label",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "3ce26efaf7c09c5a39570a72608dc24c202477106eea9c0ec08f49cc40a355ea",
+        "originalMembershipSha256": "d27936bdb8b35a99a9ea71075465ff6727beba07cfafadd0df7fdae1adad82c6",
+        "observations": 15,
+        "canonicalSample": [
+          "static:checkbox@dark/desktop",
+          "static:checkbox@dark/tablet",
+          "static:checkbox@dark/mobile",
+          "interaction:checkbox@dark/desktop-dpr1/focus",
+          "interaction:checkbox@dark/desktop-dpr1/hover",
+          "interaction:checkbox@dark/desktop-dpr1/held",
+          "interaction:checkbox@dark/desktop-dpr1/activate",
+          "interaction:checkbox@dark/desktop-dpr1/activate-leave",
+          "interaction:checkbox@dark/desktop-dpr1/selected",
+          "interaction:checkbox@dark/desktop-dpr2/focus",
+          "interaction:checkbox@dark/desktop-dpr2/hover",
+          "interaction:checkbox@dark/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "selected"
+        ]
+      },
+      {
+        "family": "checkbox",
+        "element": "checkbox-label",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,0.38)",
+        "canonicalRowSha256": "4bf2dbd6a04ef3c0a322d51f51c05d84680586bd03245966c50e2cc470b74dd6",
+        "originalMembershipSha256": "0ef8ddd896af581a0944ef718f3f2ab9a2e7122a8d1d3eadc3e5fb11dfcf48e6",
+        "observations": 6,
+        "canonicalSample": [
+          "interaction:checkbox@light/desktop-dpr1/disabled",
+          "interaction:checkbox@light/desktop-dpr2/disabled",
+          "interaction:checkbox@contrast/desktop-dpr1/disabled",
+          "interaction:checkbox@contrast/desktop-dpr2/disabled",
+          "interaction:checkbox@custom/desktop-dpr1/disabled",
+          "interaction:checkbox@custom/desktop-dpr2/disabled"
+        ],
+        "states": [
+          "disabled"
+        ]
+      },
+      {
+        "family": "checkbox",
+        "element": "checkbox-label",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,0.38)",
+        "canonicalRowSha256": "2f548d061179e6ab29a884cacb43917ad84337c2f5ed544bceaab435c52e2fe9",
+        "originalMembershipSha256": "44f77a98f85a7946afb43e16fd340b1a9407faced85ea27628c7efbd1414a60e",
+        "observations": 2,
+        "canonicalSample": [
+          "interaction:checkbox@dark/desktop-dpr1/disabled",
+          "interaction:checkbox@dark/desktop-dpr2/disabled"
+        ],
+        "states": [
+          "disabled"
+        ]
+      },
+      {
+        "family": "checkbox",
+        "element": "checkbox-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "017fffdfe44a7e2c00cdc78c443c6eaff68fa788da17dce906addce25e5b0571",
+        "originalMembershipSha256": "b63f035075e7480ed2eebe126a212e4051b97811b715bb41b8a63494e1f1dcf2",
+        "observations": 51,
+        "canonicalSample": [
+          "static:checkbox@light/desktop",
+          "static:checkbox@light/tablet",
+          "static:checkbox@light/mobile",
+          "static:checkbox@contrast/desktop",
+          "static:checkbox@contrast/tablet",
+          "static:checkbox@contrast/mobile",
+          "static:checkbox@custom/desktop",
+          "static:checkbox@custom/tablet",
+          "static:checkbox@custom/mobile",
+          "interaction:checkbox@light/desktop-dpr1/focus",
+          "interaction:checkbox@light/desktop-dpr1/hover",
+          "interaction:checkbox@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "checkbox",
+        "element": "checkbox-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "683aa549a528178a46c4a532d0e526dedcba559f51a54fd9c33c2bb57443b120",
+        "originalMembershipSha256": "910db665acafb620e0e31c5eac1a2a2cf4facb85a43bdcb8a961c752d7b30c80",
+        "observations": 17,
+        "canonicalSample": [
+          "static:checkbox@dark/desktop",
+          "static:checkbox@dark/tablet",
+          "static:checkbox@dark/mobile",
+          "interaction:checkbox@dark/desktop-dpr1/focus",
+          "interaction:checkbox@dark/desktop-dpr1/hover",
+          "interaction:checkbox@dark/desktop-dpr1/held",
+          "interaction:checkbox@dark/desktop-dpr1/activate",
+          "interaction:checkbox@dark/desktop-dpr1/activate-leave",
+          "interaction:checkbox@dark/desktop-dpr1/disabled",
+          "interaction:checkbox@dark/desktop-dpr1/selected",
+          "interaction:checkbox@dark/desktop-dpr2/focus",
+          "interaction:checkbox@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "chips",
+        "element": "chip-0",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "1f8fa6f56aea1541968875e5d1ccc31dd5952bc3baebd5b8904bea26f3b4edc3",
+        "originalMembershipSha256": "9fd01e4b2594ffe4c2ed051ed1e31fcdcb0082db8a4f36d377597a78be31d6f4",
+        "observations": 57,
+        "canonicalSample": [
+          "static:chips@light/desktop",
+          "static:chips@light/tablet",
+          "static:chips@light/mobile",
+          "static:chips@contrast/desktop",
+          "static:chips@contrast/tablet",
+          "static:chips@contrast/mobile",
+          "static:chips@custom/desktop",
+          "static:chips@custom/tablet",
+          "static:chips@custom/mobile",
+          "interaction:chips@light/desktop-dpr1/focus",
+          "interaction:chips@light/desktop-dpr1/hover",
+          "interaction:chips@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "activate-alternate",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "chips",
+        "element": "chip-0",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "ec5252ed84ce72ee6e0c76fdf6cea764c34b59c462cde9e4d795408e880a1305",
+        "originalMembershipSha256": "dc2787580633e0d79be700e2b6df3cf20815fdf3a881f50b1a7b11b146d6af81",
+        "observations": 19,
+        "canonicalSample": [
+          "static:chips@dark/desktop",
+          "static:chips@dark/tablet",
+          "static:chips@dark/mobile",
+          "interaction:chips@dark/desktop-dpr1/focus",
+          "interaction:chips@dark/desktop-dpr1/hover",
+          "interaction:chips@dark/desktop-dpr1/held",
+          "interaction:chips@dark/desktop-dpr1/activate",
+          "interaction:chips@dark/desktop-dpr1/activate-leave",
+          "interaction:chips@dark/desktop-dpr1/activate-alternate",
+          "interaction:chips@dark/desktop-dpr1/disabled",
+          "interaction:chips@dark/desktop-dpr1/selected",
+          "interaction:chips@dark/desktop-dpr2/focus"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "activate-alternate",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "chips",
+        "element": "chip-1",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "c0da1de749140dd7f59fe752b7e8d056d41c50b48af4a939acddc382ed2665c2",
+        "originalMembershipSha256": "c73be0a595308bb2a91d2ce735c825429dd6074bd14dbb5f902624057490032b",
+        "observations": 57,
+        "canonicalSample": [
+          "static:chips@light/desktop",
+          "static:chips@light/tablet",
+          "static:chips@light/mobile",
+          "static:chips@contrast/desktop",
+          "static:chips@contrast/tablet",
+          "static:chips@contrast/mobile",
+          "static:chips@custom/desktop",
+          "static:chips@custom/tablet",
+          "static:chips@custom/mobile",
+          "interaction:chips@light/desktop-dpr1/focus",
+          "interaction:chips@light/desktop-dpr1/hover",
+          "interaction:chips@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "activate-alternate",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "chips",
+        "element": "chip-1",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "b0228f4d79d992772e4e298e6ebff2b72396b9c190f3b27d590a1613258f5337",
+        "originalMembershipSha256": "5128594855d01fed1a4e6d198b81cd3629891725eeede9d24d260f5bb941e068",
+        "observations": 19,
+        "canonicalSample": [
+          "static:chips@dark/desktop",
+          "static:chips@dark/tablet",
+          "static:chips@dark/mobile",
+          "interaction:chips@dark/desktop-dpr1/focus",
+          "interaction:chips@dark/desktop-dpr1/hover",
+          "interaction:chips@dark/desktop-dpr1/held",
+          "interaction:chips@dark/desktop-dpr1/activate",
+          "interaction:chips@dark/desktop-dpr1/activate-leave",
+          "interaction:chips@dark/desktop-dpr1/activate-alternate",
+          "interaction:chips@dark/desktop-dpr1/disabled",
+          "interaction:chips@dark/desktop-dpr1/selected",
+          "interaction:chips@dark/desktop-dpr2/focus"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "activate-alternate",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "chips",
+        "element": "chips-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "94e53eb1c4eb191da632d865204b5b537c551b63d9c9680c7cf31ead1012b457",
+        "originalMembershipSha256": "f4000d7dc089ab370ba2b9416bbee66cafead654386cb78d19903727270aee9c",
+        "observations": 57,
+        "canonicalSample": [
+          "static:chips@light/desktop",
+          "static:chips@light/tablet",
+          "static:chips@light/mobile",
+          "static:chips@contrast/desktop",
+          "static:chips@contrast/tablet",
+          "static:chips@contrast/mobile",
+          "static:chips@custom/desktop",
+          "static:chips@custom/tablet",
+          "static:chips@custom/mobile",
+          "interaction:chips@light/desktop-dpr1/focus",
+          "interaction:chips@light/desktop-dpr1/hover",
+          "interaction:chips@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "activate-alternate",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "chips",
+        "element": "chips-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "2ba079d707552f34e671c60e5133023afcef72dd66a439032c0194ed0067cfda",
+        "originalMembershipSha256": "8fc35dfb7e7274fb3c909e199a34902bef5c6852009b76109aff8cddfc045816",
+        "observations": 19,
+        "canonicalSample": [
+          "static:chips@dark/desktop",
+          "static:chips@dark/tablet",
+          "static:chips@dark/mobile",
+          "interaction:chips@dark/desktop-dpr1/focus",
+          "interaction:chips@dark/desktop-dpr1/hover",
+          "interaction:chips@dark/desktop-dpr1/held",
+          "interaction:chips@dark/desktop-dpr1/activate",
+          "interaction:chips@dark/desktop-dpr1/activate-leave",
+          "interaction:chips@dark/desktop-dpr1/activate-alternate",
+          "interaction:chips@dark/desktop-dpr1/disabled",
+          "interaction:chips@dark/desktop-dpr1/selected",
+          "interaction:chips@dark/desktop-dpr2/focus"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "activate-alternate",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "core",
+        "element": "core-primary",
+        "property": "caretColor",
+        "reference": "rgba(255,255,255,1)",
+        "canonicalRowSha256": "4ac72760d4ed1592e3565098fd812d278bd6fc450f8e37959855393bb40b1816",
+        "originalMembershipSha256": "0d8b4a9f3baa8ac40b888247836a7eb0ccd91b7a348b93634a7bf071d2f82f7f",
+        "observations": 39,
+        "canonicalSample": [
+          "static:core@light/desktop",
+          "static:core@light/tablet",
+          "static:core@light/mobile",
+          "static:core@contrast/desktop",
+          "static:core@contrast/tablet",
+          "static:core@contrast/mobile",
+          "static:core@custom/desktop",
+          "static:core@custom/tablet",
+          "static:core@custom/mobile",
+          "interaction:core@light/desktop-dpr1/focus",
+          "interaction:core@light/desktop-dpr1/hover",
+          "interaction:core@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "core",
+        "element": "core-primary",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "57b6ced98d9b02ea8feceeb1868e203e9ca80591e80370c22c692cb7fca933a4",
+        "originalMembershipSha256": "b01a07dc84823ed697d3cd08214668c1646a2932f45b64f5d97a73e260582d89",
+        "observations": 13,
+        "canonicalSample": [
+          "static:core@dark/desktop",
+          "static:core@dark/tablet",
+          "static:core@dark/mobile",
+          "interaction:core@dark/desktop-dpr1/focus",
+          "interaction:core@dark/desktop-dpr1/hover",
+          "interaction:core@dark/desktop-dpr1/held",
+          "interaction:core@dark/desktop-dpr1/activate",
+          "interaction:core@dark/desktop-dpr1/activate-leave",
+          "interaction:core@dark/desktop-dpr2/focus",
+          "interaction:core@dark/desktop-dpr2/hover",
+          "interaction:core@dark/desktop-dpr2/held",
+          "interaction:core@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-actions",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "18e78e7d47f1aa80305b7024a83f8672312a92103fd16872b9278e2866bb4bc5",
+        "originalMembershipSha256": "690535190f3773a6796bf68407a7489e3eab4b4332e291809406054302c76e7e",
+        "observations": 32,
+        "canonicalSample": [
+          "interaction:dialog@light/desktop-dpr1/activate",
+          "interaction:dialog@light/desktop-dpr1/activate-leave",
+          "interaction:dialog@light/desktop-dpr1/open-hover-content",
+          "interaction:dialog@light/desktop-dpr1/open",
+          "interaction:dialog@light/desktop-dpr2/activate",
+          "interaction:dialog@light/desktop-dpr2/activate-leave",
+          "interaction:dialog@light/desktop-dpr2/open-hover-content",
+          "interaction:dialog@light/desktop-dpr2/open",
+          "interaction:dialog@dark/desktop-dpr1/activate",
+          "interaction:dialog@dark/desktop-dpr1/activate-leave",
+          "interaction:dialog@dark/desktop-dpr1/open-hover-content",
+          "interaction:dialog@dark/desktop-dpr1/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "open-hover-content",
+          "open"
+        ]
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-cancel",
+        "property": "caretColor",
+        "reference": "rgba(125,0,250,1)",
+        "canonicalRowSha256": "e2b4d6a694c2a636d9ac2d6a5cd9c0961bb2e82c77c8415c3219b5abd67f92fe",
+        "originalMembershipSha256": "e53778e801059ce7ef32cd8f7da225a9e720754a096f4862f6b026a0acad033f",
+        "observations": 32,
+        "canonicalSample": [
+          "interaction:dialog@light/desktop-dpr1/activate",
+          "interaction:dialog@light/desktop-dpr1/activate-leave",
+          "interaction:dialog@light/desktop-dpr1/open-hover-content",
+          "interaction:dialog@light/desktop-dpr1/open",
+          "interaction:dialog@light/desktop-dpr2/activate",
+          "interaction:dialog@light/desktop-dpr2/activate-leave",
+          "interaction:dialog@light/desktop-dpr2/open-hover-content",
+          "interaction:dialog@light/desktop-dpr2/open",
+          "interaction:dialog@dark/desktop-dpr1/activate",
+          "interaction:dialog@dark/desktop-dpr1/activate-leave",
+          "interaction:dialog@dark/desktop-dpr1/open-hover-content",
+          "interaction:dialog@dark/desktop-dpr1/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "open-hover-content",
+          "open"
+        ]
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-copy",
+        "property": "caretColor",
+        "reference": "rgba(73,69,78,1)",
+        "canonicalRowSha256": "ae7afca20107ef42f053691279a13eef3991d4778d5ab19c19fbaf1f862585aa",
+        "originalMembershipSha256": "298a377322cbe5825e520de08a2bdd5acb97f2a4a56e5c59377e29f876cfc769",
+        "observations": 32,
+        "canonicalSample": [
+          "interaction:dialog@light/desktop-dpr1/activate",
+          "interaction:dialog@light/desktop-dpr1/activate-leave",
+          "interaction:dialog@light/desktop-dpr1/open-hover-content",
+          "interaction:dialog@light/desktop-dpr1/open",
+          "interaction:dialog@light/desktop-dpr2/activate",
+          "interaction:dialog@light/desktop-dpr2/activate-leave",
+          "interaction:dialog@light/desktop-dpr2/open-hover-content",
+          "interaction:dialog@light/desktop-dpr2/open",
+          "interaction:dialog@dark/desktop-dpr1/activate",
+          "interaction:dialog@dark/desktop-dpr1/activate-leave",
+          "interaction:dialog@dark/desktop-dpr1/open-hover-content",
+          "interaction:dialog@dark/desktop-dpr1/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "open-hover-content",
+          "open"
+        ]
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-panel",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "d8195f9139799b2bb2f22768708c941ac564642f3375bc14f5e1ec6f6e026a81",
+        "originalMembershipSha256": "3987151e5eec76de1c6fa8f6c6232cc0a09a460a7da8c866c94c2878f2954d16",
+        "observations": 32,
+        "canonicalSample": [
+          "interaction:dialog@light/desktop-dpr1/activate",
+          "interaction:dialog@light/desktop-dpr1/activate-leave",
+          "interaction:dialog@light/desktop-dpr1/open-hover-content",
+          "interaction:dialog@light/desktop-dpr1/open",
+          "interaction:dialog@light/desktop-dpr2/activate",
+          "interaction:dialog@light/desktop-dpr2/activate-leave",
+          "interaction:dialog@light/desktop-dpr2/open-hover-content",
+          "interaction:dialog@light/desktop-dpr2/open",
+          "interaction:dialog@dark/desktop-dpr1/activate",
+          "interaction:dialog@dark/desktop-dpr1/activate-leave",
+          "interaction:dialog@dark/desktop-dpr1/open-hover-content",
+          "interaction:dialog@dark/desktop-dpr1/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "open-hover-content",
+          "open"
+        ]
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-primary",
+        "property": "caretColor",
+        "reference": "rgba(255,255,255,1)",
+        "canonicalRowSha256": "4ee4800cf6586168dcf3bb8aa373a4e007b429dcd374d3cd0706b2fa1b5c4a70",
+        "originalMembershipSha256": "82262560ccce42971001c40db1cf4acbed76f2930e6d071a9a621c02f035c789",
+        "observations": 58,
+        "canonicalSample": [
+          "static:dialog@light/desktop",
+          "static:dialog@light/tablet",
+          "static:dialog@light/mobile",
+          "static:dialog@contrast/desktop",
+          "static:dialog@contrast/tablet",
+          "static:dialog@contrast/mobile",
+          "static:dialog@custom/desktop",
+          "static:dialog@custom/tablet",
+          "static:dialog@custom/mobile",
+          "interaction:dialog@light/desktop-dpr1/focus",
+          "interaction:dialog@light/desktop-dpr1/hover",
+          "interaction:dialog@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "open-hover-content",
+          "open-dismiss-outside",
+          "open",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-primary",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "0ad44edfa985297798b3d9be4fa093ca51829b297dc4648f66b945cb2429f9d8",
+        "originalMembershipSha256": "45d64d7513a073f7490671627c0bcdbf962c62802cac7cb1a9a2da4f4b0e7796",
+        "observations": 20,
+        "canonicalSample": [
+          "static:dialog@dark/desktop",
+          "static:dialog@dark/tablet",
+          "static:dialog@dark/mobile",
+          "interaction:dialog@dark/desktop-dpr1/focus",
+          "interaction:dialog@dark/desktop-dpr1/hover",
+          "interaction:dialog@dark/desktop-dpr1/held",
+          "interaction:dialog@dark/desktop-dpr1/activate",
+          "interaction:dialog@dark/desktop-dpr1/activate-leave",
+          "interaction:dialog@dark/desktop-dpr1/open-hover-content",
+          "interaction:dialog@dark/desktop-dpr1/open-dismiss-outside",
+          "interaction:dialog@dark/desktop-dpr1/open",
+          "interaction:dialog@dark/desktop-dpr2/focus"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "open-hover-content",
+          "open-dismiss-outside",
+          "open",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-save",
+        "property": "caretColor",
+        "reference": "rgba(255,255,255,1)",
+        "canonicalRowSha256": "9044f1702c37160aff398e5aaecb4212a0c800a8e03f63dc9ad370c3b7a8b85e",
+        "originalMembershipSha256": "4f349bc4d9c1fec215f8bb615abf6d4ee94afdffaa29f56ef036dfdbb0d7eb88",
+        "observations": 32,
+        "canonicalSample": [
+          "interaction:dialog@light/desktop-dpr1/activate",
+          "interaction:dialog@light/desktop-dpr1/activate-leave",
+          "interaction:dialog@light/desktop-dpr1/open-hover-content",
+          "interaction:dialog@light/desktop-dpr1/open",
+          "interaction:dialog@light/desktop-dpr2/activate",
+          "interaction:dialog@light/desktop-dpr2/activate-leave",
+          "interaction:dialog@light/desktop-dpr2/open-hover-content",
+          "interaction:dialog@light/desktop-dpr2/open",
+          "interaction:dialog@dark/desktop-dpr1/activate",
+          "interaction:dialog@dark/desktop-dpr1/activate-leave",
+          "interaction:dialog@dark/desktop-dpr1/open-hover-content",
+          "interaction:dialog@dark/desktop-dpr1/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "open-hover-content",
+          "open"
+        ]
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-title",
+        "property": "caretColor",
+        "reference": "rgba(29,27,30,1)",
+        "canonicalRowSha256": "11d82d105306beb6721390f02982e3566d2c0d9de7538d9a37425ecd699f3e27",
+        "originalMembershipSha256": "e33b10b2cf31f330fa7bd5afa219e023b5e3a82adc6784a0b4ce7a77ce5a1263",
+        "observations": 32,
+        "canonicalSample": [
+          "interaction:dialog@light/desktop-dpr1/activate",
+          "interaction:dialog@light/desktop-dpr1/activate-leave",
+          "interaction:dialog@light/desktop-dpr1/open-hover-content",
+          "interaction:dialog@light/desktop-dpr1/open",
+          "interaction:dialog@light/desktop-dpr2/activate",
+          "interaction:dialog@light/desktop-dpr2/activate-leave",
+          "interaction:dialog@light/desktop-dpr2/open-hover-content",
+          "interaction:dialog@light/desktop-dpr2/open",
+          "interaction:dialog@dark/desktop-dpr1/activate",
+          "interaction:dialog@dark/desktop-dpr1/activate-leave",
+          "interaction:dialog@dark/desktop-dpr1/open-hover-content",
+          "interaction:dialog@dark/desktop-dpr1/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "open-hover-content",
+          "open"
+        ]
+      },
+      {
+        "family": "divider",
+        "element": "divider-above",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "f3e67c47f5491b31e49885b57b74326502c1dc0e7b908ac1c80278cc27fa91ec",
+        "originalMembershipSha256": "dcb5a6a9c80a992f054f031543daab26a2a997b483b938339c942d00493f8a37",
+        "observations": 18,
+        "canonicalSample": [
+          "static:divider@light/desktop",
+          "static:divider@light/tablet",
+          "static:divider@light/mobile",
+          "static:divider@contrast/desktop",
+          "static:divider@contrast/tablet",
+          "static:divider@contrast/mobile",
+          "static:divider@custom/desktop",
+          "static:divider@custom/tablet",
+          "static:divider@custom/mobile",
+          "static:divider@light/comparison",
+          "static:divider@contrast/comparison",
+          "static:divider@custom/comparison"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "divider",
+        "element": "divider-above",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "db02239c6d7bf717f7dedef0c202df83d8bc9c144ab5406e4d24857ad090a4d9",
+        "originalMembershipSha256": "05f1d0f08505484ed1f593306176a346677c5aefe1eb276de692ddd1661af740",
+        "observations": 6,
+        "canonicalSample": [
+          "static:divider@dark/desktop",
+          "static:divider@dark/tablet",
+          "static:divider@dark/mobile",
+          "static:divider@dark/comparison",
+          "interaction:divider@dark/desktop-dpr1/inspect",
+          "interaction:divider@dark/desktop-dpr2/inspect"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "divider",
+        "element": "divider-below",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "56d64fcd112136db0499154237c38ab5c233b61084c52d6a27b09b97649a810e",
+        "originalMembershipSha256": "945ce9611d1909602e624c0a4de4686d2347564ca1ca3928408eb791f01f4bf6",
+        "observations": 18,
+        "canonicalSample": [
+          "static:divider@light/desktop",
+          "static:divider@light/tablet",
+          "static:divider@light/mobile",
+          "static:divider@contrast/desktop",
+          "static:divider@contrast/tablet",
+          "static:divider@contrast/mobile",
+          "static:divider@custom/desktop",
+          "static:divider@custom/tablet",
+          "static:divider@custom/mobile",
+          "static:divider@light/comparison",
+          "static:divider@contrast/comparison",
+          "static:divider@custom/comparison"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "divider",
+        "element": "divider-below",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "0288fae4e09a898cec26c080eb98df9e3c3aa963e71a742947a65ce52dc8f94a",
+        "originalMembershipSha256": "45b9029c980f5636a21aa10058664b82558dfa4a05edcbaae678ec3657430d95",
+        "observations": 6,
+        "canonicalSample": [
+          "static:divider@dark/desktop",
+          "static:divider@dark/tablet",
+          "static:divider@dark/mobile",
+          "static:divider@dark/comparison",
+          "interaction:divider@dark/desktop-dpr1/inspect",
+          "interaction:divider@dark/desktop-dpr2/inspect"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "divider",
+        "element": "divider-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "c880bee684179925acc02f36147a9f2939bc0d8f87b04cc7c567c4b6c591a24d",
+        "originalMembershipSha256": "d4032c87f7fb3f3d4120f797645696dd7a01a68f1d470d01da1a4d7249ff8735",
+        "observations": 18,
+        "canonicalSample": [
+          "static:divider@light/desktop",
+          "static:divider@light/tablet",
+          "static:divider@light/mobile",
+          "static:divider@contrast/desktop",
+          "static:divider@contrast/tablet",
+          "static:divider@contrast/mobile",
+          "static:divider@custom/desktop",
+          "static:divider@custom/tablet",
+          "static:divider@custom/mobile",
+          "static:divider@light/comparison",
+          "static:divider@contrast/comparison",
+          "static:divider@custom/comparison"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "divider",
+        "element": "divider-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "9fad45c1d67afaa203d98203956b44681a9fe463beed221fd9379f89cadd9523",
+        "originalMembershipSha256": "e8f2900a7c29321046a1cfbc12076fc463c1b2ebac70bdab16c18190655e9a73",
+        "observations": 6,
+        "canonicalSample": [
+          "static:divider@dark/desktop",
+          "static:divider@dark/tablet",
+          "static:divider@dark/mobile",
+          "static:divider@dark/comparison",
+          "interaction:divider@dark/desktop-dpr1/inspect",
+          "interaction:divider@dark/desktop-dpr2/inspect"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "expansion",
+        "element": "expansion-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "8114426388994a5c7f901a2376cb14e24a95d62ae67b92e23d2487217cf51cd2",
+        "originalMembershipSha256": "abc3142b55916ceee3f0c90b1186505f9674526b636558542f9d6ced20debe9a",
+        "observations": 51,
+        "canonicalSample": [
+          "static:expansion@light/desktop",
+          "static:expansion@light/tablet",
+          "static:expansion@light/mobile",
+          "static:expansion@contrast/desktop",
+          "static:expansion@contrast/tablet",
+          "static:expansion@contrast/mobile",
+          "static:expansion@custom/desktop",
+          "static:expansion@custom/tablet",
+          "static:expansion@custom/mobile",
+          "interaction:expansion@light/desktop-dpr1/focus",
+          "interaction:expansion@light/desktop-dpr1/hover",
+          "interaction:expansion@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "open"
+        ]
+      },
+      {
+        "family": "expansion",
+        "element": "expansion-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "e1f7dd16d36cf12548e5a44974c31f6176053cf511c582e758f6d8ae62e48ff9",
+        "originalMembershipSha256": "b59a21b908f7a0fc68c44038626b1a08d7ea1ccf1e94986c82774b56f283c03a",
+        "observations": 17,
+        "canonicalSample": [
+          "static:expansion@dark/desktop",
+          "static:expansion@dark/tablet",
+          "static:expansion@dark/mobile",
+          "interaction:expansion@dark/desktop-dpr1/focus",
+          "interaction:expansion@dark/desktop-dpr1/hover",
+          "interaction:expansion@dark/desktop-dpr1/held",
+          "interaction:expansion@dark/desktop-dpr1/activate",
+          "interaction:expansion@dark/desktop-dpr1/activate-leave",
+          "interaction:expansion@dark/desktop-dpr1/disabled",
+          "interaction:expansion@dark/desktop-dpr1/open",
+          "interaction:expansion@dark/desktop-dpr2/focus",
+          "interaction:expansion@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "open"
+        ]
+      },
+      {
+        "family": "expansion",
+        "element": "expansion-title",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "6cbad431925eb391cb79e83ecbe3fa8e7a5474cf7d6133f17cf5ef025cde2efc",
+        "originalMembershipSha256": "655fd1fcf9373791b825d7819524eeffbb93fd052a1f9d3ad58b80a5a1608c8a",
+        "observations": 45,
+        "canonicalSample": [
+          "static:expansion@light/desktop",
+          "static:expansion@light/tablet",
+          "static:expansion@light/mobile",
+          "static:expansion@contrast/desktop",
+          "static:expansion@contrast/tablet",
+          "static:expansion@contrast/mobile",
+          "static:expansion@custom/desktop",
+          "static:expansion@custom/tablet",
+          "static:expansion@custom/mobile",
+          "interaction:expansion@light/desktop-dpr1/focus",
+          "interaction:expansion@light/desktop-dpr1/hover",
+          "interaction:expansion@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "open"
+        ]
+      },
+      {
+        "family": "expansion",
+        "element": "expansion-title",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "c214b554227f47680fa8c184137a0fba485c95902bff4a8ab29aeb216616e8bf",
+        "originalMembershipSha256": "24c6f506be6d91c5d336e17a22e7c56e513c6dccd2858725a1bcc7aa5f3c5040",
+        "observations": 15,
+        "canonicalSample": [
+          "static:expansion@dark/desktop",
+          "static:expansion@dark/tablet",
+          "static:expansion@dark/mobile",
+          "interaction:expansion@dark/desktop-dpr1/focus",
+          "interaction:expansion@dark/desktop-dpr1/hover",
+          "interaction:expansion@dark/desktop-dpr1/held",
+          "interaction:expansion@dark/desktop-dpr1/activate",
+          "interaction:expansion@dark/desktop-dpr1/activate-leave",
+          "interaction:expansion@dark/desktop-dpr1/open",
+          "interaction:expansion@dark/desktop-dpr2/focus",
+          "interaction:expansion@dark/desktop-dpr2/hover",
+          "interaction:expansion@dark/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "open"
+        ]
+      },
+      {
+        "family": "expansion",
+        "element": "expansion-title",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,0.38)",
+        "canonicalRowSha256": "071db04ec3b0af5778270bc7badae980e64d20a5c11d7ae139de1d129d619c18",
+        "originalMembershipSha256": "13200a898c8e7f7f85fed37314f045bbcd0faf6bb26f03ff862a59343d9684c0",
+        "observations": 6,
+        "canonicalSample": [
+          "interaction:expansion@light/desktop-dpr1/disabled",
+          "interaction:expansion@light/desktop-dpr2/disabled",
+          "interaction:expansion@contrast/desktop-dpr1/disabled",
+          "interaction:expansion@contrast/desktop-dpr2/disabled",
+          "interaction:expansion@custom/desktop-dpr1/disabled",
+          "interaction:expansion@custom/desktop-dpr2/disabled"
+        ],
+        "states": [
+          "disabled"
+        ]
+      },
+      {
+        "family": "expansion",
+        "element": "expansion-title",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,0.38)",
+        "canonicalRowSha256": "9792765b4105ee20d17fd1e9bfc722616a6eb0266a36409ba7d00c3667b0b979",
+        "originalMembershipSha256": "72fa2157adda022948aca4beab0550e603706783422f2a61b3cfee463ab71ead",
+        "observations": 2,
+        "canonicalSample": [
+          "interaction:expansion@dark/desktop-dpr1/disabled",
+          "interaction:expansion@dark/desktop-dpr2/disabled"
+        ],
+        "states": [
+          "disabled"
+        ]
+      },
+      {
+        "family": "grid-list",
+        "element": "grid-list-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "53761ebd41c35b9c5b6182db3fcc4df5e01ba6479dd1d408e0684418cb99e383",
+        "originalMembershipSha256": "4c3b6d9b5b9696709c86df24a01e867473257dc8c59bcc42ca38896017594feb",
+        "observations": 39,
+        "canonicalSample": [
+          "static:grid-list@light/desktop",
+          "static:grid-list@light/tablet",
+          "static:grid-list@light/mobile",
+          "static:grid-list@contrast/desktop",
+          "static:grid-list@contrast/tablet",
+          "static:grid-list@contrast/mobile",
+          "static:grid-list@custom/desktop",
+          "static:grid-list@custom/tablet",
+          "static:grid-list@custom/mobile",
+          "interaction:grid-list@light/desktop-dpr1/focus",
+          "interaction:grid-list@light/desktop-dpr1/hover",
+          "interaction:grid-list@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "grid-list",
+        "element": "grid-list-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "776028b0f5f4d830e1e1ca25d3ed4abc7e65d334a91259368d73b722aad4506b",
+        "originalMembershipSha256": "a3fcbcb40f9c2a1009f80d1787b6b79bd9896a44b3b0d239ffa955d47330a309",
+        "observations": 13,
+        "canonicalSample": [
+          "static:grid-list@dark/desktop",
+          "static:grid-list@dark/tablet",
+          "static:grid-list@dark/mobile",
+          "interaction:grid-list@dark/desktop-dpr1/focus",
+          "interaction:grid-list@dark/desktop-dpr1/hover",
+          "interaction:grid-list@dark/desktop-dpr1/held",
+          "interaction:grid-list@dark/desktop-dpr1/activate",
+          "interaction:grid-list@dark/desktop-dpr1/activate-leave",
+          "interaction:grid-list@dark/desktop-dpr2/focus",
+          "interaction:grid-list@dark/desktop-dpr2/hover",
+          "interaction:grid-list@dark/desktop-dpr2/held",
+          "interaction:grid-list@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "grid-list",
+        "element": "grid-tile-one",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "c8ed0834221044efa0402af1f0d26d42bad3eb2e4828b36ed169553f79bcacfc",
+        "originalMembershipSha256": "b5249bdbd76e1c5c72b8dc043239296bd45e5a15726cccbd61711ae91de75703",
+        "observations": 39,
+        "canonicalSample": [
+          "static:grid-list@light/desktop",
+          "static:grid-list@light/tablet",
+          "static:grid-list@light/mobile",
+          "static:grid-list@contrast/desktop",
+          "static:grid-list@contrast/tablet",
+          "static:grid-list@contrast/mobile",
+          "static:grid-list@custom/desktop",
+          "static:grid-list@custom/tablet",
+          "static:grid-list@custom/mobile",
+          "interaction:grid-list@light/desktop-dpr1/focus",
+          "interaction:grid-list@light/desktop-dpr1/hover",
+          "interaction:grid-list@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "grid-list",
+        "element": "grid-tile-one",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "ef4747684b3c47574c3219a981be3924579d20a2e0dfded3e2f41024d86a3468",
+        "originalMembershipSha256": "4986712371edd463da2d265335ebdb123d445818c5a028b1bb64d06706ca64bb",
+        "observations": 13,
+        "canonicalSample": [
+          "static:grid-list@dark/desktop",
+          "static:grid-list@dark/tablet",
+          "static:grid-list@dark/mobile",
+          "interaction:grid-list@dark/desktop-dpr1/focus",
+          "interaction:grid-list@dark/desktop-dpr1/hover",
+          "interaction:grid-list@dark/desktop-dpr1/held",
+          "interaction:grid-list@dark/desktop-dpr1/activate",
+          "interaction:grid-list@dark/desktop-dpr1/activate-leave",
+          "interaction:grid-list@dark/desktop-dpr2/focus",
+          "interaction:grid-list@dark/desktop-dpr2/hover",
+          "interaction:grid-list@dark/desktop-dpr2/held",
+          "interaction:grid-list@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "grid-list",
+        "element": "grid-tile-two",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "d9ee518660daad98ad23c3181a26b5ee6314a7a622461f8e3717421afa15bfec",
+        "originalMembershipSha256": "9a8af7df4b6dfc792ebcfaea1e7c980151f45d85d734521393cbadc4f27f7281",
+        "observations": 39,
+        "canonicalSample": [
+          "static:grid-list@light/desktop",
+          "static:grid-list@light/tablet",
+          "static:grid-list@light/mobile",
+          "static:grid-list@contrast/desktop",
+          "static:grid-list@contrast/tablet",
+          "static:grid-list@contrast/mobile",
+          "static:grid-list@custom/desktop",
+          "static:grid-list@custom/tablet",
+          "static:grid-list@custom/mobile",
+          "interaction:grid-list@light/desktop-dpr1/focus",
+          "interaction:grid-list@light/desktop-dpr1/hover",
+          "interaction:grid-list@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "grid-list",
+        "element": "grid-tile-two",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "2c58a78e4ba9f7b55df8dee551c15c71921556fa9fda58f8e76b9f5c2777b4bb",
+        "originalMembershipSha256": "7ab68013a6630c9ed86ba62d449109533e90d7a800db5155fb04e10a53480ffd",
+        "observations": 13,
+        "canonicalSample": [
+          "static:grid-list@dark/desktop",
+          "static:grid-list@dark/tablet",
+          "static:grid-list@dark/mobile",
+          "interaction:grid-list@dark/desktop-dpr1/focus",
+          "interaction:grid-list@dark/desktop-dpr1/hover",
+          "interaction:grid-list@dark/desktop-dpr1/held",
+          "interaction:grid-list@dark/desktop-dpr1/activate",
+          "interaction:grid-list@dark/desktop-dpr1/activate-leave",
+          "interaction:grid-list@dark/desktop-dpr2/focus",
+          "interaction:grid-list@dark/desktop-dpr2/hover",
+          "interaction:grid-list@dark/desktop-dpr2/held",
+          "interaction:grid-list@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "icon",
+        "element": "icon-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "e3fc8e7dda0fc7c8716741ac2f6a8b1d2bce991bee6213ddf57e9ff5a0530c97",
+        "originalMembershipSha256": "590fbf7a59b9aec49f18d4468c8f3c861bbf8216ce39afcc3b68d7c17534d0f4",
+        "observations": 15,
+        "canonicalSample": [
+          "static:icon@light/desktop",
+          "static:icon@light/tablet",
+          "static:icon@light/mobile",
+          "static:icon@contrast/desktop",
+          "static:icon@contrast/tablet",
+          "static:icon@contrast/mobile",
+          "static:icon@custom/desktop",
+          "static:icon@custom/tablet",
+          "static:icon@custom/mobile",
+          "interaction:icon@light/desktop-dpr1/inspect",
+          "interaction:icon@light/desktop-dpr2/inspect",
+          "interaction:icon@contrast/desktop-dpr1/inspect"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "icon",
+        "element": "icon-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "acfb948383b21df8f7d68a5751b8eb1ff4dd8ddf9fc45c9016ddbc7ab49b120b",
+        "originalMembershipSha256": "e52586ef4dac2aa94dfeadcfe6f46927ab1e9c1cce9e314dda7eb2b21685041c",
+        "observations": 5,
+        "canonicalSample": [
+          "static:icon@dark/desktop",
+          "static:icon@dark/tablet",
+          "static:icon@dark/mobile",
+          "interaction:icon@dark/desktop-dpr1/inspect",
+          "interaction:icon@dark/desktop-dpr2/inspect"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "list",
+        "element": "list-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "48c421dfa283ac416fbd0e52bcab38f3a5fe96fbee30ea70e13fb56dd84aa7d2",
+        "originalMembershipSha256": "fab7a2f8b5327fdf7179cb5afcb22908e5e7e43a0e783866c1d0a95ce7502836",
+        "observations": 39,
+        "canonicalSample": [
+          "static:list@light/desktop",
+          "static:list@light/tablet",
+          "static:list@light/mobile",
+          "static:list@contrast/desktop",
+          "static:list@contrast/tablet",
+          "static:list@contrast/mobile",
+          "static:list@custom/desktop",
+          "static:list@custom/tablet",
+          "static:list@custom/mobile",
+          "interaction:list@light/desktop-dpr1/focus",
+          "interaction:list@light/desktop-dpr1/hover",
+          "interaction:list@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "list",
+        "element": "list-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "d7d2d6d4faed74332b55d6880b9bf759a1bd429a353f073a06b29aa3ab82f8fc",
+        "originalMembershipSha256": "3e4ee2a6fc1336ebf91e9b31eebf45e38079b4f5d57111e6116cd5d4ffc823fa",
+        "observations": 13,
+        "canonicalSample": [
+          "static:list@dark/desktop",
+          "static:list@dark/tablet",
+          "static:list@dark/mobile",
+          "interaction:list@dark/desktop-dpr1/focus",
+          "interaction:list@dark/desktop-dpr1/hover",
+          "interaction:list@dark/desktop-dpr1/held",
+          "interaction:list@dark/desktop-dpr1/activate",
+          "interaction:list@dark/desktop-dpr1/activate-leave",
+          "interaction:list@dark/desktop-dpr2/focus",
+          "interaction:list@dark/desktop-dpr2/hover",
+          "interaction:list@dark/desktop-dpr2/held",
+          "interaction:list@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "menu",
+        "element": "menu-primary",
+        "property": "caretColor",
+        "reference": "rgba(255,255,255,1)",
+        "canonicalRowSha256": "b946046d08cde1ce698f5f5a7f0dfb771b1ad508b043b28657f37bd1b60b782f",
+        "originalMembershipSha256": "f5a600fa596546908e7144ea2c718698192400214b6f6e3ce3aa59fb14124678",
+        "observations": 70,
+        "canonicalSample": [
+          "static:menu@light/desktop",
+          "static:menu@light/tablet",
+          "static:menu@light/mobile",
+          "static:menu@contrast/desktop",
+          "static:menu@contrast/tablet",
+          "static:menu@contrast/mobile",
+          "static:menu@custom/desktop",
+          "static:menu@custom/tablet",
+          "static:menu@custom/mobile",
+          "interaction:menu@light/desktop-dpr1/focus",
+          "interaction:menu@light/desktop-dpr1/hover",
+          "interaction:menu@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "open-hover-content",
+          "open-dismiss-outside",
+          "open-dismiss-canvas",
+          "disabled",
+          "open",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "menu",
+        "element": "menu-primary",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "d32c8ee6960025374b676d331e5560027310b879a4f6e839390dba37be8b52fb",
+        "originalMembershipSha256": "2060c3fe68d4e2a842fe1552f3d9b59bda4bb8ac019a5959d67e7454633e8633",
+        "observations": 24,
+        "canonicalSample": [
+          "static:menu@dark/desktop",
+          "static:menu@dark/tablet",
+          "static:menu@dark/mobile",
+          "interaction:menu@dark/desktop-dpr1/focus",
+          "interaction:menu@dark/desktop-dpr1/hover",
+          "interaction:menu@dark/desktop-dpr1/held",
+          "interaction:menu@dark/desktop-dpr1/activate",
+          "interaction:menu@dark/desktop-dpr1/activate-leave",
+          "interaction:menu@dark/desktop-dpr1/open-hover-content",
+          "interaction:menu@dark/desktop-dpr1/open-dismiss-outside",
+          "interaction:menu@dark/desktop-dpr1/open-dismiss-canvas",
+          "interaction:menu@dark/desktop-dpr1/disabled"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "open-hover-content",
+          "open-dismiss-outside",
+          "open-dismiss-canvas",
+          "disabled",
+          "open",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "paginator",
+        "element": "paginator-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "4f0724b4878f6d16a09a5a7d56f5430c4c30b41f74d8bb17af70fbb133c7d6ad",
+        "originalMembershipSha256": "bd44ceff4fda5864ee61487c0396712f6f2bac884ce6dc17c84be6ca5e897713",
+        "observations": 39,
+        "canonicalSample": [
+          "static:paginator@light/desktop",
+          "static:paginator@light/tablet",
+          "static:paginator@light/mobile",
+          "static:paginator@contrast/desktop",
+          "static:paginator@contrast/tablet",
+          "static:paginator@contrast/mobile",
+          "static:paginator@custom/desktop",
+          "static:paginator@custom/tablet",
+          "static:paginator@custom/mobile",
+          "interaction:paginator@light/desktop-dpr1/focus",
+          "interaction:paginator@light/desktop-dpr1/hover",
+          "interaction:paginator@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "paginator",
+        "element": "paginator-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "3d8ff50f1c1909f5f6b1bc9ec23ba7cbbad654b54cb8e4d4703fddfdaf45b229",
+        "originalMembershipSha256": "34f5793d40f0fd4fb345a7f6a880ec0db9d7ad05ca4be5820eb7a26cc37c609c",
+        "observations": 13,
+        "canonicalSample": [
+          "static:paginator@dark/desktop",
+          "static:paginator@dark/tablet",
+          "static:paginator@dark/mobile",
+          "interaction:paginator@dark/desktop-dpr1/focus",
+          "interaction:paginator@dark/desktop-dpr1/hover",
+          "interaction:paginator@dark/desktop-dpr1/held",
+          "interaction:paginator@dark/desktop-dpr1/activate",
+          "interaction:paginator@dark/desktop-dpr1/activate-leave",
+          "interaction:paginator@dark/desktop-dpr2/focus",
+          "interaction:paginator@dark/desktop-dpr2/hover",
+          "interaction:paginator@dark/desktop-dpr2/held",
+          "interaction:paginator@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "paginator",
+        "element": "paginator-range",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "69d820210f6e2d10921f89fba84f01e72e61ceaa158f6cac9e195a197ef62602",
+        "originalMembershipSha256": "12600539745af7065b9e3888b9825fce68d7571e014ceb7d525ffd2921aed959",
+        "observations": 39,
+        "canonicalSample": [
+          "static:paginator@light/desktop",
+          "static:paginator@light/tablet",
+          "static:paginator@light/mobile",
+          "static:paginator@contrast/desktop",
+          "static:paginator@contrast/tablet",
+          "static:paginator@contrast/mobile",
+          "static:paginator@custom/desktop",
+          "static:paginator@custom/tablet",
+          "static:paginator@custom/mobile",
+          "interaction:paginator@light/desktop-dpr1/focus",
+          "interaction:paginator@light/desktop-dpr1/hover",
+          "interaction:paginator@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "paginator",
+        "element": "paginator-range",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "52d8c8e9c87cf6efc677228bd81807026801cc96e5fda7f08012ccd10f2374c3",
+        "originalMembershipSha256": "d398e4d0eed1837cca5dfe7a2f6a9379895924145feb42a08c4ded91c88b75d6",
+        "observations": 13,
+        "canonicalSample": [
+          "static:paginator@dark/desktop",
+          "static:paginator@dark/tablet",
+          "static:paginator@dark/mobile",
+          "interaction:paginator@dark/desktop-dpr1/focus",
+          "interaction:paginator@dark/desktop-dpr1/hover",
+          "interaction:paginator@dark/desktop-dpr1/held",
+          "interaction:paginator@dark/desktop-dpr1/activate",
+          "interaction:paginator@dark/desktop-dpr1/activate-leave",
+          "interaction:paginator@dark/desktop-dpr2/focus",
+          "interaction:paginator@dark/desktop-dpr2/hover",
+          "interaction:paginator@dark/desktop-dpr2/held",
+          "interaction:paginator@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "paginator",
+        "element": "paginator-size",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "b895cb04cc18dd5012faab7215cbc82c10c8c9860b2d5c3c9c714444a422382f",
+        "originalMembershipSha256": "fcd60a3147696e079914ca626321434ea102e7fdc38d1171a58d87bc6b09ed4f",
+        "observations": 39,
+        "canonicalSample": [
+          "static:paginator@light/desktop",
+          "static:paginator@light/tablet",
+          "static:paginator@light/mobile",
+          "static:paginator@contrast/desktop",
+          "static:paginator@contrast/tablet",
+          "static:paginator@contrast/mobile",
+          "static:paginator@custom/desktop",
+          "static:paginator@custom/tablet",
+          "static:paginator@custom/mobile",
+          "interaction:paginator@light/desktop-dpr1/focus",
+          "interaction:paginator@light/desktop-dpr1/hover",
+          "interaction:paginator@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "paginator",
+        "element": "paginator-size",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "2a7bb7ea4dc17ffb2654d5203edbdf6652742fda24c0435ea019a50e386539fd",
+        "originalMembershipSha256": "6dad3e5a8f8446b04fa72ea1bbb4058ef45eed34c3fdc70b588993aa0825b51e",
+        "observations": 13,
+        "canonicalSample": [
+          "static:paginator@dark/desktop",
+          "static:paginator@dark/tablet",
+          "static:paginator@dark/mobile",
+          "interaction:paginator@dark/desktop-dpr1/focus",
+          "interaction:paginator@dark/desktop-dpr1/hover",
+          "interaction:paginator@dark/desktop-dpr1/held",
+          "interaction:paginator@dark/desktop-dpr1/activate",
+          "interaction:paginator@dark/desktop-dpr1/activate-leave",
+          "interaction:paginator@dark/desktop-dpr2/focus",
+          "interaction:paginator@dark/desktop-dpr2/hover",
+          "interaction:paginator@dark/desktop-dpr2/held",
+          "interaction:paginator@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "progress-bar",
+        "element": "progress-bar-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "d1b5b5c2e0e12c2312571c5c6885aea7b393425ac8a96ceacd9885392fc96942",
+        "originalMembershipSha256": "0fba30a6c4110f0905c64bba41a1df41ebbc1a3010488900b13eb15a82798faf",
+        "observations": 15,
+        "canonicalSample": [
+          "static:progress-bar@light/desktop",
+          "static:progress-bar@light/tablet",
+          "static:progress-bar@light/mobile",
+          "static:progress-bar@contrast/desktop",
+          "static:progress-bar@contrast/tablet",
+          "static:progress-bar@contrast/mobile",
+          "static:progress-bar@custom/desktop",
+          "static:progress-bar@custom/tablet",
+          "static:progress-bar@custom/mobile",
+          "interaction:progress-bar@light/desktop-dpr1/inspect",
+          "interaction:progress-bar@light/desktop-dpr2/inspect",
+          "interaction:progress-bar@contrast/desktop-dpr1/inspect"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "progress-bar",
+        "element": "progress-bar-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "5509364c0abf9f9a5f69524559bdc7ce94009532698d4d94183b13513cdb056c",
+        "originalMembershipSha256": "0c3a44d1a8e7bf6e04bd5ded648421708fea52fabb0f645b359a68f1a9f7a874",
+        "observations": 5,
+        "canonicalSample": [
+          "static:progress-bar@dark/desktop",
+          "static:progress-bar@dark/tablet",
+          "static:progress-bar@dark/mobile",
+          "interaction:progress-bar@dark/desktop-dpr1/inspect",
+          "interaction:progress-bar@dark/desktop-dpr2/inspect"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "progress-spinner",
+        "element": "progress-spinner-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "a9db06d674d8691c8fc169b05e77bdb69f92b71e03be0fd084f6ac231aed38ab",
+        "originalMembershipSha256": "2d17b75ceaa2eec2285cd977b818d6bd7deb0e1df60e53fd248c6eaf97a83ff5",
+        "observations": 15,
+        "canonicalSample": [
+          "static:progress-spinner@light/desktop",
+          "static:progress-spinner@light/tablet",
+          "static:progress-spinner@light/mobile",
+          "static:progress-spinner@contrast/desktop",
+          "static:progress-spinner@contrast/tablet",
+          "static:progress-spinner@contrast/mobile",
+          "static:progress-spinner@custom/desktop",
+          "static:progress-spinner@custom/tablet",
+          "static:progress-spinner@custom/mobile",
+          "interaction:progress-spinner@light/desktop-dpr1/inspect",
+          "interaction:progress-spinner@light/desktop-dpr2/inspect",
+          "interaction:progress-spinner@contrast/desktop-dpr1/inspect"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "progress-spinner",
+        "element": "progress-spinner-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "590f973fc39e90475d1f05423cfc6751cf08c28bd44d1544173369e8500cd647",
+        "originalMembershipSha256": "c1bd9bfcfff24f8b407d7d5da1f316678925a27cd91693ec223e922d1efa97f6",
+        "observations": 5,
+        "canonicalSample": [
+          "static:progress-spinner@dark/desktop",
+          "static:progress-spinner@dark/tablet",
+          "static:progress-spinner@dark/mobile",
+          "interaction:progress-spinner@dark/desktop-dpr1/inspect",
+          "interaction:progress-spinner@dark/desktop-dpr2/inspect"
+        ],
+        "states": [
+          "static",
+          "inspect"
+        ]
+      },
+      {
+        "family": "radio",
+        "element": "radio-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "3daa9a7881a8497cbab0098e2dec328a2e6bc77b02b7cbee0aecf2a695a356a2",
+        "originalMembershipSha256": "fc58c306761d862677e9fbcd6d0c1600ef7860834210e8334c583252ed554c32",
+        "observations": 51,
+        "canonicalSample": [
+          "static:radio@light/desktop",
+          "static:radio@light/tablet",
+          "static:radio@light/mobile",
+          "static:radio@contrast/desktop",
+          "static:radio@contrast/tablet",
+          "static:radio@contrast/mobile",
+          "static:radio@custom/desktop",
+          "static:radio@custom/tablet",
+          "static:radio@custom/mobile",
+          "interaction:radio@light/desktop-dpr1/focus",
+          "interaction:radio@light/desktop-dpr1/hover",
+          "interaction:radio@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "radio",
+        "element": "radio-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "6a0a5f36b23452a72a012570e8dfe35218188244cbe9acbc725241daef233163",
+        "originalMembershipSha256": "212d2301a36eb0dc29e168111a1f3d0bf99d0d1deb5c5431ff1cee4d728ee50e",
+        "observations": 17,
+        "canonicalSample": [
+          "static:radio@dark/desktop",
+          "static:radio@dark/tablet",
+          "static:radio@dark/mobile",
+          "interaction:radio@dark/desktop-dpr1/focus",
+          "interaction:radio@dark/desktop-dpr1/hover",
+          "interaction:radio@dark/desktop-dpr1/held",
+          "interaction:radio@dark/desktop-dpr1/activate",
+          "interaction:radio@dark/desktop-dpr1/activate-leave",
+          "interaction:radio@dark/desktop-dpr1/disabled",
+          "interaction:radio@dark/desktop-dpr1/selected",
+          "interaction:radio@dark/desktop-dpr2/focus",
+          "interaction:radio@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "radio",
+        "element": "radio-solo-label",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "8b3ffd0b0d4e92a59b12ce5b8495d715f2bd5e8288e954613986d7f29c6d75da",
+        "originalMembershipSha256": "b482e26bf6e17bf377fd7dc3356fb7ba31ad2925074074b2ca3438e66c0d28b2",
+        "observations": 45,
+        "canonicalSample": [
+          "static:radio@light/desktop",
+          "static:radio@light/tablet",
+          "static:radio@light/mobile",
+          "static:radio@contrast/desktop",
+          "static:radio@contrast/tablet",
+          "static:radio@contrast/mobile",
+          "static:radio@custom/desktop",
+          "static:radio@custom/tablet",
+          "static:radio@custom/mobile",
+          "interaction:radio@light/desktop-dpr1/focus",
+          "interaction:radio@light/desktop-dpr1/hover",
+          "interaction:radio@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "selected"
+        ]
+      },
+      {
+        "family": "radio",
+        "element": "radio-solo-label",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "4b24095ca66d6900d394aaca70992b9f0bf70bfd0f8d400e36fea548d277fa5b",
+        "originalMembershipSha256": "b154530762910ab9e3a9d3c91cb86a1f77242822caa2f1fb617790f83974cdce",
+        "observations": 15,
+        "canonicalSample": [
+          "static:radio@dark/desktop",
+          "static:radio@dark/tablet",
+          "static:radio@dark/mobile",
+          "interaction:radio@dark/desktop-dpr1/focus",
+          "interaction:radio@dark/desktop-dpr1/hover",
+          "interaction:radio@dark/desktop-dpr1/held",
+          "interaction:radio@dark/desktop-dpr1/activate",
+          "interaction:radio@dark/desktop-dpr1/activate-leave",
+          "interaction:radio@dark/desktop-dpr1/selected",
+          "interaction:radio@dark/desktop-dpr2/focus",
+          "interaction:radio@dark/desktop-dpr2/hover",
+          "interaction:radio@dark/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "selected"
+        ]
+      },
+      {
+        "family": "radio",
+        "element": "radio-solo-label",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,0.38)",
+        "canonicalRowSha256": "5249d33ad005a15e45479c3b93b85a3b63d8f5d4ff71c0cb0967528622f2daa1",
+        "originalMembershipSha256": "c60c0334d8e602556c8ef0353ef9afae2d9cfbe69bc248767e6ecb4040906b33",
+        "observations": 6,
+        "canonicalSample": [
+          "interaction:radio@light/desktop-dpr1/disabled",
+          "interaction:radio@light/desktop-dpr2/disabled",
+          "interaction:radio@contrast/desktop-dpr1/disabled",
+          "interaction:radio@contrast/desktop-dpr2/disabled",
+          "interaction:radio@custom/desktop-dpr1/disabled",
+          "interaction:radio@custom/desktop-dpr2/disabled"
+        ],
+        "states": [
+          "disabled"
+        ]
+      },
+      {
+        "family": "radio",
+        "element": "radio-solo-label",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,0.38)",
+        "canonicalRowSha256": "ebc110454d5f9b3a73815487d5f5509f325413c3d1c60bb0e992be592c656736",
+        "originalMembershipSha256": "14397055c27b016e766a7b6c0b974e5b5e1d9366783528ed17ea1131b88939dc",
+        "observations": 2,
+        "canonicalSample": [
+          "interaction:radio@dark/desktop-dpr1/disabled",
+          "interaction:radio@dark/desktop-dpr2/disabled"
+        ],
+        "states": [
+          "disabled"
+        ]
+      },
+      {
+        "family": "radio",
+        "element": "radio-team-label",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "cdeebaae9576e0108adcf1674ec49948a41fe60ec239c0790b071c8039a8a7d1",
+        "originalMembershipSha256": "111b38839f13a47aed913478f319e367e56ac5f927af5fed03a8070897d74b96",
+        "observations": 45,
+        "canonicalSample": [
+          "static:radio@light/desktop",
+          "static:radio@light/tablet",
+          "static:radio@light/mobile",
+          "static:radio@contrast/desktop",
+          "static:radio@contrast/tablet",
+          "static:radio@contrast/mobile",
+          "static:radio@custom/desktop",
+          "static:radio@custom/tablet",
+          "static:radio@custom/mobile",
+          "interaction:radio@light/desktop-dpr1/focus",
+          "interaction:radio@light/desktop-dpr1/hover",
+          "interaction:radio@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "selected"
+        ]
+      },
+      {
+        "family": "radio",
+        "element": "radio-team-label",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "6d640f9f8b8db92000f46b7818ace3425e73642b29a68878ed980e73bcb30e5f",
+        "originalMembershipSha256": "8b3f24b7b7e5040d5e604687dda84c74e546a428f1578adf0b4f615075f7c26d",
+        "observations": 15,
+        "canonicalSample": [
+          "static:radio@dark/desktop",
+          "static:radio@dark/tablet",
+          "static:radio@dark/mobile",
+          "interaction:radio@dark/desktop-dpr1/focus",
+          "interaction:radio@dark/desktop-dpr1/hover",
+          "interaction:radio@dark/desktop-dpr1/held",
+          "interaction:radio@dark/desktop-dpr1/activate",
+          "interaction:radio@dark/desktop-dpr1/activate-leave",
+          "interaction:radio@dark/desktop-dpr1/selected",
+          "interaction:radio@dark/desktop-dpr2/focus",
+          "interaction:radio@dark/desktop-dpr2/hover",
+          "interaction:radio@dark/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "selected"
+        ]
+      },
+      {
+        "family": "radio",
+        "element": "radio-team-label",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,0.38)",
+        "canonicalRowSha256": "7b7af412b463ad68a97e63117783d8827956ff98a07152cf03284ae6f9370ac2",
+        "originalMembershipSha256": "7d5ef484c00160ea48c1c079a85cad9093825a026ae89329abb9f54696c525b4",
+        "observations": 6,
+        "canonicalSample": [
+          "interaction:radio@light/desktop-dpr1/disabled",
+          "interaction:radio@light/desktop-dpr2/disabled",
+          "interaction:radio@contrast/desktop-dpr1/disabled",
+          "interaction:radio@contrast/desktop-dpr2/disabled",
+          "interaction:radio@custom/desktop-dpr1/disabled",
+          "interaction:radio@custom/desktop-dpr2/disabled"
+        ],
+        "states": [
+          "disabled"
+        ]
+      },
+      {
+        "family": "radio",
+        "element": "radio-team-label",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,0.38)",
+        "canonicalRowSha256": "786327151fddaa21e921bb8e7d78683a0fbe9f5e28d9a8f5fc9f60914387d5cf",
+        "originalMembershipSha256": "aa9d001b96fdfeb057e0884d4f9d86a0e302b56a197181d97e8efc1ab81846db",
+        "observations": 2,
+        "canonicalSample": [
+          "interaction:radio@dark/desktop-dpr1/disabled",
+          "interaction:radio@dark/desktop-dpr2/disabled"
+        ],
+        "states": [
+          "disabled"
+        ]
+      },
+      {
+        "family": "sidenav",
+        "element": "sidenav-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,30,1)",
+        "canonicalRowSha256": "1bfeb5b444d8c39479e96c451ed67d2c0cf462593e4d33123ca4f8bc447eeb54",
+        "originalMembershipSha256": "f01428a9dedc04c584ad2dfe3e6e705e792f963536a0b2158de37d8493c02fff",
+        "observations": 62,
+        "canonicalSample": [
+          "static:sidenav@light/desktop",
+          "static:sidenav@light/tablet",
+          "static:sidenav@light/mobile",
+          "static:sidenav@dark/desktop",
+          "static:sidenav@dark/tablet",
+          "static:sidenav@dark/mobile",
+          "static:sidenav@contrast/desktop",
+          "static:sidenav@contrast/tablet",
+          "static:sidenav@contrast/mobile",
+          "static:sidenav@custom/desktop",
+          "static:sidenav@custom/tablet",
+          "static:sidenav@custom/mobile"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "open",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "slide-toggle",
+        "element": "slide-toggle-label",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "980f6534c5b8d674023ba67fcc21fb62abeafa596f6d125c98cae40ee2131b71",
+        "originalMembershipSha256": "f78b757ffe4a43575484ca430685a360c06370dcc0cbf05689faf992b7c8440d",
+        "observations": 51,
+        "canonicalSample": [
+          "static:slide-toggle@light/desktop",
+          "static:slide-toggle@light/tablet",
+          "static:slide-toggle@light/mobile",
+          "static:slide-toggle@contrast/desktop",
+          "static:slide-toggle@contrast/tablet",
+          "static:slide-toggle@contrast/mobile",
+          "static:slide-toggle@custom/desktop",
+          "static:slide-toggle@custom/tablet",
+          "static:slide-toggle@custom/mobile",
+          "interaction:slide-toggle@light/desktop-dpr1/focus",
+          "interaction:slide-toggle@light/desktop-dpr1/hover",
+          "interaction:slide-toggle@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "slide-toggle",
+        "element": "slide-toggle-label",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "787ab01d6433fbf43e1bda8a8febba7ce3fce4a1a73f26c35dce9074323f07a7",
+        "originalMembershipSha256": "d5c5ae39cf748940fc116d1aabe34b1df00e03a4dc0ad836262f0807d3b78497",
+        "observations": 17,
+        "canonicalSample": [
+          "static:slide-toggle@dark/desktop",
+          "static:slide-toggle@dark/tablet",
+          "static:slide-toggle@dark/mobile",
+          "interaction:slide-toggle@dark/desktop-dpr1/focus",
+          "interaction:slide-toggle@dark/desktop-dpr1/hover",
+          "interaction:slide-toggle@dark/desktop-dpr1/held",
+          "interaction:slide-toggle@dark/desktop-dpr1/activate",
+          "interaction:slide-toggle@dark/desktop-dpr1/activate-leave",
+          "interaction:slide-toggle@dark/desktop-dpr1/disabled",
+          "interaction:slide-toggle@dark/desktop-dpr1/selected",
+          "interaction:slide-toggle@dark/desktop-dpr2/focus",
+          "interaction:slide-toggle@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "slide-toggle",
+        "element": "slide-toggle-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "2c0b60bd7c365f3ea631bbf4b425bfbbfddf51c826f82420c8f00798dc609c00",
+        "originalMembershipSha256": "e86833b4923362390335adc7cb96fc9c93192750390502efb5220cba928cdc4f",
+        "observations": 51,
+        "canonicalSample": [
+          "static:slide-toggle@light/desktop",
+          "static:slide-toggle@light/tablet",
+          "static:slide-toggle@light/mobile",
+          "static:slide-toggle@contrast/desktop",
+          "static:slide-toggle@contrast/tablet",
+          "static:slide-toggle@contrast/mobile",
+          "static:slide-toggle@custom/desktop",
+          "static:slide-toggle@custom/tablet",
+          "static:slide-toggle@custom/mobile",
+          "interaction:slide-toggle@light/desktop-dpr1/focus",
+          "interaction:slide-toggle@light/desktop-dpr1/hover",
+          "interaction:slide-toggle@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "slide-toggle",
+        "element": "slide-toggle-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "5f00d3d8d7052f410ccacec7170f0ad4ddede537f725bffd0eab049d0bc219f2",
+        "originalMembershipSha256": "0dab10f7912fef6ce90f708ce7687ed0e9f2c726010f8359d9689fdb69073eed",
+        "observations": 17,
+        "canonicalSample": [
+          "static:slide-toggle@dark/desktop",
+          "static:slide-toggle@dark/tablet",
+          "static:slide-toggle@dark/mobile",
+          "interaction:slide-toggle@dark/desktop-dpr1/focus",
+          "interaction:slide-toggle@dark/desktop-dpr1/hover",
+          "interaction:slide-toggle@dark/desktop-dpr1/held",
+          "interaction:slide-toggle@dark/desktop-dpr1/activate",
+          "interaction:slide-toggle@dark/desktop-dpr1/activate-leave",
+          "interaction:slide-toggle@dark/desktop-dpr1/disabled",
+          "interaction:slide-toggle@dark/desktop-dpr1/selected",
+          "interaction:slide-toggle@dark/desktop-dpr2/focus",
+          "interaction:slide-toggle@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "slider",
+        "element": "slider-primary",
+        "property": "caretColor",
+        "reference": "rgba(16,16,16,1)",
+        "canonicalRowSha256": "9230329b3b23f4bd0e41723b3579c410b277643a5354262a502bd146f4ed4f33",
+        "originalMembershipSha256": "67155072bc196d3d85cd368eaa609a1b92da5a3bf9a2a9cd76402c972774112f",
+        "observations": 70,
+        "canonicalSample": [
+          "static:slider@light/desktop",
+          "static:slider@light/tablet",
+          "static:slider@light/mobile",
+          "static:slider@dark/desktop",
+          "static:slider@dark/tablet",
+          "static:slider@dark/mobile",
+          "static:slider@contrast/desktop",
+          "static:slider@contrast/tablet",
+          "static:slider@contrast/mobile",
+          "static:slider@custom/desktop",
+          "static:slider@custom/tablet",
+          "static:slider@custom/mobile"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "drag-start",
+          "drag-end"
+        ]
+      },
+      {
+        "family": "slider",
+        "element": "slider-primary",
+        "property": "caretColor",
+        "reference": "rgba(197,197,197,1)",
+        "canonicalRowSha256": "50838208e331f233b586d2e5b22dd65b48fc9408a29d9fa8249c79d418e50a96",
+        "originalMembershipSha256": "9c9817b6297fe15aa1a00d313e04a4808b6eae3be52f7fe20182e9acf50b40e3",
+        "observations": 8,
+        "canonicalSample": [
+          "interaction:slider@light/desktop-dpr1/disabled",
+          "interaction:slider@light/desktop-dpr2/disabled",
+          "interaction:slider@dark/desktop-dpr1/disabled",
+          "interaction:slider@dark/desktop-dpr2/disabled",
+          "interaction:slider@contrast/desktop-dpr1/disabled",
+          "interaction:slider@contrast/desktop-dpr2/disabled",
+          "interaction:slider@custom/desktop-dpr1/disabled",
+          "interaction:slider@custom/desktop-dpr2/disabled"
+        ],
+        "states": [
+          "disabled"
+        ]
+      },
+      {
+        "family": "slider",
+        "element": "slider-start",
+        "property": "caretColor",
+        "reference": "rgba(16,16,16,1)",
+        "canonicalRowSha256": "15ba9e9e37215d9dc57ec3966b8fa39cc1af4fb8c297b41fd286a7ab70070dda",
+        "originalMembershipSha256": "137f0ae69db9b0c45c030ed5dfe442516656bcba68100ed69061e8ec8c30be50",
+        "observations": 70,
+        "canonicalSample": [
+          "static:slider@light/desktop",
+          "static:slider@light/tablet",
+          "static:slider@light/mobile",
+          "static:slider@dark/desktop",
+          "static:slider@dark/tablet",
+          "static:slider@dark/mobile",
+          "static:slider@contrast/desktop",
+          "static:slider@contrast/tablet",
+          "static:slider@contrast/mobile",
+          "static:slider@custom/desktop",
+          "static:slider@custom/tablet",
+          "static:slider@custom/mobile"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "drag-start",
+          "drag-end"
+        ]
+      },
+      {
+        "family": "slider",
+        "element": "slider-start",
+        "property": "caretColor",
+        "reference": "rgba(197,197,197,1)",
+        "canonicalRowSha256": "59f7f273022235aaf6b97e765e88af89a007d01677aecff1acd72f33f2bd9fe6",
+        "originalMembershipSha256": "804933cc677374e12653142f380db58571cde5d59199eaaded87315ac33315ca",
+        "observations": 8,
+        "canonicalSample": [
+          "interaction:slider@light/desktop-dpr1/disabled",
+          "interaction:slider@light/desktop-dpr2/disabled",
+          "interaction:slider@dark/desktop-dpr1/disabled",
+          "interaction:slider@dark/desktop-dpr2/disabled",
+          "interaction:slider@contrast/desktop-dpr1/disabled",
+          "interaction:slider@contrast/desktop-dpr2/disabled",
+          "interaction:slider@custom/desktop-dpr1/disabled",
+          "interaction:slider@custom/desktop-dpr2/disabled"
+        ],
+        "states": [
+          "disabled"
+        ]
+      },
+      {
+        "family": "slider",
+        "element": "slider-visual",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "d8307debd39ca46d12578f22fa42c00ab164149398ddbdba666fb3f4cd2e4edc",
+        "originalMembershipSha256": "42383d26c71fc86902513fb7cce171a9542d938e2f79163fdd9d531ccc68612d",
+        "observations": 59,
+        "canonicalSample": [
+          "static:slider@light/desktop",
+          "static:slider@light/tablet",
+          "static:slider@light/mobile",
+          "static:slider@contrast/desktop",
+          "static:slider@contrast/tablet",
+          "static:slider@contrast/mobile",
+          "static:slider@custom/desktop",
+          "static:slider@custom/tablet",
+          "static:slider@custom/mobile",
+          "interaction:slider@light/desktop-dpr1/focus",
+          "interaction:slider@light/desktop-dpr1/hover",
+          "interaction:slider@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "drag-start",
+          "drag-end",
+          "disabled"
+        ]
+      },
+      {
+        "family": "slider",
+        "element": "slider-visual",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "99ba889398ba5e113a3bad21dbc1ca825be2af92a0405c53a903104068b74ea3",
+        "originalMembershipSha256": "856e356dcda66816b452a0df32b28faa86c935d74dd09d54fe26fbd035372551",
+        "observations": 19,
+        "canonicalSample": [
+          "static:slider@dark/desktop",
+          "static:slider@dark/tablet",
+          "static:slider@dark/mobile",
+          "interaction:slider@dark/desktop-dpr1/focus",
+          "interaction:slider@dark/desktop-dpr1/hover",
+          "interaction:slider@dark/desktop-dpr1/held",
+          "interaction:slider@dark/desktop-dpr1/activate",
+          "interaction:slider@dark/desktop-dpr1/activate-leave",
+          "interaction:slider@dark/desktop-dpr1/drag-start",
+          "interaction:slider@dark/desktop-dpr1/drag-end",
+          "interaction:slider@dark/desktop-dpr1/disabled",
+          "interaction:slider@dark/desktop-dpr2/focus"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "drag-start",
+          "drag-end",
+          "disabled"
+        ]
+      },
+      {
+        "family": "snack-bar",
+        "element": "snack-bar-overlay",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "9d9998c056dd016fc3ab13e508672bbcafe2f22cecdb9ce5fe434f94b73315db",
+        "originalMembershipSha256": "ac79d2099356192b2ed9c604875ed0ae96ab97c6f816f53d7930599ddd592400",
+        "observations": 34,
+        "canonicalSample": [
+          "interaction:snack-bar@light/desktop-dpr1/activate",
+          "interaction:snack-bar@light/desktop-dpr1/activate-leave",
+          "interaction:snack-bar@light/desktop-dpr1/activate-twice",
+          "interaction:snack-bar@light/desktop-dpr1/open",
+          "interaction:snack-bar@light/desktop-dpr2/activate",
+          "interaction:snack-bar@light/desktop-dpr2/activate-leave",
+          "interaction:snack-bar@light/desktop-dpr2/activate-twice",
+          "interaction:snack-bar@light/desktop-dpr2/open",
+          "interaction:snack-bar@dark/desktop-dpr1/activate",
+          "interaction:snack-bar@dark/desktop-dpr1/activate-leave",
+          "interaction:snack-bar@dark/desktop-dpr1/activate-twice",
+          "interaction:snack-bar@dark/desktop-dpr1/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "activate-twice",
+          "open"
+        ]
+      },
+      {
+        "family": "snack-bar",
+        "element": "snack-bar-primary",
+        "property": "caretColor",
+        "reference": "rgba(255,255,255,1)",
+        "canonicalRowSha256": "2545d69807d3e716a7bd355c6f08fd1961ced968490b9ad2d6e6aeb123866063",
+        "originalMembershipSha256": "963a26c6b49a3d60054ef1fd95e38a18affc588bd06182b61228921f608a5bee",
+        "observations": 54,
+        "canonicalSample": [
+          "static:snack-bar@light/desktop",
+          "static:snack-bar@light/tablet",
+          "static:snack-bar@light/mobile",
+          "static:snack-bar@contrast/desktop",
+          "static:snack-bar@contrast/tablet",
+          "static:snack-bar@contrast/mobile",
+          "static:snack-bar@custom/desktop",
+          "static:snack-bar@custom/tablet",
+          "static:snack-bar@custom/mobile",
+          "interaction:snack-bar@light/desktop-dpr1/focus",
+          "interaction:snack-bar@light/desktop-dpr1/hover",
+          "interaction:snack-bar@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "activate-twice",
+          "open",
+          "auto-dismiss"
+        ]
+      },
+      {
+        "family": "snack-bar",
+        "element": "snack-bar-primary",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "1d44ca6d6fbd689da7999437504ebe7a93172eab4f62109c51e75d32d9734b04",
+        "originalMembershipSha256": "0e075c8e5ae8fd19196398a5d3caab632a4c6669bdecb4b646cde3b1b1f7dfe4",
+        "observations": 17,
+        "canonicalSample": [
+          "static:snack-bar@dark/desktop",
+          "static:snack-bar@dark/tablet",
+          "static:snack-bar@dark/mobile",
+          "interaction:snack-bar@dark/desktop-dpr1/focus",
+          "interaction:snack-bar@dark/desktop-dpr1/hover",
+          "interaction:snack-bar@dark/desktop-dpr1/held",
+          "interaction:snack-bar@dark/desktop-dpr1/activate",
+          "interaction:snack-bar@dark/desktop-dpr1/activate-leave",
+          "interaction:snack-bar@dark/desktop-dpr1/activate-twice",
+          "interaction:snack-bar@dark/desktop-dpr1/open",
+          "interaction:snack-bar@dark/desktop-dpr2/focus",
+          "interaction:snack-bar@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "activate-twice",
+          "open"
+        ]
+      },
+      {
+        "family": "snack-bar",
+        "element": "snack-bar-surface",
+        "property": "caretColor",
+        "reference": "rgba(245,239,244,1)",
+        "canonicalRowSha256": "7345ae2ade6aa8cd73d30e5af4840e8e75704073324c1b7851eeb88a6c6ca669",
+        "originalMembershipSha256": "ec9a56672ce18e4e16c05ea7fe70997bf83f90208c83ea67981d19b756870422",
+        "observations": 34,
+        "canonicalSample": [
+          "interaction:snack-bar@light/desktop-dpr1/activate",
+          "interaction:snack-bar@light/desktop-dpr1/activate-leave",
+          "interaction:snack-bar@light/desktop-dpr1/activate-twice",
+          "interaction:snack-bar@light/desktop-dpr1/open",
+          "interaction:snack-bar@light/desktop-dpr2/activate",
+          "interaction:snack-bar@light/desktop-dpr2/activate-leave",
+          "interaction:snack-bar@light/desktop-dpr2/activate-twice",
+          "interaction:snack-bar@light/desktop-dpr2/open",
+          "interaction:snack-bar@dark/desktop-dpr1/activate",
+          "interaction:snack-bar@dark/desktop-dpr1/activate-leave",
+          "interaction:snack-bar@dark/desktop-dpr1/activate-twice",
+          "interaction:snack-bar@dark/desktop-dpr1/open"
+        ],
+        "states": [
+          "activate",
+          "activate-leave",
+          "activate-twice",
+          "open"
+        ]
+      },
+      {
+        "family": "sort",
+        "element": "sort-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "4b1e8ced87adecc7b2173237047a5483dcfc79a9b995fb0faf8d7831f5314745",
+        "originalMembershipSha256": "4160239c022061247ea6622dbff82536b5a36b09495d262eac0c6c60a793cac9",
+        "observations": 45,
+        "canonicalSample": [
+          "static:sort@light/desktop",
+          "static:sort@light/tablet",
+          "static:sort@light/mobile",
+          "static:sort@contrast/desktop",
+          "static:sort@contrast/tablet",
+          "static:sort@contrast/mobile",
+          "static:sort@custom/desktop",
+          "static:sort@custom/tablet",
+          "static:sort@custom/mobile",
+          "interaction:sort@light/desktop-dpr1/focus",
+          "interaction:sort@light/desktop-dpr1/hover",
+          "interaction:sort@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "activate-twice"
+        ]
+      },
+      {
+        "family": "sort",
+        "element": "sort-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "b4dda21a7c24e0cbaeef9150e9350fe56ec48010cecdd72ccf9b2eb15d6b6a38",
+        "originalMembershipSha256": "8989f57f86761f2f4a48496650ab4d6b2c91242e8687f784474f8143d0b979e3",
+        "observations": 15,
+        "canonicalSample": [
+          "static:sort@dark/desktop",
+          "static:sort@dark/tablet",
+          "static:sort@dark/mobile",
+          "interaction:sort@dark/desktop-dpr1/focus",
+          "interaction:sort@dark/desktop-dpr1/hover",
+          "interaction:sort@dark/desktop-dpr1/held",
+          "interaction:sort@dark/desktop-dpr1/activate",
+          "interaction:sort@dark/desktop-dpr1/activate-leave",
+          "interaction:sort@dark/desktop-dpr1/activate-twice",
+          "interaction:sort@dark/desktop-dpr2/focus",
+          "interaction:sort@dark/desktop-dpr2/hover",
+          "interaction:sort@dark/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "activate-twice"
+        ]
+      },
+      {
+        "family": "stepper",
+        "element": "step-details-text",
+        "property": "caretColor",
+        "reference": "rgba(73,69,78,1)",
+        "canonicalRowSha256": "30a6da227ef5b586f5a06f39a3233fdf30def4ec19342e13a9ed2a833b134dfb",
+        "originalMembershipSha256": "24da62b36bbccabf08767ef8c0cf0ced3a9132327fb85c745045ea050cd5e510",
+        "observations": 68,
+        "canonicalSample": [
+          "static:stepper@light/desktop",
+          "static:stepper@light/tablet",
+          "static:stepper@light/mobile",
+          "static:stepper@dark/desktop",
+          "static:stepper@dark/tablet",
+          "static:stepper@dark/mobile",
+          "static:stepper@contrast/desktop",
+          "static:stepper@contrast/tablet",
+          "static:stepper@contrast/mobile",
+          "static:stepper@custom/desktop",
+          "static:stepper@custom/tablet",
+          "static:stepper@custom/mobile"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "stepper",
+        "element": "step-review-text",
+        "property": "caretColor",
+        "reference": "rgba(73,69,78,1)",
+        "canonicalRowSha256": "b629acf5bb635a62e76eba2f9da19c040a0c313d6255357fc0150ed617379078",
+        "originalMembershipSha256": "b672e5a49a2514a4914d7030878af30be51b7b9f3b11572d1f0f231490842f87",
+        "observations": 68,
+        "canonicalSample": [
+          "static:stepper@light/desktop",
+          "static:stepper@light/tablet",
+          "static:stepper@light/mobile",
+          "static:stepper@dark/desktop",
+          "static:stepper@dark/tablet",
+          "static:stepper@dark/mobile",
+          "static:stepper@contrast/desktop",
+          "static:stepper@contrast/tablet",
+          "static:stepper@contrast/mobile",
+          "static:stepper@custom/desktop",
+          "static:stepper@custom/tablet",
+          "static:stepper@custom/mobile"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "stepper",
+        "element": "stepper-content",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "80eaccb9d9a221881e9e290bd39376890743630ee5f5a07d1bce5f70b1a46b39",
+        "originalMembershipSha256": "60516550b4066555701a890b3a3483add98f67a18827a600d4d86de33f509543",
+        "observations": 51,
+        "canonicalSample": [
+          "static:stepper@light/desktop",
+          "static:stepper@light/tablet",
+          "static:stepper@light/mobile",
+          "static:stepper@contrast/desktop",
+          "static:stepper@contrast/tablet",
+          "static:stepper@contrast/mobile",
+          "static:stepper@custom/desktop",
+          "static:stepper@custom/tablet",
+          "static:stepper@custom/mobile",
+          "interaction:stepper@light/desktop-dpr1/focus",
+          "interaction:stepper@light/desktop-dpr1/hover",
+          "interaction:stepper@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "stepper",
+        "element": "stepper-content",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "99d0c716171968c8e50894a303366322e60c3d5cbbbed9f5edf224822f9447ca",
+        "originalMembershipSha256": "774874183c5cc115ed771fde7b515f20e4dcf623f3f17bcbb12fca571961aea8",
+        "observations": 17,
+        "canonicalSample": [
+          "static:stepper@dark/desktop",
+          "static:stepper@dark/tablet",
+          "static:stepper@dark/mobile",
+          "interaction:stepper@dark/desktop-dpr1/focus",
+          "interaction:stepper@dark/desktop-dpr1/hover",
+          "interaction:stepper@dark/desktop-dpr1/held",
+          "interaction:stepper@dark/desktop-dpr1/activate",
+          "interaction:stepper@dark/desktop-dpr1/activate-leave",
+          "interaction:stepper@dark/desktop-dpr1/disabled",
+          "interaction:stepper@dark/desktop-dpr1/selected",
+          "interaction:stepper@dark/desktop-dpr2/focus",
+          "interaction:stepper@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "stepper",
+        "element": "stepper-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "d7189f05e89fce6367d9a6380080884d787ccc17c77472f214036eae88e6292a",
+        "originalMembershipSha256": "1caeb4c3bb010e315af3b854367f8e6ad65ba0781d09fe0ae1800fed0e1035b8",
+        "observations": 51,
+        "canonicalSample": [
+          "static:stepper@light/desktop",
+          "static:stepper@light/tablet",
+          "static:stepper@light/mobile",
+          "static:stepper@contrast/desktop",
+          "static:stepper@contrast/tablet",
+          "static:stepper@contrast/mobile",
+          "static:stepper@custom/desktop",
+          "static:stepper@custom/tablet",
+          "static:stepper@custom/mobile",
+          "interaction:stepper@light/desktop-dpr1/focus",
+          "interaction:stepper@light/desktop-dpr1/hover",
+          "interaction:stepper@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "stepper",
+        "element": "stepper-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "1e05cf90b0e67013333bbc57d13d92eae6c6f858c4f50a8ec1b14fc792befdf0",
+        "originalMembershipSha256": "21c5e704a42bae63e74d33747194b37165a728477ce68d4b512c101d28ed3b11",
+        "observations": 17,
+        "canonicalSample": [
+          "static:stepper@dark/desktop",
+          "static:stepper@dark/tablet",
+          "static:stepper@dark/mobile",
+          "interaction:stepper@dark/desktop-dpr1/focus",
+          "interaction:stepper@dark/desktop-dpr1/hover",
+          "interaction:stepper@dark/desktop-dpr1/held",
+          "interaction:stepper@dark/desktop-dpr1/activate",
+          "interaction:stepper@dark/desktop-dpr1/activate-leave",
+          "interaction:stepper@dark/desktop-dpr1/disabled",
+          "interaction:stepper@dark/desktop-dpr1/selected",
+          "interaction:stepper@dark/desktop-dpr2/focus",
+          "interaction:stepper@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected"
+        ]
+      },
+      {
+        "family": "table",
+        "element": "table-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "6aba32bd93a58c536f08c62e52e1f0eb0478089e8b8c23fb4fdf64ead2db99c7",
+        "originalMembershipSha256": "ff19e448481f52830bc3cc4fed378df43a1cd0ffff7398403c1e7514782b16ec",
+        "observations": 39,
+        "canonicalSample": [
+          "static:table@light/desktop",
+          "static:table@light/tablet",
+          "static:table@light/mobile",
+          "static:table@contrast/desktop",
+          "static:table@contrast/tablet",
+          "static:table@contrast/mobile",
+          "static:table@custom/desktop",
+          "static:table@custom/tablet",
+          "static:table@custom/mobile",
+          "interaction:table@light/desktop-dpr1/focus",
+          "interaction:table@light/desktop-dpr1/hover",
+          "interaction:table@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "table",
+        "element": "table-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "2d45dabb176357a5780c8619b3f99ac56f509aef4c29a0b673b48c5fd8ea133b",
+        "originalMembershipSha256": "f06467ec27548b9d1d7b51b13d74146cb5297afef3b5ab776b95ac11d747d02e",
+        "observations": 13,
+        "canonicalSample": [
+          "static:table@dark/desktop",
+          "static:table@dark/tablet",
+          "static:table@dark/mobile",
+          "interaction:table@dark/desktop-dpr1/focus",
+          "interaction:table@dark/desktop-dpr1/hover",
+          "interaction:table@dark/desktop-dpr1/held",
+          "interaction:table@dark/desktop-dpr1/activate",
+          "interaction:table@dark/desktop-dpr1/activate-leave",
+          "interaction:table@dark/desktop-dpr2/focus",
+          "interaction:table@dark/desktop-dpr2/hover",
+          "interaction:table@dark/desktop-dpr2/held",
+          "interaction:table@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "tabs",
+        "element": "tab-activity",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "8540540d3696d9725dd5dd2e7bfcf164f6ac64e8d7e509a71f93a543de65d886",
+        "originalMembershipSha256": "6c88871a1808b81976869283e5705c96f4045ebe22357690cd6439836f6ac824",
+        "observations": 52,
+        "canonicalSample": [
+          "static:tabs@light/desktop",
+          "static:tabs@light/tablet",
+          "static:tabs@light/mobile",
+          "static:tabs@contrast/desktop",
+          "static:tabs@contrast/tablet",
+          "static:tabs@contrast/mobile",
+          "static:tabs@custom/desktop",
+          "static:tabs@custom/tablet",
+          "static:tabs@custom/mobile",
+          "interaction:tabs@light/desktop-dpr1/focus",
+          "interaction:tabs@light/desktop-dpr1/hover",
+          "interaction:tabs@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "tabs",
+        "element": "tab-activity",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "5c7b295bb435706bf1ef39313ce4f194462cec8a5065abb72e11a304deb4e648",
+        "originalMembershipSha256": "c8a1852737a60342320d1ff5430c8c35eaafc8dfd4ad885ddc9457a96d193bb0",
+        "observations": 18,
+        "canonicalSample": [
+          "static:tabs@dark/desktop",
+          "static:tabs@dark/tablet",
+          "static:tabs@dark/mobile",
+          "interaction:tabs@dark/desktop-dpr1/focus",
+          "interaction:tabs@dark/desktop-dpr1/hover",
+          "interaction:tabs@dark/desktop-dpr1/held",
+          "interaction:tabs@dark/desktop-dpr1/activate",
+          "interaction:tabs@dark/desktop-dpr1/activate-leave",
+          "interaction:tabs@dark/desktop-dpr1/disabled",
+          "interaction:tabs@dark/desktop-dpr1/selected",
+          "interaction:tabs@dark/desktop-dpr2/focus",
+          "interaction:tabs@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "tabs",
+        "element": "tab-overview",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "d82c028837b7fb543f9fe2ef59d9736293969774e33e24ed45105505b324884a",
+        "originalMembershipSha256": "5ecdd9253b542bd12d84c98ee16c5a14088a57f2cbd6cf4b769d539d0d1739e8",
+        "observations": 52,
+        "canonicalSample": [
+          "static:tabs@light/desktop",
+          "static:tabs@light/tablet",
+          "static:tabs@light/mobile",
+          "static:tabs@contrast/desktop",
+          "static:tabs@contrast/tablet",
+          "static:tabs@contrast/mobile",
+          "static:tabs@custom/desktop",
+          "static:tabs@custom/tablet",
+          "static:tabs@custom/mobile",
+          "interaction:tabs@light/desktop-dpr1/focus",
+          "interaction:tabs@light/desktop-dpr1/hover",
+          "interaction:tabs@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "tabs",
+        "element": "tab-overview",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "2cbfaba044b5f3f24d67c1c2b9509b0681cad11bd677fb9916514cf839b8bae9",
+        "originalMembershipSha256": "ed00d6d1c158dbf8751221938ca24948ee66d2c0ce8285e4d19d2312c6ec41a4",
+        "observations": 18,
+        "canonicalSample": [
+          "static:tabs@dark/desktop",
+          "static:tabs@dark/tablet",
+          "static:tabs@dark/mobile",
+          "interaction:tabs@dark/desktop-dpr1/focus",
+          "interaction:tabs@dark/desktop-dpr1/hover",
+          "interaction:tabs@dark/desktop-dpr1/held",
+          "interaction:tabs@dark/desktop-dpr1/activate",
+          "interaction:tabs@dark/desktop-dpr1/activate-leave",
+          "interaction:tabs@dark/desktop-dpr1/disabled",
+          "interaction:tabs@dark/desktop-dpr1/selected",
+          "interaction:tabs@dark/desktop-dpr2/focus",
+          "interaction:tabs@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "tabs",
+        "element": "tab-panel",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "0c3cf0fe554ed912223a65fb3ca5cd6dd32ca5e170a4ebc5935df71f12df47e6",
+        "originalMembershipSha256": "1eba50706a9fc9b6e7e0a2a77157d1a88ef2f13facdc5e094928e38791a00443",
+        "observations": 52,
+        "canonicalSample": [
+          "static:tabs@light/desktop",
+          "static:tabs@light/tablet",
+          "static:tabs@light/mobile",
+          "static:tabs@contrast/desktop",
+          "static:tabs@contrast/tablet",
+          "static:tabs@contrast/mobile",
+          "static:tabs@custom/desktop",
+          "static:tabs@custom/tablet",
+          "static:tabs@custom/mobile",
+          "interaction:tabs@light/desktop-dpr1/focus",
+          "interaction:tabs@light/desktop-dpr1/hover",
+          "interaction:tabs@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "tabs",
+        "element": "tab-panel",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "e149205d6b83b511eec360826a390d3e18942d95a67ccd0c638720c6d1f06e4a",
+        "originalMembershipSha256": "f3b656e3dab3116b07b778d06877ac598eb4c93a693c3a5d03de3186907ac2b8",
+        "observations": 18,
+        "canonicalSample": [
+          "static:tabs@dark/desktop",
+          "static:tabs@dark/tablet",
+          "static:tabs@dark/mobile",
+          "interaction:tabs@dark/desktop-dpr1/focus",
+          "interaction:tabs@dark/desktop-dpr1/hover",
+          "interaction:tabs@dark/desktop-dpr1/held",
+          "interaction:tabs@dark/desktop-dpr1/activate",
+          "interaction:tabs@dark/desktop-dpr1/activate-leave",
+          "interaction:tabs@dark/desktop-dpr1/disabled",
+          "interaction:tabs@dark/desktop-dpr1/selected",
+          "interaction:tabs@dark/desktop-dpr2/focus",
+          "interaction:tabs@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "tabs",
+        "element": "tabs-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "05d86a02cb4d6e1eced82d856fa17a8a33ac96b47acb318c3a3606844d942be6",
+        "originalMembershipSha256": "cfddeab9acc7cf932b9f1fa50986c711cad62e6c2c475030abc82540a2fa10ca",
+        "observations": 52,
+        "canonicalSample": [
+          "static:tabs@light/desktop",
+          "static:tabs@light/tablet",
+          "static:tabs@light/mobile",
+          "static:tabs@contrast/desktop",
+          "static:tabs@contrast/tablet",
+          "static:tabs@contrast/mobile",
+          "static:tabs@custom/desktop",
+          "static:tabs@custom/tablet",
+          "static:tabs@custom/mobile",
+          "interaction:tabs@light/desktop-dpr1/focus",
+          "interaction:tabs@light/desktop-dpr1/hover",
+          "interaction:tabs@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "tabs",
+        "element": "tabs-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "f2190014df69b73092260d2d94f7d47301ae0e56bc4c376a8a52ed5dba066b3e",
+        "originalMembershipSha256": "d0e0b3c75d491089b8062e45489bd98a7f409d413368a50b984147de60d20afc",
+        "observations": 18,
+        "canonicalSample": [
+          "static:tabs@dark/desktop",
+          "static:tabs@dark/tablet",
+          "static:tabs@dark/mobile",
+          "interaction:tabs@dark/desktop-dpr1/focus",
+          "interaction:tabs@dark/desktop-dpr1/hover",
+          "interaction:tabs@dark/desktop-dpr1/held",
+          "interaction:tabs@dark/desktop-dpr1/activate",
+          "interaction:tabs@dark/desktop-dpr1/activate-leave",
+          "interaction:tabs@dark/desktop-dpr1/disabled",
+          "interaction:tabs@dark/desktop-dpr1/selected",
+          "interaction:tabs@dark/desktop-dpr2/focus",
+          "interaction:tabs@dark/desktop-dpr2/hover"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "disabled",
+          "selected",
+          "open-dismiss"
+        ]
+      },
+      {
+        "family": "toolbar",
+        "element": "toolbar-action",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "09511554684edbf553b96ebe919d8debea75e379ad09c44f2b5db28b94aa86a2",
+        "originalMembershipSha256": "7881702fd1fcca0cd8825186ee7bec8c57f948e1fa4fae291e0174dfe96859e4",
+        "observations": 39,
+        "canonicalSample": [
+          "static:toolbar@light/desktop",
+          "static:toolbar@light/tablet",
+          "static:toolbar@light/mobile",
+          "static:toolbar@contrast/desktop",
+          "static:toolbar@contrast/tablet",
+          "static:toolbar@contrast/mobile",
+          "static:toolbar@custom/desktop",
+          "static:toolbar@custom/tablet",
+          "static:toolbar@custom/mobile",
+          "interaction:toolbar@light/desktop-dpr1/focus",
+          "interaction:toolbar@light/desktop-dpr1/hover",
+          "interaction:toolbar@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "toolbar",
+        "element": "toolbar-action",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "2e408f0485cce0092e9801f240ffa49e0f066af44bc21c43439bedaa6a53c354",
+        "originalMembershipSha256": "ee5b9240fd8a03a8dabb26808fa4f01ef260837f3bfb5280ed8cd5dc8ffdc708",
+        "observations": 13,
+        "canonicalSample": [
+          "static:toolbar@dark/desktop",
+          "static:toolbar@dark/tablet",
+          "static:toolbar@dark/mobile",
+          "interaction:toolbar@dark/desktop-dpr1/focus",
+          "interaction:toolbar@dark/desktop-dpr1/hover",
+          "interaction:toolbar@dark/desktop-dpr1/held",
+          "interaction:toolbar@dark/desktop-dpr1/activate",
+          "interaction:toolbar@dark/desktop-dpr1/activate-leave",
+          "interaction:toolbar@dark/desktop-dpr2/focus",
+          "interaction:toolbar@dark/desktop-dpr2/hover",
+          "interaction:toolbar@dark/desktop-dpr2/held",
+          "interaction:toolbar@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "toolbar",
+        "element": "toolbar-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "03e3e920a4050059ffd626a907e6351ff1512b6e914060938eecb7f8eee55435",
+        "originalMembershipSha256": "7501b10b932e1eb4c9f457dffabab58bac3a3d1980bff5b4261ef021da516eb9",
+        "observations": 39,
+        "canonicalSample": [
+          "static:toolbar@light/desktop",
+          "static:toolbar@light/tablet",
+          "static:toolbar@light/mobile",
+          "static:toolbar@contrast/desktop",
+          "static:toolbar@contrast/tablet",
+          "static:toolbar@contrast/mobile",
+          "static:toolbar@custom/desktop",
+          "static:toolbar@custom/tablet",
+          "static:toolbar@custom/mobile",
+          "interaction:toolbar@light/desktop-dpr1/focus",
+          "interaction:toolbar@light/desktop-dpr1/hover",
+          "interaction:toolbar@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "toolbar",
+        "element": "toolbar-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "6b7cdf41988022fb57f2aee95dcedf41fc23224b29b5c7e2d23c0c2c33b2e4fc",
+        "originalMembershipSha256": "11df965be9b93d156577d5c82965e3a45ecd43220f7620110b47873f0a97446f",
+        "observations": 13,
+        "canonicalSample": [
+          "static:toolbar@dark/desktop",
+          "static:toolbar@dark/tablet",
+          "static:toolbar@dark/mobile",
+          "interaction:toolbar@dark/desktop-dpr1/focus",
+          "interaction:toolbar@dark/desktop-dpr1/hover",
+          "interaction:toolbar@dark/desktop-dpr1/held",
+          "interaction:toolbar@dark/desktop-dpr1/activate",
+          "interaction:toolbar@dark/desktop-dpr1/activate-leave",
+          "interaction:toolbar@dark/desktop-dpr2/focus",
+          "interaction:toolbar@dark/desktop-dpr2/hover",
+          "interaction:toolbar@dark/desktop-dpr2/held",
+          "interaction:toolbar@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "toolbar",
+        "element": "toolbar-title",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "3016515c9aeb28ca18a0b8c62272e11cda4c86d78b038b8c5221ae34056a8e55",
+        "originalMembershipSha256": "4dbb16c43f817d26883733ff8f0fd3b70b4673ceda75f1b855bc301aa5d57b2b",
+        "observations": 39,
+        "canonicalSample": [
+          "static:toolbar@light/desktop",
+          "static:toolbar@light/tablet",
+          "static:toolbar@light/mobile",
+          "static:toolbar@contrast/desktop",
+          "static:toolbar@contrast/tablet",
+          "static:toolbar@contrast/mobile",
+          "static:toolbar@custom/desktop",
+          "static:toolbar@custom/tablet",
+          "static:toolbar@custom/mobile",
+          "interaction:toolbar@light/desktop-dpr1/focus",
+          "interaction:toolbar@light/desktop-dpr1/hover",
+          "interaction:toolbar@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "toolbar",
+        "element": "toolbar-title",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "d4c8216df74328610b81c6ddf51844bdff3af9e23dba40685cc48a9ef5c1c172",
+        "originalMembershipSha256": "dff190750576a71fa68e0570adb1f9b5e887aedb5ad21bb01300ae7fbd44be84",
+        "observations": 13,
+        "canonicalSample": [
+          "static:toolbar@dark/desktop",
+          "static:toolbar@dark/tablet",
+          "static:toolbar@dark/mobile",
+          "interaction:toolbar@dark/desktop-dpr1/focus",
+          "interaction:toolbar@dark/desktop-dpr1/hover",
+          "interaction:toolbar@dark/desktop-dpr1/held",
+          "interaction:toolbar@dark/desktop-dpr1/activate",
+          "interaction:toolbar@dark/desktop-dpr1/activate-leave",
+          "interaction:toolbar@dark/desktop-dpr2/focus",
+          "interaction:toolbar@dark/desktop-dpr2/hover",
+          "interaction:toolbar@dark/desktop-dpr2/held",
+          "interaction:toolbar@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "tooltip",
+        "element": "tooltip-popup",
+        "property": "caretColor",
+        "reference": "rgba(245,239,244,1)",
+        "canonicalRowSha256": "73bab62ea9db256df0003255d3ac68d1694b61256cbea5cafd35ce1f6ca7c7a8",
+        "originalMembershipSha256": "dffbed5074eb8ba26ea8e79080fa24f7abf91ee51bde470fc23d3d293e6f548f",
+        "observations": 18,
+        "canonicalSample": [
+          "interaction:tooltip@light/desktop-dpr1/hover",
+          "interaction:tooltip@light/desktop-dpr1/held",
+          "interaction:tooltip@light/desktop-dpr2/hover",
+          "interaction:tooltip@light/desktop-dpr2/held",
+          "interaction:tooltip@dark/desktop-dpr1/hover",
+          "interaction:tooltip@dark/desktop-dpr1/held",
+          "interaction:tooltip@dark/desktop-dpr2/hover",
+          "interaction:tooltip@dark/desktop-dpr2/held",
+          "interaction:tooltip@contrast/desktop-dpr1/hover",
+          "interaction:tooltip@contrast/desktop-dpr1/held",
+          "interaction:tooltip@contrast/desktop-dpr2/hover",
+          "interaction:tooltip@contrast/desktop-dpr2/held"
+        ],
+        "states": [
+          "hover",
+          "held"
+        ]
+      },
+      {
+        "family": "tooltip",
+        "element": "tooltip-primary",
+        "property": "caretColor",
+        "reference": "rgba(255,255,255,1)",
+        "canonicalRowSha256": "d01069d4fffea99011819ffa01305fb4f3c3f279e5c74d07e4da9a875db5e48e",
+        "originalMembershipSha256": "0e70fe70e4023c68d091371b916f8790343ea4ce673813357be9dafca26f9c20",
+        "observations": 47,
+        "canonicalSample": [
+          "static:tooltip@light/desktop",
+          "static:tooltip@light/tablet",
+          "static:tooltip@light/mobile",
+          "static:tooltip@contrast/desktop",
+          "static:tooltip@contrast/tablet",
+          "static:tooltip@contrast/mobile",
+          "static:tooltip@custom/desktop",
+          "static:tooltip@custom/tablet",
+          "static:tooltip@custom/mobile",
+          "interaction:tooltip@light/desktop-dpr1/focus",
+          "interaction:tooltip@light/desktop-dpr1/hover",
+          "interaction:tooltip@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "open"
+        ]
+      },
+      {
+        "family": "tooltip",
+        "element": "tooltip-primary",
+        "property": "caretColor",
+        "reference": "rgba(0,0,0,1)",
+        "canonicalRowSha256": "07afc56caa83868bd2f5881c0a199f33b7c3c7b3dedac76a2b2f8ac6ef06f7af",
+        "originalMembershipSha256": "9c2a213224ad637ba645f97cf4077595d0b35a13d8b49dfdfa74430f618c549d",
+        "observations": 15,
+        "canonicalSample": [
+          "static:tooltip@dark/desktop",
+          "static:tooltip@dark/tablet",
+          "static:tooltip@dark/mobile",
+          "interaction:tooltip@dark/desktop-dpr1/focus",
+          "interaction:tooltip@dark/desktop-dpr1/hover",
+          "interaction:tooltip@dark/desktop-dpr1/held",
+          "interaction:tooltip@dark/desktop-dpr1/activate",
+          "interaction:tooltip@dark/desktop-dpr1/activate-leave",
+          "interaction:tooltip@dark/desktop-dpr1/open",
+          "interaction:tooltip@dark/desktop-dpr2/focus",
+          "interaction:tooltip@dark/desktop-dpr2/hover",
+          "interaction:tooltip@dark/desktop-dpr2/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave",
+          "open"
+        ]
+      },
+      {
+        "family": "tree",
+        "element": "tree-primary",
+        "property": "caretColor",
+        "reference": "rgba(29,27,32,1)",
+        "canonicalRowSha256": "2adce8f15b4347b0ddc6685dc18a7db539c8f835c0e27ff375e57e71dfb9d6a6",
+        "originalMembershipSha256": "15a7abefda8af402e19ebac561922863e11dbb0093d3cee30f17297db59348a8",
+        "observations": 39,
+        "canonicalSample": [
+          "static:tree@light/desktop",
+          "static:tree@light/tablet",
+          "static:tree@light/mobile",
+          "static:tree@contrast/desktop",
+          "static:tree@contrast/tablet",
+          "static:tree@contrast/mobile",
+          "static:tree@custom/desktop",
+          "static:tree@custom/tablet",
+          "static:tree@custom/mobile",
+          "interaction:tree@light/desktop-dpr1/focus",
+          "interaction:tree@light/desktop-dpr1/hover",
+          "interaction:tree@light/desktop-dpr1/held"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      },
+      {
+        "family": "tree",
+        "element": "tree-primary",
+        "property": "caretColor",
+        "reference": "rgba(230,225,229,1)",
+        "canonicalRowSha256": "7a8246ce00f27a80a0ea2931a1dd46c063279c4560ffdf3276407fdfaec38e88",
+        "originalMembershipSha256": "6e4336c88822943dc1955bd5f65ad677739e1e44efa45cb48863335f8e3a6391",
+        "observations": 13,
+        "canonicalSample": [
+          "static:tree@dark/desktop",
+          "static:tree@dark/tablet",
+          "static:tree@dark/mobile",
+          "interaction:tree@dark/desktop-dpr1/focus",
+          "interaction:tree@dark/desktop-dpr1/hover",
+          "interaction:tree@dark/desktop-dpr1/held",
+          "interaction:tree@dark/desktop-dpr1/activate",
+          "interaction:tree@dark/desktop-dpr1/activate-leave",
+          "interaction:tree@dark/desktop-dpr2/focus",
+          "interaction:tree@dark/desktop-dpr2/hover",
+          "interaction:tree@dark/desktop-dpr2/held",
+          "interaction:tree@dark/desktop-dpr2/activate"
+        ],
+        "states": [
+          "static",
+          "focus",
+          "hover",
+          "held",
+          "activate",
+          "activate-leave"
+        ]
+      }
+    ],
+    "inputEquivalent": false,
+    "computedCandidateVerified": false,
+    "renderingEquivalent": false,
+    "rendererCauseProven": false,
+    "selectedCaseCount": 1734,
+    "selectedCasesSha256": "70e01dddf4c332c6ac228016ea3d6ee859e6c3231704dd23cdf9ec655af106dd"
+  },
   "canonicalIntegration": false,
   "inputEquivalent": false,
   "computedCandidateVerified": false,
@@ -131999,7 +136415,7 @@
   "rendererCauseProven": false,
   "limitations": [
     "Survey only; canonical classification and original inputs are unchanged.",
-    "Count agreement is not an independent replay of complete original canonical group membership.",
+    "Exact original membership is verified separately from tree/declaration interpretation and production classification.",
     "Shared IDs and reviewed aliases establish measurement identity, not structural or input equivalence.",
     "Editable/input owners, explicit caret/reset/motion requests, unknown selectors and capture gaps require specific review.",
     "Captured surface ancestry does not establish document-external inheritance, candidate computed values, visible caret paint or renderer causality."

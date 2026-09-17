@@ -8,6 +8,7 @@ import { createGunzip } from 'node:zlib';
 import Parser from 'jsonparse';
 import ts from 'typescript';
 import { inspectOwnerCaretInput } from '../tests/material-parity/owner-caret-input-evidence.mjs';
+import { bindOwnerCaretMembership } from '../tests/material-parity/owner-caret-canonical-membership.mjs';
 
 const args = process.argv.slice(2);
 assert.ok(!args.length || args.length === 1 && args[0] === '--check', 'only --check is accepted');
@@ -91,7 +92,14 @@ const findings = [...groups.values()].map(g => ({ ...g,
   originalCountMatchesCanonical: g.observations.length === g.canonicalOccurrences,
   everyObservationHasCapturedLocalOmissionEvidence: g.observations.length > 0 &&
     g.observations.every(o => o.disposition === 'captured-caret-computed-versus-local-omission') }));
+const { selectedCases, ...membership } = bindOwnerCaretMembership(findings, rows, raw, canonicalStyle);
+assert.deepEqual(selectedCases, cases);
+membership.selectedCaseCount = selectedCases.length;
+membership.selectedCasesSha256 = hash(JSON.stringify(selectedCases));
+assert.equal(membership.groups, 145); assert.equal(membership.originalCasesScanned, 2311);
+assert.equal(membership.observations, 4050);
 const sources = ['scripts/audit-material-owner-caret-inputs.mjs', 'tests/material-parity/owner-caret-input-evidence.mjs',
+  'tests/material-parity/owner-caret-canonical-membership.mjs',
   'tests/material-parity/root-initial-style-evidence.mjs', 'tests/material-parity/border-initial-input-evidence.mjs',
   'tests/material-parity/origin-alias-mapping-evidence.mjs', 'tests/material-parity/generated-node-mapping-evidence.mjs',
   auditModule, 'tests/material-parity/run-material-parity.mjs'];
@@ -104,10 +112,10 @@ const report = { schemaVersion: 1, kind: 'remaining-owner-caret-original-input-s
     canonicalOccurrences: findings.reduce((n, g) => n + g.canonicalOccurrences, 0),
     exactCountGroups: findings.filter(g => g.originalCountMatchesCanonical).length,
     fullyReviewedLocalOmissionGroups: findings.filter(g => g.originalCountMatchesCanonical && g.everyObservationHasCapturedLocalOmissionEvidence).length },
-  groups: findings, cases, canonicalIntegration: false, inputEquivalent: false,
+  groups: findings, cases, membership, canonicalIntegration: false, inputEquivalent: false,
   computedCandidateVerified: false, descendantCaretVerified: false, rendererCauseProven: false,
   limitations: ['Survey only; canonical classification and original inputs are unchanged.',
-    'Count agreement is not an independent replay of complete original canonical group membership.',
+    'Exact original membership is verified separately from tree/declaration interpretation and production classification.',
     'Shared IDs and reviewed aliases establish measurement identity, not structural or input equivalence.',
     'Editable/input owners, explicit caret/reset/motion requests, unknown selectors and capture gaps require specific review.',
     'Captured surface ancestry does not establish document-external inheritance, candidate computed values, visible caret paint or renderer causality.'] };
