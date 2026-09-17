@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Caret source join verifies every original proof before producing classifications
+
+The [complete-capture source binding](material-owner-caret-source-binding.md)
+authenticates the committed parent/candidate reports, eleven full-source receipts
+and seven exact normalization functions, then reopens original trees and replays
+all 4,050 observations. A grouping loop reproduces the independent 118-group /
+3,154-observation coverage and retains 896 unclassified observations. Thirteen
+rejection controls pass after correcting an unrelated-owner comparison in a
+positive test. Filtered-capture handling and canonical integration are still
+pending; no renderer or canonical audit data changed.
+
 ## Caret attribution now has an independent planned-output coverage check
 
 The [coverage check](material-owner-caret-coverage.md) authenticates and fully
