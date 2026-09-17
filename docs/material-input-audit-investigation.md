@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Unfiltered audit harness finished with 16 retained failures
+
+The [complete 110-file run](material-audit-full-harness-110-result.md) terminated
+with exit 1: 898 TAP entries, 882 passed, 16 failed, zero skipped or cancelled.
+Its full log and failure inventory are preserved. Several metadata/conservation
+failures already have independent diagnostics; reviewed-authoring conservation,
+remaining-overlay metadata and root initial metadata still need their specific
+follow-up. The owner-grid allocation failure is being rerun unchanged in isolation.
+This is not an enforced rendering-parity result or a completed input audit.
+
 ## Filtered caret captures retain explicit missing-population evidence
 
 The [subset source boundary](material-owner-caret-subset-binding.md) replays the
