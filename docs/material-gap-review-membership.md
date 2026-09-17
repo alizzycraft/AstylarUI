@@ -213,3 +213,27 @@ integration checks, complete canonical generation/conservation and enforced
 parity matrix remain separate acceptance requirements. The previously recorded
 395-test pass predates this production integration and is not a current full
 regression claim.
+
+### Current case-index and audit regressions verified
+
+The nine saved original-case indexes now reference audit module SHA-256
+`252754869d5683cc76ba0784a96fc55d5c50aa8eeeb8a0441c131ec0a62eb6d4`.
+These are receipt-only updates, not regenerated observations: a complete-object
+comparison against `a98ef5d70022f3b36c1d70f5edd73f20061a1732`, restoring only
+that one dependency field in each file, preserves every original case, value,
+classification and source descriptor. The retained conservation log is
+`artifacts/material-parity/field-host-flow-input-audit/gap-review-nine-receipt-conservation.log`,
+SHA-256 `857c17c8624f5a65d7737137cdb50c913af221ed208d6d7dcabe38a9bad2e035`.
+
+```powershell
+node --test --test-concurrency=1 tests/material-parity/input-equivalence-audit.spec.mjs tests/material-parity/input-audit-cli-transport.spec.mjs tests/material-parity/input-audit-report-codec.spec.mjs
+```
+
+The current complete three-file run passes **395/395**, exit **0**, with no
+failures, skips, cancellations or todos, **1,055,254.071 ms**. This replays the
+owning original-case/tree assertions; updating hashes alone is not the evidence.
+The retained log is
+`artifacts/material-parity/field-host-flow-input-audit/gap-review-audit-regressions.log`,
+SHA-256 `8f5d1b1dd01def52bd81cfa4fc9838a6f05fa676ef9d06bfde3019c3854666aa`.
+Historical integration conservation, the complete current harness, canonical
+refresh/conservation and enforced parity remain separate requirements.
