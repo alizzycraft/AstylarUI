@@ -1,0 +1,5434 @@
+{
+  "schemaVersion": 1,
+  "kind": "public-range-drag-root-cause-audit",
+  "report": {
+    "file": "artifacts/material-parity/public-range-drag-audit-v2/latest-report.json",
+    "sha256": "8c298293efb0e464af4a3ba73bf80055fcbab469c196e666e22b02f17ad85962"
+  },
+  "browser": "152.0.7977.76",
+  "packages": {
+    "@angular/core": "20.3.29",
+    "@angular/platform-browser": "20.3.29",
+    "@babylonjs/core": "8.56.2",
+    "astylarui": "0.2.0",
+    "esbuild": "0.28.1"
+  },
+  "sources": [
+    {
+      "file": "scripts/record-public-range-drag-audit.mjs",
+      "sha256": "7538f3c2c0ea78e8fe3a57ed061f02f0a523a00771344e1a5f9964694fb7bde0"
+    },
+    {
+      "file": "tests/material-parity/public-range-drag-evidence.mjs",
+      "sha256": "86b59a235dd5b0896628fbbc99a4dc02e251d7544c309a614e17e356452b9dc7"
+    },
+    {
+      "file": "tests/material-parity/public-range-drag-evidence.spec.mjs",
+      "sha256": "355928ad9eabe639c8b838b4bd7d23a6890ceb13835a0dfeb6f323f1eb1e8653"
+    },
+    {
+      "file": "src/lib/astylar-interaction-runtime.ts",
+      "sha256": "10a7d573ae5f8da3db51675327720f6fb70d2c3547da35e69f48e21e092e35b7"
+    },
+    {
+      "file": "src/lib/astylar.ts",
+      "sha256": "e72cfb8e8e1d91c5a4de9002de3ae98f76f1ed26112251b47fde3b77b13f1094"
+    },
+    {
+      "file": "src/lib/astylar-semantic-bridge.ts",
+      "sha256": "1a0011d3530701d9a74dc37b9f5a14d0fed0742dfd8793c39f8628e06b6a5725"
+    },
+    {
+      "file": "src/app/services/dom/input/input-element.service.ts",
+      "sha256": "1feefdf367bdaf42f777913049034e06af6faa14dad6f4019b2d05913170a5cf"
+    },
+    {
+      "file": "src/app/services/dom/input/range.manager.ts",
+      "sha256": "5300fd18403ff659f4ef415df796f0e9ea0260e7c591004fa407fd99ec24b4db"
+    }
+  ],
+  "cases": 32,
+  "pairedBoundaries": 416,
+  "screenshots": 256,
+  "prematureReleaseCases": 16,
+  "missingOutsideReleaseCases": 16,
+  "tracedCauseCases": 8,
+  "failedChecks": 488,
+  "observations": [
+    {
+      "dpr": 1,
+      "translated": false,
+      "target": "first",
+      "update": "none",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "40",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "50",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "60",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "70",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "80",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "90",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 2,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "target": "first",
+      "update": "none",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "40",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "50",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "60",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "70",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "80",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "90",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 2,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "target": "first",
+      "update": "held-equivalent",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "target": "first",
+      "update": "held-equivalent",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "target": "second",
+      "update": "none",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "55"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "45"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "35"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "30"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "20"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "10"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 3,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-4:value",
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "target": "second",
+      "update": "none",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "55"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "45"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "35"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "30"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "20"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "10"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 3,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-4:value",
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "target": "second",
+      "update": "held-equivalent",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "target": "second",
+      "update": "held-equivalent",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "target": "first",
+      "update": "none",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "40",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "50",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "60",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "70",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "80",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "90",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 2,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "target": "first",
+      "update": "none",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "40",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "50",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "60",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "70",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "80",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "90",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 2,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "target": "first",
+      "update": "held-equivalent",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "target": "first",
+      "update": "held-equivalent",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "target": "second",
+      "update": "none",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "55"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "45"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "35"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "30"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "20"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "10"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 3,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-4:value",
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "target": "second",
+      "update": "none",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "55"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "45"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "35"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "30"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "20"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "10"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 3,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-4:value",
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "target": "second",
+      "update": "held-equivalent",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "target": "second",
+      "update": "held-equivalent",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "target": "first",
+      "update": "none",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "40",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "50",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "60",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "70",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "80",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "90",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 2,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "target": "first",
+      "update": "none",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "40",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "50",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "60",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "70",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "80",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "90",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 2,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "target": "first",
+      "update": "held-equivalent",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "target": "first",
+      "update": "held-equivalent",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "target": "second",
+      "update": "none",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "55"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "45"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "35"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "30"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "20"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "10"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 3,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-4:value",
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "target": "second",
+      "update": "none",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "55"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "45"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "35"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "30"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "20"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "10"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 3,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-4:value",
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "target": "second",
+      "update": "held-equivalent",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "target": "second",
+      "update": "held-equivalent",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "target": "first",
+      "update": "none",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "40",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "50",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "60",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "70",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "80",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "90",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 2,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "target": "first",
+      "update": "none",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "40",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "50",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "60",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "70",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "80",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "90",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "100",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 2,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "target": "first",
+      "update": "held-equivalent",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "target": "first",
+      "update": "held-equivalent",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "40",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "50",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "60",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "70",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "85",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "95",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "100",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "target": "second",
+      "update": "none",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "55"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "45"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "35"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "30"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "20"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "10"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 3,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-4:value",
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "target": "second",
+      "update": "none",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "55"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "45"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "35"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "30"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "20"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "10"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "0"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 3,
+      "publicReleasesWhileHeld": 0,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 0,
+      "strategy": "initial",
+      "causeFrames": [],
+      "failedChecks": [
+        "move-4:value",
+        "move-5:value",
+        "move-6:value",
+        "released:release-count"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "target": "second",
+      "update": "held-equivalent",
+      "stackTracing": false,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "target": "second",
+      "update": "held-equivalent",
+      "stackTracing": true,
+      "values": [
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "65"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "55"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "45"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "35"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "25"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "15"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "5"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ],
+        [
+          [
+            "30",
+            "0"
+          ],
+          [
+            "30",
+            "65"
+          ]
+        ]
+      ],
+      "unequalMoveValues": 8,
+      "publicReleasesWhileHeld": 1,
+      "nativeReleasesWhileHeld": 0,
+      "publicReleasesAfterNativeUp": 1,
+      "strategy": "reuse",
+      "causeFrames": [
+        {
+          "name": "AstylarInteractionRuntime.handlePointer",
+          "line": 396541,
+          "column": 14,
+          "instruction": "this.dispatchPointer(\"pointerup\", targetId, pointerInfo);"
+        },
+        {
+          "name": "HTMLCanvasElement._pointerBlurEvent",
+          "line": 28625,
+          "column": 22,
+          "instruction": "this._onInputChanged(DeviceType.Mouse, 0, deviceEvent);"
+        },
+        {
+          "name": "_AstylarSemanticBridge.syncFocus",
+          "line": 397987,
+          "column": 12,
+          "instruction": "node.focus({ preventScroll: true });"
+        }
+      ],
+      "failedChecks": [
+        "updated:release-count",
+        "updated:pressed-owner",
+        "move-1:value",
+        "move-1:release-count",
+        "move-1:pressed-owner",
+        "move-2:value",
+        "move-2:release-count",
+        "move-2:pressed-owner",
+        "move-3:value",
+        "move-3:release-count",
+        "move-3:pressed-owner",
+        "move-4:value",
+        "move-4:release-count",
+        "move-4:pressed-owner",
+        "move-5:value",
+        "move-5:release-count",
+        "move-5:pressed-owner",
+        "move-6:value",
+        "move-6:release-count",
+        "move-6:pressed-owner",
+        "move-7:value",
+        "move-7:release-count",
+        "move-7:pressed-owner",
+        "move-8:value",
+        "move-8:release-count",
+        "move-8:pressed-owner",
+        "released:value"
+      ]
+    }
+  ],
+  "updateReleaseCauseProvenInPublicReduction": true,
+  "materialSwappedThumbCauseProven": false,
+  "renderingEquivalent": false,
+  "canonicalAttributionChanged": false,
+  "findings": [
+    {
+      "id": "range-compatible-update-premature-release",
+      "classification": "confirmed-core-defect",
+      "owner": "semantic focus synchronization / Babylon device input / interaction runtime",
+      "cause": "Identical public update reuses controls but semantic focus blurs the canvas. Babylon dispatches a release, core clears the pressed owner before native release, and subsequent drag moves stop changing the value."
+    },
+    {
+      "id": "range-captured-release-outside-owner",
+      "classification": "confirmed-core-defect",
+      "owner": "AstylarInteractionRuntime POINTERUP target selection",
+      "cause": "Native canvas capture delivers release outside the authored control. Core commits change to the pressed owner but dispatches pointerup only to the current hit target, losing the owner release event when the hit is empty."
+    },
+    {
+      "id": "range-pointer-value-mapping",
+      "classification": "confirmed-core-defect",
+      "owner": "range pointer mapping and native-control geometry contract",
+      "cause": "The captured core maps CSS-local X over the complete 160px input width. All non-updated traces match that formula, but browser values differ at two or three intermediate steps. The exact native thumb/track metric remains to be isolated."
+    }
+  ],
+  "limitations": [
+    "No Material plugin or overlapping range controls: these results do not prove the reported swapped-thumb cause.",
+    "Pointer targeting follows shared authored CSS points, not a visual-thumb measurement. Candidate screenshots expose missing native-like range paint; visual parity is not claimed.",
+    "The update proof changes only an identical document before movement. Continuous controlled-value updates, pointer cancellation, vertical/RTL ranges and transformed/scrolled ancestors remain separate.",
+    "DPR and translated-host invariance apply to these inputs only; they do not establish global coordinate correctness.",
+    "No production implementation or canonical Material comparison input was changed."
+  ]
+}

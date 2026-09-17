@@ -3,6 +3,23 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Public bidirectional range proof confirms shared premature release
+
+The [public range reproduction](material-public-range-drag-audit.md) covers both
+controls/directions at DPR 1/2, two host origins and passive stack tracing on/off.
+All 16 identical-update cases prematurely release and stop moving. Eight captured
+stacks bind the semantic-focus -> canvas-blur -> Babylon-release -> core handling
+path to the served JavaScript. Reconciliation uses reuse. This extends the
+button-held-update cause to ranges without a Material plugin or fixture workaround.
+
+The 16 no-update controls reach both endpoints and preserve the sibling, but
+lose public pointer-up after leaving the control and differ at intermediate
+step values. Those are separately attributed to captured-release routing and
+full-box pointer mapping. Exact native thumb travel remains to be isolated;
+the Material swapped-thumb cause is still unproven. Three evidence tests pass
+with 15 rejection controls; all 32 browser cases intentionally retain their
+failing assertions. No renderer or canonical comparison input changed.
+
 ## Remaining caret-color population surveyed without an equivalence waiver
 
 The [complete original caret survey](material-owner-caret-input-survey.md)
@@ -43,7 +60,7 @@ not recover original resolved motion or establish a renderer cause. The six
 browser CSSOM controls are replayed, not replaced by a guessed CSS parser.
 
 Both commits are pushed to `codex/material-ui-showcase`. The current complete
-audit-harness discovery now contains **109 files**: 101 Material, four general and
+audit-harness discovery now contains **110 files**: 102 Material, four general and
 four TTS, retaining all 43 legacy files. Inventory completeness is not a passing
 execution. The current audit/CLI/codec regression run now passes **395/395**,
 including the original-case checks for nine receipt-only index updates whose
