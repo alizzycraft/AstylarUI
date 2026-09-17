@@ -13,6 +13,7 @@ import { buttonFlexAttribution } from './button-flex-source-binding.mjs';
 import { buttonHostRequestAttribution } from './button-host-request-source-binding.mjs';
 import { buttonFixedWidthAttribution } from './button-fixed-width-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
+import { assertLaterGapClassifications } from './owner-gap-integration-conservation.mjs';
 
 const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -81,8 +82,16 @@ test('button requests production integration preserves raw values and prior clas
     const keys = new Set([...selected, ...laterWidths, ...boxes].map(r => JSON.stringify(scalar(r))));
     const old = previous.discrepancies.filter(r => keys.has(JSON.stringify(scalar(r))));
     assert.equal(old.length, 71); assert.ok(old.every(r => r.attribution === 'unresolved'));
-    const others = r => r.discrepancies.filter(d => !keys.has(JSON.stringify(scalar(d))));
-    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'complete unrelated rows remain unchanged after explicitly reviewed later width/box-sizing groups');
+    const laterGaps = assertLaterGapClassifications(audit, previous);
+    assert.equal(laterGaps.size, 18);
+    assert.equal(audit.discrepancies.filter(r => laterGaps.has(JSON.stringify(scalar(r))))
+      .reduce((n, r) => n + r.occurrences, 0), 566);
+    assert.ok([...laterGaps].every(key => !keys.has(key)), 'later classifications cannot replace the original formatting/width/box proof');
+    const others = r => r.discrepancies.filter(d => {
+      const key = JSON.stringify(scalar(d));
+      return !keys.has(key) && !laterGaps.has(key);
+    });
+    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'complete unrelated rows remain unchanged after original groups and independently verified later gaps');
     const errors = validateMaterialInputAudit(audit, { requireComplete: false });
     assert.deepEqual(errors.filter(e => /button flex|button host request|button fixed width|button box sizing/.test(e)), []);
     for (const row of selected) {
@@ -102,6 +111,7 @@ test('button requests production integration preserves raw values and prior clas
       formattingHostGroups: selected.length, widthGroups: laterWidths.length, matchingCoreOwnersRetained: matchingCoreOwners,
       boxSizingGroups: boxes.length, observations: [...selected, ...laterWidths, ...boxes].reduce((n, r) => n + r.occurrences, 0),
       unchangedScalarRows: audit.discrepancies.length,
+      independentlyVerifiedLaterGapGroups: laterGaps.size,
       unchangedCompleteRows: others(audit).length,
       unchangedCompleteRowsSha256: hash(JSON.stringify(others(audit))),
       baselineCommit, inputEquivalent: false }));

@@ -457,3 +457,24 @@ SHA-256 `bf5e0c4212054ec203f427e711ec5d063e437cc827f25bd9e0580fa32e00808a`.
 Totals: two tests, one pass, one fail, no cancellations/skips/todos, reported
 duration **17,693,219.3313 ms**. This is a focused width-test pass, not a green
 combined command, complete harness, or renderer-equivalence result.
+
+### Corrected request guard: complete focused pass
+
+```powershell
+node --test tests/material-parity/button-requests-canonical-integration.spec.mjs
+```
+
+Exit **0**, **1/1 passed**, no failures, cancellations, skips or todos;
+reported duration **836,659.2632 ms**. The complete test preserves **1,087 cases**,
+**283 button owners**, **2,938 scalar rows**, all **71 original selected groups**
+and its original missing-evidence rejection checks. The later gap population is
+independently authenticated as **18 groups / 566 observations**, disjoint from
+the original selected groups. Every other complete row remains unchanged:
+**2,849 rows**, full-array SHA-256
+`d79a0ce689a33c2aee6cfdb09b3bf3d2ac2970c4809bb083836471d8b61b9216`.
+
+Log: `artifacts/material-parity/field-host-flow-input-audit/button-requests-guard-recheck.log`,
+SHA-256 `707da0a7f3def1196d0c72b2ab7a3d9d2b082858284da29b7859a7307951cddb`.
+The earlier failed combined run and original historical diagnostics remain
+retained. This closes the request-guard correction, not complete harness or
+rendering-parity acceptance.
