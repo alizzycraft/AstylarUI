@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Explicit-gap source replay and complete coverage are independently checked
+
+The [source/coverage preparation](material-explicit-gap-canonical-binding.md#source-replay-and-independent-classification-coverage-prepared)
+reuses the unchanged composition verifier and binds all 1,032 observations to
+original inputs across 2,311 retained capture identities. Independent coverage
+reconstructs all 16 expected groups, exact membership and states; dropping or
+relabeling a finding cannot opt out. Missing owners remain explicit missing
+coverage instead of reducing the denominator. Four focused tests pass, including
+source mutations, full replay with a deleted observation, and classification
+coverage rejection controls. These modules remain outside the production audit
+and live 95-file harness, so canonical integration and current full verification
+are still required. The canonical unresolved count remains 2,330.
+
 ## Explicit-gap classifier preserves the unequal-input finding
 
 The [prepared classifier](material-explicit-gap-canonical-binding.md#prepared-classifier-not-yet-integrated)

@@ -75,6 +75,49 @@ changed by the retained increment.
 
 ## Remaining work
 
+### Source replay and independent classification coverage prepared
+
+The new `explicit-gap-source-binding.mjs` collector authenticates the saved
+membership proof against commit `6af0ecd30f1a4a0c64639664546f312b20c5addd`, checks
+its source and parent-proof fingerprints, and executes the unchanged original
+composition verifier with `--check`. That verifier reopens every original tree
+and descendant composition, retains all 40 negative controls, and confirms the
+canonical files were not changed. The verifier's own source hash is checked
+before execution. No second composition implementation was introduced.
+
+The collector reopens the original scalar report, compares the complete selected
+inputs, and retains all 2,311 capture identities, 516 selected owners in 296
+cases, and 1,032 row/column observations. Its expected population comes from the
+fixed proof inventory. Removing a source owner records the two missing property
+observations; it cannot shrink the denominator. Complete validation rejects
+partial coverage. Diagnostic subsets can be checked explicitly with
+`requireComplete: false`, but do not establish complete audit coverage.
+
+`explicit-gap-coverage.mjs` independently reopens the original scalar source and
+reconstructs all expected classifications, full ordered membership, state lists
+and display samples. It compares against the fixed proof inventory rather than
+whatever findings survive in the proposed report. Source validation and complete
+classification validation are both required for production integration.
+
+```powershell
+node --test --test-concurrency=1 tests/material-parity/explicit-gap-source-binding.spec.mjs tests/material-parity/explicit-gap-coverage.spec.mjs
+```
+
+Result: exit **0**, **4/4 tests**, no failures/skips/cancellations/todos,
+**41,654.9198 ms**. The source tests reject ten changed scalar/tree/identity
+populations and additionally exercise full replay with a deleted observation,
+an incomplete-coverage claim, and an omitted owner. Thirteen classification
+controls reject removed/relabelled findings, changed values, samples, ordered
+memberships, states, equivalence claims, source groups and coverage counts.
+
+The log is
+`artifacts/material-parity/field-host-flow-input-audit/explicit-gap-source-coverage-focused.log`,
+1,186 bytes, SHA-256
+`ef228c56396ea77a91f77dc31fd130c4eac764a406afa37552db61a4ea0763e9`.
+The new modules are still independent of the production audit and the live
+95-file harness. Canonical integration, precedence/conservation checks and a
+complete current harness remain pending; no renderer or fixture input changed.
+
 ### Prepared classifier, not yet integrated
 
 `tests/material-parity/explicit-gap-classification.mjs` now consumes the verified
