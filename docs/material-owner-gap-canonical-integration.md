@@ -178,13 +178,52 @@ It is 102,382 bytes, SHA-256
 This closes the earlier ten regression failures; full canonical verification
 and the current complete harness remain separate requirements.
 
-The earlier 91-file / 854-test harness pass predates this integration. The
-complete current harness is running in session **85570**, with log
-`field-host-flow-input-audit/full-harness-gap-integration.log`. Its startup
-inventory contains **95 files** (87 Material, four general parity and four TTS),
-including all 43 legacy files. It includes the separately committed button
-paint survey and the current gap integration; tested sources remain unchanged
-during the run. No outcome is claimed yet. The enforced parity matrix also
-remains required. Input and
-rendering equivalence remain false; the public gap grammar/unit/axis failures
-and other unresolved audit findings remain open.
+### Complete 95-file harness: two failures and focused corrections
+
+The earlier 91-file / 854-test pass predates this integration. Session **85570**
+has now finished with exit **1**: **865/867 passing, two failures**, no skips,
+cancellations or todos; test duration **25,495,092.2618 ms**, wrapper elapsed
+**25,495,495 ms**. Its startup inventory contains **95 files** (87 Material, four
+general parity and four TTS), including all 43 legacy files. Tested dependencies
+were left unchanged until the process returned its terminal result. Later-added
+independent held-state and explicit-gap tests are not included in this inventory.
+
+The retained log is
+`artifacts/material-parity/field-host-flow-input-audit/full-harness-gap-integration.log`,
+344,457 bytes, SHA-256
+`c80ad9cb243df4d331caa620aa2459acd4434151a50d0114a93f593cec31fa05`.
+
+The two failures have bounded, separately verified explanations:
+
+- **Field-host join receipt:** `693a95f` refreshed two dependency hashes in the
+  field-host survey but omitted regeneration of its dependent membership receipt.
+  Replaying the existing join differs in exactly its survey-file hash. Regeneration
+  changes only that descriptor; all 72 groups, 4,616 observations, historical
+  classifications, canonical row hashes and memberships are unchanged. This was
+  not an EOL-only change and no historical values were replaced.
+- **Slider historical conservation:** the test had not accounted for six later
+  gap observation-stage classifications (row/column gap on `slider-primary`,
+  `slider-start`, and `slider-visual`, two cases each). It now uses the existing
+  independent source/coverage conservation helper before restoring those exact
+  rows for the historical comparison. All **220** original complete rows reproduce
+  the unchanged historical SHA-256
+  `4e1f09fc03af948aec7b2d1d927ee13c298b6439ceaa3bb0145a72122eb315ee`.
+  No expected hash, scalar, classification boundary or tolerance was weakened.
+  Four new rejection controls require the later gap source and membership evidence.
+
+```powershell
+node scripts/audit-material-field-host-layout-join.mjs
+node scripts/audit-material-field-host-layout-join.mjs --check
+node --test --test-concurrency=1 tests/material-parity/field-host-layout-canonical-join.spec.mjs tests/material-parity/slider-border-canonical-integration.spec.mjs
+```
+
+Generation and no-write join replay exit **0**. The focused regression run in
+session **80603** passes **7/7**, exit **0**, no failures/skips/cancellations/todos,
+**25,926.3851 ms**. Its log is
+`artifacts/material-parity/field-host-flow-input-audit/full-harness-gap-failure-repairs.log`,
+SHA-256 `b38f3aab445a12feadf9c75fb56c43ed8b3488e202867b301184c1de9aead010`.
+
+These focused corrections do not turn the failed 95-file run into a full pass.
+The current complete harness, updated canonical provenance replay and enforced
+parity matrix remain required. Input/rendering equivalence is not established;
+the public gap grammar/unit/axis failures and remaining audit findings are open.

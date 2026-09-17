@@ -3,6 +3,18 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Complete 95-file harness finishes; both exposed regressions are corrected
+
+The [full-run record and focused corrections](material-owner-gap-canonical-integration.md#complete-95-file-harness-two-failures-and-focused-corrections)
+retain the terminal **865/867 passing, two failing** result. The field-host
+membership receipt had a stale dependency descriptor, not changed findings.
+The slider historical guard needed to validate and account for six later gap
+classifications. Its unchanged original 220-row hash is now recovered, with
+four additional evidence-rejection controls. Both failures' focused suites pass
+**7/7**. No renderer, reference, fixture, tolerance or historical expected hash
+was changed. A full current run and canonical provenance replay are still
+required; the earlier failed run is not relabelled as passing.
+
 ## Explicit-gap source replay and complete coverage are independently checked
 
 The [source/coverage preparation](material-explicit-gap-canonical-binding.md#source-replay-and-independent-classification-coverage-prepared)
