@@ -1,5 +1,50 @@
 # Full-harness field-host failures: stale receipts, unchanged original evidence
 
+## Verified dependent refresh after the nine case indexes
+
+After `4947e2f`, the original layout, historical-membership-join, and initial-style
+generators were run in dependency order, each followed by its no-write `--check`:
+
+```powershell
+node scripts/audit-material-field-host-layout-inputs.mjs
+node scripts/audit-material-field-host-layout-inputs.mjs --check
+node scripts/audit-material-field-host-layout-join.mjs
+node scripts/audit-material-field-host-layout-join.mjs --check
+node scripts/audit-material-field-host-initial-styles.mjs
+node scripts/audit-material-field-host-initial-styles.mjs --check
+```
+
+All six commands exit **0**. The separate weight/tracking index's single stale
+audit-module receipt was refreshed using the complete original-source replay
+documented below. Comparison of the four entire JSON objects against `4947e2f`
+proves exactly six changed hashes: two layout source receipts, one join survey
+receipt, two initial-style source receipts, and one weight/tracking source
+receipt. Every other field remains identical. In particular, no historical
+classification, authored declaration, missing value, case, geometry gap, or
+proof digest was replaced.
+
+The original focused tests were run unchanged:
+
+```powershell
+node --test --test-concurrency=1 tests/material-parity/field-host-layout-input-evidence.spec.mjs tests/material-parity/field-host-layout-canonical-join.spec.mjs tests/material-parity/field-host-initial-style-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs
+```
+
+**13/13 pass**, exit **0**, no failed, cancelled, skipped, or todo tests;
+**181,703.856 ms**. This verifies complete source/case replay and original
+mutation controls, not merely receipt equality. Historical canonical integration
+tests are a separate check, and the complete audit is still unfinished.
+
+Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `caret-field-host-receipt-conservation.log`, SHA-256
+  `143aea20d3f8cf00dbeb25fd8ddd4a6bf742bac5398640e180117116e16f2b4e`.
+- `caret-field-host-refresh-focused.log`, SHA-256
+  `84c3ff4c7467cc71ba87e6d565281a2051b35d2d0d9a83b8670d683c16da4469`.
+
+Earlier diagnostic scripts deliberately expect stale source receipts; they are
+not current acceptance commands after this refresh. Their original runs and
+failure evidence remain recorded below.
+
 ## Recheck after caret integration
 
 At `ebd5898`, the same unchanged diagnostic was rerun against audit-module
