@@ -1,5 +1,24 @@
 # Full-harness field-host failures: stale receipts, unchanged original evidence
 
+## Recheck after caret integration
+
+At `ebd5898`, the same unchanged diagnostic was rerun against audit-module
+SHA-256 `b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73`.
+Both complete replay records match the non-receipt and membership digests below:
+**577 layout cases / 72 groups / 4,616 observations**, and **577 weight/tracking
+cases / 1,154 proofs / 12 groups**. Only the same two layout receipts and one
+weight/tracking receipt differ. No evidence artifact was rewritten.
+
+The original stale-fingerprint assertion remains: **4 pass / 1 fail**, exit
+**1**, **168,982.9665 ms**. The assertions beyond that guard were independently
+executed by the diagnostic insertion. Log:
+`artifacts/material-parity/field-host-flow-input-audit/caret-field-host-receipts-recheck.log`,
+SHA-256 `5b998799c24221903c39985b086d2534eee20f81389a0321e96ee9309308de7d`.
+This is complete evidence replay with a preserved provenance failure, not a
+green suite. The earlier run below is retained as historical evidence.
+
+## Earlier full-harness diagnosis
+
 The running 110-file audit harness exposed three additional failures:
 
 - Field-host layout canonical join: the saved layout survey's typography-index

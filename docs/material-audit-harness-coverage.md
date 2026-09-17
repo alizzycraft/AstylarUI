@@ -1,6 +1,15 @@
 # Complete audit harness coverage
 
-## Current inventory: canonical caret integration is registered
+## Current inventory: complete caret conservation controls are registered
+
+Discovery includes **113 files**: **105 Material**, four general parity and four
+TTS, retaining all **43 legacy files**. The new complete-row conservation tests
+and inventory tests pass **8/8**. The full canonical checker correctly rejects
+the not-yet-regenerated report; this is not full-report acceptance. See
+[the conservation contract and red baseline](material-caret-canonical-conservation.md).
+The complete current harness and enforced rendering matrix remain outstanding.
+
+## Earlier inventory: canonical caret integration is registered
 
 Discovery includes **112 files**: **104 Material**, four general parity and four
 TTS, with all **43 legacy files** retained. The added canonical caret integration
