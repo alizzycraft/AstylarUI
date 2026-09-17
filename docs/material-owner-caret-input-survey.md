@@ -30,6 +30,13 @@ All equivalence, candidate-computed, descendant-caret and renderer-cause flags
 remain false. In particular, this cannot close the reported missing caret in
 focused empty text inputs.
 
+The subsequent [complete motion-target review](material-owner-caret-motion-review.md)
+replays all 42 explicit-motion groups, including every original observation.
+Thirty-two groups / 796 observations name no direct caret or text-color motion
+target; ten chip/tab groups / 362 observations remain specific review cases.
+This does not change the parent survey or canonical classifications and is not
+a computed-candidate or visible-caret claim.
+
 ## Evidence and ownership
 
 `tests/material-parity/owner-caret-input-evidence.mjs` reuses the existing

@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Original caret motion review preserves color-dependent and incomplete cases
+
+The [new declaration review](material-owner-caret-motion-review.md) replays all
+42 motion-request groups / 1,158 observations / 822 original cases against the
+pinned parent and complete original trees. Thirty-two groups name no direct
+caret or text-color motion target. Ten groups remain open: chip duration-only
+requests, tab-label color transitions and tab-panel empty longhands. Generation
+and no-write replay pass with seven positive and 32 rejection controls; all
+canonical files remain unchanged. This narrows the declaration investigation,
+not the visible empty-input caret bug or the 2,278-group attribution backlog.
+
 ## Current full-harness button-width failure has a bounded explanation
 
 The [unchanged-test diagnostic](material-button-fixed-width-audit.md#later-full-harness-failure-isolated-without-changing-the-test)
