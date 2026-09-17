@@ -271,3 +271,56 @@ button-box, field-host and grid historical baselines; both tooltip tests pass.
 These six focused suites do not establish complete canonical conservation or
 rendering parity. Full report regeneration/conservation, the current complete
 audit harness and enforced output-parity matrix remain required.
+
+### Complete canonical generation, conservation and no-write replay
+
+The complete report now incorporates the independently reviewed explicit-spacing
+and capture/motion findings. Generation and subsequent **no-write replay** both
+finish with exit **1**, solely because **2,278** groups remain unattributed. There
+are no stale-report or source-binding errors. Both retain **436/436 static** and
+**1,875/1,875 interaction** cases, **8,339** groups, **386,891** observations and
+**132** source findings. These are verified audit artifacts, not input-equivalence
+acceptance or renderer fixes.
+
+```powershell
+node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+node scripts/run-material-input-audit.mjs --check --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+node scripts/check-material-gap-canonical-conservation.mjs
+```
+
+The read-only conservation command passes, exit **0**. It authenticates both
+compressed and uncompressed payloads against the old committed manifest at
+`852a06d1c8958d926a4eb9a0977b7847a3b16140` and the current manifest. Across every
+ordered row it preserves identity, complete original scalar projection (including
+own-property presence), counts, sampled cases/states and authored examples.
+Exactly **52** formerly unresolved classifications change:
+
+| Attribution | Groups | Observations |
+| --- | ---: | ---: |
+| Unequal explicit spacing composition | 16 | 1,032 |
+| Motion-gap observation stage | 32 | 1,720 |
+| Original overlay scalar-layer rule loss | 4 | 118 |
+
+The remaining **8,287 complete rows** are unchanged. Their ordered row-digest
+SHA-256 is `b9d944e7ac3e8a001be936fc3bd6ffbfe40fc3402f425f8b99b2aad48359fcfe`.
+All changed rows retain false input-equivalence, used-gap and renderer-causality
+claims; the capture/motion rows also retain false computed-candidate and rendering
+claims. Top-level proof ledgers are validated by the separate no-write replay,
+not by this row-only conservation check.
+
+Retained evidence under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `gap-review-full-canonical-generation.log` and
+  `gap-review-full-canonical-check.log`: identical SHA-256
+  `b0fc2d4c926c5613cbb44a45c09d7f2023561bfb365c465c86089cf1d73880dc`.
+- `gap-review-full-canonical-conservation.json`: complete 52-row change receipts,
+  SHA-256 `76bd084cb491b33aab88d53b350cc4db4bf2cf68689c3e25b0bd09591aded6aa`.
+- Current gzip: **52,704,701 bytes**, SHA-256
+  `81e107a92e2d8544b8e4b09bc26178b35b304aee816e8ff6f65c8a58f8394fd3`.
+- Decoded JSON: **1,954,606,641 bytes**, SHA-256
+  `004d35b10a0d85987fe9cd94482bdf365e2ad784faae2ae12d8a62437e9350a3`.
+
+The unfiltered 110-file audit harness remains a separate running check. It has
+reported a historical button-fixed-width conservation assertion failure; that
+failure is retained and requires diagnosis, not a broad unrelated-row exemption.
+The enforced parity matrix and remaining attribution work are still outstanding.

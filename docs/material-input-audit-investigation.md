@@ -69,10 +69,15 @@ complete non-provenance contents remain unchanged. The subsequent
 passes **11/11** across all six focused suites. Source-bound accounting for the
 36 later review groups preserves every prior scalar and unrelated complete row
 in those diagnostics; eight new rejection controls prevent broad exclusions.
-The saved canonical report still has **2,330 unresolved groups**. Canonical
-refresh, full-corpus conservation, the complete current harness and the enforced
-parity matrix remain outstanding. No renderer, plugin, reference or canonical
-comparison input was changed by these audit increments.
+The [complete canonical refresh and no-write replay](material-gap-review-membership.md#complete-canonical-generation-conservation-and-no-write-replay)
+now retain **2,278 unresolved groups**. Complete row conservation verifies all
+8,339 original scalars and 8,287 unchanged complete findings; only the 52 reviewed
+spacing/capture classifications change. Generation and no-write replay both exit
+1 solely for the remaining attribution gaps, not stale evidence. The unfiltered
+110-file harness is still running and has exposed a historical button-width
+conservation failure requiring investigation. The complete current harness,
+remaining attribution and enforced parity matrix remain outstanding. No renderer,
+plugin, reference or canonical comparison input changed in these audit increments.
 
 ## Explicit-spacing historical guards verified
 
