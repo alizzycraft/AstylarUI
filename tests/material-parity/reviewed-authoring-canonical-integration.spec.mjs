@@ -14,6 +14,7 @@ import { buttonFlexAttribution } from './button-flex-source-binding.mjs';
 import { buttonHostRequestAttribution } from './button-host-request-source-binding.mjs';
 import { buttonFixedWidthAttribution } from './button-fixed-width-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
+import { assertLaterGapClassifications } from './owner-gap-integration-conservation.mjs';
 
 const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -103,7 +104,15 @@ test('reviewed authoring production integration preserves raw rows and prior cla
   const oldSelected = previous.discrepancies.filter(r => selected.has(JSON.stringify(scalar(r))));
   assert.equal(oldSelected.length, 188);
   assert.ok(oldSelected.every(r => r.attribution === 'unresolved'));
-  const others = r => r.discrepancies.filter(d => !selected.has(JSON.stringify(scalar(d))));
+  const laterGaps = assertLaterGapClassifications(audit, previous);
+  assert.equal(laterGaps.size, 18);
+  assert.equal(audit.discrepancies.filter(r => laterGaps.has(JSON.stringify(scalar(r))))
+    .reduce((n, r) => n + r.occurrences, 0), 758);
+  assert.ok([...laterGaps].every(key => !selected.has(key)), 'later classifications cannot replace original authoring proof');
+  const others = r => r.discrepancies.filter(d => {
+    const key = JSON.stringify(scalar(d));
+    return !selected.has(key) && !laterGaps.has(key);
+  });
   assert.equal(hash(JSON.stringify(others(audit))), hash(JSON.stringify(others(previous))));
   assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => /root flow height|button pill radius|button flex|button host request|button fixed width|button box sizing/.test(e)));
 }));

@@ -478,3 +478,24 @@ SHA-256 `707da0a7f3def1196d0c72b2ab7a3d9d2b082858284da29b7859a7307951cddb`.
 The earlier failed combined run and original historical diagnostics remain
 retained. This closes the request-guard correction, not complete harness or
 rendering-parity acceptance.
+
+### Corrected reviewed-authoring guard: full two-test pass
+
+```powershell
+node --test tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs
+```
+
+Exit **0**, **2/2 passed**, no failures, cancellations, skips or todos;
+reported duration **1,665,064.2858 ms**. The original integration checks and the
+complete detached-evidence / inflated-claim rejection test both ran. This is not
+the earlier name-filtered diagnostic. The bounded correction authenticates exactly
+**18 later groups / 758 observations**, requires them to be disjoint from the
+**188 original selected groups**, and retains the original ordered scalar,
+authored-input and complete unrelated-row comparisons.
+
+Log: `artifacts/material-parity/field-host-flow-input-audit/reviewed-authoring-guard-recheck.log`,
+SHA-256 `55b67def5122000f0eecf4cdd6eb90a6cec64b99abb8e73f55273ff06a8828df`.
+Together with the two separately verified button guards, this resolves all three
+diagnosed historical-conservation failures. The full current harness and
+rendering-parity matrix still remain required; no renderer or canonical input
+change is included.
