@@ -4,6 +4,9 @@ import { validateOwnerGapClassifications } from './owner-gap-coverage.mjs';
 import { explicitGapAttribution } from './explicit-gap-classification.mjs';
 import { validateExplicitGapInputs } from './explicit-gap-source-binding.mjs';
 import { validateExplicitGapClassifications } from './explicit-gap-coverage.mjs';
+import { gapReviewAttributions } from './gap-review-classification.mjs';
+import { validateGapReviewInputs } from './gap-review-source-binding.mjs';
+import { validateGapReviewClassifications } from './gap-review-coverage.mjs';
 
 export const gapScalarProjection = row => [row.family, row.element, row.property, row.reference,
   row.astylar, row.occurrences, row.cases, row.states];
@@ -51,5 +54,24 @@ export function assertLaterGapClassifications(audit, previous, options = {}) {
     signatures.add(key);
   }
   assert.equal(signatures.size, added.length + explicit.length);
+  // Later capture/motion findings have their own original-source binding. An
+  // attribution name alone is not permission to exempt a historical row.
+  assert.equal(audit.gapReviewInputs?.binding?.status, 'bound');
+  assert.deepEqual(validateGapReviewClassifications(audit.gapReviewInputs, audit.discrepancies, diagnostic), []);
+  assert.deepEqual(validateGapReviewInputs(audit.gapReviewInputs, diagnostic), []);
+  const reviewed = audit.discrepancies.filter(row => Object.values(gapReviewAttributions).includes(row.attribution));
+  for (const row of reviewed) {
+    const key = JSON.stringify(gapScalarProjection(row)), prior = before.get(key);
+    assert.ok(prior, 'reviewed gap classification must retain its complete prior scalar row');
+    assert.equal(prior.attribution, 'unresolved');
+    assert.equal(row.classification, 'parity-harness-defect');
+    assert.deepEqual(row.referenceAuthoredExamples, prior.referenceAuthoredExamples);
+    assert.deepEqual(row.astylarAuthoredExamples, prior.astylarAuthoredExamples);
+    for (const flag of ['inputEquivalent', 'wholeElementInputEquivalent', 'computedCandidateVerified',
+      'usedGapVerified', 'renderingEquivalent', 'rendererCauseProven']) assert.equal(row.reviewEvidence[flag], false);
+    assert.ok(!signatures.has(key), 'reviewed, explicit and normal-gap populations must be disjoint');
+    signatures.add(key);
+  }
+  assert.equal(signatures.size, added.length + explicit.length + reviewed.length);
   return signatures;
 }

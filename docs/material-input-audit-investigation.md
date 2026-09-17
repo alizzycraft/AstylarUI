@@ -43,12 +43,15 @@ not recover original resolved motion or establish a renderer cause. The six
 browser CSSOM controls are replayed, not replaced by a guessed CSS parser.
 
 Both commits are pushed to `codex/material-ui-showcase`. The current complete
-audit-harness discovery contains **108 files**: 100 Material, four general and
+audit-harness discovery now contains **109 files**: 101 Material, four general and
 four TTS, retaining all 43 legacy files. Inventory completeness is not a passing
 execution. The current audit/CLI/codec regression run now passes **395/395**,
 including the original-case checks for nine receipt-only index updates whose
-complete non-provenance contents remain unchanged. Historical conservation is
-still in progress separately; its terminal result is not yet claimed.
+complete non-provenance contents remain unchanged. The subsequent
+[historical conservation run](material-gap-review-membership.md#historical-conservation-after-bounded-gap-reviews)
+passes **11/11** across all six focused suites. Source-bound accounting for the
+36 later review groups preserves every prior scalar and unrelated complete row
+in those diagnostics; eight new rejection controls prevent broad exclusions.
 The saved canonical report still has **2,330 unresolved groups**. Canonical
 refresh, full-corpus conservation, the complete current harness and the enforced
 parity matrix remain outstanding. No renderer, plugin, reference or canonical

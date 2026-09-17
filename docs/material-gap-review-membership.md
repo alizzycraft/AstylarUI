@@ -237,3 +237,37 @@ The retained log is
 SHA-256 `8f5d1b1dd01def52bd81cfa4fc9838a6f05fa676ef9d06bfde3019c3854666aa`.
 Historical integration conservation, the complete current harness, canonical
 refresh/conservation and enforced parity remain separate requirements.
+
+### Historical conservation after bounded gap reviews
+
+The historical integration guards now authenticate later capture/motion
+classifications through their independent source and coverage validators before
+accounting for them in unrelated-row comparisons. They preserve the complete
+prior scalar projection, authored examples and all false equivalence/cause
+flags. Normal-gap, explicit-spacing and reviewed-gap populations must remain
+disjoint. Eight added rejection controls cover lost evidence/rows/cases,
+substituted proof digests, fabricated causality and raw omission replaced by a
+literal marker.
+
+```powershell
+node --test --test-concurrency=1 tests/material-parity/owner-gap-canonical-integration.spec.mjs tests/material-parity/slider-border-canonical-integration.spec.mjs tests/material-parity/owner-grid-initial-canonical-integration.spec.mjs tests/material-parity/button-box-sizing-canonical-integration.spec.mjs tests/material-parity/field-host-layout-canonical-integration.spec.mjs tests/material-parity/tooltip-wrapping-canonical-integration.spec.mjs
+```
+
+All **11/11** tests pass, exit **0**, with no failures, skips, cancellations or
+todos, **3,023,752.9254 ms**. The retained log is
+`artifacts/material-parity/field-host-flow-input-audit/gap-review-historical-conservation.log`,
+SHA-256 `7a460a77658b8b01e59f1bf9e6ece27660a2e37887ced94670e647d6f5e3100f`.
+
+The historical owner-gap diagnostic retains all 6,605 scalar rows and 6,445
+unrelated complete rows, SHA-256
+`5b9f5cfd5f8b5ca61381dadc761e4639484158a13ca69dc35dc977b0d0993432`.
+The later reviewed population in that selected diagnostic is 36 groups / 196
+observations, not the full 1,838-observation production population. The slider
+guard retains its original 220-row digest
+`4e1f09fc03af948aec7b2d1d927ee13c298b6439ceaa3bb0145a72122eb315ee`.
+The log also retains full scalar/unrelated-row counts and digests for the
+button-box, field-host and grid historical baselines; both tooltip tests pass.
+
+These six focused suites do not establish complete canonical conservation or
+rendering parity. Full report regeneration/conservation, the current complete
+audit harness and enforced output-parity matrix remain required.
