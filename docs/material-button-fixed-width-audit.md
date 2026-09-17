@@ -422,3 +422,38 @@ revision, so correcting a live historical guard does not erase the original
 failure reproduction. Import relocation still targets the current audit modules
 and changes no other original statements. No canonical classifications, renderer
 behavior or comparison authoring change in this diagnostic increment.
+
+### Corrected fixed-width guard passes; request-count mistake retained
+
+The fixed-width integration now calls the existing independent source/coverage
+guard before accounting for the **18** later gap groups / **1,200** observations.
+It proves they are disjoint from the original width/box groups, preserves the
+original raw input and scalar assertions, and still requires structural equality
+for every unrelated complete row. Its original missing-evidence and incomplete-
+owner rejection controls also ran and passed.
+
+```powershell
+node --test --test-concurrency=1 tests/material-parity/button-fixed-width-canonical-integration.spec.mjs tests/material-parity/button-requests-canonical-integration.spec.mjs
+```
+
+The fixed-width test passed, retaining **480 cases**, **600 owners**, **1,201
+scalar rows**, **52 matching-width owners** and **1,166 unchanged complete rows**.
+The complete unchanged-row-array SHA-256 is
+`d2858f8d9f2dd399d8335ddeb57e987e710cae46662a24e14b66f3ae267035f6`
+(different serialization from the earlier array of individual row digests).
+Reported test duration is **17,425,067.7126 ms**; this includes a long host/tool
+interruption and is not interpreted as CPU time.
+
+The combined command exited **1**, one pass / one fail. The request test rejected
+an incorrectly copied 1,200-observation assertion: its independently retained
+diagnostic actually contains **566 observations** across the same 18 identities,
+because its selected case population differs. No evidence was changed to fit the
+incorrect count. The request assertion is corrected to that original independently
+verified count and requires its own complete rerun before acceptance.
+
+Retained combined log:
+`artifacts/material-parity/field-host-flow-input-audit/button-historical-guards-recheck.log`,
+SHA-256 `bf5e0c4212054ec203f427e711ec5d063e437cc827f25bd9e0580fa32e00808a`.
+Totals: two tests, one pass, one fail, no cancellations/skips/todos, reported
+duration **17,693,219.3313 ms**. This is a focused width-test pass, not a green
+combined command, complete harness, or renderer-equivalence result.
