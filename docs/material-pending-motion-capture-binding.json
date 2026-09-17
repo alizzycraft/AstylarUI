@@ -1,0 +1,3594 @@
+{
+  "schemaVersion": 1,
+  "kind": "original-pending-motion-capture-membership-binding",
+  "sources": [
+    {
+      "file": "docs/material-gap-review-membership.json",
+      "sha256": "ad18f20ccb9234035660854b1eb8ccef4a84c9813459d5a806106dc6c4bf545b"
+    },
+    {
+      "file": "docs/material-motion-cssom-capture-proof.json",
+      "sha256": "43e283945443539cd7ab127fa5bab86dcdeda70bb896eab726e5b56006e57fd6"
+    }
+  ],
+  "sourceFingerprint": {
+    "file": "scripts/bind-material-pending-motion-capture.mjs",
+    "sha256": "4bc741ba9c736064555140598d61bb3ed3e076a09bbaad3c474497032df3b6ef"
+  },
+  "counts": {
+    "groups": 2,
+    "cases": 32,
+    "propertyObservations": 64,
+    "browserControls": 6
+  },
+  "rows": [
+    {
+      "family": "dialog",
+      "element": "dialog-panel",
+      "property": "columnGap",
+      "canonicalRevision": "2408285b0a3cff2a6366825bb9dee214758bf91d",
+      "canonicalRowSha256": "fe5969e898ffc766c0bb84bac8b0b6b51ea186254cbec5f0365f34d47a32dec2",
+      "originalProofSha256": "bf57b9d9feaf60fecb6668236e7d2651d1f0287a402e137d7273c5a7f6648aea",
+      "priorAttribution": "unresolved",
+      "originalMotionDisposition": "requires-review",
+      "observations": [
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/activate",
+          "state": "activate",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "f3f7728c9c4fbc6bdae1aedacfb2ac15529d96634499fc5ee2879b5ac62dfbb5"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "824223a0cdb6e0a64c0ca3d2ec3b091b1d54423604ddfaf3737becb1ccf3302b"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open-hover-content/reference-input-tree.json",
+              "sha256": "2f7bd9a2fb62918033636fdcf991bb1eb54f6581e9e0348bae63378d08a0aab9"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+              "sha256": "57a20e2587559f483d2e3b53a79857ee58165c28122ea4c595b5f6fd43a556d7"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/open",
+          "state": "open",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open/reference-input-tree.json",
+              "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open/astylar-input-tree.json",
+              "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr2/activate",
+          "state": "activate",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr2/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "824223a0cdb6e0a64c0ca3d2ec3b091b1d54423604ddfaf3737becb1ccf3302b"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr2/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open-hover-content/reference-input-tree.json",
+              "sha256": "2f7bd9a2fb62918033636fdcf991bb1eb54f6581e9e0348bae63378d08a0aab9"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+              "sha256": "57a20e2587559f483d2e3b53a79857ee58165c28122ea4c595b5f6fd43a556d7"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr2/open",
+          "state": "open",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open/reference-input-tree.json",
+              "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open/astylar-input-tree.json",
+              "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr1/activate",
+          "state": "activate",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr1/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "c1c209fa2d9493074c27162441a044475ca13099492b787a860008bae7139d9f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr1/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open-hover-content/reference-input-tree.json",
+              "sha256": "dee00cc64afe931dcf375e8043d8c84070b1781d69fd7d691c19e92b5099bf4c"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+              "sha256": "c4045457b8b796f536cc3028b7ef9236aa4dc0f2a404db4fd4213ffdaa8acd75"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr1/open",
+          "state": "open",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open/reference-input-tree.json",
+              "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open/astylar-input-tree.json",
+              "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr2/activate",
+          "state": "activate",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr2/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "78cb53cffbf6188c2ebe3b4d1bef2ba1119bbfef43712c5b8fbe8a9967c51a49"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "c1c209fa2d9493074c27162441a044475ca13099492b787a860008bae7139d9f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr2/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open-hover-content/reference-input-tree.json",
+              "sha256": "3f29c0aaf514a083da27d366da9ca9bbc51ce76f2cf6b796fc556f9f51dee8eb"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+              "sha256": "c4045457b8b796f536cc3028b7ef9236aa4dc0f2a404db4fd4213ffdaa8acd75"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr2/open",
+          "state": "open",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open/reference-input-tree.json",
+              "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open/astylar-input-tree.json",
+              "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr1/activate",
+          "state": "activate",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "3f7622b87f5b72aadfa10d573465e749131b1e5fb3b93b190c10de1b7e49a752"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr1/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "b72347150eba2cef2653ffb12f031215d46b53ce785c41378749fc7d27969583"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr1/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open-hover-content/reference-input-tree.json",
+              "sha256": "2ac26d042c63e32676ef9245edd751359cb0a88224e1091417a038317916f079"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+              "sha256": "b45eee212a95d34fd9e17d6f04da09748fe56daf70bf8dca2bc2f027d200cfcb"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr1/open",
+          "state": "open",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open/reference-input-tree.json",
+              "sha256": "8ae07cd82437c053793da6003f6242b0fcbd3ff0e401afe7a8044b90c9c5b63a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open/astylar-input-tree.json",
+              "sha256": "3f7622b87f5b72aadfa10d573465e749131b1e5fb3b93b190c10de1b7e49a752"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr2/activate",
+          "state": "activate",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "93350e31a0948885e25e8495463626e0c9145e8cd0878c79f033e90c242e2d45"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr2/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "8ae07cd82437c053793da6003f6242b0fcbd3ff0e401afe7a8044b90c9c5b63a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "728cce48d2100e12183376c5d0a6c26444eac110db1dcc48988c2bdb49663752"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr2/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open-hover-content/reference-input-tree.json",
+              "sha256": "57deb9c509fac36860cea282ec0a0ee6ad840322fcea02591b7070bc0592dc0a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+              "sha256": "c26b3fd51d23cde67fda8e46d4902f45177b4e958a7e00679c19af5437fa49de"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr2/open",
+          "state": "open",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open/reference-input-tree.json",
+              "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open/astylar-input-tree.json",
+              "sha256": "93350e31a0948885e25e8495463626e0c9145e8cd0878c79f033e90c242e2d45"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr1/activate",
+          "state": "activate",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "9740555c0fad7b539c4aa194282536c6082abda7040e4c84044791728ecfb4f1"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr1/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "e659f4b9504bcc47f16f891633baeec8e3cff1149b2228c71c35576d2bd21ca0"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "3f415ca727f125cf57655f01abbdd57d5ea7d778cff6079575d86e013451417c"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr1/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open-hover-content/reference-input-tree.json",
+              "sha256": "efb81c3ba441bbba4fe7d92955a2fcde5d43e89f3eecbc5591fd9b9dbad27647"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+              "sha256": "746164cb03d2873744015d4eff8625b6be16851a66d1d8aef9db4a0c57aae626"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr1/open",
+          "state": "open",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open/reference-input-tree.json",
+              "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open/astylar-input-tree.json",
+              "sha256": "9740555c0fad7b539c4aa194282536c6082abda7040e4c84044791728ecfb4f1"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr2/activate",
+          "state": "activate",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "e659f4b9504bcc47f16f891633baeec8e3cff1149b2228c71c35576d2bd21ca0"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "42ff42079f2acbe35474e83f2df817208d8ca46ec485299135d6c472a2634acd"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr2/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "dcf8487cfec77c9ec1d56d4b010f0c750b0689d71f61f9d2c9d1ecfd7dcc92f0"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr2/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open-hover-content/reference-input-tree.json",
+              "sha256": "c28e8b8698716035bc8084d844ec44fa4a6ea5b298a3f122c869abb91c49371b"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+              "sha256": "6b1fdf5f7496ae81cfac08786b726e0582a3551ce666bc3ab2a05c28e254fa93"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr2/open",
+          "state": "open",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open/reference-input-tree.json",
+              "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open/astylar-input-tree.json",
+              "sha256": "42ff42079f2acbe35474e83f2df817208d8ca46ec485299135d6c472a2634acd"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        }
+      ],
+      "classification": "parity-harness-defect",
+      "attribution": "original-pending-transition-shorthand-capture-loss",
+      "owner": "Material scalar authored-rule capture and pending CSS shorthand interpretation",
+      "inputEquivalent": false,
+      "computedCandidateVerified": false,
+      "usedGapVerified": false,
+      "originalResolvedMotionVerified": false,
+      "renderingEquivalent": false,
+      "rendererCauseProven": false
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-panel",
+      "property": "rowGap",
+      "canonicalRevision": "2408285b0a3cff2a6366825bb9dee214758bf91d",
+      "canonicalRowSha256": "f4a5ac66e90c1e3824dd0b3cf4009e3a7002863fb1b91e8e2d57f720b9cf4d11",
+      "originalProofSha256": "e10cdd734fc33c5e5952a155d989077521704bba74299bcd948f177ccc04a5e9",
+      "priorAttribution": "unresolved",
+      "originalMotionDisposition": "requires-review",
+      "observations": [
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/activate",
+          "state": "activate",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "f3f7728c9c4fbc6bdae1aedacfb2ac15529d96634499fc5ee2879b5ac62dfbb5"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "824223a0cdb6e0a64c0ca3d2ec3b091b1d54423604ddfaf3737becb1ccf3302b"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open-hover-content/reference-input-tree.json",
+              "sha256": "2f7bd9a2fb62918033636fdcf991bb1eb54f6581e9e0348bae63378d08a0aab9"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+              "sha256": "57a20e2587559f483d2e3b53a79857ee58165c28122ea4c595b5f6fd43a556d7"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr1/open",
+          "state": "open",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open/reference-input-tree.json",
+              "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr1/open/astylar-input-tree.json",
+              "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr2/activate",
+          "state": "activate",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr2/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "824223a0cdb6e0a64c0ca3d2ec3b091b1d54423604ddfaf3737becb1ccf3302b"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr2/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open-hover-content/reference-input-tree.json",
+              "sha256": "2f7bd9a2fb62918033636fdcf991bb1eb54f6581e9e0348bae63378d08a0aab9"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+              "sha256": "57a20e2587559f483d2e3b53a79857ee58165c28122ea4c595b5f6fd43a556d7"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@light/desktop-dpr2/open",
+          "state": "open",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open/reference-input-tree.json",
+              "sha256": "92ac114098fe4c2cdee94c7cb548ea5ecf09a016b19ba14c0a38305deb763419"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/light/desktop-dpr2/open/astylar-input-tree.json",
+              "sha256": "2145a4fd6e71a86071962d245e95111254f0ee922059acfaa6ec0ec234e36c85"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr1/activate",
+          "state": "activate",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr1/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "c1c209fa2d9493074c27162441a044475ca13099492b787a860008bae7139d9f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr1/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open-hover-content/reference-input-tree.json",
+              "sha256": "dee00cc64afe931dcf375e8043d8c84070b1781d69fd7d691c19e92b5099bf4c"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+              "sha256": "c4045457b8b796f536cc3028b7ef9236aa4dc0f2a404db4fd4213ffdaa8acd75"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr1/open",
+          "state": "open",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open/reference-input-tree.json",
+              "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr1/open/astylar-input-tree.json",
+              "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr2/activate",
+          "state": "activate",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr2/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "78cb53cffbf6188c2ebe3b4d1bef2ba1119bbfef43712c5b8fbe8a9967c51a49"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "c1c209fa2d9493074c27162441a044475ca13099492b787a860008bae7139d9f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr2/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open-hover-content/reference-input-tree.json",
+              "sha256": "3f29c0aaf514a083da27d366da9ca9bbc51ce76f2cf6b796fc556f9f51dee8eb"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+              "sha256": "c4045457b8b796f536cc3028b7ef9236aa4dc0f2a404db4fd4213ffdaa8acd75"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@dark/desktop-dpr2/open",
+          "state": "open",
+          "inputSha256": "d5074f616f00c9c0cc97f125aaa3b2e8e13e0eec93be4d5abb8758196eabac8e",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open/reference-input-tree.json",
+              "sha256": "62ad9e5596a7c3c50d766c50061fdaa0ec0a0d4f9e9a5f3e1ab708cedc2a06f7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/dark/desktop-dpr2/open/astylar-input-tree.json",
+              "sha256": "3d605e308004f5e10a6b6315329c179dea3a5c2513b9958004aa100e54614d6f"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr1/activate",
+          "state": "activate",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "3f7622b87f5b72aadfa10d573465e749131b1e5fb3b93b190c10de1b7e49a752"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr1/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "b72347150eba2cef2653ffb12f031215d46b53ce785c41378749fc7d27969583"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr1/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open-hover-content/reference-input-tree.json",
+              "sha256": "2ac26d042c63e32676ef9245edd751359cb0a88224e1091417a038317916f079"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+              "sha256": "b45eee212a95d34fd9e17d6f04da09748fe56daf70bf8dca2bc2f027d200cfcb"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr1/open",
+          "state": "open",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open/reference-input-tree.json",
+              "sha256": "8ae07cd82437c053793da6003f6242b0fcbd3ff0e401afe7a8044b90c9c5b63a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr1/open/astylar-input-tree.json",
+              "sha256": "3f7622b87f5b72aadfa10d573465e749131b1e5fb3b93b190c10de1b7e49a752"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr2/activate",
+          "state": "activate",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "93350e31a0948885e25e8495463626e0c9145e8cd0878c79f033e90c242e2d45"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr2/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "8ae07cd82437c053793da6003f6242b0fcbd3ff0e401afe7a8044b90c9c5b63a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "728cce48d2100e12183376c5d0a6c26444eac110db1dcc48988c2bdb49663752"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr2/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open-hover-content/reference-input-tree.json",
+              "sha256": "57deb9c509fac36860cea282ec0a0ee6ad840322fcea02591b7070bc0592dc0a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+              "sha256": "c26b3fd51d23cde67fda8e46d4902f45177b4e958a7e00679c19af5437fa49de"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@contrast/desktop-dpr2/open",
+          "state": "open",
+          "inputSha256": "e5840ec797e04e4fb09924657a457bc93209aa3be3fe1101b199f2720c7a83cd",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open/reference-input-tree.json",
+              "sha256": "f63bb5e7c916ac70a4f8d0691d2ba9ce6ed3175bc681fe2f411019ad351938dc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/contrast/desktop-dpr2/open/astylar-input-tree.json",
+              "sha256": "93350e31a0948885e25e8495463626e0c9145e8cd0878c79f033e90c242e2d45"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr1/activate",
+          "state": "activate",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "9740555c0fad7b539c4aa194282536c6082abda7040e4c84044791728ecfb4f1"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr1/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "e659f4b9504bcc47f16f891633baeec8e3cff1149b2228c71c35576d2bd21ca0"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "3f415ca727f125cf57655f01abbdd57d5ea7d778cff6079575d86e013451417c"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr1/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open-hover-content/reference-input-tree.json",
+              "sha256": "efb81c3ba441bbba4fe7d92955a2fcde5d43e89f3eecbc5591fd9b9dbad27647"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open-hover-content/astylar-input-tree.json",
+              "sha256": "746164cb03d2873744015d4eff8625b6be16851a66d1d8aef9db4a0c57aae626"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr1/open",
+          "state": "open",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open/reference-input-tree.json",
+              "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr1/open/astylar-input-tree.json",
+              "sha256": "9740555c0fad7b539c4aa194282536c6082abda7040e4c84044791728ecfb4f1"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr2/activate",
+          "state": "activate",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "e659f4b9504bcc47f16f891633baeec8e3cff1149b2228c71c35576d2bd21ca0"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "42ff42079f2acbe35474e83f2df817208d8ca46ec485299135d6c472a2634acd"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr2/activate-leave",
+          "state": "activate-leave",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "dcf8487cfec77c9ec1d56d4b010f0c750b0689d71f61f9d2c9d1ecfd7dcc92f0"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr2/open-hover-content",
+          "state": "open-hover-content",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open-hover-content/reference-input-tree.json",
+              "sha256": "c28e8b8698716035bc8084d844ec44fa4a6ea5b298a3f122c869abb91c49371b"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open-hover-content/astylar-input-tree.json",
+              "sha256": "6b1fdf5f7496ae81cfac08786b726e0582a3551ce666bc3ab2a05c28e254fa93"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        },
+        {
+          "case": "interaction:dialog@custom/desktop-dpr2/open",
+          "state": "open",
+          "inputSha256": "0ddd070b7f9006f7eeedd162278d277580493a091c1612db61013a16b5339ee0",
+          "referenceRaw": "normal",
+          "candidateRaw": "<omitted>",
+          "candidateRawShorthand": "<omitted>",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open/reference-input-tree.json",
+              "sha256": "dfc9e25f87f28e1f047e027baabf4e8aebadd25144568d91ae8077f9bd7f808c"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/dialog/custom/desktop-dpr2/open/astylar-input-tree.json",
+              "sha256": "42ff42079f2acbe35474e83f2df817208d8ca46ec485299135d6c472a2634acd"
+            }
+          },
+          "review": {
+            "disposition": "requires-review",
+            "reasons": [
+              "unresolved-value:transition-property",
+              "unresolved-value:transition-duration",
+              "unresolved-value:transition-timing-function",
+              "unresolved-value:transition-delay",
+              "unresolved-value:transition-behavior",
+              "transition-target-not-proven-non-gap"
+            ]
+          },
+          "capturedReferenceOwner": "overlay:0/1/0/1/0/0",
+          "capturedRuleSource": "sheet:9/7",
+          "capturedFullRuleText": "display: flex; flex-direction: column; flex-grow: 0; flex-shrink: 0; box-sizing: border-box; width: 100%; height: 100%; position: relative; overflow-y: auto; outline: 0px; transform: scale(0.8); transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1); max-height: inherit; min-height: inherit; min-width: inherit; max-width: inherit; box-shadow: var(--mat-dialog-container-elevation-shadow, none); border-radius: var(--mat-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); background-color: var(--mat-dialog-container-color, var(--mat-sys-surface, white));",
+          "capturedEmptyLonghands": {
+            "transition-property": {
+              "value": "",
+              "important": false
+            },
+            "transition-duration": {
+              "value": "",
+              "important": false
+            },
+            "transition-timing-function": {
+              "value": "",
+              "important": false
+            },
+            "transition-delay": {
+              "value": "",
+              "important": false
+            },
+            "transition-behavior": {
+              "value": "",
+              "important": false
+            }
+          },
+          "scalarRetainsCssText": false
+        }
+      ],
+      "classification": "parity-harness-defect",
+      "attribution": "original-pending-transition-shorthand-capture-loss",
+      "owner": "Material scalar authored-rule capture and pending CSS shorthand interpretation",
+      "inputEquivalent": false,
+      "computedCandidateVerified": false,
+      "usedGapVerified": false,
+      "originalResolvedMotionVerified": false,
+      "renderingEquivalent": false,
+      "rendererCauseProven": false
+    }
+  ],
+  "canonicalIntegration": false,
+  "inputEquivalent": false,
+  "originalResolvedMotionVerified": false,
+  "candidateComputedGapVerified": false,
+  "rendererCauseProven": false,
+  "limitation": "Confirmed original scalar capture loses pending transition shorthand text. This does not resolve original motion or custom properties, substitute fresh replay values, establish candidate computed/used gaps, or prove the cause of any layout or rendering defect."
+}
