@@ -61,3 +61,25 @@ This diagnoses an audit index's provenance maintenance, not candidate computed
 styles, descendant consumption, visible parity, or a renderer fix. Complete
 canonical integration, unresolved attribution and the final enforced matrix
 remain separate requirements.
+
+## Verified metadata-only correction
+
+After the dependent historical tests finished, only the two entries listed above
+were updated. An independent JSON comparison against committed pre-refresh
+`c7a0cd6` proves every non-receipt field remains identical, retaining SHA-256
+`a43e00eeb2d4223a28b0b6feafd91776fca883ffea15ab135a4ac2954dd83286`.
+All saved current-source receipts were then checked against normalized file bytes.
+
+```powershell
+node --test tests/material-parity/root-initial-style-evidence.spec.mjs
+```
+
+The unchanged file passes **5/5**, exit **0**, no failures, cancellations, skips
+or todos; duration **28,115.4193 ms**. This includes the complete root population
+and all original negative controls, not only a fingerprint assertion.
+
+Log: `artifacts/material-parity/field-host-flow-input-audit/root-initial-receipt-refresh-recheck.log`,
+SHA-256 `aed1a3dc23207341f4e25a9a19c472a77ecdbe9666ea7a45b551058e0a4f8491`.
+The prior diagnostic and original failure remain preserved in `c7a0cd6` and its
+recorded log; its stale-state precondition is no longer true after this correction.
+This is a focused evidence-index pass, not full audit acceptance.
