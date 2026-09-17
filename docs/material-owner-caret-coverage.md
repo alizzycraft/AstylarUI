@@ -75,9 +75,9 @@ authenticated executed-function boundary, their unchanged full test file passed
 rejection controls. The original proof reports and canonical audit were unchanged.
 Log: `artifacts/material-parity/field-host-flow-input-audit/caret-proof-executed-boundary-recheck.log`.
 
-These modules are not yet imported into the canonical builder. Integrate the
-authenticated source join, invoke complete coverage validation, and add the
-production integration proof.
+The canonical builder now imports the authenticated source join and invokes
+complete coverage validation. The [focused production integration
+proof](material-owner-caret-canonical-integration.md) passes. Remaining work:
 Compare previous/current canonical reports to preserve every raw scalar,
 property-presence distinction, authored example and unrelated complete row.
 Regenerate and no-write replay the canonical audit, then run the complete current

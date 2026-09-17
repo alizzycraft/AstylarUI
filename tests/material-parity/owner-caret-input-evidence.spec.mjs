@@ -78,10 +78,20 @@ test('generated badge caret keeps explicit transition declarations and original 
 });
 
 test('owner caret survey replays every original case without changing canonical classifications', () => {
-  const result = JSON.parse(execFileSync(process.execPath, ['scripts/audit-material-owner-caret-inputs.mjs', '--check'],
+  // Re-execute the pinned generator, including complete original canonical-row
+  // membership. Only its enclosing audit-module receipt may differ; exact
+  // executed normalization, all other sources and all report fields are checked.
+  // Keep the original generator and survey immutable, not rewritten as current.
+  const result = JSON.parse(execFileSync(process.execPath, ['scripts/diagnose-material-caret-survey-receipt.mjs'],
     { encoding: 'utf8', maxBuffer: 1024 * 1024 }).trim());
-  assert.deepEqual(result, { groups: 145, originalCases: 1734, observations: 4050, canonicalOccurrences: 4050,
+  const countFields = ['groups', 'originalCases', 'observations', 'canonicalOccurrences',
+    'exactCountGroups', 'fullyReviewedLocalOmissionGroups', 'canonicalIntegration', 'canonicalUnchanged'];
+  assert.deepEqual(Object.fromEntries(countFields.map(k => [k, result[k]])),
+    { groups: 145, originalCases: 1734, observations: 4050, canonicalOccurrences: 4050,
     exactCountGroups: 145, fullyReviewedLocalOmissionGroups: 86, canonicalIntegration: false, canonicalUnchanged: true });
+  assert.equal(result.completeOriginalGeneratorReplayed, true);
+  assert.equal(result.nonReceiptEvidenceUnchanged, true); assert.equal(result.surveyUnchanged, true);
+  assert.equal(result.normalizationFunctions, 7); assert.equal(result.canonicalIntegrationVerified, false);
   const survey = JSON.parse(readFileSync('docs/material-owner-caret-input-survey.json'));
   assert.equal(survey.groups.filter(g => g.everyObservationHasCapturedLocalOmissionEvidence)
     .reduce((n, g) => n + g.observations.length, 0), 2358);

@@ -1,6 +1,16 @@
 # Complete audit harness coverage
 
-## Current inventory: caret proof commands are registered
+## Current inventory: canonical caret integration is registered
+
+Discovery includes **112 files**: **104 Material**, four general parity and four
+TTS, with all **43 legacy files** retained. The added canonical caret integration
+file and three registered caret commands pass their complete focused run **4/4**;
+the inventory guard explicitly requires both files. The current inventory test
+passes **4/4**. See [integration evidence and remaining full-run
+requirements](material-owner-caret-canonical-integration.md). The last full run
+still covered 110 files and failed; no current unfiltered pass is claimed here.
+
+## Earlier inventory: caret proof commands are registered
 
 Automatic discovery now includes **111 files**: **103 Material**, four general
 parity and four TTS, retaining all **43 legacy files**. The new

@@ -1373,8 +1373,31 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 243);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 243);
+  assert.equal(audit.sourceFingerprints.length, 260);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 260);
+  // The caret integration adds 17 authenticated proof, source and test files.
+  for (const file of [
+    'tests/material-parity/owner-caret-audit-source-binding.mjs',
+    'tests/material-parity/owner-caret-source-binding.mjs',
+    'tests/material-parity/owner-caret-classification.mjs',
+    'tests/material-parity/owner-caret-attribution-coverage.mjs',
+    'tests/material-parity/owner-caret-input-evidence.mjs',
+    'tests/material-parity/owner-caret-input-evidence.spec.mjs',
+    'tests/material-parity/owner-caret-canonical-membership.mjs',
+    'tests/material-parity/owner-caret-proof-commands.spec.mjs',
+    'tests/material-parity/owner-caret-canonical-integration.spec.mjs',
+    'scripts/check-material-owner-caret-coverage.mjs',
+    'scripts/check-material-owner-caret-source-binding.mjs',
+    'scripts/check-material-owner-caret-subset-binding.mjs',
+    'scripts/audit-material-owner-caret-inputs.mjs',
+    'scripts/audit-material-owner-caret-attribution.mjs',
+    'scripts/audit-material-caret-motion-requests.mjs',
+    'docs/material-owner-caret-input-survey.json',
+    'docs/material-owner-caret-attribution.json',
+  ]) assert.deepEqual(audit.sourceFingerprints.filter(entry => entry.file === file), [{ file,
+    sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') }]);
+  assert.ok(audit.focusedProofs.some(entry => entry.file ===
+    'tests/material-parity/owner-caret-canonical-integration.spec.mjs' && entry.status !== 'missing'));
   // The original 129-source inventory gained one tooltip binding and three
   // slider binding files, followed by ten range-border, five field-host and
   // eight shared owner-attribution sources and six tooltip wrapping/proof

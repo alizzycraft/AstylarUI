@@ -80,9 +80,10 @@ focused capture membership against those same originals, records missing
 observations explicitly and requires full membership by default. It retains this
 complete replay underneath the projection. A subset is not full-corpus evidence.
 
-The canonical builder does not yet import this module; the existing live harness
-and dependencies remain unchanged. Add focused inventory only after that run
-terminates. Canonical integration still requires all-row scalar/authored-input
-conservation, exact preservation of unrelated classifications, regeneration and
-no-write replay, and the complete current harness/enforced parity matrix.
+The canonical builder now imports this module through the authenticated subset
+boundary. The [focused production integration](material-owner-caret-canonical-integration.md)
+passes, with original values and unrelated findings preserved in its diagnostic
+population. Full-report scalar/authored-input conservation, regeneration and
+no-write replay, and the complete current harness/enforced parity matrix remain
+required. No earlier live harness was modified underneath its execution.
 The canonical unresolved count remains **2,278**.

@@ -3,11 +3,11 @@
   "kind": "explicit-gap-original-composition-review",
   "survey": {
     "file": "docs/material-owner-gap-input-survey.json",
-    "sha256": "77b6b28a7094731abbdd574007f0ef449748cb65020a69c4147c52f1f995b128"
+    "sha256": "2575edb57305d009386dd20864a1de56f36e6e49a709859e128a393e6121a7d3"
   },
   "join": {
     "file": "docs/material-owner-gap-canonical-join.json",
-    "sha256": "3a69b7eca37f03e4a37a26c9afc3ccecea107ecdd343fcd8627ad2245f558343"
+    "sha256": "a9f136ae81f4e25cfe80e0e8370976ea08f6a13a0ccc531fe913821042cc45b5"
   },
   "counts": {
     "groups": 16,
