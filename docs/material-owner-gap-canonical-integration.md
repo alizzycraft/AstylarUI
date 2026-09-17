@@ -86,9 +86,15 @@ blank-line separation and shifted test-source line references.
 
 Logs are `field-host-flow-input-audit/owner-gap-canonical-generation.log` and
 `field-host-flow-input-audit/owner-gap-saved-conservation.log`, under
-`artifacts/material-parity`. Full no-write generation/check is now running in
-session **8635**, with log `owner-gap-full-no-write.log`; its result is not yet
-known. Passing saved projections does not substitute for that complete replay.
+`artifacts/material-parity`. Full no-write generation/check in session **8635**
+has now completed: exit **1** solely for **2,330 unresolved** differences,
+**1,568,414 ms** wrapper elapsed. It replays 436/436 static and 1,875/1,875
+interaction cases, 8,339 groups, 386,891 occurrences and 132 source findings.
+There are no additional stale-payload, provenance or replay errors. The log
+`field-host-flow-input-audit/owner-gap-full-no-write.log` is 350 bytes, SHA-256
+`75df8b64d7a8d3465c173cb773332a5dc8bee72bab31b7a88806320479e21ac9`.
+The saved compressed payload still has the exact hash above. This verifies
+reproducibility while preserving failing attribution evidence, not equivalence.
 
 ## Dependent provenance
 
@@ -102,8 +108,8 @@ controls) and six fresh CSSOM controls. Inspection confirms their only changes
 are dependency digests. The [dialog motion provenance refresh](material-dialog-motion-context-survey.md#gap-integration-provenance-refresh)
 also passes all 32 cases, 2,848 scalar checks and 21 negative controls, retaining
 identical observations under new source descriptors and preserving the old
-capture byte-for-byte. These do not replace the still-pending full canonical
-checks or complete current harness.
+capture byte-for-byte. These focused checks and the complete canonical replay
+above do not replace the complete current harness.
 
 ### Historical integration checks
 

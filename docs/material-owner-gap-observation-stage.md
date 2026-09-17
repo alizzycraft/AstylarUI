@@ -82,7 +82,8 @@ full reviewed-case membership, and enforces the independent coverage check.
 Saved-payload verification confirms that the remaining
 54 unresolved gap groups and every unrelated canonical row are conserved.
 The generated canonical count is now **2,330 unresolved**. Full no-write
-replay remains pending; the reduced count is not an input-equivalence claim.
+replay has completed with exit 1 solely for those unresolved differences and
+no additional replay errors; the reduced count is not an input-equivalence claim.
 
 The earlier 91-file harness started before these two new spec files existed.
 Its passing result and these focused results are separate evidence. The current

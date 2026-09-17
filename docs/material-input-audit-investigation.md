@@ -25,8 +25,9 @@ groups / 6,320 observations gain bounded observation-stage attribution; all
 54 remaining gap groups / 2,934 observations remain. The generated audit still
 fails honestly on **2,330 unresolved** groups and does not establish input or
 rendering equivalence. All 395 audit/CLI/codec regression tests pass. Full
-no-write replay and the new 95-file complete harness are running; neither is
-claimed complete. Earlier 2,438 counts below describe the pre-integration
+no-write replay has completed with exit 1 solely for those 2,330 unresolved
+groups, preserving all captured-state coverage and payload identity. The
+95-file complete harness remains running. Earlier 2,438 counts below describe the pre-integration
 snapshot, not the current generated report.
 
 ## Shared button paint uses different composition inputs
