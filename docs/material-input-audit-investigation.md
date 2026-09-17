@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Overlay mapping receipt failure isolated without altering the live harness
+
+The [read-only overlay receipt diagnostic](material-overlay-mapping-receipt-diagnostic.md)
+retains the original on-disk failure and proposes exactly one audit-module
+fingerprint change in memory. With every other mapping field unchanged, the
+unchanged reader replays all 91 cases / 200 owners / 17,654 root properties.
+The diagnostic deliberately exits 1: receipt refresh and unchanged-test reruns
+remain pending until the full harness terminates. No observation or historical
+capture receipt was rewritten.
+
 ## Tooltip hover/held reference context now has a source-bound replay
 
 The [18-case tooltip context survey](material-tooltip-caret-context-survey.md)
