@@ -37,6 +37,13 @@ target; ten chip/tab groups / 362 observations remain specific review cases.
 This does not change the parent survey or canonical classifications and is not
 a computed-candidate or visible-caret claim.
 
+The [source-bound attribution candidate](material-owner-caret-attribution.md)
+now replays all original observations and proposes observation-stage attribution
+for the 86 no-request groups plus 32 narrowly reviewed motion groups. It retains
+all 27 other groups explicitly, with 67 rejection and 14 conservation controls.
+Canonical integration and candidate computed/visible-caret verification remain
+separate work; the parent survey is unchanged.
+
 ## Evidence and ownership
 
 `tests/material-parity/owner-caret-input-evidence.mjs` reuses the existing

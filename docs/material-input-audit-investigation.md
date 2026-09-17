@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Original caret attribution candidate preserves every pending group
+
+The [bounded classifier and complete original replay](material-owner-caret-attribution.md)
+account for all 145 caret groups / 4,050 observations by scanning all 2,311 original
+cases. The 86 no-request and 32 reviewed-motion groups receive proposed observation-
+stage attribution, never an equivalence waiver. The other 27 groups / 896 observations
+remain explicit review cases. Generation, no-write replay, 67 rejection controls,
+14 report-conservation controls and three positive controls pass. Canonical
+integration is pending; no current classification or unresolved count changed.
+
 ## Fresh chip/tab replay distinguishes broad chip targets from disabled tab motion
 
 The [reference motion context survey](material-caret-motion-context-survey.md)
