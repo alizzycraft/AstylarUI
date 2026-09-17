@@ -1373,8 +1373,8 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 229);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 229);
+  assert.equal(audit.sourceFingerprints.length, 243);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 243);
   // The original 129-source inventory gained one tooltip binding and three
   // slider binding files, followed by ten range-border, five field-host and
   // eight shared owner-attribution sources and six tooltip wrapping/proof
@@ -1409,6 +1409,20 @@ test('records source fingerprints and actual visual acceptance fields', () => {
     'scripts/bind-material-explicit-gap-composition.mjs',
     'scripts/audit-material-explicit-gap-composition.mjs',
     'docs/material-explicit-gap-canonical-binding.json',
+    'tests/material-parity/gap-review-classification.mjs',
+    'tests/material-parity/gap-review-classification.spec.mjs',
+    'tests/material-parity/gap-review-source-binding.mjs',
+    'tests/material-parity/gap-review-source-binding.spec.mjs',
+    'tests/material-parity/gap-review-coverage.mjs',
+    'tests/material-parity/gap-review-coverage.spec.mjs',
+    'tests/material-parity/gap-review-canonical-integration.spec.mjs',
+    'tests/material-parity/gap-review-membership.spec.mjs',
+    'scripts/bind-material-gap-review-membership.mjs',
+    'docs/material-gap-review-membership.json',
+    'docs/material-owner-gap-motion-review.json',
+    'docs/material-gap-scalar-rule-loss.json',
+    'scripts/audit-material-gap-motion-requests.mjs',
+    'scripts/audit-material-gap-scalar-rule-loss.mjs',
     'tests/material-parity/field-host-layout-input-evidence.mjs',
     'tests/material-parity/field-host-layout-input-evidence.spec.mjs',
     'tests/material-parity/field-host-layout-source-binding.mjs',

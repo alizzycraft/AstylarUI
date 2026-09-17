@@ -75,7 +75,12 @@ export function bindGapReviewPopulation(population, proof) {
 function loadReplayedProof(root) {
   const bytes = readFileSync(path.resolve(root, proofFile)), proof = JSON.parse(bytes);
   const committed = execFileSync('git', ['show', `${proofRevision}:${proofFile}`], { cwd: root, maxBuffer: 8 * 1024 * 1024 });
-  assert.deepEqual(proof, JSON.parse(committed), 'gap review binding changed from verified original membership');
+  const original = JSON.parse(committed);
+  // Only dependency receipts may advance; the existing CLI independently
+  // replays every original finding, tree, canonical row and membership below.
+  assert.deepEqual({ ...proof, sources: proof.sources.map((source, index) =>
+    ({ ...source, sha256: original.sources[index]?.sha256 })) }, original,
+  'gap review binding changed beyond independently replayed dependency receipts');
   for (const source of proof.sources) assert.equal(hash(readFileSync(path.resolve(root, source.file))), source.sha256,
     'gap review dependency changed');
   assert.equal(proof.sourceFingerprint.file, verifier);

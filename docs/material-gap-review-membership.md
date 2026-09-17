@@ -153,5 +153,63 @@ Actual prior/current production integration remains a separate check.
    counts. The complete enforced parity matrix is still required.
 
 No production renderer, plugin, comparison fixture, reference, threshold or
-canonical classification changed. The saved canonical snapshot still has 2,330
-unresolved groups; this supplement does not silently reduce that count.
+canonical classification changed in the preparatory work above. The saved
+canonical snapshot still has 2,330 unresolved groups; this supplement does not
+silently reduce that count.
+
+### Production integration and original-input conservation
+
+The production audit builder now consumes the independently authenticated
+membership ledger and its classification coverage. The new classifier runs
+only after earlier classifications, including normal-gap and explicit-spacing
+findings, have declined the row. Both original-source replay and complete
+classification coverage run through the production validator. Missing ledgers,
+missing observations/findings and fabricated equivalence are rejected.
+
+The actual prior builder is loaded from
+`3ebcff3e8f7bdfe7ecd9e00a4c2acbd11fefdc4a`, with only import paths relocated.
+AST checks preserve every other statement and the production normalization
+functions. The integration test uses all **676** original cases containing the
+reviewed owners. It preserves every original input and all **2,173 scalar
+rows**, including raw absent candidate values. Exactly **36 groups / 1,838
+observations** receive bounded capture/observation-stage classifications.
+All **2,137 unrelated complete findings** remain identical, with SHA-256
+`d1c43e0171134addda61aee0437a34935f0d767faa93ab99f8d1633aeb3f5629`.
+The **64** pending dialog-motion observations remain unresolved, and input
+equivalence remains false. This is not full-corpus conservation or a renderer
+fix.
+
+```powershell
+node --test --test-concurrency=1 tests/material-parity/gap-review-membership.spec.mjs tests/material-parity/gap-review-classification.spec.mjs tests/material-parity/gap-review-source-binding.spec.mjs tests/material-parity/gap-review-coverage.spec.mjs tests/material-parity/gap-review-canonical-integration.spec.mjs
+```
+
+The complete focused run passes **9/9**, exit **0**, no failures, skips,
+cancellations or todos, **6,861,775.3367 ms**. The integration test itself took
+**6,714,121.9772 ms**; its four negative controls exercise the full production
+validator, not a substituted implementation. The retained log is
+`artifacts/material-parity/field-host-flow-input-audit/gap-review-integration-focused.log`,
+SHA-256 `a6d0b607bbaa542c37fb58a65ade4206b2295a6266aa1feec4588ec44e2e804f`.
+
+Before wiring, the same integration test failed because it found zero of the
+36 classifications. That red baseline is retained in
+`artifacts/material-parity/field-host-flow-input-audit/gap-review-integration-before.log`,
+SHA-256 `d05a07c196e47239dd07039d43ff78cdfcef540a025639299d788a0b984d3315`.
+
+Seven existing proof generators were replayed after the audit module changed:
+owner-gap survey/join, explicit-gap composition/binding, motion review,
+scalar-layer review and gap-review membership. All findings and populations
+remain unchanged. Comparison against `9311d08` confirms that the complete seven
+objects differ in exactly **11 dependency-receipt fields**, not their original
+observations, rules, memberships or conclusions. The retained conservation log is
+`artifacts/material-parity/field-host-flow-input-audit/gap-review-seven-receipt-conservation.log`,
+SHA-256 `8917dc9f542ec1a4c0df9f374bd188bcb124482e9d9dc2096818a578fd26ddd6`.
+The source loader permits only these independently replayed receipt advances;
+it does not accept arbitrary changes to the pinned membership proof.
+
+The source inventory now authenticates all **243** unique dependencies,
+including the 14 new review/integration files. The focused inventory test
+passes **1/1**, exit 0, **1,417.9634 ms**. The current full harness, historical
+integration checks, complete canonical generation/conservation and enforced
+parity matrix remain separate acceptance requirements. The previously recorded
+395-test pass predates this production integration and is not a current full
+regression claim.
