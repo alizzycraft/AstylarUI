@@ -79,6 +79,12 @@ or claim any renderer fix.
 
 ## Next steps
 
+The [fresh chip/tab context replay](material-caret-motion-context-survey.md) now
+measures all ten retained groups at their original case boundaries. Chip hosts
+resolve to `all` with a 1 ms duration; tab request ancestors resolve to `none`.
+It preserves all original proofs and does not substitute fresh values into the
+historical capture or change canonical attribution.
+
 1. Bind the 86 original local-omission groups and these 32 bounded motion reviews
    to production attribution only with exact original membership and independent
    coverage validation. Keep raw values and false equivalence claims intact.

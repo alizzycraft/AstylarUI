@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Fresh chip/tab replay distinguishes broad chip targets from disabled tab motion
+
+The [reference motion context survey](material-caret-motion-context-survey.md)
+replays all 146 retained chip/tab cases / 362 observations against the frozen
+reference. Every original 89-field scalar and declaration/ancestry proof matches.
+Chip hosts resolve to `transition-property: all` with a 1 ms duration; tab request
+ancestors resolve to `none`. Leaf values are kept separate from ancestor requests.
+The independent reader, no-write replay, 29 rejection controls and two changed-
+measurement controls pass. Fresh measurements do not replace historical missing
+values or prove candidate behavior; all canonical classifications remain unchanged.
+
 ## Original caret motion review preserves color-dependent and incomplete cases
 
 The [new declaration review](material-owner-caret-motion-review.md) replays all
