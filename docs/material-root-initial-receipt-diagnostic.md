@@ -1,5 +1,40 @@
 # Root initial-style index: complete replay before metadata refresh
 
+## Verified caret-era refresh
+
+Following `80bf887`, the two enclosing audit-module/spec receipts were refreshed
+again, without changing any root observation. The saved hashes were first
+matched to actual source at `222ca7f54cb30ff9cd85f5607f57b8349a5686b5`.
+AST comparisons verified unchanged `collectFullTreeInventory`,
+`collectReferenceContextGaps`, `caseKey`, and `referenceContextProperties`.
+Every audit-spec statement remains identical except its source-inventory test;
+all other saved root-index source fingerprints still match current files.
+
+Only the module receipt `252754...` to `b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73`
+and spec receipt `ce70ce...` to `0a373bad2e438a5f0a633fa69f734cd4e5ec8dc03690aba488397011557c8e2e`
+changed. A whole-object comparison against `80bf887` retains the complete
+non-receipt digest `a43e00eeb2d4223a28b0b6feafd91776fca883ffea15ab135a4ac2954dd83286`.
+
+The unchanged command `node --test tests/material-parity/root-initial-style-evidence.spec.mjs`
+passes **5/5**, exit **0**, **26,741.904 ms**, with no failures, skips,
+cancellations or todos. It replays all **2,311 cases / 30,043 observations /
+468 groups**, including original membership and false-claim controls. This is
+not descendant-consumer or rendering equivalence.
+
+Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `caret-root-initial-source-boundary.log`, SHA-256
+  `e3cb25a27635cc6701c1d822e075f6c31efe50de6e6a0897617edf11ff93fc94`.
+- `caret-root-initial-receipt-conservation.log`, SHA-256
+  `ac56785e76cae762eb4b52899ff327305609d08653a8ed4f22a06acf69c7d787`.
+- `caret-root-initial-refresh-focused.log`, SHA-256
+  `06e45110e0b7c363d5fae78e4babb5050771f839274d55be8d66f0ddad77915f`.
+
+The earlier diagnostic and refresh below remain historical records, not
+instructions to replace the current provenance with those older hashes.
+
+## Earlier gap-era investigation
+
 The full harness's root-index failure is attributable to **two stale source
 fingerprints**, not a missing or changed root observation. The original assertion
 stops at the first mismatch; the diagnostic enumerates both before retaining that
