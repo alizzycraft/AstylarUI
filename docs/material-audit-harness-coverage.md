@@ -1,6 +1,19 @@
 # Complete audit harness coverage
 
-## Current inventory: component host font-token inputs are registered
+## Current inventory: container font-family stages are registered
+
+Discovery includes **131 files**: 123 Material, four general and four TTS,
+retaining all 43 legacy files. The [container family-stage proof](material-container-font-family-stages.md)
+checks 1,082 observations across 20 mapped owners and all four profiles. It
+distinguishes computed inheritance from local omission, excludes stepper's
+component token, and preserves 60 literal progress opacity/none motion rules.
+Generation and no-write replay pass. Focused/inventory checks pass **7/7** in
+17,476.1766ms with 2,440 mutation rejections and a separate stepper guard.
+No canonical attribution or renderer/input change follows. The original
+120-file full run remains live in slider-border integration, with three
+previously diagnosed failures; these focused results do not extend that run.
+
+## Previous inventory: component host font-token inputs are registered
 
 The subsequent [canonical host-token proposal](material-host-font-token-attribution.md)
 joins seven groups / 380 observations and preserves all 8,332 other complete
