@@ -8,7 +8,8 @@ passes independent comparison of every complete current/frozen row: exactly
 134 groups / 3,325 observations change classification metadata, and all raw
 inputs plus 8,205 other complete rows are preserved (1/1, 211,327.539ms).
 The generated report has 2,026 unresolved groups; its separate freshness replay
-is still running at this checkpoint. Gap dependency refreshes pass an additional
+is terminal and confirms current payload/Markdown, exiting 1 solely for those
+remaining unattributed groups. Gap dependency refreshes pass an additional
 7/7 focused/inventory checks with unchanged generators and evidence bodies.
 
 The [leaf-family proposal](material-leaf-font-family-attribution.md) and

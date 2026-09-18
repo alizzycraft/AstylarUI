@@ -12,7 +12,9 @@ input and all **8,205 other complete rows** are unchanged. The complete-payload
 conservation test passes 1/1 in 211,327.539ms; generation accounts for all
 436 static and 1,875 interaction cases and retains **2,026 unresolved groups**.
 That is the actual generated count, not a claim of audit completion or parity.
-The independent no-write freshness command is still running at this checkpoint.
+The independent no-write freshness command is now terminal and confirms the
+generated payload/Markdown are current. Exit 1 preserves the sole diagnostic:
+2,026 differences still lack attribution. Freshness is not audit acceptance.
 
 Seven existing gap reports were independently regenerated with their unchanged
 generators: only eleven dependency hashes advance, with all other evidence

@@ -95,8 +95,12 @@ node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-par
 Generation finishes with 436/436 static cases, 1,875/1,875 interaction cases,
 132 source findings and exactly one diagnostic: **2,026 differences still lack
 root-cause attribution**. Exit 1 is preserved; this is not complete audit
-acceptance. The independent command with `--check` is running at this checkpoint
-and has not yet been claimed successful.
+acceptance. The independent command with `--check` is now terminal: it confirms
+the generated payload and Markdown are current, and exits 1 solely for the same
+**2,026 unattributed differences**. It reports all 436 static and 1,875 interaction
+cases, all 8,339 groups / 386,891 observations and 132 source findings. This is
+successful freshness verification with deliberately failing audit acceptance,
+not an input-equivalence or rendering-parity pass.
 
 Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
 `reviewed-input-integrated-boundary-corrected.log`,
