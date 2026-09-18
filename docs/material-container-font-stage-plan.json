@@ -3,7 +3,7 @@
   "kind": "container-font-size-stage-proposed-canonical-attribution",
   "proof": {
     "file": "docs/material-container-font-stages.json",
-    "sha256": "419b9191472abb96b8214923c5bf290f646f930567c76225b0a40d2e35894dab"
+    "sha256": "94b067a09f0c06f597532d37a7f40f0474ff3204ccfb043a39a0ed8bdf61d5a8"
   },
   "originalCapture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
@@ -36,12 +36,12 @@
     "uncompressedSha256": "27ce5b4e9821a22142188efd8eb2dd30003c51f5b4ad6a52b2999c2667de6a09"
   },
   "originalCasesScanned": 2311,
-  "proposedGroups": 51,
-  "proposedObservations": 1012,
+  "proposedGroups": 63,
+  "proposedObservations": 1150,
   "canonicalRows": 8339,
   "baselineUnresolved": 2160,
-  "otherCompleteRows": 8288,
-  "otherOrderedRowDigestsSha256": "fbd380d311fb19e2ed92ffd53e7e5dab6d563186230305f4c55469acf541d6a8",
+  "otherCompleteRows": 8276,
+  "otherOrderedRowDigestsSha256": "026ac4fb664119ce4efae6540e40ce4f992f523c035290fe9d47ee938c391f4d",
   "findings": [
     {
       "family": "sidenav",
@@ -7227,6 +7227,386 @@
       "renderingEquivalent": false
     },
     {
+      "family": "icon",
+      "element": "icon-primary",
+      "property": "fontSize",
+      "reference": "16px",
+      "occurrences": 10,
+      "cases": [
+        "static:icon@light/desktop",
+        "static:icon@light/tablet",
+        "static:icon@light/mobile",
+        "static:icon@dark/desktop",
+        "static:icon@dark/tablet",
+        "static:icon@dark/mobile",
+        "interaction:icon@light/desktop-dpr1/inspect",
+        "interaction:icon@light/desktop-dpr2/inspect",
+        "interaction:icon@dark/desktop-dpr1/inspect",
+        "interaction:icon@dark/desktop-dpr2/inspect"
+      ],
+      "states": [
+        "static",
+        "inspect"
+      ],
+      "observations": [
+        {
+          "case": "static:icon@light/desktop",
+          "inputSha256": "f0aa7e503fe630ba247feea79a3b1070adda90e52de022eed54efd4165bcfba6",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/light/desktop/reference-input-tree.json",
+              "sha256": "1153b82fc86f5b570d40e4e0a43618697172d5a32b09c4e7a46f0d6fac4e4a7f"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/light/desktop/astylar-input-tree.json",
+              "sha256": "0e8ec4561629b472765a16f4e9d159cec88deb64704ff593f1fcff8d15d136cc"
+            }
+          },
+          "proofSha256": "8a24587ae6403100b53d61922cec3537830f9c575c02855172e904c1cbfc02c3"
+        },
+        {
+          "case": "static:icon@light/tablet",
+          "inputSha256": "f0aa7e503fe630ba247feea79a3b1070adda90e52de022eed54efd4165bcfba6",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/light/tablet/reference-input-tree.json",
+              "sha256": "177023f67a0a1a7a73cf56b6a4a9abdd607b7150febb5040493fa8dd2b09e08b"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/light/tablet/astylar-input-tree.json",
+              "sha256": "0e8ec4561629b472765a16f4e9d159cec88deb64704ff593f1fcff8d15d136cc"
+            }
+          },
+          "proofSha256": "8a24587ae6403100b53d61922cec3537830f9c575c02855172e904c1cbfc02c3"
+        },
+        {
+          "case": "static:icon@light/mobile",
+          "inputSha256": "f0aa7e503fe630ba247feea79a3b1070adda90e52de022eed54efd4165bcfba6",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/light/mobile/reference-input-tree.json",
+              "sha256": "75346470475bc26dd53fb762713fc47927cc56033ba8dc2aeb39a48761c2c19e"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/light/mobile/astylar-input-tree.json",
+              "sha256": "0e8ec4561629b472765a16f4e9d159cec88deb64704ff593f1fcff8d15d136cc"
+            }
+          },
+          "proofSha256": "8a24587ae6403100b53d61922cec3537830f9c575c02855172e904c1cbfc02c3"
+        },
+        {
+          "case": "static:icon@dark/desktop",
+          "inputSha256": "018ddae762c80f38af4639ce388878d794c5fcc12a9771a2157bb665a8488810",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/dark/desktop/reference-input-tree.json",
+              "sha256": "9b20c96ee25f83df9b0ea6340cd2a6ffd11efff5ba8e26d46a6640311c56a12b"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/dark/desktop/astylar-input-tree.json",
+              "sha256": "f3e915c9dd45f0aaa13f7c50cf07e9fae4898d600d78787cb335ef3d7800395a"
+            }
+          },
+          "proofSha256": "1c18cbb711d7e9cdbd0264a84914110306adc7e7d6a4a39efe9fe936821bece8"
+        },
+        {
+          "case": "static:icon@dark/tablet",
+          "inputSha256": "018ddae762c80f38af4639ce388878d794c5fcc12a9771a2157bb665a8488810",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/dark/tablet/reference-input-tree.json",
+              "sha256": "b9df606475b5b2a5322d70ac148fb32c356d1f75e536ea095bdc729079f62b31"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/dark/tablet/astylar-input-tree.json",
+              "sha256": "f3e915c9dd45f0aaa13f7c50cf07e9fae4898d600d78787cb335ef3d7800395a"
+            }
+          },
+          "proofSha256": "1c18cbb711d7e9cdbd0264a84914110306adc7e7d6a4a39efe9fe936821bece8"
+        },
+        {
+          "case": "static:icon@dark/mobile",
+          "inputSha256": "018ddae762c80f38af4639ce388878d794c5fcc12a9771a2157bb665a8488810",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/dark/mobile/reference-input-tree.json",
+              "sha256": "71eab21e99a21ef6b2ef51d19817e3e9fd73d6a9204378c23aecd2fc4610e755"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/dark/mobile/astylar-input-tree.json",
+              "sha256": "f3e915c9dd45f0aaa13f7c50cf07e9fae4898d600d78787cb335ef3d7800395a"
+            }
+          },
+          "proofSha256": "1c18cbb711d7e9cdbd0264a84914110306adc7e7d6a4a39efe9fe936821bece8"
+        },
+        {
+          "case": "interaction:icon@light/desktop-dpr1/inspect",
+          "inputSha256": "f0aa7e503fe630ba247feea79a3b1070adda90e52de022eed54efd4165bcfba6",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/light/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "1153b82fc86f5b570d40e4e0a43618697172d5a32b09c4e7a46f0d6fac4e4a7f"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/light/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "25f3ef13c7f8bdb8db38871292a974b5a8f58e84f1affb647cfdd75acbfb426b"
+            }
+          },
+          "proofSha256": "8a24587ae6403100b53d61922cec3537830f9c575c02855172e904c1cbfc02c3"
+        },
+        {
+          "case": "interaction:icon@light/desktop-dpr2/inspect",
+          "inputSha256": "f0aa7e503fe630ba247feea79a3b1070adda90e52de022eed54efd4165bcfba6",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/light/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "1153b82fc86f5b570d40e4e0a43618697172d5a32b09c4e7a46f0d6fac4e4a7f"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/light/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "25f3ef13c7f8bdb8db38871292a974b5a8f58e84f1affb647cfdd75acbfb426b"
+            }
+          },
+          "proofSha256": "8a24587ae6403100b53d61922cec3537830f9c575c02855172e904c1cbfc02c3"
+        },
+        {
+          "case": "interaction:icon@dark/desktop-dpr1/inspect",
+          "inputSha256": "018ddae762c80f38af4639ce388878d794c5fcc12a9771a2157bb665a8488810",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/dark/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "9b20c96ee25f83df9b0ea6340cd2a6ffd11efff5ba8e26d46a6640311c56a12b"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/dark/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "f3e915c9dd45f0aaa13f7c50cf07e9fae4898d600d78787cb335ef3d7800395a"
+            }
+          },
+          "proofSha256": "1c18cbb711d7e9cdbd0264a84914110306adc7e7d6a4a39efe9fe936821bece8"
+        },
+        {
+          "case": "interaction:icon@dark/desktop-dpr2/inspect",
+          "inputSha256": "018ddae762c80f38af4639ce388878d794c5fcc12a9771a2157bb665a8488810",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/dark/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "9b20c96ee25f83df9b0ea6340cd2a6ffd11efff5ba8e26d46a6640311c56a12b"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/dark/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "e16ab91cca0737caa15bd646434496cdfa0b24ce95f71dc15e6cf40e20830859"
+            }
+          },
+          "proofSha256": "1c18cbb711d7e9cdbd0264a84914110306adc7e7d6a4a39efe9fe936821bece8"
+        }
+      ],
+      "canonicalRowSha256": "1ca3c55857729f22833948f310d2cbb17e8881aabbb33aa9a399e6e810945130",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
+      "family": "icon",
+      "element": "icon-primary",
+      "property": "fontSize",
+      "reference": "14.4px",
+      "occurrences": 5,
+      "cases": [
+        "static:icon@contrast/desktop",
+        "static:icon@contrast/tablet",
+        "static:icon@contrast/mobile",
+        "interaction:icon@contrast/desktop-dpr1/inspect",
+        "interaction:icon@contrast/desktop-dpr2/inspect"
+      ],
+      "states": [
+        "static",
+        "inspect"
+      ],
+      "observations": [
+        {
+          "case": "static:icon@contrast/desktop",
+          "inputSha256": "c5067daee74b363e768be17722dab9cbd90e139b9d66c994cd6b3a6f180c8c2f",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/contrast/desktop/reference-input-tree.json",
+              "sha256": "5be173a33d03d21c05e2fa1b7dd3499b67da6fd9489fa5ea0aec43261d6d7ffd"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/contrast/desktop/astylar-input-tree.json",
+              "sha256": "ef825e3ee04956538555bbee9da56cfc2c4f57d61bc9c168cb9d78a6c33277d3"
+            }
+          },
+          "proofSha256": "1c17c45751ec379a9c510fa2b0cfe68d1aa04c9edf40bdc5683ebf312c4f3a18"
+        },
+        {
+          "case": "static:icon@contrast/tablet",
+          "inputSha256": "c5067daee74b363e768be17722dab9cbd90e139b9d66c994cd6b3a6f180c8c2f",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/contrast/tablet/reference-input-tree.json",
+              "sha256": "1588ee05e9711e4fe30221e9941ce752b0066e060d271b0cae968c2d0a600f85"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/contrast/tablet/astylar-input-tree.json",
+              "sha256": "ef825e3ee04956538555bbee9da56cfc2c4f57d61bc9c168cb9d78a6c33277d3"
+            }
+          },
+          "proofSha256": "1c17c45751ec379a9c510fa2b0cfe68d1aa04c9edf40bdc5683ebf312c4f3a18"
+        },
+        {
+          "case": "static:icon@contrast/mobile",
+          "inputSha256": "c5067daee74b363e768be17722dab9cbd90e139b9d66c994cd6b3a6f180c8c2f",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/contrast/mobile/reference-input-tree.json",
+              "sha256": "d6395fd66677137f87fbc3acfabb013be9ef40866a081d7f2dc948eebd283b30"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/contrast/mobile/astylar-input-tree.json",
+              "sha256": "25f8fd5b2e965b0537bd9a061b459983be8a1344fac9af32cffdafa57f1c2561"
+            }
+          },
+          "proofSha256": "1c17c45751ec379a9c510fa2b0cfe68d1aa04c9edf40bdc5683ebf312c4f3a18"
+        },
+        {
+          "case": "interaction:icon@contrast/desktop-dpr1/inspect",
+          "inputSha256": "c5067daee74b363e768be17722dab9cbd90e139b9d66c994cd6b3a6f180c8c2f",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/contrast/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "5be173a33d03d21c05e2fa1b7dd3499b67da6fd9489fa5ea0aec43261d6d7ffd"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/contrast/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "9c6bbd5b9c13c94a4f60fdcd19e23e65b9e5815ab4ef6e005c71fdba649e4641"
+            }
+          },
+          "proofSha256": "1c17c45751ec379a9c510fa2b0cfe68d1aa04c9edf40bdc5683ebf312c4f3a18"
+        },
+        {
+          "case": "interaction:icon@contrast/desktop-dpr2/inspect",
+          "inputSha256": "c5067daee74b363e768be17722dab9cbd90e139b9d66c994cd6b3a6f180c8c2f",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/contrast/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "5be173a33d03d21c05e2fa1b7dd3499b67da6fd9489fa5ea0aec43261d6d7ffd"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/contrast/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "25f8fd5b2e965b0537bd9a061b459983be8a1344fac9af32cffdafa57f1c2561"
+            }
+          },
+          "proofSha256": "1c17c45751ec379a9c510fa2b0cfe68d1aa04c9edf40bdc5683ebf312c4f3a18"
+        }
+      ],
+      "canonicalRowSha256": "4ae2495a70ad8c75164f71ede2be5db3f7afd957c897e1c55ad21ede05a336e7",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
+      "family": "icon",
+      "element": "icon-primary",
+      "property": "fontSize",
+      "reference": "18.4px",
+      "occurrences": 5,
+      "cases": [
+        "static:icon@custom/desktop",
+        "static:icon@custom/tablet",
+        "static:icon@custom/mobile",
+        "interaction:icon@custom/desktop-dpr1/inspect",
+        "interaction:icon@custom/desktop-dpr2/inspect"
+      ],
+      "states": [
+        "static",
+        "inspect"
+      ],
+      "observations": [
+        {
+          "case": "static:icon@custom/desktop",
+          "inputSha256": "15a663cd5e9dfab8bafa119faf626b1a877abf7b82b8b90994f9f4b339812f65",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/custom/desktop/reference-input-tree.json",
+              "sha256": "c935aeb326ae401a3f9387fd2d3e548deea3f975b92224188013b6fdb3740c7a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/custom/desktop/astylar-input-tree.json",
+              "sha256": "35ced2c62b41dc2a37911fe8b652241507f69378e6bf40018b243dc63e6f1bcb"
+            }
+          },
+          "proofSha256": "ecc3b38888143d891acf9939a02cb0b09a007038a22e8ed3ff2e69ad8f8e540f"
+        },
+        {
+          "case": "static:icon@custom/tablet",
+          "inputSha256": "15a663cd5e9dfab8bafa119faf626b1a877abf7b82b8b90994f9f4b339812f65",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/custom/tablet/reference-input-tree.json",
+              "sha256": "cc8eb00853715ddf1e47b8f7ae7b5935eabcba2f5a216bef9c0f6de7afdf74bc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/custom/tablet/astylar-input-tree.json",
+              "sha256": "83be893a528a75f8debd623dc44b1a07f689ae6c0c669b6109d3f23568d8dbf5"
+            }
+          },
+          "proofSha256": "ecc3b38888143d891acf9939a02cb0b09a007038a22e8ed3ff2e69ad8f8e540f"
+        },
+        {
+          "case": "static:icon@custom/mobile",
+          "inputSha256": "15a663cd5e9dfab8bafa119faf626b1a877abf7b82b8b90994f9f4b339812f65",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/custom/mobile/reference-input-tree.json",
+              "sha256": "7e1b9409837c7d127f0355208a336cbac1524ea0fb1591c685cbe7387d581e6d"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/icon/custom/mobile/astylar-input-tree.json",
+              "sha256": "922efb902b14307f46908f0dd0d19749976f06375b62c6a8f44285b6e55f66b9"
+            }
+          },
+          "proofSha256": "ecc3b38888143d891acf9939a02cb0b09a007038a22e8ed3ff2e69ad8f8e540f"
+        },
+        {
+          "case": "interaction:icon@custom/desktop-dpr1/inspect",
+          "inputSha256": "15a663cd5e9dfab8bafa119faf626b1a877abf7b82b8b90994f9f4b339812f65",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/custom/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "c935aeb326ae401a3f9387fd2d3e548deea3f975b92224188013b6fdb3740c7a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/custom/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "83be893a528a75f8debd623dc44b1a07f689ae6c0c669b6109d3f23568d8dbf5"
+            }
+          },
+          "proofSha256": "ecc3b38888143d891acf9939a02cb0b09a007038a22e8ed3ff2e69ad8f8e540f"
+        },
+        {
+          "case": "interaction:icon@custom/desktop-dpr2/inspect",
+          "inputSha256": "15a663cd5e9dfab8bafa119faf626b1a877abf7b82b8b90994f9f4b339812f65",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/custom/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "c935aeb326ae401a3f9387fd2d3e548deea3f975b92224188013b6fdb3740c7a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/icon/custom/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "0c5282fb469263f4ade0f7c487ee175cee6f23a18eb8965b8b2b595a21c50a43"
+            }
+          },
+          "proofSha256": "ecc3b38888143d891acf9939a02cb0b09a007038a22e8ed3ff2e69ad8f8e540f"
+        }
+      ],
+      "canonicalRowSha256": "ed4c633c5f3c67dfad36b5d1634d6de11e02ad2321356a86b1c7a1da4038b36e",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
       "family": "sort",
       "element": "sort-primary",
       "property": "fontSize",
@@ -11388,6 +11768,1293 @@
         }
       ],
       "canonicalRowSha256": "28466efe8a67843fd21a2e21cb456494c403c8936918c7e8f79893f048a764c5",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
+      "family": "slider",
+      "element": "slider-visual",
+      "property": "fontSize",
+      "reference": "16px",
+      "occurrences": 40,
+      "cases": [
+        "static:slider@light/desktop",
+        "static:slider@light/tablet",
+        "static:slider@light/mobile",
+        "static:slider@dark/desktop",
+        "static:slider@dark/tablet",
+        "static:slider@dark/mobile",
+        "interaction:slider@light/desktop-dpr1/focus",
+        "interaction:slider@light/desktop-dpr1/hover",
+        "interaction:slider@light/desktop-dpr1/held",
+        "interaction:slider@light/desktop-dpr1/activate",
+        "interaction:slider@light/desktop-dpr1/activate-leave",
+        "interaction:slider@light/desktop-dpr1/drag-start"
+      ],
+      "states": [
+        "static",
+        "focus",
+        "hover",
+        "held",
+        "activate",
+        "activate-leave",
+        "drag-start",
+        "drag-end",
+        "disabled"
+      ],
+      "observations": [
+        {
+          "case": "static:slider@light/desktop",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/light/desktop/reference-input-tree.json",
+              "sha256": "a6ca72b8400708ec605bf3196b155bb8eb487197e31fb2625e06b05bd31b2c69"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/light/desktop/astylar-input-tree.json",
+              "sha256": "dc0bf02e7f4fe25de14461cad60575713ac184a4603a4169594ae35a16ba6e46"
+            }
+          },
+          "proofSha256": "7003dfdada84e60104a90bc0be7cf6e97a27bfa4d56f3abf4fa1fb7b384dd3ba"
+        },
+        {
+          "case": "static:slider@light/tablet",
+          "inputSha256": "df7c8efecea0d7158a2f6171febaf7739d7fb1a392c4b1d097abded1967dda2f",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/light/tablet/reference-input-tree.json",
+              "sha256": "c9a9d2ed560103c0ab613b14b0fc2a6aeb43faed7e822bb33916ec4f80e7bdfe"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/light/tablet/astylar-input-tree.json",
+              "sha256": "dc0bf02e7f4fe25de14461cad60575713ac184a4603a4169594ae35a16ba6e46"
+            }
+          },
+          "proofSha256": "7003dfdada84e60104a90bc0be7cf6e97a27bfa4d56f3abf4fa1fb7b384dd3ba"
+        },
+        {
+          "case": "static:slider@light/mobile",
+          "inputSha256": "b4f054a58162e274bf9cf4a57f2c1c70c04f1e8a0699696d03a6a0cae5cef039",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/light/mobile/reference-input-tree.json",
+              "sha256": "30b572969ab16e0db146a396077c744e4c1cc70d85e30d51e86e09419db27cf0"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/light/mobile/astylar-input-tree.json",
+              "sha256": "dc0bf02e7f4fe25de14461cad60575713ac184a4603a4169594ae35a16ba6e46"
+            }
+          },
+          "proofSha256": "7003dfdada84e60104a90bc0be7cf6e97a27bfa4d56f3abf4fa1fb7b384dd3ba"
+        },
+        {
+          "case": "static:slider@dark/desktop",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/dark/desktop/reference-input-tree.json",
+              "sha256": "0ee98ac66c2ba085425b7fef6962dda081389b4c544301f4d4fc4528121e66ef"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/dark/desktop/astylar-input-tree.json",
+              "sha256": "bab1cd0b62583d9ef37b2bb3666a4ea8b2b00870b2090c7254b9535c5f0dab65"
+            }
+          },
+          "proofSha256": "cb4d11f03fd233752703f14a6dcea8c8bffbf1804f97829f7002e9931cf524be"
+        },
+        {
+          "case": "static:slider@dark/tablet",
+          "inputSha256": "ccb4aec0cf4c957a12b56930136bebc787a1b400dd51bd758320226e7e354cab",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/dark/tablet/reference-input-tree.json",
+              "sha256": "ce52e0ab1eb34ce7eff317def4dd1e9cb44d20a57bc6bda6db720013b4e97fb0"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/dark/tablet/astylar-input-tree.json",
+              "sha256": "bab1cd0b62583d9ef37b2bb3666a4ea8b2b00870b2090c7254b9535c5f0dab65"
+            }
+          },
+          "proofSha256": "cb4d11f03fd233752703f14a6dcea8c8bffbf1804f97829f7002e9931cf524be"
+        },
+        {
+          "case": "static:slider@dark/mobile",
+          "inputSha256": "d547bead81d62f11ca9fb545d978c66ccaae6c745e8500b0a2407e1b5a85612b",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/dark/mobile/reference-input-tree.json",
+              "sha256": "8592c57580852ce3ff1b6253428fd480ccf4dae4727f55d9a19615c2b2a4826d"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/dark/mobile/astylar-input-tree.json",
+              "sha256": "bab1cd0b62583d9ef37b2bb3666a4ea8b2b00870b2090c7254b9535c5f0dab65"
+            }
+          },
+          "proofSha256": "cb4d11f03fd233752703f14a6dcea8c8bffbf1804f97829f7002e9931cf524be"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr1/focus",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/focus/reference-input-tree.json",
+              "sha256": "b27f1ebe90277b2ef674d719f83e0322cfd16b4140b50fecc1e2d59d3762ca2a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/focus/astylar-input-tree.json",
+              "sha256": "dc0bf02e7f4fe25de14461cad60575713ac184a4603a4169594ae35a16ba6e46"
+            }
+          },
+          "proofSha256": "7003dfdada84e60104a90bc0be7cf6e97a27bfa4d56f3abf4fa1fb7b384dd3ba"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr1/hover",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/hover/reference-input-tree.json",
+              "sha256": "15d526fd4cab5910765fe9d0d0942d28318bfa293b2e05daf1e8100e1beae1d3"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/hover/astylar-input-tree.json",
+              "sha256": "dc0bf02e7f4fe25de14461cad60575713ac184a4603a4169594ae35a16ba6e46"
+            }
+          },
+          "proofSha256": "7003dfdada84e60104a90bc0be7cf6e97a27bfa4d56f3abf4fa1fb7b384dd3ba"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr1/held",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/held/reference-input-tree.json",
+              "sha256": "0ff8865ebcd799b6fd89c128995c7b5290e4019b4d6df6862ce1468600c52bbb"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/held/astylar-input-tree.json",
+              "sha256": "dc0bf02e7f4fe25de14461cad60575713ac184a4603a4169594ae35a16ba6e46"
+            }
+          },
+          "proofSha256": "7003dfdada84e60104a90bc0be7cf6e97a27bfa4d56f3abf4fa1fb7b384dd3ba"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr1/activate",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "28246ffd9b68a8b36c639089b7514e0386e458567bb5c3814ce7155684567e88"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "58962496cf83ea277eeed54a48a30f3a828b6ddb17d3841045ee25b0952df737"
+            }
+          },
+          "proofSha256": "ec4b5eeac770411c0c173760845907bcf00d390b903546b69a044671e4679b4f"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr1/activate-leave",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "b27f1ebe90277b2ef674d719f83e0322cfd16b4140b50fecc1e2d59d3762ca2a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "a03ba0828f4f66ef5ad81f95ffc526066536e6399be2588e90876d8716b9c202"
+            }
+          },
+          "proofSha256": "7003dfdada84e60104a90bc0be7cf6e97a27bfa4d56f3abf4fa1fb7b384dd3ba"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr1/drag-start",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/drag-start/reference-input-tree.json",
+              "sha256": "e564d12bcd9ee43955b238ff4eba7aaa68937fa0cfcc813b2ae2a048a96971ab"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/drag-start/astylar-input-tree.json",
+              "sha256": "00986cf0e3d82b70aeb0f9c998540df9d7bbbc644e1fc78567afdbdb7b9ea80c"
+            }
+          },
+          "proofSha256": "3ffa8a7f90130de5fec096033c8aa63795052d3033efdef6b89e75bd48ee06f2"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr1/drag-end",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/drag-end/reference-input-tree.json",
+              "sha256": "143a369edbd9a1063ee2bb5100a8a8c4410be1181c425a4616089ddef1ea3e80"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/drag-end/astylar-input-tree.json",
+              "sha256": "90903856d2f3b1cbf016ad29ab44f8787a7811b7a6863a9f15d237f781f382f3"
+            }
+          },
+          "proofSha256": "44ae79b4d2fe8a9b5511c42ba8a31988919ed03dbf83954bdaf0470629c64a83"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr1/disabled",
+          "inputSha256": "72b886ece889479b767906db52527de3d37fea40cc84000ceb2ee5605ff912fa",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/disabled/reference-input-tree.json",
+              "sha256": "1a8677b982f0792b9f630ebd5d6cca77471a97084dbd8f6e996df01eff3d4f58"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/disabled/astylar-input-tree.json",
+              "sha256": "507f26dc99d3860343cb5202932beed608ee2f18c4fa7a6ed4d3252820a4de6f"
+            }
+          },
+          "proofSha256": "9aab4f91e4bff8313c03f6d6cc8bd790932cdd7a564ce06ea5ee1c33d9b39142"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr2/focus",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/focus/reference-input-tree.json",
+              "sha256": "b27f1ebe90277b2ef674d719f83e0322cfd16b4140b50fecc1e2d59d3762ca2a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/focus/astylar-input-tree.json",
+              "sha256": "a03ba0828f4f66ef5ad81f95ffc526066536e6399be2588e90876d8716b9c202"
+            }
+          },
+          "proofSha256": "7003dfdada84e60104a90bc0be7cf6e97a27bfa4d56f3abf4fa1fb7b384dd3ba"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr2/hover",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/hover/reference-input-tree.json",
+              "sha256": "15d526fd4cab5910765fe9d0d0942d28318bfa293b2e05daf1e8100e1beae1d3"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/hover/astylar-input-tree.json",
+              "sha256": "dc0bf02e7f4fe25de14461cad60575713ac184a4603a4169594ae35a16ba6e46"
+            }
+          },
+          "proofSha256": "7003dfdada84e60104a90bc0be7cf6e97a27bfa4d56f3abf4fa1fb7b384dd3ba"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr2/held",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/held/reference-input-tree.json",
+              "sha256": "0ff8865ebcd799b6fd89c128995c7b5290e4019b4d6df6862ce1468600c52bbb"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/held/astylar-input-tree.json",
+              "sha256": "dc0bf02e7f4fe25de14461cad60575713ac184a4603a4169594ae35a16ba6e46"
+            }
+          },
+          "proofSha256": "7003dfdada84e60104a90bc0be7cf6e97a27bfa4d56f3abf4fa1fb7b384dd3ba"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr2/activate",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "28246ffd9b68a8b36c639089b7514e0386e458567bb5c3814ce7155684567e88"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "58962496cf83ea277eeed54a48a30f3a828b6ddb17d3841045ee25b0952df737"
+            }
+          },
+          "proofSha256": "ec4b5eeac770411c0c173760845907bcf00d390b903546b69a044671e4679b4f"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr2/activate-leave",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "b27f1ebe90277b2ef674d719f83e0322cfd16b4140b50fecc1e2d59d3762ca2a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "dc0bf02e7f4fe25de14461cad60575713ac184a4603a4169594ae35a16ba6e46"
+            }
+          },
+          "proofSha256": "7003dfdada84e60104a90bc0be7cf6e97a27bfa4d56f3abf4fa1fb7b384dd3ba"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr2/drag-start",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/drag-start/reference-input-tree.json",
+              "sha256": "e564d12bcd9ee43955b238ff4eba7aaa68937fa0cfcc813b2ae2a048a96971ab"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/drag-start/astylar-input-tree.json",
+              "sha256": "00986cf0e3d82b70aeb0f9c998540df9d7bbbc644e1fc78567afdbdb7b9ea80c"
+            }
+          },
+          "proofSha256": "3ffa8a7f90130de5fec096033c8aa63795052d3033efdef6b89e75bd48ee06f2"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr2/drag-end",
+          "inputSha256": "2cba076824b395b05890627b12cb49d2c6f958b3bf45fbcf9d21ba32201b01ba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/drag-end/reference-input-tree.json",
+              "sha256": "143a369edbd9a1063ee2bb5100a8a8c4410be1181c425a4616089ddef1ea3e80"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/drag-end/astylar-input-tree.json",
+              "sha256": "90903856d2f3b1cbf016ad29ab44f8787a7811b7a6863a9f15d237f781f382f3"
+            }
+          },
+          "proofSha256": "44ae79b4d2fe8a9b5511c42ba8a31988919ed03dbf83954bdaf0470629c64a83"
+        },
+        {
+          "case": "interaction:slider@light/desktop-dpr2/disabled",
+          "inputSha256": "72b886ece889479b767906db52527de3d37fea40cc84000ceb2ee5605ff912fa",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/disabled/reference-input-tree.json",
+              "sha256": "1a8677b982f0792b9f630ebd5d6cca77471a97084dbd8f6e996df01eff3d4f58"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/disabled/astylar-input-tree.json",
+              "sha256": "507f26dc99d3860343cb5202932beed608ee2f18c4fa7a6ed4d3252820a4de6f"
+            }
+          },
+          "proofSha256": "9aab4f91e4bff8313c03f6d6cc8bd790932cdd7a564ce06ea5ee1c33d9b39142"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr1/focus",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/focus/reference-input-tree.json",
+              "sha256": "df7f4f4e0539cd6829d80e8ff50cb4ff4dfeb3c96d3b2f439dd363da36e86d27"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/focus/astylar-input-tree.json",
+              "sha256": "bab1cd0b62583d9ef37b2bb3666a4ea8b2b00870b2090c7254b9535c5f0dab65"
+            }
+          },
+          "proofSha256": "cb4d11f03fd233752703f14a6dcea8c8bffbf1804f97829f7002e9931cf524be"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr1/hover",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/hover/reference-input-tree.json",
+              "sha256": "b6c453cd2a6b762066f966a22c64f04bf20c6e752ed5d3a66ae8079b5cb78314"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/hover/astylar-input-tree.json",
+              "sha256": "bab1cd0b62583d9ef37b2bb3666a4ea8b2b00870b2090c7254b9535c5f0dab65"
+            }
+          },
+          "proofSha256": "cb4d11f03fd233752703f14a6dcea8c8bffbf1804f97829f7002e9931cf524be"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr1/held",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/held/reference-input-tree.json",
+              "sha256": "c3dd5f80b6592b3f09c677574524627d416d41daac5438989cd109f0c021a9ef"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/held/astylar-input-tree.json",
+              "sha256": "bab1cd0b62583d9ef37b2bb3666a4ea8b2b00870b2090c7254b9535c5f0dab65"
+            }
+          },
+          "proofSha256": "cb4d11f03fd233752703f14a6dcea8c8bffbf1804f97829f7002e9931cf524be"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr1/activate",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "39d4bd29df6f6acda54561b890e9b80f5d827704997a31546af78e96ef452bef"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "eefec6bbee2bb1a5140dbcff9f0f7d0761dc34ef9e5b1d7d00e7b3244997f6ba"
+            }
+          },
+          "proofSha256": "837acb1bf48ca49936a9372d82e0d5d2bc5802f1188e1a792e55cdd5d35e1b70"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr1/activate-leave",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "df7f4f4e0539cd6829d80e8ff50cb4ff4dfeb3c96d3b2f439dd363da36e86d27"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "bab1cd0b62583d9ef37b2bb3666a4ea8b2b00870b2090c7254b9535c5f0dab65"
+            }
+          },
+          "proofSha256": "cb4d11f03fd233752703f14a6dcea8c8bffbf1804f97829f7002e9931cf524be"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr1/drag-start",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/drag-start/reference-input-tree.json",
+              "sha256": "78ae5d3a7e6a64bd9cb2da337a161fde524d6c7396b791a8514ed026881ef948"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/drag-start/astylar-input-tree.json",
+              "sha256": "2aaa6febe25066770981db40e4eebf885c1cd0260709596f4069f49a172d0f95"
+            }
+          },
+          "proofSha256": "0a5356823d880681c7a8cfc8fe156f6d261e95d89db7afb10511f4216bd4faa7"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr1/drag-end",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/drag-end/reference-input-tree.json",
+              "sha256": "15b7ff257defdc653c39efda4c4f121f9a0905ca92b3cb9f58371519ac6e0ddb"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/drag-end/astylar-input-tree.json",
+              "sha256": "1878ca5627e59cfc5be123edf80b60256fef1f52873862163e47e66d5183a4be"
+            }
+          },
+          "proofSha256": "aca57ae5fdeb9552aba54ad29091264aac737ea0218a441b88f423ce9b9a07ec"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr1/disabled",
+          "inputSha256": "c64af33469601fc3dce76657e73a8c0c4fecaf6e04a60b0e1de18b8f3b52c6f8",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/disabled/reference-input-tree.json",
+              "sha256": "c5d33bd43eef96db3daab3e3164abab2bcdad769e0b9f7be1d544982447ba5a6"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/disabled/astylar-input-tree.json",
+              "sha256": "f8c00244073720bb2d61c2ff6615b27805f263a3bf8aa3941c52f1256ce6ddda"
+            }
+          },
+          "proofSha256": "7ea4a642d1321003f66a23957c91e4a02080e671fe6548221df05c3d5b7118b1"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr2/focus",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/focus/reference-input-tree.json",
+              "sha256": "df7f4f4e0539cd6829d80e8ff50cb4ff4dfeb3c96d3b2f439dd363da36e86d27"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/focus/astylar-input-tree.json",
+              "sha256": "bab1cd0b62583d9ef37b2bb3666a4ea8b2b00870b2090c7254b9535c5f0dab65"
+            }
+          },
+          "proofSha256": "cb4d11f03fd233752703f14a6dcea8c8bffbf1804f97829f7002e9931cf524be"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr2/hover",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/hover/reference-input-tree.json",
+              "sha256": "b6c453cd2a6b762066f966a22c64f04bf20c6e752ed5d3a66ae8079b5cb78314"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/hover/astylar-input-tree.json",
+              "sha256": "bab1cd0b62583d9ef37b2bb3666a4ea8b2b00870b2090c7254b9535c5f0dab65"
+            }
+          },
+          "proofSha256": "cb4d11f03fd233752703f14a6dcea8c8bffbf1804f97829f7002e9931cf524be"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr2/held",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/held/reference-input-tree.json",
+              "sha256": "c3dd5f80b6592b3f09c677574524627d416d41daac5438989cd109f0c021a9ef"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/held/astylar-input-tree.json",
+              "sha256": "bab1cd0b62583d9ef37b2bb3666a4ea8b2b00870b2090c7254b9535c5f0dab65"
+            }
+          },
+          "proofSha256": "cb4d11f03fd233752703f14a6dcea8c8bffbf1804f97829f7002e9931cf524be"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr2/activate",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "39d4bd29df6f6acda54561b890e9b80f5d827704997a31546af78e96ef452bef"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "eefec6bbee2bb1a5140dbcff9f0f7d0761dc34ef9e5b1d7d00e7b3244997f6ba"
+            }
+          },
+          "proofSha256": "837acb1bf48ca49936a9372d82e0d5d2bc5802f1188e1a792e55cdd5d35e1b70"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr2/activate-leave",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "df7f4f4e0539cd6829d80e8ff50cb4ff4dfeb3c96d3b2f439dd363da36e86d27"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "bab1cd0b62583d9ef37b2bb3666a4ea8b2b00870b2090c7254b9535c5f0dab65"
+            }
+          },
+          "proofSha256": "cb4d11f03fd233752703f14a6dcea8c8bffbf1804f97829f7002e9931cf524be"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr2/drag-start",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/drag-start/reference-input-tree.json",
+              "sha256": "78ae5d3a7e6a64bd9cb2da337a161fde524d6c7396b791a8514ed026881ef948"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/drag-start/astylar-input-tree.json",
+              "sha256": "2aaa6febe25066770981db40e4eebf885c1cd0260709596f4069f49a172d0f95"
+            }
+          },
+          "proofSha256": "0a5356823d880681c7a8cfc8fe156f6d261e95d89db7afb10511f4216bd4faa7"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr2/drag-end",
+          "inputSha256": "bb001a5159631b49f01ed683749335aac85288da00f9778967d0e23752ddb79d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/drag-end/reference-input-tree.json",
+              "sha256": "15b7ff257defdc653c39efda4c4f121f9a0905ca92b3cb9f58371519ac6e0ddb"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/drag-end/astylar-input-tree.json",
+              "sha256": "1878ca5627e59cfc5be123edf80b60256fef1f52873862163e47e66d5183a4be"
+            }
+          },
+          "proofSha256": "aca57ae5fdeb9552aba54ad29091264aac737ea0218a441b88f423ce9b9a07ec"
+        },
+        {
+          "case": "interaction:slider@dark/desktop-dpr2/disabled",
+          "inputSha256": "c64af33469601fc3dce76657e73a8c0c4fecaf6e04a60b0e1de18b8f3b52c6f8",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/disabled/reference-input-tree.json",
+              "sha256": "c5d33bd43eef96db3daab3e3164abab2bcdad769e0b9f7be1d544982447ba5a6"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/disabled/astylar-input-tree.json",
+              "sha256": "f8c00244073720bb2d61c2ff6615b27805f263a3bf8aa3941c52f1256ce6ddda"
+            }
+          },
+          "proofSha256": "7ea4a642d1321003f66a23957c91e4a02080e671fe6548221df05c3d5b7118b1"
+        },
+        {
+          "case": "interaction:slider@light/comparison/drag-start",
+          "inputSha256": "5af892f33772200fffafa3a56c8de07448fd6d0695fdde069bce38a07985864a",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/comparison/drag-start/reference-input-tree.json",
+              "sha256": "f9caef3d081d55bca43b229301c3465ff2de7ce218f3bab923d10a68255eea4b"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/comparison/drag-start/astylar-input-tree.json",
+              "sha256": "20282cc963d67c5eff6320d683bb7d05bfabc124a59a1f6ffa581dc356f80ccc"
+            }
+          },
+          "proofSha256": "3ffa8a7f90130de5fec096033c8aa63795052d3033efdef6b89e75bd48ee06f2"
+        },
+        {
+          "case": "interaction:slider@light/comparison/drag-end",
+          "inputSha256": "5af892f33772200fffafa3a56c8de07448fd6d0695fdde069bce38a07985864a",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/comparison/drag-end/reference-input-tree.json",
+              "sha256": "2ad021a21bdd87b880cf0997c3afd405e1cdb3e0e9c69169593cd29aee2cbe0e"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/comparison/drag-end/astylar-input-tree.json",
+              "sha256": "4520e1c38148529b55bdd7db4a3077eb7a90b57e8a38d7340bfb7e26529ee2c2"
+            }
+          },
+          "proofSha256": "44ae79b4d2fe8a9b5511c42ba8a31988919ed03dbf83954bdaf0470629c64a83"
+        }
+      ],
+      "canonicalRowSha256": "23ea2d9e0e64cea2457cd45c5c9e88bcbac69fcea1be008c5c2278988650b6c9",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
+      "family": "slider",
+      "element": "slider-visual",
+      "property": "fontSize",
+      "reference": "14.4px",
+      "occurrences": 19,
+      "cases": [
+        "static:slider@contrast/desktop",
+        "static:slider@contrast/tablet",
+        "static:slider@contrast/mobile",
+        "interaction:slider@contrast/desktop-dpr1/focus",
+        "interaction:slider@contrast/desktop-dpr1/hover",
+        "interaction:slider@contrast/desktop-dpr1/held",
+        "interaction:slider@contrast/desktop-dpr1/activate",
+        "interaction:slider@contrast/desktop-dpr1/activate-leave",
+        "interaction:slider@contrast/desktop-dpr1/drag-start",
+        "interaction:slider@contrast/desktop-dpr1/drag-end",
+        "interaction:slider@contrast/desktop-dpr1/disabled",
+        "interaction:slider@contrast/desktop-dpr2/focus"
+      ],
+      "states": [
+        "static",
+        "focus",
+        "hover",
+        "held",
+        "activate",
+        "activate-leave",
+        "drag-start",
+        "drag-end",
+        "disabled"
+      ],
+      "observations": [
+        {
+          "case": "static:slider@contrast/desktop",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/contrast/desktop/reference-input-tree.json",
+              "sha256": "d14546aad37725cd227bb778c0a397f732c9eb955aca03139386fd53e854f8f0"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/contrast/desktop/astylar-input-tree.json",
+              "sha256": "0ce7024fc41c2ab8e9d3b2344b1e4f8dc232a4c655687985a7de24704de6f2cb"
+            }
+          },
+          "proofSha256": "e014b65e52700eb0094c045c7d0365649145062c5765ea1b3eb248173892cf88"
+        },
+        {
+          "case": "static:slider@contrast/tablet",
+          "inputSha256": "bf2e4d8e0242602a86a0af75abc68bcfd61f0bf40c8b293bc50ccdf2a5cebb72",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/contrast/tablet/reference-input-tree.json",
+              "sha256": "1e3492bc4f9ec7465512a7e4a4bcb2a1d0ac344d235592be7b322db781e76aaf"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/contrast/tablet/astylar-input-tree.json",
+              "sha256": "0ce7024fc41c2ab8e9d3b2344b1e4f8dc232a4c655687985a7de24704de6f2cb"
+            }
+          },
+          "proofSha256": "e014b65e52700eb0094c045c7d0365649145062c5765ea1b3eb248173892cf88"
+        },
+        {
+          "case": "static:slider@contrast/mobile",
+          "inputSha256": "e853d49d968cf070f8637835ffb3a186de840524e78b712c6c1023579c7bdebd",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/contrast/mobile/reference-input-tree.json",
+              "sha256": "f2344809d4f6eec56003d57555d23680cb118809e174f4ae578707cd13bf0cb4"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/contrast/mobile/astylar-input-tree.json",
+              "sha256": "b490a223183ec760b310ea5d70526df109a58d160e0cbb93b9d73b25948e175a"
+            }
+          },
+          "proofSha256": "e014b65e52700eb0094c045c7d0365649145062c5765ea1b3eb248173892cf88"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr1/focus",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/focus/reference-input-tree.json",
+              "sha256": "dca65dc2cced0925b90d2a7bcc5ddb6da7337de549461299843234971d347a5a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/focus/astylar-input-tree.json",
+              "sha256": "0ce7024fc41c2ab8e9d3b2344b1e4f8dc232a4c655687985a7de24704de6f2cb"
+            }
+          },
+          "proofSha256": "e014b65e52700eb0094c045c7d0365649145062c5765ea1b3eb248173892cf88"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr1/hover",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/hover/reference-input-tree.json",
+              "sha256": "dd0ec63e054f1d4149c21e0698922594859ae3dd645d8228ca9b0b36cd156c15"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+              "sha256": "0ce7024fc41c2ab8e9d3b2344b1e4f8dc232a4c655687985a7de24704de6f2cb"
+            }
+          },
+          "proofSha256": "e014b65e52700eb0094c045c7d0365649145062c5765ea1b3eb248173892cf88"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr1/held",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/held/reference-input-tree.json",
+              "sha256": "672e3128511c061c68b4adb655046eb4cb30e808ecc6b9a9b43bdb04ee7c4048"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/held/astylar-input-tree.json",
+              "sha256": "0ce7024fc41c2ab8e9d3b2344b1e4f8dc232a4c655687985a7de24704de6f2cb"
+            }
+          },
+          "proofSha256": "e014b65e52700eb0094c045c7d0365649145062c5765ea1b3eb248173892cf88"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr1/activate",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "da71faec60c2f82b39a0b5411cf12f8b175454016c036567faeb45e4ab5b7e27"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "2b6757fed80b23056d2a2723c3f23bf22000960c20e9286c7643ce8dada313ba"
+            }
+          },
+          "proofSha256": "31c7926458d981f74227096c97f1e912dc0bc212fdf9ad0cce78488ef3ff8e65"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr1/activate-leave",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "dca65dc2cced0925b90d2a7bcc5ddb6da7337de549461299843234971d347a5a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "0ce7024fc41c2ab8e9d3b2344b1e4f8dc232a4c655687985a7de24704de6f2cb"
+            }
+          },
+          "proofSha256": "e014b65e52700eb0094c045c7d0365649145062c5765ea1b3eb248173892cf88"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr1/drag-start",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/drag-start/reference-input-tree.json",
+              "sha256": "522fa8aec19861e41f2d162dad30ebfd53ea99f612f12632bf4929d93dbd0223"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/drag-start/astylar-input-tree.json",
+              "sha256": "f56c2494c1743e1b8de48022a15ff2531865c9a5b8bd542e79167a39d8601211"
+            }
+          },
+          "proofSha256": "068408544e0cd793802fb40d28b6d31f6cf71847d68fd40a15df0d509c039e5e"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr1/drag-end",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/drag-end/reference-input-tree.json",
+              "sha256": "fbc7a35b4de451d6a041f91d21ee36ef70c92df34d43809932b08be62260fbd4"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/drag-end/astylar-input-tree.json",
+              "sha256": "450c48187eb954cadb169d01ed5ceec71d8b334eb39cd9e1de28deec719e4f73"
+            }
+          },
+          "proofSha256": "814d0ba4de460d33f66cad745c90186756786f07e158cd225f82b66a5ccb5ce3"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr1/disabled",
+          "inputSha256": "746e6e71c4eb4e048185992e76303304b5ba1067dd0309b96dfa0f04543da6ab",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/disabled/reference-input-tree.json",
+              "sha256": "4d535c38bfbefee6418b8d242f2fbcf1992e993c9822a491b58b0eee7c09660d"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/disabled/astylar-input-tree.json",
+              "sha256": "4049fa5d76b7225d96796ae5f469ea05817e5d69c6f20b90fb223dda71118b47"
+            }
+          },
+          "proofSha256": "15940fdaec9fffbf586b3e4a789f4369bb44eb367c914e60713cb1cc88df23a8"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr2/focus",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/focus/reference-input-tree.json",
+              "sha256": "dca65dc2cced0925b90d2a7bcc5ddb6da7337de549461299843234971d347a5a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/focus/astylar-input-tree.json",
+              "sha256": "b490a223183ec760b310ea5d70526df109a58d160e0cbb93b9d73b25948e175a"
+            }
+          },
+          "proofSha256": "e014b65e52700eb0094c045c7d0365649145062c5765ea1b3eb248173892cf88"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr2/hover",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/hover/reference-input-tree.json",
+              "sha256": "dd0ec63e054f1d4149c21e0698922594859ae3dd645d8228ca9b0b36cd156c15"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+              "sha256": "b490a223183ec760b310ea5d70526df109a58d160e0cbb93b9d73b25948e175a"
+            }
+          },
+          "proofSha256": "e014b65e52700eb0094c045c7d0365649145062c5765ea1b3eb248173892cf88"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr2/held",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/held/reference-input-tree.json",
+              "sha256": "672e3128511c061c68b4adb655046eb4cb30e808ecc6b9a9b43bdb04ee7c4048"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/held/astylar-input-tree.json",
+              "sha256": "b490a223183ec760b310ea5d70526df109a58d160e0cbb93b9d73b25948e175a"
+            }
+          },
+          "proofSha256": "e014b65e52700eb0094c045c7d0365649145062c5765ea1b3eb248173892cf88"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr2/activate",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "da71faec60c2f82b39a0b5411cf12f8b175454016c036567faeb45e4ab5b7e27"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "a840588d000ffd1fed16b2142fc039f86fe69d8291b6a2135787a862dde264f9"
+            }
+          },
+          "proofSha256": "31c7926458d981f74227096c97f1e912dc0bc212fdf9ad0cce78488ef3ff8e65"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr2/activate-leave",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "dca65dc2cced0925b90d2a7bcc5ddb6da7337de549461299843234971d347a5a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "b490a223183ec760b310ea5d70526df109a58d160e0cbb93b9d73b25948e175a"
+            }
+          },
+          "proofSha256": "e014b65e52700eb0094c045c7d0365649145062c5765ea1b3eb248173892cf88"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr2/drag-start",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/drag-start/reference-input-tree.json",
+              "sha256": "522fa8aec19861e41f2d162dad30ebfd53ea99f612f12632bf4929d93dbd0223"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/drag-start/astylar-input-tree.json",
+              "sha256": "6ccd9b5eeae442aa85d891bac07c1cf88109178839b9592bc7bd5d836f3f034b"
+            }
+          },
+          "proofSha256": "068408544e0cd793802fb40d28b6d31f6cf71847d68fd40a15df0d509c039e5e"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr2/drag-end",
+          "inputSha256": "88706ac50b0a7e317051df901b16dea5247cf6b20b8a7c0419339fa5412313f9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/drag-end/reference-input-tree.json",
+              "sha256": "fbc7a35b4de451d6a041f91d21ee36ef70c92df34d43809932b08be62260fbd4"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/drag-end/astylar-input-tree.json",
+              "sha256": "ba818402cffc365ff6ca74ce0d607efcf047b073995de560488ae23bf8d7d88c"
+            }
+          },
+          "proofSha256": "814d0ba4de460d33f66cad745c90186756786f07e158cd225f82b66a5ccb5ce3"
+        },
+        {
+          "case": "interaction:slider@contrast/desktop-dpr2/disabled",
+          "inputSha256": "746e6e71c4eb4e048185992e76303304b5ba1067dd0309b96dfa0f04543da6ab",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/disabled/reference-input-tree.json",
+              "sha256": "4d535c38bfbefee6418b8d242f2fbcf1992e993c9822a491b58b0eee7c09660d"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/disabled/astylar-input-tree.json",
+              "sha256": "94a13b867bcc4df0cddfbbc6493b38962025b9b0366646983d781463d8abda6f"
+            }
+          },
+          "proofSha256": "15940fdaec9fffbf586b3e4a789f4369bb44eb367c914e60713cb1cc88df23a8"
+        }
+      ],
+      "canonicalRowSha256": "8890099945158428e1ef5fdc74419cf4625b519fcf566f7cd36e8d5f4d8332f5",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
+      "family": "slider",
+      "element": "slider-visual",
+      "property": "fontSize",
+      "reference": "18.4px",
+      "occurrences": 19,
+      "cases": [
+        "static:slider@custom/desktop",
+        "static:slider@custom/tablet",
+        "static:slider@custom/mobile",
+        "interaction:slider@custom/desktop-dpr1/focus",
+        "interaction:slider@custom/desktop-dpr1/hover",
+        "interaction:slider@custom/desktop-dpr1/held",
+        "interaction:slider@custom/desktop-dpr1/activate",
+        "interaction:slider@custom/desktop-dpr1/activate-leave",
+        "interaction:slider@custom/desktop-dpr1/drag-start",
+        "interaction:slider@custom/desktop-dpr1/drag-end",
+        "interaction:slider@custom/desktop-dpr1/disabled",
+        "interaction:slider@custom/desktop-dpr2/focus"
+      ],
+      "states": [
+        "static",
+        "focus",
+        "hover",
+        "held",
+        "activate",
+        "activate-leave",
+        "drag-start",
+        "drag-end",
+        "disabled"
+      ],
+      "observations": [
+        {
+          "case": "static:slider@custom/desktop",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/custom/desktop/reference-input-tree.json",
+              "sha256": "0fc8073421bd9f3dab3110e636edbf19064ebdef8fee4d624429cd9c96467ef3"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/custom/desktop/astylar-input-tree.json",
+              "sha256": "a91c332ffbf3240c276deb5a30b6e2dc38cb0d51697433ed2a12acb9a9d0eefd"
+            }
+          },
+          "proofSha256": "018e87ca8e5f905626a276234fa631173ce92474087637a1981222882529b1c8"
+        },
+        {
+          "case": "static:slider@custom/tablet",
+          "inputSha256": "e1f5540a9911b694b5bae354a9b8731d4510fb51064457d4ebf0e07a3ce48463",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/custom/tablet/reference-input-tree.json",
+              "sha256": "60ede77fe6a2f86a9dd867cbaab768be4a76756c6c4f5f1a7f47f05aa5359041"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/custom/tablet/astylar-input-tree.json",
+              "sha256": "a91c332ffbf3240c276deb5a30b6e2dc38cb0d51697433ed2a12acb9a9d0eefd"
+            }
+          },
+          "proofSha256": "018e87ca8e5f905626a276234fa631173ce92474087637a1981222882529b1c8"
+        },
+        {
+          "case": "static:slider@custom/mobile",
+          "inputSha256": "09df399b0466933a453bee32dd8147afc169294a9ab709550c025a99795798c6",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/custom/mobile/reference-input-tree.json",
+              "sha256": "ca2dbe51a6cd8a549e2284f2fde1ebf340cd25c032019d98efc3585559368650"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/slider/custom/mobile/astylar-input-tree.json",
+              "sha256": "33e483a4a9d4e47aa065f3e17922ee130b3d0e16640dbf02e1cf6f72c8889552"
+            }
+          },
+          "proofSha256": "018e87ca8e5f905626a276234fa631173ce92474087637a1981222882529b1c8"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr1/focus",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/focus/reference-input-tree.json",
+              "sha256": "61b6ef2c507599f30c7d1c6e7e7e4a299e0a97f72429672667668cbdb9f3c109"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/focus/astylar-input-tree.json",
+              "sha256": "a91c332ffbf3240c276deb5a30b6e2dc38cb0d51697433ed2a12acb9a9d0eefd"
+            }
+          },
+          "proofSha256": "018e87ca8e5f905626a276234fa631173ce92474087637a1981222882529b1c8"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr1/hover",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/hover/reference-input-tree.json",
+              "sha256": "d91cd21a53f93f6632bfcdea275ba8a2ce1d1f96fc2c008f330866191ebc2398"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/hover/astylar-input-tree.json",
+              "sha256": "a91c332ffbf3240c276deb5a30b6e2dc38cb0d51697433ed2a12acb9a9d0eefd"
+            }
+          },
+          "proofSha256": "018e87ca8e5f905626a276234fa631173ce92474087637a1981222882529b1c8"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr1/held",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/held/reference-input-tree.json",
+              "sha256": "17c1db5a468bebf97d007877a3d245bd0aee03f460a4a7fee571752a7ee7b013"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/held/astylar-input-tree.json",
+              "sha256": "a91c332ffbf3240c276deb5a30b6e2dc38cb0d51697433ed2a12acb9a9d0eefd"
+            }
+          },
+          "proofSha256": "018e87ca8e5f905626a276234fa631173ce92474087637a1981222882529b1c8"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr1/activate",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "8c2ac19169a693ee8da901c4aa298fd7bd35df08b39154ab72e8b1ef83a45443"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "e253e16fa6568d4fe5f9fecfc94d65f7f627c20378179f9ccaeccae2dfd767c9"
+            }
+          },
+          "proofSha256": "1e3dc77754407559fe579f20f47a9356d38b8bdbd5d3353a6ecc4549fbd297c9"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr1/activate-leave",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+              "sha256": "61b6ef2c507599f30c7d1c6e7e7e4a299e0a97f72429672667668cbdb9f3c109"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+              "sha256": "a91c332ffbf3240c276deb5a30b6e2dc38cb0d51697433ed2a12acb9a9d0eefd"
+            }
+          },
+          "proofSha256": "018e87ca8e5f905626a276234fa631173ce92474087637a1981222882529b1c8"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr1/drag-start",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/drag-start/reference-input-tree.json",
+              "sha256": "f02a23bb763126763c49bee7d7ec48c2ead056463dba776b5de07fe39ee29605"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/drag-start/astylar-input-tree.json",
+              "sha256": "203bf64edf35ca24c684a5c5c900e2f1104b37c8037ce18f21eb83d3910d801d"
+            }
+          },
+          "proofSha256": "f2e7aacd101c2eaf99ef32f10c8f0782eb050aec97762204eeb88d09bb778570"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr1/drag-end",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/drag-end/reference-input-tree.json",
+              "sha256": "86941add28e97ac549e0e7f359d72e341559b5b605a4144ea0c49ff3150ded11"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/drag-end/astylar-input-tree.json",
+              "sha256": "aeb5746e14ce3794ef187764f6aac176bcb716f68eeb377f35be27cbed4619a1"
+            }
+          },
+          "proofSha256": "07c033a6bdefd641e4339241ccc1699e7148dccb46e4c05cd2fcc7ca36f03b76"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr1/disabled",
+          "inputSha256": "7a8410937b5cef50fba6fee302c20869f193506cf59e39384668f72856c619e8",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/disabled/reference-input-tree.json",
+              "sha256": "1137ad9d363391fcd860657d3e9f58bd8210227aa7f7305887e1eaf5f5375320"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/disabled/astylar-input-tree.json",
+              "sha256": "4d6231c0f176cf46a012049bae8269e1424d03e00880f51feccfc85831f9fb80"
+            }
+          },
+          "proofSha256": "a61de12bbbc468862b1a50d3189877a94149ce9aa519185ecf089afe78c43203"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr2/focus",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/focus/reference-input-tree.json",
+              "sha256": "61b6ef2c507599f30c7d1c6e7e7e4a299e0a97f72429672667668cbdb9f3c109"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/focus/astylar-input-tree.json",
+              "sha256": "ff7eb2b63954e3b5e7323170ec8086b712ee801aefd73194446e9619f1ae3254"
+            }
+          },
+          "proofSha256": "018e87ca8e5f905626a276234fa631173ce92474087637a1981222882529b1c8"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr2/hover",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/hover/reference-input-tree.json",
+              "sha256": "d91cd21a53f93f6632bfcdea275ba8a2ce1d1f96fc2c008f330866191ebc2398"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/hover/astylar-input-tree.json",
+              "sha256": "ff7eb2b63954e3b5e7323170ec8086b712ee801aefd73194446e9619f1ae3254"
+            }
+          },
+          "proofSha256": "018e87ca8e5f905626a276234fa631173ce92474087637a1981222882529b1c8"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr2/held",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/held/reference-input-tree.json",
+              "sha256": "17c1db5a468bebf97d007877a3d245bd0aee03f460a4a7fee571752a7ee7b013"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/held/astylar-input-tree.json",
+              "sha256": "ff7eb2b63954e3b5e7323170ec8086b712ee801aefd73194446e9619f1ae3254"
+            }
+          },
+          "proofSha256": "018e87ca8e5f905626a276234fa631173ce92474087637a1981222882529b1c8"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr2/activate",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "8c2ac19169a693ee8da901c4aa298fd7bd35df08b39154ab72e8b1ef83a45443"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "8e11a3b9f3e3f1516df889578f4582f93998986b22fcf34dddd49c429d630cb7"
+            }
+          },
+          "proofSha256": "1e3dc77754407559fe579f20f47a9356d38b8bdbd5d3353a6ecc4549fbd297c9"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr2/activate-leave",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+              "sha256": "61b6ef2c507599f30c7d1c6e7e7e4a299e0a97f72429672667668cbdb9f3c109"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+              "sha256": "ff7eb2b63954e3b5e7323170ec8086b712ee801aefd73194446e9619f1ae3254"
+            }
+          },
+          "proofSha256": "018e87ca8e5f905626a276234fa631173ce92474087637a1981222882529b1c8"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr2/drag-start",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/drag-start/reference-input-tree.json",
+              "sha256": "f02a23bb763126763c49bee7d7ec48c2ead056463dba776b5de07fe39ee29605"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/drag-start/astylar-input-tree.json",
+              "sha256": "6a5b05ee619e0a23c3d5d5dc24378613563b756e929e0a9f467ea9b721ab5085"
+            }
+          },
+          "proofSha256": "f2e7aacd101c2eaf99ef32f10c8f0782eb050aec97762204eeb88d09bb778570"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr2/drag-end",
+          "inputSha256": "d9299129fa8822853e8f275d784d29221499234e3eaea09ab9b00f6f3f41dfcf",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/drag-end/reference-input-tree.json",
+              "sha256": "86941add28e97ac549e0e7f359d72e341559b5b605a4144ea0c49ff3150ded11"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/drag-end/astylar-input-tree.json",
+              "sha256": "bb9ff576ec4408d627e7a1f53166a80dd1e2debbc6155579e3f0648ccd5e22d6"
+            }
+          },
+          "proofSha256": "07c033a6bdefd641e4339241ccc1699e7148dccb46e4c05cd2fcc7ca36f03b76"
+        },
+        {
+          "case": "interaction:slider@custom/desktop-dpr2/disabled",
+          "inputSha256": "7a8410937b5cef50fba6fee302c20869f193506cf59e39384668f72856c619e8",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/disabled/reference-input-tree.json",
+              "sha256": "1137ad9d363391fcd860657d3e9f58bd8210227aa7f7305887e1eaf5f5375320"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/disabled/astylar-input-tree.json",
+              "sha256": "788d1fea596bb0c5e288e4aebaa74ba792f73adac83352df6c75568c51266137"
+            }
+          },
+          "proofSha256": "a61de12bbbc468862b1a50d3189877a94149ce9aa519185ecf089afe78c43203"
+        }
+      ],
+      "canonicalRowSha256": "a10710dcfd58d59437430ba03d391516d98d8441f63edd18976286322ab492de",
       "proposedClassification": "parity-harness-defect",
       "proposedAttribution": "reviewed-container-font-size-declaration-stage",
       "computedCandidateVerified": false,
@@ -17089,6 +18756,766 @@
         }
       ],
       "canonicalRowSha256": "55a147bbc696398f30e6501f556906cee9a2bd4ddd154c89db030a7bf1e94596",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
+      "family": "progress-bar",
+      "element": "progress-bar-primary",
+      "property": "fontSize",
+      "reference": "16px",
+      "occurrences": 10,
+      "cases": [
+        "static:progress-bar@light/desktop",
+        "static:progress-bar@light/tablet",
+        "static:progress-bar@light/mobile",
+        "static:progress-bar@dark/desktop",
+        "static:progress-bar@dark/tablet",
+        "static:progress-bar@dark/mobile",
+        "interaction:progress-bar@light/desktop-dpr1/inspect",
+        "interaction:progress-bar@light/desktop-dpr2/inspect",
+        "interaction:progress-bar@dark/desktop-dpr1/inspect",
+        "interaction:progress-bar@dark/desktop-dpr2/inspect"
+      ],
+      "states": [
+        "static",
+        "inspect"
+      ],
+      "observations": [
+        {
+          "case": "static:progress-bar@light/desktop",
+          "inputSha256": "99b791ac0efbf0aaacfaf0fb70122f6031b3f8213292c0a54e76eec4a29f9125",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/light/desktop/reference-input-tree.json",
+              "sha256": "438f826078a01f71525b60d71afee38e6f7051a59726e2aa4a92f7294e626aa5"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/light/desktop/astylar-input-tree.json",
+              "sha256": "d673386442fb51be3e6695e89b94b47d1e840a8d6d3c935b9ab78248bcdcb6b7"
+            }
+          },
+          "proofSha256": "d23844a568487936edf5608bae6645d5fa94da6a108b9f30689faf848bcf0fc6"
+        },
+        {
+          "case": "static:progress-bar@light/tablet",
+          "inputSha256": "0bab448d1b74d96d1573c11807acf1a743a2b8d6a24d54e7ded2c7061b5b6e39",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/light/tablet/reference-input-tree.json",
+              "sha256": "b799ed834f970893d6b0b7baac9ed90993b05c277ddc711ba38848bfa8ea58c5"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/light/tablet/astylar-input-tree.json",
+              "sha256": "d673386442fb51be3e6695e89b94b47d1e840a8d6d3c935b9ab78248bcdcb6b7"
+            }
+          },
+          "proofSha256": "d23844a568487936edf5608bae6645d5fa94da6a108b9f30689faf848bcf0fc6"
+        },
+        {
+          "case": "static:progress-bar@light/mobile",
+          "inputSha256": "0689604607e291db33589f56d258cea1df2d00613604c776f1776168e632645c",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/light/mobile/reference-input-tree.json",
+              "sha256": "63f27b1f5ca1948c3e5b4fdc0bdf65d7bc47923115f6d47d11d6ac5d91d83033"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/light/mobile/astylar-input-tree.json",
+              "sha256": "4c6b3779891857e13966625cdfc0174409841890048f16fed24e72f76ec30236"
+            }
+          },
+          "proofSha256": "d23844a568487936edf5608bae6645d5fa94da6a108b9f30689faf848bcf0fc6"
+        },
+        {
+          "case": "static:progress-bar@dark/desktop",
+          "inputSha256": "3ea9d32ad25cfe673a52af611e69358cc1d8585421c0376252aff76bc7d3289a",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/dark/desktop/reference-input-tree.json",
+              "sha256": "63074e39e3b66abbf42b9d5958272af674f884cd72f46442119a3c7f1196d7bd"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/dark/desktop/astylar-input-tree.json",
+              "sha256": "54fe82e1c2d995bcc3106672d7a0ae4ed9ad199e9771bb033a49bbf031f35b81"
+            }
+          },
+          "proofSha256": "efc2d52d4eeec4951eeb9e0c413b3f4405274354f53c1c8e92e51057c30b69a5"
+        },
+        {
+          "case": "static:progress-bar@dark/tablet",
+          "inputSha256": "d49ab799e8459c42b36f1b1322e7d058e93fefcaa3606c7fe8b4b6511ff50cc1",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/dark/tablet/reference-input-tree.json",
+              "sha256": "3ddb7d6f2480d8ab70e6db73652c37095ec28c11b3fb98582b77aba872d0d79e"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/dark/tablet/astylar-input-tree.json",
+              "sha256": "8a6fd7699ed0a32b118ead229747440f4fd6016142808061664db06cde8513fd"
+            }
+          },
+          "proofSha256": "efc2d52d4eeec4951eeb9e0c413b3f4405274354f53c1c8e92e51057c30b69a5"
+        },
+        {
+          "case": "static:progress-bar@dark/mobile",
+          "inputSha256": "f67838acad30ee95808ad11af3366920f6ef782eb039e360fc71e574e704c5c1",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/dark/mobile/reference-input-tree.json",
+              "sha256": "2821258da91e46065fd688bc7e86da565a260e441618d5266c82f66f676fe8cb"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/dark/mobile/astylar-input-tree.json",
+              "sha256": "8a6fd7699ed0a32b118ead229747440f4fd6016142808061664db06cde8513fd"
+            }
+          },
+          "proofSha256": "efc2d52d4eeec4951eeb9e0c413b3f4405274354f53c1c8e92e51057c30b69a5"
+        },
+        {
+          "case": "interaction:progress-bar@light/desktop-dpr1/inspect",
+          "inputSha256": "99b791ac0efbf0aaacfaf0fb70122f6031b3f8213292c0a54e76eec4a29f9125",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/light/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "438f826078a01f71525b60d71afee38e6f7051a59726e2aa4a92f7294e626aa5"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/light/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "4c6b3779891857e13966625cdfc0174409841890048f16fed24e72f76ec30236"
+            }
+          },
+          "proofSha256": "d23844a568487936edf5608bae6645d5fa94da6a108b9f30689faf848bcf0fc6"
+        },
+        {
+          "case": "interaction:progress-bar@light/desktop-dpr2/inspect",
+          "inputSha256": "99b791ac0efbf0aaacfaf0fb70122f6031b3f8213292c0a54e76eec4a29f9125",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/light/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "438f826078a01f71525b60d71afee38e6f7051a59726e2aa4a92f7294e626aa5"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/light/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "4c6b3779891857e13966625cdfc0174409841890048f16fed24e72f76ec30236"
+            }
+          },
+          "proofSha256": "d23844a568487936edf5608bae6645d5fa94da6a108b9f30689faf848bcf0fc6"
+        },
+        {
+          "case": "interaction:progress-bar@dark/desktop-dpr1/inspect",
+          "inputSha256": "3ea9d32ad25cfe673a52af611e69358cc1d8585421c0376252aff76bc7d3289a",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/dark/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "63074e39e3b66abbf42b9d5958272af674f884cd72f46442119a3c7f1196d7bd"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/dark/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "8a6fd7699ed0a32b118ead229747440f4fd6016142808061664db06cde8513fd"
+            }
+          },
+          "proofSha256": "efc2d52d4eeec4951eeb9e0c413b3f4405274354f53c1c8e92e51057c30b69a5"
+        },
+        {
+          "case": "interaction:progress-bar@dark/desktop-dpr2/inspect",
+          "inputSha256": "3ea9d32ad25cfe673a52af611e69358cc1d8585421c0376252aff76bc7d3289a",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/dark/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "63074e39e3b66abbf42b9d5958272af674f884cd72f46442119a3c7f1196d7bd"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/dark/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "8a6fd7699ed0a32b118ead229747440f4fd6016142808061664db06cde8513fd"
+            }
+          },
+          "proofSha256": "efc2d52d4eeec4951eeb9e0c413b3f4405274354f53c1c8e92e51057c30b69a5"
+        }
+      ],
+      "canonicalRowSha256": "86c3f12dbf3ff1120427c22a0aeef32065f4d8522f17ea0b3d46dfdbf7c9b258",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
+      "family": "progress-bar",
+      "element": "progress-bar-primary",
+      "property": "fontSize",
+      "reference": "14.4px",
+      "occurrences": 5,
+      "cases": [
+        "static:progress-bar@contrast/desktop",
+        "static:progress-bar@contrast/tablet",
+        "static:progress-bar@contrast/mobile",
+        "interaction:progress-bar@contrast/desktop-dpr1/inspect",
+        "interaction:progress-bar@contrast/desktop-dpr2/inspect"
+      ],
+      "states": [
+        "static",
+        "inspect"
+      ],
+      "observations": [
+        {
+          "case": "static:progress-bar@contrast/desktop",
+          "inputSha256": "620ba0a74007ff177c5582165691a32ddb87b19336a52d1f57e9af8ce282fab9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/contrast/desktop/reference-input-tree.json",
+              "sha256": "8cff590586bf6d51722079d3b775fc447a924b2c417e964017e58dcae9c52a4d"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/contrast/desktop/astylar-input-tree.json",
+              "sha256": "8855c19d4e142aa96943fdbfd9c2b18fa287f71a2e24af9d00abd069da732be1"
+            }
+          },
+          "proofSha256": "269c6360297e242934eb2c27b5c87dc2e069b9e8477e887713932b0a454e94cc"
+        },
+        {
+          "case": "static:progress-bar@contrast/tablet",
+          "inputSha256": "db4d2280d6cef3e45f9e0826b62d1797638a6ec53d6901dc268892a6276b2eba",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/contrast/tablet/reference-input-tree.json",
+              "sha256": "ac427f6e656402d67d705382ad5fb5750b771461fcee8b573887b09b296a2848"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/contrast/tablet/astylar-input-tree.json",
+              "sha256": "b6aff1b2961243df16011a132cf4334cb9a336bd5952833e4b9a68e5141ba9cb"
+            }
+          },
+          "proofSha256": "269c6360297e242934eb2c27b5c87dc2e069b9e8477e887713932b0a454e94cc"
+        },
+        {
+          "case": "static:progress-bar@contrast/mobile",
+          "inputSha256": "368fef828b911e9a310270ee2bdbdf1ef95402cec32de983a0d3e4d023107b8e",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/contrast/mobile/reference-input-tree.json",
+              "sha256": "666451d329fc38b88554eaf71a36d6c9fca81d63dc7d3401964c82ce4dabc06f"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/contrast/mobile/astylar-input-tree.json",
+              "sha256": "b4537179037edcf7db96751095e140a8109777dfd7542daa81b6faec2fc808f0"
+            }
+          },
+          "proofSha256": "269c6360297e242934eb2c27b5c87dc2e069b9e8477e887713932b0a454e94cc"
+        },
+        {
+          "case": "interaction:progress-bar@contrast/desktop-dpr1/inspect",
+          "inputSha256": "620ba0a74007ff177c5582165691a32ddb87b19336a52d1f57e9af8ce282fab9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/contrast/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "8cff590586bf6d51722079d3b775fc447a924b2c417e964017e58dcae9c52a4d"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/contrast/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "8855c19d4e142aa96943fdbfd9c2b18fa287f71a2e24af9d00abd069da732be1"
+            }
+          },
+          "proofSha256": "269c6360297e242934eb2c27b5c87dc2e069b9e8477e887713932b0a454e94cc"
+        },
+        {
+          "case": "interaction:progress-bar@contrast/desktop-dpr2/inspect",
+          "inputSha256": "620ba0a74007ff177c5582165691a32ddb87b19336a52d1f57e9af8ce282fab9",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/contrast/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "8cff590586bf6d51722079d3b775fc447a924b2c417e964017e58dcae9c52a4d"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/contrast/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "b4537179037edcf7db96751095e140a8109777dfd7542daa81b6faec2fc808f0"
+            }
+          },
+          "proofSha256": "269c6360297e242934eb2c27b5c87dc2e069b9e8477e887713932b0a454e94cc"
+        }
+      ],
+      "canonicalRowSha256": "e3a754153e16f5fcf717945d15a84423ea71257b896f061ce37d3d6737a6872f",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
+      "family": "progress-bar",
+      "element": "progress-bar-primary",
+      "property": "fontSize",
+      "reference": "18.4px",
+      "occurrences": 5,
+      "cases": [
+        "static:progress-bar@custom/desktop",
+        "static:progress-bar@custom/tablet",
+        "static:progress-bar@custom/mobile",
+        "interaction:progress-bar@custom/desktop-dpr1/inspect",
+        "interaction:progress-bar@custom/desktop-dpr2/inspect"
+      ],
+      "states": [
+        "static",
+        "inspect"
+      ],
+      "observations": [
+        {
+          "case": "static:progress-bar@custom/desktop",
+          "inputSha256": "461a8cb15cdc91015ac377f85d6ff0b2265b14c9372ce4852a2f4437e741b792",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/custom/desktop/reference-input-tree.json",
+              "sha256": "60233fb9f7ed71f8c9bcde0b9c88b88ef608b02c8bfdc33b49b7c25002037ef2"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/custom/desktop/astylar-input-tree.json",
+              "sha256": "ef8eace1b29ba9f56e286a6a4f1d93c3555c3e10a202ec5d75d392454f0ce311"
+            }
+          },
+          "proofSha256": "d1cdd5e385763861b5a38f3158bec27c68e31fb07388dbf8667d20a753ec0189"
+        },
+        {
+          "case": "static:progress-bar@custom/tablet",
+          "inputSha256": "109b6f155734f2d526911a60ef471b03e6c9186236042f15de434923caeac48d",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/custom/tablet/reference-input-tree.json",
+              "sha256": "3cb5c5ffc7b0c1dc6a366da816ca2bdd08f8159ddc5c9897cbe096291f642a19"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/custom/tablet/astylar-input-tree.json",
+              "sha256": "ef8eace1b29ba9f56e286a6a4f1d93c3555c3e10a202ec5d75d392454f0ce311"
+            }
+          },
+          "proofSha256": "d1cdd5e385763861b5a38f3158bec27c68e31fb07388dbf8667d20a753ec0189"
+        },
+        {
+          "case": "static:progress-bar@custom/mobile",
+          "inputSha256": "cd09ae0a5b9bf4a647501a872f06b4d0c8da22d557a4e18a6fa51e600b364ff2",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/custom/mobile/reference-input-tree.json",
+              "sha256": "4858b725628f4643ea2e253eda28408543559176ad4f357275c007cb30a37444"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-bar/custom/mobile/astylar-input-tree.json",
+              "sha256": "19136ad8c8e7a795c918b38527dd4d5dce4ac62dd1daa10db5bba9cda93825a8"
+            }
+          },
+          "proofSha256": "d1cdd5e385763861b5a38f3158bec27c68e31fb07388dbf8667d20a753ec0189"
+        },
+        {
+          "case": "interaction:progress-bar@custom/desktop-dpr1/inspect",
+          "inputSha256": "461a8cb15cdc91015ac377f85d6ff0b2265b14c9372ce4852a2f4437e741b792",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/custom/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "60233fb9f7ed71f8c9bcde0b9c88b88ef608b02c8bfdc33b49b7c25002037ef2"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/custom/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "ef8eace1b29ba9f56e286a6a4f1d93c3555c3e10a202ec5d75d392454f0ce311"
+            }
+          },
+          "proofSha256": "d1cdd5e385763861b5a38f3158bec27c68e31fb07388dbf8667d20a753ec0189"
+        },
+        {
+          "case": "interaction:progress-bar@custom/desktop-dpr2/inspect",
+          "inputSha256": "461a8cb15cdc91015ac377f85d6ff0b2265b14c9372ce4852a2f4437e741b792",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/custom/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "60233fb9f7ed71f8c9bcde0b9c88b88ef608b02c8bfdc33b49b7c25002037ef2"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-bar/custom/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "428b24036b283b4a17ba4ee12878ce50de76364f870153c4b33dbda91a0861ee"
+            }
+          },
+          "proofSha256": "d1cdd5e385763861b5a38f3158bec27c68e31fb07388dbf8667d20a753ec0189"
+        }
+      ],
+      "canonicalRowSha256": "f29c935b79741ba1f64570661253427a1bb0b2fd74df0e0d3a02b373b1ecd268",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
+      "family": "progress-spinner",
+      "element": "progress-spinner-primary",
+      "property": "fontSize",
+      "reference": "16px",
+      "occurrences": 10,
+      "cases": [
+        "static:progress-spinner@light/desktop",
+        "static:progress-spinner@light/tablet",
+        "static:progress-spinner@light/mobile",
+        "static:progress-spinner@dark/desktop",
+        "static:progress-spinner@dark/tablet",
+        "static:progress-spinner@dark/mobile",
+        "interaction:progress-spinner@light/desktop-dpr1/inspect",
+        "interaction:progress-spinner@light/desktop-dpr2/inspect",
+        "interaction:progress-spinner@dark/desktop-dpr1/inspect",
+        "interaction:progress-spinner@dark/desktop-dpr2/inspect"
+      ],
+      "states": [
+        "static",
+        "inspect"
+      ],
+      "observations": [
+        {
+          "case": "static:progress-spinner@light/desktop",
+          "inputSha256": "ffc9c4050e95986b08e5d4263b7365ada81571e3e70e89baae5b2960ca0425a5",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/light/desktop/reference-input-tree.json",
+              "sha256": "9862a1d05b62257578612da9ee2c1d61751758b79f539681b109648a90afd11d"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/light/desktop/astylar-input-tree.json",
+              "sha256": "7e6c737e53d640c292efb3fc3f6863203f082ba627a715189550c8ace65f3134"
+            }
+          },
+          "proofSha256": "60aa52d9a9e6ab0ae4ca96cbaef7c8ef719647247d02672fb40d8b2278f6e501"
+        },
+        {
+          "case": "static:progress-spinner@light/tablet",
+          "inputSha256": "ffc9c4050e95986b08e5d4263b7365ada81571e3e70e89baae5b2960ca0425a5",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/light/tablet/reference-input-tree.json",
+              "sha256": "da15e6ebf9128eb53df9cbbaf4604ae2d6e278384a8e431b9ce3631b5308c87a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/light/tablet/astylar-input-tree.json",
+              "sha256": "9934f733fe508f00bc034b84dad409e04690c154997d01e923ab8987920358ab"
+            }
+          },
+          "proofSha256": "60aa52d9a9e6ab0ae4ca96cbaef7c8ef719647247d02672fb40d8b2278f6e501"
+        },
+        {
+          "case": "static:progress-spinner@light/mobile",
+          "inputSha256": "ffc9c4050e95986b08e5d4263b7365ada81571e3e70e89baae5b2960ca0425a5",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/light/mobile/reference-input-tree.json",
+              "sha256": "467e844a909238c688a4244ec18daf911f4bd088d3b06aea93516813032a8b0b"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/light/mobile/astylar-input-tree.json",
+              "sha256": "9934f733fe508f00bc034b84dad409e04690c154997d01e923ab8987920358ab"
+            }
+          },
+          "proofSha256": "60aa52d9a9e6ab0ae4ca96cbaef7c8ef719647247d02672fb40d8b2278f6e501"
+        },
+        {
+          "case": "static:progress-spinner@dark/desktop",
+          "inputSha256": "095efd83d2a1d4c07b96f6b2004a12ed8e88bbc703daf55e0828addabc9dcb9a",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/dark/desktop/reference-input-tree.json",
+              "sha256": "c69815de4c63fb8b37f111dcab7a9153a8ec18eeda383625e337beefcd221468"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/dark/desktop/astylar-input-tree.json",
+              "sha256": "4bca4349e24efac36c9e435c193fd3698bd3cd04d925933640029a124f184434"
+            }
+          },
+          "proofSha256": "bd6122bc7dcb00743bf0fc70a8df1503ea5cd7095c379bd1babfcab25ad0e01e"
+        },
+        {
+          "case": "static:progress-spinner@dark/tablet",
+          "inputSha256": "095efd83d2a1d4c07b96f6b2004a12ed8e88bbc703daf55e0828addabc9dcb9a",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/dark/tablet/reference-input-tree.json",
+              "sha256": "f65f8c7b57579d4ca620831f2b9a2ccc52ed9cf9cc5313c2a47e01d4ec4ae8bf"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/dark/tablet/astylar-input-tree.json",
+              "sha256": "4bca4349e24efac36c9e435c193fd3698bd3cd04d925933640029a124f184434"
+            }
+          },
+          "proofSha256": "bd6122bc7dcb00743bf0fc70a8df1503ea5cd7095c379bd1babfcab25ad0e01e"
+        },
+        {
+          "case": "static:progress-spinner@dark/mobile",
+          "inputSha256": "095efd83d2a1d4c07b96f6b2004a12ed8e88bbc703daf55e0828addabc9dcb9a",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/dark/mobile/reference-input-tree.json",
+              "sha256": "7ab6fdee948066e0acf9074a8010b6f0aff5b0baf51383c152441ec278683ac0"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/dark/mobile/astylar-input-tree.json",
+              "sha256": "4bca4349e24efac36c9e435c193fd3698bd3cd04d925933640029a124f184434"
+            }
+          },
+          "proofSha256": "bd6122bc7dcb00743bf0fc70a8df1503ea5cd7095c379bd1babfcab25ad0e01e"
+        },
+        {
+          "case": "interaction:progress-spinner@light/desktop-dpr1/inspect",
+          "inputSha256": "ffc9c4050e95986b08e5d4263b7365ada81571e3e70e89baae5b2960ca0425a5",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/light/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "9862a1d05b62257578612da9ee2c1d61751758b79f539681b109648a90afd11d"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/light/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "9934f733fe508f00bc034b84dad409e04690c154997d01e923ab8987920358ab"
+            }
+          },
+          "proofSha256": "60aa52d9a9e6ab0ae4ca96cbaef7c8ef719647247d02672fb40d8b2278f6e501"
+        },
+        {
+          "case": "interaction:progress-spinner@light/desktop-dpr2/inspect",
+          "inputSha256": "ffc9c4050e95986b08e5d4263b7365ada81571e3e70e89baae5b2960ca0425a5",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/light/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "9862a1d05b62257578612da9ee2c1d61751758b79f539681b109648a90afd11d"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/light/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "9934f733fe508f00bc034b84dad409e04690c154997d01e923ab8987920358ab"
+            }
+          },
+          "proofSha256": "60aa52d9a9e6ab0ae4ca96cbaef7c8ef719647247d02672fb40d8b2278f6e501"
+        },
+        {
+          "case": "interaction:progress-spinner@dark/desktop-dpr1/inspect",
+          "inputSha256": "095efd83d2a1d4c07b96f6b2004a12ed8e88bbc703daf55e0828addabc9dcb9a",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/dark/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "c69815de4c63fb8b37f111dcab7a9153a8ec18eeda383625e337beefcd221468"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/dark/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "4bca4349e24efac36c9e435c193fd3698bd3cd04d925933640029a124f184434"
+            }
+          },
+          "proofSha256": "bd6122bc7dcb00743bf0fc70a8df1503ea5cd7095c379bd1babfcab25ad0e01e"
+        },
+        {
+          "case": "interaction:progress-spinner@dark/desktop-dpr2/inspect",
+          "inputSha256": "095efd83d2a1d4c07b96f6b2004a12ed8e88bbc703daf55e0828addabc9dcb9a",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/dark/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "c69815de4c63fb8b37f111dcab7a9153a8ec18eeda383625e337beefcd221468"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/dark/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "4bca4349e24efac36c9e435c193fd3698bd3cd04d925933640029a124f184434"
+            }
+          },
+          "proofSha256": "bd6122bc7dcb00743bf0fc70a8df1503ea5cd7095c379bd1babfcab25ad0e01e"
+        }
+      ],
+      "canonicalRowSha256": "ebd9bac40cbd2a3555a902f9fb6569e54a88019a41382f8f7aa2387b07d332b4",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
+      "family": "progress-spinner",
+      "element": "progress-spinner-primary",
+      "property": "fontSize",
+      "reference": "14.4px",
+      "occurrences": 5,
+      "cases": [
+        "static:progress-spinner@contrast/desktop",
+        "static:progress-spinner@contrast/tablet",
+        "static:progress-spinner@contrast/mobile",
+        "interaction:progress-spinner@contrast/desktop-dpr1/inspect",
+        "interaction:progress-spinner@contrast/desktop-dpr2/inspect"
+      ],
+      "states": [
+        "static",
+        "inspect"
+      ],
+      "observations": [
+        {
+          "case": "static:progress-spinner@contrast/desktop",
+          "inputSha256": "e7019c9958578ababe22554ce5d4040eacf798020acda116d44406acee03609b",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/contrast/desktop/reference-input-tree.json",
+              "sha256": "bea96be0e1a819c8a4f079c1a040e9199df48e3d6679011ad634907f79d4943a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/contrast/desktop/astylar-input-tree.json",
+              "sha256": "3026be36c1400538ef9b7a1a6566c670fd5cef8513869c7b70810d01089151ff"
+            }
+          },
+          "proofSha256": "1bd03985d4ccea6c18b6bc0383c4f4d80a961176ac80a7fa8c554da520cef0b5"
+        },
+        {
+          "case": "static:progress-spinner@contrast/tablet",
+          "inputSha256": "e7019c9958578ababe22554ce5d4040eacf798020acda116d44406acee03609b",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/contrast/tablet/reference-input-tree.json",
+              "sha256": "3d3bc0e7ebbd5dbd95d33fc611cf05142a071702ade72f9882eabce7ecb15ac5"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/contrast/tablet/astylar-input-tree.json",
+              "sha256": "3026be36c1400538ef9b7a1a6566c670fd5cef8513869c7b70810d01089151ff"
+            }
+          },
+          "proofSha256": "1bd03985d4ccea6c18b6bc0383c4f4d80a961176ac80a7fa8c554da520cef0b5"
+        },
+        {
+          "case": "static:progress-spinner@contrast/mobile",
+          "inputSha256": "e7019c9958578ababe22554ce5d4040eacf798020acda116d44406acee03609b",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/contrast/mobile/reference-input-tree.json",
+              "sha256": "693f70ee092dd6ad4cc86031be25219e8e9bd641750f0891174043e68ee2de72"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/contrast/mobile/astylar-input-tree.json",
+              "sha256": "fb1f3dfc2fc41c8589521d5cb3d7d9e1403b067a1330b5a3e26a06d974511197"
+            }
+          },
+          "proofSha256": "1bd03985d4ccea6c18b6bc0383c4f4d80a961176ac80a7fa8c554da520cef0b5"
+        },
+        {
+          "case": "interaction:progress-spinner@contrast/desktop-dpr1/inspect",
+          "inputSha256": "e7019c9958578ababe22554ce5d4040eacf798020acda116d44406acee03609b",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/contrast/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "bea96be0e1a819c8a4f079c1a040e9199df48e3d6679011ad634907f79d4943a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/contrast/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "3026be36c1400538ef9b7a1a6566c670fd5cef8513869c7b70810d01089151ff"
+            }
+          },
+          "proofSha256": "1bd03985d4ccea6c18b6bc0383c4f4d80a961176ac80a7fa8c554da520cef0b5"
+        },
+        {
+          "case": "interaction:progress-spinner@contrast/desktop-dpr2/inspect",
+          "inputSha256": "e7019c9958578ababe22554ce5d4040eacf798020acda116d44406acee03609b",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/contrast/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "bea96be0e1a819c8a4f079c1a040e9199df48e3d6679011ad634907f79d4943a"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/contrast/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "fb1f3dfc2fc41c8589521d5cb3d7d9e1403b067a1330b5a3e26a06d974511197"
+            }
+          },
+          "proofSha256": "1bd03985d4ccea6c18b6bc0383c4f4d80a961176ac80a7fa8c554da520cef0b5"
+        }
+      ],
+      "canonicalRowSha256": "0ec0fc98bc138fb7cc220bbf5d33c97dfc08925a1476057dce5811e65ffefe98",
+      "proposedClassification": "parity-harness-defect",
+      "proposedAttribution": "reviewed-container-font-size-declaration-stage",
+      "computedCandidateVerified": false,
+      "renderingEquivalent": false
+    },
+    {
+      "family": "progress-spinner",
+      "element": "progress-spinner-primary",
+      "property": "fontSize",
+      "reference": "18.4px",
+      "occurrences": 5,
+      "cases": [
+        "static:progress-spinner@custom/desktop",
+        "static:progress-spinner@custom/tablet",
+        "static:progress-spinner@custom/mobile",
+        "interaction:progress-spinner@custom/desktop-dpr1/inspect",
+        "interaction:progress-spinner@custom/desktop-dpr2/inspect"
+      ],
+      "states": [
+        "static",
+        "inspect"
+      ],
+      "observations": [
+        {
+          "case": "static:progress-spinner@custom/desktop",
+          "inputSha256": "0c70d2d04965a9461cc60b4a9c0b477625b3c94fc1bf36077c825c4364c0c0c4",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/custom/desktop/reference-input-tree.json",
+              "sha256": "2da063547ba39cbbced66e8a5464418a4cb450980ecd2edf0b6d17beac6260dc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/custom/desktop/astylar-input-tree.json",
+              "sha256": "6b05e4ee4c6b09d62e25ac7be82f1a07b33713aa87424d22023fa0281fd7f81f"
+            }
+          },
+          "proofSha256": "c9968ce5cb3b360ab2af34f04121944aebabc62dc2d39d0d765e124ef611d58c"
+        },
+        {
+          "case": "static:progress-spinner@custom/tablet",
+          "inputSha256": "0c70d2d04965a9461cc60b4a9c0b477625b3c94fc1bf36077c825c4364c0c0c4",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/custom/tablet/reference-input-tree.json",
+              "sha256": "66adaf74bc61b474176babb84166c1280a41d0a749ac0d3820d1e419f544ab84"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/custom/tablet/astylar-input-tree.json",
+              "sha256": "6b05e4ee4c6b09d62e25ac7be82f1a07b33713aa87424d22023fa0281fd7f81f"
+            }
+          },
+          "proofSha256": "c9968ce5cb3b360ab2af34f04121944aebabc62dc2d39d0d765e124ef611d58c"
+        },
+        {
+          "case": "static:progress-spinner@custom/mobile",
+          "inputSha256": "0c70d2d04965a9461cc60b4a9c0b477625b3c94fc1bf36077c825c4364c0c0c4",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/custom/mobile/reference-input-tree.json",
+              "sha256": "0bb806fd88de254290a4f9989ffc388d677ffd13562b9800fdde124b6717fd21"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/progress-spinner/custom/mobile/astylar-input-tree.json",
+              "sha256": "5760e2fbf80b41d1d060f7d92dbb741b51840d6afddb92f4b490ecd2e3678631"
+            }
+          },
+          "proofSha256": "c9968ce5cb3b360ab2af34f04121944aebabc62dc2d39d0d765e124ef611d58c"
+        },
+        {
+          "case": "interaction:progress-spinner@custom/desktop-dpr1/inspect",
+          "inputSha256": "0c70d2d04965a9461cc60b4a9c0b477625b3c94fc1bf36077c825c4364c0c0c4",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/custom/desktop-dpr1/inspect/reference-input-tree.json",
+              "sha256": "2da063547ba39cbbced66e8a5464418a4cb450980ecd2edf0b6d17beac6260dc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/custom/desktop-dpr1/inspect/astylar-input-tree.json",
+              "sha256": "6b05e4ee4c6b09d62e25ac7be82f1a07b33713aa87424d22023fa0281fd7f81f"
+            }
+          },
+          "proofSha256": "c9968ce5cb3b360ab2af34f04121944aebabc62dc2d39d0d765e124ef611d58c"
+        },
+        {
+          "case": "interaction:progress-spinner@custom/desktop-dpr2/inspect",
+          "inputSha256": "0c70d2d04965a9461cc60b4a9c0b477625b3c94fc1bf36077c825c4364c0c0c4",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/custom/desktop-dpr2/inspect/reference-input-tree.json",
+              "sha256": "2da063547ba39cbbced66e8a5464418a4cb450980ecd2edf0b6d17beac6260dc"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/progress-spinner/custom/desktop-dpr2/inspect/astylar-input-tree.json",
+              "sha256": "81f09ed2267e284da28b5844d22ae3269d5dfeff6249d645cb09ce7f29a4b14d"
+            }
+          },
+          "proofSha256": "c9968ce5cb3b360ab2af34f04121944aebabc62dc2d39d0d765e124ef611d58c"
+        }
+      ],
+      "canonicalRowSha256": "e7f221ff0089949b4deaba3ecdf502d9f20471bd20630623f2c986e9e87a6921",
       "proposedClassification": "parity-harness-defect",
       "proposedAttribution": "reviewed-container-font-size-declaration-stage",
       "computedCandidateVerified": false,

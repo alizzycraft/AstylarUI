@@ -10,12 +10,13 @@ const digest = value => createHash('sha256').update(JSON.stringify(value)).diges
 const expected = { 'badge-primary': 52, 'button-toggle-primary': 68, 'card-primary': 52, 'checkbox-primary': 68,
   'chips-primary': 76, 'divider-primary': 24, 'expansion-primary': 68, 'grid-list-primary': 52, 'radio-primary': 68,
   'sidenav-primary': 62, 'slide-toggle-primary': 68, 'sort-primary': 60, 'stepper-primary': 68, 'tabs-primary': 70,
-  'tree-primary': 52, 'grid-tile-one': 52, 'grid-tile-two': 52 };
+  'tree-primary': 52, 'grid-tile-one': 52, 'grid-tile-two': 52,
+  'icon-primary': 20, 'progress-bar-primary': 20, 'progress-spinner-primary': 20, 'slider-visual': 78 };
 
 test('all original non-own-text container font omissions retain corresponding authored inheritance requests', () => {
   const report = collectContainerFontStages();
   assert.deepEqual(report, JSON.parse(readFileSync('docs/material-container-font-stages.json')));
-  assert.equal(report.originalCasesScanned, 2311); assert.equal(report.observations, 1012); assert.deepEqual(report.counts, expected);
+  assert.equal(report.originalCasesScanned, 2311); assert.equal(report.observations, 1150); assert.deepEqual(report.counts, expected);
   for (const finding of report.findings) {
     assert.equal(finding.proof.authoredSizeInheritanceMatches, true);
     assert.equal(finding.proof.candidateLocalFontSize, '<omitted>');
@@ -24,6 +25,35 @@ test('all original non-own-text container font omissions retain corresponding au
       assert.equal(finding.proof[flag], false);
   }
   assert.equal(report.canonicalAttributionChanged, false); assert.equal(report.rendererChanged, false);
+});
+
+test('visual-owner extension preserves every earlier container finding without broadening its claims', () => {
+  const previous = JSON.parse(execFileSync('git',
+    ['show', '74ee4e537309761d3d115249a9e9135b9c89ed4c:docs/material-container-font-stages.json'],
+    { maxBuffer: 32 * 1024 * 1024 }));
+  const current = JSON.parse(readFileSync('docs/material-container-font-stages.json'));
+  const priorIds = new Set(Object.keys(previous.counts));
+  assert.deepEqual(current.findings.filter(f => priorIds.has(f.element)), previous.findings);
+  const added = current.findings.filter(f => !priorIds.has(f.element));
+  assert.equal(added.length, 138);
+  assert.deepEqual([...new Set(added.map(f => f.element))].sort(),
+    ['icon-primary', 'progress-bar-primary', 'progress-spinner-primary', 'slider-visual']);
+  assert.equal(previous.observations, 1012);
+  assert.deepEqual(Object.fromEntries(Object.entries(current.counts).filter(([id]) => priorIds.has(id))), previous.counts);
+  const previousPlan = JSON.parse(execFileSync('git',
+    ['show', '74ee4e537309761d3d115249a9e9135b9c89ed4c:docs/material-container-font-stage-plan.json'],
+    { maxBuffer: 8 * 1024 * 1024 }));
+  const currentPlan = JSON.parse(readFileSync('docs/material-container-font-stage-plan.json'));
+  assert.deepEqual(currentPlan.findings.filter(f => priorIds.has(f.element)), previousPlan.findings);
+  assert.deepEqual(currentPlan.canonicalPayload, previousPlan.canonicalPayload);
+  assert.equal(previousPlan.proposedGroups, 51); assert.equal(currentPlan.proposedGroups, 63);
+  for (const finding of added) {
+    const target = containerFontStageTargets[finding.element], p = finding.proof;
+    assert.equal(p.referencePath[0].type, target.referenceType);
+    assert.equal(p.candidatePath[0].authored.type, target.candidateType);
+    assert.equal(p.computedCandidateVerified, false); assert.equal(p.rendererCauseProven, false);
+    assert.equal(p.renderingEquivalent, false); assert.equal(p.descendantTypographyVerified, false);
+  }
 });
 
 test('every container owner rejects changed ownership ancestry font requests or inspection stages', () => {
@@ -76,15 +106,15 @@ test('every container owner rejects changed ownership ancestry font requests or 
     }
     assert.equal(digest([input, reference, candidate]), before);
   }
-  assert.equal(executions, 493);
+  assert.equal(executions, 609);
 });
 
 test('container stage plan independently replays source proofs and authenticates the complete frozen canonical payload', () => {
   const receipt = JSON.parse(execFileSync(process.execPath,
     ['--max-old-space-size=512', 'scripts/audit-material-container-font-stages.mjs', '--plan', '--check'],
     { encoding: 'utf8', maxBuffer: 1024 * 1024 }));
-  assert.equal(receipt.proposedGroups, 51); assert.equal(receipt.proposedObservations, 1012);
-  assert.equal(receipt.otherCompleteRows, 8288); assert.equal(receipt.baselineUnresolved, 2160);
+  assert.equal(receipt.proposedGroups, 63); assert.equal(receipt.proposedObservations, 1150);
+  assert.equal(receipt.otherCompleteRows, 8276); assert.equal(receipt.baselineUnresolved, 2160);
   assert.equal(receipt.canonicalAttributionChanged, false);
 });
 
@@ -98,7 +128,7 @@ test('container stage join rejects incomplete altered or overclaimed coverage', 
   const rows = saved.findings.map(g => ({ ...Object.fromEntries(
     ['family', 'element', 'property', 'reference', 'occurrences', 'cases', 'states'].map(k => [k, g[k]])), attribution: 'unresolved' }));
   const before = digest([proof, original, rows]);
-  assert.equal(planContainerFontStages(proof, original, rows, normalize).proposedObservations, 1012);
+  assert.equal(planContainerFontStages(proof, original, rows, normalize).proposedObservations, 1150);
   const changes = [
     p => { p.findings.pop(); }, p => { p.findings[1] = p.findings[0]; },
     p => { p.findings[0].originalInputSha256 = 'changed'; }, p => { p.findings[0].inputTrees.reference.sha256 = 'changed'; },

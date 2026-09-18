@@ -23,6 +23,15 @@ export const containerFontStageTargets = Object.fromEntries([
 ].map(([family, referenceType, candidateType]) => [family + '-primary', { family, referenceType, candidateType }]));
 for (const id of ['grid-tile-one', 'grid-tile-two']) containerFontStageTargets[id] =
   { family: 'grid-list', referenceType: 'mat-grid-tile', candidateType: 'div' };
+// These mapped visual owners also have no captured own/retained/control text.
+// This reviews their CSS font-size observation stage only; image geometry,
+// plugin drawing inputs and plugin/core ownership remain separate findings.
+for (const [family, id, referenceType, candidateType] of [
+  ['icon', 'icon-primary', 'mat-icon', 'img'],
+  ['progress-bar', 'progress-bar-primary', 'mat-progress-bar', 'showcase.material:linear-progress'],
+  ['progress-spinner', 'progress-spinner-primary', 'mat-progress-spinner', 'showcase.material:circular-progress'],
+  ['slider', 'slider-visual', 'mat-slider', 'showcase.material:range-visual'],
+]) containerFontStageTargets[id] = { family, referenceType, candidateType };
 
 function ancestry(tree, owner, stop) {
   const result = [], seen = new Set();

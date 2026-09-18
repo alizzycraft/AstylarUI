@@ -2,6 +2,24 @@
 
 ## Current inventory: component font-scope inputs are registered
 
+The subsequent [visual-owner font-stage extension](material-container-font-stages.md)
+keeps this 124-file inventory. It adds 138 original observations / 12 proposed
+groups to the existing suite, for 1,150 observations / 63 proposed groups.
+All earlier 1,012 findings and 51 plan entries are deep-compared with their
+frozen committed versions. Plugin drawing/interaction and image geometry are
+not accepted by this CSS measurement-stage explanation.
+The final focused/inventory run passes **9/9**, exit **0**, in 98,435.5563ms,
+including independent full-payload replay and 628 rejection-control executions.
+
+The live original 120-file run subsequently reached 673 reported results. It
+also reports failure **111**, `gap-review-canonical-integration.spec.mjs:72`,
+with `all unrelated complete findings unchanged` after 282,481.064ms. Its
+frozen builder baseline is `3ebcff3e8f7bdfe7ecd9e00a4c2acbd11fefdc4a`.
+That failure has not yet been independently diagnosed; the explicit-gap
+diagnosis must not be generalized to it without checking the changed records.
+The running harness remains unaccepted, and the new suite does not repair
+either historical conservation test.
+
 Discovery includes **124 files**: 116 Material, four general and four TTS,
 retaining all 43 legacy files. The [toolbar/paginator font-scope audit](material-font-scope-inputs.md)
 authenticates 104 original observations and traces the component-to-descendant
