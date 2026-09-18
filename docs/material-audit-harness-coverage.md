@@ -1,6 +1,18 @@
 # Complete audit harness coverage
 
-## Current inventory: read-only plan checks; original full run terminal
+## Current inventory: consolidated source-replayed proposal binding
+
+Discovery now includes **134 files**: 126 Material, four general and four TTS,
+retaining all 43 legacy files. The [consolidated proposal binding](material-reviewed-input-proposal-binding.md)
+independently replays seven proposal sets and twelve source proofs, joins 134
+pending groups / 3,325 property observations without overlaps, and conserves
+all 8,205 other complete rows. Focused/inventory checks pass **8/8** in
+133,902.3789ms, including write-prohibited full replay, 35 rejection controls,
+and a static/interactive same-tuple preservation guard. Canonical promotion
+and complete current-harness acceptance remain pending; the original gap-review
+correction is still live at this checkpoint.
+
+## Previous inventory: read-only plan checks; original full run terminal
 
 Discovery now includes **133 files**: 125 Material, four general and four TTS,
 retaining all 43 legacy files. The new [plan/check CLI regression](material-font-plan-check-mode.md)

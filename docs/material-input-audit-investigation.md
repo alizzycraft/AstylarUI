@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Source-bound proposals now have a consolidated integration check
+
+The [combined original-source replay](material-reviewed-input-proposal-binding.md)
+authenticates all seven pending proposal sets and their twelve source proofs,
+then replays their original join functions against the complete frozen canonical
+payload. It accounts for 134 groups / 3,325 observations and preserves 8,205
+other complete rows, with no overlapping targets. The same-tuple static versus
+interactive ambiguity is guarded by complete-row hashes. Focused/inventory
+tests pass 8/8. This prepares integration; it does not change canonical
+classifications, clear the remaining 2,160 groups, or prove rendering parity.
+
 ## Current checkpoint: full 120-file run completed; bounded corrections underway
 
 The later unfiltered 120-file audit harness is terminal: **927 results, 924
