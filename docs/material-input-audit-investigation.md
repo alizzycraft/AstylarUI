@@ -3,6 +3,15 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Current integration checkpoint: metadata transition verified in memory
+
+The [source-replayed dry run](material-reviewed-input-transition-dry-run.md)
+projects 134 classifications / 3,325 observations while conserving all raw
+fields, source objects and 8,205 other complete rows. Focused/inventory tests
+pass 7/7 with 34 rejection controls. The actual canonical count is still 2,160
+unresolved; 2,026 is only the verified projection. Live builder integration,
+remaining classifications and complete enforced verification are outstanding.
+
 ## Source-bound proposals now have a consolidated integration check
 
 The [combined original-source replay](material-reviewed-input-proposal-binding.md)

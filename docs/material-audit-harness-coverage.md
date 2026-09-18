@@ -1,6 +1,16 @@
 # Complete audit harness coverage
 
-## Current inventory: consolidated source-replayed proposal binding
+## Current inventory: verified classification transition dry run
+
+Discovery includes **135 files**: 127 Material, four general and four TTS,
+retaining all 43 legacy files. The [transition dry run](material-reviewed-input-transition-dry-run.md)
+passes 7/7 focused/inventory checks in 135,416.0381ms, including a write-prohibited
+complete source/payload replay and 34 negative controls. It projects 134 metadata
+reviews without changing any canonical file: 2,026 projected unresolved versus
+2,160 actual. All 8,205 other complete rows remain unchanged. Live builder
+integration and complete current-harness/rendering verification remain pending.
+
+## Previous inventory: consolidated source-replayed proposal binding
 
 Discovery now includes **134 files**: 126 Material, four general and four TTS,
 retaining all 43 legacy files. The [consolidated proposal binding](material-reviewed-input-proposal-binding.md)

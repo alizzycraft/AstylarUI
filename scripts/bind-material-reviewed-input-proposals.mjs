@@ -100,12 +100,18 @@ export function joinReviewedInputProposals(plans, rows) {
     canonicalAttributionChanged: false, inputEquivalent: false, renderingEquivalent: false };
 }
 
-export async function collectReviewedInputProposalBinding() {
+export async function readReviewedProposalCanonical() {
   // Authenticate every byte of the frozen payload once, rather than opening the
   // same two-gigabyte parent seven times. Each original independent join still
   // receives every complete row and preserves its existing assertions.
-  const { manifest, rows } = await readCaretConservationRows(file =>
+  return readCaretConservationRows(file =>
     execFileSync('git', ['show', `${canonicalRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
+}
+
+// Internal replay boundary. `canonical` must come from the byte-authenticating
+// reader above. Keeping that object allows a subsequent no-write transition
+// proof to examine the very same complete rows without decoding them twice.
+export function replayReviewedInputProposalBinding({ manifest, rows }) {
   const originalCapture = { file: 'artifacts/material-parity/current-ancestry-audit/latest-report.json',
     sha256: 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a' };
   const originalBytes = readFileSync(originalCapture.file); assert.equal(hash(originalBytes), originalCapture.sha256);
@@ -141,6 +147,10 @@ export async function collectReviewedInputProposalBinding() {
     canonicalPayload: manifest, originalCapture, productionNormalization: normalization, plans: descriptors, ...joined,
     canonicalIntegration: false, sourceProofsReplayed: true, completeAuditAccepted: false,
     limitation: 'Seven committed proposal sets are independently replayed from original sources and the full frozen canonical payload, then joined without overlapping rows or property observations. This is an integration boundary, not canonical promotion or output parity. Unjoined findings, including the later leaf-family proof, remain outside this bounded population.' };
+}
+
+export async function collectReviewedInputProposalBinding() {
+  return replayReviewedInputProposalBinding(await readReviewedProposalCanonical());
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
