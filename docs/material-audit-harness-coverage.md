@@ -1,6 +1,22 @@
 # Complete audit harness coverage
 
-## Current inventory: overlay font inheritance inputs are registered
+## Current inventory: pending font proposal coverage is registered
+
+Discovery includes **129 files**: 121 Material, four general and four TTS,
+retaining all 43 legacy files. The [pending font coverage index](material-pending-font-coverage.md)
+authenticates all 98 pending font-size groups / 1,831 observations against four
+committed proposals and the full frozen canonical payload. No group is missing
+or overlaps; no classification is promoted. The focused/inventory suite passes
+**9/9** in 83,522.7056ms, with 42 rejection controls.
+
+The original 120-file full run remains live in reviewed-authoring integration
+(runner 24392 / child 7964 at this snapshot). Three failures have been observed:
+the separately diagnosed explicit-gap and gap-review conservation assertions,
+and pending-motion-capture binding's parent-survey digest mismatch. The latter
+requires investigation, not a blind fingerprint refresh. The new focused result
+is not full-harness or enforced rendering acceptance.
+
+## Previous inventory: overlay font inheritance inputs are registered
 
 The subsequent [overlay extension of the font ownership proposal](material-font-ownership-attribution.md)
 keeps the 128-file inventory. It now proposes 12 groups / 401 observations,
