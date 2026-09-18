@@ -3,14 +3,35 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Current integration checkpoint: canonical rows independently conserved
+## Current integration checkpoint: follow-up verification in progress
+
+[Canonical follow-up integration](material-followup-input-canonical-integration.md)
+is now wired in the working tree after all earlier classification rules.
+The stopped runs exposed stale gap-producer receipts. All seven unchanged
+generators have now been replayed and receipt conservation passes **7/7**:
+only eleven dependency hashes change, with every finding and observation
+preserved. The historical overlay projection correction passes **8/8** and
+is committed as `b406142`. Full builder tests and canonical generation are
+running again; complete-row conservation and CLI freshness must follow.
+The last accepted unresolved count remains **2,026**; **1,960** is still only
+the source-verified transition target. No renderer or fixture behavior changes.
+
+The [additional control font-style membership](material-additional-control-font-style-attribution.md)
+independently joins four groups / 168 original observations to the frozen
+canonical payload and conserves 8,335 other complete rows. All seven focused
+checks pass, including 27 rejection controls and write-prohibited replay, in
+84,685.4358ms. This proves omitted inheritance authoring, not wrong glyphs:
+the original control textures already report normal. These four groups remain
+a separate proposal, not part of the 66-group integration.
+This increment is committed and pushed as `411ace1` on
+`codex/material-ui-showcase`.
 
 The [four-set original-case adapter](material-followup-input-source-binding.md)
 now passes **9/9**, exit 0, in **47,469.5516ms**, after correcting a no-op
 negative test in the first 8/9 run. It source-binds all 66 groups / 2,640
 observations, enumerates omitted cases in subsets and rejects changed inputs
-or classification claims. This adapter is not yet wired into the production
-builder. Canonical promotion still requires precedence and complete-row
+or classification claims. The adapter is now wired into the working-tree
+builder; canonical promotion still requires precedence and complete-row
 conservation; the actual unresolved count is **2,026**, not the projected 1,960.
 
 The [historical box/grid integration checks](material-reviewed-box-grid-integration.md)

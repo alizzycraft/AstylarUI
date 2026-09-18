@@ -1,6 +1,23 @@
 # Complete audit harness coverage
 
-## Current inventory: canonical integration conserved
+## Current inventory: follow-up integration verification in progress
+
+[Follow-up live integration](material-followup-input-canonical-integration.md)
+is in progress. The working inventory includes a new full-population canonical
+conservation test (**151 files**, 143 Material + four general + four TTS), but
+that test has not run. After stopping receipt-failure runs, the unchanged gap
+generators and receipt-conservation checks now pass **7/7**. The historical
+overlay projection tests pass **8/8**. Full builder tests and generation have
+been relaunched; neither is accepted yet. Focused passes do not establish
+integration or
+the complete current harness.
+
+The additional control font-style proof and its
+[exact-membership proposal](material-additional-control-font-style-attribution.md)
+bring discovery to **153 files** (145 Material + four general + four TTS),
+retaining all 43 legacy files. Membership/source replay and inventory checks
+pass **7/7**, exit 0, in **84,685.4358ms**. No complete current-harness pass is
+claimed and the four proposed classifications are not yet canonical.
 
 The [four-set original-case adapter](material-followup-input-source-binding.md)
 adds the **150th file** (142 Material, four general, four TTS; 43 legacy files
