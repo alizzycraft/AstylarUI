@@ -5,6 +5,14 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: canonical rows independently conserved
 
+The [control font-style membership proposal](material-control-font-style-attribution.md)
+now joins all **11 groups / 756 observations** to the complete frozen canonical
+payload, preserving 8,328 other complete rows. Its full focused suite passes
+**7/7**, exit 0, in **108,611.3541ms**, including independent no-write replay and
+41 rejection controls. This classifies an omitted inheritance request, not
+wrong glyphs or a proven renderer defect. Canonical integration remains pending;
+the current discovered inventory is **147 files**, retaining all 43 legacy tests.
+
 The [control font-style reset proof](material-control-font-style-reset.md)
 adds **756 original observations**: 600 shared-button textures and 156 range
 inputs. The reference explicitly requests `font-style: inherit` through its
@@ -29,8 +37,8 @@ Discovery now contains 145 files, including all 43 legacy files.
 The [explicit-gap and gap-review historical replay](material-reviewed-gap-review-integration.md)
 is terminal, **2/2 pass**, in 2,897,781.2575ms. Their original scalar and complete-row
 hash assertions remain intact. The button fixed-width/request historical
-tests now authenticate exactly eight later state-layer preblend groups / 24
-observations before reconstructing metadata for their unchanged original-row
+tests authenticate exact later state-layer preblend groups before
+reconstructing metadata for their unchanged original-row
 checks. [Fixed-width passed](material-reviewed-button-fixed-width-integration.md)
 its sole test in 1,228,694.8176ms. The request sibling failed a new count assertion
 (12 versus 24): its existing one-viewport-per-state selection differs from the

@@ -77,6 +77,9 @@ Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
 `control-font-style-reset-generation.log` and
 `control-font-style-reset-focused.log`.
 
-No renderer, plugin, reference or candidate authoring changed. Exact canonical
-membership/integration is still required; the unresolved count remains 2,026.
+No renderer, plugin, reference or candidate authoring changed. The
+[canonical membership proposal](material-control-font-style-attribution.md)
+now verifies all 11 groups / 756 observations against the complete frozen
+payload, with 7/7 focused checks. Canonical integration is still required;
+the unresolved count remains 2,026.
 The complete audit harness and enforced rendering matrix are separate gates.

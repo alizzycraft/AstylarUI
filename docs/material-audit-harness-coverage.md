@@ -2,6 +2,13 @@
 
 ## Current inventory: canonical integration conserved
 
+The [control font-style membership proposal](material-control-font-style-attribution.md)
+adds the **147th file** (139 Material, four general, four TTS; all 43 legacy
+files retained). Its suite passes **7/7**, exit 0, in **108,611.3541ms**, including
+independent source/full-payload replay and 41 rejection controls. The proposal
+accounts for 11 groups / 756 observations without changing canonical inputs or
+classifications. Earlier counts below are historical checkpoints.
+
 The [control font-style reset proof](material-control-font-style-reset.md)
 adds the 146th discovered file (138 Material, four general, four TTS; all 43
 legacy files retained). Its suite passes **7/7**, exit 0, in **15,313.5261ms**,
