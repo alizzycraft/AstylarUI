@@ -1,5 +1,14 @@
 # Complete audit harness coverage
 
+## Historical integration baseline: four retained failures
+
+The unfiltered five-file recheck finished with **10 tests: six pass / four fail**,
+exit **1**. Button box sizing, owner gap, owner grid and slider border retain
+their original checksum failures. The four slider source-validation tests and
+both tooltip-wrapping tests pass. See [the exact baseline and machine
+receipt](material-historical-caret-recheck-baseline.md). This focused run does
+not replace complete current harness acceptance or explain the failed hashes.
+
 ## Current inventory: historical border-context replay is registered
 
 Discovery includes **116 files**: **108 Material**, four general parity and four

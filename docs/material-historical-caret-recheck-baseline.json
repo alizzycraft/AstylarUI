@@ -1,0 +1,121 @@
+{
+  "kind": "historical-caret-integration-baseline",
+  "command": "node --test --test-concurrency=1 tests/material-parity/button-box-sizing-canonical-integration.spec.mjs tests/material-parity/owner-gap-canonical-integration.spec.mjs tests/material-parity/owner-grid-initial-canonical-integration.spec.mjs tests/material-parity/slider-border-canonical-integration.spec.mjs tests/material-parity/tooltip-wrapping-canonical-integration.spec.mjs",
+  "terminalExitCode": 1,
+  "terminalEvidence": "originating process session 58616 returned exit code 1",
+  "log": {
+    "file": "artifacts/material-parity/field-host-flow-input-audit/caret-historical-remaining-before.log",
+    "sha256": "af1224704008774f279b989cf393cec672464734441709bbac36e023104475aa"
+  },
+  "sources": [
+    {
+      "file": "tests/material-parity/button-box-sizing-canonical-integration.spec.mjs",
+      "normalizedSha256": "a64451f802cf8c4b5aac1198b05dd9df77eaea0765bfab8c83c9d9ed77d1e3ba",
+      "unchangedFromRevision": "a6c98bd"
+    },
+    {
+      "file": "tests/material-parity/owner-gap-canonical-integration.spec.mjs",
+      "normalizedSha256": "a25be71183c424d025e228668f627b254b2c432bddae56318eaf3d10edf12cb9",
+      "unchangedFromRevision": "a6c98bd"
+    },
+    {
+      "file": "tests/material-parity/owner-grid-initial-canonical-integration.spec.mjs",
+      "normalizedSha256": "9ac36f86b919aed57661fd481f9c8e466076deee6694e1022af2f8506ca132b3",
+      "unchangedFromRevision": "a6c98bd"
+    },
+    {
+      "file": "tests/material-parity/slider-border-canonical-integration.spec.mjs",
+      "normalizedSha256": "00ff5566c36025a2429d82b367a4694f1ffc907d489894905ee3b93c88788c68",
+      "unchangedFromRevision": "a6c98bd"
+    },
+    {
+      "file": "tests/material-parity/tooltip-wrapping-canonical-integration.spec.mjs",
+      "normalizedSha256": "de24eaddd7dd8a108cfa2835cc1fb5c78778144a55e5d8dbb0270e3fa16e797d",
+      "unchangedFromRevision": "a6c98bd"
+    }
+  ],
+  "totals": {
+    "tests": 10,
+    "pass": 6,
+    "fail": 4,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "durationMs": 2801497.1904
+  },
+  "testResults": [
+    {
+      "index": 1,
+      "name": "button box sizing production integration preserves all scalar inputs earlier precedence and measurement gaps",
+      "status": "fail",
+      "durationMs": 511244.6389,
+      "expectedSha256": "d8e76b862c7583ad261e0ee0aff4da07214244b68683c4ffa047b9342daa7ffd",
+      "actualSha256": "acd1f1e9f428e1d74e2594d926e10f9a61bde13d15afe9cdd8a54cff5393cd02"
+    },
+    {
+      "index": 2,
+      "name": "owner gap production integration preserves all scalars prior precedence and unrelated complete rows",
+      "status": "fail",
+      "durationMs": 153508.7131,
+      "expectedSha256": "5b9f5cfd5f8b5ca61381dadc761e4639484158a13ca69dc35dc977b0d0993432",
+      "actualSha256": "69ab0243745656105df5030551a66eabed88b5e503a73d1e6cab677f11c991c0"
+    },
+    {
+      "index": 3,
+      "name": "owner grid production integration preserves original scalars, earlier precedence and unrelated rows",
+      "status": "fail",
+      "durationMs": 117267.311,
+      "expectedSha256": "0e8955ffc4cb02cbf5b91fb12d77c2757fb3d5c71d005177014a450e58fb3032",
+      "actualSha256": "7a01028e19bb95c83def3aa4f730aca50abd32c017beb589e3804557d2f5edaa"
+    },
+    {
+      "index": 4,
+      "name": "slider border canonical integration preserves raw values and attributes only the twelve proven properties",
+      "status": "fail",
+      "durationMs": 76738.1001,
+      "expectedSha256": "4e1f09fc03af948aec7b2d1d927ee13c298b6439ceaa3bb0145a72122eb315ee",
+      "actualSha256": "06e2e601bed4152555f19ded8e9dd6caac5eecad89fa9eded6a7b2e1cb754660"
+    },
+    {
+      "index": 5,
+      "name": "slider historical conservation requires exact later gap source and classification coverage",
+      "status": "pass",
+      "durationMs": 49434.7931
+    },
+    {
+      "index": 6,
+      "name": "slider integration retains exact source validation for later grid observation-stage rows",
+      "status": "pass",
+      "durationMs": 290853.0946
+    },
+    {
+      "index": 7,
+      "name": "slider integration retains exact source validation for the later shadow attribution",
+      "status": "pass",
+      "durationMs": 359005.934
+    },
+    {
+      "index": 8,
+      "name": "slider border canonical validation rejects missing sources altered scalars and fabricated parity",
+      "status": "pass",
+      "durationMs": 680600.4369
+    },
+    {
+      "index": 9,
+      "name": "tooltip wrapping production integration preserves scalar values and existing classification precedence",
+      "status": "pass",
+      "durationMs": 161904.495
+    },
+    {
+      "index": 10,
+      "name": "tooltip wrapping production validation rejects missing binding lost rows and false equivalence",
+      "status": "pass",
+      "durationMs": 388122.5203
+    }
+  ],
+  "originalAssertionsRetained": true,
+  "rendererChanged": false,
+  "canonicalInputsChanged": false,
+  "inputEquivalenceEstablished": false,
+  "limitation": "Completed five-file audit-test baseline only. Four original checksum failures require exact changed-record diagnosis; six passing tests do not establish renderer or complete audit acceptance."
+}
