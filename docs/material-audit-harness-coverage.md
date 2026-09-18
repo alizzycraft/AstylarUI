@@ -1,5 +1,16 @@
 # Complete audit harness coverage
 
+## Current inventory: historical border-context replay is registered
+
+Discovery includes **116 files**: **108 Material**, four general parity and four
+TTS. The complete historical source-method replay and inventory controls pass
+**5/5**, exit **0**, retaining all legacy coverage. See [the bounded history
+finding and exact results](material-border-context-history.md). This proves a
+pre-showcase parsing boundary, not historical browser output or rendering parity.
+The complete current harness and enforced rendering matrix remain outstanding;
+the canonical source inventory will need regeneration after the pending batch
+of historical test corrections is verified.
+
 ## Current canonical replay: reviewed caret classifications are conserved
 
 Production generation and the complete no-write replay agree across the

@@ -1,0 +1,135 @@
+{
+  "kind": "historical-border-context-method-replay",
+  "revision": "19d01be551aca2dab9e75e5ed79f2c819d099e8d",
+  "showcaseRevision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+  "ancestorVerified": true,
+  "borderFileIntroducedAtRevision": true,
+  "sources": [
+    {
+      "file": "src/app/services/dom/style.service.ts",
+      "sha256": "89fa24518e6a996bfc123445a01ab9641e41f6a8c5769f66e6de974cad6faee0",
+      "methods": [
+        {
+          "name": "parseBackgroundColor",
+          "line": 380,
+          "sha256": "f7adaa202be5496e48c4ab73e14c00bbb01932bf153e7747c8d0e92ac7fdedd6"
+        },
+        {
+          "name": "parseHexColor",
+          "line": 611,
+          "sha256": "de42212f485aa1e0d76ccebdd195937a257a4d3086cffd1abef9ab270b78266e"
+        },
+        {
+          "name": "parseRgbColor",
+          "line": 595,
+          "sha256": "e9fe5bfe77821d9c810d80e0dce2241157c0f9a0dc26ed304b20ae963590ea0b"
+        }
+      ]
+    },
+    {
+      "file": "src/app/services/dom/elements/element-border.service.ts",
+      "sha256": "5a66c1aff1bfd77f17f20ede3359fd14616d8cecd5365ba0c8ceb5f71f2298e3",
+      "methods": [
+        {
+          "name": "parseBorderProperties",
+          "line": 18,
+          "sha256": "641767f45f216a375a8374db184e3500591b256832699532aa83c2a022c40093"
+        }
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "input": {
+        "color": "#123456",
+        "borderColor": "currentColor",
+        "borderStyle": "solid"
+      },
+      "parserArgument": "currentColor",
+      "rgb": [
+        0.2,
+        0.2,
+        0.3
+      ],
+      "contextualColorUsed": false
+    },
+    {
+      "input": {
+        "color": "#123456",
+        "borderColor": "CURRENTCOLOR",
+        "borderStyle": "solid"
+      },
+      "parserArgument": "CURRENTCOLOR",
+      "rgb": [
+        0.2,
+        0.2,
+        0.3
+      ],
+      "contextualColorUsed": false
+    },
+    {
+      "input": {
+        "color": "#123456",
+        "borderColor": "#123456",
+        "borderStyle": "solid"
+      },
+      "parserArgument": "#123456",
+      "rgb": [
+        0.07058823529411765,
+        0.20392156862745098,
+        0.33725490196078434
+      ],
+      "contextualColorUsed": null
+    },
+    {
+      "input": {
+        "color": "#c04a20",
+        "borderColor": "currentColor",
+        "borderStyle": "solid"
+      },
+      "parserArgument": "currentColor",
+      "rgb": [
+        0.2,
+        0.2,
+        0.3
+      ],
+      "contextualColorUsed": false
+    },
+    {
+      "input": {
+        "color": "#c04a20",
+        "borderColor": "CURRENTCOLOR",
+        "borderStyle": "solid"
+      },
+      "parserArgument": "CURRENTCOLOR",
+      "rgb": [
+        0.2,
+        0.2,
+        0.3
+      ],
+      "contextualColorUsed": false
+    },
+    {
+      "input": {
+        "color": "#c04a20",
+        "borderColor": "#c04a20",
+        "borderStyle": "solid"
+      },
+      "parserArgument": "#c04a20",
+      "rgb": [
+        0.7529411764705882,
+        0.2901960784313726,
+        0.12549019607843137
+      ],
+      "contextualColorUsed": null
+    }
+  ],
+  "literalControls": 2,
+  "keywordControls": 4,
+  "inputsUnchanged": true,
+  "historicalPublicRuntimeVerified": false,
+  "historicalRasterVerified": false,
+  "earliestRendererDefectRevisionEstablished": false,
+  "canonicalClassificationChanged": false,
+  "limitation": "Exact historical border/color methods use only the border-color string and return a fixed fallback for currentColor despite two distinct element colors. This source/method boundary predates the showcase. It does not date earlier predecessor implementations or prove any historical build, cascade, material, geometry or framebuffer behavior."
+}
