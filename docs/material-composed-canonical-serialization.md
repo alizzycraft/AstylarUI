@@ -1,5 +1,34 @@
 # Composed canonical proof: serialization boundary defect
 
+## 2026-09-19 integration checkpoint
+
+The independent full CLI `--check` terminated, exit **1**, with no freshness
+mismatch and only the retained **1,960 unresolved-group** error. That result
+applies to the preceding 344-source report, not the subsequent edits.
+
+The guard is now wired into the composed test: it independently reads the
+complete frozen intermediate payload, checks its manifest against the follow-up
+binding, compares all reconstructed rows, requires exactly 134 serialization-only
+differences, and supplies the frozen-order rows to the unchanged follow-up
+transition. The corrected run now passes **3/3**, exit **0**, zero skips/
+failures/cancellations/TODOs, in **837,623.9177ms**. It verifies exactly 200
+changed groups / 5,965 observations and 8,139 other complete rows conserved,
+with ordered digest
+`bb540087c97143a8448bdb9c57c5bfb79c8becdf2bbd9591a5cb66194c218c62`.
+All 386,891 raw observations remain; 1,960 groups remain unresolved. This is
+complete-row integration evidence, not full-builder freshness or rendering parity.
+
+Both guard source/test files are added to the canonical source inventory:
+**346 total**, retaining the original 308 in order and enumerating exactly 38
+additions. The focused fingerprint test passes **1/1**, exit 0, in
+**4,184.9306ms**. Normal generation must refresh this metadata; the previously
+verified report is intentionally not presented as current after the edit.
+
+Logs: `followup-composed-canonical-corrected.log` and
+`followup-composed-fingerprints.log` under the existing artifact directory.
+
+## Original failure and diagnosis
+
 The first 66-group canonical conservation test passed, but the subsequent
 200-group composition test failed at the unchanged-row digest guard. The
 failure is in the test's intermediate representation, not evidence of changed
@@ -63,14 +92,11 @@ omission, membership/order, attribution, evidence, and extra/missing fields.
 Four inventory tests retain complete harness discovery. The focused log is
 `followup-composed-serialization-focused.log` in the same directory.
 
-The helper is prepared but not yet wired into the composed canonical test:
-the independent full CLI freshness reader is still using that test file's
-fingerprint. Once that reader terminates, read and authenticate the intermediate
-payload, require its manifest to match the follow-up binding, verify all rows
-through this helper, and apply the unchanged follow-up transition to those
-frozen-order rows. Rerun the complete composed test and refresh the report's
-source fingerprint through normal generation. Do not claim the failed combined
-test is green from this focused result.
+Initially the helper remained unwired while the independent CLI freshness
+reader used that test file's fingerprint. The subsequent full integration
+and passing composed test are recorded above. Canonical source metadata still
+requires normal regeneration; the focused result alone was never used to
+declare the failed combined test green.
 
 No renderer, plugin, authored comparison, capture, canonical report, or expected
 hash changed in this correction. The nine saved case-index receipt updates,

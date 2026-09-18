@@ -1,10 +1,40 @@
-# Nine case-index receipts: verified read-only refresh rehearsal
+# Nine case-index receipts: guarded refresh applied
+
+## 2026-09-19 applied refresh
+
+After the independent canonical freshness reader terminated, the guarded writer
+was run against normalized main-module SHA-256
+`1189df0c574dc9e8058cf7a61ceb0f0751e0df48dca67b796f12dadde3ec6e45`.
+Its four conservation/writer/original-membership tests passed before writing,
+then it rechecked the unchanged dependencies and wrote the nine indexes.
+`--check` exits **0** against the saved files. The original case-index tests,
+without substitution, pass **11/11**, exit **0**, zero skips/failures/
+cancellations/TODOs, in **70,985.2673ms**.
+
+Only each object's one main-module receipt changes. JSON serialization also
+expands a few formerly compact arrays; complete-object conservation proves
+their contents are unchanged. No capture or membership has been replaced.
+The dependent field-host reports are being checked separately; the complete
+builder and canonical regeneration are still required.
+
+```text
+node scripts/refresh-material-case-index-receipts.mjs --write
+node scripts/refresh-material-case-index-receipts.mjs --check
+node --test --test-name-pattern="case index" tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Logs in the existing artifact directory: `followup-nine-case-index-write.log`,
+`followup-nine-case-index-check.log`, and
+`followup-nine-case-index-saved-tests.log`. The writer records its verification
+output SHA-256 `231380abdfe9c148699576df0b5342843c18da94741fbc29964b70502e765abb`.
+
+## Earlier read-only rehearsal
 
 The latest complete audit-builder run has nine failures at the old main-module
 fingerprint guard. A new maintained refresh tool proves the bounded update and
 replays the original case-index assertions **without changing the saved files**.
-The refresh has not yet been applied; the broader canonical jobs are still
-reading the current evidence.
+At that earlier checkpoint the refresh had not been applied because broader
+canonical jobs were reading the evidence. It is now applied as described above.
 
 ## Exact boundary
 
@@ -69,7 +99,7 @@ No original tests, saved case indexes, authored fixtures, renderer code,
 classification metadata, captures or thresholds were changed by this increment.
 Harness discovery is now 156 files, retaining every legacy test.
 
-## Next step, not yet executed
+## Earlier next-step instructions (now executed above)
 
 After the active canonical readers terminate, run:
 

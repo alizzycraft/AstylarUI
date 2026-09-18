@@ -5,6 +5,17 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: follow-up verification in progress
 
+The corrected composed conservation now passes **3/3**: 200 source-reviewed
+groups / 5,965 observations, all raw inputs preserved, and 8,139 other complete
+rows unchanged. The nine saved case-index tests pass **11/11**, gap-receipt
+replay **3/3**, and dependent field-host conservation/original proofs/inventory
+**19/19**. These are working-tree integration results, not a committed canonical
+promotion. The full builder retry encountered an unexplained Windows process
+failure; a fresh serial run was started only after that process and the other
+verification jobs terminated. It will generate the canonical report only if the
+full builder succeeds. See the [current checkpoint](material-followup-input-canonical-integration.md)
+for exact commands/logs, provenance and outstanding acceptance work.
+
 The composed historical conservation failure is now
 [traced to JSON property ordering](material-composed-canonical-serialization.md):
 independent full-payload/source replay finds zero value differences across all

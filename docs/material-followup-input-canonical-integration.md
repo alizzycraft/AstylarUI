@@ -12,6 +12,36 @@ font/rendering parity and renderer causality.
 
 ## Current verification state
 
+**Latest 2026-09-19 checkpoint:** the corrected composed proof passes **3/3**,
+exit **0**, in **837,623.9177ms**. All 200 reviewed groups / 5,965 observations
+match independent source replay, every raw input is preserved, and the other
+8,139 complete rows remain unchanged (ordered digest
+`bb540087c97143a8448bdb9c57c5bfb79c8becdf2bbd9591a5cb66194c218c62`).
+The earlier CLI freshness run finished with only the 1,960 unresolved-group
+error, but its result predates the new source/receipt changes and is not a
+freshness pass for the current working tree.
+
+The source inventory now has 346 entries: all 308 original files plus exactly
+38 enumerated additions. Its focused check passes **1/1**. Nine saved case
+indexes pass their unchanged original tests **11/11**. Seven gap reports pass
+receipt conservation and independent no-write replay **3/3**, in
+**107,077.4588ms**. The dependent four field-host reports pass complete-object
+conservation, original source/case proofs and inventory checks **19/19**, in
+**362,887.7556ms**. These changes remain in the working tree pending the complete
+builder and regenerated canonical freshness checks.
+
+The first full builder retry terminated after two tests with Windows process
+exit code **3221226505**, not an assertion, in **101,119.5692ms**. The command's
+outer exit is **1**; its log is `followup-composed-full-builder.log`. Available
+Application/System event-log checks did not establish the cause. No OOM cause
+is claimed. After all other verification processes terminated, a lower-load
+serial retry started at **00:27:55 Africa/Johannesburg**, session **20439**.
+It runs the unchanged full builder test file without the explicit heap override;
+only if that succeeds will its shell proceed to 4GB canonical generation.
+Logs are `followup-composed-full-builder-serial.log` and
+`followup-composed-canonical-generation.log`. Neither result is verified yet.
+Do not restart a live reader or commit the pending canonical promotion as green.
+
 **2026-09-19 checkpoint:** the sequential conservation run has terminated,
 exit **1**, **one pass / one failure**. The composed test fed reconstructed
 objects into the next byte-sensitive guard without preserving the frozen

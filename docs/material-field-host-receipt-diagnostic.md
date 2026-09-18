@@ -1,5 +1,38 @@
 # Full-harness field-host failures: stale receipts, unchanged original evidence
 
+## 2026-09-19 working-tree refresh
+
+Following the nine guarded case-index updates, the original diagnostic was
+rerun unchanged. It again reproduces the complete layout and weight/tracking
+populations with the exact non-receipt and membership digests below. Its
+intentional stale-receipt failure remains in
+`followup-field-host-receipts-diagnostic.log`: **4 pass / 1 fail**, exit **1**,
+**198,261.7724ms**. The actual main-module digest is now
+`1189df0c574dc9e8058cf7a61ceb0f0751e0df48dca67b796f12dadde3ec6e45`.
+
+After that process terminated, the three original generators were rerun in
+dependency order and the independently replayed weight/tracking receipt was
+updated. A new conservation suite anchors the four complete report objects to
+`80bf8879713ff53fdfdf97b187cabd2242e69d1b`. It permits exactly six actual
+dependency-hash changes and requires every other field to remain equal. The
+unchanged original producer/proof sources are also checked against that commit.
+Fifteen rejection controls cover altered observations, joins, conclusions,
+dependency identities, digests and extra/missing evidence.
+
+The new guard, four unchanged field-host test files, and harness inventory tests
+pass **19/19**, exit **0**, zero skips/failures/cancellations/TODOs, in
+**362,887.7556ms**. Log:
+`artifacts/material-parity/field-host-flow-input-audit/followup-field-host-refresh-focused.log`.
+This is a verified working-tree refresh, not yet a committed canonical promotion
+or a complete harness/parity-matrix pass.
+
+```text
+node scripts/audit-material-field-host-layout-inputs.mjs
+node scripts/audit-material-field-host-layout-join.mjs
+node scripts/audit-material-field-host-initial-styles.mjs
+node --test --test-concurrency=1 tests/material-parity/field-host-receipt-conservation.spec.mjs tests/material-parity/field-host-layout-input-evidence.spec.mjs tests/material-parity/field-host-layout-canonical-join.spec.mjs tests/material-parity/field-host-initial-style-evidence.spec.mjs tests/material-parity/field-host-weight-tracking-evidence.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs
+```
+
 ## Verified dependent refresh after the nine case indexes
 
 After `4947e2f`, the original layout, historical-membership-join, and initial-style

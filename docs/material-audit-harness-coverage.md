@@ -2,6 +2,16 @@
 
 ## Current inventory: follow-up integration verification in progress
 
+Working-tree discovery is now **158 files** (150 Material + four general + four
+TTS, all legacy files retained). The new field-host receipt guard, original four
+field-host suites and inventory checks pass **19/19**, exit 0, in
+**362,887.7556ms**. Corrected composed canonical conservation passes **3/3**,
+exit 0, in **837,623.9177ms**. The nine saved case-index assertions pass **11/11**
+and seven-report gap conservation/replay passes **3/3**. The full builder retry
+terminated with Windows process code 3221226505 after two passing tests; a
+subsequent lower-load serial builder/generation run is live. These bounded
+passes are not complete current-harness or enforced parity acceptance.
+
 The [intermediate serialization guard](material-composed-canonical-serialization.md)
 adds the **157th discovered file** (149 Material + four general + four TTS).
 Its two guard tests and four inventory tests pass **6/6**, exit 0, in
