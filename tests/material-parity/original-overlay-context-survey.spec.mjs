@@ -6,7 +6,8 @@ import path from 'node:path';
 import { collectOriginalOverlayContextSurvey } from './original-overlay-context-survey.mjs';
 import { originalOverlayAuditSourceCommit, originalOverlayAuditSourceFile,
   verifyHistoricalAuditModuleSource, originalOverlayMappingSourceCommit,
-  originalOverlayMappingSourceFile, verifyHistoricalOverlayMappingSource } from './historical-audit-module-source.mjs';
+  originalOverlayMappingSourceFile, verifyHistoricalOverlayMappingSource,
+  verifyOverlayMappingAuditProjection, conserveOriginalOverlayContextSnapshot } from './historical-audit-module-source.mjs';
 import { execFileSync } from 'node:child_process';
 
 const file = 'artifacts/material-parity/original-overlay-context-current-ancestry-audit/latest-report.json';
@@ -116,4 +117,51 @@ test('historical mapping verification permits only independently bound lineage r
   assert.throws(() => probe(({ put }) => {
     const changed = structuredClone(current); changed.observations.pop(); put(originalOverlayMappingSourceFile, changed);
   }), /Current overlay mapping data/);
+});
+
+test('mapping projection rejects changed retained functions imports and links into changed orchestration', () => {
+  const source = JSON.parse(readFileSync(originalOverlayMappingSourceFile)).sourceFingerprints.find(s => s.file === originalOverlayAuditSourceFile);
+  const anchor = execFileSync('git', ['show', `4dc770a:${source.file}`], { maxBuffer: 4 * 1024 * 1024 });
+  let current = readFileSync(source.file, 'utf8');
+  // Exercise the permitted import shape even when this infrastructure commit
+  // is checked out before the separate builder integration.
+  if (!current.includes("from './reviewed-input-audit-source-binding.mjs'")) current +=
+    "\nimport { collectReviewedInputAuditInputs, validateReviewedInputAuditInputs, reviewedInputClassificationContexts, classifyReviewedInput, validateReviewedInputClassifications } from './reviewed-input-audit-source-binding.mjs';\n";
+  if (!current.includes("from './reviewed-input-proposal-transition.mjs'")) current +=
+    "\nimport { reviewedInputAttributions } from './reviewed-input-proposal-transition.mjs';\n";
+  const result = verifyOverlayMappingAuditProjection(source, Buffer.from(current), anchor);
+  assert.ok(result.retainedStatements > 100); assert.equal(result.recordedSha256, source.sha256);
+  const mutations = [
+    s => s.replace('function reviewedTemplateTextMappings(', 'function alteredTemplateTextMappings('),
+    s => s.replace('function canonicalStyle(', 'function alteredCanonicalStyle('),
+    s => s + '\nconst unexplainedMappingInput = 1;\n',
+    s => s + '\nimport { unrelated } from "./unreviewed.mjs";\n',
+    s => s.replace("from './benchmark.config.mjs'", "from './changed-benchmark.mjs'"),
+    s => s.replace('classifyReviewedInput, validateReviewedInputClassifications', 'classifyReviewedInput, unexpectedAlias'),
+    s => s + '\nfunction mappingReachesOrchestration() { return buildMaterialInputAudit({}); }\n',
+    s => s + '\nfunction mappingReachesCollector() { return collectStyleDiscrepancies([]); }\n',
+  ];
+  for (const mutate of mutations) { const changed = mutate(current); assert.notEqual(changed, current);
+    assert.throws(() => verifyOverlayMappingAuditProjection(source, Buffer.from(changed), anchor)); }
+  assert.throws(() => verifyOverlayMappingAuditProjection({ ...source, sha256: '0'.repeat(64) }, Buffer.from(current), anchor));
+});
+
+test('original context snapshot preserves all observations and rejects receipt laundering', () => {
+  const live = collectOriginalOverlayContextSurvey(file), before = structuredClone(live);
+  const result = conserveOriginalOverlayContextSnapshot(live);
+  assert.deepEqual(live, before); assert.deepEqual(result.observations, live.observations);
+  assert.equal(result.cases, 91); assert.equal(result.matchedOriginalOwners, 200);
+  for (const mutate of [
+    r => { r.observations.pop(); }, r => { r.rootProperties--; },
+    r => { r.historicalAuditSource.currentSha256 = '0'.repeat(64); },
+    r => { r.historicalAuditSource.recordedSha256 = '0'.repeat(64); },
+    r => { r.historicalMappingSource.currentSourceChecks = [{ retainedStatements: -1 }]; },
+    r => { r.historicalMappingSource.currentSha256 = '0'.repeat(64); },
+    r => { r.historicalMappingSource.exactMappingDataMatch = false; },
+    r => { r.renderingEquivalent = true; },
+  ]) { const changed = structuredClone(live); mutate(changed); assert.throws(() => conserveOriginalOverlayContextSnapshot(changed)); }
+  if (live.historicalMappingSource.currentSourceChecks) {
+    const missing = structuredClone(live); delete missing.historicalMappingSource.currentSourceChecks;
+    assert.throws(() => conserveOriginalOverlayContextSnapshot(missing));
+  }
 });

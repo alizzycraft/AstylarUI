@@ -5,6 +5,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { resolveOriginAliasPair } from '../tests/material-parity/origin-alias-mapping-evidence.mjs';
 import { collectOriginalOverlayContextSurvey } from '../tests/material-parity/original-overlay-context-survey.mjs';
+import { conserveOriginalOverlayContextSnapshot } from '../tests/material-parity/historical-audit-module-source.mjs';
 import { selectorCanApply } from '../tests/material-parity/border-initial-input-evidence.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -92,7 +93,10 @@ export function inspectOverlayFontInput(entry, input, reference, candidate, exte
 
 export function collectOverlayFontInputs() {
   const contextFile = 'artifacts/material-parity/original-overlay-context-current-ancestry-audit/latest-report.json';
-  const context = collectOriginalOverlayContextSurvey(contextFile);
+  // The font proof cites the original independently replayed context snapshot.
+  // Current audit orchestration may evolve, but no original observation or
+  // non-current lineage field may change when preserving that citation.
+  const context = conserveOriginalOverlayContextSnapshot(collectOriginalOverlayContextSurvey(contextFile));
   const file = 'artifacts/material-parity/current-ancestry-audit/latest-report.json', bytes = readFileSync(file), sha256 = hash(bytes);
   assert.equal(sha256, 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const original = JSON.parse(bytes), seen = new Set(), findings = [], usedContexts = new Set();

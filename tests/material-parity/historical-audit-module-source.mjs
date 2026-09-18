@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import ts from 'typescript';
 
 // The 91-state capture predates tooltip wrapping classification. Its source
 // receipt describes the producer then, not a promise that today's audit module
@@ -10,6 +11,48 @@ import path from 'node:path';
 export const originalOverlayAuditSourceCommit = '65487aeba6a26f9715f302f92b4ee454161a94ef';
 export const originalOverlayAuditSourceFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const mappingAuditRevision = '4dc770a';
+// The integration changes audit orchestration, not any mapping implementation.
+// Verify every other statement exactly and reject references from retained
+// statements into the changed functions. This is not a blanket hash exemption.
+export function verifyOverlayMappingAuditProjection(recorded, currentBytes, historicalBytes) {
+  const old = historicalBytes.toString('utf8').replaceAll('\r\n', '\n');
+  const current = currentBytes.toString('utf8').replaceAll('\r\n', '\n');
+  assert.equal(hash(old), recorded.sha256, 'Current mapping source historical anchor changed');
+  const excluded = new Set(['buildMaterialInputAudit', 'validateMaterialInputAudit', 'renderMaterialInputAuditMarkdown',
+    'collectStyleDiscrepancies', 'sourceFingerprints', 'focusedProofInventory']);
+  const additions = new Map([
+    ['./reviewed-input-audit-source-binding.mjs', ['collectReviewedInputAuditInputs', 'validateReviewedInputAuditInputs',
+      'reviewedInputClassificationContexts', 'classifyReviewedInput', 'validateReviewedInputClassifications']],
+    ['./reviewed-input-proposal-transition.mjs', ['reviewedInputAttributions']],
+  ]);
+  function project(text, isCurrent) {
+    const parsed = ts.createSourceFile(recorded.file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    assert.equal(parsed.parseDiagnostics.length, 0, 'Current mapping source cannot be parsed');
+    const removed = new Set(), imports = new Set(), statements = [];
+    for (const node of parsed.statements) {
+      if (ts.isFunctionDeclaration(node) && excluded.has(node.name?.text)) {
+        assert.ok(!removed.has(node.name.text)); removed.add(node.name.text); continue;
+      }
+      if (isCurrent && ts.isImportDeclaration(node) && additions.has(node.moduleSpecifier.text)) {
+        assert.ok(!imports.has(node.moduleSpecifier.text)); imports.add(node.moduleSpecifier.text);
+        const clause = node.importClause; assert.ok(clause && !clause.name && !clause.isTypeOnly);
+        assert.ok(ts.isNamedImports(clause.namedBindings));
+        assert.deepEqual(clause.namedBindings.elements.map(n => { assert.equal(n.propertyName, undefined); return n.name.text; }), additions.get(node.moduleSpecifier.text));
+        continue;
+      }
+      function visit(n) { if (ts.isIdentifier(n)) assert.ok(!excluded.has(n.text), 'Current mapping source reaches changed audit orchestration'); ts.forEachChild(n, visit); }
+      visit(node); statements.push(node.getText(parsed));
+    }
+    assert.deepEqual([...removed].sort(), [...excluded].sort());
+    return statements;
+  }
+  const before = project(old, false), after = project(current, true);
+  assert.deepEqual(after, before, 'Current mapping source changed outside reviewed audit orchestration');
+  return { file: recorded.file, historicalRevision: mappingAuditRevision, recordedSha256: recorded.sha256,
+    currentSha256: hash(current), retainedStatements: before.length, retainedStatementsSha256: hash(JSON.stringify(before)),
+    verification: 'all-other-statements-identical-and-no-retained-references-to-changed-orchestration' };
+}
 export function verifyHistoricalAuditModuleSource(recorded, currentBytes, { root = process.cwd(),
   readRevision = () => execFileSync('git', ['show', `${originalOverlayAuditSourceCommit}:${originalOverlayAuditSourceFile}`],
     { cwd: root, maxBuffer: 4 * 1024 * 1024 }) } = {}) {
@@ -48,9 +91,14 @@ export function verifyHistoricalOverlayMappingSource(recorded, currentBytes, { r
   assert.deepEqual(data(current), data(historical), 'Current overlay mapping data differs from the recorded historical population');
   assert.deepEqual(current.sourceFingerprints.map(s => s.file), historical.sourceFingerprints.map(s => s.file),
     'Overlay mapping source inventory changed');
+  const currentSourceChecks = [];
   for (const source of current.sourceFingerprints) {
     assert.deepEqual(Object.keys(source).sort(), ['file', 'sha256']);
-    assert.equal(hash(readCurrentSource(source.file).toString('utf8').replaceAll('\r\n', '\n')), source.sha256,
+    const sourceBytes = readCurrentSource(source.file);
+    if (source.file === originalOverlayAuditSourceFile && hash(sourceBytes.toString('utf8').replaceAll('\r\n', '\n')) !== source.sha256) {
+      const anchor = execFileSync('git', ['show', `${mappingAuditRevision}:${source.file}`], { cwd: root, maxBuffer: 4 * 1024 * 1024 });
+      currentSourceChecks.push(verifyOverlayMappingAuditProjection(source, sourceBytes, anchor));
+    } else assert.equal(hash(sourceBytes.toString('utf8').replaceAll('\r\n', '\n')), source.sha256,
       `Current mapping source changed: ${source.file}`);
   }
   assert.equal(hash(readCurrentSource(current.inputSurvey.file)), current.inputSurvey.sha256,
@@ -59,7 +107,33 @@ export function verifyHistoricalOverlayMappingSource(recorded, currentBytes, { r
     file: recorded.file, recordedSha256: recorded.sha256, historicalSourceCommit: originalOverlayMappingSourceCommit,
     currentSha256: hash(currentBytes), exactCurrentSourceMatch: hash(currentBytes) === recorded.sha256,
     mappingDataSha256: hash(JSON.stringify(data(historical))), exactMappingDataMatch: true,
+    ...(currentSourceChecks.length ? { currentSourceChecks } : {}),
     inputEquivalent: false, renderingEquivalent: false,
     scope: 'Historical mapping bytes are hash-bound to committed evidence. Every current field except source fingerprints and the parent-report digest must match exactly; current sources and parent bytes are separately hash-checked. Complete original/fresh owner-proof replay remains required. This does not assert parent-report semantic or rendering equivalence.',
   } };
+}
+
+// Replay today's context first, then preserve the historical proof's lineage
+// receipt only if ALL observations and every non-current-source field agree.
+// The returned object is explicitly the original snapshot, not a current hash.
+export function conserveOriginalOverlayContextSnapshot(context, { root = process.cwd() } = {}) {
+  const file = 'docs/material-original-overlay-context-survey.json';
+  const original = JSON.parse(execFileSync('git', ['show', `${mappingAuditRevision}:${file}`], { cwd: root, maxBuffer: 8 * 1024 * 1024 }));
+  delete original.sourceFingerprints;
+  const projected = structuredClone(context);
+  assert.equal(projected.historicalAuditSource.currentSha256, hash(readFileSync(path.resolve(root, originalOverlayAuditSourceFile))));
+  const sourceChanged = projected.historicalAuditSource.currentSha256 !== original.historicalAuditSource.currentSha256;
+  projected.historicalAuditSource.currentSha256 = original.historicalAuditSource.currentSha256;
+  const checks = projected.historicalMappingSource.currentSourceChecks;
+  if (sourceChanged) assert.equal(checks?.length, 1, 'changed current source requires the exact mapping projection proof');
+  if (checks) {
+    assert.equal(checks.length, 1);
+    const source = JSON.parse(readFileSync(path.resolve(root, originalOverlayMappingSourceFile))).sourceFingerprints.find(s => s.file === originalOverlayAuditSourceFile);
+    const current = readFileSync(path.resolve(root, source.file));
+    const anchor = execFileSync('git', ['show', `${mappingAuditRevision}:${source.file}`], { cwd: root, maxBuffer: 4 * 1024 * 1024 });
+    assert.deepEqual(checks[0], verifyOverlayMappingAuditProjection(source, current, anchor));
+    delete projected.historicalMappingSource.currentSourceChecks;
+  }
+  assert.deepEqual(projected, original, 'original overlay context data or non-current receipt changed');
+  return original;
 }

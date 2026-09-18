@@ -3,7 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Current integration checkpoint: synchronous source boundary verified
+## Current integration checkpoint: builder wiring under full verification
+
+The builder now applies the seven reviewed proposal sets only after earlier
+attributions leave an observation unresolved. Exact emitted membership has 14
+additional rejection controls. An [overlay source-boundary correction](material-overlay-mapping-orchestration-boundary.md)
+was required because the historical mapping receipt pinned the whole old audit
+module. It preserves mapping statements, every original receipt and all owner
+observations; it does not waive changed mapping behavior. The integrated focused
+suite passes 20/20. Canonical generation, independent complete-row conservation
+and no-write freshness checks are still pending; the projected 2,026 count is
+not yet claimed as canonical or accepted audit coverage.
+
+## Previous integration checkpoint: synchronous source boundary verified
 
 The [builder-ready source boundary](material-reviewed-input-live-source-boundary.md)
 independently replays all twelve source proofs, authenticates prior proposals
