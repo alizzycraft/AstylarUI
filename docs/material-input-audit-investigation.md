@@ -19,7 +19,7 @@ generated payload/Markdown are current. Exit 1 preserves the sole diagnostic:
 Seven existing gap reports were independently regenerated with their unchanged
 generators: only eleven dependency hashes advance, with all other evidence
 preserved. Their write-prohibited replay and rejection controls pass 7/7 with
-inventory tests. Current discovery contains **142 files**, retaining all 43
+inventory tests. Current discovery contains **143 files**, retaining all 43
 legacy files. Full current-harness and enforced-rendering verification remain
 outstanding.
 
@@ -43,6 +43,20 @@ The [later-review conservation helper](material-later-reviewed-input-conservatio
 passes 8/8 focused/source-replay/inventory checks and reconstructs only verified
 metadata, retaining all raw inputs and unrelated mutations for historical tests
 to check. Its production historical-test integration is still pending.
+
+The two historical gap tests now use that helper while retaining their original
+scalar, count and complete-row digest assertions. Their live production replay
+is still pending. Those test-source edits postdate the successful canonical
+freshness checkpoint and will require final regeneration/freshness verification.
+The [downstream motion proof](material-reviewed-motion-receipt-refresh.md)
+has independently replayed with only three dependency hashes changed; all 64
+observations and conclusions remain unchanged (3/3 focused checks).
+
+The [own-text weight/tracking source proof](material-leaf-weight-tracking-stages.md)
+adds 304 verified property observations for badge/card/divider text. Retained
+core text values match reference scalars under unchanged normalization, while
+local snapshots omit them. Focused checks pass 7/7 with 48 rejection controls;
+this is not glyph/input equivalence and canonical membership remains pending.
 
 ## Previous integration checkpoint: builder wiring under full verification
 
