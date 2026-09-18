@@ -1,5 +1,18 @@
 # Complete audit harness coverage
 
+## Current canonical replay: reviewed caret classifications are conserved
+
+Production generation and the complete no-write replay agree across the
+lossless audit payload and human report. The independent canonical checker
+preserves all **8,339 rows / 386,891 observations**, permitting only **118
+reviewed classification changes / 3,154 observations** and preserving all
+**8,221 other complete rows**. Strict audit acceptance remains red for **2,160
+unattributed signatures**. See [the exact commands and receipts](material-caret-canonical-conservation.md#regenerated-canonical-discrepancy-conservation-2026-09-18).
+The conservation/inventory tests pass **8/8**, but this is not a complete
+115-file harness run. The three historical button/authoring failures are
+[diagnosed, not waived](material-button-later-caret-conservation.md); their
+corrected replay and remaining historical tests are separate work.
+
 ## Current inventory: pending caret context commands are registered
 
 Discovery includes **115 files**: **107 Material**, four general parity and four

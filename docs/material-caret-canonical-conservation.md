@@ -1,6 +1,6 @@
 # Complete caret classification conservation gate
 
-This audit-only gate protects the pending canonical integration of the reviewed
+This audit-only gate protects the canonical integration of the reviewed
 caret observation-stage findings. It does not establish equivalent inputs,
 visible caret rendering, or a renderer fix. No renderer or comparison fixture
 changes are included.
@@ -31,9 +31,64 @@ independently authenticated attribution and reviewed-case population.
 
 The expected full-report transition is **8,339 rows / 386,891 observations**,
 with **118 changed classification rows / 8,221 complete unchanged rows** and
-**2,278 to 2,160 unresolved signatures**. This is an expected transition, not a
-completed regeneration result. All input-equivalence and rendering-equivalence
+**2,278 to 2,160 unresolved signatures**. This transition has now passed the
+complete discrepancy-row checker described below. All input-equivalence and rendering-equivalence
 claims remain false in these bounded observation-stage reviews.
+
+## Regenerated canonical discrepancy conservation (2026-09-18)
+
+The production CLI regenerated the canonical manifest, lossless payload and
+human report. Generation exited **1** solely because **2,160 resolved-style
+differences still lack attribution**. Coverage remains **436/436 static** and
+**1,875/1,875 interaction** cases, with **132 source findings**. The red audit
+acceptance result is retained, not waived by successful serialization.
+
+`node scripts/check-material-caret-canonical-conservation.mjs` then completed
+with exit **0**, authenticating both complete compressed/decoded payloads and
+the original-source caret coverage. It verified all **8,339 rows / 386,891
+observations**, exactly **118 changed classification rows / 3,154 observations**,
+and **8,221 complete unchanged rows**. The **27 pending groups / 896 observations**
+remain unresolved and completely unchanged. The ordered unchanged-row digest
+list has SHA-256
+`7356e3ef683cc87f055fd48ece50b6bf9880a1b70c57c8ad0e643f23354ab977`.
+
+The new payload is **53,080,014 compressed bytes**, SHA-256
+`8e64c341ff24086dfdcdae4ca8324ad86a1f67348f35053d17252846249dad90`,
+and **1,966,939,725 decoded bytes**, SHA-256
+`27ce5b4e9821a22142188efd8eb2dd30003c51f5b4ad6a52b2999c2667de6a09`.
+The checker confirms that none of the three canonical files changed during
+its run. It compares complete discrepancy records, not the semantic content
+of every other inspection ledger. The separate production CLI no-write replay
+has also completed: its full decoded-value comparison and human-report check
+pass before the expected red audit-acceptance result. Both generation and
+no-write replay report only the 2,160 unresolved signatures, not stale data or
+source-binding errors.
+
+The exact production command, run once without and once with `--check`, is:
+
+```powershell
+node scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit --check
+```
+
+Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `caret-canonical-generation.log`, SHA-256
+  `59cdaa0dfa05a4d885b5e4e67dbd61f995a119345e6aa2b9760bcd43d58168f8`.
+- `caret-canonical-no-write.log`, identical SHA-256
+  `59cdaa0dfa05a4d885b5e4e67dbd61f995a119345e6aa2b9760bcd43d58168f8`.
+- `caret-canonical-complete-conservation.log`, SHA-256
+  `2afd3d236d51df78d0613dfea671793f733f48c8fdecc082588a6ec8c5f1f83e`.
+
+The complete conservation/inventory unit command below was rerun before this
+increment: **8/8 pass**, exit **0**, **1,503.4054 ms**. Log
+`caret-canonical-commit-controls.log`, SHA-256
+`0757210d7b34093e898260b498905cdf5da8ea2e20a3fd143084deec0aa006f1`.
+
+The historical button-test failures have separately been reproduced and
+explained without removing their original assertions; see
+[the complete-row diagnostics](material-button-later-caret-conservation.md).
+None of this establishes a full current harness pass, rendering equivalence,
+or completion of the remaining audit classifications.
 
 ## Executed verification
 
@@ -55,7 +110,7 @@ Final focused log:
 `artifacts/material-parity/field-host-flow-input-audit/caret-conservation-focused-final.log`
 SHA-256: `dbc2169fc42b393c34b2a9703522d1a2a7935e3edc3e3b857b6e12f329b6d378`.
 
-The full checker currently exits **1**, at the expected independent source
+Before regeneration, the full checker exited **1**, at the expected independent source
 coverage assertion: the unchanged canonical report does not yet contain the
 reviewed caret classifications. This red baseline is not successful full-report
 conservation. Do not remove or relax the assertion to accept the old report.
@@ -87,9 +142,10 @@ run supplies a final pass/fail total.
 
 ## Remaining work
 
-Finish the broader regression run, repair dependent evidence provenance only
-after whole-evidence replay, and refresh the canonical report. Then execute
-this full gate and the canonical no-write replay. The complete current audit
+The broader regression run and dependent receipt refreshes have separate
+recorded results. The full discrepancy gate and production canonical no-write
+comparison now pass, while strict audit acceptance remains red. Repair only
+independently diagnosed historical test expectations. The complete current audit
 harness, enforced parity matrix, remaining classifications, and overall audit
 acceptance are still outstanding. See
 [the preceding bounded integration](material-owner-caret-canonical-integration.md).
