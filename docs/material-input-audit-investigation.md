@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Vertical-alignment population review
+
+The [complete original alignment survey](material-vertical-align-population.md)
+now covers 116 groups / 6,886 observations: 80 computed-default/local-omission
+groups, 24 one-sided explicit-request groups, and 12 unresolved owner mappings.
+All original cases are scanned; eight missing tooltip scalar observations remain
+explicit. A 102-revision history review finds that `354084e` introduced `middle`
+in seven selectors, extending beyond the previously reviewed control labels to
+expansion, stepper and tabs; dialog copy follows separately in `bc0e449`.
+This is new source/history evidence, not canonical promotion or a rendering fix.
+The final source/history/inventory verification passes **10/10**, exit 0, in
+**29,026.6242ms**, including 25 rejection controls and four mapping-gap cases.
+
 ## Current integration checkpoint: follow-up verification in progress
 
 The corrected composed conservation now passes **3/3**: 200 source-reviewed
@@ -15,6 +28,11 @@ failure; a fresh serial run was started only after that process and the other
 verification jobs terminated. It will generate the canonical report only if the
 full builder succeeds. See the [current checkpoint](material-followup-input-canonical-integration.md)
 for exact commands/logs, provenance and outstanding acceptance work.
+
+## Historical checkpoints
+
+The entries below describe earlier checkpoints and their then-current processes.
+Their live/stale status is superseded by the current integration checkpoint above.
 
 The composed historical conservation failure is now
 [traced to JSON property ordering](material-composed-canonical-serialization.md):

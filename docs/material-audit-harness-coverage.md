@@ -1,6 +1,20 @@
 # Complete audit harness coverage
 
-## Current inventory: follow-up integration verification in progress
+## Current inventory: complete alignment-population source proof
+
+Discovery now contains **159 files** (151 Material + four general + four TTS,
+all 43 legacy files retained), including `vertical-align-population.spec.mjs`.
+The [alignment population/source/history proof](material-vertical-align-population.md)
+and inventory checks pass **10/10**, exit 0, in **29,026.6242ms**, with no skips,
+cancellations or TODOs. It replays 116 original groups / 6,886 observations,
+preserves 12 unresolved owner-mapping groups and eight missing scalar records,
+and checks 102 historical source revisions. No renderer, canonical fixture or
+canonical classification was changed. This is not a complete-harness pass.
+
+The separately running full builder/generation sequence retains its existing
+inputs and remains an outstanding integration gate.
+
+## Prior integration checkpoint
 
 Working-tree discovery is now **158 files** (150 Material + four general + four
 TTS, all legacy files retained). The new field-host receipt guard, original four
