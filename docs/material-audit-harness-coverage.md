@@ -2,6 +2,14 @@
 
 ## Current inventory: follow-up integration verification in progress
 
+The [intermediate serialization guard](material-composed-canonical-serialization.md)
+adds the **157th discovered file** (149 Material + four general + four TTS).
+Its two guard tests and four inventory tests pass **6/6**, exit 0, in
+**751.3273ms**, including 13 changed-evidence rejection cases. The original
+combined canonical run is terminal with one pass and one failure; the new
+guard is not yet wired into that test, so no composed/full-harness pass is
+claimed. The independent CLI freshness check remains live.
+
 The [case-index receipt guard](material-followup-case-index-receipts.md) brings
 the latest inventory to **156 files** (148 Material + four general + four TTS,
 all 43 legacy files retained). Its four conservation/replay/writer tests and
@@ -9,7 +17,8 @@ four inventory checks pass **8/8**, exit 0, in **82,949.2265ms**. The nested
 unchanged original case-index tests pass **11/11** against in-memory proposed
 receipts; saved indexes remain stale and the original full builder is still
 failed. The first 66-group canonical conservation test has passed; its composed
-historical companion and the independent CLI check remain live. None of these
+historical companion subsequently failed as described above; the independent
+CLI check remains live. None of these
 bounded results establish a complete current-harness or parity-matrix pass.
 
 The [public vertical-align proof](material-public-vertical-align-audit.md) brings

@@ -5,14 +5,23 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: follow-up verification in progress
 
+The composed historical conservation failure is now
+[traced to JSON property ordering](material-composed-canonical-serialization.md):
+independent full-payload/source replay finds zero value differences across all
+8,339 rows and 134 serialization-only differences. A complete-row equality guard
+for the intermediate boundary passes six focused/inventory checks with 13
+rejection cases. The combined run remains a recorded failure until the
+correction is integrated and rerun; the independent CLI freshness job is live.
+
 The [nine receipt refresh rehearsal](material-followup-case-index-receipts.md)
 now preserves the complete historical index objects and passes the original
 11 membership tests with only in-memory fingerprint proposals. The four guard
 tests plus four inventory checks pass **8/8**; no saved receipt has changed.
 Separately, the first full canonical conservation test passes: exactly 66
 metadata-only group changes / 2,640 observations and all 8,273 other complete
-rows preserved. The composed historical conservation and CLI freshness jobs
-remain live; integration is not yet accepted.
+rows preserved. The composed historical conservation job subsequently failed
+as described above; the CLI freshness job remains live. Integration is not yet
+accepted.
 
 The [public vertical-align reproduction](material-public-vertical-align-audit.md)
 confirms a core applicability/default inconsistency across **64 paired cases /

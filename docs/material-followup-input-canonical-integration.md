@@ -12,12 +12,23 @@ font/rendering parity and renderer causality.
 
 ## Current verification state
 
+**2026-09-19 checkpoint:** the sequential conservation run has terminated,
+exit **1**, **one pass / one failure**. The composed test fed reconstructed
+objects into the next byte-sensitive guard without preserving the frozen
+serialization. Independent full-payload replay proves all 8,339 rows have
+identical values and exactly 134 differ only in property order. The
+[serialization-boundary correction](material-composed-canonical-serialization.md)
+has six passing focused/inventory checks, but is not yet wired into the test
+while the independent CLI freshness reader remains live. The original failure
+and both expected digests are retained. Integration is not yet accepted.
+
 **Subsequent checkpoint:** the first full-row conservation test has passed in
 **656,066.6299ms**: exactly 66 changed groups / 2,640 observations, all raw input
 fields preserved, and 8,273 other complete rows unchanged. Their ordered digest
 is `c46a8886a4cb7d306fa879978581782a1ebe8a1224f1aeb2ddd6bac8608ffe1c`.
-The composed 200-group test remains live in the same session, so no final 2/2
-result is claimed. The independent CLI freshness check also remains live.
+At that earlier checkpoint the composed 200-group test was still live; its
+terminal failure and diagnosis are now recorded above. The independent CLI
+freshness check remains live.
 
 The [nine case-index receipt rehearsal](material-followup-case-index-receipts.md)
 now passes eight focused/inventory checks, including an independently launched
