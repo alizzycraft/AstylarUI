@@ -1,7 +1,8 @@
 # Historical button/authoring failures after caret attribution
 
 This is audit instrumentation evidence, not a renderer or fixture correction.
-The original historical tests remain unchanged in this diagnostic increment.
+The original historical tests remained unchanged in diagnostic commit `0d7e46c`.
+The verified button-width correction is recorded separately below.
 
 ## Original failure and retained assertions
 
@@ -85,13 +86,43 @@ exit **0**, **896.5686 ms**, retaining 18 mutation rejections and three
 unauthenticated-source wrapper rejections. Log `caret-button-guard-controls.log`,
 SHA-256 `0d27ae7947c321ac9354438b2480ee221351ffc6e7dc27c80ad6878be9b5f3e1`.
 
+## Verified button-width integration (2026-09-18)
+
+The corrected `button-fixed-width-canonical-integration.spec.mjs` has completed
+its one unfiltered test successfully within the three-file command shown above:
+**1 pass**, **842,739.2014 ms**. The runner has advanced to the next file; this
+is a completed file result, not a claim that the combined command has finished.
+Its live aggregate log is
+`artifacts/material-parity/field-host-flow-input-audit/caret-historical-button-authoring-recheck.log`.
+Do not treat a hash of that still-growing log as a final run receipt.
+
+The correction authenticates exactly **20 later caret groups / 600 observations**,
+requires zero pending caret observations in this historical subset, and rejects
+overlap with the original width/box groups or later gap findings. It preserves
+all **1,201 ordered scalar rows** and exact structural equality for all **1,146
+remaining complete rows**. Their digest is unchanged from the diagnostic:
+`acf142b011155301b361b01109b4ed5164ada83bb1416eefdba6dcb47acf8101`.
+The original authoring, precedence, source-validation, human-report and
+invalid-evidence assertions remain in place. Only authenticated later metadata
+is separated from the historical unrelated-row comparison.
+
+The strict helper controls were rerun with
+`node --test tests/material-parity/later-caret-integration-conservation.spec.mjs`:
+**3/3 pass**, exit **0**, **1,010.0761 ms**; no failures, skips, cancellations
+or todos. Scoped diff review and `git diff --check` also pass.
+
+This bounded correction is committed independently of the still-running button
+requests and reviewed-authoring files. No canonical payload is regenerated yet;
+source-inventory refresh is deferred until the remaining verified test changes
+can be batched. No runtime or fixture fix is included.
+
 ## Next boundary
 
-Use the independently authenticated caret signatures in the three historical
-integration tests, require disjointness from their original and later-gap
-populations, and retain the complete comparison of every other record. Preserve
-all original authoring checks and negative controls. Then rerun all three files
-without a test-name filter, including the slow detached/inflated-evidence test.
+Finish the unfiltered button-requests and reviewed-authoring replays, including
+the slow detached/inflated-evidence test, before accepting their corrections.
+Require the same authenticated signatures, disjointness from original and
+later-gap populations, and complete comparison of every other record. Preserve
+all original authoring checks and negative controls.
 
 Canonical conservation, the complete current harness, outstanding discrepancy
 classifications and the enforced parity matrix remain separate acceptance work.

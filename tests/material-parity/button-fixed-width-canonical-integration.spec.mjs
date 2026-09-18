@@ -12,7 +12,7 @@ import { buildMaterialInputAudit, validateMaterialInputAudit,
   renderMaterialInputAuditMarkdown } from './input-equivalence-audit.mjs';
 import { buttonFixedWidthAttribution } from './button-fixed-width-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
-import { assertLaterGapClassifications } from './owner-gap-integration-conservation.mjs';
+import { assertLaterGapClassifications, assertLaterCaretClassifications } from './owner-gap-integration-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const baselineCommit = '30357b9f8c7b95da668914032557c5f7416c81db';
@@ -82,13 +82,20 @@ test('button fixed widths production integration preserves matching authoring an
     assert.equal(audit.discrepancies.filter(r => laterGaps.has(JSON.stringify(scalar(r))))
       .reduce((n, r) => n + r.occurrences, 0), 1200);
     assert.ok([...laterGaps].every(key => !keys.has(key)), 'later classifications cannot replace the original width/box proof');
+    const laterCarets = assertLaterCaretClassifications(audit, previous);
+    assert.equal(laterCarets.size, 20);
+    assert.equal(audit.ownerCaretInputs.plannedCoverage.reviewedObservations, 600);
+    assert.equal(audit.ownerCaretInputs.plannedCoverage.pendingObservations, 0);
+    assert.ok([...laterCarets].every(key => !keys.has(key) && !laterGaps.has(key)),
+      'authenticated caret reviews cannot replace original width/box or later gap proofs');
     const others = r => r.discrepancies.filter(d => {
       const key = JSON.stringify(scalar(d));
-      return !keys.has(key) && !laterGaps.has(key);
+      return !keys.has(key) && !laterGaps.has(key) && !laterCarets.has(key);
     });
+    assert.equal(others(audit).length, 1146);
     // Exact structural equality, with a bounded assertion diagnostic rather
     // than a multi-megabyte rendering of the complete captured trees on failure.
-    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'all complete rows outside the original width/box groups and independently verified later gaps remain unchanged');
+    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'all complete rows outside original width/box groups and independently verified later gap/caret reviews remain unchanged');
     assert.match(renderMaterialInputAuditMarkdown(audit), /Fixed button width authoring: 600[^\n]*9[^\n]*52/);
     const errors = validateMaterialInputAudit(audit, { requireComplete: false });
     assert.deepEqual(errors.filter(e => /button fixed width|button box sizing/.test(e)), []);
@@ -104,6 +111,8 @@ test('button fixed widths production integration preserves matching authoring an
       authoringGroups: 9, retainedScalarMatchingOwners: 52, attributedScalarGroups: rows.length,
       attributedScalarObservations: 548, laterBoxSizingGroups: boxes.length, unchangedScalarRows: audit.discrepancies.length,
       independentlyVerifiedLaterGapGroups: laterGaps.size,
+      independentlyVerifiedLaterCaretGroups: laterCarets.size,
+      independentlyVerifiedLaterCaretObservations: audit.ownerCaretInputs.plannedCoverage.reviewedObservations,
       unchangedCompleteRows: others(audit).length, unchangedCompleteRowsSha256: hash(JSON.stringify(others(audit))),
       inputEquivalent: false, limitation: 'Actual production normalization/precedence with all original button owners; full unrelated-family report conservation and final enforced matrix remain separate.' }));
   } finally {
