@@ -14,7 +14,7 @@ import { buttonFlexAttribution } from './button-flex-source-binding.mjs';
 import { buttonHostRequestAttribution } from './button-host-request-source-binding.mjs';
 import { buttonFixedWidthAttribution } from './button-fixed-width-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
-import { assertLaterGapClassifications } from './owner-gap-integration-conservation.mjs';
+import { assertLaterGapClassifications, assertLaterCaretClassifications } from './owner-gap-integration-conservation.mjs';
 
 const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -109,12 +109,26 @@ test('reviewed authoring production integration preserves raw rows and prior cla
   assert.equal(audit.discrepancies.filter(r => laterGaps.has(JSON.stringify(scalar(r))))
     .reduce((n, r) => n + r.occurrences, 0), 758);
   assert.ok([...laterGaps].every(key => !selected.has(key)), 'later classifications cannot replace original authoring proof');
+  const laterCarets = assertLaterCaretClassifications(audit, previous);
+  assert.equal(laterCarets.size, 20);
+  assert.equal(audit.ownerCaretInputs.plannedCoverage.reviewedObservations, 379);
+  assert.equal(audit.ownerCaretInputs.plannedCoverage.pendingObservations, 0);
+  assert.ok([...laterCarets].every(key => !selected.has(key) && !laterGaps.has(key)),
+    'authenticated caret reviews cannot replace original authoring or later gap proofs');
   const others = r => r.discrepancies.filter(d => {
     const key = JSON.stringify(scalar(d));
-    return !selected.has(key) && !laterGaps.has(key);
+    return !selected.has(key) && !laterGaps.has(key) && !laterCarets.has(key);
   });
+  assert.equal(others(audit).length, 2718);
   assert.equal(hash(JSON.stringify(others(audit))), hash(JSON.stringify(others(previous))));
   assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => /root flow height|button pill radius|button flex|button host request|button fixed width|button box sizing/.test(e)));
+  console.log(JSON.stringify({ baselineCommit, diagnosticCases: raw.results.length + raw.interactions.length,
+    unchangedScalarRows: audit.discrepancies.length, originalAuthoringGroups: selected.size,
+    independentlyVerifiedLaterGapGroups: laterGaps.size,
+    independentlyVerifiedLaterCaretGroups: laterCarets.size,
+    independentlyVerifiedLaterCaretObservations: audit.ownerCaretInputs.plannedCoverage.reviewedObservations,
+    unchangedCompleteRows: others(audit).length, unchangedCompleteRowsSha256: hash(JSON.stringify(others(audit))),
+    inputEquivalent: false, renderingEquivalent: false }));
 }));
 
 test('reviewed authoring production validation rejects detached evidence and inflated claims', () => withCapture((raw, options) => {

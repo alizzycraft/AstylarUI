@@ -137,13 +137,27 @@ Scoped diff review and `git diff --check` pass. The strict helper has not change
 since its three passing controls recorded above. This is another audit-only
 correction, not a rendering fix or complete harness acceptance.
 
-## Next boundary
+## Completed reviewed-authoring and three-file replay (2026-09-18)
 
-Finish the unfiltered reviewed-authoring replay, including the slow
-detached/inflated-evidence test, before accepting its correction.
-Require the same authenticated signatures, disjointness from original and
-later-gap populations, and complete comparison of every other record. Preserve
-all original authoring checks and negative controls.
+The unfiltered three-file command has finished with **4/4 tests passed**, exit
+**0**, no skips, cancellations or todos, total duration **4,106,568.2102 ms**.
+The reviewed-authoring positive test took **411,357.5194 ms**; its unchanged
+detached/inflated-evidence test took **1,847,428.5364 ms**. The aggregate log above
+is now terminal, with SHA-256
+`f7d45d1995f1569a20c10c87ca9fc50ede0a70a40c300920819d84882b9e9a91`.
+
+The corrected positive test authenticates **20 caret groups / 379 observations**,
+requires no pending caret observations in this subset, and proves disjointness
+from the **188 original authoring groups** and **18 later-gap groups**. All
+**2,944 ordered scalar rows** and **2,718 unrelated complete rows** remain
+unchanged. The latter digest stays
+`090aefdd241706ba47e1242e915d799fc0046443828d7658e121fd8db23e3c1c`.
+Neither the original authoring proof nor the negative controls were replaced.
+All input-equivalence and rendering-equivalence claims remain false.
+
+The earlier running-status sections are historical checkpoints, not current
+claims that these three files are still running. Their completed run does not
+establish acceptance of other integration tests or the complete harness.
 
 Canonical conservation, the complete current harness, outstanding discrepancy
 classifications and the enforced parity matrix remain separate acceptance work.
