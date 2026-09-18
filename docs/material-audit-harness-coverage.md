@@ -1,6 +1,22 @@
 # Complete audit harness coverage
 
-## Current inventory: font ownership canonical proposal is registered
+## Current inventory: overlay font inheritance inputs are registered
+
+Discovery includes **128 files**: 120 Material, four general and four TTS,
+retaining all 43 legacy files. The [overlay font-context audit](material-overlay-font-inputs.md)
+authenticates 182 original observations in 91 cases and independently replays
+their existing reference external-context evidence. It retains 94 matching and
+88 differing page-versus-overlay sizes, plus 59 scalar rule-capture gaps. No
+candidate computed value, visibility conclusion or canonical promotion follows.
+
+Generation and no-write replay pass. Final focused/inventory verification
+passes **6/6**, exit **0**, in 8,356.3895ms, with 624 rejection executions. The
+initial negative-control setup failure is documented in the source report.
+The original 120-file full run remains live (runner 24392, parent 24492,
+reviewed-authoring child 7964 at this snapshot), with 766 reported results and
+the two diagnosed failures retained. Selected files remain unmodified.
+
+## Previous inventory: font ownership canonical proposal is registered
 
 Discovery includes **127 files**: 119 Material, four general and four TTS,
 retaining all 43 legacy files. The [font ownership proposal](material-font-ownership-attribution.md)
