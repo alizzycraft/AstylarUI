@@ -10,6 +10,7 @@ import ts from 'typescript';
 import { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInputAuditMarkdown }
   from './input-equivalence-audit.mjs';
 import { explicitGapAttribution } from './explicit-gap-classification.mjs';
+import { assertLaterCaretClassifications } from './owner-gap-integration-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const baselineCommit = '3abdb781279462cd1ca1a78e8cf2b6cdc618f3b5';
@@ -71,8 +72,18 @@ test('production explicit-gap integration preserves every scalar and all unrelat
       assert.equal(row.reviewEvidence.inputEquivalent, false);
       assert.equal(row.reviewEvidence.rendererCauseProven, false);
     }
-    const others = report => report.discrepancies.filter(r => !keys.has(identity(r)));
+    // This historical baseline predates nine independently source-bound caret
+    // reviews. Validate that exact metadata-only delta, not a broad property
+    // exemption; all raw inputs and remaining complete rows stay conserved.
+    const laterCaret = assertLaterCaretClassifications(audit, previous, { root: process.cwd(), requireComplete: false });
+    assert.equal(laterCaret.size, 9);
+    assert.equal(audit.ownerCaretInputs.plannedCoverage.reviewedObservations, 332);
+    assert.equal(audit.ownerCaretInputs.plannedCoverage.pendingObservations, 184);
+    assert.ok(rows.every(r => !laterCaret.has(JSON.stringify(scalar(r)))));
+    const others = report => report.discrepancies.filter(r => !keys.has(identity(r)) && !laterCaret.has(JSON.stringify(scalar(r))));
     assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'all unrelated complete findings unchanged');
+    assert.equal(others(audit).length, 867);
+    assert.equal(hash(others(audit)), '148228a933f26e3b3e1ff6604bd175717194c4cbd57012f463fe8d1d70f1704b');
     assert.match(renderMaterialInputAuditMarkdown(audit), /Explicit gap composition: 1032[^\n]*16/);
     assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => /explicit gap/i.test(e)), []);
     for (const mutate of [
@@ -85,6 +96,7 @@ test('production explicit-gap integration preserves every scalar and all unrelat
     }
     console.log(JSON.stringify({ baselineCommit, diagnosticCases: 296, attributedGroups: 16,
       attributedObservations: 1032, unchangedScalarRows: audit.discrepancies.length,
+      laterCaretGroups: laterCaret.size, laterCaretObservations: 332, pendingCaretObservationsRetained: 184,
       unchangedCompleteRows: others(audit).length, unchangedCompleteRowsSha256: hash(others(audit)),
       inputEquivalent: false, limitation: 'Complete explicit-gap population through production normalization and precedence; full unrelated-family canonical conservation and enforced parity remain separate.' }));
   } finally {

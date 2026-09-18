@@ -10,6 +10,12 @@ pass with writes prohibited and report bytes unchanged (188,168.142ms total).
 The separate inventory suite passes 4/4. This does not extend the completed
 120-file run or establish a new full-harness pass.
 
+The [explicit-gap conservation correction](material-post-full-explicit-gap-repair.md)
+now passes its original 296-case population, preserving 892 scalar rows and
+867 unrelated complete findings while accounting for exactly nine later caret
+reviews. Its sibling gap-review conservation replay remains live; a successful
+exit for the combined command has not yet been established.
+
 ## Previous inventory: leaf font-family stages
 
 The [motion receipt correction](material-post-full-motion-receipt-repair.md)
