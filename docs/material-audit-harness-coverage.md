@@ -7,8 +7,17 @@ retaining all 43 legacy files. The [plain-text font-stage proof](material-leaf-f
 reviews 220 original observations without synthesizing missing local declarations.
 Its two tests and four inventory tests pass **6/6**, exit **0**, with 23 rejection
 controls applied to each of five owners (115 executions). The hidden stepper
-body remains explicitly recorded. No canonical promotion, renderer fix, or full
-harness acceptance is claimed.
+body remains explicitly recorded. The subsequent source-bound attribution
+proposal maps 15 pending interactive groups / 152 observations while preserving
+15 static groups / 68 observations. Expanded focused verification passes
+**8/8**, exit **0**, with 22 additional join-rejection controls and an independent
+full-payload replay. No canonical promotion, renderer fix, or full harness
+acceptance is claimed.
+
+The [post-historical-test canonical refresh](material-post-historical-caret-refresh.md)
+and its independent no-write replay are complete. Their only failure is the
+existing 2,160 unattributed signatures; all 8,339 discrepancy rows remain exactly
+unchanged. The complete current unfiltered harness remains an independent gate.
 
 ## Previous inventory: list/table inherited-font replacement proof is registered
 

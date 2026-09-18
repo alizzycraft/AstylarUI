@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { collectLeafFontStages, inspectLeafFontStages } from '../../scripts/audit-material-leaf-font-stages.mjs';
+import { planLeafFontAttribution } from '../../scripts/audit-material-leaf-font-attribution.mjs';
+import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
 
 test('all original selected plain-text font omissions retain matching inherited text inputs', () => {
   const actual = collectLeafFontStages();
@@ -14,6 +17,59 @@ test('all original selected plain-text font omissions retain matching inherited 
       assert.equal(finding.proof[flag], false);
   }
   assert.equal(actual.canonicalAttributionChanged, false);
+});
+
+test('planned font attribution independently replays source trees and complete frozen canonical payload', () => {
+  const receipt = JSON.parse(execFileSync(process.execPath,
+    ['--max-old-space-size=512', 'scripts/audit-material-leaf-font-attribution.mjs', '--check'],
+    { encoding: 'utf8', maxBuffer: 1024 * 1024 }));
+  assert.equal(receipt.proposedGroups, 15); assert.equal(receipt.proposedObservations, 152);
+  assert.equal(receipt.preservedStaticGroups, 15); assert.equal(receipt.preservedStaticObservations, 68);
+  assert.equal(receipt.otherCompleteRows, 8324); assert.equal(receipt.baselineUnresolved, 2160);
+  assert.equal(receipt.canonicalAttributionChanged, false);
+});
+
+test('planned font join rejects incomplete evidence and preserves previously classified static groups', () => {
+  const proof = collectLeafFontStages(), original = JSON.parse(readFileSync(proof.originalCapture.file));
+  const saved = JSON.parse(readFileSync('docs/material-leaf-font-attribution-plan.json'));
+  const normalize = bindOwnerCaretNormalization(readFileSync(saved.productionNormalization.module, 'utf8'), saved.productionNormalization);
+  // Pure small projections test join rejection; the preceding CLI authenticates
+  // all rows and tree sources rather than trusting this projection as evidence.
+  const rows = [...saved.proposed, ...saved.preservedStatic].map(g => ({
+    ...Object.fromEntries(['family', 'element', 'property', 'reference', 'occurrences', 'cases', 'states'].map(k => [k, g[k]])),
+    attribution: g.previousAttribution }));
+  const before = JSON.stringify([proof, original, rows]);
+  assert.equal(planLeafFontAttribution(proof, original, rows, normalize).proposedObservations, 152);
+  const changes = [
+    p => { p.findings.pop(); },
+    p => { p.findings[1] = structuredClone(p.findings[0]); },
+    p => { p.findings[0].originalInputSha256 = 'changed'; },
+    p => { p.findings[0].inputTrees.reference.sha256 = 'changed'; },
+    p => { p.findings[0].viewport.width++; },
+    p => { p.findings[0].proof.retainedFontSizeMatches = false; },
+    p => { p.findings[0].proof.retainedText.style.fontSize = '99px'; },
+    p => { p.findings[0].proof.rendererCauseProven = true; },
+    p => { p.findings[0].proof.renderingEquivalent = true; },
+    p => { p.findings[0].proof.wholeElementInputEquivalent = true; },
+    p => { p.findings[0].proof.text = 'changed'; },
+    (_p, o) => { o.interactions = o.interactions.filter(e => e.family !== 'stepper'); },
+    (_p, o) => { o.results = o.results.filter(e => e.family !== 'divider'); },
+    (_p, _o, r) => { r.pop(); },
+    (_p, _o, r) => { r.push(structuredClone(r[0])); },
+    (_p, _o, r) => { r[0].reference = '99px'; },
+    (_p, _o, r) => { r[0].astylar = r[0].reference; },
+    (_p, _o, r) => { r[0].occurrences--; },
+    (_p, _o, r) => { r[0].cases.reverse(); },
+    (_p, _o, r) => { r[0].states = ['static']; },
+    (_p, _o, r) => { r[0].attribution = 'already-reviewed'; },
+    (_p, _o, r) => { r.at(-1).attribution = 'unresolved'; },
+  ];
+  for (const mutate of changes) {
+    const p = structuredClone(proof), r = structuredClone(rows);
+    const o = { ...original, results: [...original.results], interactions: [...original.interactions] };
+    mutate(p, o, r); assert.throws(() => planLeafFontAttribution(p, o, r, normalize));
+  }
+  assert.equal(JSON.stringify([proof, original, rows]), before);
 });
 
 test('leaf font stage proof rejects altered ownership text inheritance and retained evidence', () => {

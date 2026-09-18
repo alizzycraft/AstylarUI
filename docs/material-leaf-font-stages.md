@@ -94,3 +94,43 @@ measurement-stage attribution for verified retained text, rather than adding
 fixture-local font sizes to make the audit green. Matching text input alone is
 not sufficient to close the rendering audit. The complete current harness and
 enforced parity matrix remain required.
+
+## Exact proposed canonical attribution — 2026-09-18
+
+The independent [attribution proposal](material-leaf-font-attribution-plan.json)
+now joins all 220 source observations to the complete frozen canonical parent
+`06e50dbcd3594c5987d63a4ec38e792b87b08dde`. It replays the source proof first,
+authenticates both trees per observation, binds the seven actual production
+normalization functions, and streams/authenticates the entire canonical payload.
+
+The original audit explicitly restricts `classifyReviewedTypographyStage` to
+static cases (`tests/material-parity/input-equivalence-audit.mjs:1932`). The join
+therefore preserves **15 already-reviewed static groups / 68 observations** and
+proposes attribution of **15 pending interactive groups / 152 observations**.
+It verifies each group's exact values, complete occurrence count, capped case
+list and full state list independently from the original capture population.
+It does not derive coverage by selecting whatever canonical rows remain.
+
+All **8,324 other complete rows**, including the already-reviewed static font
+groups, are retained with ordered row-digest SHA-256
+`c5ffa5c305d7941598a92c1467093c8826c745e1d364b0946619bfdb96d3d1ad`.
+The proposal preserves raw omissions and limits its explanation to the local
+declaration versus separately retained text-input stage. Current interactive
+glyph paint, other properties and whole-element input equivalence remain
+unproven. Canonical classification is still unchanged; this is not a reduction
+of the published 2,160 unresolved signatures yet.
+
+```powershell
+node --max-old-space-size=512 scripts/audit-material-leaf-font-attribution.mjs
+node --max-old-space-size=512 scripts/audit-material-leaf-font-attribution.mjs --check
+node --test --test-concurrency=1 tests/material-parity/leaf-font-stages.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs
+```
+
+Generation succeeds. The expanded focused command passes **8/8**, exit **0**, no
+skips/cancellations/todos, **71,644.6126 ms**, including **62,382.3791 ms** for the
+full CLI no-write replay against the immutable parent. Twenty-two new rejection
+controls protect the join and existing static classifications, in addition to
+the 115 source-proof controls. Proposal SHA-256:
+`b7880e6791195b43b351e4ce128be667f81cbce80fa68b65acbd2df59bb14c87`.
+Its referenced source proof remains
+`9c835c4efc6a4e4f2c53eff2ce476a5dca035d85cf985ff7942e31f7d2bd80dc`.
