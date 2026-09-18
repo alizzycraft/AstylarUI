@@ -12,6 +12,36 @@ font/rendering parity and renderer causality.
 
 ## Current verification state
 
+**Latest result:** the 22:52 full builder run is terminal, exit **1**, with
+**379 passed / nine failed / 388 total**, zero skips/cancellations/TODOs, in
+**1,918,988.2402ms**. All nine failures compare the current normalized main-module
+hash `fe75275edf2b2181a93ebf0290d338f10a73a362ea0059ead51ca65be5fe97d8`
+against retained receipt hash
+`b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73`.
+Affected case indexes are container caret, root height, field host color, root
+color, root typography, field host alignment, field host, non-widget appearance,
+and button appearance. Preserve their original captures and findings; replay or
+authenticate the precise unchanged producer dependencies and prove receipt-only
+conservation before claiming fresh evidence. Do not exempt whole-module hashes
+or replace expected hashes without that proof. The log is
+`followup-input-builder-gap-replayed.log` in the existing artifact log directory.
+
+The independent 22:52 canonical generator (PID 588, session 38918) has now
+terminated, exit **1**, solely for **1,960 unresolved groups**. Its output retains
+436/436 static and 1,875/1,875 interaction captures, 8,339 difference groups,
+386,891 observations and 132 source findings. This is not an acceptance pass.
+The generated manifest now identifies 53,455,133 compressed bytes with SHA-256
+`534dc2fdf8ffff34fe39695b2380350a950cb68e0ef322e6ce9d1459bcf5e127`,
+and 1,979,346,771 decoded bytes with SHA-256
+`d96841256135b67a5be85457dc0965aa198421196050d87835860c1cf2e92bdd`.
+
+Full source-replayed conservation of the 66-group transition and composed
+200-group transition has been launched sequentially in session 88257, logging
+to `followup-input-canonical-full-conservation.log`. The independent full CLI
+`--check` is running in session 40782, logging to
+`followup-input-canonical-check.log`. Neither has a verified result yet. The following paragraphs
+retain the chronological earlier attempts and must not be read as current passes.
+
 Syntax checks and `git diff --check` passed. The full audit-builder test file
 and canonical generation were launched on 2026-09-18 at approximately 22:13
 Africa/Johannesburg. The first generation terminated with exit 1 after reaching

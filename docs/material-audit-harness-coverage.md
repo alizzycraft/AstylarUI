@@ -2,6 +2,17 @@
 
 ## Current inventory: follow-up integration verification in progress
 
+The [public vertical-align proof](material-public-vertical-align-audit.md) brings
+discovery to **155 files** (147 Material + four general + four TTS, retaining all
+43 legacy files). Its seven evidence tests plus four inventory checks pass
+**11/11**, exit 0, in **12,791.578ms** on the final replay. This does not establish a full-harness pass.
+The full builder test file has now ended with **379 passed / nine failed / 388
+total**, exit 1, in **1,918,988.2402ms**. The failures are stale main-module
+fingerprints in nine retained case indexes; they remain unresolved and must not
+be exempted from freshness checks. The separate canonical generator is now
+terminal, exit 1 solely for 1,960 unresolved groups. The full-row conservation
+and CLI freshness jobs have started; their results remain unverified.
+
 The [control-label alignment proof](material-control-label-vertical-align.md)
 adds the **154th file** (146 Material + four general + four TTS; all 43 legacy
 files retained). All seven focused/source-history/inventory checks pass, exit 0,

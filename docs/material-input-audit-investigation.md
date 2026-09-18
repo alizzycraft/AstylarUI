@@ -5,6 +5,22 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: follow-up verification in progress
 
+The [public vertical-align reproduction](material-public-vertical-align-audit.md)
+confirms a core applicability/default inconsistency across **64 paired cases /
+128 screenshots**: `baseline` is treated as bottom alignment, shifting non-inline
+glyphs 56px relative to omission. The original Material label composition is not
+yet causally linked. Browser evidence retains **36 failed deltas** with zero
+runtime errors; focused binding/source/raster/inventory tests pass **11/11** and
+the consumer build passes. No renderer or comparison input was changed.
+
+The latest full builder run has terminated, exit **1**, with **379/388 passed**
+and nine failed source-fingerprint assertions in retained case indexes. Canonical
+generation has finished, exit 1 solely for **1,960 unresolved groups**, retaining
+8,339 groups / 386,891 observations. Full-row conservation and independent CLI
+freshness checks have now started but are not yet verified. The failures and required
+receipt-conservation follow-up are recorded in the
+[integration checkpoint](material-followup-input-canonical-integration.md).
+
 The [control-label alignment history](material-control-label-vertical-align.md)
 now proves an explicit candidate `middle` substitution against reference
 `baseline` in **272 original observations**. Commit `354084e` added it to the
