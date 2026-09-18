@@ -1,0 +1,1632 @@
+{
+  "schemaVersion": 1,
+  "kind": "original-slider-disabled-input-audit",
+  "originalCapture": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+  },
+  "originalCasesScanned": 2311,
+  "sliderCases": 78,
+  "matchingOpacityCases": 70,
+  "observations": [
+    {
+      "case": "interaction:slider@light/desktop-dpr1/disabled",
+      "profile": "light",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "disabled",
+      "originalInputSha256": "72b886ece889479b767906db52527de3d37fea40cc84000ceb2ee5605ff912fa",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "1a8677b982f0792b9f630ebd5d6cca77471a97084dbd8f6e996df01eff3d4f58"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "507f26dc99d3860343cb5202932beed608ee2f18c4fa7a6ed4d3252820a4de6f"
+        }
+      },
+      "proof": {
+        "referenceOwner": "frame/2/0",
+        "candidateOwner": "root/0/2/0/0",
+        "referenceRule": {
+          "source": "sheet:4/36",
+          "selector": ".mat-mdc-slider.mdc-slider--disabled",
+          "cssText": "cursor: auto; opacity: 0.38;",
+          "declarations": {
+            "cursor": {
+              "value": "auto",
+              "important": false
+            },
+            "opacity": {
+              "value": "0.38",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        },
+        "referenceOpacity": "0.38",
+        "candidateOpacity": "1.0",
+        "candidateAncestors": [
+          {
+            "node": "root/0/2/0/0",
+            "authored": {
+              "type": "showcase.material:range-visual",
+              "id": "slider-visual",
+              "class": "range-plugin-layer",
+              "data": {
+                "start": 0.3,
+                "end": 0.65,
+                "indicator-color": "#6750a4",
+                "track-color": "#e7e0ec",
+                "state-color": "#6750a4"
+              }
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2/0",
+            "authored": {
+              "type": "div",
+              "id": "slider-pair",
+              "class": "range-stack"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2",
+            "authored": {
+              "type": "section",
+              "id": "slider-root",
+              "ariaLabel": "slider showcase"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0",
+            "authored": {
+              "type": "main",
+              "id": "page"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root",
+            "kind": "synthetic-root-no-captured-local-style"
+          }
+        ],
+        "candidateOpacityRules": [
+          {
+            "selector": "#slider-disabled",
+            "width": "99px",
+            "opacity": "1",
+            "background": "#dcd7df",
+            "color": "#a4a0a7"
+          },
+          {
+            "selector": "#slider-start",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "0",
+            "opacity": "0"
+          },
+          {
+            "selector": "#slider-primary",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "50%",
+            "opacity": "0"
+          }
+        ],
+        "controls": [
+          {
+            "element": "slider-start",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-start",
+              "matsliderstartthumb": "",
+              "aria-label": "Minimum",
+              "class": "mdc-slider__input",
+              "aria-valuetext": "30",
+              "disabled": "",
+              "step": "5",
+              "min": "0",
+              "max": "65",
+              "style": "width: 363.15px; padding: 0px; left: -21px; right: auto;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-start",
+              "class": "range-layer",
+              "min": "0",
+              "max": "50",
+              "step": "1",
+              "value": "30",
+              "disabled": true,
+              "ariaLabel": "Minimum",
+              "ariaValueText": "30"
+            }
+          },
+          {
+            "element": "slider-primary",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-primary",
+              "matsliderendthumb": "",
+              "aria-label": "Maximum",
+              "class": "mdc-slider__input mat-slider__right-input",
+              "aria-valuetext": "65",
+              "disabled": "",
+              "step": "5",
+              "min": "30",
+              "max": "100",
+              "style": "padding: 0px; left: auto; right: -21px; width: 398.85px;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-primary",
+              "class": "range-layer",
+              "min": "50",
+              "max": "100",
+              "step": "1",
+              "value": "65",
+              "disabled": true,
+              "ariaLabel": "Maximum",
+              "ariaValueText": "65"
+            }
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "owner": "Material slider fixture disabled-state propagation to its separate visual owner",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "renderedOpacityVerified": false,
+        "limitation": "Original host opacity/disabled-state inputs differ before projection. Input controls are disabled on both sides, but candidate visual authoring has no disabled state or opacity request and its captured local ancestry remains opaque. This does not prove final group compositing, pointer behavior, or the cause of swapped/jerky dragging."
+      }
+    },
+    {
+      "case": "interaction:slider@light/desktop-dpr2/disabled",
+      "profile": "light",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "disabled",
+      "originalInputSha256": "72b886ece889479b767906db52527de3d37fea40cc84000ceb2ee5605ff912fa",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "1a8677b982f0792b9f630ebd5d6cca77471a97084dbd8f6e996df01eff3d4f58"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/light/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "507f26dc99d3860343cb5202932beed608ee2f18c4fa7a6ed4d3252820a4de6f"
+        }
+      },
+      "proof": {
+        "referenceOwner": "frame/2/0",
+        "candidateOwner": "root/0/2/0/0",
+        "referenceRule": {
+          "source": "sheet:4/36",
+          "selector": ".mat-mdc-slider.mdc-slider--disabled",
+          "cssText": "cursor: auto; opacity: 0.38;",
+          "declarations": {
+            "cursor": {
+              "value": "auto",
+              "important": false
+            },
+            "opacity": {
+              "value": "0.38",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        },
+        "referenceOpacity": "0.38",
+        "candidateOpacity": "1.0",
+        "candidateAncestors": [
+          {
+            "node": "root/0/2/0/0",
+            "authored": {
+              "type": "showcase.material:range-visual",
+              "id": "slider-visual",
+              "class": "range-plugin-layer",
+              "data": {
+                "start": 0.3,
+                "end": 0.65,
+                "indicator-color": "#6750a4",
+                "track-color": "#e7e0ec",
+                "state-color": "#6750a4"
+              }
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2/0",
+            "authored": {
+              "type": "div",
+              "id": "slider-pair",
+              "class": "range-stack"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2",
+            "authored": {
+              "type": "section",
+              "id": "slider-root",
+              "ariaLabel": "slider showcase"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0",
+            "authored": {
+              "type": "main",
+              "id": "page"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root",
+            "kind": "synthetic-root-no-captured-local-style"
+          }
+        ],
+        "candidateOpacityRules": [
+          {
+            "selector": "#slider-disabled",
+            "width": "99px",
+            "opacity": "1",
+            "background": "#dcd7df",
+            "color": "#a4a0a7"
+          },
+          {
+            "selector": "#slider-start",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "0",
+            "opacity": "0"
+          },
+          {
+            "selector": "#slider-primary",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "50%",
+            "opacity": "0"
+          }
+        ],
+        "controls": [
+          {
+            "element": "slider-start",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-start",
+              "matsliderstartthumb": "",
+              "aria-label": "Minimum",
+              "class": "mdc-slider__input",
+              "aria-valuetext": "30",
+              "disabled": "",
+              "step": "5",
+              "min": "0",
+              "max": "65",
+              "style": "width: 363.15px; padding: 0px; left: -21px; right: auto;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-start",
+              "class": "range-layer",
+              "min": "0",
+              "max": "50",
+              "step": "1",
+              "value": "30",
+              "disabled": true,
+              "ariaLabel": "Minimum",
+              "ariaValueText": "30"
+            }
+          },
+          {
+            "element": "slider-primary",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-primary",
+              "matsliderendthumb": "",
+              "aria-label": "Maximum",
+              "class": "mdc-slider__input mat-slider__right-input",
+              "aria-valuetext": "65",
+              "disabled": "",
+              "step": "5",
+              "min": "30",
+              "max": "100",
+              "style": "padding: 0px; left: auto; right: -21px; width: 398.85px;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-primary",
+              "class": "range-layer",
+              "min": "50",
+              "max": "100",
+              "step": "1",
+              "value": "65",
+              "disabled": true,
+              "ariaLabel": "Maximum",
+              "ariaValueText": "65"
+            }
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "owner": "Material slider fixture disabled-state propagation to its separate visual owner",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "renderedOpacityVerified": false,
+        "limitation": "Original host opacity/disabled-state inputs differ before projection. Input controls are disabled on both sides, but candidate visual authoring has no disabled state or opacity request and its captured local ancestry remains opaque. This does not prove final group compositing, pointer behavior, or the cause of swapped/jerky dragging."
+      }
+    },
+    {
+      "case": "interaction:slider@dark/desktop-dpr1/disabled",
+      "profile": "dark",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "disabled",
+      "originalInputSha256": "c64af33469601fc3dce76657e73a8c0c4fecaf6e04a60b0e1de18b8f3b52c6f8",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "c5d33bd43eef96db3daab3e3164abab2bcdad769e0b9f7be1d544982447ba5a6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "f8c00244073720bb2d61c2ff6615b27805f263a3bf8aa3941c52f1256ce6ddda"
+        }
+      },
+      "proof": {
+        "referenceOwner": "frame/2/0",
+        "candidateOwner": "root/0/2/0/0",
+        "referenceRule": {
+          "source": "sheet:4/36",
+          "selector": ".mat-mdc-slider.mdc-slider--disabled",
+          "cssText": "cursor: auto; opacity: 0.38;",
+          "declarations": {
+            "cursor": {
+              "value": "auto",
+              "important": false
+            },
+            "opacity": {
+              "value": "0.38",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        },
+        "referenceOpacity": "0.38",
+        "candidateOpacity": "1.0",
+        "candidateAncestors": [
+          {
+            "node": "root/0/2/0/0",
+            "authored": {
+              "type": "showcase.material:range-visual",
+              "id": "slider-visual",
+              "class": "range-plugin-layer",
+              "data": {
+                "start": 0.3,
+                "end": 0.65,
+                "indicator-color": "#d0bcff",
+                "track-color": "#49454f",
+                "state-color": "#d0bcff"
+              }
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2/0",
+            "authored": {
+              "type": "div",
+              "id": "slider-pair",
+              "class": "range-stack"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2",
+            "authored": {
+              "type": "section",
+              "id": "slider-root",
+              "ariaLabel": "slider showcase"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0",
+            "authored": {
+              "type": "main",
+              "id": "page"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root",
+            "kind": "synthetic-root-no-captured-local-style"
+          }
+        ],
+        "candidateOpacityRules": [
+          {
+            "selector": "#slider-disabled",
+            "width": "99px",
+            "opacity": "1",
+            "background": "#3e3c42",
+            "color": "#706c72"
+          },
+          {
+            "selector": "#slider-start",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "0",
+            "opacity": "0"
+          },
+          {
+            "selector": "#slider-primary",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "50%",
+            "opacity": "0"
+          }
+        ],
+        "controls": [
+          {
+            "element": "slider-start",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-start",
+              "matsliderstartthumb": "",
+              "aria-label": "Minimum",
+              "class": "mdc-slider__input",
+              "aria-valuetext": "30",
+              "disabled": "",
+              "step": "5",
+              "min": "0",
+              "max": "65",
+              "style": "width: 363.15px; padding: 0px; left: -21px; right: auto;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-start",
+              "class": "range-layer",
+              "min": "0",
+              "max": "50",
+              "step": "1",
+              "value": "30",
+              "disabled": true,
+              "ariaLabel": "Minimum",
+              "ariaValueText": "30"
+            }
+          },
+          {
+            "element": "slider-primary",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-primary",
+              "matsliderendthumb": "",
+              "aria-label": "Maximum",
+              "class": "mdc-slider__input mat-slider__right-input",
+              "aria-valuetext": "65",
+              "disabled": "",
+              "step": "5",
+              "min": "30",
+              "max": "100",
+              "style": "padding: 0px; left: auto; right: -21px; width: 398.85px;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-primary",
+              "class": "range-layer",
+              "min": "50",
+              "max": "100",
+              "step": "1",
+              "value": "65",
+              "disabled": true,
+              "ariaLabel": "Maximum",
+              "ariaValueText": "65"
+            }
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "owner": "Material slider fixture disabled-state propagation to its separate visual owner",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "renderedOpacityVerified": false,
+        "limitation": "Original host opacity/disabled-state inputs differ before projection. Input controls are disabled on both sides, but candidate visual authoring has no disabled state or opacity request and its captured local ancestry remains opaque. This does not prove final group compositing, pointer behavior, or the cause of swapped/jerky dragging."
+      }
+    },
+    {
+      "case": "interaction:slider@dark/desktop-dpr2/disabled",
+      "profile": "dark",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "disabled",
+      "originalInputSha256": "c64af33469601fc3dce76657e73a8c0c4fecaf6e04a60b0e1de18b8f3b52c6f8",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "c5d33bd43eef96db3daab3e3164abab2bcdad769e0b9f7be1d544982447ba5a6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/dark/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "f8c00244073720bb2d61c2ff6615b27805f263a3bf8aa3941c52f1256ce6ddda"
+        }
+      },
+      "proof": {
+        "referenceOwner": "frame/2/0",
+        "candidateOwner": "root/0/2/0/0",
+        "referenceRule": {
+          "source": "sheet:4/36",
+          "selector": ".mat-mdc-slider.mdc-slider--disabled",
+          "cssText": "cursor: auto; opacity: 0.38;",
+          "declarations": {
+            "cursor": {
+              "value": "auto",
+              "important": false
+            },
+            "opacity": {
+              "value": "0.38",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        },
+        "referenceOpacity": "0.38",
+        "candidateOpacity": "1.0",
+        "candidateAncestors": [
+          {
+            "node": "root/0/2/0/0",
+            "authored": {
+              "type": "showcase.material:range-visual",
+              "id": "slider-visual",
+              "class": "range-plugin-layer",
+              "data": {
+                "start": 0.3,
+                "end": 0.65,
+                "indicator-color": "#d0bcff",
+                "track-color": "#49454f",
+                "state-color": "#d0bcff"
+              }
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2/0",
+            "authored": {
+              "type": "div",
+              "id": "slider-pair",
+              "class": "range-stack"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2",
+            "authored": {
+              "type": "section",
+              "id": "slider-root",
+              "ariaLabel": "slider showcase"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0",
+            "authored": {
+              "type": "main",
+              "id": "page"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root",
+            "kind": "synthetic-root-no-captured-local-style"
+          }
+        ],
+        "candidateOpacityRules": [
+          {
+            "selector": "#slider-disabled",
+            "width": "99px",
+            "opacity": "1",
+            "background": "#3e3c42",
+            "color": "#706c72"
+          },
+          {
+            "selector": "#slider-start",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "0",
+            "opacity": "0"
+          },
+          {
+            "selector": "#slider-primary",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "50%",
+            "opacity": "0"
+          }
+        ],
+        "controls": [
+          {
+            "element": "slider-start",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-start",
+              "matsliderstartthumb": "",
+              "aria-label": "Minimum",
+              "class": "mdc-slider__input",
+              "aria-valuetext": "30",
+              "disabled": "",
+              "step": "5",
+              "min": "0",
+              "max": "65",
+              "style": "width: 363.15px; padding: 0px; left: -21px; right: auto;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-start",
+              "class": "range-layer",
+              "min": "0",
+              "max": "50",
+              "step": "1",
+              "value": "30",
+              "disabled": true,
+              "ariaLabel": "Minimum",
+              "ariaValueText": "30"
+            }
+          },
+          {
+            "element": "slider-primary",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-primary",
+              "matsliderendthumb": "",
+              "aria-label": "Maximum",
+              "class": "mdc-slider__input mat-slider__right-input",
+              "aria-valuetext": "65",
+              "disabled": "",
+              "step": "5",
+              "min": "30",
+              "max": "100",
+              "style": "padding: 0px; left: auto; right: -21px; width: 398.85px;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-primary",
+              "class": "range-layer",
+              "min": "50",
+              "max": "100",
+              "step": "1",
+              "value": "65",
+              "disabled": true,
+              "ariaLabel": "Maximum",
+              "ariaValueText": "65"
+            }
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "owner": "Material slider fixture disabled-state propagation to its separate visual owner",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "renderedOpacityVerified": false,
+        "limitation": "Original host opacity/disabled-state inputs differ before projection. Input controls are disabled on both sides, but candidate visual authoring has no disabled state or opacity request and its captured local ancestry remains opaque. This does not prove final group compositing, pointer behavior, or the cause of swapped/jerky dragging."
+      }
+    },
+    {
+      "case": "interaction:slider@contrast/desktop-dpr1/disabled",
+      "profile": "contrast",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "disabled",
+      "originalInputSha256": "746e6e71c4eb4e048185992e76303304b5ba1067dd0309b96dfa0f04543da6ab",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "4d535c38bfbefee6418b8d242f2fbcf1992e993c9822a491b58b0eee7c09660d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "4049fa5d76b7225d96796ae5f469ea05817e5d69c6f20b90fb223dda71118b47"
+        }
+      },
+      "proof": {
+        "referenceOwner": "frame/2/0",
+        "candidateOwner": "root/0/2/0/0",
+        "referenceRule": {
+          "source": "sheet:4/36",
+          "selector": ".mat-mdc-slider.mdc-slider--disabled",
+          "cssText": "cursor: auto; opacity: 0.38;",
+          "declarations": {
+            "cursor": {
+              "value": "auto",
+              "important": false
+            },
+            "opacity": {
+              "value": "0.38",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        },
+        "referenceOpacity": "0.38",
+        "candidateOpacity": "1.0",
+        "candidateAncestors": [
+          {
+            "node": "root/0/2/0/0",
+            "authored": {
+              "type": "showcase.material:range-visual",
+              "id": "slider-visual",
+              "class": "range-plugin-layer",
+              "data": {
+                "start": 0.3,
+                "end": 0.65,
+                "indicator-color": "#000000",
+                "track-color": "#e7e0ec",
+                "state-color": "#000000"
+              }
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2/0",
+            "authored": {
+              "type": "div",
+              "id": "slider-pair",
+              "class": "range-stack"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2",
+            "authored": {
+              "type": "section",
+              "id": "slider-root",
+              "ariaLabel": "slider showcase"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0",
+            "authored": {
+              "type": "main",
+              "id": "page"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root",
+            "kind": "synthetic-root-no-captured-local-style"
+          }
+        ],
+        "candidateOpacityRules": [
+          {
+            "selector": "#slider-disabled",
+            "width": "99px",
+            "opacity": "1",
+            "background": "#d7d6d7",
+            "color": "#a09fa1"
+          },
+          {
+            "selector": "#slider-start",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "0",
+            "opacity": "0"
+          },
+          {
+            "selector": "#slider-primary",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "50%",
+            "opacity": "0"
+          }
+        ],
+        "controls": [
+          {
+            "element": "slider-start",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-start",
+              "matsliderstartthumb": "",
+              "aria-label": "Minimum",
+              "class": "mdc-slider__input",
+              "aria-valuetext": "30",
+              "disabled": "",
+              "step": "5",
+              "min": "0",
+              "max": "65",
+              "style": "width: 363.15px; padding: 0px; left: -21px; right: auto;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-start",
+              "class": "range-layer",
+              "min": "0",
+              "max": "50",
+              "step": "1",
+              "value": "30",
+              "disabled": true,
+              "ariaLabel": "Minimum",
+              "ariaValueText": "30"
+            }
+          },
+          {
+            "element": "slider-primary",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-primary",
+              "matsliderendthumb": "",
+              "aria-label": "Maximum",
+              "class": "mdc-slider__input mat-slider__right-input",
+              "aria-valuetext": "65",
+              "disabled": "",
+              "step": "5",
+              "min": "30",
+              "max": "100",
+              "style": "padding: 0px; left: auto; right: -21px; width: 398.85px;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-primary",
+              "class": "range-layer",
+              "min": "50",
+              "max": "100",
+              "step": "1",
+              "value": "65",
+              "disabled": true,
+              "ariaLabel": "Maximum",
+              "ariaValueText": "65"
+            }
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "owner": "Material slider fixture disabled-state propagation to its separate visual owner",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "renderedOpacityVerified": false,
+        "limitation": "Original host opacity/disabled-state inputs differ before projection. Input controls are disabled on both sides, but candidate visual authoring has no disabled state or opacity request and its captured local ancestry remains opaque. This does not prove final group compositing, pointer behavior, or the cause of swapped/jerky dragging."
+      }
+    },
+    {
+      "case": "interaction:slider@contrast/desktop-dpr2/disabled",
+      "profile": "contrast",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "disabled",
+      "originalInputSha256": "746e6e71c4eb4e048185992e76303304b5ba1067dd0309b96dfa0f04543da6ab",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "4d535c38bfbefee6418b8d242f2fbcf1992e993c9822a491b58b0eee7c09660d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/contrast/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "94a13b867bcc4df0cddfbbc6493b38962025b9b0366646983d781463d8abda6f"
+        }
+      },
+      "proof": {
+        "referenceOwner": "frame/2/0",
+        "candidateOwner": "root/0/2/0/0",
+        "referenceRule": {
+          "source": "sheet:4/36",
+          "selector": ".mat-mdc-slider.mdc-slider--disabled",
+          "cssText": "cursor: auto; opacity: 0.38;",
+          "declarations": {
+            "cursor": {
+              "value": "auto",
+              "important": false
+            },
+            "opacity": {
+              "value": "0.38",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        },
+        "referenceOpacity": "0.38",
+        "candidateOpacity": "1.0",
+        "candidateAncestors": [
+          {
+            "node": "root/0/2/0/0",
+            "authored": {
+              "type": "showcase.material:range-visual",
+              "id": "slider-visual",
+              "class": "range-plugin-layer",
+              "data": {
+                "start": 0.3,
+                "end": 0.65,
+                "indicator-color": "#000000",
+                "track-color": "#e7e0ec",
+                "state-color": "#000000"
+              }
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2/0",
+            "authored": {
+              "type": "div",
+              "id": "slider-pair",
+              "class": "range-stack"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2",
+            "authored": {
+              "type": "section",
+              "id": "slider-root",
+              "ariaLabel": "slider showcase"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0",
+            "authored": {
+              "type": "main",
+              "id": "page"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root",
+            "kind": "synthetic-root-no-captured-local-style"
+          }
+        ],
+        "candidateOpacityRules": [
+          {
+            "selector": "#slider-disabled",
+            "width": "99px",
+            "opacity": "1",
+            "background": "#d7d6d7",
+            "color": "#a09fa1"
+          },
+          {
+            "selector": "#slider-start",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "0",
+            "opacity": "0"
+          },
+          {
+            "selector": "#slider-primary",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "50%",
+            "opacity": "0"
+          }
+        ],
+        "controls": [
+          {
+            "element": "slider-start",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-start",
+              "matsliderstartthumb": "",
+              "aria-label": "Minimum",
+              "class": "mdc-slider__input",
+              "aria-valuetext": "30",
+              "disabled": "",
+              "step": "5",
+              "min": "0",
+              "max": "65",
+              "style": "width: 363.15px; padding: 0px; left: -21px; right: auto;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-start",
+              "class": "range-layer",
+              "min": "0",
+              "max": "50",
+              "step": "1",
+              "value": "30",
+              "disabled": true,
+              "ariaLabel": "Minimum",
+              "ariaValueText": "30"
+            }
+          },
+          {
+            "element": "slider-primary",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-primary",
+              "matsliderendthumb": "",
+              "aria-label": "Maximum",
+              "class": "mdc-slider__input mat-slider__right-input",
+              "aria-valuetext": "65",
+              "disabled": "",
+              "step": "5",
+              "min": "30",
+              "max": "100",
+              "style": "padding: 0px; left: auto; right: -21px; width: 398.85px;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-primary",
+              "class": "range-layer",
+              "min": "50",
+              "max": "100",
+              "step": "1",
+              "value": "65",
+              "disabled": true,
+              "ariaLabel": "Maximum",
+              "ariaValueText": "65"
+            }
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "owner": "Material slider fixture disabled-state propagation to its separate visual owner",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "renderedOpacityVerified": false,
+        "limitation": "Original host opacity/disabled-state inputs differ before projection. Input controls are disabled on both sides, but candidate visual authoring has no disabled state or opacity request and its captured local ancestry remains opaque. This does not prove final group compositing, pointer behavior, or the cause of swapped/jerky dragging."
+      }
+    },
+    {
+      "case": "interaction:slider@custom/desktop-dpr1/disabled",
+      "profile": "custom",
+      "viewport": {
+        "id": "desktop-dpr1",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1
+      },
+      "state": "disabled",
+      "originalInputSha256": "7a8410937b5cef50fba6fee302c20869f193506cf59e39384668f72856c619e8",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "1137ad9d363391fcd860657d3e9f58bd8210227aa7f7305887e1eaf5f5375320"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "4d6231c0f176cf46a012049bae8269e1424d03e00880f51feccfc85831f9fb80"
+        }
+      },
+      "proof": {
+        "referenceOwner": "frame/2/0",
+        "candidateOwner": "root/0/2/0/0",
+        "referenceRule": {
+          "source": "sheet:4/36",
+          "selector": ".mat-mdc-slider.mdc-slider--disabled",
+          "cssText": "cursor: auto; opacity: 0.38;",
+          "declarations": {
+            "cursor": {
+              "value": "auto",
+              "important": false
+            },
+            "opacity": {
+              "value": "0.38",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        },
+        "referenceOpacity": "0.38",
+        "candidateOpacity": "1.0",
+        "candidateAncestors": [
+          {
+            "node": "root/0/2/0/0",
+            "authored": {
+              "type": "showcase.material:range-visual",
+              "id": "slider-visual",
+              "class": "range-plugin-layer",
+              "data": {
+                "start": 0.3,
+                "end": 0.65,
+                "indicator-color": "#006a6a",
+                "track-color": "#e7e0ec",
+                "state-color": "#006a6a"
+              }
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2/0",
+            "authored": {
+              "type": "div",
+              "id": "slider-pair",
+              "class": "range-stack"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2",
+            "authored": {
+              "type": "section",
+              "id": "slider-root",
+              "ariaLabel": "slider showcase"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0",
+            "authored": {
+              "type": "main",
+              "id": "page"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root",
+            "kind": "synthetic-root-no-captured-local-style"
+          }
+        ],
+        "candidateOpacityRules": [
+          {
+            "selector": "#slider-disabled",
+            "width": "99px",
+            "opacity": "1",
+            "background": "#ccd8d8",
+            "color": "#99a0a2"
+          },
+          {
+            "selector": "#slider-start",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "0",
+            "opacity": "0"
+          },
+          {
+            "selector": "#slider-primary",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "50%",
+            "opacity": "0"
+          }
+        ],
+        "controls": [
+          {
+            "element": "slider-start",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-start",
+              "matsliderstartthumb": "",
+              "aria-label": "Minimum",
+              "class": "mdc-slider__input",
+              "aria-valuetext": "30",
+              "disabled": "",
+              "step": "5",
+              "min": "0",
+              "max": "65",
+              "style": "width: 363.15px; padding: 0px; left: -21px; right: auto;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-start",
+              "class": "range-layer",
+              "min": "0",
+              "max": "50",
+              "step": "1",
+              "value": "30",
+              "disabled": true,
+              "ariaLabel": "Minimum",
+              "ariaValueText": "30"
+            }
+          },
+          {
+            "element": "slider-primary",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-primary",
+              "matsliderendthumb": "",
+              "aria-label": "Maximum",
+              "class": "mdc-slider__input mat-slider__right-input",
+              "aria-valuetext": "65",
+              "disabled": "",
+              "step": "5",
+              "min": "30",
+              "max": "100",
+              "style": "padding: 0px; left: auto; right: -21px; width: 398.85px;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-primary",
+              "class": "range-layer",
+              "min": "50",
+              "max": "100",
+              "step": "1",
+              "value": "65",
+              "disabled": true,
+              "ariaLabel": "Maximum",
+              "ariaValueText": "65"
+            }
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "owner": "Material slider fixture disabled-state propagation to its separate visual owner",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "renderedOpacityVerified": false,
+        "limitation": "Original host opacity/disabled-state inputs differ before projection. Input controls are disabled on both sides, but candidate visual authoring has no disabled state or opacity request and its captured local ancestry remains opaque. This does not prove final group compositing, pointer behavior, or the cause of swapped/jerky dragging."
+      }
+    },
+    {
+      "case": "interaction:slider@custom/desktop-dpr2/disabled",
+      "profile": "custom",
+      "viewport": {
+        "id": "desktop-dpr2",
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 2
+      },
+      "state": "disabled",
+      "originalInputSha256": "7a8410937b5cef50fba6fee302c20869f193506cf59e39384668f72856c619e8",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "1137ad9d363391fcd860657d3e9f58bd8210227aa7f7305887e1eaf5f5375320"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/slider/custom/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "788d1fea596bb0c5e288e4aebaa74ba792f73adac83352df6c75568c51266137"
+        }
+      },
+      "proof": {
+        "referenceOwner": "frame/2/0",
+        "candidateOwner": "root/0/2/0/0",
+        "referenceRule": {
+          "source": "sheet:4/36",
+          "selector": ".mat-mdc-slider.mdc-slider--disabled",
+          "cssText": "cursor: auto; opacity: 0.38;",
+          "declarations": {
+            "cursor": {
+              "value": "auto",
+              "important": false
+            },
+            "opacity": {
+              "value": "0.38",
+              "important": false
+            }
+          },
+          "conditions": [],
+          "active": true
+        },
+        "referenceOpacity": "0.38",
+        "candidateOpacity": "1.0",
+        "candidateAncestors": [
+          {
+            "node": "root/0/2/0/0",
+            "authored": {
+              "type": "showcase.material:range-visual",
+              "id": "slider-visual",
+              "class": "range-plugin-layer",
+              "data": {
+                "start": 0.3,
+                "end": 0.65,
+                "indicator-color": "#006a6a",
+                "track-color": "#e7e0ec",
+                "state-color": "#006a6a"
+              }
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2/0",
+            "authored": {
+              "type": "div",
+              "id": "slider-pair",
+              "class": "range-stack"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0/2",
+            "authored": {
+              "type": "section",
+              "id": "slider-root",
+              "ariaLabel": "slider showcase"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root/0",
+            "authored": {
+              "type": "main",
+              "id": "page"
+            },
+            "opacity": {
+              "normalResolvedStyle": "1.0",
+              "interactionResolvedStyle": "1.0",
+              "resolvedStyle": "1.0"
+            }
+          },
+          {
+            "node": "root",
+            "kind": "synthetic-root-no-captured-local-style"
+          }
+        ],
+        "candidateOpacityRules": [
+          {
+            "selector": "#slider-disabled",
+            "width": "99px",
+            "opacity": "1",
+            "background": "#ccd8d8",
+            "color": "#99a0a2"
+          },
+          {
+            "selector": "#slider-start",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "0",
+            "opacity": "0"
+          },
+          {
+            "selector": "#slider-primary",
+            "width": "50%",
+            "height": "44px",
+            "top": "2px",
+            "left": "50%",
+            "opacity": "0"
+          }
+        ],
+        "controls": [
+          {
+            "element": "slider-start",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-start",
+              "matsliderstartthumb": "",
+              "aria-label": "Minimum",
+              "class": "mdc-slider__input",
+              "aria-valuetext": "30",
+              "disabled": "",
+              "step": "5",
+              "min": "0",
+              "max": "65",
+              "style": "width: 363.15px; padding: 0px; left: -21px; right: auto;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-start",
+              "class": "range-layer",
+              "min": "0",
+              "max": "50",
+              "step": "1",
+              "value": "30",
+              "disabled": true,
+              "ariaLabel": "Minimum",
+              "ariaValueText": "30"
+            }
+          },
+          {
+            "element": "slider-primary",
+            "reference": {
+              "_ngcontent-ng-c2921559503": "",
+              "type": "range",
+              "id": "slider-primary",
+              "matsliderendthumb": "",
+              "aria-label": "Maximum",
+              "class": "mdc-slider__input mat-slider__right-input",
+              "aria-valuetext": "65",
+              "disabled": "",
+              "step": "5",
+              "min": "30",
+              "max": "100",
+              "style": "padding: 0px; left: auto; right: -21px; width: 398.85px;"
+            },
+            "candidate": {
+              "type": "input",
+              "inputType": "range",
+              "id": "slider-primary",
+              "class": "range-layer",
+              "min": "50",
+              "max": "100",
+              "step": "1",
+              "value": "65",
+              "disabled": true,
+              "ariaLabel": "Maximum",
+              "ariaValueText": "65"
+            }
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "owner": "Material slider fixture disabled-state propagation to its separate visual owner",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "renderedOpacityVerified": false,
+        "limitation": "Original host opacity/disabled-state inputs differ before projection. Input controls are disabled on both sides, but candidate visual authoring has no disabled state or opacity request and its captured local ancestry remains opaque. This does not prove final group compositing, pointer behavior, or the cause of swapped/jerky dragging."
+      }
+    }
+  ],
+  "canonicalAttributionChanged": false,
+  "rendererChanged": false,
+  "inputEquivalent": false
+}
