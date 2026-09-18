@@ -1,6 +1,33 @@
 # Complete audit harness coverage
 
-## Current inventory: authoring input attribution proposal is registered
+## Current inventory: non-own-text container font stages are registered
+
+Discovery now includes **123 files**: 115 Material, four general and four TTS,
+retaining all 43 legacy files. The [container font-stage investigation](material-container-font-stages.md)
+covers 1,012 original observations across 17 owners, and its source-bound
+proposal maps 51 pending groups while preserving 8,288 unrelated complete rows.
+This is computed-versus-local-declaration evidence, not candidate computed-font
+verification, renderer correctness, or a canonical promotion.
+
+Source generation, no-write replay, and plan generation pass. Expanded focused
+verification passes **8/8**, exit **0**, including independent complete-payload
+replay and **512 rejection-control executions**. The initial plan hit its
+512 MiB heap limit; projecting only the authenticated original fields used by
+the join reduced peak retention without removing cases or canonical rows. The
+same 512 MiB limit then passed generation and independent replay.
+
+The full run launched at `9933ac1` is still the original **120-file** selection.
+At 14:18 SAST on 2026-09-18 it had reported a failure in
+`explicit-gap-canonical-integration.spec.mjs:75`: the unrelated-complete-findings
+comparison fails against historical builder `3abdb781279462cd1ca1a78e8cf2b6cdc618f3b5`.
+The test reached that comparison after its scalar and explicit-gap attribution
+checks passed. That observation does not establish which unrelated records
+changed or why. Preserve the failure, trace the exact differences, and do not
+replace its expectation without conservation evidence. The runner remains
+active; this is neither a terminal full-run report nor current 123-file
+acceptance. No selected test/source file was changed by this increment.
+
+## Previous inventory: authoring input attribution proposal is registered
 
 Discovery now includes **122 files**: 114 Material, four general and four TTS,
 retaining all 43 legacy files. The [source-bound authoring proposal](material-authoring-input-attribution.md)
