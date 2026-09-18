@@ -5,6 +5,14 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: canonical rows independently conserved
 
+The [four-set original-case adapter](material-followup-input-source-binding.md)
+now passes **9/9**, exit 0, in **47,469.5516ms**, after correcting a no-op
+negative test in the first 8/9 run. It source-binds all 66 groups / 2,640
+observations, enumerates omitted cases in subsets and rejects changed inputs
+or classification claims. This adapter is not yet wired into the production
+builder. Canonical promotion still requires precedence and complete-row
+conservation; the actual unresolved count is **2,026**, not the projected 1,960.
+
 The [historical box/grid integration checks](material-reviewed-box-grid-integration.md)
 are terminal: **2/2 pass**, exit 0, in **2,080,139.7366ms**. The exact later
 source-bound populations are 59 groups / 76 observations for box sizing and

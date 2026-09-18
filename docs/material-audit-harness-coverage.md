@@ -2,6 +2,13 @@
 
 ## Current inventory: canonical integration conserved
 
+The [four-set original-case adapter](material-followup-input-source-binding.md)
+adds the **150th file** (142 Material, four general, four TTS; 43 legacy files
+retained). Corrected focused verification passes **9/9**, exit 0, in
+**47,469.5516ms**; the earlier 8/9 result was a no-op negative test, retained
+in the log. The complete current harness has not been run. Production
+classification and canonical output remain unchanged.
+
 The [historical box/grid production replay](material-reviewed-box-grid-integration.md)
 passes **2/2**, exit 0, in **2,080,139.7366ms**. Both tests retain their original
 scalar and complete-row assertions; only exact independently source-verified
