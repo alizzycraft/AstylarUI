@@ -85,9 +85,13 @@ authored CSS coordinates, including translated hosts and both DPRs.
 
 The responsible core entry is
 `src/app/services/dom/input/input-element.service.ts:549`; range normalization
-and visual placement are in `range.manager.ts`. The browser's exact native
-thumb/track travel metric still needs isolation; do not guess a compensating
-offset or weaken value comparison. The unchanged results across the two tested
+and visual placement are in `range.manager.ts`. The
+[subsequent native-raster travel review](material-public-range-travel-audit.md)
+measures 8px/152px endpoint centers and predicts all 256 native move samples
+using the resulting 144px travel span; the full-width model fails 80 of them.
+This establishes the metric for the captured geometry, not all native sizes or
+themes. Do not guess a compensating offset or weaken value comparison.
+The unchanged results across the two tested
 origins/DPRs do not establish global coordinate correctness.
 
 ## Verification and retained failures

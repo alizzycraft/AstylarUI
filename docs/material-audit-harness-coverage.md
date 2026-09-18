@@ -1,9 +1,16 @@
 # Complete audit harness coverage
 
-## Current inventory: alignment canonical membership proof
+## Current inventory: native range travel evidence
 
-Discovery now contains **161 files** (153 Material + four general + four TTS,
-all 43 legacy files retained), including `vertical-align-population.spec.mjs`
+Discovery now contains **162 files** (154 Material + four general + four TTS,
+all 43 legacy files retained). The new [range travel proof](material-public-range-travel-audit.md)
+adds `public-range-travel.spec.mjs`: source-replayed raster measurements predict
+all 256 native moves and distinguish 144px native travel from the core's 160px
+full-width mapping. Its combined run with unchanged original range tests and
+inventory checks passes **11/11**, exit 0, in **11,097.4525ms**. This is bounded
+public-reproduction evidence, not corrected Material interaction or a full run.
+
+The preceding alignment inventory includes `vertical-align-population.spec.mjs`
 and `later-followup-input-conservation.spec.mjs`, plus the new
 `vertical-align-canonical-plan.spec.mjs`. The [canonical membership proposal](material-vertical-align-canonical-plan.md)
 and inventory checks pass **7/7**, exit 0, in **197,776.0105ms**, including
@@ -19,7 +26,8 @@ binds all 442 formerly unmapped observations using existing owner proofs,
 preserves 59 overlay scalar-rule gaps and eight missing scalar records, and
 checks 102 historical source revisions. The historical follow-up conservation
 helper and original/source/inventory checks separately pass **13/13** in
-**326,285.831ms**; the six actual historical integration tests still need reruns.
+**326,285.831ms**. The six actual historical integration tests started serially
+at 01:34:52 Africa/Johannesburg, session 66846; no terminal result is claimed.
 No renderer, canonical fixture or
 canonical classification was changed. This is not a complete-harness pass.
 
@@ -27,7 +35,7 @@ The serial full-builder retry now passes **388/388**, exit 0, zero skips,
 cancellations or TODOs, in **1,523,253.5638ms**. Its queued canonical generation
 has terminated, exit 1 solely for 1,960 unresolved groups. Fresh independent CLI
 verification started at 01:25:09 Africa/Johannesburg and remains outstanding.
-The builder-file pass does not stand in for the complete 161-suite harness or
+The builder-file pass does not stand in for the complete 162-suite harness or
 enforced parity matrix.
 
 ## Prior integration checkpoint

@@ -3,6 +3,20 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Public range travel geometry
+
+The [native-raster travel review](material-public-range-travel-audit.md) narrows
+the remaining intermediate range-value discrepancy. Original endpoint rasters
+measure CSS-local centers at 8px and 152px inside a 160px control. That 144px
+span predicts all 256 captured native move values; the core full-width model
+fails 80 of those native samples while matching all 128 no-update candidate
+samples. The event-local coordinates were already proven correct in the public
+reduction. The first demonstrated divergence for these samples is travel
+geometry in pointer-to-value conversion, not world projection. This is not a
+universal native range metric, a Material swapped-thumb diagnosis, or a renderer
+fix. New and unchanged original proof/inventory tests pass **11/11**, exit 0,
+in **11,097.4525ms**.
+
 ## Vertical-alignment population review
 
 The [complete original alignment survey](material-vertical-align-population.md)
@@ -32,8 +46,9 @@ causality claim.
 
 The [historical conservation helper](material-later-followup-conservation.md)
 now authenticates the later 66-group population separately from the earlier 134
-groups. All 13 focused/source/inventory tests pass; the six unchanged actual
-historical production-integration tests still need rerunning.
+groups. All 13 focused/source/inventory tests pass. The six unchanged actual
+historical production-integration tests are now running serially, started
+at 01:34:52 Africa/Johannesburg, session 66846; they have no terminal result yet.
 
 ## Current integration checkpoint: follow-up verification in progress
 

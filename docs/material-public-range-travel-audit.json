@@ -1,0 +1,4584 @@
+{
+  "schemaVersion": 1,
+  "kind": "public-range-native-travel-raster-audit",
+  "originalReport": {
+    "file": "artifacts/material-parity/public-range-drag-audit-v2/latest-report.json",
+    "sha256": "8c298293efb0e464af4a3ba73bf80055fcbab469c196e666e22b02f17ad85962"
+  },
+  "browser": "152.0.7977.76",
+  "packages": {
+    "@angular/core": "20.3.29",
+    "@angular/platform-browser": "20.3.29",
+    "@babylonjs/core": "8.56.2",
+    "astylarui": "0.2.0",
+    "esbuild": "0.28.1"
+  },
+  "sourceFingerprints": [
+    {
+      "file": "scripts/audit-public-range-travel.mjs",
+      "sha256": "1104527a24d3daad3bac68fbe9524b2d12cda7faa77b1f2657ddfd782f56fcda"
+    },
+    {
+      "file": "tests/material-parity/public-range-drag-evidence.mjs",
+      "sha256": "86b59a235dd5b0896628fbbc99a4dc02e251d7544c309a614e17e356452b9dc7"
+    },
+    {
+      "file": "src/app/services/dom/input/input-element.service.ts",
+      "sha256": "1feefdf367bdaf42f777913049034e06af6faa14dad6f4019b2d05913170a5cf"
+    },
+    {
+      "file": "src/app/services/dom/input/range.manager.ts",
+      "sha256": "5300fd18403ff659f4ef415df796f0e9ea0260e7c591004fa407fd99ec24b4db"
+    }
+  ],
+  "cases": 32,
+  "measuredScreenshots": 64,
+  "calibrationPairs": 8,
+  "nativeMoveSamples": 256,
+  "nativeFullBoxMismatches": 80,
+  "noUpdateCandidateMoveSamples": 128,
+  "calibrations": [
+    {
+      "dpr": 1,
+      "translated": false,
+      "stackTracing": false,
+      "high": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-first-none-stacksfalse-released-reference.png",
+          "sha256": "3789fc264cf2ad388ba67a4f7d14585f0ee93ac24bd1bcd49e41fb147b7d62a7"
+        },
+        "control": "first",
+        "value": 100,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 172,
+        "localCenterX": 152,
+        "bandBounds": {
+          "left": 166,
+          "right": 178
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "low": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-second-none-stacksfalse-released-reference.png",
+          "sha256": "0cf20304768e760d8a0ae5da67900b894f1645ded039eb1b492bd6f695308e58"
+        },
+        "control": "second",
+        "value": 0,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 248.00000000000003,
+        "localCenterX": 8.000000000000028,
+        "bandBounds": {
+          "left": 242,
+          "right": 254
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "travel": 143.99999999999997
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "stackTracing": true,
+      "high": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-first-none-stackstrue-released-reference.png",
+          "sha256": "3789fc264cf2ad388ba67a4f7d14585f0ee93ac24bd1bcd49e41fb147b7d62a7"
+        },
+        "control": "first",
+        "value": 100,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 172,
+        "localCenterX": 152,
+        "bandBounds": {
+          "left": 166,
+          "right": 178
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "low": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-second-none-stackstrue-released-reference.png",
+          "sha256": "0cf20304768e760d8a0ae5da67900b894f1645ded039eb1b492bd6f695308e58"
+        },
+        "control": "second",
+        "value": 0,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 248.00000000000003,
+        "localCenterX": 8.000000000000028,
+        "bandBounds": {
+          "left": 242,
+          "right": 254
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "travel": 143.99999999999997
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "stackTracing": false,
+      "high": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-first-none-stacksfalse-released-reference.png",
+          "sha256": "c7edece4a6d328620d061567fcc85a716d2286838a2d4748db8ea388ad03c592"
+        },
+        "control": "first",
+        "value": 100,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 235.99999999999997,
+        "localCenterX": 151.99999999999997,
+        "bandBounds": {
+          "left": 230,
+          "right": 242
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "low": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-second-none-stacksfalse-released-reference.png",
+          "sha256": "a56ad53cd2053c86ace78fd5096dd848c03e6cce2ca008e2b3deec90b11c2aef"
+        },
+        "control": "second",
+        "value": 0,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 311.99999999999994,
+        "localCenterX": 7.999999999999943,
+        "bandBounds": {
+          "left": 306,
+          "right": 318
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "travel": 144.00000000000003
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "stackTracing": true,
+      "high": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-first-none-stackstrue-released-reference.png",
+          "sha256": "c7edece4a6d328620d061567fcc85a716d2286838a2d4748db8ea388ad03c592"
+        },
+        "control": "first",
+        "value": 100,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 235.99999999999997,
+        "localCenterX": 151.99999999999997,
+        "bandBounds": {
+          "left": 230,
+          "right": 242
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "low": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-second-none-stackstrue-released-reference.png",
+          "sha256": "a56ad53cd2053c86ace78fd5096dd848c03e6cce2ca008e2b3deec90b11c2aef"
+        },
+        "control": "second",
+        "value": 0,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 311.99999999999994,
+        "localCenterX": 7.999999999999943,
+        "bandBounds": {
+          "left": 306,
+          "right": 318
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "travel": 144.00000000000003
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "stackTracing": false,
+      "high": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-first-none-stacksfalse-released-reference.png",
+          "sha256": "ad68bb7f9189cc2cced48904e9fd14cc12483deb0f2f2a1a1bbdd012b912aec3"
+        },
+        "control": "first",
+        "value": 100,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 171.99999999999994,
+        "localCenterX": 151.99999999999994,
+        "bandBounds": {
+          "left": 166,
+          "right": 178
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "low": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-second-none-stacksfalse-released-reference.png",
+          "sha256": "310747b1b4817f9b127746532f829b2cafe6e9c1a92c96200846ac91b7a9253b"
+        },
+        "control": "second",
+        "value": 0,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 248,
+        "localCenterX": 8,
+        "bandBounds": {
+          "left": 242,
+          "right": 254
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "travel": 143.99999999999994
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "stackTracing": true,
+      "high": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-first-none-stackstrue-released-reference.png",
+          "sha256": "ad68bb7f9189cc2cced48904e9fd14cc12483deb0f2f2a1a1bbdd012b912aec3"
+        },
+        "control": "first",
+        "value": 100,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 171.99999999999994,
+        "localCenterX": 151.99999999999994,
+        "bandBounds": {
+          "left": 166,
+          "right": 178
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "low": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-second-none-stackstrue-released-reference.png",
+          "sha256": "310747b1b4817f9b127746532f829b2cafe6e9c1a92c96200846ac91b7a9253b"
+        },
+        "control": "second",
+        "value": 0,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 248,
+        "localCenterX": 8,
+        "bandBounds": {
+          "left": 242,
+          "right": 254
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "travel": 143.99999999999994
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "stackTracing": false,
+      "high": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-first-none-stacksfalse-released-reference.png",
+          "sha256": "a1bd6f9031b1bca9c4665396f6b1ea432b48c1d244b7369a42dc277af403e2f1"
+        },
+        "control": "first",
+        "value": 100,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 236.00000000000003,
+        "localCenterX": 152.00000000000003,
+        "bandBounds": {
+          "left": 230,
+          "right": 242
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "low": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-second-none-stacksfalse-released-reference.png",
+          "sha256": "5539f12e9a1576641b605cb9d0d2773fd0ec2cd004adb29b138878800f6a8082"
+        },
+        "control": "second",
+        "value": 0,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 312,
+        "localCenterX": 8,
+        "bandBounds": {
+          "left": 306,
+          "right": 318
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "travel": 144.00000000000003
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "stackTracing": true,
+      "high": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-first-none-stackstrue-released-reference.png",
+          "sha256": "a1bd6f9031b1bca9c4665396f6b1ea432b48c1d244b7369a42dc277af403e2f1"
+        },
+        "control": "first",
+        "value": 100,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 236.00000000000003,
+        "localCenterX": 152.00000000000003,
+        "bandBounds": {
+          "left": 230,
+          "right": 242
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "low": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-second-none-stackstrue-released-reference.png",
+          "sha256": "5539f12e9a1576641b605cb9d0d2773fd0ec2cd004adb29b138878800f6a8082"
+        },
+        "control": "second",
+        "value": 0,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 312,
+        "localCenterX": 8,
+        "bandBounds": {
+          "left": 306,
+          "right": 318
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "travel": 144.00000000000003
+    }
+  ],
+  "observations": [
+    {
+      "dpr": 1,
+      "translated": false,
+      "stackTracing": false,
+      "target": "first",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-first-none-stacksfalse-initial-reference.png",
+          "sha256": "64f5a195ae08ad9dcce75f352cb9dfb3a2c9bc364a48e9d743ea0592623d39b0"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 70.99999999999999,
+        "localCenterX": 50.999999999999986,
+        "bandBounds": {
+          "left": 65,
+          "right": 77
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 51.20000000000002,
+      "lowCenter": 8.000000000000028,
+      "highCenter": 152,
+      "travel": 143.99999999999997,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 40,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 50,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 60,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 70,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 80,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 90,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "stackTracing": true,
+      "target": "first",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-first-none-stackstrue-initial-reference.png",
+          "sha256": "64f5a195ae08ad9dcce75f352cb9dfb3a2c9bc364a48e9d743ea0592623d39b0"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 70.99999999999999,
+        "localCenterX": 50.999999999999986,
+        "bandBounds": {
+          "left": 65,
+          "right": 77
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 51.20000000000002,
+      "lowCenter": 8.000000000000028,
+      "highCenter": 152,
+      "travel": 143.99999999999997,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 40,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 50,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 60,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 70,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 80,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 90,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "stackTracing": false,
+      "target": "first",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-first-held-equivalent-stacksfalse-initial-reference.png",
+          "sha256": "64f5a195ae08ad9dcce75f352cb9dfb3a2c9bc364a48e9d743ea0592623d39b0"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 70.99999999999999,
+        "localCenterX": 50.999999999999986,
+        "bandBounds": {
+          "left": 65,
+          "right": 77
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 51.20000000000002,
+      "lowCenter": 8.000000000000028,
+      "highCenter": 152,
+      "travel": 143.99999999999997,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 30,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 30,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 30,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 30,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 30,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 30,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "stackTracing": true,
+      "target": "first",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-first-held-equivalent-stackstrue-initial-reference.png",
+          "sha256": "64f5a195ae08ad9dcce75f352cb9dfb3a2c9bc364a48e9d743ea0592623d39b0"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 70.99999999999999,
+        "localCenterX": 50.999999999999986,
+        "bandBounds": {
+          "left": 65,
+          "right": 77
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 51.20000000000002,
+      "lowCenter": 8.000000000000028,
+      "highCenter": 152,
+      "travel": 143.99999999999997,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 30,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 30,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 30,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 30,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 30,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 30,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "stackTracing": false,
+      "target": "second",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-second-none-stacksfalse-initial-reference.png",
+          "sha256": "64f5a195ae08ad9dcce75f352cb9dfb3a2c9bc364a48e9d743ea0592623d39b0"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 341.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 336,
+          "right": 348
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 101.60000000000001,
+      "lowCenter": 8.000000000000028,
+      "highCenter": 152,
+      "travel": 143.99999999999997,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 55,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 45,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 35,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 30,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 20,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 10,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "stackTracing": true,
+      "target": "second",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-second-none-stackstrue-initial-reference.png",
+          "sha256": "64f5a195ae08ad9dcce75f352cb9dfb3a2c9bc364a48e9d743ea0592623d39b0"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 341.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 336,
+          "right": 348
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 101.60000000000001,
+      "lowCenter": 8.000000000000028,
+      "highCenter": 152,
+      "travel": 143.99999999999997,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 55,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 45,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 35,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 30,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 20,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 10,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "stackTracing": false,
+      "target": "second",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-second-held-equivalent-stacksfalse-initial-reference.png",
+          "sha256": "64f5a195ae08ad9dcce75f352cb9dfb3a2c9bc364a48e9d743ea0592623d39b0"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 341.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 336,
+          "right": 348
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 101.60000000000001,
+      "lowCenter": 8.000000000000028,
+      "highCenter": 152,
+      "travel": 143.99999999999997,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 65,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 65,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 65,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 65,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 65,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 65,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "stackTracing": true,
+      "target": "second",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedfalse-second-held-equivalent-stackstrue-initial-reference.png",
+          "sha256": "64f5a195ae08ad9dcce75f352cb9dfb3a2c9bc364a48e9d743ea0592623d39b0"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 341.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 336,
+          "right": 348
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 101.60000000000001,
+      "lowCenter": 8.000000000000028,
+      "highCenter": 152,
+      "travel": 143.99999999999997,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 65,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 65,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 65,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 65,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 65,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 65,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "stackTracing": false,
+      "target": "first",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-first-none-stacksfalse-initial-reference.png",
+          "sha256": "739323160bc795f469d1976bb0a19dce5fe8774c3bf9c326079ed4c299656462"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 135,
+        "localCenterX": 51,
+        "bandBounds": {
+          "left": 129,
+          "right": 141
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 51.19999999999995,
+      "lowCenter": 7.999999999999943,
+      "highCenter": 151.99999999999997,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 40,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 50,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 60,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 70,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 80,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 90,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "stackTracing": true,
+      "target": "first",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-first-none-stackstrue-initial-reference.png",
+          "sha256": "739323160bc795f469d1976bb0a19dce5fe8774c3bf9c326079ed4c299656462"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 135,
+        "localCenterX": 51,
+        "bandBounds": {
+          "left": 129,
+          "right": 141
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 51.19999999999995,
+      "lowCenter": 7.999999999999943,
+      "highCenter": 151.99999999999997,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 40,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 50,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 60,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 70,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 80,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 90,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "stackTracing": false,
+      "target": "first",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-first-held-equivalent-stacksfalse-initial-reference.png",
+          "sha256": "739323160bc795f469d1976bb0a19dce5fe8774c3bf9c326079ed4c299656462"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 135,
+        "localCenterX": 51,
+        "bandBounds": {
+          "left": 129,
+          "right": 141
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 51.19999999999995,
+      "lowCenter": 7.999999999999943,
+      "highCenter": 151.99999999999997,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 30,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 30,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 30,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 30,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 30,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 30,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "stackTracing": true,
+      "target": "first",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-first-held-equivalent-stackstrue-initial-reference.png",
+          "sha256": "739323160bc795f469d1976bb0a19dce5fe8774c3bf9c326079ed4c299656462"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 135,
+        "localCenterX": 51,
+        "bandBounds": {
+          "left": 129,
+          "right": 141
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 51.19999999999995,
+      "lowCenter": 7.999999999999943,
+      "highCenter": 151.99999999999997,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 30,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 30,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 30,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 30,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 30,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 30,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "stackTracing": false,
+      "target": "second",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-second-none-stacksfalse-initial-reference.png",
+          "sha256": "739323160bc795f469d1976bb0a19dce5fe8774c3bf9c326079ed4c299656462"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 405.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 400,
+          "right": 412
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 101.59999999999997,
+      "lowCenter": 7.999999999999943,
+      "highCenter": 151.99999999999997,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 55,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 45,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 35,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 30,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 20,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 10,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "stackTracing": true,
+      "target": "second",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-second-none-stackstrue-initial-reference.png",
+          "sha256": "739323160bc795f469d1976bb0a19dce5fe8774c3bf9c326079ed4c299656462"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 405.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 400,
+          "right": 412
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 101.59999999999997,
+      "lowCenter": 7.999999999999943,
+      "highCenter": 151.99999999999997,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 55,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 45,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 35,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 30,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 20,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 10,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "stackTracing": false,
+      "target": "second",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-second-held-equivalent-stacksfalse-initial-reference.png",
+          "sha256": "739323160bc795f469d1976bb0a19dce5fe8774c3bf9c326079ed4c299656462"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 405.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 400,
+          "right": 412
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 101.59999999999997,
+      "lowCenter": 7.999999999999943,
+      "highCenter": 151.99999999999997,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 65,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 65,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 65,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 65,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 65,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 65,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "stackTracing": true,
+      "target": "second",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr1-translatedtrue-second-held-equivalent-stackstrue-initial-reference.png",
+          "sha256": "739323160bc795f469d1976bb0a19dce5fe8774c3bf9c326079ed4c299656462"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 1,
+        "centerX": 405.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 400,
+          "right": 412
+        },
+        "weightedPixels": 59.54509803921569,
+        "halfWeightedPixels": [
+          29.772549019607844,
+          29.772549019607844
+        ]
+      },
+      "expectedInitialCenter": 101.59999999999997,
+      "lowCenter": 7.999999999999943,
+      "highCenter": 151.99999999999997,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 65,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 65,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 65,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 65,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 65,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 65,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "stackTracing": false,
+      "target": "first",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-first-none-stacksfalse-initial-reference.png",
+          "sha256": "e930983273c5d4813ae475ee5c8cf0edd542cee2812a7ae0169010a3a6b58cf2"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 71.00000000000001,
+        "localCenterX": 51.000000000000014,
+        "bandBounds": {
+          "left": 65,
+          "right": 77
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 51.19999999999998,
+      "lowCenter": 8,
+      "highCenter": 151.99999999999994,
+      "travel": 143.99999999999994,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 40,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 50,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 60,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 70,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 80,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 90,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "stackTracing": true,
+      "target": "first",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-first-none-stackstrue-initial-reference.png",
+          "sha256": "e930983273c5d4813ae475ee5c8cf0edd542cee2812a7ae0169010a3a6b58cf2"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 71.00000000000001,
+        "localCenterX": 51.000000000000014,
+        "bandBounds": {
+          "left": 65,
+          "right": 77
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 51.19999999999998,
+      "lowCenter": 8,
+      "highCenter": 151.99999999999994,
+      "travel": 143.99999999999994,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 40,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 50,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 60,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 70,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 80,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 90,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "stackTracing": false,
+      "target": "first",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-first-held-equivalent-stacksfalse-initial-reference.png",
+          "sha256": "e930983273c5d4813ae475ee5c8cf0edd542cee2812a7ae0169010a3a6b58cf2"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 71.00000000000001,
+        "localCenterX": 51.000000000000014,
+        "bandBounds": {
+          "left": 65,
+          "right": 77
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 51.19999999999998,
+      "lowCenter": 8,
+      "highCenter": 151.99999999999994,
+      "travel": 143.99999999999994,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 30,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 30,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 30,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 30,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 30,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 30,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "stackTracing": true,
+      "target": "first",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-first-held-equivalent-stackstrue-initial-reference.png",
+          "sha256": "e930983273c5d4813ae475ee5c8cf0edd542cee2812a7ae0169010a3a6b58cf2"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 20,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 71.00000000000001,
+        "localCenterX": 51.000000000000014,
+        "bandBounds": {
+          "left": 65,
+          "right": 77
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 51.19999999999998,
+      "lowCenter": 8,
+      "highCenter": 151.99999999999994,
+      "travel": 143.99999999999994,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 30,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 30,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 30,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 30,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 30,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 30,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "stackTracing": false,
+      "target": "second",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-second-none-stacksfalse-initial-reference.png",
+          "sha256": "e930983273c5d4813ae475ee5c8cf0edd542cee2812a7ae0169010a3a6b58cf2"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 341.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 336,
+          "right": 348
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 101.59999999999997,
+      "lowCenter": 8,
+      "highCenter": 151.99999999999994,
+      "travel": 143.99999999999994,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 55,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 45,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 35,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 30,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 20,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 10,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "stackTracing": true,
+      "target": "second",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-second-none-stackstrue-initial-reference.png",
+          "sha256": "e930983273c5d4813ae475ee5c8cf0edd542cee2812a7ae0169010a3a6b58cf2"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 341.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 336,
+          "right": 348
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 101.59999999999997,
+      "lowCenter": 8,
+      "highCenter": 151.99999999999994,
+      "travel": 143.99999999999994,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 55,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 45,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 35,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 30,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 20,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 10,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "stackTracing": false,
+      "target": "second",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-second-held-equivalent-stacksfalse-initial-reference.png",
+          "sha256": "e930983273c5d4813ae475ee5c8cf0edd542cee2812a7ae0169010a3a6b58cf2"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 341.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 336,
+          "right": 348
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 101.59999999999997,
+      "lowCenter": 8,
+      "highCenter": 151.99999999999994,
+      "travel": 143.99999999999994,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 65,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 65,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 65,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 65,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 65,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 65,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "stackTracing": true,
+      "target": "second",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedfalse-second-held-equivalent-stackstrue-initial-reference.png",
+          "sha256": "e930983273c5d4813ae475ee5c8cf0edd542cee2812a7ae0169010a3a6b58cf2"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 240,
+          "y": 40,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 341.99999999999994,
+        "localCenterX": 101.99999999999994,
+        "bandBounds": {
+          "left": 336,
+          "right": 348
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 101.59999999999997,
+      "lowCenter": 8,
+      "highCenter": 151.99999999999994,
+      "travel": 143.99999999999994,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 65,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 65,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 65,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 65,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 65,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 65,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "stackTracing": false,
+      "target": "first",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-first-none-stacksfalse-initial-reference.png",
+          "sha256": "8ad665ee5466d1df697b6617bb11590b470fb0cc3ece951bc550b3a026d429f3"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 134.99999999999997,
+        "localCenterX": 50.99999999999997,
+        "bandBounds": {
+          "left": 129,
+          "right": 141
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 51.20000000000001,
+      "lowCenter": 8,
+      "highCenter": 152.00000000000003,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 40,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 50,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 60,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 70,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 80,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 90,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "stackTracing": true,
+      "target": "first",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-first-none-stackstrue-initial-reference.png",
+          "sha256": "8ad665ee5466d1df697b6617bb11590b470fb0cc3ece951bc550b3a026d429f3"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 134.99999999999997,
+        "localCenterX": 50.99999999999997,
+        "bandBounds": {
+          "left": 129,
+          "right": 141
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 51.20000000000001,
+      "lowCenter": 8,
+      "highCenter": 152.00000000000003,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 40,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 50,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 60,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 70,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 80,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 90,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 100,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "stackTracing": false,
+      "target": "first",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-first-held-equivalent-stacksfalse-initial-reference.png",
+          "sha256": "8ad665ee5466d1df697b6617bb11590b470fb0cc3ece951bc550b3a026d429f3"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 134.99999999999997,
+        "localCenterX": 50.99999999999997,
+        "bandBounds": {
+          "left": 129,
+          "right": 141
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 51.20000000000001,
+      "lowCenter": 8,
+      "highCenter": 152.00000000000003,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 30,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 30,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 30,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 30,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 30,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 30,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "stackTracing": true,
+      "target": "first",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-first-held-equivalent-stackstrue-initial-reference.png",
+          "sha256": "8ad665ee5466d1df697b6617bb11590b470fb0cc3ece951bc550b3a026d429f3"
+        },
+        "control": "first",
+        "value": 30,
+        "box": {
+          "x": 84,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 134.99999999999997,
+        "localCenterX": 50.99999999999997,
+        "bandBounds": {
+          "left": 129,
+          "right": 141
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 51.20000000000001,
+      "lowCenter": 8,
+      "highCenter": 152.00000000000003,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 63.875,
+          "nativeValue": 40,
+          "astylarValue": 30,
+          "predictedNative": 40,
+          "fullBoxModel": 40,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 79.75,
+          "nativeValue": 50,
+          "astylarValue": 30,
+          "predictedNative": 50,
+          "fullBoxModel": 50,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 95.625,
+          "nativeValue": 60,
+          "astylarValue": 30,
+          "predictedNative": 60,
+          "fullBoxModel": 60,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 111.5,
+          "nativeValue": 70,
+          "astylarValue": 30,
+          "predictedNative": 70,
+          "fullBoxModel": 70,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 127.375,
+          "nativeValue": 85,
+          "astylarValue": 30,
+          "predictedNative": 85,
+          "fullBoxModel": 80,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 143.25,
+          "nativeValue": 95,
+          "astylarValue": 30,
+          "predictedNative": 95,
+          "fullBoxModel": 90,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": 159.125,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": 175,
+          "nativeValue": 100,
+          "astylarValue": 30,
+          "predictedNative": 100,
+          "fullBoxModel": 100,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "stackTracing": false,
+      "target": "second",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-second-none-stacksfalse-initial-reference.png",
+          "sha256": "8ad665ee5466d1df697b6617bb11590b470fb0cc3ece951bc550b3a026d429f3"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 405.9999999999999,
+        "localCenterX": 101.99999999999989,
+        "bandBounds": {
+          "left": 400,
+          "right": 412
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 101.60000000000002,
+      "lowCenter": 8,
+      "highCenter": 152.00000000000003,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 55,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 45,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 35,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 30,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 20,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 10,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "stackTracing": true,
+      "target": "second",
+      "update": "none",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-second-none-stackstrue-initial-reference.png",
+          "sha256": "8ad665ee5466d1df697b6617bb11590b470fb0cc3ece951bc550b3a026d429f3"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 405.9999999999999,
+        "localCenterX": 101.99999999999989,
+        "bandBounds": {
+          "left": 400,
+          "right": 412
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 101.60000000000002,
+      "lowCenter": 8,
+      "highCenter": 152.00000000000003,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 55,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 45,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 35,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 30,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 20,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 10,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 0,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": true
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "stackTracing": false,
+      "target": "second",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-second-held-equivalent-stacksfalse-initial-reference.png",
+          "sha256": "8ad665ee5466d1df697b6617bb11590b470fb0cc3ece951bc550b3a026d429f3"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 405.9999999999999,
+        "localCenterX": 101.99999999999989,
+        "bandBounds": {
+          "left": 400,
+          "right": 412
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 101.60000000000002,
+      "lowCenter": 8,
+      "highCenter": 152.00000000000003,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 65,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 65,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 65,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 65,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 65,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 65,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "stackTracing": true,
+      "target": "second",
+      "update": "held-equivalent",
+      "initialRaster": {
+        "screenshot": {
+          "file": "dpr2-translatedtrue-second-held-equivalent-stackstrue-initial-reference.png",
+          "sha256": "8ad665ee5466d1df697b6617bb11590b470fb0cc3ece951bc550b3a026d429f3"
+        },
+        "control": "second",
+        "value": 65,
+        "box": {
+          "x": 304,
+          "y": 80,
+          "width": 160,
+          "height": 40
+        },
+        "dpr": 2,
+        "centerX": 405.9999999999999,
+        "localCenterX": 101.99999999999989,
+        "bandBounds": {
+          "left": 400,
+          "right": 412
+        },
+        "weightedPixels": 245.85098039215688,
+        "halfWeightedPixels": [
+          122.92549019607843,
+          122.92549019607841
+        ]
+      },
+      "expectedInitialCenter": 101.60000000000002,
+      "lowCenter": 8,
+      "highCenter": 152.00000000000003,
+      "travel": 144.00000000000003,
+      "moves": [
+        {
+          "stage": "move-1",
+          "localX": 89.125,
+          "nativeValue": 55,
+          "astylarValue": 65,
+          "predictedNative": 55,
+          "fullBoxModel": 55,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-2",
+          "localX": 74.25,
+          "nativeValue": 45,
+          "astylarValue": 65,
+          "predictedNative": 45,
+          "fullBoxModel": 45,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-3",
+          "localX": 59.375,
+          "nativeValue": 35,
+          "astylarValue": 65,
+          "predictedNative": 35,
+          "fullBoxModel": 35,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-4",
+          "localX": 44.5,
+          "nativeValue": 25,
+          "astylarValue": 65,
+          "predictedNative": 25,
+          "fullBoxModel": 30,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-5",
+          "localX": 29.625,
+          "nativeValue": 15,
+          "astylarValue": 65,
+          "predictedNative": 15,
+          "fullBoxModel": 20,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-6",
+          "localX": 14.75,
+          "nativeValue": 5,
+          "astylarValue": 65,
+          "predictedNative": 5,
+          "fullBoxModel": 10,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": false,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-7",
+          "localX": -0.125,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        },
+        {
+          "stage": "move-8",
+          "localX": -15,
+          "nativeValue": 0,
+          "astylarValue": 65,
+          "predictedNative": 0,
+          "fullBoxModel": 0,
+          "nativeMatchesTravel": true,
+          "nativeMatchesFullBox": true,
+          "astylarMatchesFullBox": false
+        }
+      ]
+    }
+  ],
+  "capturedNativeTravelModelVerified": true,
+  "generalNativeRangeMetricProven": false,
+  "materialSwappedThumbCauseProven": false,
+  "renderingEquivalent": false,
+  "rendererChanged": false,
+  "limits": [
+    "This reuses authenticated captured native rasters and pointer traces; it is not a new browser run or a general UA-style contract.",
+    "Endpoint centers are measured from different identically sized controls under the same captured declarations. They are not DOM pseudo-element box measurements.",
+    "The model is established for this Chromium native theme, 160px horizontal LTR ranges and the sampled paths. Other sizes, themes, RTL, custom thumbs and pointer grab offsets require independent experiments.",
+    "Core blank range paint, premature release during updates, and swapped overlapping Material thumbs remain separate findings.",
+    "Do not add an 8px fixture or renderer magic offset; native/core appearance and travel geometry need an explicit owning contract."
+  ]
+}

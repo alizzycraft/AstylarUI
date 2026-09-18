@@ -55,6 +55,14 @@ That check is not yet terminal. The 388-test pass is the full builder file,
 not the complete audit harness or enforced parity matrix. Do not restart a live
 reader or commit the pending canonical promotion as green.
 
+The six unchanged historical production-integration suites started serially at
+**01:34:52 Africa/Johannesburg**, session **66846**, parent node process **13004**,
+with `--max-old-space-size=3072 --test --test-concurrency=1`: button box-sizing,
+button fixed-width, button requests, owner grid initial values, explicit gap,
+and gap review. Their log is `followup-six-historical-integrations.log`.
+The first child is live; a completed source-helper test is not substituted for
+these original production assertions, and no six-suite pass is claimed yet.
+
 ### Historical verification checkpoints
 
 The remaining chronology records prior attempts, not the current process state.
