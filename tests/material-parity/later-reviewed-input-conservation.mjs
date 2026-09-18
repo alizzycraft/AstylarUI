@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { isDeepStrictEqual } from 'node:util';
 import { validateReviewedInputAuditInputs, validateReviewedInputClassifications } from './reviewed-input-audit-source-binding.mjs';
 import { reviewedInputAttributions } from './reviewed-input-proposal-transition.mjs';
+import { validateFollowupInputAuditInputs, validateFollowupInputClassifications } from './followup-input-audit-source-binding.mjs';
+import { followupInputAttributions } from './followup-input-proposal-transition.mjs';
 
 const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
 const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
@@ -13,12 +15,20 @@ const signature = row => JSON.stringify([row.family, row.element, row.property, 
 // The returned rows retain every later non-reviewed change so historical tests
 // still detect an unrelated mutation; no property/family exemption is applied.
 export function reconstructBeforeReviewedInputMetadata(previous, current, evidence) {
-  assert.deepEqual(validateReviewedInputClassifications(evidence, current), []);
+  return reconstructMetadata(previous, current, evidence, reviewedInputAttributions, validateReviewedInputClassifications);
+}
+
+export function reconstructBeforeFollowupInputMetadata(previous, current, evidence) {
+  return reconstructMetadata(previous, current, evidence, followupInputAttributions, validateFollowupInputClassifications);
+}
+
+function reconstructMetadata(previous, current, evidence, attributions, validate) {
+  assert.deepEqual(validate(evidence, current), []);
   const before = new Map(previous.map(row => [signature(row), row]));
   assert.equal(before.size, previous.length, 'ambiguous historical scalar membership');
   const seen = new Set(), changes = [];
   const rows = current.map(row => {
-    if (!reviewedInputAttributions.includes(row.attribution)) return row;
+    if (!attributions.includes(row.attribution)) return row;
     const key = signature(row), prior = before.get(key);
     assert.ok(prior, 'reviewed row has no exact historical scalar membership');
     assert.ok(!seen.has(key), 'duplicate later reviewed row'); seen.add(key);
@@ -35,10 +45,21 @@ export function reconstructBeforeReviewedInputMetadata(previous, current, eviden
 }
 
 export function independentlyReconstructBeforeReviewedInputs(audit, previous, options = {}) {
+  let current = audit.discrepancies, followupChanges;
+  if (audit.followupInputs !== undefined || current.some(row => followupInputAttributions.includes(row.attribution))) {
+    // Later findings are not a blanket exclusion. Re-read the original capture
+    // and replay every follow-up source proof for this exact historical subset.
+    assert.deepEqual(validateFollowupInputAuditInputs(audit.followupInputs,
+      { ...options, requireComplete: false }), []);
+    const restored = reconstructBeforeFollowupInputMetadata(previous.discrepancies, current, audit.followupInputs);
+    current = restored.rows; followupChanges = restored.changes;
+  }
   // The fresh replay validates all twelve source proofs and exact original
   // subset membership, not just flags, counts or attribution names in a report.
   assert.deepEqual(validateReviewedInputAuditInputs(audit.reviewedInputs,
     { ...options, requireComplete: false }), []);
-  return reconstructBeforeReviewedInputMetadata(previous.discrepancies,
-    audit.discrepancies, audit.reviewedInputs);
+  const result = reconstructBeforeReviewedInputMetadata(previous.discrepancies, current, audit.reviewedInputs);
+  // Existing callers keep their original 134-set counts and complete-row checks.
+  // The separately authenticated follow-up population is reported independently.
+  return followupChanges === undefined ? result : { ...result, followupChanges };
 }
