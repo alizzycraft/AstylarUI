@@ -6,15 +6,24 @@ The machine report is generated separately from the full benchmark output.
 ## Vertical-alignment population review
 
 The [complete original alignment survey](material-vertical-align-population.md)
-now covers 116 groups / 6,886 observations: 80 computed-default/local-omission
-groups, 24 one-sided explicit-request groups, and 12 unresolved owner mappings.
+now covers 116 groups / 6,886 observations: 90 computed-default/local-omission
+groups, 24 one-sided explicit-request groups, and two overlay scalar-rule gaps.
+Existing structural/alias proofs bind all 442 formerly unmapped observations;
+59 retain a full-tree `z-index:1000` rule absent from their scalar authored records.
 All original cases are scanned; eight missing tooltip scalar observations remain
 explicit. A 102-revision history review finds that `354084e` introduced `middle`
 in seven selectors, extending beyond the previously reviewed control labels to
 expansion, stepper and tabs; dialog copy follows separately in `bc0e449`.
 This is new source/history evidence, not canonical promotion or a rendering fix.
-The final source/history/inventory verification passes **10/10**, exit 0, in
-**29,026.6242ms**, including 25 rejection controls and four mapping-gap cases.
+The updated source/history/alias/inventory verification passes **12/12**, exit 0,
+in **34,871.3864ms**, including 25 evidence rejection controls and nine direct or
+generated mapping-gap cases. All 6,444 unrelated complete proofs and every original
+observation remain unchanged; the 59 gaps join the existing layer-capture diagnosis.
+
+The [historical conservation helper](material-later-followup-conservation.md)
+now authenticates the later 66-group population separately from the earlier 134
+groups. All 13 focused/source/inventory tests pass; the six unchanged actual
+historical production-integration tests still need rerunning.
 
 ## Current integration checkpoint: follow-up verification in progress
 

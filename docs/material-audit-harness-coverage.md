@@ -2,20 +2,25 @@
 
 ## Current inventory: complete alignment-population source proof
 
-Discovery now contains **159 files** (151 Material + four general + four TTS,
-all 43 legacy files retained), including `vertical-align-population.spec.mjs`.
+Discovery now contains **160 files** (152 Material + four general + four TTS,
+all 43 legacy files retained), including `vertical-align-population.spec.mjs`
+and `later-followup-input-conservation.spec.mjs`.
 The [alignment population/source/history proof](material-vertical-align-population.md)
-and inventory checks pass **10/10**, exit 0, in **29,026.6242ms**, with no skips,
+and inventory checks pass **12/12**, exit 0, in **34,871.3864ms**, with no skips,
 cancellations or TODOs. It replays 116 original groups / 6,886 observations,
-preserves 12 unresolved owner-mapping groups and eight missing scalar records,
-and checks 102 historical source revisions. No renderer, canonical fixture or
+binds all 442 formerly unmapped observations using existing owner proofs,
+preserves 59 overlay scalar-rule gaps and eight missing scalar records, and
+checks 102 historical source revisions. The historical follow-up conservation
+helper and original/source/inventory checks separately pass **13/13** in
+**326,285.831ms**; the six actual historical integration tests still need reruns.
+No renderer, canonical fixture or
 canonical classification was changed. This is not a complete-harness pass.
 
 The serial full-builder retry now passes **388/388**, exit 0, zero skips,
 cancellations or TODOs, in **1,523,253.5638ms**. Its queued canonical generation
 started at 00:53:19 Africa/Johannesburg and is confirmed live. Generation and
 fresh independent CLI verification remain outstanding. The builder-file pass
-does not stand in for the complete 159-suite harness or enforced parity matrix.
+does not stand in for the complete 160-suite harness or enforced parity matrix.
 
 ## Prior integration checkpoint
 

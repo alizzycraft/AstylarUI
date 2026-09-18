@@ -6,6 +6,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 import { rootInitialSelectorCanApply } from '../tests/material-parity/root-initial-style-evidence.mjs';
+import { resolveOriginAliasPair } from '../tests/material-parity/origin-alias-mapping-evidence.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const digest = value => hash(JSON.stringify(value));
@@ -19,7 +20,7 @@ const scalars = ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionRes
 const caseId = (kind, e) => `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 const targetFile = 'docs/material-vertical-align-population.json';
 
-export function inspectVerticalAlignPopulationInput(input, reference, candidate) {
+export function inspectVerticalAlignPopulationInput(input, reference, candidate, family) {
   for (const tree of [reference, candidate]) {
     assert.equal(tree.schemaVersion, 1);
     assert.deepEqual(tree.errors, []);
@@ -28,14 +29,26 @@ export function inspectVerticalAlignPopulationInput(input, reference, candidate)
   assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
   assert.equal(candidate.resolvedStyleEvidenceVersion, 2);
   assert.equal(input.astylarResolvedStyleEvidenceVersion, 2);
-  const refs = reference.nodes.filter(n => n.attributes?.id === input.id || n.attributes?.['data-parity-id'] === input.id);
+  const ids = reference.nodes.filter(n => n.attributes?.id === input.id);
+  let refs = ids.length ? ids : reference.nodes.filter(n => n.attributes?.['data-parity-id'] === input.id);
   const asts = candidate.nodes.filter(n => n.authored?.id === input.id);
+  let generatedIdentity;
+  if (refs.length !== 1 && ids.length === 0 && family) {
+    generatedIdentity = resolveOriginAliasPair({ family }, reference, candidate, input);
+    if (generatedIdentity.status === 'mapped' && asts.length === 1 && generatedIdentity.candidateNode === asts[0].key)
+      refs = reference.nodes.filter(n => n.key === generatedIdentity.referenceNode);
+  }
   const evidence = { reference: value(input.reference, 'verticalAlign'), candidate: value(input.astylar, 'verticalAlign'),
     mapping: { referenceKeys: refs.map(n => n.key), candidateKeys: asts.map(n => n.key) },
     status: 'unresolved-mapping', classification: 'unresolved',
     owner: 'comparison measurement identity mapping',
     wholeElementInputEquivalent: false, usedAlignmentVerified: false, renderingEquivalent: false,
     rendererCauseProven: false, canonicalAttributionChanged: false };
+  if (generatedIdentity) evidence.generatedIdentity = generatedIdentity;
+  if (generatedIdentity?.status === 'mapped-with-scalar-rule-gap') {
+    evidence.status = 'unresolved-alias-scalar-rule-gap';
+    evidence.owner = 'reference scalar/full-tree authored-rule capture';
+  }
   if (refs.length !== 1 || asts.length !== 1) return evidence;
   const r = refs[0], a = asts[0];
   assert.equal(input.referenceStructure.schemaVersion, 2);
@@ -65,7 +78,7 @@ export function inspectVerticalAlignPopulationInput(input, reference, candidate)
     display: value(side === 'reference' ? reference.styles[node.style] : node.resolvedStyle, 'display'),
     position: value(side === 'reference' ? reference.styles[node.style] : node.resolvedStyle, 'position') } : null;
   Object.assign(evidence, {
-    mapping: { ...evidence.mapping, referenceIdentity: r.attributes.id === input.id ? 'id' : 'data-parity-id',
+    mapping: { ...evidence.mapping, referenceIdentity: generatedIdentity?.method ?? (r.attributes.id === input.id ? 'id' : 'data-parity-id'),
       sameElementType: r.type === a.authored.type },
     referenceOwner: { ...context(r, 'reference'), ownText: r.ownText, parentContext: context(parentR, 'reference') },
     candidateOwner: { ...context(a, 'candidate'), ownText: value(a.authored, 'textContent'), parentContext: context(parentA, 'candidate'),
@@ -158,7 +171,7 @@ export function collectVerticalAlignPopulation() {
     if (!inputs.length) continue;
     const reference = tree(entry.inputTrees.reference), candidate = tree(entry.inputTrees.astylar);
     for (const input of inputs) {
-      const proof = inspectVerticalAlignPopulationInput(input, reference, candidate);
+      const proof = inspectVerticalAlignPopulationInput(input, reference, candidate, entry.family);
       const finding = { case: id, family: entry.family, element: input.id, property: 'verticalAlign',
         profile: entry.profile, state: entry.state ?? 'static', viewport: entry.viewport,
         inputTrees: entry.inputTrees, originalInputSha256: digest(input), proof };
@@ -178,7 +191,9 @@ export function collectVerticalAlignPopulation() {
   return { schemaVersion: 1, kind: 'complete-original-scalar-vertical-align-population',
     originalCapture: { file, sha256: hash(bytes) }, casesScanned: seen.size, groupCount: groups.size,
     sourceFingerprints: ['scripts/audit-material-vertical-align-population.mjs',
-      'tests/material-parity/root-initial-style-evidence.mjs', 'tests/material-parity/border-initial-input-evidence.mjs']
+      'tests/material-parity/root-initial-style-evidence.mjs', 'tests/material-parity/border-initial-input-evidence.mjs',
+      'tests/material-parity/origin-alias-mapping-evidence.mjs', 'tests/material-parity/generated-node-mapping-evidence.mjs',
+      'tests/material-parity/input-equivalence-audit.mjs', 'tests/material-parity/run-material-parity.mjs']
       .map(file => ({ file, sha256: hash(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')) })),
     observations: findings.length, equalScalarObservations: equal, missingScalarObservations: missing,
     explicitCandidateRequestHistory: collectVerticalAlignPopulationHistory(selectors),
@@ -191,7 +206,7 @@ export function collectVerticalAlignPopulation() {
       'An explicit middle declaration present on only one side proves unequal local authoring, not whether CSS applies it in the respective formatting contexts.',
       'Candidate rules use conservative possible applicability; no cascade winner is synthesized for ambiguous rules, conditions or inline attributes.',
       'Retained text values and private plugin types are recorded, not accepted as glyph, control paint or plugin-consumer proof.',
-      'Missing and ambiguous owners and missing scalar evidence remain explicit; no fallback by visual resemblance is used.',
+      'Generated owners use existing structural/measurement-alias proofs with all 89 original scalar fields; unresolved owners, rule gaps and missing scalar evidence remain explicit.',
       'No rendering, fixture, normalizer or canonical classification change is made by this survey.'] };
 }
 

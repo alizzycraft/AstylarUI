@@ -14,11 +14,11 @@ const entries = new Map([['static', original.results], ['interaction', original.
   es.map(e => [`${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`, e])));
 function fixture(finding = saved.findings.find(f => f.element === 'checkbox-label')) {
   const entry = entries.get(finding.case);
-  return { input: structuredClone(entry.styleInputs.find(i => i.id === finding.element)),
+  return { family: entry.family, input: structuredClone(entry.styleInputs.find(i => i.id === finding.element)),
     reference: JSON.parse(readFileSync(finding.inputTrees.reference.file)),
     candidate: JSON.parse(readFileSync(finding.inputTrees.astylar.file)) };
 }
-const inspect = f => inspectVerticalAlignPopulationInput(f.input, f.reference, f.candidate);
+const inspect = f => inspectVerticalAlignPopulationInput(f.input, f.reference, f.candidate, f.family);
 const a = f => f.candidate.nodes.find(n => n.authored?.id === f.input.id);
 const r = f => f.reference.nodes.find(n => n.attributes?.id === f.input.id || n.attributes?.['data-parity-id'] === f.input.id);
 
@@ -27,9 +27,9 @@ test('alignment survey covers the whole original scalar difference population, n
   assert.equal(saved.groupCount, 116); assert.equal(saved.observations, 6886);
   assert.equal(saved.missingScalarObservations.length, 8);
   assert.deepEqual(saved.statusCounts, {
-    'computed-initial-versus-omitted-local-declaration': 4932,
+    'computed-initial-versus-omitted-local-declaration': 5315,
     'reference-explicit-middle-versus-candidate-omission': 794,
-    'unresolved-mapping': 442,
+    'unresolved-alias-scalar-rule-gap': 59,
     'candidate-explicit-middle-versus-reference-baseline': 718,
   });
   const identities = [];
@@ -139,6 +139,70 @@ test('missing or ambiguous identity mappings remain unresolved instead of using 
     const f = fixture(); mutate(f); const proof = inspect(f);
     assert.equal(proof.status, 'unresolved-mapping'); assert.equal(proof.classification, 'unresolved');
   }
+});
+
+test('existing structural aliases bind all 442 former mapping gaps while retaining 59 authored-rule capture gaps', () => {
+  const generated = saved.findings.filter(f => f.proof.generatedIdentity);
+  assert.equal(generated.length, 442);
+  assert.equal(generated.filter(f => f.proof.generatedIdentity.status === 'mapped').length, 383);
+  const gaps = generated.filter(f => f.proof.generatedIdentity.status === 'mapped-with-scalar-rule-gap');
+  assert.equal(gaps.length, 59);
+  assert.deepEqual([...new Set(gaps.map(f => f.element))].sort(), ['bottom-sheet-overlay', 'snack-bar-overlay']);
+  const knownGapReview = JSON.parse(readFileSync('docs/material-gap-scalar-rule-loss.json'));
+  const knownObservations = knownGapReview.findings.flatMap(group => group.observations.map(observation => ({
+    element: group.element, property: group.property, ...observation })));
+  for (const finding of generated) {
+    assert.deepEqual(inspect(fixture(finding)), finding.proof);
+    assert.equal(finding.proof.generatedIdentity.checkedReferenceProperties, 89);
+  }
+  for (const finding of gaps) {
+    assert.equal(finding.proof.status, 'unresolved-alias-scalar-rule-gap');
+    assert.equal(finding.proof.classification, 'unresolved');
+    assert.deepEqual(finding.proof.generatedIdentity.missingRules, [{ selector: '.cdk-global-overlay-wrapper',
+      declarations: { 'z-index': { value: '1000', important: false } } }]);
+    assert.deepEqual(finding.proof.generatedIdentity.extraRules, []);
+    const prior = knownObservations.filter(o => o.case === finding.case && o.element === finding.element);
+    assert.deepEqual(prior.map(o => o.property).sort(), ['columnGap', 'rowGap']);
+    for (const observation of prior) {
+      assert.deepEqual(observation.inputTrees, finding.inputTrees);
+      assert.deepEqual(observation.proof.generatedIdentity, finding.proof.generatedIdentity);
+      assert.equal(observation.review.attribution, 'original-overlay-scalar-layer-rule-loss');
+    }
+  }
+  const first = generated.find(f => f.element === 'badge-count');
+  for (const mutate of [
+    f => { f.family = 'unreviewed'; },
+    f => { f.reference.nodes.find(n => n.key === first.proof.generatedIdentity.referenceNode).parent = 'missing'; },
+    f => { const node = structuredClone(f.reference.nodes.find(n => n.key === first.proof.generatedIdentity.referenceNode));
+      node.key += '/duplicate'; f.reference.nodes.push(node); },
+    f => { f.input.reference.color = 'changed'; },
+    f => { f.candidate.resolvedStyleRevision = -1; },
+  ]) {
+    const f = fixture(first); mutate(f);
+    assert.equal(inspect(f).status, 'unresolved-mapping');
+  }
+});
+
+test('alias join preserves every original observation and all 6444 unrelated complete proofs', () => {
+  const bytes = execFileSync('git', ['show', 'd514acc:docs/material-vertical-align-population.json'], { maxBuffer: 32 * 1024 * 1024 });
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'f650af18267a5a7e3d324ae30b603ac203189e343de93637115b10664c56c106');
+  const prior = JSON.parse(bytes);
+  for (const key of ['originalCapture', 'casesScanned', 'groupCount', 'observations', 'equalScalarObservations',
+    'missingScalarObservations', 'explicitCandidateRequestHistory']) assert.deepEqual(saved[key], prior[key]);
+  assert.equal(saved.findings.length, prior.findings.length);
+  let reviewed = 0, untouched = 0;
+  for (const [index, before] of prior.findings.entries()) {
+    const after = saved.findings[index];
+    const withoutProof = ({ proof, ...rest }) => rest;
+    assert.deepEqual(withoutProof(after), withoutProof(before));
+    if (before.proof.status === 'unresolved-mapping') {
+      reviewed++; assert.ok(after.proof.generatedIdentity);
+      assert.ok(['mapped', 'mapped-with-scalar-rule-gap'].includes(after.proof.generatedIdentity.status));
+    } else { untouched++; assert.deepEqual(after.proof, before.proof); }
+  }
+  assert.equal(reviewed, 442); assert.equal(untouched, 6444);
+  const membership = groups => groups.map(({ statuses, ...rest }) => rest);
+  assert.deepEqual(membership(saved.groups), membership(prior.groups));
 });
 
 test('complete alignment report regenerates from authenticated captures in enforced no-write mode', () => {
