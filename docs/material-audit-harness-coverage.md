@@ -1,6 +1,18 @@
 # Complete audit harness coverage
 
-## Current inventory: pending font proposal coverage is registered
+## Current inventory: component host font-token inputs are registered
+
+Discovery includes **130 files**: 122 Material, four general and four TTS,
+retaining all 43 legacy files. The [host font-token audit](material-host-font-token-inputs.md)
+checks 172 original owners / 380 property observations. Toolbar and paginator
+omit component family/weight/tracking requests; stepper omits the family
+request. Generation and no-write replay pass; the focused/inventory suite
+passes **6/6** in 6,294.6377ms with 436 rejection executions. No canonical
+classification or rendering input changes. The original 120-file run is live
+in slider-border integration (runner 24392 / child 21724 at this snapshot),
+with 808 reported results and the three previously documented failures.
+
+## Previous inventory: pending font proposal coverage is registered
 
 The subsequent [pending-motion receipt diagnostic](material-motion-parent-receipt-diagnostic.md)
 explains the third observed full-run failure without changing its selected
