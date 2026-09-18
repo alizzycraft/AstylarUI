@@ -1,6 +1,21 @@
 # Complete audit harness coverage
 
-## Current inventory: range control font reset omission is registered
+## Current inventory: authoring input attribution proposal is registered
+
+Discovery now includes **122 files**: 114 Material, four general and four TTS,
+retaining all 43 legacy files. The [source-bound authoring proposal](material-authoring-input-attribution.md)
+joins nine pending groups / 136 unequal observations while retaining 202 numeric
+matches and all 8,330 unrelated complete canonical rows. The independent
+source/payload replay and focused/inventory suite pass **9/9**, exit **0**, with
+61 rejection-control executions. The canonical unresolved count remains 2,160;
+this is a proposal, not an applied classification or renderer acceptance.
+
+The still-running full harness launched at `9933ac1` selected **120 files**.
+It excludes the subsequently added range-reset and authoring-proposal tests;
+its result must not be presented as full coverage of the 122-file inventory.
+The selected source/test files have not changed during these additions.
+
+## Previous inventory: range control font reset omission is registered
 
 Discovery now includes **121 files**: 113 Material, four general and four TTS,
 retaining all 43 legacy files. The [range font reset proof](material-range-font-reset.md)
