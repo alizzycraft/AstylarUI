@@ -5,6 +5,13 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: canonical rows independently conserved
 
+The [historical box/grid integration checks](material-reviewed-box-grid-integration.md)
+are terminal: **2/2 pass**, exit 0, in **2,080,139.7366ms**. The exact later
+source-bound populations are 59 groups / 76 observations for box sizing and
+55 / 109 for grid. All original scalar/precedence assertions remain, conserving
+6,282 and 6,055 other complete rows respectively. This is subset conservation,
+not canonical/input-equivalence acceptance.
+
 The [synchronous four-set source replay](material-followup-input-source-replay.md)
 passes **7/7**, exit 0, in **24,801.5258ms**. It freshly executes all four
 source collectors, authenticates the original capture/normalizers, and checks
@@ -31,8 +38,8 @@ no-write source/canonical replay pass; the full focused suite is **7/7**, exit 0
 in **514,470.7977ms**, with 45 rejection controls. A separate metadata-only
 transition has passed its pure checks (34 rejection controls) and the full
 replay recorded above. No canonical promotion or renderer change is
-claimed. The two box-sizing/grid historical replays also remain a pending
-combined run, with exact later membership independently projected first.
+claimed. The two box-sizing/grid historical replays now pass as recorded
+above, with exact later membership independently projected first.
 
 The [control font-style membership proposal](material-control-font-style-attribution.md)
 now joins all **11 groups / 756 observations** to the complete frozen canonical

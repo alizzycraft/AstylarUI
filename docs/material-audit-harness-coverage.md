@@ -2,6 +2,12 @@
 
 ## Current inventory: canonical integration conserved
 
+The [historical box/grid production replay](material-reviewed-box-grid-integration.md)
+passes **2/2**, exit 0, in **2,080,139.7366ms**. Both tests retain their original
+scalar and complete-row assertions; only exact independently source-verified
+later metadata is reconstructed for historical comparison. This does not
+constitute a complete current-harness run.
+
 The [four-set source replay](material-followup-input-source-replay.md) adds
 the **149th file** (141 Material, four general, four TTS; all 43 legacy files
 retained). Its focused run passes **7/7**, exit 0, in **24,801.5258ms**, including
@@ -23,8 +29,8 @@ sources/full canonical joins, unchanged canonical file hashes, 45 rejection
 controls and all four inventory checks. It binds 66 groups / 2,640 observations,
 not canonical promotion. The separate transition has now passed full replay;
 the working inventory includes its new test file (**148 files**), but no full
-current-harness pass is claimed. Box-sizing/grid historical tests remain a
-pending combined production run.
+current-harness pass is claimed. Box-sizing/grid historical tests have passed
+their combined production run as recorded above.
 
 The [control font-style membership proposal](material-control-font-style-attribution.md)
 adds the **147th file** (139 Material, four general, four TTS; all 43 legacy

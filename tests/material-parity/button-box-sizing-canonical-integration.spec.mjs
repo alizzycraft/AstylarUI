@@ -11,6 +11,7 @@ import { buttonBoxSizingAttribution } from './button-box-sizing-classification.m
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
 import { fieldHostLayoutAttribution, fieldHostWidthAttribution } from './field-host-layout-source-binding.mjs';
 import { assertLaterGapClassifications, assertLaterCaretClassifications } from './owner-gap-integration-conservation.mjs';
+import { independentlyReconstructBeforeReviewedInputs } from './later-reviewed-input-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs', baselineCommit = '0165f76';
 const source = execFileSync('git', ['show', `${baselineCommit}:${moduleFile}`], { maxBuffer: 4 * 1024 * 1024 }).toString();
@@ -89,7 +90,11 @@ test('button box sizing production integration preserves all scalar inputs earli
   assert.ok([...laterCarets].every(signature => !signatures.has(signature)),
     'authenticated later caret reviews cannot replace original box, field-host or gap proofs');
   for (const signature of laterCarets) signatures.add(signature);
-  const other = report => report.discrepancies.filter(r => !signatures.has(JSON.stringify(scalar(r))));
+  const restored = independentlyReconstructBeforeReviewedInputs(audit, previous);
+  assert.equal(restored.changes.length, 59);
+  assert.equal(restored.changes.reduce((n, r) => n + r.occurrences, 0), 76);
+  const other = report => (report === audit ? restored.rows : report.discrepancies)
+    .filter(r => !signatures.has(JSON.stringify(scalar(r))));
   assert.equal(other(audit).length, 6282);
   assert.equal(hash(other(audit)), hash(other(previous)), 'complete unrelated rows unchanged');
   const binding = audit.buttonBoxSizingInputs;
@@ -120,6 +125,7 @@ test('button box sizing production integration preserves all scalar inputs earli
     independentlyVerifiedLaterCaretGroups: laterCarets.size,
     independentlyVerifiedLaterCaretObservations: audit.ownerCaretInputs.plannedCoverage.reviewedObservations,
     retainedPendingCaretObservations: audit.ownerCaretInputs.plannedCoverage.pendingObservations,
+    independentlyVerifiedLaterInputGroups: restored.changes.length, independentlyVerifiedLaterInputObservations: 76,
     unchangedCompleteRows: other(audit).length, unchangedCompleteRowsSha256: hash(other(audit)),
     fullCanonicalConservationVerified: false, inputEquivalent: false, retainedDiagnosticCapture: file }));
 });

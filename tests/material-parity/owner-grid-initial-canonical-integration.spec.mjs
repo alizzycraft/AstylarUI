@@ -12,6 +12,7 @@ import { ownerGridInitialAttribution } from './owner-grid-initial-classification
 import { nonGridTemplateAttribution } from './grid-template-input-evidence.mjs';
 import { fieldHostLayoutAttribution, fieldHostWidthAttribution } from './field-host-layout-source-binding.mjs';
 import { assertLaterGapClassifications, assertLaterCaretClassifications } from './owner-gap-integration-conservation.mjs';
+import { independentlyReconstructBeforeReviewedInputs } from './later-reviewed-input-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const baselineCommit = '364f46a309319201317919b6a23dd1aadd08f405';
@@ -98,7 +99,11 @@ test('owner grid production integration preserves original scalars, earlier prec
     assert.ok([...laterCarets].every(signature => !signatures.has(signature)),
       'authenticated caret reviews cannot replace original grid/box, field-host or gap proofs');
     for (const signature of laterCarets) signatures.add(signature);
-    const other = report => report.discrepancies.filter(r => !signatures.has(JSON.stringify(scalar(r))));
+    const restored = independentlyReconstructBeforeReviewedInputs(audit, previous);
+    assert.equal(restored.changes.length, 55);
+    assert.equal(restored.changes.reduce((n, r) => n + r.occurrences, 0), 109);
+    const other = report => (report === audit ? restored.rows : report.discrepancies)
+      .filter(r => !signatures.has(JSON.stringify(scalar(r))));
     assert.equal(other(audit).length, 6055);
     assert.equal(hash(other(audit)), hash(other(previous)), 'complete unrelated rows unchanged');
     assert.deepEqual(audit.discrepancies.filter(r => r.attribution === nonGridTemplateAttribution),
