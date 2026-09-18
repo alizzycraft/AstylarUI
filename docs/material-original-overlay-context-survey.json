@@ -10,7 +10,7 @@
     "file": "tests/material-parity/input-equivalence-audit.mjs",
     "recordedSha256": "fb97f72a543cff1f6c4e1f163f8b92f98c7dbbacbaa4a37d0571432045201392",
     "historicalSourceCommit": "65487aeba6a26f9715f302f92b4ee454161a94ef",
-    "currentSha256": "c57c725b10a0b94bf9c21ccf85e3764f47bccd9d629d004010429fd239c820c1",
+    "currentSha256": "b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73",
     "exactCurrentSourceMatch": false,
     "scope": "Historical source receipt only; current mapping behavior requires complete owner-proof replay and negative controls."
   },
@@ -18,7 +18,7 @@
     "file": "docs/material-overlay-owner-mapping-survey.json",
     "recordedSha256": "36507ec938f338be4e6e6840a88ac8866045f4914852a62c25f7d7ff1ca4bd13",
     "historicalSourceCommit": "cab0cc3cc53b3728bb4022b89e0fe47168c18bae",
-    "currentSha256": "c5acd99d242b0c59ec5121318fe30b83113b7a7b1efbdaf5a643d0a74232a9cc",
+    "currentSha256": "f7f34b06f959cf4ab0a0d1befd39d3e7d26947301e49a53fd0c27562a08993c7",
     "exactCurrentSourceMatch": false,
     "mappingDataSha256": "7570513ecee8d5a2033bc3670a3133c6a183df7d39216c391cc86e267101bdbf",
     "exactMappingDataMatch": true,
@@ -6069,7 +6069,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "c57c725b10a0b94bf9c21ccf85e3764f47bccd9d629d004010429fd239c820c1"
+      "sha256": "b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73"
     }
   ]
 }

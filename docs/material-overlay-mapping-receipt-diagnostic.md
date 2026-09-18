@@ -35,7 +35,7 @@ The compactly serialized in-memory proposal SHA-256 is
 Those distinct identities are recorded; the proposal is never represented as
 the on-disk file or original capture input.
 
-## Verification and follow-up
+## Historical diagnostic verification and follow-up
 
 ```powershell
 node scripts/diagnose-material-overlay-mapping-receipt.mjs
@@ -56,3 +56,43 @@ unchanged original-overlay-context suite including its negative controls. Then
 regenerate dependent current-source reports in order and rerun the full current
 harness. The fresh-only external-context limitation and candidate/rendering
 equivalence flags must remain false.
+
+## Current-source refresh and complete replay (2026-09-18)
+
+The original generators now run successfully against on-disk evidence, followed
+by their no-write checks:
+
+```powershell
+node scripts/audit-material-overlay-owner-mappings.mjs
+node scripts/audit-material-overlay-owner-mappings.mjs --check
+node scripts/audit-material-original-overlay-context.mjs
+node scripts/audit-material-original-overlay-context.mjs --check
+node scripts/audit-material-remaining-overlay-ancestry.mjs
+node scripts/audit-material-remaining-overlay-ancestry.mjs --check
+node --test --test-concurrency=1 tests/material-parity/original-overlay-context-survey.spec.mjs tests/material-parity/remaining-overlay-ancestry-review.spec.mjs
+```
+
+All six generator/check invocations exit **0**. The unchanged suites pass
+**11/11**, exit **0**; TAP elapsed time is **25,333,631.1055 ms**, which is a
+wall-clock result, not a renderer-performance measurement. The test log is
+`artifacts/material-parity/field-host-flow-input-audit/caret-overlay-receipt-focused.log`,
+SHA-256 `7b0c9a9f5964a056a99156a5de4ef4aedc8128fde73ed2c59927909d4879e888`.
+
+Compared with committed baseline `5de7ce4`, exactly **seven hash fields** change
+across the three JSON reports. Complete-object comparison after removing only
+those seven paths proves every other field unchanged. Historical producer and
+capture receipts are preserved. The conservation log is
+`artifacts/material-parity/field-host-flow-input-audit/caret-overlay-receipt-conservation.log`,
+SHA-256 `ad946c6c4907c1ed25176522944516c2cea75df6d9c6ddd529bd7f1c95bc1fdd`.
+
+Preserved populations: 54 mapping groups, 91 cases, 200 owners, 600 identity
+mutation controls, 17,654 external-root properties; and 48 remaining-ancestry
+groups, 1,424 observations, 50 cases, 178 owners, 263 declaration patterns and
+356 identity controls. All 18 missing tooltip context owners remain explicit.
+This establishes current-source provenance and conservation, not candidate
+replay, input equivalence, rendering parity, or canonical classification.
+
+The earlier counterfactual diagnostic remains historical evidence and is not a
+current acceptance command. Its use by the later overlay-caret collector must
+be replaced with the now-valid production reader in a separately verified
+instrumentation increment.
