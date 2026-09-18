@@ -6,6 +6,7 @@ import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { replayReviewedInputSourcePlans } from '../../scripts/bind-material-reviewed-input-proposals.mjs';
 import { bindOwnerCaretCaptureSubset } from './owner-caret-audit-source-binding.mjs';
+import { reviewedInputAttributions } from './reviewed-input-proposal-transition.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const digest = x => hash(JSON.stringify(x));
@@ -44,6 +45,9 @@ export function projectReviewedInputAuditInputs(binding, transition, supplied, o
   assert.equal(transition.canonicalFilesChanged, false); assert.equal(transition.completeAuditAccepted, false);
   assert.equal(binding.canonicalIntegration, false); assert.equal(binding.sourceProofsReplayed, true);
   const subset = bindOwnerCaretCaptureSubset(supplied, original);
+  const states = new Map([['static', supplied.results ?? []], ['interaction', supplied.interactions ?? []]]
+    .flatMap(([kind, entries]) => entries.map(e => [
+      `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`, e.state ?? 'static'])));
   const changes = new Map(transition.changes.map(c => [c.originalCompleteRowSha256, c]));
   assert.equal(changes.size, binding.groups.length); assert.equal(changes.size, transition.changedGroups);
   const observations = [], groups = [], missingObservations = [], seen = new Set();
@@ -76,7 +80,8 @@ export function projectReviewedInputAuditInputs(binding, transition, supplied, o
     }
     if (members.length) groups.push({ ...metadata(row), family: p.family, element: p.element, property: p.property,
       reference: p.reference, astylar: p.astylar, originalCompleteRowSha256: p.canonicalRowSha256,
-      occurrences: members.length, cases: members.slice(0, 12).map(o => o.case), reviewedCases: members.map(o => o.case) });
+      occurrences: members.length, cases: members.slice(0, 12).map(o => o.case), reviewedCases: members.map(o => o.case),
+      states: [...new Set(members.map(o => states.get(o.case)))] });
   }
   assert.equal(seen.size, binding.proposedObservations);
   return { observations, groups, coverage: { ...subset.coverage, sourceObservations: seen.size,
@@ -139,5 +144,24 @@ export function validateReviewedInputAuditInputs(evidence, { root = process.cwd(
     assert.equal(replay.binding.status, 'bound', replay.binding.error);
     same(evidence, replay, 'reviewed input evidence differs from independent source replay');
   } catch (error) { return [`reviewed input replay failed: ${error}`]; }
+  return [];
+}
+
+// Invoke only after independent source validation. Expected membership comes
+// from original inputs, never from whichever classified rows survived output.
+export function validateReviewedInputClassifications(evidence, rows) {
+  try {
+    assert.equal(evidence?.binding?.status, 'bound', 'reviewed classifications lack source binding');
+    const actual = rows.filter(r => reviewedInputAttributions.includes(r.attribution));
+    assert.equal(actual.length, evidence.groups.length, 'reviewed group count changed');
+    const byOriginal = new Map(actual.map(r => [r.reviewEvidence?.originalCompleteRowSha256, r]));
+    assert.equal(byOriginal.size, actual.length, 'duplicate reviewed original group');
+    for (const expected of evidence.groups) {
+      const row = byOriginal.get(expected.originalCompleteRowSha256); assert.ok(row, 'reviewed source group missing');
+      for (const key of [...metadataKeys, 'family', 'element', 'property', 'reference', 'astylar',
+        'occurrences', 'cases', 'reviewedCases', 'states']) same(row[key], expected[key], `reviewed ${key} differs from source`);
+    }
+    assert.equal(actual.reduce((n, r) => n + r.occurrences, 0), evidence.coverage.suppliedObservations);
+  } catch (error) { return [`reviewed input classification coverage failed: ${error}`]; }
   return [];
 }

@@ -12,6 +12,7 @@ const kindAttributions = {
   buttonPaint: ['reviewed-button-state-layer-preblending'], hostTokens: ['reviewed-component-host-font-token-omission'],
   containerFamily: ['reviewed-container-font-family-declaration-stage'],
 };
+export const reviewedInputAttributions = Object.values(kindAttributions).flat();
 const explanations = {
   'reviewed-container-font-size-declaration-stage': ['Material audit inherited versus local font-size measurement boundary',
     'The original own-text-empty owner paths share the same authored page font-size dependency while the scalar compares browser computed inheritance with omitted candidate local declarations. No candidate computed value, descendant typography, layout, or raster equivalence is inferred.'],

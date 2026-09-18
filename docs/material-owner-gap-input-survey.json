@@ -39,7 +39,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73"
+      "sha256": "ec46011466042e97fb44269ebdb31efc1e02b9eaf8470df4678921e0795b489b"
     },
     {
       "file": "tests/material-parity/origin-alias-mapping-evidence.mjs",

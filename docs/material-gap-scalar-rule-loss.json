@@ -3,7 +3,7 @@
   "kind": "owner-gap-scalar-layer-rule-loss-review",
   "parent": {
     "file": "docs/material-owner-gap-input-survey.json",
-    "sha256": "2575edb57305d009386dd20864a1de56f36e6e49a709859e128a393e6121a7d3"
+    "sha256": "2e990e6c15b959d396770ce8012bc62c61e0a32926fc67020e4a34ba43ee28f8"
   },
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",

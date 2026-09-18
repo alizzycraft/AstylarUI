@@ -4,7 +4,8 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { collectReviewedInputAuditInputs, projectReviewedInputAuditInputs,
-  reviewedInputClassificationContexts, classifyReviewedInput, validateReviewedInputAuditInputs } from './reviewed-input-audit-source-binding.mjs';
+  reviewedInputClassificationContexts, classifyReviewedInput, validateReviewedInputAuditInputs,
+  validateReviewedInputClassifications } from './reviewed-input-audit-source-binding.mjs';
 import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
@@ -117,4 +118,24 @@ test('unbound and altered-caller requests never acquire reviewed classifications
   assert.deepEqual(e.observations, []); assert.deepEqual(e.groups, []);
   assert.ok(validateReviewedInputAuditInputs(e, { requireComplete: false }).length);
   assert.equal(reviewedInputClassificationContexts(e).size, 0);
+});
+
+test('emitted row validation rejects missing reviews, invented membership and changed metadata', () => {
+  const f = fixture(), projection = project(f), evidence = { binding: { status: 'bound' }, ...projection };
+  const rows = evidence.groups.map(({ originalCompleteRowSha256, ...row }) => row);
+  assert.deepEqual(validateReviewedInputClassifications(evidence, rows), []);
+  const mutations = [
+    xs => { xs.pop(); }, xs => { xs.push(structuredClone(xs[0])); },
+    xs => { xs[0].attribution = 'unresolved'; }, xs => { xs[0].classification = 'equivalent-representation'; },
+    xs => { xs[0].occurrences++; }, xs => { xs[0].cases.push('invented'); },
+    xs => { xs[0].reviewedCases.pop(); }, xs => { xs[0].states.push('invented'); },
+    xs => { xs[0].reference = 'altered'; }, xs => { xs[0].astylar = 'altered'; },
+    xs => { xs[0].recommendedOwner = 'wrong'; }, xs => { xs[0].justification = 'unsupported'; },
+    xs => { xs[0].reviewEvidence.rendererCauseProven = true; },
+    xs => { xs[0].reviewEvidence.originalCompleteRowSha256 = '0'.repeat(64); },
+  ];
+  for (const mutate of mutations) { const changed = structuredClone(rows); mutate(changed);
+    assert.ok(validateReviewedInputClassifications(evidence, changed).length); }
+  assert.equal(mutations.length, 14);
+  assert.ok(validateReviewedInputClassifications({ ...evidence, binding: { status: 'unbound' } }, rows).length);
 });

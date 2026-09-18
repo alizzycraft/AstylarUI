@@ -10,6 +10,8 @@ Evidence: complete enforced parity report with Chromium 152.0.7977.76.
 
 ## Verdict
 
+Bounded reviewed inputs: 3325 original property observations support 134 source-replayed measurement-stage or authoring/ownership groups. Raw values, original membership and prior classifications are retained. Missing original observations: 0. This does not establish whole-element input equivalence, rendering parity or renderer causality.
+
 Bounded caret reviews: 4050 original observations support 118 observation-stage groups; 896 observations remain pending. Raw omissions and full source membership are retained. This does not establish candidate computed caret values, editable-descendant behavior, visible caret paint, equivalent inputs or renderer causality.
 
 Bounded gap reviews: 1902 original observations support 36 capture/observation-stage groups. Original motion requests, raw omitted values and full memberships remain intact; 64 motion observations remain unresolved. Independent source and classification coverage do not establish candidate computed gaps, used spacing, equivalent inputs or renderer causality.
@@ -18,7 +20,7 @@ Explicit gap composition: 1032 original observations support 16 unequal applicat
 
 Visual parity is green, but input equivalence is **not established**. The audit found 8339 unique normalized input differences across 386891 occurrences.
 
-2160 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
+2026 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
 
 Border initial-color evidence: 3580 uniquely paired node observations prove omitted author/inline color inputs with browser currentColor versus core transparent defaults. Attribution rejects possibly applicable state/media/reset rules and unknown selectors, and is not an equivalence waiver. Alpha paint, contextual-color paint, structure and final raster require separate evidence.
 
@@ -145,10 +147,10 @@ This means the existing screenshot score cannot be used as evidence that the ren
 
 | Classification | Unique signatures |
 | --- | ---: |
-| application-plugin-authoring-defect | 875 |
+| application-plugin-authoring-defect | 911 |
 | equivalent-representation | 2082 |
 | intentional-documented-limitation | 336 |
-| parity-harness-defect | 5046 |
+| parity-harness-defect | 5010 |
 
 ## Source-level compensation findings
 
@@ -360,9 +362,10 @@ The Material-specific state layers, ripples, progress/range visuals, checkmark, 
 
 ## Focused evidence
 
+- complete original-source reviewed-input classification conservation: Authenticates both entire current and frozen canonical payloads, independently replays seven proposal sets and twelve source proofs, and compares every complete discrepancy with the verified metadata transition. Exactly 134 groups / 3,325 observations change classification; all raw inputs and 8,205 other complete rows remain unchanged. Fresh builder freshness and full rendering acceptance are separate checks. (tests/material-parity/reviewed-input-canonical-integration.spec.mjs:14)
 - bounded caret observation-stage integration with authenticated original inputs: A four-case diagnostic exercises local and motion reviews plus pending range and tooltip cases. Actual prior/current builders preserve every scalar and unrelated complete finding; production validation rejects missing evidence, lost or relabeled rows and inflated claims. Complete source replay accounts separately for 118 reviewed groups / 3,154 observations and 27 pending groups / 896 observations. The diagnostic is not full canonical conservation or proof of equivalent computed caret values, editable-descendant behavior, visible paint or renderer causality. (tests/material-parity/owner-caret-canonical-integration.spec.mjs:59)
-- bounded original motion and scalar-capture review with complete source coverage: The original complete membership and tree proofs support 36 capture/observation-stage findings across 1,838 observations; 64 dialog motion observations remain unresolved. Independent source authentication and coverage preserve raw absence, explicit motion requests and prior scalar values. Actual prior/current builders must conserve unrelated complete findings. No resolved candidate gap, equal input, used layout or renderer causality is inferred. (tests/material-parity/gap-review-canonical-integration.spec.mjs:46)
-- explicit spacing composition with original-source replay and complete classification coverage: Existing full-tree composition proofs bind all 16 groups and 1,032 original observations. Production classification retains unequal application/plugin requests, explicit shorthand and raw omitted longhands. Independent coverage rejects missing owners and findings; prior/current builder conservation must preserve every scalar and unrelated complete finding. This does not establish computed gap, layout equivalence, historical motivation or renderer causality. (tests/material-parity/explicit-gap-canonical-integration.spec.mjs:47)
+- bounded original motion and scalar-capture review with complete source coverage: The original complete membership and tree proofs support 36 capture/observation-stage findings across 1,838 observations; 64 dialog motion observations remain unresolved. Independent source authentication and coverage preserve raw absence, explicit motion requests and prior scalar values. Actual prior/current builders must conserve unrelated complete findings. No resolved candidate gap, equal input, used layout or renderer causality is inferred. (tests/material-parity/gap-review-canonical-integration.spec.mjs:47)
+- explicit spacing composition with original-source replay and complete classification coverage: Existing full-tree composition proofs bind all 16 groups and 1,032 original observations. Production classification retains unequal application/plugin requests, explicit shorthand and raw omitted longhands. Independent coverage rejects missing owners and findings; prior/current builder conservation must preserve every scalar and unrelated complete finding. This does not establish computed gap, layout equivalence, historical motivation or renderer causality. (tests/material-parity/explicit-gap-canonical-integration.spec.mjs:48)
 - gap observation-stage source binding with exact coverage and prior precedence: Every original normal-versus-local-omission observation is retained, including explicit requests and motion review cases. Independently hash-bound tree replay and exact classified coverage explain diagnostic-stage differences without inventing candidate computed defaults or used spacing. Actual prior/current builders preserve normalization, earlier attribution, all scalar rows and unrelated complete records. Public gap grammar, unit and axis failures remain independent findings; full canonical conservation and rendering verification remain separate gates. (tests/material-parity/owner-gap-canonical-integration.spec.mjs:50)
 - grid-template observation-stage evidence with original-source coverage and prior precedence: Original scalar/tree joins retain browser-computed none and absent candidate local declarations without inventing computed values. Actual prior/current builders preserve normalization, all scalar rows and unrelated complete classifications across every family and diagnostic interaction states. Full declaration replay and exact coverage validation preserve earlier non-grid proof and negative cases. Active-grid behavior, implicit-track sizing, plugin ownership and rendering remain independent obligations; full canonical conservation is a separate gate. (tests/material-parity/owner-grid-initial-canonical-integration.spec.mjs:54)
 - fixed button widths retain authored differences even where scalars match: Original source binding retains every selected button owner before numerical filtering. Actual prior production classification supplies the baseline with unchanged normalization and aliases. All nine authored-width groups remain in the ledger, including the scalar-matching core owners; only unequal scalar rows receive attribution. Exact values, existing unrelated classifications and source/state coverage are preserved. Missing binding or lost scalar-matching owners is rejected. Full-report conservation and used-layout/raster proof remain separate gates. (tests/material-parity/button-fixed-width-canonical-integration.spec.mjs:46)
