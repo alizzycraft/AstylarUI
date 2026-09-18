@@ -1,6 +1,22 @@
 # Complete audit harness coverage
 
-## Current inventory: component font-scope inputs are registered
+## Current inventory: expansion title font inputs are registered
+
+Discovery includes **125 files**: 117 Material, four general and four TTS,
+retaining all 43 legacy files. The [expansion title proof](material-expansion-title-inputs.md)
+authenticates all 68 original observations: 51 local omissions and 17 compact
+title-only overrides. It preserves the 51 numerically matching retained sizes
+alongside 17 unequal sizes and distinguishes declaration scope from rendering.
+No canonical attribution or renderer behavior changes.
+
+Independent no-write replay passes. The focused/inventory run passes **6/6**,
+exit **0**, in 3,254.0323ms, with 108 rejection-control executions. The original
+120-file full run remains live (runner 24392, parent 24492, grid-integration
+child 11628 at this snapshot), with 720 reported results and the two diagnosed
+historical conservation failures. Its selected test/source files are unchanged;
+this new focused result is not complete current-harness acceptance.
+
+## Previous inventory: component font-scope inputs are registered
 
 The subsequent [visual-owner font-stage extension](material-container-font-stages.md)
 keeps this 124-file inventory. It adds 138 original observations / 12 proposed
