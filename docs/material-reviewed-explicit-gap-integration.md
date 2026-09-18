@@ -27,9 +27,11 @@ renderer fix, gap equivalence or complete audit acceptance.
 node --test --test-concurrency=1 tests/material-parity/explicit-gap-canonical-integration.spec.mjs tests/material-parity/gap-review-canonical-integration.spec.mjs
 ```
 
-The first file's sole test is **passed**, in **906,280.4098ms**; its child process
-has exited and the sequential runner has started the second file. The combined
-run is not yet terminal, so **no 2/2 or complete-suite pass is claimed**.
+The first file's sole test passed in **906,280.4098ms**. The
+[gap-review sibling](material-reviewed-gap-review-integration.md) subsequently
+passed in **1,985,557.7593ms**. The combined run is terminal: **2/2 pass**, zero
+failures/skips/cancellations/TODOs, **2,897,781.2575ms** total. This is not a
+complete-suite pass.
 Log: `artifacts/material-parity/field-host-flow-input-audit/historical-reviewed-conservation-production.log`.
 
 An earlier in-memory diagnostic launcher failed before executing any test
@@ -38,6 +40,6 @@ temporary launcher was removed once the independent freshness job finished;
 this result comes from the normal production test files, not that diagnostic.
 Its log remains `historical-reviewed-conservation-diagnostic.log`.
 
-The sibling gap-review replay, remaining historical conservation checks,
+The remaining historical conservation checks,
 final canonical source-freshness regeneration, complete current harness and
 enforced rendering matrix remain outstanding.

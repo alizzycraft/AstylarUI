@@ -47,6 +47,9 @@ Read-only projection against the original populations identifies:
 The [explicit-gap production replay](material-reviewed-explicit-gap-integration.md)
 has now passed its sole test in 906,280.4098ms: all 892 scalars and the original
 867-row digest remain intact after authenticating exactly 13 later groups / 424
-observations. The sequential runner is still executing the gap-review sibling;
-no combined 2/2 pass is claimed. Other historical integration tests need the
-same evidence-based review, not blanket exemption.
+observations. The [gap-review sibling](material-reviewed-gap-review-integration.md)
+also passed in 1,985,557.7593ms: all 2,173 scalars, 64 pending motion observations
+and the original 2,105-row digest remain intact after authenticating exactly
+19 later groups / 195 observations. The sequential run is terminal, **2/2 pass**,
+with no failures, skips, cancellations or TODOs. Other historical integration
+tests need the same evidence-based review, not blanket exemption.

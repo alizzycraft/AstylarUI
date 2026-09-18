@@ -16,8 +16,10 @@ historical-payload replay. Generation and write-prohibited replay pass. Its
 first combined focused run is 6/7 because of a no-op mutation test; the corrected
 combined suite passes **7/7**, exit 0, in **392,055.816ms**, including the
 independent no-write source/payload replay and 39 rejection controls. The historical
-gap-review and two button tests are also still running. These are pending
-bounded verification increments, not a complete current-harness result or
+[explicit-gap/gap-review run](material-reviewed-gap-review-integration.md) is
+terminal, **2/2 pass**, in 2,897,781.2575ms. Button fixed-width also passed its
+sole test in 1,228,694.8176ms; its request sibling remains live. These are bounded
+verification increments, not a complete current-harness result or
 canonical promotion. Earlier inventory/results below are checkpoints.
 
 Discovery includes **144 files**: 136 Material, four general and four TTS,

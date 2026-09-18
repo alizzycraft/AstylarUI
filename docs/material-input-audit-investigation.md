@@ -26,11 +26,13 @@ in **392,055.816ms**, including independent no-write source/payload replay and
 39 rejection controls. There is no canonical promotion or complete-suite claim.
 Discovery now contains 145 files, including all 43 legacy files.
 
-The explicit-gap historical replay passed (see its dedicated report); the
-gap-review sibling remains live. The button fixed-width/request historical
+The [explicit-gap and gap-review historical replay](material-reviewed-gap-review-integration.md)
+is terminal, **2/2 pass**, in 2,897,781.2575ms. Their original scalar and complete-row
+hash assertions remain intact. The button fixed-width/request historical
 tests now authenticate exactly eight later state-layer preblend groups / 24
 observations before reconstructing metadata for their unchanged original-row
-checks. Their production replay is live and not yet accepted. The authoritative
+checks. Fixed-width passed its sole test in 1,228,694.8176ms; the request sibling
+is still live, so no combined pass is claimed. The authoritative
 canonical unresolved count remains 2,026; source freshness and the complete
 enforced matrix remain outstanding after these audit-test additions.
 
