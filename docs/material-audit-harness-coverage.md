@@ -1,6 +1,16 @@
 # Complete audit harness coverage
 
-## Current inventory: disabled slider input proof is registered
+## Current inventory: list/table inherited-font replacement proof is registered
+
+Discovery now includes **119 files**: 111 Material, four general and four TTS,
+retaining all 43 legacy files. The [list/table font-input proof](material-container-font-inputs.md)
+reviews 104 original owners, including all 52 numerically matching observations.
+Its two tests and four inventory tests pass **6/6**, exit **0**, with eighteen
+negative controls applied independently to each family (36 executions).
+The table's 14px-to-16px fixture history is kept separate from the core changes
+in the same commit. No canonical promotion or renderer acceptance is claimed.
+
+## Previous inventory: disabled slider input proof is registered
 
 Discovery now includes **118 files**: 110 Material, four general and four TTS,
 retaining all 43 legacy files. The [disabled slider input proof](material-slider-disabled-inputs.md)

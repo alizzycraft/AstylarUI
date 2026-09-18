@@ -21,6 +21,7 @@ test('complete Material audit plan includes every discovered suite and every leg
   assert.ok(plan.additionalFiles.includes('tests/material-parity/border-context-history.spec.mjs'));
   assert.ok(plan.additionalFiles.includes('tests/material-parity/button-hover-composition.spec.mjs'));
   assert.ok(plan.additionalFiles.includes('tests/material-parity/slider-disabled-inputs.spec.mjs'));
+  assert.ok(plan.additionalFiles.includes('tests/material-parity/container-font-inputs.spec.mjs'));
   assert.ok(plan.files.includes('tests/parity/material-audit-harness-inventory.spec.mjs'));
   assert.deepEqual(plan.nodeArguments, ['--test', '--test-concurrency=1', ...plan.files]);
   assert.equal(plan.files.length, Object.values(plan.counts).reduce((a, b) => a + b, 0));
