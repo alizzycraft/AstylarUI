@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "kind": "pending-motion-parent-receipt-diagnostic",
+  "baselineRevision": "a98ef5d70022f3b36c1d70f5edd73f20061a1732",
+  "originalFailureRetained": true,
+  "protectedFilesUnchanged": true,
+  "changedSource": {
+    "file": "tests/material-parity/input-equivalence-audit.mjs",
+    "previous": "252754869d5683cc76ba0784a96fc55d5c50aa8eeeb8a0441c131ec0a62eb6d4",
+    "current": "b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73"
+  },
+  "unchangedSurveyProjectionSha256": "a04b319b49de5f02ca11163957c4e2ba3928737b8e8982c9a25d248efca750fd",
+  "parentReceipt": {
+    "saved": {
+      "file": "docs/material-owner-gap-input-survey.json",
+      "sha256": "77b6b28a7094731abbdd574007f0ef449748cb65020a69c4147c52f1f995b128"
+    },
+    "current": {
+      "file": "docs/material-owner-gap-input-survey.json",
+      "sha256": "2575edb57305d009386dd20864a1de56f36e6e49a709859e128a393e6121a7d3"
+    }
+  },
+  "browser": {
+    "saved": "152.0.7977.76",
+    "fresh": "152.0.7977.84"
+  },
+  "unchangedCssomProjectionSha256": "dd34fc3992afc4a13c7ea9f23c2e2d4bf320b707c7a7be84cda39e87224cadcc",
+  "verifier": {
+    "file": "scripts/verify-material-motion-cssom-capture.mjs",
+    "sha256": "fcaee07d55e0af1914bb38db023741eb835782a6d1d2a1a5d9c1c515f6c26310",
+    "outputSinkOnlyAdapted": true
+  },
+  "browserControls": 6,
+  "originalDialogCases": 32,
+  "unchangedPendingGroups": 2,
+  "unchangedPendingObservations": 64,
+  "unchangedBindingRowsSha256": "660d4829b07b2cd5ed681b65fcf1648d5636a284588d4e9c32b449409872d8b5",
+  "rejectionControls": 7,
+  "canonicalIntegration": false,
+  "inputEquivalent": false,
+  "originalResolvedMotionVerified": false,
+  "renderingEquivalent": false,
+  "limitation": "Read-only replay diagnoses a stale receipt and conserves all original findings. It does not repair the original failing test or prove renderer, computed-motion, or gap-layout parity."
+}

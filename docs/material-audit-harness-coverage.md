@@ -2,6 +2,14 @@
 
 ## Current inventory: pending font proposal coverage is registered
 
+The subsequent [pending-motion receipt diagnostic](material-motion-parent-receipt-diagnostic.md)
+explains the third observed full-run failure without changing its selected
+inputs: only a parent survey's audit-module fingerprint advanced. A fresh
+browser replay retains all six controls, 32 original cases and 64 pending
+observations; the browser patch version change is recorded explicitly. Seven
+mutation controls pass. The original failing binding remains unchanged until
+the full run is terminal. Discovery remains 129 files.
+
 Discovery includes **129 files**: 121 Material, four general and four TTS,
 retaining all 43 legacy files. The [pending font coverage index](material-pending-font-coverage.md)
 authenticates all 98 pending font-size groups / 1,831 observations against four
