@@ -2,7 +2,7 @@
 
 This is audit instrumentation evidence, not a renderer or fixture correction.
 The original historical tests remained unchanged in diagnostic commit `0d7e46c`.
-The verified button-width correction is recorded separately below.
+The verified button-width and button-request corrections are recorded separately below.
 
 ## Original failure and retained assertions
 
@@ -116,10 +116,31 @@ requests and reviewed-authoring files. No canonical payload is regenerated yet;
 source-inventory refresh is deferred until the remaining verified test changes
 can be batched. No runtime or fixture fix is included.
 
+## Verified button-request integration (2026-09-18)
+
+The same unfiltered three-file command has now completed
+`button-requests-canonical-integration.spec.mjs`: **1 pass**, **995,309.5196 ms**.
+Its runner has advanced to reviewed-authoring, whose positive and negative tests
+are not yet claimed to pass. The live aggregate log named above preserves the
+completed result and its full diagnostic counts.
+
+The correction independently authenticates **20 caret groups / 283 observations**,
+requires zero pending caret observations in this subset, and rejects overlap
+with the original formatting/width/box groups and later gaps. All **2,938 ordered
+scalar rows** and **2,829 complete unrelated rows** remain unchanged, with digest
+`9b1d77e487e5931de72a353185df5fc8cb0097e2040260820147b4fed610c001`.
+All original source-validation and detached-evidence rejection assertions remain.
+The test's existing structural comparison is retained; no expected checksum is
+replaced and no whole-property exemption is introduced.
+
+Scoped diff review and `git diff --check` pass. The strict helper has not changed
+since its three passing controls recorded above. This is another audit-only
+correction, not a rendering fix or complete harness acceptance.
+
 ## Next boundary
 
-Finish the unfiltered button-requests and reviewed-authoring replays, including
-the slow detached/inflated-evidence test, before accepting their corrections.
+Finish the unfiltered reviewed-authoring replay, including the slow
+detached/inflated-evidence test, before accepting its correction.
 Require the same authenticated signatures, disjointness from original and
 later-gap populations, and complete comparison of every other record. Preserve
 all original authoring checks and negative controls.
