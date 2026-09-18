@@ -12,6 +12,9 @@ const choices = {
   'button-fixed-width': "    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'all complete rows outside the original width/box groups and independently verified later gaps remain unchanged');",
   'button-requests': "    assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'complete unrelated rows remain unchanged after original groups and independently verified later gaps');",
   'reviewed-authoring': '  assert.equal(hash(JSON.stringify(others(audit))), hash(JSON.stringify(others(previous))));',
+  'button-box-sizing': "  assert.equal(hash(other(audit)), hash(other(previous)), 'complete unrelated rows unchanged');",
+  'owner-gap': "  assert.equal(hash(other(audit)), hash(other(previous)), 'every unrelated complete row remains identical');",
+  'owner-grid-initial': "    assert.equal(hash(other(audit)), hash(other(previous)), 'complete unrelated rows unchanged');",
 };
 assert.equal(process.argv.length, 3);
 const name = process.argv[2]; assert.ok(Object.hasOwn(choices, name));
@@ -20,8 +23,9 @@ const revision = 'a6c98bd';
 const source = execFileSync('git', ['show', `${revision}:${file}`], { encoding: 'utf8' });
 const sourceSha256 = createHash('sha256').update(source).digest('hex');
 const anchor = choices[name]; assert.equal(source.split(anchor).length, 2);
+const otherFunction = ['button-box-sizing', 'owner-gap', 'owner-grid-initial'].includes(name) ? 'other' : 'others';
 const insertion = `
-  const diagnosticBefore = others(previous), diagnosticAfter = others(audit);
+  const diagnosticBefore = ${otherFunction}(previous), diagnosticAfter = ${otherFunction}(audit);
   assert.equal(diagnosticBefore.length, diagnosticAfter.length);
   const diagnosticKeys = diagnosticCaretDelta(audit, previous);
   const diagnosticChanged = [], diagnosticUnchanged = [];
@@ -37,7 +41,7 @@ const insertion = `
       previousCompleteSha256:diagnosticDigest(a), currentCompleteSha256:diagnosticDigest(b) });
   }
   assert.equal(diagnosticChanged.length, diagnosticKeys.size);
-  const diagnosticOther = r => others(r).filter(d => !diagnosticKeys.has(JSON.stringify(scalar(d))));
+  const diagnosticOther = r => ${otherFunction}(r).filter(d => !diagnosticKeys.has(JSON.stringify(scalar(d))));
   assert.deepEqual(diagnosticOther(audit), diagnosticOther(previous));
   console.log(JSON.stringify({ kind:'historical-button-later-caret-conservation-diagnostic',
     source:${JSON.stringify(file)}, sourceRevision:${JSON.stringify(revision)}, sourceSha256:${JSON.stringify(sourceSha256)}, baselineCommit,

@@ -39,6 +39,11 @@ each original assertion and must show exact changed-record membership before
 any historical comparison is corrected. In particular, the slider's frozen
 `4e1f09fc...` checksum must not simply be replaced with the observed `06e2e601...`.
 
+The subsequent [box/gap/grid diagnostics](material-box-gap-grid-caret-conservation.md)
+now explain those three complete-row failures with exact authenticated caret
+metadata changes and unchanged remaining records. Corrected replay is separate;
+the slider cause is not inferred from their results.
+
 The tooltip passes require no corresponding correction. They do not prove
 tooltip rendering is correct: these tests concern audit classification and
 conservation, not the reported positioning, size or blur symptoms.
