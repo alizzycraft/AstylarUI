@@ -129,6 +129,10 @@ test('mapping projection rejects changed retained functions imports and links in
     "\nimport { collectReviewedInputAuditInputs, validateReviewedInputAuditInputs, reviewedInputClassificationContexts, classifyReviewedInput, validateReviewedInputClassifications } from './reviewed-input-audit-source-binding.mjs';\n";
   if (!current.includes("from './reviewed-input-proposal-transition.mjs'")) current +=
     "\nimport { reviewedInputAttributions } from './reviewed-input-proposal-transition.mjs';\n";
+  if (!current.includes("from './followup-input-audit-source-binding.mjs'")) current +=
+    "\nimport { collectFollowupInputAuditInputs, validateFollowupInputAuditInputs, followupInputClassificationContexts, classifyFollowupInput, validateFollowupInputClassifications } from './followup-input-audit-source-binding.mjs';\n";
+  if (!current.includes("from './followup-input-proposal-transition.mjs'")) current +=
+    "\nimport { followupInputAttributions } from './followup-input-proposal-transition.mjs';\n";
   const result = verifyOverlayMappingAuditProjection(source, Buffer.from(current), anchor);
   assert.ok(result.retainedStatements > 100); assert.equal(result.recordedSha256, source.sha256);
   const mutations = [
@@ -138,6 +142,11 @@ test('mapping projection rejects changed retained functions imports and links in
     s => s + '\nimport { unrelated } from "./unreviewed.mjs";\n',
     s => s.replace("from './benchmark.config.mjs'", "from './changed-benchmark.mjs'"),
     s => s.replace('classifyReviewedInput, validateReviewedInputClassifications', 'classifyReviewedInput, unexpectedAlias'),
+    s => s.replace('classifyFollowupInput, validateFollowupInputClassifications', 'classifyFollowupInput, unexpectedAlias'),
+    s => s.replace('import { followupInputAttributions }', 'import { followupInputAttributions as otherAttributions }'),
+    s => s.replace('import { followupInputAttributions }', 'import defaultAttributions, { followupInputAttributions }'),
+    s => s + "\nimport { followupInputAttributions } from './followup-input-proposal-transition.mjs';\n",
+    s => s + '\nfunction mappingReachesFollowup() { return classifyFollowupInput({}); }\n',
     s => s + '\nfunction mappingReachesOrchestration() { return buildMaterialInputAudit({}); }\n',
     s => s + '\nfunction mappingReachesCollector() { return collectStyleDiscrepancies([]); }\n',
   ];

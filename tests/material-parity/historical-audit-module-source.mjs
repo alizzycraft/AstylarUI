@@ -25,6 +25,9 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
     ['./reviewed-input-audit-source-binding.mjs', ['collectReviewedInputAuditInputs', 'validateReviewedInputAuditInputs',
       'reviewedInputClassificationContexts', 'classifyReviewedInput', 'validateReviewedInputClassifications']],
     ['./reviewed-input-proposal-transition.mjs', ['reviewedInputAttributions']],
+    ['./followup-input-audit-source-binding.mjs', ['collectFollowupInputAuditInputs', 'validateFollowupInputAuditInputs',
+      'followupInputClassificationContexts', 'classifyFollowupInput', 'validateFollowupInputClassifications']],
+    ['./followup-input-proposal-transition.mjs', ['followupInputAttributions']],
   ]);
   function project(text, isCurrent) {
     const parsed = ts.createSourceFile(recorded.file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
