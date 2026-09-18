@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "kind": "slider-authoring-history-source-receipt",
+  "sourceFile": "examples/material-showcase/src/app/astylar.component.ts",
+  "hashEncoding": "UTF-8 with CRLF normalized to LF",
+  "scope": "Historical authoring facts, not execution of old builds, proof of author intent, or canonical attribution promotion",
+  "revisions": [
+    {
+      "revision": "2f440115740ff76fa9e55b3f4a11568207b2af5a",
+      "sourceSha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+      "finding": "Initial full domains and step 5 coexist with custom hard-coded invisible hit boxes and a separate visual owner",
+      "requiredFragments": [
+        "id: 'slider-start', class: 'range-layer', min: '0', max: '100', step: '5', value: String(state.sliderStart)",
+        "id: 'slider-primary', class: 'range-layer', min: '0', max: '100', step: '5', value: String(state.sliderValue)",
+        "selector: '#slider-start', width: '350px'",
+        "selector: '#slider-primary', width: '399px'",
+        "type: 'showcase.material:range-visual', id: 'slider-material-visual'"
+      ]
+    },
+    {
+      "revision": "7159b1d5266ed4bc03b56581b8034526abae892b",
+      "sourceSha256": "8835dc9714940ff55cb5d926a72df4dd6af5c3bf1683dec360926440c5120e0e",
+      "finding": "Fixed half-domains and hard clamping introduced; step remains 5",
+      "requiredFragments": [
+        "id: 'slider-start', class: 'range-layer', min: '0', max: '50', step: '5', value: String(Math.min(50, state.sliderStart))",
+        "id: 'slider-primary', class: 'range-layer', min: '50', max: '100', step: '5', value: String(Math.max(50, state.sliderValue))"
+      ]
+    },
+    {
+      "revision": "d973f8479d8ff36b8634a2da345a9f9958d57cbd",
+      "sourceSha256": "809437c72f99af53f810b3c8ed428d0f6a38ec56d0e914a2a51f32c61bc0c74f",
+      "parentSourceSha256": "e54a78c81d595bac655324e5f5011ec1a053bbc456ccb77ecaa6b6672a24af1e",
+      "finding": "Input handler replaces store/document updates with a mesh-metadata visual callback; state commit moves to change",
+      "requiredFragments": [
+        "this.updateSliderVisual(nextStart, nextEnd)",
+        "['checkbox-primary', 'select-control', 'radio-team', 'radio-solo'].includes(targetId)",
+        "const updateRange = range?.metadata?.updateRange",
+        "if (typeof updateRange === 'function') updateRange(start / 100, end / 100)"
+      ],
+      "parentRequiredFragments": [
+        "['slider-primary', 'slider-start', 'checkbox-primary', 'select-control', 'radio-team', 'radio-solo'].includes(targetId)"
+      ]
+    },
+    {
+      "revision": "f3c8254c2aa63197c03e0fb2bd43cc98c0e57fed",
+      "sourceSha256": "944417c135e7f917f88ff9772096d2b527b47c1c9911369bcecef71ed540d94c",
+      "finding": "Step changes from 5 to 1 without restoring the full domains",
+      "requiredFragments": [
+        "id: 'slider-start', class: 'range-layer', min: '0', max: '50', step: '1', value: String(Math.min(50, state.sliderStart))",
+        "id: 'slider-primary', class: 'range-layer', min: '50', max: '100', step: '1', value: String(Math.max(50, state.sliderValue))"
+      ]
+    },
+    {
+      "revision": "2cb8b198d40212746f2b7be0053c742bd5da6628",
+      "sourceSha256": "479613f7b9f468be9022edb1f2adda45710003b7ee300c12adff1c308eec4677",
+      "finding": "Hover/pressed visual state also moves through a metadata callback; half-domains and step 1 remain",
+      "requiredFragments": [
+        "this.updateSliderStateLayer(sliderHandleName(event.targetId), .12)",
+        "const updateStateLayer = range?.metadata?.updateStateLayer",
+        "if (typeof updateStateLayer === 'function') updateStateLayer(handle, alpha)",
+        "min: '0', max: '50', step: '1'",
+        "min: '50', max: '100', step: '1'"
+      ]
+    },
+    {
+      "revision": "ce8f3f1c90e7f6dae69df3152e8ee97dbbbe2c5b",
+      "sourceSha256": "bd5c9571202c2960c78aae3015f52f2cd1342c943d9adfe57c50d048c73c9741",
+      "finding": "Fixed pixel hit widths become responsive 50-percent halves; value constraints remain unequal",
+      "requiredFragments": [
+        "selector: '#slider-start', width: '50%', height: '44px', top: '2px', left: '0', opacity: '0'",
+        "selector: '#slider-primary', width: '50%', height: '44px', top: '2px', left: '50%', opacity: '0'",
+        "min: '0', max: '50', step: '1'",
+        "min: '50', max: '100', step: '1'"
+      ]
+    },
+    {
+      "revision": "3dcbdd9395b6daf34fa20b630f37304d1742a3ad",
+      "sourceSha256": "d413f5ff188450cb88f532aac972baef26c63e2b339c4dc71a2a61d197da8e7f",
+      "finding": "Comparison geometry changes and visual owner is renamed; half-domains and step 1 remain",
+      "requiredFragments": [
+        "selector: '.range-stack', position: 'relative', width: '100%', height: '48px', margin: '0 8px'",
+        "type: 'showcase.material:range-visual', id: 'slider-visual'",
+        "min: '0', max: '50', step: '1'",
+        "min: '50', max: '100', step: '1'"
+      ]
+    }
+  ],
+  "implementationOrder": [
+    "Correct core active-gesture preservation through public updates and semantic focus synchronization using the existing equivalent-input button/range reproductions",
+    "Correct captured-owner release routing and isolate native range travel metrics without compensating fixture offsets",
+    "Restore full reference domain, step and peer-dependent constraints through shared core interaction; remove fixed half-domain clamping",
+    "Restore state-layer and disabled-state ownership through shared paint and styling, then verify both thumbs and independent input-state/raster assertions"
+  ],
+  "rendererChanged": false,
+  "canonicalAttributionChanged": false,
+  "originalSwappedThumbCauseProven": false,
+  "historicalAuthorIntentProven": false
+}
