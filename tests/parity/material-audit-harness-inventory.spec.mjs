@@ -16,6 +16,7 @@ test('complete Material audit plan includes every discovered suite and every leg
   assert.ok(plan.additionalFiles.includes('tests/material-parity/owner-caret-proof-commands.spec.mjs'));
   assert.ok(plan.additionalFiles.includes('tests/material-parity/owner-caret-canonical-integration.spec.mjs'));
   assert.ok(plan.additionalFiles.includes('tests/material-parity/owner-caret-canonical-conservation.spec.mjs'));
+  assert.ok(plan.additionalFiles.includes('tests/material-parity/later-caret-integration-conservation.spec.mjs'));
   assert.ok(plan.files.includes('tests/parity/material-audit-harness-inventory.spec.mjs'));
   assert.deepEqual(plan.nodeArguments, ['--test', '--test-concurrency=1', ...plan.files]);
   assert.equal(plan.files.length, Object.values(plan.counts).reduce((a, b) => a + b, 0));

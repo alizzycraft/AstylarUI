@@ -1,6 +1,16 @@
 # Complete audit harness coverage
 
-## Current inventory: complete caret conservation controls are registered
+## Current inventory: historical caret conservation controls are registered
+
+Discovery includes **114 files**: **106 Material**, four general parity and four
+TTS, retaining all **43 legacy files**. The new historical-delta controls pass
+**3/3** and the inventory guard passes **4/4**. These controls require an
+authenticated caret population before a later classification can be separated
+from an older integration test's unrelated-row checksum. They do not exempt a
+whole property. See [the diagnostic and conservation contract](material-field-host-later-caret-conservation.md).
+The complete current harness and enforced rendering matrix remain outstanding.
+
+## Earlier inventory: complete caret conservation controls are registered
 
 Discovery includes **113 files**: **105 Material**, four general parity and four
 TTS, retaining all **43 legacy files**. The new complete-row conservation tests
