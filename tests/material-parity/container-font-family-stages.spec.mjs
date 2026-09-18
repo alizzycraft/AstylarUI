@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
-import { collectContainerFontFamily, inspectContainerFontFamily, containerFontFamilyTargets }
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { collectContainerFontFamily, inspectContainerFontFamily, containerFontFamilyTargets, planContainerFontFamily }
   from '../../scripts/audit-material-container-font-family-stages.mjs';
 import { materialAuditHarnessPlan } from '../../scripts/run-material-audit-harness.mjs';
 
@@ -100,4 +102,68 @@ test('stepper component token cannot be reclassified as shared page family inher
   const input = e.styleInputs.find(i => i.id === 'stepper-primary');
   assert.throws(() => inspectContainerFontFamily('stepper', input,
     JSON.parse(readFileSync(e.inputTrees.reference.file)), JSON.parse(readFileSync(e.inputTrees.astylar.file))));
+});
+
+test('container family proposal authenticates the original capture and every complete canonical row', () => {
+  const result = JSON.parse(execFileSync(process.execPath,
+    ['--max-old-space-size=512', 'scripts/audit-material-container-font-family-stages.mjs', '--plan', '--check'],
+    { encoding: 'utf8', maxBuffer: 1024 * 1024 }));
+  assert.equal(result.proposedGroups, 20); assert.equal(result.proposedObservations, 1082);
+  assert.equal(result.otherCompleteRows, 8319); assert.equal(result.canonicalAttributionChanged, false);
+});
+
+// Synthetic inputs below isolate join validation. Only the independent CLI
+// test above establishes actual source and full-canonical-payload conservation.
+function joinFixture() {
+  const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const input = { id: 'badge-primary', reference: { fontFamily: 'Roboto, Arial, sans-serif' }, astylar: {} };
+  const caseId = 'static:badge@light/desktop', viewport = { id: 'desktop' }, inputTrees = { reference: { sha256: 'reference' }, astylar: { sha256: 'candidate' } };
+  const finding = { case: caseId, family: 'badge', element: input.id, profile: 'light', state: 'static', viewport, inputTrees,
+    originalInputSha256: digest(input), proof: { property: 'fontFamily', classification: 'parity-harness-defect',
+      attribution: 'container-computed-inheritance-versus-local-font-family-stage', authoredFamilyInheritanceMatches: true,
+      candidateLocalFontFamily: '<omitted>', referenceComputedFontFamily: input.reference.fontFamily,
+      computedCandidateVerified: false, wholeElementInputEquivalent: false, rendererCauseProven: false,
+      renderingEquivalent: false, descendantTypographyVerified: false } };
+  const proof = { canonicalAttributionChanged: false, rendererChanged: false, inputEquivalent: false, renderingEquivalent: false,
+    observations: 1, originalCasesScanned: 1, findings: [finding],
+    counts: Object.fromEntries(Object.keys(containerFontFamilyTargets).map(id => [id, id === input.id ? 1 : 0])) };
+  const original = { results: [{ family: 'badge', profile: 'light', viewport, inputTrees, styleInputs: [input] }], interactions: [] };
+  const rows = [{ family: 'badge', element: input.id, property: 'fontFamily', reference: 'roboto,arial,sans-serif',
+    occurrences: 1, cases: [caseId], states: ['static'], attribution: 'unresolved', rawEvidence: { retain: true } },
+    { family: 'other', element: 'other', property: 'fontSize', attribution: 'existing-review', rawEvidence: { retain: true } }];
+  return { proof, original, rows };
+}
+const fixtureNormalizer = value => value.fontFamily ? { fontFamily: value.fontFamily.toLowerCase().replaceAll(' ', '') } : {};
+
+test('container family proposals reject changed membership prior classifications and unsupported claims', () => {
+  const changes = [
+    x => { x.proof.findings.pop(); },
+    x => { x.proof.findings.push(structuredClone(x.proof.findings[0])); x.proof.observations++; },
+    x => { x.original.results = []; },
+    x => { x.original.results.push(structuredClone(x.original.results[0])); },
+    x => { x.proof.findings[0].originalInputSha256 = 'changed'; },
+    x => { x.proof.findings[0].inputTrees = {}; },
+    x => { x.proof.findings[0].proof.referenceComputedFontFamily = 'Arial'; },
+    x => { x.proof.findings[0].proof.authoredFamilyInheritanceMatches = false; },
+    x => { x.proof.findings[0].proof.classification = 'equivalent-representation'; },
+    x => { x.rows[0].attribution = 'existing-review'; },
+    x => { x.rows[0].cases = ['invented']; },
+    x => { x.rows[0].states = ['hover']; },
+    x => { x.rows[0].occurrences++; },
+    x => { x.rows.push(structuredClone(x.rows[0])); },
+    x => { x.rows[0].reference = 'Arial'; },
+    x => { x.proof.counts['badge-primary']--; },
+    x => { x.proof.originalCasesScanned++; },
+    ...['computedCandidateVerified', 'wholeElementInputEquivalent', 'rendererCauseProven', 'renderingEquivalent',
+      'descendantTypographyVerified'].map(flag => x => { x.proof.findings[0].proof[flag] = true; }),
+    ...['canonicalAttributionChanged', 'rendererChanged', 'inputEquivalent', 'renderingEquivalent'].map(flag => x => { x.proof[flag] = true; }),
+  ];
+  const base = joinFixture(), before = JSON.stringify(base), result = planContainerFontFamily(base.proof, base.original, base.rows, fixtureNormalizer);
+  assert.equal(result.proposedGroups, 1); assert.equal(result.otherCompleteRows, 1); assert.equal(result.canonicalAttributionChanged, false);
+  assert.equal(JSON.stringify(base), before);
+  for (const [index, mutate] of changes.entries()) {
+    const x = joinFixture(); mutate(x);
+    assert.throws(() => planContainerFontFamily(x.proof, x.original, x.rows, fixtureNormalizer), 'join mutation ' + index);
+  }
+  assert.equal(changes.length, 26);
 });

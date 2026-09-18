@@ -2,6 +2,15 @@
 
 ## Current inventory: container font-family stages are registered
 
+The subsequent [canonical family-stage proposal](material-container-font-family-attribution.md)
+joins 20 unresolved groups / 1,082 observations and conserves the other 8,319
+complete rows. Generation and independent source/full-payload replay pass;
+the expanded focused/inventory suite passes **9/9** in 102,832.7768ms, with
+2,466 mutation checks plus the stepper exclusion guard. No canonical
+classification changes. Discovery remains 131 files. The original full run
+has advanced to slider input-box source binding (runner 24392 / child 20616
+at this snapshot), with 824 reported results and the same three failures.
+
 Discovery includes **131 files**: 123 Material, four general and four TTS,
 retaining all 43 legacy files. The [container family-stage proof](material-container-font-family-stages.md)
 checks 1,082 observations across 20 mapped owners and all four profiles. It
