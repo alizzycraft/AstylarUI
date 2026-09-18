@@ -37,15 +37,16 @@ corrects the test fixture; the failure and corrected pass remain in
 `later-reviewed-input-conservation-focused-corrected.log` under
 `artifacts/material-parity/field-host-flow-input-audit/`.
 
-## Integration targets still pending
+## Production integration progress
 
 Read-only projection against the original populations identifies:
 
 - Explicit-gap historical test: 296 cases, **13 later groups / 424 observations**.
 - Gap-review historical test: 676 cases, **19 later groups / 195 observations**.
 
-The original gap/caret checks, unrelated-row counts and hashes should remain
-unchanged after reconstructing these authenticated metadata transitions. The
-helper's focused pass does not establish that those production-builder tests
-pass; their wiring and complete executions remain outstanding. Other historical
-integration tests need the same evidence-based review, not blanket exemption.
+The [explicit-gap production replay](material-reviewed-explicit-gap-integration.md)
+has now passed its sole test in 906,280.4098ms: all 892 scalars and the original
+867-row digest remain intact after authenticating exactly 13 later groups / 424
+observations. The sequential runner is still executing the gap-review sibling;
+no combined 2/2 pass is claimed. Other historical integration tests need the
+same evidence-based review, not blanket exemption.
