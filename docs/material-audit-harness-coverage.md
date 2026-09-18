@@ -1,6 +1,16 @@
 # Complete audit harness coverage
 
-## Current inventory: leaf font-family stages; original full run terminal
+## Current inventory: read-only plan checks; original full run terminal
+
+Discovery now includes **133 files**: 125 Material, four general and four TTS,
+retaining all 43 legacy files. The new [plan/check CLI regression](material-font-plan-check-mode.md)
+first reproduces two writes in supposed check mode, then passes 4/4 after the
+bounded argument-order correction. Both real source/frozen-canonical replays
+pass with writes prohibited and report bytes unchanged (188,168.142ms total).
+The separate inventory suite passes 4/4. This does not extend the completed
+120-file run or establish a new full-harness pass.
+
+## Previous inventory: leaf font-family stages
 
 The [motion receipt correction](material-post-full-motion-receipt-repair.md)
 has now passed its fresh browser replay and 3/3 focused tests (31 rejection

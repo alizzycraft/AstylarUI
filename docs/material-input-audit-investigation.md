@@ -3,7 +3,36 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Unfiltered audit harness finished with 16 retained failures
+## Current checkpoint: full 120-file run completed; bounded corrections underway
+
+The later unfiltered 120-file audit harness is terminal: **927 results, 924
+passed, three failed**, no skipped/cancelled/TODO results, in 14,641,295.202ms.
+Its launch inventory predates the newer source proofs; see the current
+[coverage record](material-audit-harness-coverage.md), not historical inventories
+below, for the latest scope. This is audit-harness evidence, not rendering parity.
+
+The [motion receipt correction](material-post-full-motion-receipt-repair.md)
+passes fresh browser/source replay and 3/3 tests while conserving all original
+observations and conclusions. Corrections to the two historical gap-conservation
+tests are still undergoing original-population replay. A separate
+[CLI check-mode defect](material-font-plan-check-mode.md) was reproduced:
+`--plan --check` could regenerate two reports instead of checking staleness.
+Its bounded correction passes 4/4 tests, including both complete source and
+frozen-canonical replays with filesystem writes prohibited and saved report
+bytes unchanged.
+
+The [leaf family source proof](material-leaf-font-family-stages.md) adds 152
+verified retained-text observations; it distinguishes local omission from
+inherited text input without claiming physical font or raster parity.
+Canonical attribution still has **2,160 unresolved groups**. The accumulated
+source-bound proposals require integration and complete conservation checks;
+the complete input audit and enforced rendering matrix remain outstanding.
+
+The sections below are chronological investigation evidence, not current
+completion claims. Earlier live-process and pending-repair descriptions refer
+to their recorded checkpoints.
+
+## Historical unfiltered audit harness finished with 16 retained failures
 
 The [complete 110-file run](material-audit-full-harness-110-result.md) terminated
 with exit 1: 898 TAP entries, 882 passed, 16 failed, zero skipped or cancelled.

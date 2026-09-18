@@ -214,7 +214,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   const args = process.argv.slice(2); assert.ok(args.every(a => ['--check', '--plan'].includes(a))); assert.equal(new Set(args).size, args.length);
   const plan = args.includes('--plan'), report = plan ? await collectHostFontTokenPlan() : collectHostFontTokens();
   const file = plan ? 'docs/material-host-font-token-attribution-plan.json' : 'docs/material-host-font-token-inputs.json', output = JSON.stringify(report, null, 2) + '\n';
-  if (args[0] === '--check') assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), output); else writeFileSync(file, output);
+  if (args.includes('--check')) assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), output); else writeFileSync(file, output);
   console.log(JSON.stringify({ ownerObservations: report.ownerObservations, propertyObservations: report.propertyObservations,
     counts: report.counts, proposedGroups: report.proposedGroups, proposedObservations: report.proposedObservations,
     otherCompleteRows: report.otherCompleteRows, reportSha256: hash(output), canonicalAttributionChanged: false }));

@@ -182,7 +182,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   const args = process.argv.slice(2); assert.ok(args.every(a => ['--check', '--plan'].includes(a))); assert.equal(new Set(args).size, args.length);
   const plan = args.includes('--plan'), report = plan ? await collectContainerFontFamilyPlan() : collectContainerFontFamily();
   const file = plan ? 'docs/material-container-font-family-attribution-plan.json' : 'docs/material-container-font-family-stages.json', output = JSON.stringify(report, null, 2) + '\n';
-  if (args[0] === '--check') assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), output); else writeFileSync(file, output);
+  if (args.includes('--check')) assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), output); else writeFileSync(file, output);
   console.log(JSON.stringify({ observations: report.observations, counts: report.counts, proposedGroups: report.proposedGroups,
     proposedObservations: report.proposedObservations, otherCompleteRows: report.otherCompleteRows,
     reportSha256: hash(output), canonicalAttributionChanged: false }));
