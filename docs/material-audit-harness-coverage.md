@@ -12,8 +12,9 @@ not replace complete current harness acceptance or explain the failed hashes.
 ## Current inventory: button hover composition is registered
 
 Discovery now includes **117 files**: **109 Material**, four general parity and
-four TTS. The [eight-case primary-button hover composition proof](material-button-hover-composition.md)
-and inventory controls pass **6/6**, exit **0**, with fourteen rejection controls.
+four TTS. The [24-case primary-button composition proof](material-button-hover-composition.md)
+scans the complete original population; its proof and inventory tests pass
+**7/7**, exit **0**, with seventeen rejection controls.
 This is a bounded unequal-input finding, not full harness or renderer acceptance.
 
 ## Previous inventory: historical border-context replay is registered

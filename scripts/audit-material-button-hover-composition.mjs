@@ -19,7 +19,10 @@ const hex = value => {
 };
 
 // A structural/paint-input observation, not a cascade engine or raster proof.
-export function inspectButtonHoverComposition(reference, candidate, mixHex) {
+export function inspectButtonHoverComposition(reference, candidate, mixHex, state = 'hover') {
+  assert.ok(['hover', 'activate', 'held'].includes(state), 'unreviewed interaction boundary');
+  const pressed = state === 'held', pseudoState = pressed ? 'active' : 'hover';
+  const opacityToken = pressed ? 'pressed' : 'hover';
   assert.deepEqual(reference.errors, []); assert.deepEqual(candidate.errors, []);
   assert.equal(reference.schemaVersion, 1); assert.equal(candidate.schemaVersion, 1);
   assert.equal(candidate.resolvedStyleEvidenceVersion, 2);
@@ -35,24 +38,24 @@ export function inspectButtonHoverComposition(reference, candidate, mixHex) {
   const baseStyle = reference.styles[host.style], layerStyle = reference.styles[pseudo.style];
   const layerRules = pseudo.rules.map(i => reference.rules[i]);
   assert.ok(layerRules.some(r => r.active === true && r.selector ===
-    '.mat-mdc-unelevated-button:hover > .mat-mdc-button-persistent-ripple::before' &&
-    r.declarations.opacity?.value === 'var(--mat-button-filled-hover-state-layer-opacity, var(--mat-sys-hover-state-layer-opacity))'));
+    `.mat-mdc-unelevated-button:${pseudoState} > .mat-mdc-button-persistent-ripple::before` &&
+    r.declarations.opacity?.value === `var(--mat-button-filled-${opacityToken}-state-layer-opacity, var(--mat-sys-${opacityToken}-state-layer-opacity))`));
   assert.ok(layerRules.some(r => r.active === true && r.declarations['background-color']?.value ===
     'var(--mat-button-filled-state-layer-color, var(--mat-sys-on-primary))'));
-  assert.equal(layerStyle.opacity, '0.08'); assert.equal(layerStyle.position, 'absolute');
+  assert.equal(layerStyle.opacity, pressed ? '0.12' : '0.08'); assert.equal(layerStyle.position, 'absolute');
   assert.equal(layerStyle.pointerEvents, 'none');
   const base = hex(baseStyle.backgroundColor), foreground = hex(layerStyle.backgroundColor);
   assert.equal(target.normalResolvedStyle.background, base);
   const flattened = mixHex(base, foreground, Number(layerStyle.opacity));
   assert.equal(target.interactionResolvedStyle.background, flattened);
   assert.equal(target.resolvedStyle.background, flattened);
-  const candidateRule = one(candidate.rules.filter(r => r.selector === '.material-button:hover'));
+  const candidateRule = one(candidate.rules.filter(r => r.selector === `.material-button:${pseudoState}`));
   assert.equal(candidateRule.background, flattened, 'captured hover declaration must explain the changed host background');
   const hostRules = host.rules.map(i => reference.rules[i]);
   assert.ok(hostRules.some(r => r.active === true && r.selector === '.mat-mdc-unelevated-button:not(:disabled)' &&
     r.declarations['background-color']?.value === 'var(--mat-button-filled-container-color, var(--mat-sys-primary))'));
   assert.notEqual(base, flattened);
-  return { referenceHost: host.key, referenceLayer: layer.key, candidateHost: target.key,
+  return { state, referenceHost: host.key, referenceLayer: layer.key, candidateHost: target.key,
     referenceBackground: baseStyle.backgroundColor, referenceLayerBackground: layerStyle.backgroundColor,
     referenceLayerOpacity: layerStyle.opacity, candidateNormalBackground: target.normalResolvedStyle.background,
     candidateEffectiveBackground: target.interactionResolvedStyle.background,
@@ -73,14 +76,29 @@ export function collectButtonHoverComposition() {
   const compiled = ts.transpileModule(fn.replace(/^export /, ''), { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
   const mixHex = new Function(compiled + '\nreturn mixHex;')();
   const directory = 'artifacts/material-parity/current-ancestry-audit', observations = [];
-  for (const profile of ['light', 'dark', 'contrast', 'custom']) for (const dpr of [1, 2]) {
-    const viewport = { id: `desktop-dpr${dpr}`, width: 1440, height: 1000, deviceScaleFactor: dpr };
-    const key = materialCaseKey('interaction', { family: 'button', profile, viewport, state: 'hover' });
+  const originalFile = `${directory}/latest-report.json`, originalBytes = readFileSync(originalFile);
+  const originalSha256 = hash(originalBytes);
+  assert.equal(originalSha256, 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const original = JSON.parse(originalBytes), selected = [], seen = new Set();
+  let primaryCases = 0;
+  for (const [kind, entries] of [['static', original.results], ['interaction', original.interactions]]) for (const entry of entries) {
+    const key = materialCaseKey(kind, entry); assert.ok(!seen.has(key)); seen.add(key);
+    if (entry.family !== 'button') continue;
+    const input = one(entry.styleInputs.filter(i => i.id === 'button-primary')); primaryCases++;
+    if (hex(input.reference.backgroundColor) === input.astylar.background) continue;
+    assert.equal(kind, 'interaction');
+    assert.ok(['hover', 'held', 'activate'].includes(entry.state), 'additional unequal background requires review');
+    selected.push({ key, entry, input });
+  }
+  assert.equal(seen.size, 2311); assert.equal(primaryCases, 60); assert.equal(selected.length, 24);
+  for (const { key, entry, input } of selected) {
+    const { profile, viewport, state } = entry;
     const file = `${directory}/checkpoint/${hash(key)}.json`, bytes = readFileSync(file);
     const record = JSON.parse(bytes);
     assert.equal(record.key, key); assert.equal(record.sha256, hash(JSON.stringify(record.result)));
     assert.equal(record.result.family, 'button'); assert.equal(record.result.profile, profile);
-    assert.deepEqual(record.result.viewport, viewport); assert.equal(record.result.state, 'hover');
+    assert.deepEqual(record.result.viewport, viewport); assert.equal(record.result.state, state);
+    assert.deepEqual(record.result, entry, 'original report and checkpoint must describe the same complete result');
     const trees = {};
     for (const side of ['reference', 'astylar']) {
       const descriptor = record.result.inputTrees[side], target = path.resolve(descriptor.file);
@@ -89,11 +107,17 @@ export function collectButtonHoverComposition() {
       const captured = one(record.files.filter(f => path.resolve(directory, f.file) === target));
       assert.equal(captured.sha256, descriptor.sha256); trees[side] = JSON.parse(data);
     }
-    observations.push({ profile, viewport, state: 'hover', checkpoint: { file, sha256: hash(bytes) },
-      inputTrees: record.result.inputTrees, proof: inspectButtonHoverComposition(trees.reference, trees.astylar, mixHex) });
+    const proof = inspectButtonHoverComposition(trees.reference, trees.astylar, mixHex, state);
+    assert.equal(input.reference.backgroundColor, proof.referenceBackground);
+    for (const stage of ['astylar', 'astylarInteractionResolvedStyle']) assert.equal(input[stage].background, proof.candidateEffectiveBackground);
+    assert.equal(input.astylarNormalResolvedStyle.background, proof.candidateNormalBackground);
+    observations.push({ profile, viewport, state, checkpoint: { file, sha256: hash(bytes) },
+      originalInputSha256: hash(JSON.stringify(input)), inputTrees: record.result.inputTrees, proof });
   }
   return { schemaVersion: 1, kind: 'button-hover-paint-composition-audit',
-    scope: 'Eight original primary-button hover captures only; not all backgrounds, held presses, transitions, or the complete interaction matrix.',
+    scope: 'Every unequal primary-button background in the original report: hover, held and activate. Not other button owners, transitions between boundaries, or full rendering equivalence.',
+    originalCapture: { file: originalFile, sha256: originalSha256 },
+    originalCasesScanned: seen.size, primaryCases, equalBackgroundCasesRetained: primaryCases - selected.length,
     sources: [{ file: sourceFile, sha256: hash(source) }, { file: themeFile, sha256: hash(themeSource) }],
     history: { revision: '2f44011', sourceSha256: hash(historical), hoverRule,
       conclusion: 'The preblended hover rule already exists in the initial Material showcase commit; author intent and a motivating renderer defect are not inferred.' },

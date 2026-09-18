@@ -10,9 +10,13 @@ const host = t => t.nodes.find(n => n.authored?.id === 'button-primary');
 const layer = t => t.nodes.find(n => n.attributes?.class?.split(/\s+/).includes('mat-mdc-button-persistent-ripple'));
 const mix = (...args) => { assert.deepEqual(args, ['#6750a4', '#ffffff', .08]); return '#735eab'; };
 
-test('eight checkpoint-bound button hover cases retain unequal paint composition', () => {
+test('all original unequal primary button backgrounds retain unequal paint composition', () => {
   const report = collectButtonHoverComposition();
-  assert.equal(report.cases, 8);
+  assert.equal(report.cases, 24);
+  assert.equal(report.originalCasesScanned, 2311);
+  assert.equal(report.primaryCases, 60);
+  assert.equal(report.equalBackgroundCasesRetained, 36);
+  for (const state of ['hover', 'held', 'activate']) assert.equal(report.observations.filter(o => o.state === state).length, 8);
   assert.equal(report.canonicalAttributionChanged, false);
   assert.equal(report.inputEquivalent, false);
   for (const row of report.observations) {
@@ -46,4 +50,17 @@ test('hover composition rejects changed ownership, requests, stages and structur
     assert.throws(() => inspectButtonHoverComposition(r, a, mix));
   }
   assert.equal(JSON.stringify([reference, candidate]), original);
+});
+
+test('held and post-activation paint boundaries are not substituted for hover', () => {
+  const read = (side, state) => JSON.parse(readFileSync(directory.replace('/hover/', `/${state}/`) + side + '-input-tree.json'));
+  const heldReference = read('reference', 'held'), heldCandidate = read('astylar', 'held');
+  const heldMix = (...args) => { assert.deepEqual(args, ['#6750a4', '#ffffff', .12]); return '#7965af'; };
+  const proof = inspectButtonHoverComposition(heldReference, heldCandidate, heldMix, 'held');
+  assert.equal(proof.referenceLayerOpacity, '0.12');
+  assert.equal(proof.candidateRule.selector, '.material-button:active');
+  assert.equal(inspectButtonHoverComposition(read('reference', 'activate'), read('astylar', 'activate'), mix, 'activate').state, 'activate');
+  assert.throws(() => inspectButtonHoverComposition(heldReference, heldCandidate, mix, 'hover'));
+  assert.throws(() => inspectButtonHoverComposition(reference, candidate, heldMix, 'held'));
+  assert.throws(() => inspectButtonHoverComposition(reference, candidate, mix, 'focus'));
 });
