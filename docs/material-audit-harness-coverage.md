@@ -2,11 +2,19 @@
 
 ## Current inventory: canonical integration conserved
 
+The [four-set transition dry run](material-followup-input-transition.md)
+passes **7/7** in **549,212.8772ms**, including independent write-prohibited
+source/full-canonical replay, raw-row conservation, 34 negative controls and
+all four inventory checks. There are no failures, skips, cancellations or
+TODOs. This proves only the 66-group metadata projection; canonical promotion
+and the complete current harness remain unverified. The next synchronous
+source-replay test is being added separately and is not part of this result.
+
 The [expanded four-set binding](material-followup-input-proposal-binding.md)
 passes **7/7**, exit 0, in **514,470.7977ms**. This includes independently replayed
 sources/full canonical joins, unchanged canonical file hashes, 45 rejection
 controls and all four inventory checks. It binds 66 groups / 2,640 observations,
-not canonical promotion. The separate transition is still under full replay;
+not canonical promotion. The separate transition has now passed full replay;
 the working inventory includes its new test file (**148 files**), but no full
 current-harness pass is claimed. Box-sizing/grid historical tests remain a
 pending combined production run.

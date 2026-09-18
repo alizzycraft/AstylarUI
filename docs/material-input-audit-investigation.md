@@ -5,14 +5,24 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: canonical rows independently conserved
 
+The [four-set metadata transition](material-followup-input-transition.md)
+now passes generation and independent write-prohibited replay. The full
+focused run is **7/7**, zero failures/skips/cancellations/TODOs, in
+**549,212.8772ms**. Its in-memory projection changes only classification
+metadata for 66 groups / 2,640 observations and preserves 8,273 other complete
+rows. All canonical files remain unchanged: **2,026 unresolved** is still the
+actual report count; **1,960** is only the dry-run projection. Live-builder
+source binding, integration, remaining classifications, the complete harness
+and enforced rendering matrix remain outstanding.
+
 The [four-set follow-up binding](material-followup-input-proposal-binding.md)
 now authenticates **66 proposed groups / 2,640 observations**, including the
 11 control font-style omissions alongside the previous 55 harness findings.
 All **8,273 other complete rows** remain unchanged. Generation and independent
 no-write source/canonical replay pass; the full focused suite is **7/7**, exit 0,
 in **514,470.7977ms**, with 45 rejection controls. A separate metadata-only
-transition has passed its pure checks (34 rejection controls), while full
-dry-run generation is still live. No canonical promotion or renderer change is
+transition has passed its pure checks (34 rejection controls) and the full
+replay recorded above. No canonical promotion or renderer change is
 claimed. The two box-sizing/grid historical replays also remain a pending
 combined run, with exact later membership independently projected first.
 
