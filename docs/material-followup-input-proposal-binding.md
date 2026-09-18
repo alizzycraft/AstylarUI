@@ -1,7 +1,7 @@
 # Follow-up input proposals: cross-revision conservation
 
 This is a source/membership check, not a renderer change or canonical promotion.
-It joins three separately reviewed findings to the frozen canonical payload at
+It joins four separately reviewed findings to the frozen canonical payload at
 `957774a`:
 
 | Finding | Proposed groups | Original observations |
@@ -9,13 +9,14 @@ It joins three separately reviewed findings to the frozen canonical payload at
 | Own-text local versus retained font family | 4 | 96 |
 | Own-text local versus retained weight/tracking | 8 | 192 |
 | Expansion panel incorrectly compared with header | 43 | 1,596 |
-| Total | 55 | 1,884 |
+| Omitted control font-style inheritance request | 11 | 756 |
+| Total | 66 | 2,640 |
 
 The leaf-family proof predates the 134-group reviewed-input integration. Its
 original baseline remains `06e50db`; the binding does not rewrite its receipt
 to imply it was captured or verified against a newer parent. Instead, it
 replays that original source/canonical join, then requires every complete
-proposed row to survive unchanged in `957774a`. The other two original joins
+proposed row to survive unchanged in `957774a`. The other three original joins
 already use `957774a`. Every source collector is rerun; saved flags and counts
 alone cannot authenticate a proposal.
 
@@ -23,7 +24,9 @@ The combined join requires exact complete-row hashes, original property
 values, case ordering, states, occurrence counts, source input/proof digests,
 and nonoverlapping property observations. Already reviewed static rows with
 the same scalar values cannot be mistaken for pending interactive rows.
-All 8,284 other complete rows are retained in an ordered digest.
+The four-set proposal leaves 8,273 other complete rows outside the transition.
+Its generation and independent full focused verification have passed.
+The prior three-set result is retained separately below.
 
 ## What this means for remediation
 
@@ -40,6 +43,13 @@ The separately demonstrated disabled-header cursor mismatch remains an
 authoring finding. Do not change the candidate header weight to match the
 reference panel's unrelated weight.
 
+The [control font-style finding](material-control-font-style-attribution.md)
+is an authoring defect, not an observation-stage equivalence: the candidate
+omits the reference's explicit inheritance reset. Captured button text already
+reports normal, while range inputs have no captured text owner. Test genuinely
+equivalent font-reset semantics under non-normal ancestors before proposing a
+core fix; do not compensate with explicit normal styling.
+
 ## Verification
 
 ```text
@@ -47,7 +57,25 @@ node scripts/bind-material-followup-input-proposals.mjs
 node --test --test-concurrency=1 tests/material-parity/followup-input-proposal-binding.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs
 ```
 
-Generation completed with exit 0 and all three independent source/canonical
+The four-set generation exits 0 after independently replaying all source proofs
+and full historical/current canonical joins. Binding SHA-256:
+`fad7db90e601806414c32397c0c48b71c11ca3340fde5da57454ba30e4e3e43a`.
+The ordered digest of the 8,273 other complete rows is
+`c46a8886a4cb7d306fa879978581782a1ebe8a1224f1aeb2ddd6bac8608ffe1c`.
+
+The four-set pure binding checks and follow-up transition checks pass **4/4**,
+exit 0, in **5,122.3256ms**, including 45 binding and 34 transition rejection
+controls. The complete four-set focused suite then passes **7/7**, exit 0, with
+no skipped/cancelled/TODO tests, in **514,470.7977ms**. Independent no-write
+source/full-payload replay takes **510,752.0536ms**; all three canonical files
+remain byte-identical. Logs in the artifact directory below:
+`followup-four-input-proposal-binding-generation.log`,
+`followup-four-input-proposal-binding-focused.log`, and
+`followup-four-transition-pure.log`.
+
+### Prior verified three-set checkpoint (`3ba0d33`)
+
+Before adding control font-style, generation completed with exit 0 and all three independent source/canonical
 replays. The other complete rows' ordered-digest SHA-256 is
 `11baa5102c342ca20661984d8a0e1ba59dd0cac4365673f017fe518e32c2e17d`;
 the generated binding SHA-256 is

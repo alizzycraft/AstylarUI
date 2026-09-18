@@ -5,6 +5,17 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: canonical rows independently conserved
 
+The [four-set follow-up binding](material-followup-input-proposal-binding.md)
+now authenticates **66 proposed groups / 2,640 observations**, including the
+11 control font-style omissions alongside the previous 55 harness findings.
+All **8,273 other complete rows** remain unchanged. Generation and independent
+no-write source/canonical replay pass; the full focused suite is **7/7**, exit 0,
+in **514,470.7977ms**, with 45 rejection controls. A separate metadata-only
+transition has passed its pure checks (34 rejection controls), while full
+dry-run generation is still live. No canonical promotion or renderer change is
+claimed. The two box-sizing/grid historical replays also remain a pending
+combined run, with exact later membership independently projected first.
+
 The [control font-style membership proposal](material-control-font-style-attribution.md)
 now joins all **11 groups / 756 observations** to the complete frozen canonical
 payload, preserving 8,328 other complete rows. Its full focused suite passes

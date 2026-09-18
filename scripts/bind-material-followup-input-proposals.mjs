@@ -7,6 +7,7 @@ import { pathToFileURL } from 'node:url';
 import { collectLeafFontFamilyAttributionPlan } from './audit-material-leaf-font-family-attribution.mjs';
 import { collectLeafWeightTrackingAttribution } from './audit-material-leaf-weight-tracking-attribution.mjs';
 import { collectExpansionOwnerAttribution } from './audit-material-expansion-owner-attribution.mjs';
+import { collectControlFontStyleAttribution } from './audit-material-control-font-style-attribution.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -22,9 +23,14 @@ const definitions = {
   expansionOwner: { revision: 'eb95c6a', file: 'docs/material-expansion-owner-attribution-plan.json',
     baseline: currentRevision, collect: collectExpansionOwnerAttribution,
     attribution: 'reviewed-expansion-panel-header-owner-mismatch' },
+  controlFontStyle: { revision: '48a0c55', file: 'docs/material-control-font-style-attribution-plan.json',
+    baseline: currentRevision, collect: collectControlFontStyleAttribution,
+    attribution: 'reviewed-control-font-style-inheritance-reset-omission',
+    classification: 'application-plugin-authoring-defect' },
 };
 const flags = ['inputEquivalent', 'wholeElementInputEquivalent', 'renderingEquivalent',
-  'rendererCauseProven', 'physicalFontSelectionVerified', 'canonicalMappingChanged'];
+  'rendererCauseProven', 'physicalFontSelectionVerified', 'canonicalMappingChanged',
+  'candidateComputedVerified', 'nonNormalAncestorBehaviorVerified'];
 
 // Pure join of independently replayed plans. A cross-revision proposal is
 // eligible only if its ENTIRE original row survives unchanged in the target.
@@ -57,7 +63,7 @@ export function joinFollowupInputProposals(plans, rows) {
       assert.ok(!selected.has(row), 'overlapping proposed row'); selected.add(row);
       for (const key of ['family', 'element', 'property', 'reference', 'astylar', 'occurrences', 'cases', 'states'])
         assert.deepEqual(p[key], row[key], `proposal ${key} changed`);
-      assert.equal(p.proposedClassification, 'parity-harness-defect');
+      assert.equal(p.proposedClassification, definition.classification ?? 'parity-harness-defect');
       assert.equal(p.proposedAttribution, definition.attribution);
       for (const flag of flags.slice(0, 4)) assert.equal(p[flag], false);
       for (const flag of flags.slice(4)) if (Object.hasOwn(p, flag)) assert.equal(p[flag], false);
@@ -98,14 +104,14 @@ export async function collectFollowupInputProposalBinding() {
   const canonical = await readCaretConservationRows(file => execFileSync('git',
     ['show', `${currentRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   const joined = joinFollowupInputProposals(plans, canonical.rows);
-  assert.equal(joined.proposedGroups, 55); assert.equal(joined.proposedObservations, 1884);
-  assert.equal(joined.otherCompleteRows, 8284); assert.equal(joined.baselineUnresolved, 2026);
+  assert.equal(joined.proposedGroups, 66); assert.equal(joined.proposedObservations, 2640);
+  assert.equal(joined.otherCompleteRows, 8273); assert.equal(joined.baselineUnresolved, 2026);
   return { schemaVersion: 1, kind: 'source-replayed-followup-input-proposal-binding',
     canonicalRevision: execFileSync('git', ['rev-parse', currentRevision], { encoding: 'utf8' }).trim(),
     canonicalPayload: canonical.manifest, plans: descriptors, ...joined,
     sourceProofsReplayed: true, originalCanonicalJoinsReplayed: true,
     canonicalIntegration: false, completeAuditAccepted: false,
-    limitation: 'Three source-replayed proposal sets join to the current frozen canonical rows without changing any input, previous attribution or output. Leaf-family proposals retain their original older baseline; exact whole-row identity proves they survive the intervening 134 metadata reviews. All 102 expansion owner groups still require role-correct recapture. This binding is not canonical promotion or rendering parity.' };
+    limitation: 'Four source-replayed proposal sets join to the current frozen canonical rows without changing any input, previous attribution or output. Leaf-family proposals retain their original older baseline; exact whole-row identity proves they survive the intervening 134 metadata reviews. Control font-style findings concern omitted authored inheritance, not a captured glyph mismatch. All 102 expansion owner groups still require role-correct recapture. This binding is not canonical promotion or rendering parity.' };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {

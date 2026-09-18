@@ -2,6 +2,15 @@
 
 ## Current inventory: canonical integration conserved
 
+The [expanded four-set binding](material-followup-input-proposal-binding.md)
+passes **7/7**, exit 0, in **514,470.7977ms**. This includes independently replayed
+sources/full canonical joins, unchanged canonical file hashes, 45 rejection
+controls and all four inventory checks. It binds 66 groups / 2,640 observations,
+not canonical promotion. The separate transition is still under full replay;
+the working inventory includes its new test file (**148 files**), but no full
+current-harness pass is claimed. Box-sizing/grid historical tests remain a
+pending combined production run.
+
 The [control font-style membership proposal](material-control-font-style-attribution.md)
 adds the **147th file** (139 Material, four general, four TTS; all 43 legacy
 files retained). Its suite passes **7/7**, exit 0, in **108,611.3541ms**, including
