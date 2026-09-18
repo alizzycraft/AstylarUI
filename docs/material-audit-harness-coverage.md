@@ -1,6 +1,23 @@
 # Complete audit harness coverage
 
-## Current inventory: private tab typography inputs are registered
+## Current inventory: font ownership canonical proposal is registered
+
+Discovery includes **127 files**: 119 Material, four general and four TTS,
+retaining all 43 legacy files. The [font ownership proposal](material-font-ownership-attribution.md)
+joins six pending groups / 219 observations from the toolbar, paginator,
+expansion-title and tab-panel proofs. It accounts for all 242 source owners,
+preserves 17 numeric matches and six previously reviewed expansion observations,
+and conserves all 8,333 other complete canonical rows. It does not promote
+classifications or change the 2,160 unresolved count.
+
+The initial join rejected an incorrect 6-versus-9 expansion static grouping.
+The corrected join retains the three custom static cases in the unresolved
+population, rather than broadening the historical stage review. Generation
+and independent full-payload replay pass. The focused/inventory suite passes
+**8/8**, exit **0**, in 100,974.2431ms, with 62 negative-control executions.
+This is not current full-harness acceptance or the enforced rendering matrix.
+
+## Previous inventory: private tab typography inputs are registered
 
 Discovery includes **126 files**: 118 Material, four general and four TTS,
 retaining all 43 legacy files. The [tab-panel input audit](material-tab-panel-inputs.md)
