@@ -43,8 +43,10 @@ checks. [Fixed-width passed](material-reviewed-button-fixed-width-integration.md
 its sole test in 1,228,694.8176ms. The request sibling failed a new count assertion
 (12 versus 24): its existing one-viewport-per-state selection differs from the
 full fixed-width population. Independent source projection confirms the twelve
-exact witnesses, now asserted in the corrected test. Its production rerun is
-live; the original combined run remains one pass / one failure. The authoritative
+exact witnesses, now asserted in the corrected test. Its
+[production rerun passes 1/1](material-reviewed-button-requests-integration.md),
+exit 0, in 1,353,460.008ms total, with all 2,938 scalars and 2,829 other complete
+rows preserved. The original combined run remains one pass / one failure. The authoritative
 canonical unresolved count remains 2,026; source freshness and the complete
 enforced matrix remain outstanding after these audit-test additions.
 

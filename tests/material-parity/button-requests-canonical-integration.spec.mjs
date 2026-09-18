@@ -14,6 +14,7 @@ import { buttonHostRequestAttribution } from './button-host-request-source-bindi
 import { buttonFixedWidthAttribution } from './button-fixed-width-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
 import { assertLaterGapClassifications, assertLaterCaretClassifications } from './owner-gap-integration-conservation.mjs';
+import { independentlyReconstructBeforeReviewedInputs } from './later-reviewed-input-conservation.mjs';
 
 const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -93,7 +94,16 @@ test('button requests production integration preserves raw values and prior clas
     assert.equal(audit.ownerCaretInputs.plannedCoverage.pendingObservations, 0);
     assert.ok([...laterCarets].every(key => !keys.has(key) && !laterGaps.has(key)),
       'authenticated caret reviews cannot replace original formatting/width/box or later gap proofs');
-    const others = r => r.discrepancies.filter(d => {
+    const restored = independentlyReconstructBeforeReviewedInputs(audit, previous);
+    assert.equal(restored.changes.length, 8);
+    // selectStates keeps one viewport per family/profile/state. Unlike the
+    // full fixed-width population, this contains only desktop-dpr1 witnesses.
+    assert.equal(restored.changes.reduce((n, r) => n + r.occurrences, 0), 12);
+    assert.ok(restored.changes.every(r => r.attribution === 'reviewed-button-state-layer-preblending'));
+    assert.deepEqual(audit.reviewedInputs.observations.map(o => o.case).sort(),
+      ['light', 'dark', 'contrast', 'custom'].flatMap(profile => ['hover', 'held', 'activate']
+        .map(state => `interaction:button@${profile}/desktop-dpr1/${state}`)).sort());
+    const others = r => (r === audit ? restored.rows : r.discrepancies).filter(d => {
       const key = JSON.stringify(scalar(d));
       return !keys.has(key) && !laterGaps.has(key) && !laterCarets.has(key);
     });
@@ -121,6 +131,7 @@ test('button requests production integration preserves raw values and prior clas
       independentlyVerifiedLaterGapGroups: laterGaps.size,
       independentlyVerifiedLaterCaretGroups: laterCarets.size,
       independentlyVerifiedLaterCaretObservations: audit.ownerCaretInputs.plannedCoverage.reviewedObservations,
+      independentlyVerifiedLaterInputGroups: restored.changes.length, independentlyVerifiedLaterInputObservations: 12,
       unchangedCompleteRows: others(audit).length,
       unchangedCompleteRowsSha256: hash(JSON.stringify(others(audit))),
       baselineCommit, inputEquivalent: false }));

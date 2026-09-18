@@ -28,7 +28,9 @@ terminal, **2/2 pass**, in 2,897,781.2575ms. Button fixed-width also passed its
 sole test in 1,228,694.8176ms; its request sibling failed a new count assertion
 because the test samples one viewport per state (12 source-bound later
 observations, not 24). Independent source projection confirms the exact twelve
-cases; the corrected production rerun is live. These are bounded
+cases; the [corrected production rerun](material-reviewed-button-requests-integration.md)
+passes **1/1**, exit 0, in **1,353,460.008ms**, preserving all 2,938 scalar rows
+and 2,829 other complete findings. These are bounded
 verification increments, not a complete current-harness result or
 canonical promotion. Earlier inventory/results below are checkpoints.
 

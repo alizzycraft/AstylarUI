@@ -27,7 +27,7 @@ with **one pass and one failure**, not 2/2 passing. Its request sibling failed
 on a newly added count assertion: 12 observed versus 24 expected. The log is
 `artifacts/material-parity/field-host-flow-input-audit/reviewed-input-button-historical-production.log`.
 
-## Separate request-sibling correction, still pending
+## Separate request-sibling correction
 
 The request test's existing `selectStates` intentionally chooses one viewport
 per family/profile/state. A separate replay of its actual selection function
@@ -39,7 +39,10 @@ projection covers 1,087 diagnostic cases and is recorded in
 
 The corrected request test now asserts these exact twelve case identities in
 addition to the count. Its unchanged scalar and full-row checks still have to
-pass in the production rerun; that rerun is live, not yet accepted.
+pass in the production rerun. That [rerun now passes](material-reviewed-button-requests-integration.md)
+1/1, exit 0, in 1,353,460.008ms total, preserving 2,938 scalar rows and 2,829
+other complete rows. The earlier combined run remains recorded as one pass and
+one failure; it is not retroactively relabelled as a 2/2 pass.
 
 This increment commits only the verified fixed-width guard. Neither result
 establishes rendering parity, input equivalence or complete audit acceptance.
