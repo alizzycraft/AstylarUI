@@ -27,6 +27,14 @@ replace its expectation without conservation evidence. The runner remains
 active; this is neither a terminal full-run report nor current 123-file
 acceptance. No selected test/source file was changed by this increment.
 
+The subsequent [exact explicit-gap diagnostic](material-explicit-gap-later-conservation.md)
+explains the failure: nine later caret groups / 332 reviewed observations
+changed only review metadata. All 892 scalar rows and 867 remaining complete
+rows are unchanged; 184 pending caret observations remain preserved. No later
+gap-review group contributes. The diagnostic intentionally retains the original
+failure (exit 1 after successful conservation checks); the original test has
+not yet been corrected and the full run is still not accepted.
+
 ## Previous inventory: authoring input attribution proposal is registered
 
 Discovery now includes **122 files**: 114 Material, four general and four TTS,
