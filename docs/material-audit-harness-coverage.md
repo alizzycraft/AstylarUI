@@ -2,6 +2,15 @@
 
 ## Current inventory: overlay font inheritance inputs are registered
 
+The subsequent [overlay extension of the font ownership proposal](material-font-ownership-attribution.md)
+keeps the 128-file inventory. It now proposes 12 groups / 401 observations,
+accounts for 424 original owners, and preserves 8,327 unrelated complete rows.
+Every previous proposal and preserved witness is deep-compared with `25ae772`.
+Generation and independent full-payload replay pass; the focused/inventory
+suite passes **9/9**, exit **0**, in 100,111.9275ms, with 84 rejection controls.
+No canonical attribution or renderer input changes. The original 120-file run
+remains live in reviewed-authoring integration; this is not its acceptance.
+
 Discovery includes **128 files**: 120 Material, four general and four TTS,
 retaining all 43 legacy files. The [overlay font-context audit](material-overlay-font-inputs.md)
 authenticates 182 original observations in 91 cases and independently replays

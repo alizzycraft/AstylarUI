@@ -25,17 +25,17 @@ test('font ownership proposal independently replays all sources and the entire f
   const receipt = JSON.parse(execFileSync(process.execPath,
     ['--max-old-space-size=512', 'scripts/audit-material-font-ownership-attribution.mjs', '--check'],
     { encoding: 'utf8', maxBuffer: 1024 * 1024 }));
-  assert.equal(receipt.proposedGroups, 6); assert.equal(receipt.proposedObservations, 219);
+  assert.equal(receipt.proposedGroups, 12); assert.equal(receipt.proposedObservations, 401);
   assert.equal(receipt.preservedGroups, 1); assert.equal(receipt.preservedObservations, 6);
-  assert.equal(receipt.matchingScalarObservations, 17); assert.equal(receipt.otherCompleteRows, 8333);
+  assert.equal(receipt.matchingScalarObservations, 17); assert.equal(receipt.otherCompleteRows, 8327);
   assert.equal(receipt.canonicalAttributionChanged, false);
 });
 
-test('font ownership join rejects missing changed or overstated source witnesses for all three kinds', () => {
+test('font ownership join rejects missing changed or overstated source witnesses for all four kinds', () => {
   const { proofs, original, normalize, rows } = inputs();
   const before = digest([proofs, original, rows]);
-  assert.equal(planFontOwnershipAttribution(proofs, original, rows, normalize).proposedObservations, 219);
-  for (const kind of ['scope', 'expansion', 'tab']) {
+  assert.equal(planFontOwnershipAttribution(proofs, original, rows, normalize).proposedObservations, 401);
+  for (const kind of ['scope', 'expansion', 'tab', 'overlay']) {
     const changes = [
       p => { p.findings.pop(); }, p => { p.findings[1] = p.findings[0]; },
       p => { p.findings[0].case = 'invented'; },
@@ -64,16 +64,35 @@ test('font ownership join preserves compact numerical matches earlier static rev
   const { proofs, original, normalize, rows } = inputs();
   const untouched = { family: 'other', property: 'fontSize', attribution: 'existing-review', nested: { preserve: true } };
   const result = planFontOwnershipAttribution(proofs, original, [...rows, untouched], normalize);
-  assert.equal(result.originalObservations, 242); assert.equal(result.matchingScalarObservations, 17);
+  assert.equal(result.originalObservations, 424); assert.equal(result.matchingScalarObservations, 17);
   assert.equal(result.preservedObservations, 6); assert.equal(result.otherCompleteRows, 2);
   assert.equal(result.otherOrderedRowDigestsSha256, digest([rows.at(-1), untouched].map(digest)));
-  for (const family of ['toolbar', 'paginator', 'expansion', 'tabs']) {
+  for (const family of ['toolbar', 'paginator', 'expansion', 'tabs', 'bottom-sheet', 'dialog', 'snack-bar']) {
     assert.throws(() => planFontOwnershipAttribution(proofs,
-      { ...original, results: original.results.filter(e => e.family !== family) }, rows, normalize));
+      { ...original, results: original.results.filter(e => e.family !== family),
+        interactions: original.interactions.filter(e => e.family !== family) }, rows, normalize));
   }
   const p = { ...proofs.expansion, findings: proofs.expansion.findings.filter(f => f.proof.candidateLocalFontSize === '<omitted>') };
   p.observations = p.findings.length;
   assert.throws(() => planFontOwnershipAttribution({ ...proofs, expansion: p }, original, rows, normalize));
+});
+
+test('overlay extension retains every earlier complete proposal and refuses stronger font claims', () => {
+  const { saved, proofs, original, normalize, rows } = inputs();
+  const previous = JSON.parse(execFileSync('git', ['show', '25ae772:docs/material-font-ownership-attribution-plan.json'], { encoding: 'utf8' }));
+  assert.deepEqual(saved.proposed.filter(f => f.kind !== 'overlay'), previous.proposed);
+  assert.deepEqual(saved.preserved, previous.preserved); assert.deepEqual(saved.matches, previous.matches);
+  for (const kind of ['scope', 'expansion', 'tab']) assert.deepEqual(saved.proofs[kind], previous.proofs[kind]);
+  const changes = [
+    p => { p.candidateComputedFontSizeVerified = true; },
+    p => { p.mapping.status = 'unresolved'; },
+    p => { p.pageSizeMatchesReferenceOverlay = !p.pageSizeMatchesReferenceOverlay; },
+  ];
+  for (const mutate of changes) {
+    const p = { ...proofs.overlay, findings: [...proofs.overlay.findings] };
+    p.findings[0] = structuredClone(p.findings[0]); mutate(p.findings[0].proof);
+    assert.throws(() => planFontOwnershipAttribution({ ...proofs, overlay: p }, original, rows, normalize));
+  }
 });
 
 test('font ownership join refuses changed canonical values membership or prior review precedence', () => {

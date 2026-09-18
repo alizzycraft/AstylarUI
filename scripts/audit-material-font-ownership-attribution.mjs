@@ -7,6 +7,7 @@ import { pathToFileURL } from 'node:url';
 import { collectFontScopeInputs } from './audit-material-font-scope-inputs.mjs';
 import { collectExpansionTitleInputs } from './audit-material-expansion-title-inputs.mjs';
 import { collectTabPanelInputs } from './audit-material-tab-panel-inputs.mjs';
+import { collectOverlayFontInputs, overlayFontTargets } from './audit-material-overlay-font-inputs.mjs';
 import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
@@ -24,6 +25,8 @@ const definitions = {
     targets: ['expansion-title'], attribution: 'reviewed-expansion-header-font-input-omission' },
   tab: { file: 'docs/material-tab-panel-inputs.json', collect: collectTabPanelInputs,
     targets: ['tab-panel'], attribution: 'reviewed-tab-panel-private-typography-inputs' },
+  overlay: { file: 'docs/material-overlay-font-inputs.json', collect: collectOverlayFontInputs,
+    targets: Object.keys(overlayFontTargets), attribution: 'reviewed-overlay-font-inheritance-inputs' },
 };
 
 export function planFontOwnershipAttribution(proofs, original, rows, normalize) {
@@ -41,46 +44,57 @@ export function planFontOwnershipAttribution(proofs, original, rows, normalize) 
     const caseId = `${mode}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`;
     assert.ok(!cases.has(caseId)); cases.add(caseId);
     const target = { toolbar: 'toolbar-primary', paginator: 'paginator-primary', expansion: 'expansion-title', tabs: 'tab-panel' }[entry.family];
-    if (!target) continue;
-    const inputs = entry.styleInputs.filter(i => i.id === target); assert.equal(inputs.length, 1);
-    const input = inputs[0], key = JSON.stringify([caseId, input.id]), witness = observations.get(key);
-    assert.ok(witness, 'original owner lacks proof'); assert.ok(!seen.has(key)); seen.add(key);
-    const { kind, finding } = witness, p = finding.proof;
-    assert.equal(finding.family, entry.family); assert.equal(finding.profile, entry.profile); assert.equal(finding.state, entry.state ?? 'static');
-    assert.deepEqual(finding.viewport, entry.viewport); assert.deepEqual(finding.inputTrees, entry.inputTrees);
-    assert.equal(finding.originalInputSha256, digest(input));
-    assert.equal(p.classification, 'application-plugin-authoring-defect');
-    for (const flag of ['rendererCauseProven', 'renderingEquivalent']) assert.equal(p[flag], false);
-    assert.equal(kind === 'scope' ? p.wholeElementInputEquivalent : p.inputEquivalent, false);
-    assert.equal(p.referenceComputedFontSize, input.reference.fontSize);
-    assert.equal(p.candidateLocalFontSize, input.astylar.fontSize ?? '<omitted>');
-    for (const stage of ['astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle']) assert.equal(input[stage].fontSize, input.astylar.fontSize);
-    if (kind === 'scope') assert.equal(p.sameInheritanceScope, false);
-    if (kind === 'expansion') {
-      assert.equal(p.sameInheritanceScope, false); assert.equal(p.retainedText.source, 'core-text-registry');
-      assert.equal(p.retainedFontSizeMatches, p.retainedText.style.fontSize === input.reference.fontSize);
+    const overlayTargets = Object.entries(overlayFontTargets).filter(([, t]) => t.family === entry.family).map(([id]) => id);
+    if (!target && !overlayTargets.length) continue;
+    const inputs = entry.styleInputs.filter(i => target ? i.id === target : overlayTargets.includes(i.id));
+    if (target) assert.equal(inputs.length, 1);
+    else assert.ok(inputs.length === 0 || inputs.length === 2, 'partial open-overlay owner population');
+    for (const input of inputs) {
+      const key = JSON.stringify([caseId, input.id]), witness = observations.get(key);
+      assert.ok(witness, 'original owner lacks proof'); assert.ok(!seen.has(key)); seen.add(key);
+      const { kind, finding } = witness, p = finding.proof;
+      assert.equal(finding.family, entry.family); assert.equal(finding.profile, entry.profile); assert.equal(finding.state, entry.state ?? 'static');
+      assert.deepEqual(finding.viewport, entry.viewport); assert.deepEqual(finding.inputTrees, entry.inputTrees);
+      assert.equal(finding.originalInputSha256, digest(input));
+      assert.equal(p.classification, 'application-plugin-authoring-defect');
+      for (const flag of ['rendererCauseProven', 'renderingEquivalent']) assert.equal(p[flag], false);
+      assert.equal(kind === 'scope' ? p.wholeElementInputEquivalent : p.inputEquivalent, false);
+      assert.equal(p.referenceComputedFontSize, input.reference.fontSize);
+      assert.equal(p.candidateLocalFontSize, input.astylar.fontSize ?? '<omitted>');
+      for (const stage of ['astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle']) assert.equal(input[stage].fontSize, input.astylar.fontSize);
+      if (kind === 'scope') assert.equal(p.sameInheritanceScope, false);
+      if (kind === 'expansion') {
+        assert.equal(p.sameInheritanceScope, false); assert.equal(p.retainedText.source, 'core-text-registry');
+        assert.equal(p.retainedFontSizeMatches, p.retainedText.style.fontSize === input.reference.fontSize);
+      }
+      if (kind === 'tab') {
+        assert.equal(p.perCasePaintVerified, false); assert.equal(p.numericDataSizeMatches, true);
+        assert.equal(`${p.privateData['font-size']}px`, input.reference.fontSize);
+      }
+      if (kind === 'overlay') {
+        assert.equal(mode, 'interaction'); assert.equal(p.candidateComputedFontSizeVerified, false);
+        assert.ok(['mapped', 'mapped-with-scalar-rule-gap'].includes(p.mapping.status));
+        assert.equal(p.pageSizeMatchesReferenceOverlay, p.candidatePageFontSize === p.referenceComputedFontSize);
+        assert.equal(p.referenceComputedFontSize, '16px');
+      }
+      const reference = normalize(input.reference).fontSize, astylar = normalize(input.astylar).fontSize;
+      const observation = { case: caseId, originalInputSha256: finding.originalInputSha256,
+        inputTrees: finding.inputTrees, proofSha256: digest(p) };
+      if (reference === astylar) { assert.equal(kind, 'expansion'); matches.push(observation); continue; }
+      assert.equal(astylar, undefined);
+      // Only six static expansion omissions have a matching retained size and
+      // the prior stage review. Three custom static omissions remain unresolved
+      // together with 42 interactive omissions; do not erase that distinction.
+      const prior = kind === 'expansion' && mode === 'static' && p.retainedFontSizeMatches
+        ? 'reviewed-stage-mismatch' : 'unresolved';
+      const identity = { family: entry.family, element: input.id, property: 'fontSize', reference };
+      const sig = JSON.stringify([signature(identity), prior]);
+      if (!groups.has(sig)) groups.set(sig, { ...identity, kind, prior, occurrences: 0, cases: [], states: [], observations: [] });
+      const group = groups.get(sig); assert.equal(group.kind, kind); group.occurrences++;
+      if (group.cases.length < 12) group.cases.push(caseId);
+      if (!group.states.includes(entry.state ?? 'static')) group.states.push(entry.state ?? 'static');
+      group.observations.push(observation);
     }
-    if (kind === 'tab') {
-      assert.equal(p.perCasePaintVerified, false); assert.equal(p.numericDataSizeMatches, true);
-      assert.equal(`${p.privateData['font-size']}px`, input.reference.fontSize);
-    }
-    const reference = normalize(input.reference).fontSize, astylar = normalize(input.astylar).fontSize;
-    const observation = { case: caseId, originalInputSha256: finding.originalInputSha256,
-      inputTrees: finding.inputTrees, proofSha256: digest(p) };
-    if (reference === astylar) { assert.equal(kind, 'expansion'); matches.push(observation); continue; }
-    assert.equal(astylar, undefined);
-    // Only six static expansion omissions have a matching retained size and
-    // the prior stage review. Three custom static omissions remain unresolved
-    // together with 42 interactive omissions; do not erase that distinction.
-    const prior = kind === 'expansion' && mode === 'static' && p.retainedFontSizeMatches
-      ? 'reviewed-stage-mismatch' : 'unresolved';
-    const identity = { family: entry.family, element: input.id, property: 'fontSize', reference };
-    const sig = JSON.stringify([signature(identity), prior]);
-    if (!groups.has(sig)) groups.set(sig, { ...identity, kind, prior, occurrences: 0, cases: [], states: [], observations: [] });
-    const group = groups.get(sig); assert.equal(group.kind, kind); group.occurrences++;
-    if (group.cases.length < 12) group.cases.push(caseId);
-    if (!group.states.includes(entry.state ?? 'static')) group.states.push(entry.state ?? 'static');
-    group.observations.push(observation);
   }
   for (const proof of Object.values(proofs)) assert.equal(cases.size, proof.originalCasesScanned);
   assert.equal(seen.size, observations.size, 'unused proof owner');
