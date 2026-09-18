@@ -1,6 +1,17 @@
 # Complete audit harness coverage
 
-## Current inventory: verified classification transition dry run
+## Current inventory: synchronous source boundary verified
+
+Discovery includes **136 files**: 128 Material, four general and four TTS,
+retaining all 43 legacy files. The [source-bound integration boundary](material-reviewed-input-live-source-boundary.md)
+passes 11/11 focused, full frozen-transition and inventory tests in
+193,667.261ms. It authenticates all seven prior proposals and twelve current
+source proofs, supports explicit original-capture subsets, and rejects 18
+altered-source/membership/claim mutations. The production audit builder is not
+yet wired to it; actual canonical unresolved remains 2,160. Complete current
+harness and enforced-rendering acceptance remain pending.
+
+## Previous inventory: verified classification transition dry run
 
 Discovery includes **135 files**: 127 Material, four general and four TTS,
 retaining all 43 legacy files. The [transition dry run](material-reviewed-input-transition-dry-run.md)

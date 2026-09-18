@@ -3,7 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Current integration checkpoint: metadata transition verified in memory
+## Current integration checkpoint: synchronous source boundary verified
+
+The [builder-ready source boundary](material-reviewed-input-live-source-boundary.md)
+independently replays all twelve source proofs, authenticates prior proposals
+and metadata transitions, and projects only unchanged original input subsets.
+It does not claim to freshly decode the frozen canonical payload; the separate
+full replay still runs and conserves every row. Combined tests pass 11/11 in
+193,667.261ms. Wiring the builder, validating emitted group membership and
+regenerating canonical evidence are next. No current attribution count changes.
+
+## Previous integration checkpoint: metadata transition verified in memory
 
 The [source-replayed dry run](material-reviewed-input-transition-dry-run.md)
 projects 134 classifications / 3,325 observations while conserving all raw

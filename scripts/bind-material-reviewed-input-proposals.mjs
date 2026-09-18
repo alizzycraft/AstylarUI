@@ -108,17 +108,16 @@ export async function readReviewedProposalCanonical() {
     execFileSync('git', ['show', `${canonicalRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
 }
 
-// Internal replay boundary. `canonical` must come from the byte-authenticating
-// reader above. Keeping that object allows a subsequent no-write transition
-// proof to examine the very same complete rows without decoding them twice.
-export function replayReviewedInputProposalBinding({ manifest, rows }) {
+// Synchronous source replay for the live audit builder. Frozen canonical joins
+// are a separate boundary: this function does not claim to rerun them.
+export function replayReviewedInputSourcePlans(manifest) {
   const originalCapture = { file: 'artifacts/material-parity/current-ancestry-audit/latest-report.json',
     sha256: 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a' };
   const originalBytes = readFileSync(originalCapture.file); assert.equal(hash(originalBytes), originalCapture.sha256);
   const original = JSON.parse(originalBytes);
   const source = readFileSync(normalization.module, 'utf8');
   const normalize = bindOwnerCaretNormalization(source, normalization), equivalent = bindAuthoringInputEquivalence(source);
-  const plans = {}, descriptors = {};
+  const plans = {}, descriptors = {}, sourceProofs = {};
   for (const [kind, definition] of Object.entries(definitions)) {
     const revision = execFileSync('git', ['rev-parse', definition.revision], { encoding: 'utf8' }).trim();
     const committed = execFileSync('git', ['show', `${revision}:${definition.file}`], { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).replaceAll('\r\n', '\n');
@@ -133,11 +132,24 @@ export function replayReviewedInputProposalBinding({ manifest, rows }) {
     }
     if (definition.proofs.single) assert.deepEqual(plan.proof, proofDescriptors.single);
     else assert.deepEqual(plan.proofs, proofDescriptors);
-    const replay = definition.join(proofs, original, rows, normalize, equivalent);
+    plans[kind] = plan; sourceProofs[kind] = proofs;
+    descriptors[kind] = { file: definition.file, revision, sha256: hash(committed), proofs: proofDescriptors };
+  }
+  return { original, originalCapture, normalize, equivalent, plans, descriptors, sourceProofs };
+}
+
+// `canonical` must come from the byte-authenticating reader above. Sharing its
+// complete rows avoids decoding the parent twice during a transition proof.
+export function replayReviewedInputProposalBinding({ manifest, rows }) {
+  const { original, originalCapture, normalize, equivalent, plans, descriptors: sourceDescriptors, sourceProofs } =
+    replayReviewedInputSourcePlans(manifest);
+  const descriptors = {};
+  for (const [kind, definition] of Object.entries(definitions)) {
+    const plan = plans[kind], replay = definition.join(sourceProofs[kind], original, rows, normalize, equivalent);
     // Preserve every field returned by the original join, including matching or
     // previously reviewed observations, not only its proposed classifications.
     for (const [key, value] of Object.entries(replay)) assert.deepEqual(plan[key], value, `${kind}/${key} changed on replay`);
-    plans[kind] = plan; descriptors[kind] = { file: definition.file, revision, sha256: hash(committed), proofs: proofDescriptors,
+    descriptors[kind] = { ...sourceDescriptors[kind],
       completeJoinSha256: digest(replay), sourceProofsReplayed: true };
   }
   const joined = joinReviewedInputProposals(plans, rows);
