@@ -2,7 +2,7 @@
 
 ## Current inventory: canonical integration conserved
 
-Discovery includes **141 files**: 133 Material, four general and four TTS,
+Discovery includes **142 files**: 134 Material, four general and four TTS,
 retaining all 43 legacy files. The [canonical integration](material-reviewed-input-canonical-integration.md)
 passes independent comparison of every complete current/frozen row: exactly
 134 groups / 3,325 observations change classification metadata, and all raw
@@ -23,6 +23,14 @@ adds 8/8 focused/source-replay/inventory results (152,382.643ms). It rejects
 unauthenticated metadata exemptions and preserves unrelated mutations for the
 existing historical hashes. This does not yet prove those older production
 integration tests pass with the new classifications.
+
+The [expansion owner-attribution plan](material-expansion-owner-attribution.md)
+passes 7/7 focused/inventory checks in 90,723.1134ms. The independent no-write
+replay authenticates the whole canonical payload and maps 43 pending groups /
+1,596 observations to the proven panel/header role mismatch, preserving every
+other complete row. Twenty-nine rejection controls pass. This is source-bound
+proposed attribution, not canonical promotion or a replacement for the complete
+142-file harness and enforced rendering matrix.
 
 ## Previous inventory: synchronous source boundary verified
 

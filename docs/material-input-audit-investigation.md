@@ -17,7 +17,7 @@ The independent no-write freshness command is still running at this checkpoint.
 Seven existing gap reports were independently regenerated with their unchanged
 generators: only eleven dependency hashes advance, with all other evidence
 preserved. Their write-prohibited replay and rejection controls pass 7/7 with
-inventory tests. Current discovery contains **141 files**, retaining all 43
+inventory tests. Current discovery contains **142 files**, retaining all 43
 legacy files. Full current-harness and enforced-rendering verification remain
 outstanding.
 
@@ -28,6 +28,14 @@ finds a whole-panel-versus-header comparison in all 68 original cases: it is
 not a reason to change the candidate header font weight. A genuine disabled
 header cursor difference remains in eight cases. Neither finding is silently
 folded into this canonical integration.
+
+The [expansion canonical membership plan](material-expansion-owner-attribution.md)
+now binds **43 unresolved groups / 1,596 observations** to that proven role
+mismatch, preserving 59 earlier reviewed owner groups and all 8,296 other
+complete rows. Its independent full-payload/source replay and 29 rejection
+controls pass 7/7 with inventory checks (90,723.1134ms). It remains a proposal:
+the canonical unresolved count is still 2,026, and all 102 expansion-primary
+groups require role-correct recapture before equivalence acceptance.
 
 The [later-review conservation helper](material-later-reviewed-input-conservation.md)
 passes 8/8 focused/source-replay/inventory checks and reconstructs only verified
