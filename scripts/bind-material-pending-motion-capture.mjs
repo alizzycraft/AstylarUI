@@ -59,14 +59,23 @@ export function bindPendingMotionCapture(membership, cssom) {
   return rows;
 }
 
+// Receipt refresh is not permission to change an original observation or a
+// browser control. The caller authenticates the parent and must replay the
+// unchanged browser verifier against this exact saved report afterward.
+export function assertMotionReceiptConservation(cssom, pinned) {
+  assert.match(cssom.browser, /^\d+\.\d+\.\d+\.\d+$/);
+  assert.match(cssom.parent.sha256, /^[a-f0-9]{64}$/);
+  assert.deepEqual({ ...cssom, browser: pinned.browser, parent: { ...cssom.parent, sha256: pinned.parent.sha256 } }, pinned,
+    'original CSSOM proof changed beyond replayed parent receipt and recorded browser version');
+}
+
 export async function loadPendingMotionCapture() {
   const inputs = await loadGapReviewMembership(), membership = recordGapReviewMembership(inputs);
   assert.deepEqual(membership, JSON.parse(readFileSync(membershipFile)));
   const cssom = JSON.parse(readFileSync(cssomFile));
   const pinned = JSON.parse(execFileSync('git', ['show', `3ebcff3e8f7bdfe7ecd9e00a4c2acbd11fefdc4a:${cssomFile}`],
     { maxBuffer: 1024 * 1024 }));
-  assert.deepEqual({ ...cssom, parent: { ...cssom.parent, sha256: pinned.parent.sha256 } }, pinned,
-    'original CSSOM proof changed beyond replayed parent receipt');
+  assertMotionReceiptConservation(cssom, pinned);
   assert.deepEqual(cssom.parent, inputs.join.survey); assert.deepEqual(cssom.capture, inputs.join.capture);
   assert.equal(hash(readFileSync(cssom.parent.file)), cssom.parent.sha256);
   for (const s of cssom.source) assert.equal(hash(readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n')), s.sha256);

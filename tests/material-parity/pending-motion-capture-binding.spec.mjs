@@ -1,10 +1,41 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import test from 'node:test';
-import { bindPendingMotionCapture, loadPendingMotionCapture, recordPendingMotionCapture }
+import { bindPendingMotionCapture, loadPendingMotionCapture, recordPendingMotionCapture, assertMotionReceiptConservation }
   from '../../scripts/bind-material-pending-motion-capture.mjs';
 
 const evidence = await loadPendingMotionCapture();
+
+test('replayed motion receipts preserve all original evidence across parent and browser receipt changes', () => {
+  const pinned = JSON.parse(execFileSync('git', ['show', '3ebcff3e8f7bdfe7ecd9e00a4c2acbd11fefdc4a:docs/material-motion-cssom-capture-proof.json']));
+  assertMotionReceiptConservation(evidence.cssom, pinned);
+  const mutations = [
+    x => { x.parent.file = 'different-survey.json'; },
+    x => { x.parent.sha256 = 'invalid'; },
+    x => { x.browser = 'unknown'; },
+    x => { x.capture.sha256 = '0'.repeat(64); },
+    x => { x.originalDialogCases.pop(); },
+    x => { x.originalDialogCases[0].cssText = 'transition: none'; },
+    x => { x.originalDialogCases[0].scalarRetainsCssText = true; },
+    x => { x.originalDialogCases[0].inputTrees.reference.sha256 = '0'.repeat(64); },
+    x => { x.cases[0].computed.transitionDuration = '1s'; },
+    x => { x.cases.reverse(); },
+    x => { x.source[0].sha256 = '0'.repeat(64); },
+    x => { x.assertionsPassed = false; },
+    x => { x.conclusion = 'rendering equivalent'; },
+    x => { x.unexpected = true; },
+  ];
+  const before = JSON.stringify(evidence.cssom);
+  for (const [i, mutate] of mutations.entries()) {
+    const changed = structuredClone(evidence.cssom); mutate(changed);
+    assert.throws(() => assertMotionReceiptConservation(changed, pinned), `receipt mutation ${i}`);
+  }
+  assert.equal(mutations.length, 14); assert.equal(JSON.stringify(evidence.cssom), before);
+  // loadPendingMotionCapture additionally authenticates the new parent and
+  // invokes the real-browser --check: a well-formed fabricated version/hash
+  // cannot satisfy that full source/replay boundary.
+});
 
 test('pending motion capture binding retains all original memberships without inventing resolved motion', () => {
   const report = recordPendingMotionCapture(evidence);

@@ -2,6 +2,12 @@
 
 ## Current inventory: leaf font-family stages; original full run terminal
 
+The [motion receipt correction](material-post-full-motion-receipt-repair.md)
+has now passed its fresh browser replay and 3/3 focused tests (31 rejection
+controls total). It preserves every original observation and conclusion;
+only source/browser receipts change. The two historical gap conservation
+corrections are still running and no full-run acceptance is claimed.
+
 Discovery now includes **132 files**: 124 Material, four general and four TTS,
 with all 43 legacy files retained. The [leaf font-family proof](material-leaf-font-family-stages.md)
 checks 152 original observations, retains the local omission, and independently

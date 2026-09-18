@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "kind": "browser-cssom-motion-capture-proof",
-  "browser": "152.0.7977.76",
+  "browser": "152.0.7977.84",
   "parent": {
     "file": "docs/material-owner-gap-input-survey.json",
-    "sha256": "77b6b28a7094731abbdd574007f0ef449748cb65020a69c4147c52f1f995b128"
+    "sha256": "2575edb57305d009386dd20864a1de56f36e6e49a709859e128a393e6121a7d3"
   },
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
