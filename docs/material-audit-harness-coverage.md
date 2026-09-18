@@ -2,6 +2,13 @@
 
 ## Current inventory: canonical integration conserved
 
+The [control font-style reset proof](material-control-font-style-reset.md)
+adds the 146th discovered file (138 Material, four general, four TTS; all 43
+legacy files retained). Its suite passes **7/7**, exit 0, in **15,313.5261ms**,
+including individual replay of all 756 original observations, 37 rejection
+controls, and a write-prohibited source/history replay. Canonical attribution
+does not change. The preceding binding increment is committed as `3ba0d33`.
+
 Current discovery is **145 files** (137 Material, four general, four TTS),
 retaining all 43 legacy files. The new [follow-up proposal binding](material-followup-input-proposal-binding.md)
 joins 55 proposed groups / 1,884 observations with independent source/full

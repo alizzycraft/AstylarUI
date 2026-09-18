@@ -5,6 +5,17 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: canonical rows independently conserved
 
+The [control font-style reset proof](material-control-font-style-reset.md)
+adds **756 original observations**: 600 shared-button textures and 156 range
+inputs. The reference explicitly requests `font-style: inherit` through its
+font shorthand; candidate authoring supplies only a fixed family stack and
+omits the inheritance request. Button textures already report normal, while
+range inputs have no captured text owner. This is a source-proven authoring
+omission, not a glyph mismatch or confirmed core inheritance bug. All seven
+focused/source-replay/inventory checks pass in 15,313.5261ms, with 37 rejection
+controls. Canonical membership remains pending. Working inventory is now
+146 files, retaining all 43 legacy files.
+
 Follow-up verification has passed. The [three-plan binding](material-followup-input-proposal-binding.md)
 replays the original source/canonical proofs and joins 55 proposed groups /
 1,884 observations to `957774a`, retaining all 8,284 other complete rows.
