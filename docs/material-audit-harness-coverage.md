@@ -1,6 +1,18 @@
 # Complete audit harness coverage
 
-## Current inventory: plain-text font measurement-stage proof is registered
+## Current inventory: range control font reset omission is registered
+
+Discovery now includes **121 files**: 113 Material, four general and four TTS,
+retaining all 43 legacy files. The [range font reset proof](material-range-font-reset.md)
+reviews 156 original observations, including 80 numerically matching scalars.
+Its focused suite passes **2/2**, exit **0**, with 46 rejection-control executions.
+
+The live full run launched at `9933ac1` recorded **120 files** before this test
+was added. Its selected source/test files remain unchanged. Its eventual result
+must be reported as that 120-file run, not as final coverage of the later
+121-file inventory. No canonical promotion or renderer acceptance follows.
+
+## Previous inventory: plain-text font measurement-stage proof is registered
 
 Discovery now includes **120 files**: 112 Material, four general and four TTS,
 retaining all 43 legacy files. The [plain-text font-stage proof](material-leaf-font-stages.md)
