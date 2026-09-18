@@ -1,0 +1,97 @@
+# Historical button/authoring failures after caret attribution
+
+This is audit instrumentation evidence, not a renderer or fixture correction.
+The original historical tests remain unchanged in this diagnostic increment.
+
+## Original failure and retained assertions
+
+The complete unfiltered command was:
+
+```powershell
+node --test --test-concurrency=1 tests/material-parity/button-fixed-width-canonical-integration.spec.mjs tests/material-parity/button-requests-canonical-integration.spec.mjs tests/material-parity/reviewed-authoring-canonical-integration.spec.mjs
+```
+
+It finished with **one pass / three failures**, exit **1**, in
+**2,529,589.3692 ms**. Each positive integration failed its original complete
+unrelated-row assertion. The reviewed-authoring detached/inflated-evidence
+validation test passed in **1,861,903.5924 ms**. The long silent period was not
+evidence of a stopped process: CPU continued advancing, and the test runner
+delivered that file's buffered results on completion.
+
+Baseline log: `artifacts/material-parity/field-host-flow-input-audit/caret-historical-button-authoring-before.log`.
+SHA-256: `05bd118e2db1b5dd32324b26ed799bc3373eb7798da5f87f9a763af40f31f514`.
+
+The diagnostic executes the exact original spec at `a6c98bd`. It inserts a
+bounded comparison immediately before the original failing assertion; removing
+the insertion reconstructs the original source. AST comparisons constrain
+import relocation, and the original assertion remains in the executed test.
+There is no replacement expected checksum and no blanket `caretColor` waiver.
+
+## Independently authenticated cause of each failure
+
+| Original integration | Cases | Ordered scalar rows | Changed classification rows | Reviewed caret observations | Complete unchanged unrelated rows |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Button fixed width | 480 | 1,201 | 20 | 600 | 1,146 |
+| Button requests | 1,087 | 2,938 | 20 | 283 | 2,829 |
+| Reviewed authoring | 471 | 2,944 | 20 | 379 | 2,718 |
+
+For each exact historical subset, the existing strict caret guard authenticates
+the complete pinned original caret proof and source membership before it returns
+any reviewed signatures. Every changed unrelated row must belong to that exact
+signature set, and the number of changed rows must equal the set size. All raw
+values, authored fields, counts, ordered scalar rows and remaining complete
+records are conserved. Each subset contains zero pending caret observations.
+
+The only changed fields are `justification`, `recommendedOwner`, `attribution`,
+`reviewEvidence`, and `reviewedCases`. The changed rows move from `unresolved`
+to `reviewed-motion-caret-observation-stage`. All equivalence and renderer-cause
+claims remain false. This proves why these assertions failed; it does not prove
+the original rendering correct or erase any reported Material symptom.
+
+Complete unchanged-row array SHA-256 digests, in table order:
+
+- `acf142b011155301b361b01109b4ed5164ada83bb1416eefdba6dcb47acf8101`
+- `9b1d77e487e5931de72a353185df5fc8cb0097e2040260820147b4fed610c001`
+- `090aefdd241706ba47e1242e915d799fc0046443828d7658e121fd8db23e3c1c`
+
+## Executed diagnostics
+
+```powershell
+node scripts/diagnose-material-button-caret-conservation.mjs button-fixed-width
+node scripts/diagnose-material-button-caret-conservation.mjs button-requests
+node --test-name-pattern='^reviewed authoring production integration preserves' scripts/diagnose-material-button-caret-conservation.mjs reviewed-authoring
+node --check scripts/diagnose-material-button-caret-conservation.mjs
+node --test tests/material-parity/later-caret-integration-conservation.spec.mjs
+```
+
+Each diagnostic emits its successful source/row-conservation report and then
+fails the retained original assertion: **zero pass / one failure**, exit **1**.
+The diagnostic durations are **248,370.7205**, **339,892.4938**, and
+**194,885.1409 ms**, respectively. The reviewed-authoring diagnostic deliberately
+selects only the failing positive test; it is not a substitute for the complete
+unfiltered validation run above or the required corrected replay.
+
+Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `caret-button-fixed-width-diagnostic.log`: SHA-256
+  `ec708ede51b1d955d0f6de5b95e6f281b0f6448619941e4120ebb1a5892adfdb`.
+- `caret-button-requests-diagnostic.log`: SHA-256
+  `3b70a20519129ce336cc19b3a81806bc82771526bbaeeb06d04b1ebac3abb126`.
+- `caret-reviewed-authoring-diagnostic.log`: SHA-256
+  `c32beed3f8fa1deb022e8f64a6366b2deff8627cacb725c7125282368ef0d35c`.
+
+Syntax validation exits **0**. The existing strict guard controls pass **3/3**,
+exit **0**, **896.5686 ms**, retaining 18 mutation rejections and three
+unauthenticated-source wrapper rejections. Log `caret-button-guard-controls.log`,
+SHA-256 `0d27ae7947c321ac9354438b2480ee221351ffc6e7dc27c80ad6878be9b5f3e1`.
+
+## Next boundary
+
+Use the independently authenticated caret signatures in the three historical
+integration tests, require disjointness from their original and later-gap
+populations, and retain the complete comparison of every other record. Preserve
+all original authoring checks and negative controls. Then rerun all three files
+without a test-name filter, including the slow detached/inflated-evidence test.
+
+Canonical conservation, the complete current harness, outstanding discrepancy
+classifications and the enforced parity matrix remain separate acceptance work.
