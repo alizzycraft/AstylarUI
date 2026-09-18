@@ -1,6 +1,24 @@
 # Complete audit harness coverage
 
-## Current inventory: container font-family stages are registered
+## Current inventory: leaf font-family stages; original full run terminal
+
+Discovery now includes **132 files**: 124 Material, four general and four TTS,
+with all 43 legacy files retained. The [leaf font-family proof](material-leaf-font-family-stages.md)
+checks 152 original observations, retains the local omission, and independently
+verifies matching retained core-text family. Focused tests pass 3/3 with 560
+rejection controls and a separate stepper exclusion guard. This file was not
+part of the original 120-file launch inventory.
+
+The original full run (runner 24392, launched at revision 9933ac1) is now
+**terminal**: 927 results, 924 passed, three failed, zero skipped/cancelled/TODO,
+duration **14,641,295.202ms**. The runner and its test children are absent.
+Log: `artifacts/material-parity/field-host-flow-input-audit/post-historical-caret-full-120-harness.log`.
+The three failures are the explicit-gap historical conservation test, gap-review
+historical conservation test, and pending-motion binding file initialization.
+Their independently recorded diagnoses remain linked below. Corrections and
+a fresh full run are still required; this is not acceptance.
+
+## Previous inventory: container font-family stages are registered
 
 The subsequent [canonical family-stage proposal](material-container-font-family-attribution.md)
 joins 20 unresolved groups / 1,082 observations and conserves the other 8,319
