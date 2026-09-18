@@ -2,6 +2,13 @@
 
 ## Current inventory: canonical integration conserved
 
+The [four-set source replay](material-followup-input-source-replay.md) adds
+the **149th file** (141 Material, four general, four TTS; all 43 legacy files
+retained). Its focused run passes **7/7**, exit 0, in **24,801.5258ms**, including
+fresh no-write source replay, 23 rejection controls, altered-capture rejection,
+and all four inventory checks. It does not change canonical classifications or
+establish a complete current-harness pass.
+
 The [four-set transition dry run](material-followup-input-transition.md)
 passes **7/7** in **549,212.8772ms**, including independent write-prohibited
 source/full-canonical replay, raw-row conservation, 34 negative controls and

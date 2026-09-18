@@ -5,6 +5,14 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: canonical rows independently conserved
 
+The [synchronous four-set source replay](material-followup-input-source-replay.md)
+passes **7/7**, exit 0, in **24,801.5258ms**. It freshly executes all four
+source collectors, authenticates the original capture/normalizers, and checks
+all 2,640 proposed observations against their proofs. It does not claim a new
+full historical payload join or alter canonical classification. There are
+23 receipt rejection controls plus an altered-capture interception. The next
+step is exact live-builder subset binding, not a renderer fix.
+
 The [four-set metadata transition](material-followup-input-transition.md)
 now passes generation and independent write-prohibited replay. The full
 focused run is **7/7**, zero failures/skips/cancellations/TODOs, in
