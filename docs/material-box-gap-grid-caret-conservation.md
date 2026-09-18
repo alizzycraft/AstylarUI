@@ -2,8 +2,8 @@
 
 This explains three failures in the [unchanged five-file
 baseline](material-historical-caret-recheck-baseline.md). The corrected box-sizing
-and gap tests are now verified below; grid acceptance and the slider's separate
-frozen checksum remain outstanding.
+and gap/grid tests are now verified below. The slider's separate frozen checksum
+has its own diagnostic and acceptance boundary.
 
 The diagnostic executes each exact original spec at `a6c98bd`, inserts a bounded
 comparison immediately before the failing assertion, and retains that assertion.
@@ -108,7 +108,20 @@ reported above. The original 108 owner-gap groups, 16 explicit-gap groups,
 controls remain enforced. The original selected-gap set is unchanged; only the
 separately authenticated caret set is removed from the unrelated-row comparison.
 
-The grid correction must not be accepted before its unfiltered checks finish.
+### Completed corrected grid and two-file replay
+
+The command above has now finished with **2/2 tests passed**, exit **0**, no
+skips, cancellations or todos. Grid duration: **610,098.3435 ms**; complete
+two-file duration: **1,379,889.5873 ms**. The now-terminal aggregate log has
+SHA-256 `409da9727e7074ffb9f4727dbf45d4644c8d0f70d4895885b0af8aa5fbcd59ad`.
+
+Grid independently authenticates **55 caret groups / 108 reviewed observations**
+and retains **97 pending observations**. Its original 100 grid groups,
+box-sizing and field-host groups, prior precedence and invalid-proof controls
+remain enforced. All **6,423 ordered scalar rows** and **6,055 complete other
+rows** are preserved, with the unchanged digest above. No historical expected
+checksum was replaced. The earlier live statuses are historical checkpoints.
+
 The complete
 current harness, canonical source-inventory refresh, 2,160 unresolved signatures
 and final enforced rendering matrix remain separate acceptance work. No renderer
