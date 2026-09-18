@@ -26,7 +26,10 @@ The [motion receipt correction](material-post-full-motion-receipt-repair.md)
 passes fresh browser/source replay and 3/3 tests while conserving all original
 observations and conclusions. The [explicit-gap conservation correction](material-post-full-explicit-gap-repair.md)
 passes its original-population replay, preserving all 892 scalar rows and
-867 unrelated complete findings. The gap-review sibling remains live. A separate
+867 unrelated complete findings. The [gap-review sibling](material-post-full-gap-review-repair.md)
+has also passed: all 2,173 scalar rows, 2,105 unrelated complete rows and 64
+pending motion observations are conserved. The sequential replay is terminal,
+2/2 passed in 2,264,725.0812ms. A separate
 [CLI check-mode defect](material-font-plan-check-mode.md) was reproduced:
 `--plan --check` could regenerate two reports instead of checking staleness.
 Its bounded correction passes 4/4 tests, including both complete source and

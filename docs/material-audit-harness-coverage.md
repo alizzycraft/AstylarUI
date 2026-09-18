@@ -9,8 +9,10 @@ pending groups / 3,325 property observations without overlaps, and conserves
 all 8,205 other complete rows. Focused/inventory checks pass **8/8** in
 133,902.3789ms, including write-prohibited full replay, 35 rejection controls,
 and a static/interactive same-tuple preservation guard. Canonical promotion
-and complete current-harness acceptance remain pending; the original gap-review
-correction is still live at this checkpoint.
+and complete current-harness acceptance remain pending. The original
+[gap-review correction](material-post-full-gap-review-repair.md) has now passed
+its full original population; the sequential historical gap checks finished
+2/2 in 2,264,725.0812ms. Older live-process descriptions below are historical.
 
 ## Previous inventory: read-only plan checks; original full run terminal
 

@@ -9,6 +9,7 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInputAuditMarkdown } from './input-equivalence-audit.mjs';
 import { gapReviewAttributions } from './gap-review-classification.mjs';
+import { assertLaterCaretClassifications } from './owner-gap-integration-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const baselineCommit = '3ebcff3e8f7bdfe7ecd9e00a4c2acbd11fefdc4a';
@@ -68,10 +69,21 @@ test('production gap review integration preserves complete original inputs prior
       assert.equal(row.classification, 'parity-harness-defect');
       assert.equal(row.reviewEvidence.inputEquivalent, false); assert.equal(row.reviewEvidence.rendererCauseProven, false);
     }
-    const others = report => report.discrepancies.filter(r => !keys.has(identity(r)));
+    // The original gap baseline predates these exact source-authenticated
+    // caret metadata reviews. No other property or unexplained row is exempt.
+    const laterCaret = assertLaterCaretClassifications(audit, previous, { root: process.cwd(), requireComplete: false });
+    assert.equal(laterCaret.size, 32);
+    assert.equal(audit.ownerCaretInputs.plannedCoverage.reviewedObservations, 796);
+    assert.equal(audit.ownerCaretInputs.plannedCoverage.pendingObservations, 155);
+    assert.ok(rows.every(r => !laterCaret.has(JSON.stringify(scalar(r)))));
+    const others = report => report.discrepancies.filter(r => !keys.has(identity(r)) && !laterCaret.has(JSON.stringify(scalar(r))));
     assert.ok(isDeepStrictEqual(others(audit), others(previous)), 'all unrelated complete findings unchanged');
+    assert.equal(others(audit).length, 2105);
+    assert.equal(hash(others(audit)), 'e778dbd5ecca5dcd92e135ea75089295d84a5aaa563f5b5550cf0d0195e9203c');
     const pending = audit.discrepancies.filter(r => r.family === 'dialog' && r.element === 'dialog-panel' && ['rowGap', 'columnGap'].includes(r.property));
     assert.equal(pending.length, 2); assert.ok(pending.every(r => r.attribution === 'unresolved'));
+    assert.deepEqual(pending, previous.discrepancies.filter(r => r.family === 'dialog' && r.element === 'dialog-panel' && ['rowGap', 'columnGap'].includes(r.property)));
+    assert.equal(pending.reduce((n, r) => n + r.occurrences, 0), 64);
     assert.match(renderMaterialInputAuditMarkdown(audit), /Bounded gap reviews: 1902[^\n]*36/);
     assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }).filter(e => /gap review/i.test(e)), []);
     for (const mutate of [
@@ -84,6 +96,7 @@ test('production gap review integration preserves complete original inputs prior
     }
     console.log(JSON.stringify({ baselineCommit, diagnosticCases: 676, attributedGroups: 36,
       attributedObservations: 1838, unresolvedMotionObservations: 64, unchangedScalarRows: audit.discrepancies.length,
+      laterCaretGroups: laterCaret.size, laterCaretObservations: 796, pendingCaretObservationsRetained: 155,
       unchangedCompleteRows: others(audit).length, unchangedCompleteRowsSha256: hash(others(audit)),
       inputEquivalent: false, fullCanonicalConservationVerified: false }));
   } finally {

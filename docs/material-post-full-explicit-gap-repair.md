@@ -36,9 +36,10 @@ node --test --test-concurrency=1 tests/material-parity/explicit-gap-canonical-in
 node --test tests/material-parity/later-caret-integration-conservation.spec.mjs
 ```
 
-The first command is a sequential two-file replay. Its explicit-gap child is
-terminal and passed; the gap-review child is **still running** at this checkpoint.
-This is not a successful exit claim for the whole command. Log:
+The first command is a sequential two-file replay. Both children are now
+terminal and passed: **2/2**, zero failed/skipped/cancelled/TODO, in
+**2,264,725.0812ms**. The [gap-review result](material-post-full-gap-review-repair.md)
+records its separate conservation boundaries. Log:
 `artifacts/material-parity/field-host-flow-input-audit/post-full-gap-conservation-correction.log`.
 
 No renderer, reference, fixture, normalization or canonical attribution changes.
