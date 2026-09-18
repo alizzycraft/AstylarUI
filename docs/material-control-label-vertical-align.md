@@ -46,6 +46,13 @@ labels. The reference and candidate parent compositions also differ.
 
 ## Required next proof
 
+The subsequent [public applicability reduction](material-public-vertical-align-audit.md)
+now proves a general core `baseline`/inner-text-placement defect across block,
+flex-item and absolute contexts, with 64 paired cases. It also includes omission
+controls: omitted alignment already matches browser vertical placement in those
+three reduced contexts. The actual Material label-parent compositions therefore
+remain necessary before attributing their historical substitution to this defect.
+
 Keep canonical fixtures unchanged during this audit. Isolate equivalent inline
 label/parent inputs, preserving reference typography and containing structure,
 and compare baseline/line-box placement across normal and middle requests.
