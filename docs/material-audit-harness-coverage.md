@@ -2,6 +2,17 @@
 
 ## Current inventory: canonical integration conserved
 
+Current discovery is **145 files** (137 Material, four general, four TTS),
+retaining all 43 legacy files. The new [follow-up proposal binding](material-followup-input-proposal-binding.md)
+joins 55 proposed groups / 1,884 observations with independent source/full
+historical-payload replay. Generation and write-prohibited replay pass. Its
+first combined focused run is 6/7 because of a no-op mutation test; the corrected
+combined suite passes **7/7**, exit 0, in **392,055.816ms**, including the
+independent no-write source/payload replay and 39 rejection controls. The historical
+gap-review and two button tests are also still running. These are pending
+bounded verification increments, not a complete current-harness result or
+canonical promotion. Earlier inventory/results below are checkpoints.
+
 Discovery includes **144 files**: 136 Material, four general and four TTS,
 retaining all 43 legacy files. The [canonical integration](material-reviewed-input-canonical-integration.md)
 passes independent comparison of every complete current/frozen row: exactly

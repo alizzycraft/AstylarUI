@@ -5,6 +5,24 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: canonical rows independently conserved
 
+Follow-up verification has passed. The [three-plan binding](material-followup-input-proposal-binding.md)
+replays the original source/canonical proofs and joins 55 proposed groups /
+1,884 observations to `957774a`, retaining all 8,284 other complete rows.
+Generation and independent no-write replay pass. The first combined focused
+run is 6/7 because one negative control replaced an already-empty array with
+an empty array. The corrected complete focused suite passes **7/7**, exit 0,
+in **392,055.816ms**, including independent no-write source/payload replay and
+39 rejection controls. There is no canonical promotion or complete-suite claim.
+Discovery now contains 145 files, including all 43 legacy files.
+
+The explicit-gap historical replay passed (see its dedicated report); the
+gap-review sibling remains live. The button fixed-width/request historical
+tests now authenticate exactly eight later state-layer preblend groups / 24
+observations before reconstructing metadata for their unchanged original-row
+checks. Their production replay is live and not yet accepted. The authoritative
+canonical unresolved count remains 2,026; source freshness and the complete
+enforced matrix remain outstanding after these audit-test additions.
+
 The [canonical integration](material-reviewed-input-canonical-integration.md)
 now contains the seven source-replayed proposal sets: exactly **134 groups /
 3,325 observations** receive reviewed classifications. Every original scalar
