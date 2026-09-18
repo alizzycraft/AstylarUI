@@ -5,6 +5,14 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: follow-up verification in progress
 
+The [control-label alignment history](material-control-label-vertical-align.md)
+now proves an explicit candidate `middle` substitution against reference
+`baseline` in **272 original observations**. Commit `354084e` added it to the
+three checkbox/radio/switch label rules. Focused source/history verification
+passes **7/7**, exit 0, in **7,078.8166ms**, including 32 rejection controls.
+This locates authoring divergence; used alignment and a concealed core cause
+still require an equivalent-input reduction. No canonical count change is claimed.
+
 [Canonical follow-up integration](material-followup-input-canonical-integration.md)
 is now wired in the working tree after all earlier classification rules.
 The stopped runs exposed stale gap-producer receipts. All seven unchanged

@@ -2,6 +2,13 @@
 
 ## Current inventory: follow-up integration verification in progress
 
+The [control-label alignment proof](material-control-label-vertical-align.md)
+adds the **154th file** (146 Material + four general + four TTS; all 43 legacy
+files retained). All seven focused/source-history/inventory checks pass, exit 0,
+in **7,078.8166ms**. The live full builder test file and canonical generation
+are separate unverified runs; this focused result does not enlarge their scope
+or establish a complete current-harness pass.
+
 [Follow-up live integration](material-followup-input-canonical-integration.md)
 is in progress. The working inventory includes a new full-population canonical
 conservation test (**151 files**, 143 Material + four general + four TTS), but
