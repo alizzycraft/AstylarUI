@@ -1,6 +1,21 @@
 # Complete audit harness coverage
 
-## Current inventory: expansion title font inputs are registered
+## Current inventory: private tab typography inputs are registered
+
+Discovery includes **126 files**: 118 Material, four general and four TTS,
+retaining all 43 legacy files. The [tab-panel input audit](material-tab-panel-inputs.md)
+binds all 70 original cases to the private plugin typography path, preserving
+all matching font-size numbers and the 17 custom baseline offsets. It reuses
+the separately documented runtime consumer proof without claiming a new run or
+per-case painted-text verification. This is not a container-font-stage waiver.
+
+Generation and no-write replay pass; focused/inventory verification passes
+**6/6**, exit **0**, in 4,210.4053ms, with 216 rejection-control executions.
+No canonical attribution changes. The original 120-file run is still active
+(runner 24392, parent 24492, grid-source-binding child 4196 at this snapshot),
+with 730 reported results and its two diagnosed failures still preserved.
+
+## Previous inventory: expansion title font inputs are registered
 
 Discovery includes **125 files**: 117 Material, four general and four TTS,
 retaining all 43 legacy files. The [expansion title proof](material-expansion-title-inputs.md)
