@@ -36,11 +36,16 @@ outer exit is **1**; its log is `followup-composed-full-builder.log`. Available
 Application/System event-log checks did not establish the cause. No OOM cause
 is claimed. After all other verification processes terminated, a lower-load
 serial retry started at **00:27:55 Africa/Johannesburg**, session **20439**.
-It runs the unchanged full builder test file without the explicit heap override;
-only if that succeeds will its shell proceed to 4GB canonical generation.
+The unchanged full builder test file, without the explicit heap override, now
+passes **388/388**, exit **0**, with zero failures, skips, cancellations or TODOs,
+in **1,523,253.5638ms**. Its shell advanced to 4GB canonical generation at
+**00:53:19**, process **9132**, confirmed live beneath the original shell.
 Logs are `followup-composed-full-builder-serial.log` and
-`followup-composed-canonical-generation.log`. Neither result is verified yet.
-Do not restart a live reader or commit the pending canonical promotion as green.
+`followup-composed-canonical-generation.log`. Generation remains unverified;
+fresh independent CLI validation must follow its terminal result. The 388-test
+pass is the full builder file, not the complete 159-suite audit harness or
+enforced parity matrix. Do not restart a live reader or commit the pending
+canonical promotion as green.
 
 **2026-09-19 checkpoint:** the sequential conservation run has terminated,
 exit **1**, **one pass / one failure**. The composed test fed reconstructed

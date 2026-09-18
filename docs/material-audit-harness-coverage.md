@@ -11,8 +11,11 @@ preserves 12 unresolved owner-mapping groups and eight missing scalar records,
 and checks 102 historical source revisions. No renderer, canonical fixture or
 canonical classification was changed. This is not a complete-harness pass.
 
-The separately running full builder/generation sequence retains its existing
-inputs and remains an outstanding integration gate.
+The serial full-builder retry now passes **388/388**, exit 0, zero skips,
+cancellations or TODOs, in **1,523,253.5638ms**. Its queued canonical generation
+started at 00:53:19 Africa/Johannesburg and is confirmed live. Generation and
+fresh independent CLI verification remain outstanding. The builder-file pass
+does not stand in for the complete 159-suite harness or enforced parity matrix.
 
 ## Prior integration checkpoint
 

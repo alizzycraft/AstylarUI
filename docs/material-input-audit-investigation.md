@@ -25,8 +25,10 @@ replay **3/3**, and dependent field-host conservation/original proofs/inventory
 **19/19**. These are working-tree integration results, not a committed canonical
 promotion. The full builder retry encountered an unexplained Windows process
 failure; a fresh serial run was started only after that process and the other
-verification jobs terminated. It will generate the canonical report only if the
-full builder succeeds. See the [current checkpoint](material-followup-input-canonical-integration.md)
+verification jobs terminated. That serial run now passes **388/388**, exit 0,
+in **1,523,253.5638ms**. The queued canonical generation is confirmed live;
+its result and fresh independent CLI validation remain outstanding.
+See the [current checkpoint](material-followup-input-canonical-integration.md)
 for exact commands/logs, provenance and outstanding acceptance work.
 
 ## Historical checkpoints
