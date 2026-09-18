@@ -64,6 +64,21 @@ const resultChanges = [
 assert.equal(originalResult.state, 'held');
 for (const [i, change] of captureChanges.entries()) assert.throws(variant(change, true), `capture rejection ${i}`);
 for (const [i, change] of resultChanges.entries()) assert.throws(variant(change), `result rejection ${i}`);
+const normalization = baseline.parentSourceChecks.find(s => s.verification === 'exact-executed-normalization-functions');
+assert.ok(normalization); assert.notEqual(normalization.recorded, normalization.current);
+for (const digest of ['0'.repeat(64), normalization.current])
+  assert.throws(variant(r => { r.capture.sources.find(s => s.file === normalization.file).sha256 = digest; }, true),
+    'a historical capture cannot substitute current source or a fabricated receipt');
+const inspector = baseline.parentSourceChecks.find(s => s.file.endsWith('/owner-caret-input-evidence.mjs'));
+assert.ok(inspector);
+for (const source of [normalization, inspector]) {
+  const absolute = path.resolve(source.file), original = read(absolute).toString('utf8');
+  const changed = source === normalization ? original.replace('function canonicalStyle(', 'function missingCanonicalStyle(')
+    : original + '\n// changed complete dependency\n';
+  assert.notEqual(changed, original);
+  assert.throws(() => collectTooltipCaretContext({ readBytes: file => path.resolve(file) === absolute
+    ? Buffer.from(changed) : read(file) }), 'changed executed normalization or complete dependency must fail');
+}
 // New motion/context values are measurements to retain, not constants to force
 // back to the original expectation. These controls do not edit evidence files.
 const changedMotion = variant(r => {
@@ -80,4 +95,5 @@ for (const r of [baseline, changedMotion, changedAncestor])
     assert.equal(r[f], false);
 console.log(JSON.stringify({ cases: baseline.cases, originalScalarChecks: baseline.originalScalarChecks,
   rootProperties: baseline.rootProperties, negativeControls: captureChanges.length + resultChanges.length,
+  parentSourceRejectionControls: 4,
   changedObservationControls: 2, savedReportMatches: true, evidenceFilesWritten: false }));

@@ -1,6 +1,15 @@
 # Complete audit harness coverage
 
-## Current inventory: historical caret conservation controls are registered
+## Current inventory: pending caret context commands are registered
+
+Discovery includes **115 files**: **107 Material**, four general parity and four
+TTS, retaining all **43 legacy files**. The original complete tooltip and overlay
+context checker commands now run in the discovered harness. Their two tests and
+the four inventory guards pass **6/6**; see
+[the source-bound reader evidence](material-overlay-caret-context-survey.md#current-reader-verification-2026-09-18).
+This does not establish a complete current harness pass or rendering parity.
+
+## Earlier inventory: historical caret conservation controls are registered
 
 Discovery includes **114 files**: **106 Material**, four general parity and four
 TTS, retaining all **43 legacy files**. The new historical-delta controls pass

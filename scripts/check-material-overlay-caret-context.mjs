@@ -14,8 +14,9 @@ const parent = JSON.parse(readFileSync(actual.parent.file));
 const expected = parent.groups.filter(g => g.reasonCounts['unreviewed-captured-root-context']);
 assert.deepEqual(actual.groups.map(g => [g.family, g.element, g.canonicalRowSha256, g.observations.map(o => o.original)]),
   expected.map(g => [g.family, g.element, g.canonicalRowSha256, g.observations]));
-assert.equal(actual.receiptDiagnostic.onDiskReaderPasses, false);
-assert.equal(actual.receiptDiagnostic.filesWritten, false);
+assert.equal(actual.originalOverlayContextVerification.onDiskReaderPasses, true);
+assert.equal(actual.originalOverlayContextVerification.filesWritten, false);
+assert.equal(actual.originalOverlayContextVerification.historicalCaptureReceiptsPreserved, true);
 
 const o = actual.groups[0].observations[0];
 const base = { alias: o.originalAlias,
@@ -89,7 +90,7 @@ const conservation = [
   r => { r.groups[0].observations[0].historicalExternalContextVerified = true; },
   r => { r.groups[0].observations[0].review.scalarRuleGap = true; },
   r => { r.counts.observations--; }, r => { r.renderingEquivalent = true; },
-  r => { r.receiptDiagnostic.onDiskReaderPasses = true; },
+  r => { r.originalOverlayContextVerification.onDiskReaderPasses = false; },
 ];
 for (const [i, mutate] of conservation.entries()) {
   const r = structuredClone(saved); mutate(r);
@@ -99,4 +100,4 @@ for (const [i, mutate] of conservation.entries()) {
 }
 console.log(JSON.stringify({ ...actual.counts, sourceReplayMatchesSaved: true,
   negativeControls: negative.length, changedEvidenceControls: positive, conservationControls: conservation.length,
-  onDiskLegacyReaderPasses: false, filesWritten: false }));
+  onDiskLegacyReaderPasses: true, filesWritten: false }));

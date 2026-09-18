@@ -44,12 +44,13 @@ proof. Each observation retains exact original membership and its checkpoint,
 input trees, fresh capture descriptor and external stylesheet digest.
 
 The 91-case original overlay context capture covers dialog, bottom-sheet and
-snackbar. Its on-disk mapping receipt is stale. The
-[separate receipt diagnostic](material-overlay-mapping-receipt-diagnostic.md)
-first confirms that failure, then replays the unchanged reader with precisely one
-proposed fingerprint change in memory. The survey records that proposal and
-`onDiskReaderPasses: false` explicitly. No historical receipt, observation or
-on-disk dependency is rewritten to conceal the failure.
+snackbar. The original survey used a documented in-memory proposal while its
+on-disk mapping receipt was stale. Following the separately verified
+[current-source refresh](material-overlay-mapping-receipt-diagnostic.md), the
+collector now invokes the production reader directly and records
+`originalOverlayContextVerification.onDiskReaderPasses: true`. It no longer
+depends on a diagnostic that requires the on-disk reader to fail. Historical
+capture receipts remain unchanged; this does not establish candidate replay.
 
 The remaining 18 tooltip cases use the
 [fresh hover/held context replay](material-tooltip-caret-context-survey.md).
@@ -64,6 +65,45 @@ candidate-replay, rendering-equivalence and renderer-cause claims stay false.
 The original **2,278 unresolved canonical groups** remain unchanged.
 
 ## Verification
+
+### Current reader verification (2026-09-18)
+
+The original historical-parent whole-module receipt stopped replay after the
+canonical builder gained caret classifications. The collector now verifies the
+same seven executed normalization functions with the existing AST-bound helper,
+and still checks every other dependency in full. Recorded and current source
+digests are both retained; the immutable parent is not refreshed. Tooltip
+capture provenance additionally verifies the historical whole-module bytes at
+`42fd47312ed6acc093d55eeced5e86b595a4d364`, separately from current normalization.
+
+Full-object comparison against `874d1a5`, excluding only the explicitly changed
+provenance fields, preserves every observation, declaration, raw value, context,
+count and limitation. Overlay non-provenance digest:
+`34fca00a8854a725ec041e0df0b9850a60fcd451267d1c2d59af0263fda08cc6`.
+Tooltip non-provenance digest:
+`04c235155f11f4a14b00e8e7ba65fe887ec616f9fb7cf5e2ed9bf9de5849bd6a`.
+Conservation log: `artifacts/material-parity/field-host-flow-input-audit/caret-context-reader-conservation.log`,
+SHA-256 `1d4105ca1acccabf7fc687c8fad21472f3525bc274c9214ff6f690e8ea15da3e`.
+
+Both generators and no-write checks exit **0**. The complete overlay checker
+retains **15 negative**, **13 changed-evidence**, and **12 conservation**
+controls. Its generation/check/control log is
+`artifacts/material-parity/field-host-flow-input-audit/caret-overlay-reader-refresh-v2.log`,
+SHA-256 `2b9856cbb667f52fd4b1b09b182d4c2986e8dfd81112d560345583503598af32`.
+
+The actual tooltip and overlay checker commands are now registered in automatic
+harness discovery via `pending-caret-context-commands.spec.mjs`; this is not a
+mock summary. Together with the inventory guard they pass **6/6**, exit **0**,
+**20,670.8545 ms**. Tooltip retains all **34 original rejection controls**, two
+changed-observation controls and four additional historical/current source
+rejections. No canonical caret promotion or complete rendering acceptance is
+claimed. Full current harness and enforced parity matrix remain outstanding.
+
+Command: `node --test --test-concurrency=1 tests/material-parity/pending-caret-context-commands.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs`.
+Log: `artifacts/material-parity/field-host-flow-input-audit/caret-context-command-registration.log`,
+SHA-256 `2daf0c7ed6e4e8f492d6087aff20da445ea53a5534d0fe87008c03481913908b`.
+
+### Original investigation commands
 
 ```powershell
 node scripts/audit-material-overlay-caret-context.mjs

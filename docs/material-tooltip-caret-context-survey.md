@@ -83,6 +83,15 @@ Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
 
 ## Remaining investigation
 
+Update (2026-09-18): the source-provenance boundary and complete replay have now
+been reverified, and this checker is registered in automatic harness discovery.
+All 18 observations, 1,602 scalar checks and 3,816 root properties are unchanged.
+The new check separately rejects forged/replaced historical source hashes,
+changed current normalization and changed complete dependencies. See
+[the current reader conservation and command results](material-overlay-caret-context-survey.md#current-reader-verification-2026-09-18).
+The remaining text below records the original investigation boundary, not a
+claim that the later registration is still missing.
+
 This evidence can now join the separate 91-case dialog/bottom-sheet/snackbar
 reference context when reviewing the 13 retained overlay caret groups / 378
 observations. That join must rederive every original owner proof, preserve the

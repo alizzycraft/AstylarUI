@@ -8,7 +8,8 @@ import { inspectOwnerCaretInput } from '../tests/material-parity/owner-caret-inp
 import { resolveOriginAliasPair } from '../tests/material-parity/origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from '../tests/material-parity/root-initial-style-evidence.mjs';
 import { collectTooltipCaretContext } from './audit-material-tooltip-caret-context.mjs';
-import { diagnoseOverlayMappingReceipt } from './diagnose-material-overlay-mapping-receipt.mjs';
+import { collectOriginalOverlayContextSurvey } from '../tests/material-parity/original-overlay-context-survey.mjs';
+import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const normalize = key => key.replaceAll('-', '').toLowerCase();
@@ -98,10 +99,16 @@ export function collectOverlayCaretContext() {
   assert.equal(parentBytes, execFileSync('git', ['show', `${revision}:${parentFile}`],
     { maxBuffer: 32 * 1024 * 1024, encoding: 'utf8' }).replaceAll('\r\n', '\n'));
   const parent = JSON.parse(parentBytes);
-  for (const s of parent.sourceFingerprints)
-    assert.equal(hash(readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n')), s.sha256);
+  bindOwnerCaretNormalization(readFileSync(parent.productionNormalization.module, 'utf8'), parent.productionNormalization);
+  const parentSourceChecks = parent.sourceFingerprints.map(s => {
+    const current = hash(readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n'));
+    const normalization = s.file === parent.productionNormalization.module;
+    if (!normalization) assert.equal(current, s.sha256, s.file);
+    return { file: s.file, recorded: s.sha256, current,
+      verification: normalization ? 'exact-executed-normalization-functions' : 'complete-source' };
+  });
   const groups = parent.groups.filter(g => g.reasonCounts['unreviewed-captured-root-context']); assert.equal(groups.length, 13);
-  const { replay: legacy, diagnostic: receiptDiagnostic } = diagnoseOverlayMappingReceipt();
+  const legacy = collectOriginalOverlayContextSurvey('artifacts/material-parity/original-overlay-context-current-ancestry-audit/latest-report.json');
   const tooltip = collectTooltipCaretContext();
   const root = realpathSync('artifacts/material-parity') + path.sep;
   const hashed = d => {
@@ -158,7 +165,11 @@ export function collectOverlayCaretContext() {
   assert.equal(observations, 378); assert.equal(cases.size, 109); assert.equal(ruleGaps, 59);
   return { schemaVersion: 1, kind: 'original-overlay-caret-declaration-and-fresh-context-survey',
     parent: { file: parentFile, revision, normalizedSha256: hash(parentBytes) },
-    freshCaptures: captures.map(c => c.descriptor), receiptDiagnostic, originalOverlayContextSummary: {
+    parentSourceChecks, freshCaptures: captures.map(c => c.descriptor),
+    originalOverlayContextVerification: { onDiskReaderPasses: true, filesWritten: false,
+      reader: 'tests/material-parity/original-overlay-context-survey.mjs',
+      historicalCaptureReceiptsPreserved: true, candidateReplayed: false, renderingEquivalent: false },
+    originalOverlayContextSummary: {
       cases: legacy.cases, matchedOriginalOwners: legacy.matchedOriginalOwners,
       historicalAuditSource: legacy.historicalAuditSource, historicalMappingSource: legacy.historicalMappingSource },
     tooltipContextSummary: { cases: tooltip.cases, originalScalarChecks: tooltip.originalScalarChecks },
@@ -174,7 +185,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   report.sourceFingerprints = ['scripts/audit-material-overlay-caret-context.mjs',
     'tests/material-parity/owner-caret-input-evidence.mjs', 'tests/material-parity/origin-alias-mapping-evidence.mjs',
     'tests/material-parity/root-initial-style-evidence.mjs', 'tests/material-parity/original-overlay-context-survey.mjs',
-    'scripts/diagnose-material-overlay-mapping-receipt.mjs',
+    'tests/material-parity/owner-caret-source-binding.mjs',
     'scripts/audit-material-tooltip-caret-context.mjs']
     .map(file => ({ file, sha256: hash(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')) }));
   const output = JSON.stringify(report, null, 2) + '\n';
