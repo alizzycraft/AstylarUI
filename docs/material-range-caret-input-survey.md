@@ -107,3 +107,41 @@ change claims remain false. The full harness is still running with unchanged
 dependencies; registration of these standalone checks, bounded canonical
 attribution and the complete enforced parity matrix remain outstanding. The
 canonical unresolved count stays **2,278**.
+
+## Current-source replay and registration (2026-09-18)
+
+The historical whole-module source hash no longer matches the canonical audit
+builder after its caret-classification integration. The range collector retains
+the original parent's bytes and digest and now distinguishes that historical
+receipt from the exact seven normalization functions it executes. Their existing
+AST digest check remains mandatory; every other dependency still requires a
+complete-source match. The report records both old and current source digests.
+
+Generation and `--check` both exit **0**. Whole-object comparison against
+`f7e8d2a`, excluding only the new provenance array and source fingerprints,
+preserves every other field: **four groups / 156 observations / 78 cases /
+13,884 scalar checks**. Non-provenance SHA-256:
+`fb941e4a906f9e9b0c0b99a28668821fe79f58395c8ae58cb97f07a571c4f546`.
+The unequal control inputs remain explicit: **78 min**, **78 max**, and **156
+step** differences. This does not establish slider interaction or input parity.
+
+The original range checker is now registered alongside the tooltip and overlay
+commands. All **18 rejection**, **six changed-evidence**, and **14 conservation**
+controls are retained. Running the three command tests and four inventory tests
+passes **7/7**, exit **0**, **26,007.1205 ms**:
+
+```powershell
+node scripts/audit-material-range-caret-inputs.mjs
+node scripts/audit-material-range-caret-inputs.mjs --check
+node --test --test-concurrency=1 tests/material-parity/pending-caret-context-commands.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs
+```
+
+Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
+
+- `caret-range-reader-refresh.log`: SHA-256 `adcede5f5c93ba75a6fc89f922fdb829feef59cc932ed3f0a9ba848308fb39af`.
+- `caret-range-reader-conservation.log`: SHA-256 `f7d04a74386526594c3779b0f495754cbf9fb25f5fc31c21c96f9cb66d6bb7a8`.
+- `caret-all-context-command-registration.log`: SHA-256 `7fd75d43688ed51a14ddd9b4bcf0465cc8e072db5dc032707e5a8792e3f4ffb4`.
+
+The preceding section records the original investigation status. Registration
+is now complete; canonical promotion, complete current harness acceptance and
+the full enforced parity matrix are still outstanding.

@@ -3,10 +3,12 @@
 ## Current inventory: pending caret context commands are registered
 
 Discovery includes **115 files**: **107 Material**, four general parity and four
-TTS, retaining all **43 legacy files**. The original complete tooltip and overlay
-context checker commands now run in the discovered harness. Their two tests and
-the four inventory guards pass **6/6**; see
+TTS, retaining all **43 legacy files**. The original complete tooltip, overlay and
+range context checker commands now run in the discovered harness. Their three
+tests and the four inventory guards pass **7/7**; see
 [the source-bound reader evidence](material-overlay-caret-context-survey.md#current-reader-verification-2026-09-18).
+The range extension retains all original controls and unequal control-domain
+inputs; see [its complete replay](material-range-caret-input-survey.md#current-source-replay-and-registration-2026-09-18).
 This does not establish a complete current harness pass or rendering parity.
 
 ## Earlier inventory: historical caret conservation controls are registered

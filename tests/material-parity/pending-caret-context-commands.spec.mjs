@@ -27,3 +27,11 @@ test('pending overlay context uses the real on-disk reader without losing declar
   assert.equal(r.conservationControls, 12); assert.equal(r.sourceReplayMatchesSaved, true);
   assert.equal(r.onDiskLegacyReaderPasses, true); assert.equal(r.filesWritten, false);
 });
+
+test('pending range context retains all original owners and unequal control domains', () => {
+  const r = run('scripts/check-material-range-caret-inputs.mjs');
+  assert.deepEqual([r.groups, r.cases, r.observations, r.originalScalarChecks], [4, 78, 156, 13884]);
+  assert.equal(r.negativeControls, 18); assert.equal(r.changedEvidenceControls, 6);
+  assert.equal(r.conservationControls, 14); assert.equal(r.savedReportMatches, true);
+  assert.equal(r.filesWritten, false);
+});

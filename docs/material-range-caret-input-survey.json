@@ -6,6 +6,62 @@
     "sha256": "58f1f2690d786209aee2f050af41dc5531bf3d6c24318ad9a237dbe0114a4435",
     "revision": "f70c6b92f1135a7a5196e1393e8767345892de7f"
   },
+  "parentSourceChecks": [
+    {
+      "file": "scripts/audit-material-owner-caret-inputs.mjs",
+      "recorded": "a639879cfe69558e19cc7b07bf2cd77364f8cb70988c69af379f999ae642d8ed",
+      "current": "a639879cfe69558e19cc7b07bf2cd77364f8cb70988c69af379f999ae642d8ed",
+      "verification": "complete-source"
+    },
+    {
+      "file": "tests/material-parity/owner-caret-input-evidence.mjs",
+      "recorded": "e3d45570927eed67666783b17381374561df7f08210b275cb03f75648dfd2d51",
+      "current": "e3d45570927eed67666783b17381374561df7f08210b275cb03f75648dfd2d51",
+      "verification": "complete-source"
+    },
+    {
+      "file": "tests/material-parity/owner-caret-canonical-membership.mjs",
+      "recorded": "0f862599156ec57173a164bdc0f86b6493d5d0f992e75b3bcbdaa744206e6dab",
+      "current": "0f862599156ec57173a164bdc0f86b6493d5d0f992e75b3bcbdaa744206e6dab",
+      "verification": "complete-source"
+    },
+    {
+      "file": "tests/material-parity/root-initial-style-evidence.mjs",
+      "recorded": "1fb7dc3f6dee4c64a0e86db8cbaedee621cffe15e6ff5fb62878f37977d4fa8f",
+      "current": "1fb7dc3f6dee4c64a0e86db8cbaedee621cffe15e6ff5fb62878f37977d4fa8f",
+      "verification": "complete-source"
+    },
+    {
+      "file": "tests/material-parity/border-initial-input-evidence.mjs",
+      "recorded": "3dbcf33ff70244a8179f438962a2549fb7e354948f084d35d433bcf82e76f9f4",
+      "current": "3dbcf33ff70244a8179f438962a2549fb7e354948f084d35d433bcf82e76f9f4",
+      "verification": "complete-source"
+    },
+    {
+      "file": "tests/material-parity/origin-alias-mapping-evidence.mjs",
+      "recorded": "bd6a621438f2053d7edacc3d669e927f3306753c636849ff5df8e724b3fc472d",
+      "current": "bd6a621438f2053d7edacc3d669e927f3306753c636849ff5df8e724b3fc472d",
+      "verification": "complete-source"
+    },
+    {
+      "file": "tests/material-parity/generated-node-mapping-evidence.mjs",
+      "recorded": "c21d439f33323e576d19153db104bd6e2245a9d216dc3a157d4187c116c7aa41",
+      "current": "c21d439f33323e576d19153db104bd6e2245a9d216dc3a157d4187c116c7aa41",
+      "verification": "complete-source"
+    },
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "recorded": "252754869d5683cc76ba0784a96fc55d5c50aa8eeeb8a0441c131ec0a62eb6d4",
+      "current": "b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73",
+      "verification": "exact-executed-normalization-functions"
+    },
+    {
+      "file": "tests/material-parity/run-material-parity.mjs",
+      "recorded": "c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10",
+      "current": "c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10",
+      "verification": "complete-source"
+    }
+  ],
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
     "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
@@ -27546,7 +27602,7 @@
   "sourceFingerprints": [
     {
       "file": "scripts/audit-material-range-caret-inputs.mjs",
-      "sha256": "c046aa1018c5282b63d4d52cda882d4e61b37dc40b5d5d0d58b2b316b4c2b63e"
+      "sha256": "7ff55b486f05ba40931997a5378b97b8d240aaaf651e2ac0cf590ac7c094bd1f"
     },
     {
       "file": "tests/material-parity/owner-caret-input-evidence.mjs",
@@ -27554,7 +27610,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "252754869d5683cc76ba0784a96fc55d5c50aa8eeeb8a0441c131ec0a62eb6d4"
+      "sha256": "b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73"
     }
   ]
 }

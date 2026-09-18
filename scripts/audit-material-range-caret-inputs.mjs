@@ -64,10 +64,16 @@ export function collectRangeCaretInputs() {
   const parentFile = 'docs/material-owner-caret-input-survey.json', revision = 'f70c6b92f1135a7a5196e1393e8767345892de7f';
   const parentBytes = readFileSync(parentFile), parent = JSON.parse(parentBytes);
   assert.deepEqual(parent, JSON.parse(execFileSync('git', ['show', `${revision}:${parentFile}`], { maxBuffer: 32 * 1024 * 1024 })));
-  for (const s of parent.sourceFingerprints)
-    assert.equal(hash(readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n')), s.sha256);
+  const parentSourceChecks = parent.sourceFingerprints.map(s => {
+    const current = hash(readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n'));
+    const normalization = s.file === parent.productionNormalization.module;
+    if (!normalization) assert.equal(current, s.sha256, s.file);
+    return { file: s.file, recorded: s.sha256, current,
+      verification: normalization ? 'exact-executed-normalization-functions' : 'complete-source' };
+  });
   const source = readFileSync(parent.productionNormalization.module, 'utf8');
   const parsed = ts.createSourceFile(parent.productionNormalization.module, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(parsed.parseDiagnostics.length, 0);
   const functions = parent.productionNormalization.functions.map(name => {
     const nodes = parsed.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
     assert.equal(nodes.length, 1); return nodes[0].getText(parsed);
@@ -115,6 +121,7 @@ export function collectRangeCaretInputs() {
   });
   const observations = findings.flatMap(g => g.observations); assert.equal(observations.length, 156);
   return { schemaVersion: 1, kind: 'original-range-caret-input-review', parent: { file: parentFile, sha256: hash(parentBytes), revision },
+    parentSourceChecks,
     capture: parent.capture, originalCasesScanned: seen.size, selectedCases: selectedCases.size,
     groups: findings.length, observations: observations.length, originalScalarChecks: observations.length * 89,
     controlDifferences: Object.fromEntries(['min', 'max', 'step', 'value', 'disabled'].map(field =>
