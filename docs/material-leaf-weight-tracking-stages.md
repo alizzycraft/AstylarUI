@@ -50,7 +50,9 @@ Logs under `artifacts/material-parity/field-host-flow-input-audit/`:
 `leaf-weight-tracking-generation-final.log` and
 `leaf-weight-tracking-focused.log`.
 
-This increment supplies source evidence only. Exact pending-versus-previously-
-reviewed canonical membership still needs an independent join before any
-classification changes. Canonical unresolved remains **2,026**. The complete
+This increment supplies source evidence only. The later independent
+[canonical membership plan](material-leaf-weight-tracking-attribution.md) binds
+eight pending groups / 192 observations and preserves eight static reviewed
+groups / 112 observations. Production integration still needs verification
+before any classification changes. Canonical unresolved remains **2,026**. The complete
 audit, current harness and enforced rendering matrix remain outstanding.

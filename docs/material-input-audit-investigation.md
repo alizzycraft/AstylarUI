@@ -19,7 +19,7 @@ generated payload/Markdown are current. Exit 1 preserves the sole diagnostic:
 Seven existing gap reports were independently regenerated with their unchanged
 generators: only eleven dependency hashes advance, with all other evidence
 preserved. Their write-prohibited replay and rejection controls pass 7/7 with
-inventory tests. Current discovery contains **143 files**, retaining all 43
+inventory tests. Current discovery contains **144 files**, retaining all 43
 legacy files. Full current-harness and enforced-rendering verification remain
 outstanding.
 
@@ -57,6 +57,13 @@ adds 304 verified property observations for badge/card/divider text. Retained
 core text values match reference scalars under unchanged normalization, while
 local snapshots omit them. Focused checks pass 7/7 with 48 rejection controls;
 this is not glyph/input equivalence and canonical membership remains pending.
+
+The subsequent [weight/tracking membership plan](material-leaf-weight-tracking-attribution.md)
+independently authenticates the complete frozen canonical payload and binds
+eight pending groups / 192 observations. Eight earlier static groups / 112
+observations and all 8,331 other complete rows are preserved. Focused checks
+pass 7/7 (90,404.3299ms) with 25 rejection controls. Canonical promotion remains
+pending and the actual unresolved count remains 2,026.
 
 ## Previous integration checkpoint: builder wiring under full verification
 

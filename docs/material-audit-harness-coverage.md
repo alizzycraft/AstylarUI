@@ -2,7 +2,7 @@
 
 ## Current inventory: canonical integration conserved
 
-Discovery includes **143 files**: 135 Material, four general and four TTS,
+Discovery includes **144 files**: 136 Material, four general and four TTS,
 retaining all 43 legacy files. The [canonical integration](material-reviewed-input-canonical-integration.md)
 passes independent comparison of every complete current/frozen row: exactly
 134 groups / 3,325 observations change classification metadata, and all raw
@@ -42,6 +42,13 @@ conserved. The two historical gap tests now contain exact later-metadata
 reconstruction and are running their production-builder replay. The successful
 canonical freshness checkpoint predates those test-source edits; another
 generation/freshness pass is required after their integration is verified.
+
+The [weight/tracking canonical membership plan](material-leaf-weight-tracking-attribution.md)
+passes a separate 7/7 focused/inventory suite in 90,404.3299ms. It binds eight
+pending groups / 192 observations and preserves eight same-value static reviews
+/ 112 observations plus all 8,331 other complete rows. Twenty-five rejection
+controls pass. This prepares source-bound integration; it does not reduce the
+canonical count or establish a complete 144-file or rendering-matrix pass.
 
 ## Previous inventory: synchronous source boundary verified
 
