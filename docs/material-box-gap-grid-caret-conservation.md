@@ -1,8 +1,9 @@
 # Historical box/gap/grid failures: exact later caret attribution
 
 This explains three failures in the [unchanged five-file
-baseline](material-historical-caret-recheck-baseline.md). It does not yet accept
-their corrected tests or explain the slider's separate frozen checksum.
+baseline](material-historical-caret-recheck-baseline.md). The corrected box-sizing
+test is now verified below; gap/grid acceptance and the slider's separate frozen
+checksum remain outstanding.
 
 The diagnostic executes each exact original spec at `a6c98bd`, inserts a bounded
 comparison immediately before the failing assertion, and retains that assertion.
@@ -65,9 +66,29 @@ from the original and previously reviewed groups, and compare every remaining
 record in full. Pending records must remain inside that full comparison. Keep
 all original source, authoring, precedence and invalid-evidence checks.
 
-The corrected box-sizing replay is running; corrected gap/grid replays are
-queued after it. These corrections are not included in this diagnostic commit
-and must not be accepted before their unfiltered checks finish. The complete
+### Completed corrected box-sizing replay
+
+```powershell
+node --test tests/material-parity/button-box-sizing-canonical-integration.spec.mjs
+```
+
+The unfiltered replay completed with **1 test passed, 0 failed**, exit **0**,
+no skipped, cancelled or todo tests. Test duration: **572,132.7533 ms**;
+total process-reported duration: **574,772.0553 ms**. The completed log
+`artifacts/material-parity/field-host-flow-input-audit/caret-box-sizing-corrected-recheck.log`
+has SHA-256
+`4f2b3d4aa493e0a8285daa6dc0a39d4cef20e5074112fade67d0e170d88c7d4d`.
+
+The correction authenticates exactly **55 later caret groups / 119 reviewed
+observations**, proves they are disjoint from the original box/field-host/gap
+populations, retains **53 pending observations**, and preserves the complete
+comparison of all **6,282 other rows** with the unchanged digest above. All
+**6,554 ordered scalar rows**, original precedence checks, measurement-gap
+checks and invalid-evidence controls remain enforced. This is a historical
+audit-test correction, not proof of input equivalence or rendered box sizing.
+
+The corrected gap/grid replays started after box sizing completed; they must
+not be accepted before their unfiltered checks finish. The complete
 current harness, canonical source-inventory refresh, 2,160 unresolved signatures
 and final enforced rendering matrix remain separate acceptance work. No renderer
 or canonical comparison input is changed here.

@@ -10,7 +10,7 @@ import { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInpu
 import { buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
 import { fieldHostLayoutAttribution, fieldHostWidthAttribution } from './field-host-layout-source-binding.mjs';
-import { assertLaterGapClassifications } from './owner-gap-integration-conservation.mjs';
+import { assertLaterGapClassifications, assertLaterCaretClassifications } from './owner-gap-integration-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs', baselineCommit = '0165f76';
 const source = execFileSync('git', ['show', `${baselineCommit}:${moduleFile}`], { maxBuffer: 4 * 1024 * 1024 }).toString();
@@ -82,7 +82,15 @@ test('button box sizing production integration preserves all scalar inputs earli
   assert.ok(previousFields.filter(r => r.classification !== 'equivalent-representation').every(r => r.classification === 'parity-harness-defect'));
   for (const row of fields) signatures.add(JSON.stringify(scalar(row)));
   for (const signature of assertLaterGapClassifications(audit, previous)) signatures.add(signature);
+  const laterCarets = assertLaterCaretClassifications(audit, previous);
+  assert.equal(laterCarets.size, 55);
+  assert.equal(audit.ownerCaretInputs.plannedCoverage.reviewedObservations, 119);
+  assert.equal(audit.ownerCaretInputs.plannedCoverage.pendingObservations, 53);
+  assert.ok([...laterCarets].every(signature => !signatures.has(signature)),
+    'authenticated later caret reviews cannot replace original box, field-host or gap proofs');
+  for (const signature of laterCarets) signatures.add(signature);
   const other = report => report.discrepancies.filter(r => !signatures.has(JSON.stringify(scalar(r))));
+  assert.equal(other(audit).length, 6282);
   assert.equal(hash(other(audit)), hash(other(previous)), 'complete unrelated rows unchanged');
   const binding = audit.buttonBoxSizingInputs;
   assert.equal(binding.binding.status, 'bound');
@@ -109,6 +117,9 @@ test('button box sizing production integration preserves all scalar inputs earli
     originalOwners: binding.observations.length, measuredCases: 9,
     geometryGapCases: binding.observations.filter(o => !o.proof.observedDeclaredBorderBox).length,
     addedGroups: added.length, laterFieldHostGroups: fields.length, unchangedScalarRows: audit.discrepancies.length,
+    independentlyVerifiedLaterCaretGroups: laterCarets.size,
+    independentlyVerifiedLaterCaretObservations: audit.ownerCaretInputs.plannedCoverage.reviewedObservations,
+    retainedPendingCaretObservations: audit.ownerCaretInputs.plannedCoverage.pendingObservations,
     unchangedCompleteRows: other(audit).length, unchangedCompleteRowsSha256: hash(other(audit)),
     fullCanonicalConservationVerified: false, inputEquivalent: false, retainedDiagnosticCapture: file }));
 });
