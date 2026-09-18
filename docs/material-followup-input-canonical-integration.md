@@ -39,13 +39,25 @@ serial retry started at **00:27:55 Africa/Johannesburg**, session **20439**.
 The unchanged full builder test file, without the explicit heap override, now
 passes **388/388**, exit **0**, with zero failures, skips, cancellations or TODOs,
 in **1,523,253.5638ms**. Its shell advanced to 4GB canonical generation at
-**00:53:19**, process **9132**, confirmed live beneath the original shell.
+**00:53:19**, process **9132**. That generation is now terminal, exit **1**,
+with exactly one validation error: **1,960 unresolved groups**. Coverage remains
+436/436 static and 1,875/1,875 interaction cases, with 8,339 groups / 386,891
+observations and 132 source findings. The generated payload has 53,455,290
+compressed bytes, SHA-256
+`72b148d9be7f4aaf3bd5872faedad2273f408d2a5ef1c258f6944f60be5ffd07`,
+and 1,979,347,068 decoded bytes, SHA-256
+`ee6db8ce5777cd316d6266f435502a732761a7177c3d8a45b2e7d40d45642e6a`.
 Logs are `followup-composed-full-builder-serial.log` and
-`followup-composed-canonical-generation.log`. Generation remains unverified;
-fresh independent CLI validation must follow its terminal result. The 388-test
-pass is the full builder file, not the complete 159-suite audit harness or
-enforced parity matrix. Do not restart a live reader or commit the pending
-canonical promotion as green.
+`followup-composed-canonical-generation.log`. Fresh independent CLI `--check`
+with the same five capture arguments started at **01:25:09** in session **86486**,
+process **5604**, logging to `followup-composed-canonical-fresh-check.log`.
+That check is not yet terminal. The 388-test pass is the full builder file,
+not the complete audit harness or enforced parity matrix. Do not restart a live
+reader or commit the pending canonical promotion as green.
+
+### Historical verification checkpoints
+
+The remaining chronology records prior attempts, not the current process state.
 
 **2026-09-19 checkpoint:** the sequential conservation run has terminated,
 exit **1**, **one pass / one failure**. The composed test fed reconstructed

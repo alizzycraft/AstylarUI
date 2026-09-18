@@ -1,10 +1,17 @@
 # Complete audit harness coverage
 
-## Current inventory: complete alignment-population source proof
+## Current inventory: alignment canonical membership proof
 
-Discovery now contains **160 files** (152 Material + four general + four TTS,
+Discovery now contains **161 files** (153 Material + four general + four TTS,
 all 43 legacy files retained), including `vertical-align-population.spec.mjs`
-and `later-followup-input-conservation.spec.mjs`.
+and `later-followup-input-conservation.spec.mjs`, plus the new
+`vertical-align-canonical-plan.spec.mjs`. The [canonical membership proposal](material-vertical-align-canonical-plan.md)
+and inventory checks pass **7/7**, exit 0, in **197,776.0105ms**, including
+independent write-prohibited source/full-payload replay and 34 rejection cases.
+It proposes 68 groups / 3,848 observations, preserves 45 prior reviews, reserves
+the existing expansion-owner proposal, retains two capture gaps, and leaves
+8,271 other complete canonical rows outside the proposal. No classification is
+promoted by this proof.
 The [alignment population/source/history proof](material-vertical-align-population.md)
 and inventory checks pass **12/12**, exit 0, in **34,871.3864ms**, with no skips,
 cancellations or TODOs. It replays 116 original groups / 6,886 observations,
@@ -18,9 +25,10 @@ canonical classification was changed. This is not a complete-harness pass.
 
 The serial full-builder retry now passes **388/388**, exit 0, zero skips,
 cancellations or TODOs, in **1,523,253.5638ms**. Its queued canonical generation
-started at 00:53:19 Africa/Johannesburg and is confirmed live. Generation and
-fresh independent CLI verification remain outstanding. The builder-file pass
-does not stand in for the complete 160-suite harness or enforced parity matrix.
+has terminated, exit 1 solely for 1,960 unresolved groups. Fresh independent CLI
+verification started at 01:25:09 Africa/Johannesburg and remains outstanding.
+The builder-file pass does not stand in for the complete 161-suite harness or
+enforced parity matrix.
 
 ## Prior integration checkpoint
 

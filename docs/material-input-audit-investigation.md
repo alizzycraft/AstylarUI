@@ -20,6 +20,16 @@ in **34,871.3864ms**, including 25 evidence rejection controls and nine direct o
 generated mapping-gap cases. All 6,444 unrelated complete proofs and every original
 observation remain unchanged; the 59 gaps join the existing layer-capture diagnosis.
 
+The [exact canonical membership proposal](material-vertical-align-canonical-plan.md)
+now binds 68 previously unresolved groups / 3,848 observations without replacing
+earlier classifications. It preserves 45 already reviewed groups, reserves the
+one expansion-primary group for the existing owner-mismatch proposal, and
+retains the two overlay capture gaps. All 8,271 other complete frozen canonical
+rows remain outside the proposed change. Independent source/full-payload replay,
+34 rejection controls and inventory checks pass **7/7**, exit 0, in
+**197,776.0105ms**. This is not canonical promotion or a new Material renderer
+causality claim.
+
 The [historical conservation helper](material-later-followup-conservation.md)
 now authenticates the later 66-group population separately from the earlier 134
 groups. All 13 focused/source/inventory tests pass; the six unchanged actual
@@ -35,8 +45,9 @@ replay **3/3**, and dependent field-host conservation/original proofs/inventory
 promotion. The full builder retry encountered an unexplained Windows process
 failure; a fresh serial run was started only after that process and the other
 verification jobs terminated. That serial run now passes **388/388**, exit 0,
-in **1,523,253.5638ms**. The queued canonical generation is confirmed live;
-its result and fresh independent CLI validation remain outstanding.
+in **1,523,253.5638ms**. Canonical generation has now terminated, exit 1,
+solely for the 1,960 unresolved groups. The fresh independent CLI validation
+started at 01:25:09 Africa/Johannesburg and remains outstanding.
 See the [current checkpoint](material-followup-input-canonical-integration.md)
 for exact commands/logs, provenance and outstanding acceptance work.
 
