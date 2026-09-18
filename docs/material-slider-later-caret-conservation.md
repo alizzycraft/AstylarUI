@@ -41,3 +41,29 @@ this one row, enforce disjointness from the prior rollback population, preserve
 the four pending observations, and rerun all five slider tests without a filter.
 That corrected run is a separate acceptance step. This evidence concerns audit
 metadata, not slider targeting, dragging, rendering, or input equivalence.
+
+## Corrected complete five-test replay — 2026-09-18
+
+```powershell
+node --test tests/material-parity/slider-border-canonical-integration.spec.mjs
+```
+
+The unfiltered file passes **5/5**, exit **0**, with no skips, cancellations or
+todos; total duration **1,222,357.6759 ms**. The positive integration test takes
+131,405.626 ms. The four source-rejection tests also pass: later gap coverage,
+later grid observation-stage evidence, later shadow attribution, and missing
+sources/altered scalars/fabricated parity. They are retained, not filtered out.
+
+Log: `artifacts/material-parity/field-host-flow-input-audit/caret-slider-border-corrected-recheck.log`,
+SHA-256 `e179c04c426dbd855b90ec8f2452ba0bf78f126ad934ece1de704c644b0aebb0`.
+
+The corrected test independently authenticates exactly one later caret group
+(`slider-visual`, two observations), proves it is disjoint from the earlier
+rollback population, and keeps all four pending range-caret observations
+unresolved. Reconstructing the 220 complete historical rows still yields the
+original `4e1f09fc03af948aec7b2d1d927ee13c298b6439ceaa3bb0145a72122eb315ee`
+digest; that expectation was not changed. Original border rows, scalar values,
+authored examples and negative controls remain intact.
+
+This completes this historical test correction. It does not establish a full
+current audit-harness pass, renderer acceptance, or a slider interaction fix.

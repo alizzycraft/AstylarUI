@@ -8,7 +8,7 @@ import { sliderBorderDefaultAttribution } from './slider-border-default-source-b
 import { ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
 import { rootShadowAttribution } from './root-shadow-source-binding.mjs';
 import { ownerGridInitialAttribution } from './owner-grid-initial-classification.mjs';
-import { assertLaterGapClassifications } from './owner-gap-integration-conservation.mjs';
+import { assertLaterGapClassifications, assertLaterCaretClassifications } from './owner-gap-integration-conservation.mjs';
 import { ownerGapAttribution } from './owner-gap-classification.mjs';
 
 const prior = JSON.parse(readFileSync('docs/material-slider-border-defaults.json'));
@@ -54,7 +54,7 @@ test('slider border canonical integration preserves raw values and attributes on
   // Retain the historical complete-row guard. Only the 22 explicitly reviewed
   // owner-stage attributions, the later single root-shadow authoring finding,
   // six source-bound grid observation-stage rows, and independently replayed
-  // later gap observation-stage rows
+  // later gap observation-stage rows and the one authenticated later caret row
   // may be projected back to unresolved; all 220 complete rows must still
   // reproduce the original frozen digest. Do not replace the historical hash.
   const otherRows = audit.discrepancies.filter(row => !rows.includes(row));
@@ -100,6 +100,14 @@ test('slider border canonical integration preserves raw values and attributes on
   const gaps = otherRows.filter(row => gapSignatures.has(signature(row)));
   assert.equal(gaps.length, gapSignatures.size, 'all later gap findings belong to the historical non-border population');
   const later = new Set([...shared, shadow, ...grids, ...gaps]);
+  const caretSignatures = assertLaterCaretClassifications(audit, unbound, { root });
+  const carets = otherRows.filter(row => caretSignatures.has(signature(row)));
+  assert.equal(caretSignatures.size, 1);
+  assert.deepEqual(carets.map(row => [row.element, row.property, row.occurrences]), [['slider-visual', 'caretColor', 2]]);
+  assert.equal(audit.ownerCaretInputs.plannedCoverage.reviewedObservations, 2);
+  assert.equal(audit.ownerCaretInputs.plannedCoverage.pendingObservations, 4);
+  assert.ok(carets.every(row => !later.has(row)), 'caret metadata cannot replace earlier proofs');
+  for (const row of carets) later.add(row);
   const historicalRows = otherRows.map(row => {
     if (!later.has(row)) return row;
     const previous = oldRows.get(signature(row)); assert.equal(previous.attribution, 'unresolved'); return previous;
@@ -108,7 +116,9 @@ test('slider border canonical integration preserves raw values and attributes on
     '4e1f09fc03af948aec7b2d1d927ee13c298b6439ceaa3bb0145a72122eb315ee');
   console.log(JSON.stringify({ historicalCompleteRows: historicalRows.length,
     historicalSha256: createHash('sha256').update(JSON.stringify(historicalRows)).digest('hex'),
-    sourceValidatedLaterGapRows: gaps.map(row => [row.element, row.property, row.occurrences]) }));
+    sourceValidatedLaterGapRows: gaps.map(row => [row.element, row.property, row.occurrences]),
+    sourceValidatedLaterCaretRows: carets.map(row => [row.element, row.property, row.occurrences]),
+    pendingCaretObservations: audit.ownerCaretInputs.plannedCoverage.pendingObservations }));
   const errors = validateMaterialInputAudit(audit, { root, requireComplete: false });
   assert.ok(!errors.some(error => error.includes('slider border') || error.includes('owner initial-style') || error.includes('root shadow') || error.includes('owner grid')));
 }));
