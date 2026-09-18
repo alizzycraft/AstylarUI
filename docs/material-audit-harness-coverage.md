@@ -1,6 +1,30 @@
 # Complete audit harness coverage
 
-## Current inventory: synchronous source boundary verified
+## Current inventory: canonical integration conserved
+
+Discovery includes **141 files**: 133 Material, four general and four TTS,
+retaining all 43 legacy files. The [canonical integration](material-reviewed-input-canonical-integration.md)
+passes independent comparison of every complete current/frozen row: exactly
+134 groups / 3,325 observations change classification metadata, and all raw
+inputs plus 8,205 other complete rows are preserved (1/1, 211,327.539ms).
+The generated report has 2,026 unresolved groups; its separate freshness replay
+is still running at this checkpoint. Gap dependency refreshes pass an additional
+7/7 focused/inventory checks with unchanged generators and evidence bodies.
+
+The [leaf-family proposal](material-leaf-font-family-attribution.md) and
+[expansion owner-mapping proof](material-expansion-owner-mapping.md) have their
+own focused coverage (10/10 and 7/7 respectively), not canonical promotion.
+This inventory is not a full-suite result: historical conservation guards must
+independently account for exact later reviews, and the complete current harness
+and enforced rendering matrix remain outstanding.
+
+The [later-review conservation helper](material-later-reviewed-input-conservation.md)
+adds 8/8 focused/source-replay/inventory results (152,382.643ms). It rejects
+unauthenticated metadata exemptions and preserves unrelated mutations for the
+existing historical hashes. This does not yet prove those older production
+integration tests pass with the new classifications.
+
+## Previous inventory: synchronous source boundary verified
 
 Discovery includes **136 files**: 128 Material, four general and four TTS,
 retaining all 43 legacy files. The [source-bound integration boundary](material-reviewed-input-live-source-boundary.md)

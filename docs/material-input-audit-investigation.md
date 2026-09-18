@@ -3,7 +3,38 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
-## Current integration checkpoint: builder wiring under full verification
+## Current integration checkpoint: canonical rows independently conserved
+
+The [canonical integration](material-reviewed-input-canonical-integration.md)
+now contains the seven source-replayed proposal sets: exactly **134 groups /
+3,325 observations** receive reviewed classifications. Every original scalar
+input and all **8,205 other complete rows** are unchanged. The complete-payload
+conservation test passes 1/1 in 211,327.539ms; generation accounts for all
+436 static and 1,875 interaction cases and retains **2,026 unresolved groups**.
+That is the actual generated count, not a claim of audit completion or parity.
+The independent no-write freshness command is still running at this checkpoint.
+
+Seven existing gap reports were independently regenerated with their unchanged
+generators: only eleven dependency hashes advance, with all other evidence
+preserved. Their write-prohibited replay and rejection controls pass 7/7 with
+inventory tests. Current discovery contains **141 files**, retaining all 43
+legacy files. Full current-harness and enforced-rendering verification remain
+outstanding.
+
+The separate [leaf-family membership proof](material-leaf-font-family-attribution.md)
+accounts for four further proposed groups / 96 observations without changing
+canonical attribution. The [expansion owner-mapping proof](material-expansion-owner-mapping.md)
+finds a whole-panel-versus-header comparison in all 68 original cases: it is
+not a reason to change the candidate header font weight. A genuine disabled
+header cursor difference remains in eight cases. Neither finding is silently
+folded into this canonical integration.
+
+The [later-review conservation helper](material-later-reviewed-input-conservation.md)
+passes 8/8 focused/source-replay/inventory checks and reconstructs only verified
+metadata, retaining all raw inputs and unrelated mutations for historical tests
+to check. Its production historical-test integration is still pending.
+
+## Previous integration checkpoint: builder wiring under full verification
 
 The builder now applies the seven reviewed proposal sets only after earlier
 attributions leave an observation unresolved. Exact emitted membership has 14
