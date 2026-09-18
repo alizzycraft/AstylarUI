@@ -1,6 +1,16 @@
 # Complete audit harness coverage
 
-## Current inventory: list/table inherited-font replacement proof is registered
+## Current inventory: plain-text font measurement-stage proof is registered
+
+Discovery now includes **120 files**: 112 Material, four general and four TTS,
+retaining all 43 legacy files. The [plain-text font-stage proof](material-leaf-font-stages.md)
+reviews 220 original observations without synthesizing missing local declarations.
+Its two tests and four inventory tests pass **6/6**, exit **0**, with 23 rejection
+controls applied to each of five owners (115 executions). The hidden stepper
+body remains explicitly recorded. No canonical promotion, renderer fix, or full
+harness acceptance is claimed.
+
+## Previous inventory: list/table inherited-font replacement proof is registered
 
 Discovery now includes **119 files**: 111 Material, four general and four TTS,
 retaining all 43 legacy files. The [list/table font-input proof](material-container-font-inputs.md)
