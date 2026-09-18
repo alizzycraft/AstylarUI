@@ -13,6 +13,7 @@ import { buildMaterialInputAudit, validateMaterialInputAudit,
 import { buttonFixedWidthAttribution } from './button-fixed-width-classification.mjs';
 import { selectedButtonInputs } from './button-pill-radius-evidence.mjs';
 import { assertLaterGapClassifications, assertLaterCaretClassifications } from './owner-gap-integration-conservation.mjs';
+import { independentlyReconstructBeforeReviewedInputs } from './later-reviewed-input-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const baselineCommit = '30357b9f8c7b95da668914032557c5f7416c81db';
@@ -88,7 +89,11 @@ test('button fixed widths production integration preserves matching authoring an
     assert.equal(audit.ownerCaretInputs.plannedCoverage.pendingObservations, 0);
     assert.ok([...laterCarets].every(key => !keys.has(key) && !laterGaps.has(key)),
       'authenticated caret reviews cannot replace original width/box or later gap proofs');
-    const others = r => r.discrepancies.filter(d => {
+    const restored = independentlyReconstructBeforeReviewedInputs(audit, previous);
+    assert.equal(restored.changes.length, 8);
+    assert.equal(restored.changes.reduce((n, r) => n + r.occurrences, 0), 24);
+    assert.ok(restored.changes.every(r => r.attribution === 'reviewed-button-state-layer-preblending'));
+    const others = r => (r === audit ? restored.rows : r.discrepancies).filter(d => {
       const key = JSON.stringify(scalar(d));
       return !keys.has(key) && !laterGaps.has(key) && !laterCarets.has(key);
     });
@@ -113,6 +118,7 @@ test('button fixed widths production integration preserves matching authoring an
       independentlyVerifiedLaterGapGroups: laterGaps.size,
       independentlyVerifiedLaterCaretGroups: laterCarets.size,
       independentlyVerifiedLaterCaretObservations: audit.ownerCaretInputs.plannedCoverage.reviewedObservations,
+      independentlyVerifiedLaterInputGroups: restored.changes.length, independentlyVerifiedLaterInputObservations: 24,
       unchangedCompleteRows: others(audit).length, unchangedCompleteRowsSha256: hash(JSON.stringify(others(audit))),
       inputEquivalent: false, limitation: 'Actual production normalization/precedence with all original button owners; full unrelated-family report conservation and final enforced matrix remain separate.' }));
   } finally {

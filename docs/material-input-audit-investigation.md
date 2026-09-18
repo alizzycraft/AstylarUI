@@ -31,8 +31,12 @@ is terminal, **2/2 pass**, in 2,897,781.2575ms. Their original scalar and comple
 hash assertions remain intact. The button fixed-width/request historical
 tests now authenticate exactly eight later state-layer preblend groups / 24
 observations before reconstructing metadata for their unchanged original-row
-checks. Fixed-width passed its sole test in 1,228,694.8176ms; the request sibling
-is still live, so no combined pass is claimed. The authoritative
+checks. [Fixed-width passed](material-reviewed-button-fixed-width-integration.md)
+its sole test in 1,228,694.8176ms. The request sibling failed a new count assertion
+(12 versus 24): its existing one-viewport-per-state selection differs from the
+full fixed-width population. Independent source projection confirms the twelve
+exact witnesses, now asserted in the corrected test. Its production rerun is
+live; the original combined run remains one pass / one failure. The authoritative
 canonical unresolved count remains 2,026; source freshness and the complete
 enforced matrix remain outstanding after these audit-test additions.
 

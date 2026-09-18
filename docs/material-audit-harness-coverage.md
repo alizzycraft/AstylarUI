@@ -18,7 +18,10 @@ combined suite passes **7/7**, exit 0, in **392,055.816ms**, including the
 independent no-write source/payload replay and 39 rejection controls. The historical
 [explicit-gap/gap-review run](material-reviewed-gap-review-integration.md) is
 terminal, **2/2 pass**, in 2,897,781.2575ms. Button fixed-width also passed its
-sole test in 1,228,694.8176ms; its request sibling remains live. These are bounded
+sole test in 1,228,694.8176ms; its request sibling failed a new count assertion
+because the test samples one viewport per state (12 source-bound later
+observations, not 24). Independent source projection confirms the exact twelve
+cases; the corrected production rerun is live. These are bounded
 verification increments, not a complete current-harness result or
 canonical promotion. Earlier inventory/results below are checkpoints.
 
