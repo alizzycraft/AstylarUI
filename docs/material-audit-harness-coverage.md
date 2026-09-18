@@ -1,6 +1,25 @@
 # Complete audit harness coverage
 
-## Current inventory: non-own-text container font stages are registered
+## Current inventory: component font-scope inputs are registered
+
+Discovery includes **124 files**: 116 Material, four general and four TTS,
+retaining all 43 legacy files. The [toolbar/paginator font-scope audit](material-font-scope-inputs.md)
+authenticates 104 original observations and traces the component-to-descendant
+font declaration changes. It distinguishes different inheritance scope from
+the prior computed-versus-local measurement-stage cases. No visible consequence
+or core inheritance defect is inferred solely from the scope difference.
+
+Source generation and no-write replay pass. Focused/inventory verification
+passes **6/6**, exit **0**, with 56 rejection-control executions. No canonical
+promotion was performed; 2,160 groups remain unresolved.
+
+The original **120-file** full run was revalidated through live runner PID
+24392, test parent 24492 and child 6572. Its log had reached 181 reported results
+and still retained the explicit-gap conservation failure described below.
+This is a live snapshot, not terminal verification or coverage of the current
+124-file inventory. No selected source/test file changed in this increment.
+
+## Previous inventory: non-own-text container font stages are registered
 
 Discovery now includes **123 files**: 115 Material, four general and four TTS,
 retaining all 43 legacy files. The [container font-stage investigation](material-container-font-stages.md)
