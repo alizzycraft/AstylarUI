@@ -2,8 +2,8 @@
 
 This explains three failures in the [unchanged five-file
 baseline](material-historical-caret-recheck-baseline.md). The corrected box-sizing
-test is now verified below; gap/grid acceptance and the slider's separate frozen
-checksum remain outstanding.
+and gap tests are now verified below; grid acceptance and the slider's separate
+frozen checksum remain outstanding.
 
 The diagnostic executes each exact original spec at `a6c98bd`, inserts a bounded
 comparison immediately before the failing assertion, and retains that assertion.
@@ -87,8 +87,29 @@ comparison of all **6,282 other rows** with the unchanged digest above. All
 checks and invalid-evidence controls remain enforced. This is a historical
 audit-test correction, not proof of input equivalence or rendered box sizing.
 
-The corrected gap/grid replays started after box sizing completed; they must
-not be accepted before their unfiltered checks finish. The complete
+### Completed corrected gap test; grid replay still live
+
+```powershell
+node --test --test-concurrency=1 tests/material-parity/owner-gap-canonical-integration.spec.mjs tests/material-parity/owner-grid-initial-canonical-integration.spec.mjs
+```
+
+The unfiltered runner reports the gap test **passed**, with duration
+**764,695.8091 ms**, and has advanced to the grid file. This is a completed
+individual test, not a final exit status for the two-file command. Its growing
+log is `artifacts/material-parity/field-host-flow-input-audit/caret-gap-grid-corrected-recheck.log`;
+the aggregate log must not receive a final receipt until that command finishes.
+
+The correction independently authenticates **55 caret groups / 169 reviewed
+observations**, requires disjointness from the original gap populations, and
+retains **143 pending observations**. All **6,605 ordered scalar rows** and
+**6,390 complete other records** remain unchanged, with the complete-row digest
+reported above. The original 108 owner-gap groups, 16 explicit-gap groups,
+36 later reviewed-gap groups, prior precedence, source binding and invalid-proof
+controls remain enforced. The original selected-gap set is unchanged; only the
+separately authenticated caret set is removed from the unrelated-row comparison.
+
+The grid correction must not be accepted before its unfiltered checks finish.
+The complete
 current harness, canonical source-inventory refresh, 2,160 unresolved signatures
 and final enforced rendering matrix remain separate acceptance work. No renderer
 or canonical comparison input is changed here.

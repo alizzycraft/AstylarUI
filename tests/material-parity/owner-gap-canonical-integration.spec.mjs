@@ -10,7 +10,7 @@ import { buildMaterialInputAudit, validateMaterialInputAudit, renderMaterialInpu
 import { ownerGapAttribution } from './owner-gap-classification.mjs';
 import { explicitGapAttribution } from './explicit-gap-classification.mjs';
 import { gapReviewAttributions } from './gap-review-classification.mjs';
-import { assertLaterGapClassifications, gapScalarProjection as scalar } from './owner-gap-integration-conservation.mjs';
+import { assertLaterGapClassifications, assertLaterCaretClassifications, gapScalarProjection as scalar } from './owner-gap-integration-conservation.mjs';
 
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const baselineCommit = 'cab0cc3cc53b3728bb4022b89e0fe47168c18bae';
@@ -58,7 +58,17 @@ test('owner gap production integration preserves all scalars prior precedence an
   assert.ok(selected.size > 0);
   assert.equal(hash(raw), before);
   assert.deepEqual(audit.discrepancies.map(scalar), previous.discrepancies.map(scalar));
-  const other = report => report.discrepancies.filter(row => !selected.has(JSON.stringify(scalar(row))));
+  const laterCarets = assertLaterCaretClassifications(audit, previous);
+  assert.equal(laterCarets.size, 55);
+  assert.equal(audit.ownerCaretInputs.plannedCoverage.reviewedObservations, 169);
+  assert.equal(audit.ownerCaretInputs.plannedCoverage.pendingObservations, 143);
+  assert.ok([...laterCarets].every(signature => !selected.has(signature)),
+    'authenticated caret reviews cannot replace original gap classifications');
+  const other = report => report.discrepancies.filter(row => {
+    const signature = JSON.stringify(scalar(row));
+    return !selected.has(signature) && !laterCarets.has(signature);
+  });
+  assert.equal(other(audit).length, 6390);
   assert.equal(hash(other(audit)), hash(other(previous)), 'every unrelated complete row remains identical');
   const added = audit.discrepancies.filter(row => row.attribution === ownerGapAttribution);
   const explicit = audit.discrepancies.filter(row => row.attribution === explicitGapAttribution);
@@ -110,6 +120,9 @@ test('owner gap production integration preserves all scalars prior precedence an
     laterExplicitGroups: explicit.length, laterExplicitObservations: explicit.reduce((n, row) => n + row.occurrences, 0),
     laterReviewedGroups: reviewed.length, laterReviewedObservations: reviewed.reduce((n, row) => n + row.occurrences, 0),
     attributedOccurrences: added.reduce((n, row) => n + row.occurrences, 0), unchangedScalarRows: audit.discrepancies.length,
+    independentlyVerifiedLaterCaretGroups: laterCarets.size,
+    independentlyVerifiedLaterCaretObservations: audit.ownerCaretInputs.plannedCoverage.reviewedObservations,
+    retainedPendingCaretObservations: audit.ownerCaretInputs.plannedCoverage.pendingObservations,
     unchangedCompleteRows: other(audit).length, unchangedCompleteRowsSha256: hash(other(audit)),
     fullCanonicalConservationVerified: false, inputEquivalent: false, retainedDiagnosticCapture: file }));
 });
