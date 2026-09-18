@@ -87,3 +87,43 @@ count remains **2,160**; other button owners and component state-layer populatio
 are not inferred from these primary-button cases. The original eight-case hover
 proof is retained in `a94d15f`; this increment extends membership from the full
 original capture instead of assuming hover observations cover activation/press.
+
+## Exact proposed canonical coverage — 2026-09-18
+
+The [source-bound attribution proposal](material-button-paint-attribution-plan.json)
+joins all 24 observations to **eight existing background-color groups**: four
+hover/post-activation groups with four observations each, and four held-press
+groups with two observations each. The original 36 matching-background cases
+are explicitly counted and are not promoted to paint-input equivalence.
+
+```powershell
+node --max-old-space-size=512 scripts/audit-material-button-paint-attribution.mjs
+node --max-old-space-size=512 scripts/audit-material-button-paint-attribution.mjs --check
+node --test --test-concurrency=1 tests/material-parity/button-hover-composition.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs
+```
+
+The proposal replays the original composition proof and authenticates the
+complete canonical payload at fixed parent
+`06e50dbcd3594c5987d63a4ec38e792b87b08dde`. It executes the unchanged seven
+production normalization functions; it does not invent a second normalizer.
+Each proposed group retains its complete original case membership, input and
+tree digests, proof digest and pre-integration canonical-row digest. The other
+**8,331 complete rows** retain ordered row-digest receipt
+`de7984cdc02e8a52cafa326f1fbad957cb8ec3684e5d0256360af8d23fa7ed2e`.
+The fixed parent avoids silently rewriting historical witnesses when the
+current audit inventory is regenerated.
+
+Generation and the full no-write replay pass. Proposal SHA-256:
+`b4caabc0c29aa5f2f5d2519f9abeb92cfc9804942910b7a9ef4a7554b014f2e5`.
+The five composition/proposal tests and four inventory tests pass **9/9**, exit
+**0**, no skips/cancellations/todos, **67,758.1157 ms** total. The no-write CLI
+check runs inside this registered test file. Eighteen additional negative
+controls reject missing/duplicate state proofs, altered input/tree/viewport
+identity, inflated claims, omitted original states, and missing/duplicate or
+modified canonical groups, counts, state lists, case order and prior attribution.
+The original seventeen composition controls remain in place (35 total).
+
+This is an integration proposal, not a canonical promotion. No main audit
+builder, comparison fixture, renderer or classification was changed. The
+canonical unresolved count remains **2,160**, and full harness plus enforced
+rendering parity remain outstanding.

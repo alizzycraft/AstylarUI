@@ -1,5 +1,24 @@
 # Complete audit harness coverage
 
+## Latest focused verification: historical corrections complete
+
+The corrected historical checks have now completed in four unfiltered focused
+commands, collectively **12 tests / 12 passes**: the three-file button/authoring
+run (4), box sizing (1), gap/grid (2), and slider border (5). Their original
+frozen expectations and source-rejection controls are retained. See
+[button/authoring](material-button-later-caret-conservation.md),
+[box/gap/grid](material-box-gap-grid-caret-conservation.md), and
+[slider](material-slider-later-caret-conservation.md). These independent focused
+results do not constitute a complete current harness pass.
+
+The inventory remains **117 files** (109 Material, four general, four TTS,
+including all 43 legacy files). The registered primary-button composition file
+now also replays the [eight-group source-bound attribution proposal](material-button-hover-composition.md#exact-proposed-canonical-coverage--2026-09-18).
+Its five tests plus four inventory tests pass **9/9**, exit **0**, retaining
+35 rejection controls. Canonical source-inventory refresh and the complete
+current harness remain the next verification steps; the older failed runs
+below are preserved as historical evidence.
+
 ## Historical integration baseline: four retained failures
 
 The unfiltered five-file recheck finished with **10 tests: six pass / four fail**,

@@ -1,0 +1,721 @@
+{
+  "schemaVersion": 1,
+  "kind": "button-state-layer-proposed-canonical-attribution",
+  "scope": "Source-bound proposal only; does not mutate or promote any canonical discrepancy.",
+  "proof": {
+    "file": "docs/material-button-hover-composition.json",
+    "sha256": "af74f90e8689903725de24527d3ffb274fff6c672992b96354f41c3e7e0ef81f"
+  },
+  "originalCapture": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+  },
+  "productionNormalization": {
+    "module": "tests/material-parity/input-equivalence-audit.mjs",
+    "functions": [
+      "canonicalStyle",
+      "expandQuad",
+      "expandPair",
+      "splitCssTerms",
+      "normalizeValue",
+      "normalizeColor",
+      "formatNumber"
+    ],
+    "sha256": "8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e"
+  },
+  "canonicalRevision": "06e50dbcd3594c5987d63a4ec38e792b87b08dde",
+  "canonicalPayload": {
+    "format": "astylar-material-input-audit-gzip",
+    "formatVersion": 1,
+    "auditSchemaVersion": 3,
+    "payload": "material-input-equivalence-audit.json.gz",
+    "encoding": "utf-8",
+    "compression": "gzip",
+    "compressedBytes": 53080014,
+    "compressedSha256": "8e64c341ff24086dfdcdae4ca8324ad86a1f67348f35053d17252846249dad90",
+    "uncompressedBytes": 1966939725,
+    "uncompressedSha256": "27ce5b4e9821a22142188efd8eb2dd30003c51f5b4ad6a52b2999c2667de6a09"
+  },
+  "originalCasesScanned": 2311,
+  "primaryCases": 60,
+  "equalBackgroundCasesRetained": 36,
+  "proposedGroups": 8,
+  "proposedObservations": 24,
+  "canonicalRows": 8339,
+  "baselineUnresolved": 2160,
+  "otherCompleteRows": 8331,
+  "otherOrderedRowDigestsSha256": "de7984cdc02e8a52cafa326f1fbad957cb8ec3684e5d0256360af8d23fa7ed2e",
+  "findings": [
+    {
+      "family": "button",
+      "element": "button-primary",
+      "property": "backgroundColor",
+      "reference": "rgba(103,80,164,1)",
+      "astylar": "rgba(115,94,171,1)",
+      "occurrences": 4,
+      "cases": [
+        "interaction:button@light/desktop-dpr1/hover",
+        "interaction:button@light/desktop-dpr1/activate",
+        "interaction:button@light/desktop-dpr2/hover",
+        "interaction:button@light/desktop-dpr2/activate"
+      ],
+      "states": [
+        "hover",
+        "activate"
+      ],
+      "observations": [
+        {
+          "case": "interaction:button@light/desktop-dpr1/hover",
+          "inputSha256": "10fd1d50553fd985cc9ce6d640ea7bf7e3611e527bff9f239ac6c98ae08ed7fa",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr1/hover/reference-input-tree.json",
+              "sha256": "66225bf593f22f8578fdb6c8f0c0aa986d2b076eb6f58122ef0db1cf0800aca8"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr1/hover/astylar-input-tree.json",
+              "sha256": "03330cb7397ce87a56d9ffb5e956d628a7429d7bbe4e2dbe207aa01d9a37059d"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/ca762a4ec4d099c762dfe8d91124deef7aea22eb8ac2be51a624da5420c93541.json",
+            "sha256": "e9766615ebbea5d2374c3d387a239af2ffb14eefd01af82e63be303f6f5d8653"
+          },
+          "proofSha256": "0755f59be666b99761cd2b7ee1ec18e025187c05f714c46cd331760c4148037a"
+        },
+        {
+          "case": "interaction:button@light/desktop-dpr1/activate",
+          "inputSha256": "ab486cfdedd74ca9a12da6d08070a62360d2a43b2622953f691a9b14dd88635f",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "e89a53d27c828e516e44cfe6106944747c81a853866e9cf1f4ee0e8f7462ad21"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "1ac6ae9344d51025b7e521f392b9691d4e0a415f944243e9c0fb3a48264ead52"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/4f1a95c9df130d92b33a7486af9679a94b63f0f881a00dbb0a739bd2048f24ab.json",
+            "sha256": "edd44d3d7a44dd1eec1c2f4c30163244c1f157a2c4b3fa6ab8a84c4be1a532b9"
+          },
+          "proofSha256": "652b90417ebb7aaa546272f7812dfee7f1f210cba51174f88f86e067f3854ac1"
+        },
+        {
+          "case": "interaction:button@light/desktop-dpr2/hover",
+          "inputSha256": "10fd1d50553fd985cc9ce6d640ea7bf7e3611e527bff9f239ac6c98ae08ed7fa",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr2/hover/reference-input-tree.json",
+              "sha256": "66225bf593f22f8578fdb6c8f0c0aa986d2b076eb6f58122ef0db1cf0800aca8"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr2/hover/astylar-input-tree.json",
+              "sha256": "03330cb7397ce87a56d9ffb5e956d628a7429d7bbe4e2dbe207aa01d9a37059d"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/9d3b782cdfc1dd43d356fbe26694332c6da157da6d7db95c331b63006b566667.json",
+            "sha256": "544fe4f052bb2f78a8401c49baf0aacf219d61885c1a344ecf2d016fe8ccc1b9"
+          },
+          "proofSha256": "0755f59be666b99761cd2b7ee1ec18e025187c05f714c46cd331760c4148037a"
+        },
+        {
+          "case": "interaction:button@light/desktop-dpr2/activate",
+          "inputSha256": "ab486cfdedd74ca9a12da6d08070a62360d2a43b2622953f691a9b14dd88635f",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "e89a53d27c828e516e44cfe6106944747c81a853866e9cf1f4ee0e8f7462ad21"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "1ac6ae9344d51025b7e521f392b9691d4e0a415f944243e9c0fb3a48264ead52"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/b328ddd3624cd974d920cc88337eabf52df6f6f012ca2cd7f237522ef71f1a5c.json",
+            "sha256": "b0239354281124a7de91cf87721b47a6661fadf5e8cb3da34d5a7ed7e7773d3f"
+          },
+          "proofSha256": "652b90417ebb7aaa546272f7812dfee7f1f210cba51174f88f86e067f3854ac1"
+        }
+      ],
+      "canonicalRowSha256": "1746f04b91dfa4c00b5bdf21d7cdfb8fc5de59067bd2f50667229090265d5a0a",
+      "proposedClassification": "application-plugin-authoring-defect",
+      "proposedAttribution": "reviewed-button-state-layer-preblending",
+      "proposedOwner": "Material showcase button state-layer authoring",
+      "justification": "The complete original state population replaces a separately generated token-colored alpha layer with an opaque preblended host background. The unequal authored paint composition is retained; arithmetic agreement does not prove composited raster equivalence or a renderer defect.",
+      "inputEquivalent": false,
+      "renderedCompositeVerified": false,
+      "rendererCauseProven": false
+    },
+    {
+      "family": "button",
+      "element": "button-primary",
+      "property": "backgroundColor",
+      "reference": "rgba(103,80,164,1)",
+      "astylar": "rgba(121,101,175,1)",
+      "occurrences": 2,
+      "cases": [
+        "interaction:button@light/desktop-dpr1/held",
+        "interaction:button@light/desktop-dpr2/held"
+      ],
+      "states": [
+        "held"
+      ],
+      "observations": [
+        {
+          "case": "interaction:button@light/desktop-dpr1/held",
+          "inputSha256": "86b22a38db7cb3a318726f722b0a1194664c211d11632cfebe8fbc9f0dbccdf1",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr1/held/reference-input-tree.json",
+              "sha256": "c5de17a149e90e991091891be9ca995be9d8f165185dcc8f497d1aa7e3980748"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr1/held/astylar-input-tree.json",
+              "sha256": "f67d677118b86d90e47748e8da07459b8a0aa6e24f822f3ac341c8efe8f50671"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/7b500191aa2c3d8357c40b43611b84af729843df543ae37435a292c9fdc93f13.json",
+            "sha256": "ee099f51aa3f38cb2ab3b7b44d9240714b49a19573ff944457c60c5f8adcd7bd"
+          },
+          "proofSha256": "2352c98cb68d1f12933932ac4d41c70a2c086f382045ffd5f7a8ea1b51452d0f"
+        },
+        {
+          "case": "interaction:button@light/desktop-dpr2/held",
+          "inputSha256": "86b22a38db7cb3a318726f722b0a1194664c211d11632cfebe8fbc9f0dbccdf1",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr2/held/reference-input-tree.json",
+              "sha256": "c5de17a149e90e991091891be9ca995be9d8f165185dcc8f497d1aa7e3980748"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr2/held/astylar-input-tree.json",
+              "sha256": "f67d677118b86d90e47748e8da07459b8a0aa6e24f822f3ac341c8efe8f50671"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/8966acadc85394303d9e63ba0756fcccd92423a294358379d60575390e2b1a4c.json",
+            "sha256": "19c995fe7a898f10f5d640d960b448c9de6985909a902645f0af1d0efd041294"
+          },
+          "proofSha256": "2352c98cb68d1f12933932ac4d41c70a2c086f382045ffd5f7a8ea1b51452d0f"
+        }
+      ],
+      "canonicalRowSha256": "7c25c64e04eb16e9f9a9e1735eee276fa3aa63d6f95f5119eb76c27c08a4a385",
+      "proposedClassification": "application-plugin-authoring-defect",
+      "proposedAttribution": "reviewed-button-state-layer-preblending",
+      "proposedOwner": "Material showcase button state-layer authoring",
+      "justification": "The complete original state population replaces a separately generated token-colored alpha layer with an opaque preblended host background. The unequal authored paint composition is retained; arithmetic agreement does not prove composited raster equivalence or a renderer defect.",
+      "inputEquivalent": false,
+      "renderedCompositeVerified": false,
+      "rendererCauseProven": false
+    },
+    {
+      "family": "button",
+      "element": "button-primary",
+      "property": "backgroundColor",
+      "reference": "rgba(208,188,255,1)",
+      "astylar": "rgba(191,173,235,1)",
+      "occurrences": 4,
+      "cases": [
+        "interaction:button@dark/desktop-dpr1/hover",
+        "interaction:button@dark/desktop-dpr1/activate",
+        "interaction:button@dark/desktop-dpr2/hover",
+        "interaction:button@dark/desktop-dpr2/activate"
+      ],
+      "states": [
+        "hover",
+        "activate"
+      ],
+      "observations": [
+        {
+          "case": "interaction:button@dark/desktop-dpr1/hover",
+          "inputSha256": "e0093f9c57dcd92eb25a714e5a8ef9d06f0cd3cfedd714efa09b5a1feb09bdff",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr1/hover/reference-input-tree.json",
+              "sha256": "adfc1b2e3486f2649ce5b01f9fb5f881ffa2d767adb38e1abeb1a0260fce5483"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr1/hover/astylar-input-tree.json",
+              "sha256": "1980f18df1f860de0bafa869f8b8f67976eeb82051cd6a9d83469ecc19626721"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/4695ee843d15292788e2cfccc36d5f9d631bad27c0d7497c642f9267cd218508.json",
+            "sha256": "27606c7b04e27eb5c3ce5483a8a2494c84433a20da157b37c42a54140457a29b"
+          },
+          "proofSha256": "54f80ed4c7836d6c1898fc445980fc74d4296549cc88c087792f5428c79543c9"
+        },
+        {
+          "case": "interaction:button@dark/desktop-dpr1/activate",
+          "inputSha256": "696aac17623c7129732f1c2d4f0f5e1525210fefe134f0f925cc7be5b6db4616",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "d8cbb37508fb6a0ca7e9d6082aa6a38f341a5ffbf015740260b9aff7ddd4d0d7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "1d8776d7fb888247f72cc4e1fd3ff53e9eb71f5adc6ccbd8320ae1241186a732"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/e30bb30ee3288e4ae283eebe3811f90fe3264d8a7240185087c8d02062b5e807.json",
+            "sha256": "47765d5aa030b70f8efcd7069030bc5f167b96ec69a7b65f88823844c94aa994"
+          },
+          "proofSha256": "55a6d54582cc6ad9a07068efafb2a3af532d9055f5195fbebd044b81fd51ef5f"
+        },
+        {
+          "case": "interaction:button@dark/desktop-dpr2/hover",
+          "inputSha256": "e0093f9c57dcd92eb25a714e5a8ef9d06f0cd3cfedd714efa09b5a1feb09bdff",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr2/hover/reference-input-tree.json",
+              "sha256": "adfc1b2e3486f2649ce5b01f9fb5f881ffa2d767adb38e1abeb1a0260fce5483"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr2/hover/astylar-input-tree.json",
+              "sha256": "1980f18df1f860de0bafa869f8b8f67976eeb82051cd6a9d83469ecc19626721"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/645a7ff303d8ba45d3bc802889ddf7a6c7878fbbe4d58aa2b233f90af55d8784.json",
+            "sha256": "e492c44d0d6106024860ff4b0583eccebe0d19a58b477d98d5ea49a6aab7afa3"
+          },
+          "proofSha256": "54f80ed4c7836d6c1898fc445980fc74d4296549cc88c087792f5428c79543c9"
+        },
+        {
+          "case": "interaction:button@dark/desktop-dpr2/activate",
+          "inputSha256": "696aac17623c7129732f1c2d4f0f5e1525210fefe134f0f925cc7be5b6db4616",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "d8cbb37508fb6a0ca7e9d6082aa6a38f341a5ffbf015740260b9aff7ddd4d0d7"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "1d8776d7fb888247f72cc4e1fd3ff53e9eb71f5adc6ccbd8320ae1241186a732"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/84c007a785f49eda4351f34ee3780f443c1c7528fb663543b4b4d92a8b297c74.json",
+            "sha256": "c2d7e5a389fc55b092e3ff663485830000c82737578b067a01525bba4b66cda8"
+          },
+          "proofSha256": "55a6d54582cc6ad9a07068efafb2a3af532d9055f5195fbebd044b81fd51ef5f"
+        }
+      ],
+      "canonicalRowSha256": "a41915e07243a5b1019c9dbf26bfbfc1d428799c7af2672ec4666ec1a987d5b7",
+      "proposedClassification": "application-plugin-authoring-defect",
+      "proposedAttribution": "reviewed-button-state-layer-preblending",
+      "proposedOwner": "Material showcase button state-layer authoring",
+      "justification": "The complete original state population replaces a separately generated token-colored alpha layer with an opaque preblended host background. The unequal authored paint composition is retained; arithmetic agreement does not prove composited raster equivalence or a renderer defect.",
+      "inputEquivalent": false,
+      "renderedCompositeVerified": false,
+      "rendererCauseProven": false
+    },
+    {
+      "family": "button",
+      "element": "button-primary",
+      "property": "backgroundColor",
+      "reference": "rgba(208,188,255,1)",
+      "astylar": "rgba(183,165,224,1)",
+      "occurrences": 2,
+      "cases": [
+        "interaction:button@dark/desktop-dpr1/held",
+        "interaction:button@dark/desktop-dpr2/held"
+      ],
+      "states": [
+        "held"
+      ],
+      "observations": [
+        {
+          "case": "interaction:button@dark/desktop-dpr1/held",
+          "inputSha256": "316a0d15e2d28541117a5313aef664d831599fd37cf6125bdd2c8df4d63a6ba3",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr1/held/reference-input-tree.json",
+              "sha256": "196dd6affe9a6ca21d395d7d4e6e6edd19efe50bdee31a98462c3b9f5c225991"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr1/held/astylar-input-tree.json",
+              "sha256": "3125fd98b02da2e4091519466687c4aced8569a28b78af9ac36bda315daf70d4"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/2a25f68eed136eed0805bba69f73e50e016d3124e9b3a37931a128bc35067e9d.json",
+            "sha256": "653d8192d3261e0b15172b26ab06ee7f29fe0dabe7db049ad1b2016f53c830ce"
+          },
+          "proofSha256": "03c4edd55b446cc876142dcac850c3d6dff1989b7174b35a895c1b1c469ea339"
+        },
+        {
+          "case": "interaction:button@dark/desktop-dpr2/held",
+          "inputSha256": "316a0d15e2d28541117a5313aef664d831599fd37cf6125bdd2c8df4d63a6ba3",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr2/held/reference-input-tree.json",
+              "sha256": "196dd6affe9a6ca21d395d7d4e6e6edd19efe50bdee31a98462c3b9f5c225991"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/dark/desktop-dpr2/held/astylar-input-tree.json",
+              "sha256": "3125fd98b02da2e4091519466687c4aced8569a28b78af9ac36bda315daf70d4"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/451f19acc16ca2bdfdd793968f90bdb8abc5bb8b718349c00d654b081e6c7733.json",
+            "sha256": "7034a9b9e6bc723b5405f66daa642142aedf73e25232e23dfd41c9c2e9f26ee0"
+          },
+          "proofSha256": "03c4edd55b446cc876142dcac850c3d6dff1989b7174b35a895c1b1c469ea339"
+        }
+      ],
+      "canonicalRowSha256": "5dcd0bfb9e5a42d4cfbde4254c957e5bc3400b085f715a44ce3cab3da1291e59",
+      "proposedClassification": "application-plugin-authoring-defect",
+      "proposedAttribution": "reviewed-button-state-layer-preblending",
+      "proposedOwner": "Material showcase button state-layer authoring",
+      "justification": "The complete original state population replaces a separately generated token-colored alpha layer with an opaque preblended host background. The unequal authored paint composition is retained; arithmetic agreement does not prove composited raster equivalence or a renderer defect.",
+      "inputEquivalent": false,
+      "renderedCompositeVerified": false,
+      "rendererCauseProven": false
+    },
+    {
+      "family": "button",
+      "element": "button-primary",
+      "property": "backgroundColor",
+      "reference": "rgba(0,0,0,1)",
+      "astylar": "rgba(20,20,20,1)",
+      "occurrences": 4,
+      "cases": [
+        "interaction:button@contrast/desktop-dpr1/hover",
+        "interaction:button@contrast/desktop-dpr1/activate",
+        "interaction:button@contrast/desktop-dpr2/hover",
+        "interaction:button@contrast/desktop-dpr2/activate"
+      ],
+      "states": [
+        "hover",
+        "activate"
+      ],
+      "observations": [
+        {
+          "case": "interaction:button@contrast/desktop-dpr1/hover",
+          "inputSha256": "03074e0735620f4d65af655648a8473746e31ec0e04ad13dbbc6b09365f6e16f",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr1/hover/reference-input-tree.json",
+              "sha256": "b7bb30fb685ac98d1ee7f1832ec3ac5117d4ccc54348c5d4d3abe23f7ec6fa5f"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+              "sha256": "63800c815f4210e7decb3882509e83e0f5cf906dd9ef78f0e3a22b4c4588d7a1"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/4a8ae0080688e4d6cf966e05e12ac9f26bdd00e04b053ce364f36421e02a088b.json",
+            "sha256": "d0b603543f70157de0ad17625a4be84a24922c46f11e1072b4726759d493c343"
+          },
+          "proofSha256": "56de0eff4f6b4c6e149c2d893d6e19ea778bdb9224dbed370d42f5a503dcdcca"
+        },
+        {
+          "case": "interaction:button@contrast/desktop-dpr1/activate",
+          "inputSha256": "3f03ec4944ecaffc5f5842b202aa6c883b3dbdc735783e959dd38f3a070c2f67",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "7cd8441361148a614cdebb26942baba33247b5205084d1aaa6c6b2e0d6d4cb65"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "85ca8e5b23d66d145c229f6947bfb6c740b12439060e4b9bdc8ef23b57bc3add"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/e6a94be96cbb4d27f9306eeda3b1e80678966a46900df008e2921120e7fd8b09.json",
+            "sha256": "cc550e44a933a7b8d1fdb703ac2fdc72bf6c914f2bd187d4d101b97f90da4a79"
+          },
+          "proofSha256": "bb94fc372ad420ae89a804d8083f87af473aeb99f78dd252843ebc9565f97ee6"
+        },
+        {
+          "case": "interaction:button@contrast/desktop-dpr2/hover",
+          "inputSha256": "03074e0735620f4d65af655648a8473746e31ec0e04ad13dbbc6b09365f6e16f",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr2/hover/reference-input-tree.json",
+              "sha256": "b7bb30fb685ac98d1ee7f1832ec3ac5117d4ccc54348c5d4d3abe23f7ec6fa5f"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+              "sha256": "c7bcab5a26159a6baf75df422c6cd2ed8c4dfb8f56dd4a09ee6066d68943f552"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/16b9b206fd9dfb1c22d5165edd9182568e736b9437c56e52a54cb71630960799.json",
+            "sha256": "dfd65e4626a7c0638f8b51344ea72c74d854a8a917572a98ef22b9c711ede95c"
+          },
+          "proofSha256": "56de0eff4f6b4c6e149c2d893d6e19ea778bdb9224dbed370d42f5a503dcdcca"
+        },
+        {
+          "case": "interaction:button@contrast/desktop-dpr2/activate",
+          "inputSha256": "3f03ec4944ecaffc5f5842b202aa6c883b3dbdc735783e959dd38f3a070c2f67",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "7cd8441361148a614cdebb26942baba33247b5205084d1aaa6c6b2e0d6d4cb65"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "147647fa6973b6d7be4d7d1d91eeb70de15c03356b9fa5c8d8e7e407820e3482"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/b14ab45a5767c0d6aad5aa11a3c4e1fb9f872280ecf8a0d8e80b581972f184a8.json",
+            "sha256": "0300bd37698eb26fe0378f064abce74d2269414a8bd69b8f6f2f34a79bf35529"
+          },
+          "proofSha256": "bb94fc372ad420ae89a804d8083f87af473aeb99f78dd252843ebc9565f97ee6"
+        }
+      ],
+      "canonicalRowSha256": "6c45163edc7454e067e34e3c6c433a312b99854cbac042a77380426bc3826dac",
+      "proposedClassification": "application-plugin-authoring-defect",
+      "proposedAttribution": "reviewed-button-state-layer-preblending",
+      "proposedOwner": "Material showcase button state-layer authoring",
+      "justification": "The complete original state population replaces a separately generated token-colored alpha layer with an opaque preblended host background. The unequal authored paint composition is retained; arithmetic agreement does not prove composited raster equivalence or a renderer defect.",
+      "inputEquivalent": false,
+      "renderedCompositeVerified": false,
+      "rendererCauseProven": false
+    },
+    {
+      "family": "button",
+      "element": "button-primary",
+      "property": "backgroundColor",
+      "reference": "rgba(0,0,0,1)",
+      "astylar": "rgba(31,31,31,1)",
+      "occurrences": 2,
+      "cases": [
+        "interaction:button@contrast/desktop-dpr1/held",
+        "interaction:button@contrast/desktop-dpr2/held"
+      ],
+      "states": [
+        "held"
+      ],
+      "observations": [
+        {
+          "case": "interaction:button@contrast/desktop-dpr1/held",
+          "inputSha256": "e5cf7882db9670224d317073b17206afbd4d8c34bc2857d29e0a00f1a75c0729",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr1/held/reference-input-tree.json",
+              "sha256": "0ab654ddf37de6a5be0f960798cfab0804792b7ee269e1413b34eb2884d4ea86"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr1/held/astylar-input-tree.json",
+              "sha256": "3b68ef75ff267f9132974b91e45739cc5f26d90c593c1abdb9ebe71076108766"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/5792038fb31b3bc7f77bba7ce42910138360a0c1a2e0b5bc11afdc5e116f6e02.json",
+            "sha256": "98c655cc18b66427704047dc9a8a51fbbdf2c96f64a000c7f1c0f20c34d9cd4c"
+          },
+          "proofSha256": "87b8c0981e1ce38dfc0c004a7b7faa6fa10895ab9760be341a704917c45c1cfa"
+        },
+        {
+          "case": "interaction:button@contrast/desktop-dpr2/held",
+          "inputSha256": "e5cf7882db9670224d317073b17206afbd4d8c34bc2857d29e0a00f1a75c0729",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr2/held/reference-input-tree.json",
+              "sha256": "0ab654ddf37de6a5be0f960798cfab0804792b7ee269e1413b34eb2884d4ea86"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/contrast/desktop-dpr2/held/astylar-input-tree.json",
+              "sha256": "1bd1f08b0cbbb897269443094aa94e1d11011643b4c6644f9350cafaf21b9c5c"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/e321f74be1b8f8ff2de296c7437c09f27266c0122023bb596f40491f5002edf0.json",
+            "sha256": "85818da0af5119be62fbf89650c6a887d3132829e419f425b862c5ac617b0083"
+          },
+          "proofSha256": "87b8c0981e1ce38dfc0c004a7b7faa6fa10895ab9760be341a704917c45c1cfa"
+        }
+      ],
+      "canonicalRowSha256": "3e2c5b19396c9297f1731d170bff78456940dd5d575c2d212fe33a5fe4418f4c",
+      "proposedClassification": "application-plugin-authoring-defect",
+      "proposedAttribution": "reviewed-button-state-layer-preblending",
+      "proposedOwner": "Material showcase button state-layer authoring",
+      "justification": "The complete original state population replaces a separately generated token-colored alpha layer with an opaque preblended host background. The unequal authored paint composition is retained; arithmetic agreement does not prove composited raster equivalence or a renderer defect.",
+      "inputEquivalent": false,
+      "renderedCompositeVerified": false,
+      "rendererCauseProven": false
+    },
+    {
+      "family": "button",
+      "element": "button-primary",
+      "property": "backgroundColor",
+      "reference": "rgba(0,106,106,1)",
+      "astylar": "rgba(20,118,118,1)",
+      "occurrences": 4,
+      "cases": [
+        "interaction:button@custom/desktop-dpr1/hover",
+        "interaction:button@custom/desktop-dpr1/activate",
+        "interaction:button@custom/desktop-dpr2/hover",
+        "interaction:button@custom/desktop-dpr2/activate"
+      ],
+      "states": [
+        "hover",
+        "activate"
+      ],
+      "observations": [
+        {
+          "case": "interaction:button@custom/desktop-dpr1/hover",
+          "inputSha256": "b2e82e6427ffd8996e800935ed86af57ee562afbb7f32b09902810a045e3a679",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr1/hover/reference-input-tree.json",
+              "sha256": "988e0190f511007ceb88926d5bdc8f02d8f1aca12ba6704815c6b65b815fa6ff"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr1/hover/astylar-input-tree.json",
+              "sha256": "6151a281d891645499afecd24edfa29cc0d1e307ea5f8ec0e4fdc3375239facb"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/ca6cb3f3b7c5d3cd249b6cbb5b233033f72ef82785cb31191a60806f15150779.json",
+            "sha256": "6102c2b26818faad3dd695cd370da214c1a7e27e26305b731abc4b604f2c5c6e"
+          },
+          "proofSha256": "31a643461ef5ffdede55ca4654ef4a4b15eca3a57f1aa09e9ebb91bf2088a553"
+        },
+        {
+          "case": "interaction:button@custom/desktop-dpr1/activate",
+          "inputSha256": "e00d5878e6d3980a7c28a6c3e3b188f8f12de3139814b4f7eb0811e5759689ef",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr1/activate/reference-input-tree.json",
+              "sha256": "1f28440fb7835836d6c6eb3b6c25eadd923aaeceec89b34ff3646d827e7c97cd"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr1/activate/astylar-input-tree.json",
+              "sha256": "0c6828d38326be270d3dc64c33fd99ba05b3761b3d65db40b6f45f62d6217c65"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/bcbd9bf54808864b7308045d4fc10bba849ca59e0d14d772e2c246af0f3beca0.json",
+            "sha256": "e9d67c3f66199071d5acdba484d070812d688df28fde057336ad753dd1077cb8"
+          },
+          "proofSha256": "db4b0a996cb068f160780eabbd8e176ac89b90c1738d77cba5522f6ec73125bc"
+        },
+        {
+          "case": "interaction:button@custom/desktop-dpr2/hover",
+          "inputSha256": "b2e82e6427ffd8996e800935ed86af57ee562afbb7f32b09902810a045e3a679",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr2/hover/reference-input-tree.json",
+              "sha256": "988e0190f511007ceb88926d5bdc8f02d8f1aca12ba6704815c6b65b815fa6ff"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr2/hover/astylar-input-tree.json",
+              "sha256": "d80595f56f84e07e509ab4cfc08cbc98486c641574ab6d1ebea72ece74d628ff"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/a8641924cea24b20f925f7a2e862c5ae6f4cbdb284458d2209a318a2e995187f.json",
+            "sha256": "cdbfd474d528c1d064ae6e0dafa8d4c782daa670c8b946b3a938f901c82fade4"
+          },
+          "proofSha256": "31a643461ef5ffdede55ca4654ef4a4b15eca3a57f1aa09e9ebb91bf2088a553"
+        },
+        {
+          "case": "interaction:button@custom/desktop-dpr2/activate",
+          "inputSha256": "e00d5878e6d3980a7c28a6c3e3b188f8f12de3139814b4f7eb0811e5759689ef",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr2/activate/reference-input-tree.json",
+              "sha256": "1f28440fb7835836d6c6eb3b6c25eadd923aaeceec89b34ff3646d827e7c97cd"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr2/activate/astylar-input-tree.json",
+              "sha256": "175500e1445ce587fec167d2ff4bf9551d8f7bb07faab5e55ff3e8a882256306"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/0c6a056dfef10c6d23e7854f3624ceb4468b05b2536a3ce9cb4f55bc85bb0237.json",
+            "sha256": "28aa066f84f298dacee24eaa9be74db58d9b73a7c25d9be88fa7f1ae9e9edb78"
+          },
+          "proofSha256": "db4b0a996cb068f160780eabbd8e176ac89b90c1738d77cba5522f6ec73125bc"
+        }
+      ],
+      "canonicalRowSha256": "574735cc49fb2148b77d14c63be1d0e856b162ad479b3a51733f3d1423cd76ac",
+      "proposedClassification": "application-plugin-authoring-defect",
+      "proposedAttribution": "reviewed-button-state-layer-preblending",
+      "proposedOwner": "Material showcase button state-layer authoring",
+      "justification": "The complete original state population replaces a separately generated token-colored alpha layer with an opaque preblended host background. The unequal authored paint composition is retained; arithmetic agreement does not prove composited raster equivalence or a renderer defect.",
+      "inputEquivalent": false,
+      "renderedCompositeVerified": false,
+      "rendererCauseProven": false
+    },
+    {
+      "family": "button",
+      "element": "button-primary",
+      "property": "backgroundColor",
+      "reference": "rgba(0,106,106,1)",
+      "astylar": "rgba(31,124,124,1)",
+      "occurrences": 2,
+      "cases": [
+        "interaction:button@custom/desktop-dpr1/held",
+        "interaction:button@custom/desktop-dpr2/held"
+      ],
+      "states": [
+        "held"
+      ],
+      "observations": [
+        {
+          "case": "interaction:button@custom/desktop-dpr1/held",
+          "inputSha256": "56aff2a5bed42c46c8129a0527e9022866feffbd650f70c33d0007528ffe8e25",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr1/held/reference-input-tree.json",
+              "sha256": "f9d7f8657e05348a0889fd08b060c160e2e0e1975f1d79f8bc0f6feb00eda6be"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr1/held/astylar-input-tree.json",
+              "sha256": "92c577a85efe2d1df540dbac9633fec6ef84fd6184c94a8223d089bc8ace6618"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/1ac03c629db894a9ea52aaa89b0f078ea54e411e2d7052af83b0f003a007fc53.json",
+            "sha256": "6f1dc181b4ff6b8ac7c2cc6cdef893005fccca32948aa144131e477f5f6f5336"
+          },
+          "proofSha256": "e7a17981a442d8975e99fdc88968aa14ea69cd959a0c04acddc5d373ec0de29e"
+        },
+        {
+          "case": "interaction:button@custom/desktop-dpr2/held",
+          "inputSha256": "56aff2a5bed42c46c8129a0527e9022866feffbd650f70c33d0007528ffe8e25",
+          "inputTrees": {
+            "reference": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr2/held/reference-input-tree.json",
+              "sha256": "f9d7f8657e05348a0889fd08b060c160e2e0e1975f1d79f8bc0f6feb00eda6be"
+            },
+            "astylar": {
+              "file": "artifacts/material-parity/current-ancestry-audit/interactions/button/custom/desktop-dpr2/held/astylar-input-tree.json",
+              "sha256": "c421066306baa6448bdfb0d5c5a258b36f7722988f027a1c5f4b6488bf90114e"
+            }
+          },
+          "checkpoint": {
+            "file": "artifacts/material-parity/current-ancestry-audit/checkpoint/e1f1031d8f5a551b11885bb753b598956a1e17e772f3fa404b01694b9f244879.json",
+            "sha256": "ba1d8421a903dc4439a24128200476f75a68d6f66efbe63e83b99fc9566a5055"
+          },
+          "proofSha256": "e7a17981a442d8975e99fdc88968aa14ea69cd959a0c04acddc5d373ec0de29e"
+        }
+      ],
+      "canonicalRowSha256": "bdb8507c716cd0a525ab9d6e296a262f0add5fdaf4c829716ed57b961f5ca920",
+      "proposedClassification": "application-plugin-authoring-defect",
+      "proposedAttribution": "reviewed-button-state-layer-preblending",
+      "proposedOwner": "Material showcase button state-layer authoring",
+      "justification": "The complete original state population replaces a separately generated token-colored alpha layer with an opaque preblended host background. The unequal authored paint composition is retained; arithmetic agreement does not prove composited raster equivalence or a renderer defect.",
+      "inputEquivalent": false,
+      "renderedCompositeVerified": false,
+      "rendererCauseProven": false
+    }
+  ],
+  "canonicalAttributionChanged": false,
+  "inputEquivalent": false,
+  "renderingEquivalent": false
+}
