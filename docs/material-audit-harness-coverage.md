@@ -9,9 +9,16 @@ both tooltip-wrapping tests pass. See [the exact baseline and machine
 receipt](material-historical-caret-recheck-baseline.md). This focused run does
 not replace complete current harness acceptance or explain the failed hashes.
 
-## Current inventory: historical border-context replay is registered
+## Current inventory: button hover composition is registered
 
-Discovery includes **116 files**: **108 Material**, four general parity and four
+Discovery now includes **117 files**: **109 Material**, four general parity and
+four TTS. The [eight-case primary-button hover composition proof](material-button-hover-composition.md)
+and inventory controls pass **6/6**, exit **0**, with fourteen rejection controls.
+This is a bounded unequal-input finding, not full harness or renderer acceptance.
+
+## Previous inventory: historical border-context replay is registered
+
+At that increment discovery included **116 files**: **108 Material**, four general parity and four
 TTS. The complete historical source-method replay and inventory controls pass
 **5/5**, exit **0**, retaining all legacy coverage. See [the bounded history
 finding and exact results](material-border-context-history.md). This proves a
