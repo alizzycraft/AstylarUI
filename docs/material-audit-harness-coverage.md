@@ -2,6 +2,16 @@
 
 ## Current inventory: follow-up integration verification in progress
 
+The [case-index receipt guard](material-followup-case-index-receipts.md) brings
+the latest inventory to **156 files** (148 Material + four general + four TTS,
+all 43 legacy files retained). Its four conservation/replay/writer tests and
+four inventory checks pass **8/8**, exit 0, in **82,949.2265ms**. The nested
+unchanged original case-index tests pass **11/11** against in-memory proposed
+receipts; saved indexes remain stale and the original full builder is still
+failed. The first 66-group canonical conservation test has passed; its composed
+historical companion and the independent CLI check remain live. None of these
+bounded results establish a complete current-harness or parity-matrix pass.
+
 The [public vertical-align proof](material-public-vertical-align-audit.md) brings
 discovery to **155 files** (147 Material + four general + four TTS, retaining all
 43 legacy files). Its seven evidence tests plus four inventory checks pass

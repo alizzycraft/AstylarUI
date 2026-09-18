@@ -12,6 +12,19 @@ font/rendering parity and renderer causality.
 
 ## Current verification state
 
+**Subsequent checkpoint:** the first full-row conservation test has passed in
+**656,066.6299ms**: exactly 66 changed groups / 2,640 observations, all raw input
+fields preserved, and 8,273 other complete rows unchanged. Their ordered digest
+is `c46a8886a4cb7d306fa879978581782a1ebe8a1224f1aeb2ddd6bac8608ffe1c`.
+The composed 200-group test remains live in the same session, so no final 2/2
+result is claimed. The independent CLI freshness check also remains live.
+
+The [nine case-index receipt rehearsal](material-followup-case-index-receipts.md)
+now passes eight focused/inventory checks, including an independently launched
+11/11 replay of the original case-index assertions against only in-memory
+proposed receipts. Saved indexes remain unchanged until current readers finish;
+the original full-builder failures are not yet cleared.
+
 **Latest result:** the 22:52 full builder run is terminal, exit **1**, with
 **379 passed / nine failed / 388 total**, zero skips/cancellations/TODOs, in
 **1,918,988.2402ms**. All nine failures compare the current normalized main-module

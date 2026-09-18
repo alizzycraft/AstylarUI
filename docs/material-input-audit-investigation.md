@@ -5,6 +5,15 @@ The machine report is generated separately from the full benchmark output.
 
 ## Current integration checkpoint: follow-up verification in progress
 
+The [nine receipt refresh rehearsal](material-followup-case-index-receipts.md)
+now preserves the complete historical index objects and passes the original
+11 membership tests with only in-memory fingerprint proposals. The four guard
+tests plus four inventory checks pass **8/8**; no saved receipt has changed.
+Separately, the first full canonical conservation test passes: exactly 66
+metadata-only group changes / 2,640 observations and all 8,273 other complete
+rows preserved. The composed historical conservation and CLI freshness jobs
+remain live; integration is not yet accepted.
+
 The [public vertical-align reproduction](material-public-vertical-align-audit.md)
 confirms a core applicability/default inconsistency across **64 paired cases /
 128 screenshots**: `baseline` is treated as bottom alignment, shifting non-inline
