@@ -2,6 +2,13 @@
 
 ## Current inventory: component host font-token inputs are registered
 
+The subsequent [canonical host-token proposal](material-host-font-token-attribution.md)
+joins seven groups / 380 observations and preserves all 8,332 other complete
+rows. Generation and independent source/full-payload replay pass. Its expanded
+focused/inventory suite passes **8/8** in 89,857.8797ms with 463 rejection
+executions (436 original-source and 27 join controls). No canonical attribution
+changes; discovery remains 130 files. This is not full-harness acceptance.
+
 Discovery includes **130 files**: 122 Material, four general and four TTS,
 retaining all 43 legacy files. The [host font-token audit](material-host-font-token-inputs.md)
 checks 172 original owners / 380 property observations. Toolbar and paginator

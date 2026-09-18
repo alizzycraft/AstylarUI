@@ -7,6 +7,8 @@ import { pathToFileURL } from 'node:url';
 import { selectorCanApply } from '../tests/material-parity/border-initial-input-evidence.mjs';
 import { inspectFontScopeInputs } from './audit-material-font-scope-inputs.mjs';
 import { inspectContainerFontStages } from './audit-material-container-font-stages.mjs';
+import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const digest = value => hash(JSON.stringify(value));
@@ -136,10 +138,84 @@ export function collectHostFontTokens() {
     limitation: 'Explicit component font-family/weight/tracking tokens are missing from candidate host authoring. This is not evidence of a core inheritance failure or visible glyph differences. Component descendants, original theme-token definitions and actual candidate computed/paint consumers remain separate.' };
 }
 
+const signature = r => JSON.stringify([r.family, r.element, r.property, r.reference, r.astylar]);
+const canonicalRevision = '06e50dbcd3594c5987d63a4ec38e792b87b08dde';
+const normalization = { module: 'tests/material-parity/input-equivalence-audit.mjs',
+  functions: ['canonicalStyle', 'expandQuad', 'expandPair', 'splitCssTerms', 'normalizeValue', 'normalizeColor', 'formatNumber'],
+  sha256: '8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e' };
+
+export function planHostFontTokens(proof, original, rows, normalize) {
+  for (const flag of ['canonicalAttributionChanged', 'rendererChanged', 'inputEquivalent', 'renderingEquivalent']) assert.equal(proof[flag], false);
+  assert.equal(proof.ownerObservations, proof.observations.length);
+  const byOwner = new Map(proof.observations.map(o => [JSON.stringify([o.case, o.element]), o]));
+  assert.equal(byOwner.size, proof.observations.length);
+  const groups = new Map(), seen = new Set(), cases = new Set();
+  for (const [mode, entries] of [['static', original.results], ['interaction', original.interactions]]) for (const e of entries) {
+    const caseId = `${mode}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+    assert.ok(!cases.has(caseId)); cases.add(caseId); if (!Object.hasOwn(targets, e.family)) continue;
+    const input = one(e.styleInputs.filter(i => i.id === e.family + '-primary'));
+    const key = JSON.stringify([caseId, input.id]), observation = byOwner.get(key); assert.ok(observation);
+    assert.ok(!seen.has(key)); seen.add(key);
+    assert.equal(observation.family, e.family); assert.equal(observation.profile, e.profile); assert.equal(observation.state, e.state ?? 'static');
+    assert.deepEqual(observation.viewport, e.viewport); assert.deepEqual(observation.inputTrees, e.inputTrees);
+    assert.equal(observation.originalInputSha256, digest(input));
+    assert.deepEqual(observation.proofs.map(p => p.property), targets[e.family].properties);
+    for (const p of observation.proofs) {
+      assert.equal(p.classification, 'application-plugin-authoring-defect'); assert.equal(p.attribution, 'component-host-font-token-omission');
+      for (const flag of ['computedCandidateVerified', 'wholeElementInputEquivalent', 'rendererCauseProven', 'renderingEquivalent',
+        'descendantConsumersVerified', 'themeTokenOriginVerified']) assert.equal(p[flag], false);
+      assert.equal(p.referenceComputed, input.reference[p.property]); assert.equal(p.candidateLocalDeclaration, '<omitted>');
+      const r = normalize(input.reference)[p.property], a = normalize(input.astylar)[p.property];
+      assert.equal(typeof r, 'string'); assert.equal(a, undefined);
+      const row = { family: e.family, element: input.id, property: p.property, reference: r }, sig = signature(row);
+      if (!groups.has(sig)) groups.set(sig, { ...row, occurrences: 0, cases: [], states: [], observations: [] });
+      const group = groups.get(sig); group.occurrences++;
+      if (group.cases.length < 12) group.cases.push(caseId);
+      if (!group.states.includes(observation.state)) group.states.push(observation.state);
+      group.observations.push({ case: caseId, inputSha256: observation.originalInputSha256, inputTrees: observation.inputTrees, proofSha256: digest(p) });
+    }
+  }
+  assert.equal(cases.size, proof.originalCasesScanned); assert.equal(seen.size, proof.ownerObservations);
+  assert.deepEqual(Object.fromEntries(Object.keys(targets).map(f => [f, proof.observations.filter(o => o.family === f).length])), proof.counts);
+  const propertyObservations = [...groups.values()].reduce((n, g) => n + g.occurrences, 0);
+  assert.equal(propertyObservations, proof.propertyObservations);
+  const selected = new Set(), proposed = [];
+  for (const [sig, group] of groups) {
+    const row = one(rows.filter(r => signature(r) === sig)); assert.equal(row.attribution, 'unresolved');
+    for (const key of ['occurrences', 'cases', 'states']) assert.deepEqual(row[key], group[key]);
+    assert.ok(!selected.has(row)); selected.add(row);
+    proposed.push({ ...group, canonicalRowSha256: digest(row), proposedClassification: 'application-plugin-authoring-defect',
+      proposedAttribution: 'reviewed-component-host-font-token-omission', inputEquivalent: false, rendererCauseProven: false, renderingEquivalent: false });
+  }
+  return { canonicalRows: rows.length, baselineUnresolved: rows.filter(r => r.attribution === 'unresolved').length,
+    originalCasesScanned: cases.size, originalOwnerObservations: seen.size, proposedGroups: groups.size, proposedObservations: propertyObservations,
+    otherCompleteRows: rows.length - selected.size, otherOrderedRowDigestsSha256: digest(rows.filter(r => !selected.has(r)).map(digest)),
+    proposed, canonicalAttributionChanged: false, inputEquivalent: false, renderingEquivalent: false };
+}
+
+export async function collectHostFontTokenPlan() {
+  const proofFile = 'docs/material-host-font-token-inputs.json', proofBytes = readFileSync(proofFile, 'utf8').replaceAll('\r\n', '\n');
+  const proof = collectHostFontTokens(); assert.equal(proofBytes, JSON.stringify(proof, null, 2) + '\n');
+  const original = (() => {
+    const bytes = readFileSync(proof.originalCapture.file); assert.equal(hash(bytes), proof.originalCapture.sha256);
+    const parsed = JSON.parse(bytes), project = entries => entries.map(e => ({ family: e.family, profile: e.profile, viewport: e.viewport,
+      ...(e.state ? { state: e.state } : {}), inputTrees: e.inputTrees, styleInputs: e.styleInputs.filter(i => i.id === e.family + '-primary' && Object.hasOwn(targets, e.family)) }));
+    return { results: project(parsed.results), interactions: project(parsed.interactions) };
+  })();
+  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const { manifest, rows } = await readCaretConservationRows(file => execFileSync('git', ['show', `${canonicalRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
+  const result = planHostFontTokens(proof, original, rows, normalize);
+  assert.equal(result.proposedGroups, 7); assert.equal(result.proposedObservations, 380);
+  return { schemaVersion: 1, kind: 'component-host-font-token-proposed-attribution', canonicalRevision, canonicalPayload: manifest,
+    proof: { file: proofFile, sha256: hash(proofBytes) }, productionNormalization: normalization, ...result };
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  const args = process.argv.slice(2); assert.ok(!args.length || args.length === 1 && args[0] === '--check');
-  const report = collectHostFontTokens(), file = 'docs/material-host-font-token-inputs.json', output = JSON.stringify(report, null, 2) + '\n';
+  const args = process.argv.slice(2); assert.ok(args.every(a => ['--check', '--plan'].includes(a))); assert.equal(new Set(args).size, args.length);
+  const plan = args.includes('--plan'), report = plan ? await collectHostFontTokenPlan() : collectHostFontTokens();
+  const file = plan ? 'docs/material-host-font-token-attribution-plan.json' : 'docs/material-host-font-token-inputs.json', output = JSON.stringify(report, null, 2) + '\n';
   if (args[0] === '--check') assert.equal(readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), output); else writeFileSync(file, output);
   console.log(JSON.stringify({ ownerObservations: report.ownerObservations, propertyObservations: report.propertyObservations,
-    counts: report.counts, reportSha256: hash(output), canonicalAttributionChanged: false }));
+    counts: report.counts, proposedGroups: report.proposedGroups, proposedObservations: report.proposedObservations,
+    otherCompleteRows: report.otherCompleteRows, reportSha256: hash(output), canonicalAttributionChanged: false }));
 }
