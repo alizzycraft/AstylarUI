@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-replayed-ltr-alignment-current-dry-run-receipt",
+  "sourceBinding": {
+    "file": "tests/material-parity/ltr-alignment-audit-source-binding.mjs",
+    "sha256": "11f1d2913c03512cd163a69ca1a6f4989526ade5d257c03bdd8df1bb6b005c41"
+  },
+  "log": {
+    "file": "artifacts/material-parity/field-host-flow-input-audit/ltr-alignment-current-dry-run.log",
+    "sha256": "44a266f5ee67bf3b60cead81e17f22d1153a003d3daeabdb554922596e9bd4ff"
+  },
+  "canonicalCompressedSha256": "72b148d9be7f4aaf3bd5872faedad2273f408d2a5ef1c258f6944f60be5ffd07",
+  "canonicalUncompressedSha256": "ee6db8ce5777cd316d6266f435502a732761a7177c3d8a45b2e7d40d45642e6a",
+  "canonicalRows": 8339,
+  "changedGroups": 4,
+  "changedObservations": 178,
+  "unchangedCompleteRows": 8335,
+  "unchangedOrderedRowDigestsSha256": "ad91488e749ca7f2455c2ca151b0c6b7659563b26d328346c9baa24ae5dfd44e",
+  "previousUnresolved": 1960,
+  "projectedUnresolved": 1956,
+  "canonicalIntegration": false,
+  "canonicalFilesChanged": false,
+  "inputEquivalent": false,
+  "renderingEquivalent": false
+}

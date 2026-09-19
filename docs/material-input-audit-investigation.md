@@ -28,6 +28,14 @@ in **86,454.4118ms**, with no skips/cancellations/TODOs.
 
 ## Text-alignment ancestry population
 
+The [direction-scoped source adapter](material-ltr-alignment-source-adapter.md)
+now prepares those four groups / 178 observations for canonical classification,
+with complete original context replay and exact input identity. The focused
+source/projection/transition/receipt/inventory suite passes **9/9**, exit 0, in
+**82,303.7275ms**. A separate full-current-payload dry run preserves all 8,335
+other complete rows and both canonical files. It projects 1,956 unresolved
+groups, not an integrated count; actual placement remains unverified.
+
 The [direction-scoped follow-up](material-ltr-alignment-review.md) reviews four
 additional retained groups / 178 original observations. Original-tree writing
 mode/direction/last-line evidence and a 32-case browser control establish only

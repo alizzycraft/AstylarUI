@@ -70,13 +70,24 @@ passes in **1,119,189.931ms**, retaining 867 other complete rows with ordered
 digest `148228a933f26e3b3e1ff6604bd175717194c4cbd57012f463fe8d1d70f1704b`.
 Gap-review also passes, in **28,206,105.72ms**, retaining 2,105 unrelated complete
 rows with digest `e778dbd5ecca5dcd92e135ea75089295d84a5aaa563f5b5550cf0d0195e9203c`
-and all 64 unresolved motion observations. The unchanged serial run now executes
-owner-grid initial integration (child process 22680, confirmed by its current
-command line; the earlier owner-grid label was premature). Finish its
-remaining suites, then retry the unchanged failed suite with adequate memory;
-do not weaken its populations or conservation assertions. A completed
-source-helper test is not substituted for these original production assertions,
-and no six-suite pass is claimed yet.
+and all 64 unresolved motion observations. The final owner-grid suite also
+passes, in **1,043,561.6124ms**, preserving 6,055 unrelated complete rows with
+digest `1806826fdc512ae004b3451c134daa29a81611af8544917c6b844d6d825d5258`.
+The serial batch is terminal: **5 passed / 1 failed**, exit **1**, no skips,
+cancellations or TODOs, in **33,690,779.0706ms**. Session 66846 has been reaped;
+parent process 13004 and child 22680 are no longer live.
+
+The unchanged failed button-request suite was restarted as a single-suite
+invocation with a 4GB heap at **10:58:22 Africa/Johannesburg**, session **21177**, parent node
+16668 / child 10948. It logs to `followup-button-requests-4gb-retry.log`:
+
+```text
+node --max-old-space-size=4096 --test --test-concurrency=1 tests/material-parity/button-requests-canonical-integration.spec.mjs
+```
+
+This retry is still unverified. No populations or conservation assertions were
+weakened. A completed source-helper test is not substituted for the original
+production assertions, and no six-suite pass is claimed yet.
 
 ### Historical verification checkpoints
 

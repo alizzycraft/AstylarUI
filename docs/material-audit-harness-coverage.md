@@ -1,5 +1,25 @@
 # Complete audit harness coverage
 
+## Current inventory: direction-scoped source adapter
+
+Discovery contains **169 files** (161 Material + four general + four TTS;
+all 43 legacy tests retained). The [four-group adapter](material-ltr-alignment-source-adapter.md)
+adds `ltr-alignment-audit-source-binding.spec.mjs`. Full source replay,
+subset/identity checks, seventeen mutation/transition rejection controls and
+inventory checks initially pass **8/8**, exit **0**, in **85,519.0151ms**.
+The final suite including the full-payload receipt passes **9/9**, exit **0**,
+no skips/cancellations/TODOs, in **82,303.7275ms**. Its separate full-current-
+payload dry run passes, retaining all 8,335 other complete rows. No main-builder
+or canonical classifications are changed.
+
+The historical serial batch is now terminal: **5 passed / 1 failed**, exit 1,
+in **33,690,779.0706ms**. Owner-grid passes in **1,043,561.6124ms**, preserving
+6,055 other complete rows. The single failed suite hit the imposed 3GB heap
+limit; the unchanged button-request suite is being retried separately with
+4GB (session 21177, parent 16668 / child 10948). Full current harness and
+enforced parity acceptance remain outstanding. Earlier live-process and
+inventory descriptions below are historical checkpoints, not current status.
+
 ## Current inventory: direction-scoped alignment review
 
 Discovery contains **168 files** (160 Material + four general + four TTS;
