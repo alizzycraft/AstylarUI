@@ -3,6 +3,8 @@ import test from 'node:test';
 import path from 'node:path';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import ts from 'typescript';
 import {
   buildMaterialInputAudit,
   attributeObservedNormalLineBoxes,
@@ -1373,8 +1375,52 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 260);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 260);
+  assert.equal(audit.sourceFingerprints.length, 346);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 346);
+  // All 38 follow-up source, proof, plan, transition and integration files
+  // join the existing 308 entries; none of the earlier fingerprints is waived.
+  const followupFiles = [
+    'tests/material-parity/canonical-transition-composition.mjs',
+    'tests/material-parity/canonical-transition-composition.spec.mjs',
+    ...['followup-input-audit-source-binding.mjs', 'followup-input-audit-source-binding.spec.mjs',
+      'followup-input-source-replay.mjs', 'followup-input-source-replay.spec.mjs',
+      'followup-input-proposal-transition.mjs', 'followup-input-proposal-transition.spec.mjs',
+      'followup-input-proposal-binding.spec.mjs', 'followup-input-canonical-integration.spec.mjs',
+      'leaf-font-family-stages.spec.mjs', 'leaf-font-family-attribution.spec.mjs',
+      'leaf-weight-tracking-stages.spec.mjs', 'leaf-weight-tracking-attribution.spec.mjs',
+      'expansion-owner-mapping.spec.mjs', 'expansion-owner-attribution.spec.mjs',
+      'control-font-style-reset.spec.mjs', 'control-font-style-attribution.spec.mjs']
+      .map(f => `tests/material-parity/${f}`),
+    ...['bind-material-followup-input-proposals.mjs', 'check-material-followup-input-transition.mjs',
+      'audit-material-leaf-font-family-stages.mjs', 'audit-material-leaf-font-family-attribution.mjs',
+      'audit-material-leaf-weight-tracking-stages.mjs', 'audit-material-leaf-weight-tracking-attribution.mjs',
+      'audit-material-expansion-owner-mapping.mjs', 'audit-material-expansion-owner-attribution.mjs',
+      'audit-material-control-font-style-reset.mjs', 'audit-material-control-font-style-attribution.mjs']
+      .map(f => `scripts/${f}`),
+    ...['leaf-font-family-stages', 'leaf-font-family-attribution-plan', 'leaf-weight-tracking-stages',
+      'leaf-weight-tracking-attribution-plan', 'expansion-owner-mapping', 'expansion-owner-attribution-plan',
+      'control-font-style-reset', 'control-font-style-attribution-plan', 'followup-input-proposal-binding',
+      'followup-input-transition-dry-run'].map(f => `docs/material-${f}.json`),
+  ];
+  assert.equal(followupFiles.length, 38);
+  const baselineSource = execFileSync('git', ['show', 'b1e973b:tests/material-parity/input-equivalence-audit.mjs'],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  const ast = ts.createSourceFile('baseline.mjs', baselineSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const fn = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'sourceFingerprints');
+  const declaration = fn.body.statements.filter(ts.isVariableStatement)
+    .flatMap(n => [...n.declarationList.declarations]).find(n => n.name.getText(ast) === 'files');
+  assert.ok(ts.isArrayLiteralExpression(declaration.initializer));
+  assert.ok(declaration.initializer.elements.every(ts.isStringLiteral));
+  const baselineFiles = declaration.initializer.elements.map(n => n.text);
+  assert.equal(baselineFiles.length, 308);
+  assert.deepEqual(audit.sourceFingerprints.map(e => e.file).filter(f => !followupFiles.includes(f)), baselineFiles,
+    'every previous fingerprint remains in original order');
+  assert.deepEqual(audit.sourceFingerprints.map(e => e.file).filter(f => !baselineFiles.includes(f)).sort(),
+    [...followupFiles].sort(), 'only the independently inventoried 38 dependencies are added');
+  for (const file of followupFiles) assert.deepEqual(audit.sourceFingerprints.filter(entry => entry.file === file),
+    [{ file, sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') }]);
+  assert.ok(audit.focusedProofs.some(entry => entry.file ===
+    'tests/material-parity/followup-input-canonical-integration.spec.mjs' && entry.status !== 'missing'));
   // The caret integration adds 17 authenticated proof, source and test files.
   for (const file of [
     'tests/material-parity/owner-caret-audit-source-binding.mjs',

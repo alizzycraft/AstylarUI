@@ -17,7 +17,7 @@
     },
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73"
+      "sha256": "1189df0c574dc9e8058cf7a61ceb0f0751e0df48dca67b796f12dadde3ec6e45"
     },
     {
       "file": "tests/material-parity/input-equivalence-policy.mjs",
@@ -1095,10 +1095,21 @@
   },
   "verification": {
     "harnessCommand": "npm run parity:harness:check",
-    "harnessResult": { "tests": 571, "passed": 571, "failed": 0, "exitCode": 0, "durationMs": 426305.1355 },
+    "harnessResult": {
+      "tests": 571,
+      "passed": 571,
+      "failed": 0,
+      "exitCode": 0,
+      "durationMs": 426305.1355
+    },
     "harnessScope": "Includes the button collector and three collector regressions; the subsequently added button case-index test was verified separately below, not loaded by this already-running harness process. This is harness verification, not complete enforced rendering parity or input-equivalence acceptance.",
     "caseIndexCommand": "node --test --test-name-pattern='button appearance case index' tests/material-parity/input-equivalence-audit.spec.mjs",
-    "caseIndexResult": { "tests": 1, "passed": 1, "exitCode": 0, "durationMs": 1989.9751 },
+    "caseIndexResult": {
+      "tests": 1,
+      "passed": 1,
+      "exitCode": 0,
+      "durationMs": 1989.9751
+    },
     "focusedCommand": "node --test --test-name-pattern='button appearance|non-widget appearance|appearance public proof|root typography|field host|records source fingerprints and actual visual acceptance fields' tests/material-parity/input-equivalence-audit.spec.mjs",
     "focusedResult": {
       "tests": 17,

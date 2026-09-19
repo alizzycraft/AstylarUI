@@ -1,4 +1,30 @@
-# Follow-up canonical integration: verification in progress
+# Follow-up canonical integration: verified classification increment
+
+## Accepted checkpoint — 2026-09-19
+
+The 66-group / 2,640-observation follow-up is now verified for canonical
+classification promotion. This reduces unresolved groups from 2,026 to **1,960**;
+it does not establish input equivalence, output parity, or completion of the
+audit. Renderer code and comparison inputs are unchanged.
+
+The original six historical integration suites now each have a terminal pass:
+five in the serial batch and the unchanged button-request suite in its isolated
+4GB retry. The latter passes **1/1**, exit **0**, in **1,305,671.8462ms**, with
+zero failures, skips, cancellations or TODOs. Session 21177 has been reaped.
+It retains all 2,829 unrelated complete rows (ordered digest
+`9b1d77e487e5931de72a353185df5fc8cb0097e2040260820147b4fed610c001`),
+2,938 scalar rows, the 71 original reviewed groups, and the separately verified
+later gap/caret/input classifications. The initial batch remains a recorded
+5-pass / 1-heap-failure run; it is not relabeled as a six-test passing run.
+
+The full builder file passes 388/388. Complete-row conservation passes for the
+66-group transition and its composition with the earlier 134-group transition;
+the composed proof covered the earlier generated payload. Subsequent receipt
+refresh and independent current CLI `--check` report only the 1,960 unresolved
+groups, with no stale-report errors. The current manifest hashes are recorded
+below. Full audit-harness and unfiltered enforced rendering acceptance are still
+outstanding. The chronology below retains failed and superseded checkpoints;
+statements there about live jobs or pending promotion describe those times only.
 
 Working-tree integration adds the independently source-bound follow-up adapter
 after all prior classification rules. It can classify an observation only if
@@ -85,9 +111,9 @@ invocation with a 4GB heap at **10:58:22 Africa/Johannesburg**, session **21177*
 node --max-old-space-size=4096 --test --test-concurrency=1 tests/material-parity/button-requests-canonical-integration.spec.mjs
 ```
 
-This retry is still unverified. No populations or conservation assertions were
-weakened. A completed source-helper test is not substituted for the original
-production assertions, and no six-suite pass is claimed yet.
+This retry is now terminal and passing as recorded in the accepted checkpoint.
+No populations or conservation assertions were weakened. The original production
+assertions, not a substitute source-helper test, supplied the passing result.
 
 ### Historical verification checkpoints
 
@@ -223,5 +249,6 @@ checked; do not suppress a changed source fingerprint.
 Historical subset conservation tests will also need to account for the exact
 new source-bound population while retaining their original assertions. Full
 current-harness verification and the complete enforced parity matrix remain
-outstanding. No canonical count reduction is accepted yet: **2,026 unresolved**
-is the last verified count; **1,960** is the verified dry-run target.
+outstanding. At that historical checkpoint **2,026 unresolved** was the last
+verified count and **1,960** was only the dry-run target. The accepted checkpoint
+at the top of this document supersedes that status.
