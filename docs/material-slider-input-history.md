@@ -44,10 +44,19 @@ core defects. The source history above is consistent with avoiding the update
 trigger, not proof of the historical developer's motivation or a fresh execution
 of each historical build.
 
-The public reproduction also records intermediate one-step disagreements while
-event-local coordinates agree with authored CSS coordinates. Native thumb/track
-travel remains to be isolated; do not infer a global CSS/world-space defect or
-add an offset to force matching samples.
+The [native travel proof](material-public-range-travel-audit.md) now isolates the
+intermediate one-step disagreements: measured native thumb-center travel is
+144px inside the 160px control, while the core uses full-width pointer mapping.
+Event-local coordinates already agree with authored CSS coordinates. This is a
+bounded core travel-geometry defect, not a global CSS/world-space diagnosis or
+justification for a hard-coded inset; other sizes/appearances still need proof.
+
+The [passive paint proof](material-public-range-paint-audit.md) separately shows
+that generic opaque material replaces the core range's interaction-only material
+and active-track/thumb depths place them behind opaque backgrounds. This explains
+their occlusion in the public reduction, not the historical Material black ring
+or swapped handles. The coplanar unfilled track's exact GPU mechanism is still
+unproved.
 
 The [sibling pointer-state survey](material-slider-peer-pointer-survey.md)
 separately proves missing captured peer-suppression requests. The
@@ -62,15 +71,23 @@ thumb or black ring. All these distinctions must survive the implementation plan
 1. Fix generic active-gesture preservation through semantic focus synchronization
    and public updates. Require the existing button and range equal-input
    reproductions to pass; do not suppress consumer updates as the solution.
-2. Fix captured-owner release routing. Separately isolate native range travel
-   and stepping, preserving CSS-space event coordinates and exact values.
-3. Restore reference domain, step, peer bounds and dynamic hit-region behavior
+2. Fix captured-owner release routing without conflating release with click or
+   cancel. Preserve outside-hit, peer-hit and removal behavior independently.
+3. Correct core control-material ownership and paint ordering; verify visible
+   rasters, not just mesh presence. Establish and apply the shared CSS-space
+   range travel/appearance contract using the measured proof plus width/height,
+   grab-position, RTL/vertical and custom-appearance coverage.
+4. Restore reference domain, step, peer bounds and dynamic hit-region behavior
    through core controls plus legitimate Material state orchestration. Remove
    fixed half-domain clamping; test both thumbs across the midpoint, including
    start=60/end=80 and start=20/end=40, with pointer and keyboard.
-4. Restore equivalent hover/pressed/disabled paint inputs and ownership. Verify
+5. Restore equivalent hover/pressed/disabled paint inputs and ownership. Verify
    labels, values, gesture lifetime, peer selection and raster independently.
    A correctly painted track cannot certify invisible hit geometry.
+
+The [cross-component implementation handoff](material-root-cause-implementation-handoff.md)
+sets these findings alongside shared text, layout and overlay priorities without
+claiming that any reported Material symptom has been fixed.
 
 ## Verification
 

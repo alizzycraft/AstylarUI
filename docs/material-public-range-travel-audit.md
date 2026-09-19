@@ -49,7 +49,11 @@ at both host origins and DPRs. Its served bundle executes `localX / width` in
 `RangeManager.updateVisual` likewise positions its thumb using the full width,
 while `createRange` calculates a nonzero thumb size separately. This source
 observation does not establish painted candidate thumb bounds: the retained
-public candidate screenshots are blank and that paint failure remains open.
+public candidate screenshots are blank. The subsequent
+[passive paint proof](material-public-range-paint-audit.md) establishes opaque
+owner-material replacement and reversed active-track/thumb depth ordering.
+Native-like presentation and the coplanar unfilled-track GPU mechanism remain
+unproved; neither is inferred from pointer-value agreement.
 
 For these captured value samples, the demonstrated divergence is **the travel
 geometry supplied to pointer-to-value conversion**, not a CSS-to-Babylon unit
@@ -74,13 +78,14 @@ Before implementing a general rule, vary control width and height, native versus
 custom thumb appearance, and pointer grab position; check RTL/vertical ranges
 and transformed/scrolled containers separately. The captured endpoint model
 does not explain overlapping Material thumb selection, the black ring, or blank
-core range paint. Preserve the separate focus-update/release findings and the
+core range paint; that last symptom has separate bounded paint-order evidence
+linked above. Preserve the separate focus-update/release findings and the
 Material half-domain/step/peer-hit-region authoring findings.
 
 Implementation order remains: preserve the native gesture through core focus
-synchronization; correct captured release routing; establish and apply the
-core range travel/appearance contract; then re-test the Material composition
-with equivalent domain, step, structure and hit-region inputs. None of those
+synchronization; correct captured release routing; correct core range paint
+ownership and establish the CSS-space travel/appearance contract; then re-test
+the Material composition with equivalent domain, step, structure and hit-region inputs. None of those
 implementation changes are made during this audit increment.
 
 ## Evidence and verification

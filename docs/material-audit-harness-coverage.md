@@ -1,5 +1,20 @@
 # Complete audit harness coverage
 
+## Root-cause handoff replay
+
+The [updated implementation priorities](material-root-cause-implementation-handoff.md)
+are backed by an unchanged combined replay of held-button, original range drag,
+range travel/paint, vertical-alignment and inventory suites: **24/24**, exit 0,
+no skips/cancellations/TODOs, in **29,845.5369ms**. No test file was added; the
+discovered inventory remains 166 files. These checks validate retained failing
+evidence, not corrected rendering or complete-harness acceptance.
+
+The historical serial run has three passes and one 3GB heap-limit failure.
+Explicit-gap passes in **1,119,189.931ms**. The current child command is gap-review
+(PID 23500); owner-grid has no terminal result yet. Retry the unchanged failed
+button-request suite with adequate memory after the remaining suites finish.
+Earlier running-process descriptions below are historical checkpoints.
+
 ## Current inventory: text-alignment canonical membership
 
 Discovery contains **166 files** (158 Material + four general + four TTS;

@@ -65,10 +65,12 @@ The first two suites pass: button box sizing in **1,106,262.4695ms** and fixed
 width in **1,246,738.7431ms**. The third child (button requests) has failed,
 exit **134**, in **952,653.3361ms**. Its log explicitly reports
 `Reached heap limit Allocation failed - JavaScript heap out of memory` near
-the imposed 3GB cap. This is not an assertion result. The unchanged serial run
-continues with explicit-gap integration (child process 7448, confirmed by its
-current command line; the previous owner-grid label incorrectly assumed
-argument order). Finish its
+the imposed 3GB cap. This is not an assertion result. Explicit-gap subsequently
+passes in **1,119,189.931ms**, retaining 867 other complete rows with ordered
+digest `148228a933f26e3b3e1ff6604bd175717194c4cbd57012f463fe8d1d70f1704b`.
+The unchanged serial run continues with gap-review integration (child process
+23500, confirmed by its current command line; the previous owner-grid label
+incorrectly assumed argument order). Finish its
 remaining suites, then retry the unchanged failed suite with adequate memory;
 do not weaken its populations or conservation assertions. A completed
 source-helper test is not substituted for these original production assertions,

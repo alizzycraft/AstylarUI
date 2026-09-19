@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Updated implementation handoff
+
+The [root-cause priority supplement](material-root-cause-implementation-handoff.md)
+updates the existing 62-item implementation inventory with independently proved
+gesture-preservation, captured-release, range-paint, travel-geometry and
+vertical-alignment defects. It preserves the unresolved Material black-ring,
+swapped-handle and shared tooltip/snackbar positioning hypotheses. Existing
+compensations must be restored only with the owning general correction and
+equivalent-input proof; no renderer or canonical comparison was changed.
+
 ## Prepared alignment/font classification boundary
 
 The [source-replayed adapter](material-alignment-font-source-adapter.md) binds
@@ -37,13 +47,16 @@ not evidence for an initial value. The prior tooltip missing-center finding
 remains visible. Full no-write replay and inventory checks pass 8/8, exit 0,
 in 36,946.388ms. This is a source survey, not a canonical attribution reduction.
 
-The six historical integration suites have reached two passes and one failure:
+The six historical integration suites have reached three passes and one failure:
 button requests exhausted the explicitly imposed 3GB V8 heap (exit 134) after
 952,653.3361ms. The log explicitly reports a JavaScript heap-limit allocation
 failure; no assertion failure or corrected behavior is inferred. The current
-child command confirms the serial run is executing **explicit-gap** integration
-(PID 7448), not owner-grid as the earlier checkpoint assumed from argument order.
-Its remaining suites must finish,
+child command confirms the serial run is executing **gap-review** integration
+(PID 23500). Explicit-gap passed in 1,119,189.931ms, preserving 867 other
+complete rows with digest
+`148228a933f26e3b3e1ff6604bd175717194c4cbd57012f463fe8d1d70f1704b`.
+The earlier owner-grid label inferred from argument order was not correct.
+The remaining suites must finish,
 then the unchanged failed test needs a memory-adequate retry before promotion.
 
 ## Public range paint ownership
