@@ -62,8 +62,15 @@ with `--max-old-space-size=3072 --test --test-concurrency=1`: button box-sizing,
 button fixed-width, button requests, owner grid initial values, explicit gap,
 and gap review. Their log is `followup-six-historical-integrations.log`.
 The first two suites pass: button box sizing in **1,106,262.4695ms** and fixed
-width in **1,246,738.7431ms**. The third child (button requests) is live. A completed source-helper test is not substituted for
-these original production assertions, and no six-suite pass is claimed yet.
+width in **1,246,738.7431ms**. The third child (button requests) has failed,
+exit **134**, in **952,653.3361ms**. Its log explicitly reports
+`Reached heap limit Allocation failed - JavaScript heap out of memory` near
+the imposed 3GB cap. This is not an assertion result. The unchanged serial run
+continues with owner-grid initial values (child process 7448). Finish its
+remaining suites, then retry the unchanged failed suite with adequate memory;
+do not weaken its populations or conservation assertions. A completed
+source-helper test is not substituted for these original production assertions,
+and no six-suite pass is claimed yet.
 
 ### Historical verification checkpoints
 

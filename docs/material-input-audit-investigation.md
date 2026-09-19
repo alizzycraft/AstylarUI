@@ -16,6 +16,25 @@ row hashes and complete canonical provenance.
 Adapter, transition, receipt and inventory checks pass **9/9**, exit 0,
 in **86,454.4118ms**, with no skips/cancellations/TODOs.
 
+## Text-alignment ancestry population
+
+The [original text-alignment census](material-text-align-ancestry.md) now covers
+all 101 differing groups / 5,978 observations across all 2,311 original cases.
+It retains 960 equal scalar observations, eight missing tooltip counterparts,
+and the 59 known overlay layer-rule gaps. All owner-to-root requests and local
+style stages remain separate from computed/used inheritance. In particular,
+68 expansion-title observations have a parent alignment request; omission is
+not evidence for an initial value. The prior tooltip missing-center finding
+remains visible. Full no-write replay and inventory checks pass 8/8, exit 0,
+in 36,946.388ms. This is a source survey, not a canonical attribution reduction.
+
+The six historical integration suites have reached two passes and one failure:
+button requests exhausted the explicitly imposed 3GB V8 heap (exit 134) after
+952,653.3361ms. The log explicitly reports a JavaScript heap-limit allocation
+failure; no assertion failure or corrected behavior is inferred. The serial
+run continues with owner-grid initial values. Its remaining suites must finish,
+then the unchanged failed test needs a memory-adequate retry before promotion.
+
 ## Public range paint ownership
 
 The [passive range paint investigation](material-public-range-paint-audit.md)

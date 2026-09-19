@@ -1,5 +1,20 @@
 # Complete audit harness coverage
 
+## Current inventory: text-alignment ancestry
+
+Discovery contains **165 files** (157 Material + four general + four TTS;
+all 43 legacy files retained). The new `text-align-ancestry.spec.mjs` replays
+the full [5,978-observation survey](material-text-align-ancestry.md), retains
+original ancestry gaps and rejects invented inheritance. Together with inventory
+checks it passes **8/8**, exit 0, in **36,946.388ms**, with no failures, skips,
+cancellations or TODOs. Canonical classifications remain unchanged.
+
+The separate six-suite historical run has two passes and a button-request
+failure: its 3GB V8 cap was exhausted, exit 134, in 952,653.3361ms. The run is
+continuing through the remaining three suites; no aggregate pass is claimed.
+Retry the unchanged failed suite with adequate memory after this serial run.
+Complete current harness and enforced parity acceptance remain outstanding.
+
 ## Current inventory: alignment/font source adapter
 
 Discovery contains **164 files** (156 Material + four general + four TTS; all
