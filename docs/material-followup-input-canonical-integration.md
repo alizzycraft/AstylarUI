@@ -68,9 +68,11 @@ exit **134**, in **952,653.3361ms**. Its log explicitly reports
 the imposed 3GB cap. This is not an assertion result. Explicit-gap subsequently
 passes in **1,119,189.931ms**, retaining 867 other complete rows with ordered
 digest `148228a933f26e3b3e1ff6604bd175717194c4cbd57012f463fe8d1d70f1704b`.
-The unchanged serial run continues with gap-review integration (child process
-23500, confirmed by its current command line; the previous owner-grid label
-incorrectly assumed argument order). Finish its
+Gap-review also passes, in **28,206,105.72ms**, retaining 2,105 unrelated complete
+rows with digest `e778dbd5ecca5dcd92e135ea75089295d84a5aaa563f5b5550cf0d0195e9203c`
+and all 64 unresolved motion observations. The unchanged serial run now executes
+owner-grid initial integration (child process 22680, confirmed by its current
+command line; the earlier owner-grid label was premature). Finish its
 remaining suites, then retry the unchanged failed suite with adequate memory;
 do not weaken its populations or conservation assertions. A completed
 source-helper test is not substituted for these original production assertions,

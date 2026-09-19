@@ -28,6 +28,15 @@ in **86,454.4118ms**, with no skips/cancellations/TODOs.
 
 ## Text-alignment ancestry population
 
+The [direction-scoped follow-up](material-ltr-alignment-review.md) reviews four
+additional retained groups / 178 original observations. Original-tree writing
+mode/direction/last-line evidence and a 32-case browser control establish only
+the requested alignment-edge correspondence between start and left in captured
+horizontal LTR contexts. RTL controls reject a global substitution. The other
+six retained groups stay separate, and no candidate used placement or core
+logical-keyword support is certified. Source/history/context and inventory checks
+pass **8/8**, exit 0, in **35,468.6374ms**; canonical attribution is unchanged.
+
 The [prepared source adapter](material-text-align-source-adapter.md) now replays
 the complete ancestry proof and binds all 49 proposed groups / 2,677 observations
 for future main-builder integration. A full-current-payload dry run finds all
@@ -59,12 +68,15 @@ not evidence for an initial value. The prior tooltip missing-center finding
 remains visible. Full no-write replay and inventory checks pass 8/8, exit 0,
 in 36,946.388ms. This is a source survey, not a canonical attribution reduction.
 
-The six historical integration suites have reached three passes and one failure:
+The six historical integration suites have reached four passes and one failure:
 button requests exhausted the explicitly imposed 3GB V8 heap (exit 134) after
 952,653.3361ms. The log explicitly reports a JavaScript heap-limit allocation
 failure; no assertion failure or corrected behavior is inferred. The current
-child command confirms the serial run is executing **gap-review** integration
-(PID 23500). Explicit-gap passed in 1,119,189.931ms, preserving 867 other
+child command confirms the serial run is executing **owner-grid initial** integration
+(PID 22680). Gap-review passed in **28,206,105.72ms**, preserving 2,105 unrelated
+complete rows, 64 unresolved motion observations and ordered digest
+`e778dbd5ecca5dcd92e135ea75089295d84a5aaa563f5b5550cf0d0195e9203c`.
+Explicit-gap passed in 1,119,189.931ms, preserving 867 other
 complete rows with digest
 `148228a933f26e3b3e1ff6604bd175717194c4cbd57012f463fe8d1d70f1704b`.
 The earlier owner-grid label inferred from argument order was not correct.

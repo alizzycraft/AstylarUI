@@ -1,5 +1,22 @@
 # Complete audit harness coverage
 
+## Current inventory: direction-scoped alignment review
+
+Discovery contains **168 files** (160 Material + four general + four TTS;
+all 43 legacy tests retained). The [four-group / 178-observation review](material-ltr-alignment-review.md)
+adds `ltr-alignment-review.spec.mjs`. Source replay, 32 browser keyword controls,
+eighteen mutation rejections and inventory checks pass **8/8**, exit 0, no skips,
+cancellations or TODOs, in **35,468.6374ms**. This is context-scoped requested-edge
+correspondence, not candidate placement, core logical-keyword support or a
+canonical classification promotion.
+
+The historical integration batch now has four passes and one 3GB heap-limit
+failure. Gap-review passes in **28,206,105.72ms**, preserving 2,105 other complete
+rows and the 64 unresolved motion observations. The current child command is
+owner-grid initial (PID 22680). It must finish before the unchanged failed
+button-request suite is retried with adequate memory. Full current harness
+and enforced parity acceptance remain outstanding.
+
 ## Current inventory: text-alignment source adapter
 
 Discovery contains **167 files** (159 Material + four general + four TTS;
