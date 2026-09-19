@@ -1,5 +1,11 @@
 # Complete audit harness coverage
 
+The [2026-09-19 verification checkpoint](material-audit-verification-sep19.md)
+supersedes the process status below: the release retry stopped during general
+parity, its focused lifecycle diagnostic failed texture-count assertions, and
+the complete 170-file audit harness plus separate enforced TTS/Material sequence
+are running. No complete matrix or harness pass is claimed.
+
 ## Current inventory: explicit cursor owner census
 
 Discovery contains **170 files** (162 Material + four general + four TTS;
