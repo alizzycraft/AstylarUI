@@ -1,5 +1,22 @@
 # Complete audit harness coverage
 
+## Current inventory: explicit cursor owner census
+
+Discovery contains **170 files** (162 Material + four general + four TTS;
+all 43 legacy tests retained). The [explicit-cursor census](material-explicit-cursor-inputs.md)
+adds `explicit-cursor-inputs.spec.mjs`. Full source replay, twelve corruption
+controls, source/default-policy witnesses, case-versus-owner probe boundaries
+and inventory checks pass **8/8**, exit 0, in **9,293.8102ms**, without skips,
+cancellations or TODOs. The initial negative-control no-op is documented.
+
+The unchanged historical button-request retry is now terminal, **1/1**, exit 0,
+in **1,305,671.8462ms**. The verified 66-group increment is committed/pushed in
+`924db82`. The initial full enforced release command stopped at general parity
+server readiness, before executing fixtures. A separately started server has
+returned its full 167-fixture manifest; the unchanged, unfiltered release command
+has been relaunched against it. This is not yet a parity result. Earlier process
+and inventory status below is historical, not current.
+
 ## Current inventory: direction-scoped source adapter
 
 Discovery contains **169 files** (161 Material + four general + four TTS;

@@ -3,6 +3,21 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Explicit cursor ownership and missing hit-target coverage
+
+The [complete explicit-cursor census](material-explicit-cursor-inputs.md)
+joins 19 groups / 763 observations across all original cases. It distinguishes
+owner requests (485), ancestor requests (152), split slider visual ownership
+(70), and dialog button type-default suspicion (56). The maintained effective
+cursor check observes only a single family target during hover; non-hover
+`matches: true` and another owner's passing probe cannot establish cursor
+parity. No comparison styles or renderer behavior were changed. The census
+and twelve mutation controls pass with the inventory checks, 8/8 in 9,293.8102ms.
+
+The earlier 66-group follow-up is now committed in `924db82`; its unchanged
+historical button-request retry passed, 1/1, exit 0. Canonical unresolved groups
+are 1,960; audit completion and full enforced parity remain unproved.
+
 ## Updated implementation handoff
 
 The [root-cause priority supplement](material-root-cause-implementation-handoff.md)
