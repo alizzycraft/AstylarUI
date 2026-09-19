@@ -3,6 +3,23 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Public range paint ownership
+
+The [passive range paint investigation](material-public-range-paint-audit.md)
+captures eight reference/candidate cases at DPR 1/2 and two surface origins.
+All eight candidate control crops are entirely white despite live presentation
+meshes. Generic background application replaces the manager's interaction-only
+material, while active tracks and thumbs have negative depths behind the opaque
+owner and root. This establishes a bounded core paint-order defect, not the
+cause of swapped Material handles or the coplanar track's exact GPU behavior.
+No renderer or fixture changed. New, unchanged prior range and inventory tests
+pass **15/15**, exit 0, in **11,623.4188ms**.
+
+The independent canonical CLI freshness run is now terminal, exit 1 solely for
+the 1,960 unresolved-group acceptance error; no stale-report errors were emitted.
+The historical production integration run remains outstanding, so pending
+canonical promotion and full-audit completion are not claimed.
+
 ## Public range travel geometry
 
 The [native-raster travel review](material-public-range-travel-audit.md) narrows

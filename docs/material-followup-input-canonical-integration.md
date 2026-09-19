@@ -51,16 +51,18 @@ Logs are `followup-composed-full-builder-serial.log` and
 `followup-composed-canonical-generation.log`. Fresh independent CLI `--check`
 with the same five capture arguments started at **01:25:09** in session **86486**,
 process **5604**, logging to `followup-composed-canonical-fresh-check.log`.
-That check is not yet terminal. The 388-test pass is the full builder file,
-not the complete audit harness or enforced parity matrix. Do not restart a live
-reader or commit the pending canonical promotion as green.
+That check is now terminal, exit **1**, with only the **1,960 unresolved groups**
+acceptance error and no stale-report errors. The 388-test pass is the full builder
+file, not the complete audit harness or enforced parity matrix. Canonical
+promotion still awaits the historical integration gates below.
 
 The six unchanged historical production-integration suites started serially at
 **01:34:52 Africa/Johannesburg**, session **66846**, parent node process **13004**,
 with `--max-old-space-size=3072 --test --test-concurrency=1`: button box-sizing,
 button fixed-width, button requests, owner grid initial values, explicit gap,
 and gap review. Their log is `followup-six-historical-integrations.log`.
-The first child is live; a completed source-helper test is not substituted for
+The first suite passes **1/1**, in **1,106,262.4695ms**; the second child (button
+fixed-width) is live. A completed source-helper test is not substituted for
 these original production assertions, and no six-suite pass is claimed yet.
 
 ### Historical verification checkpoints

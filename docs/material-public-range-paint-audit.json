@@ -1,0 +1,397 @@
+{
+  "schemaVersion": 1,
+  "kind": "public-range-paint-audit",
+  "evidence": {
+    "file": "artifacts/material-parity/public-range-paint-inspection-v1/latest-report.json",
+    "sha256": "6bcd0fc17d8634ae27cdb515b419055afd04413dcd10439958303779e99a6773"
+  },
+  "browser": "152.0.7977.84",
+  "sourceCommit": "42ff599d238c715627db8618970e332f7114cde5",
+  "provenance": {
+    "file": "provenance.json",
+    "sha256": "6c1902e5ec6c5d87ba761304141ec12061a7858eb84d5b8d1cc4d600aacd2fcf"
+  },
+  "sources": [
+    {
+      "file": "src/app/services/dom/input/range.manager.ts",
+      "sha256": "5300fd18403ff659f4ef415df796f0e9ea0260e7c591004fa407fd99ec24b4db"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-creation.service.ts",
+      "sha256": "a1eef26cae187ef5aa9ebf946fd9cfcac3fa5e1d9f81764459465b0334edba0b"
+    },
+    {
+      "file": "src/app/services/dom/elements/element-material.service.ts",
+      "sha256": "e409d35b8100ba2bc71234b4fc1d61eac46be78029e20afcbd0f657d2d1279a3"
+    },
+    {
+      "file": "src/app/config/browser-defaults.ts",
+      "sha256": "82fb3a97989cd04015fa441f76154a9fa3112754ef5cd63f032bbd12917746c1"
+    },
+    {
+      "file": "src/app/services/babylon-camera.service.ts",
+      "sha256": "81d3e7a80a27e38743dc80a779aa739e349868f9e6db5994515ba5b82247aa0c"
+    },
+    {
+      "file": "src/app/services/css-babylon-projection.ts",
+      "sha256": "8f37fe4c674d0a2dd3703f6f1776000df561bce751226f7c2c1be0efd95292ce"
+    }
+  ],
+  "servedInstructions": [
+    {
+      "owner": "RangeManager",
+      "line": 386528,
+      "instruction": "hitMaterial.disableDepthWrite = true;"
+    },
+    {
+      "owner": "ElementCreationService",
+      "line": 392973,
+      "instruction": "this.materialService.applyElementMaterial(dom, render, mesh, element2, false, style);"
+    },
+    {
+      "owner": "ElementMaterialService",
+      "line": 388655,
+      "instruction": "const material = render.actions.mesh.createMaterial(`${element2.id || mesh.name}-material`, backgroundData.color, finalOpacity);"
+    },
+    {
+      "owner": "RangeManager",
+      "line": 386625,
+      "instruction": "const center = render.actions.camera.projectCssLocalPoint({ x: -width / 2 + activeWidth / 2, y: 0 }, -0.02);"
+    },
+    {
+      "owner": "RangeManager",
+      "line": 386629,
+      "instruction": "const center = render.actions.camera.projectCssLocalPoint({ x: -width / 2 + width * ratio, y: 0 }, -0.04);"
+    },
+    {
+      "owner": "BabylonCameraService",
+      "line": 386932,
+      "instruction": "this.camera = new FreeCamera(\"camera\", new Vector3(0, 0, cameraDistance), scene);"
+    },
+    {
+      "owner": "BabylonCameraService",
+      "line": 386938,
+      "instruction": "this.camera.setTarget(Vector3.Zero());"
+    }
+  ],
+  "cases": 8,
+  "screenshots": 16,
+  "observations": [
+    {
+      "dpr": 1,
+      "translated": false,
+      "id": "first",
+      "box": {
+        "x": 20,
+        "y": 40,
+        "width": 160,
+        "height": 40
+      },
+      "nativePixels": {
+        "pixels": 6400,
+        "nonwhite": 1344
+      },
+      "candidatePixels": {
+        "pixels": 6400,
+        "nonwhite": 0
+      },
+      "rootZ": 0,
+      "ownerZ": 0.0010000000474974513,
+      "trackZ": 0.0010000000474974513,
+      "activeZ": -0.01899999938905239,
+      "thumbZ": -0.039000000804662704,
+      "material": {
+        "name": "first-material",
+        "kind": "StandardMaterial",
+        "alpha": 1,
+        "disableDepthWrite": false,
+        "disableColorWrite": false,
+        "depthFunction": 0,
+        "emissiveColor": "#FFFFFF",
+        "diffuseColor": "#FFFFFF"
+      },
+      "screenshot": {
+        "file": "dpr1-translatedfalse-astylar.png",
+        "sha256": "a3328bba804af0a38367961b979179cf5deae64b4e49fcc0256130640cc4d62c"
+      }
+    },
+    {
+      "dpr": 1,
+      "translated": false,
+      "id": "second",
+      "box": {
+        "x": 240,
+        "y": 40,
+        "width": 160,
+        "height": 40
+      },
+      "nativePixels": {
+        "pixels": 6400,
+        "nonwhite": 1344
+      },
+      "candidatePixels": {
+        "pixels": 6400,
+        "nonwhite": 0
+      },
+      "rootZ": 0,
+      "ownerZ": 0.0010000000474974513,
+      "trackZ": 0.0010000000474974513,
+      "activeZ": -0.01899999938905239,
+      "thumbZ": -0.039000000804662704,
+      "material": {
+        "name": "second-material",
+        "kind": "StandardMaterial",
+        "alpha": 1,
+        "disableDepthWrite": false,
+        "disableColorWrite": false,
+        "depthFunction": 0,
+        "emissiveColor": "#FFFFFF",
+        "diffuseColor": "#FFFFFF"
+      },
+      "screenshot": {
+        "file": "dpr1-translatedfalse-astylar.png",
+        "sha256": "a3328bba804af0a38367961b979179cf5deae64b4e49fcc0256130640cc4d62c"
+      }
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "id": "first",
+      "box": {
+        "x": 84,
+        "y": 80,
+        "width": 160,
+        "height": 40
+      },
+      "nativePixels": {
+        "pixels": 6400,
+        "nonwhite": 1344
+      },
+      "candidatePixels": {
+        "pixels": 6400,
+        "nonwhite": 0
+      },
+      "rootZ": 0,
+      "ownerZ": 0.0010000000474974513,
+      "trackZ": 0.0010000000474974513,
+      "activeZ": -0.01899999938905239,
+      "thumbZ": -0.039000000804662704,
+      "material": {
+        "name": "first-material",
+        "kind": "StandardMaterial",
+        "alpha": 1,
+        "disableDepthWrite": false,
+        "disableColorWrite": false,
+        "depthFunction": 0,
+        "emissiveColor": "#FFFFFF",
+        "diffuseColor": "#FFFFFF"
+      },
+      "screenshot": {
+        "file": "dpr1-translatedtrue-astylar.png",
+        "sha256": "55b1dcd9e8cccca07f8aed9f2e02eba694413e458377423c726e429e6608c534"
+      }
+    },
+    {
+      "dpr": 1,
+      "translated": true,
+      "id": "second",
+      "box": {
+        "x": 304,
+        "y": 80,
+        "width": 160,
+        "height": 40
+      },
+      "nativePixels": {
+        "pixels": 6400,
+        "nonwhite": 1344
+      },
+      "candidatePixels": {
+        "pixels": 6400,
+        "nonwhite": 0
+      },
+      "rootZ": 0,
+      "ownerZ": 0.0010000000474974513,
+      "trackZ": 0.0010000000474974513,
+      "activeZ": -0.01899999938905239,
+      "thumbZ": -0.039000000804662704,
+      "material": {
+        "name": "second-material",
+        "kind": "StandardMaterial",
+        "alpha": 1,
+        "disableDepthWrite": false,
+        "disableColorWrite": false,
+        "depthFunction": 0,
+        "emissiveColor": "#FFFFFF",
+        "diffuseColor": "#FFFFFF"
+      },
+      "screenshot": {
+        "file": "dpr1-translatedtrue-astylar.png",
+        "sha256": "55b1dcd9e8cccca07f8aed9f2e02eba694413e458377423c726e429e6608c534"
+      }
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "id": "first",
+      "box": {
+        "x": 20,
+        "y": 40,
+        "width": 160,
+        "height": 40
+      },
+      "nativePixels": {
+        "pixels": 25600,
+        "nonwhite": 5288
+      },
+      "candidatePixels": {
+        "pixels": 25600,
+        "nonwhite": 0
+      },
+      "rootZ": 0,
+      "ownerZ": 0.0010000000474974513,
+      "trackZ": 0.0010000000474974513,
+      "activeZ": -0.01899999938905239,
+      "thumbZ": -0.039000000804662704,
+      "material": {
+        "name": "first-material",
+        "kind": "StandardMaterial",
+        "alpha": 1,
+        "disableDepthWrite": false,
+        "disableColorWrite": false,
+        "depthFunction": 0,
+        "emissiveColor": "#FFFFFF",
+        "diffuseColor": "#FFFFFF"
+      },
+      "screenshot": {
+        "file": "dpr2-translatedfalse-astylar.png",
+        "sha256": "7c264cdecd6fb7c1029416de2e2126f129fe9f0cd280072c7d34b95bc90376fc"
+      }
+    },
+    {
+      "dpr": 2,
+      "translated": false,
+      "id": "second",
+      "box": {
+        "x": 240,
+        "y": 40,
+        "width": 160,
+        "height": 40
+      },
+      "nativePixels": {
+        "pixels": 25600,
+        "nonwhite": 5288
+      },
+      "candidatePixels": {
+        "pixels": 25600,
+        "nonwhite": 0
+      },
+      "rootZ": 0,
+      "ownerZ": 0.0010000000474974513,
+      "trackZ": 0.0010000000474974513,
+      "activeZ": -0.01899999938905239,
+      "thumbZ": -0.039000000804662704,
+      "material": {
+        "name": "second-material",
+        "kind": "StandardMaterial",
+        "alpha": 1,
+        "disableDepthWrite": false,
+        "disableColorWrite": false,
+        "depthFunction": 0,
+        "emissiveColor": "#FFFFFF",
+        "diffuseColor": "#FFFFFF"
+      },
+      "screenshot": {
+        "file": "dpr2-translatedfalse-astylar.png",
+        "sha256": "7c264cdecd6fb7c1029416de2e2126f129fe9f0cd280072c7d34b95bc90376fc"
+      }
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "id": "first",
+      "box": {
+        "x": 84,
+        "y": 80,
+        "width": 160,
+        "height": 40
+      },
+      "nativePixels": {
+        "pixels": 25600,
+        "nonwhite": 5288
+      },
+      "candidatePixels": {
+        "pixels": 25600,
+        "nonwhite": 0
+      },
+      "rootZ": 0,
+      "ownerZ": 0.0010000000474974513,
+      "trackZ": 0.0010000000474974513,
+      "activeZ": -0.01899999938905239,
+      "thumbZ": -0.039000000804662704,
+      "material": {
+        "name": "first-material",
+        "kind": "StandardMaterial",
+        "alpha": 1,
+        "disableDepthWrite": false,
+        "disableColorWrite": false,
+        "depthFunction": 0,
+        "emissiveColor": "#FFFFFF",
+        "diffuseColor": "#FFFFFF"
+      },
+      "screenshot": {
+        "file": "dpr2-translatedtrue-astylar.png",
+        "sha256": "69498d67ab68f73778eb98d8629e20fd1866ae77e31a9672262734581096fb8f"
+      }
+    },
+    {
+      "dpr": 2,
+      "translated": true,
+      "id": "second",
+      "box": {
+        "x": 304,
+        "y": 80,
+        "width": 160,
+        "height": 40
+      },
+      "nativePixels": {
+        "pixels": 25600,
+        "nonwhite": 5288
+      },
+      "candidatePixels": {
+        "pixels": 25600,
+        "nonwhite": 0
+      },
+      "rootZ": 0,
+      "ownerZ": 0.0010000000474974513,
+      "trackZ": 0.0010000000474974513,
+      "activeZ": -0.01899999938905239,
+      "thumbZ": -0.039000000804662704,
+      "material": {
+        "name": "second-material",
+        "kind": "StandardMaterial",
+        "alpha": 1,
+        "disableDepthWrite": false,
+        "disableColorWrite": false,
+        "depthFunction": 0,
+        "emissiveColor": "#FFFFFF",
+        "diffuseColor": "#FFFFFF"
+      },
+      "screenshot": {
+        "file": "dpr2-translatedtrue-astylar.png",
+        "sha256": "69498d67ab68f73778eb98d8629e20fd1866ae77e31a9672262734581096fb8f"
+      }
+    }
+  ],
+  "classification": "confirmed-core-paint-order-defect-in-public-reduction",
+  "ownerMaterialReplacementObserved": true,
+  "activeAndThumbBehindOpaqueAncestors": true,
+  "fullTrackOcclusionMechanismProven": false,
+  "materialSwappedThumbCauseProven": false,
+  "rendererChanged": false,
+  "renderingEquivalent": false,
+  "limitations": [
+    "Passive scene inspection is diagnostic, not part of application authoring.",
+    "Coplanar track disappearance needs draw-order/depth testing evidence; mesh presence is not visibility.",
+    "No private mutation or proposed paint correction was tested; Material slider causality remains separate."
+  ]
+}

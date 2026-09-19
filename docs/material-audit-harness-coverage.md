@@ -1,5 +1,21 @@
 # Complete audit harness coverage
 
+## Current inventory: passive range paint evidence
+
+Discovery contains **163 files** (155 Material + four general + four TTS, all
+43 legacy files retained). The new [paint proof](material-public-range-paint-audit.md)
+adds `public-range-paint.spec.mjs`. Its combined run with both original range
+proofs and inventory checks passes **15/15**, exit 0, no skips/cancellations/TODOs,
+in **11,623.4188ms**. Eight paired captures and sixteen screenshots document
+invisible range contents, opaque owner-material replacement and incorrect child
+paint depths, without editing renderer or comparison inputs.
+
+The independent current canonical `--check` is terminal, exit 1 only for the
+1,960 unresolved-group acceptance error. It reports no freshness error. The
+six historical integration suites are still running; the first suite passes
+and the second is live. These focused results are not a complete-harness or
+enforced parity pass. Earlier process statuses below are historical checkpoints.
+
 ## Current inventory: native range travel evidence
 
 Discovery now contains **162 files** (154 Material + four general + four TTS,

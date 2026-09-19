@@ -128,6 +128,11 @@ blank control boxes. They are retained, not corrected or treated as matching
 paint. Pointer actions use shared authored CSS points, not measured candidate
 thumb centers. No native-like range paint or visual equivalence is claimed.
 
+The subsequent [passive paint inspection](material-public-range-paint-audit.md)
+finds opaque owner-material replacement and active/thumb depths behind opaque
+ancestors in this unchanged public reduction. It does not alter these original
+captures or establish a cause for the Material example's swapped handles.
+
 Continuous controlled-value updates, overlapping peer constraints, pointer
 cancellation, vertical/RTL ranges, transformed/scrolled ancestors and the exact
 native travel metric remain follow-up cases. The public reproduction is isolated
