@@ -28,6 +28,18 @@ in **86,454.4118ms**, with no skips/cancellations/TODOs.
 
 ## Text-alignment ancestry population
 
+The [prepared source adapter](material-text-align-source-adapter.md) now replays
+the complete ancestry proof and binds all 49 proposed groups / 2,677 observations
+for future main-builder integration. A full-current-payload dry run finds all
+49 original rows still eligible and preserves 8,290 other complete rows with
+ordered digest
+`f1a073d29cf5b2aa0690e4f29c9c92835a46efb78c132013b8f214d765c3097f`.
+It would reduce the unresolved count from 1,960 to 1,911; the canonical files
+remain unchanged. Observation-stage classification is not proof of candidate
+computed alignment, and tooltip authoring omission is not a placement diagnosis.
+Source/transition/receipt and inventory checks pass **9/9**, exit 0, in
+**92,166.0688ms**, without failures, skips, cancellations or TODOs.
+
 The [exact canonical membership proposal](material-text-align-canonical-plan.md)
 now independently joins this full population to frozen `957774a`: 48
 observation-stage groups / 2,659 observations and one tooltip authoring-omission

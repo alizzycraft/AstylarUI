@@ -1,5 +1,22 @@
 # Complete audit harness coverage
 
+## Current inventory: text-alignment source adapter
+
+Discovery contains **167 files** (159 Material + four general + four TTS;
+all 43 legacy files retained). The new `text-align-audit-source-binding.spec.mjs`
+checks the [prepared 49-group adapter](material-text-align-source-adapter.md),
+complete independent source replay, partial-capture boundaries and rejected
+metadata/input changes. Its final combined run with inventory checks and the
+full-current-payload dry-run receipt passes **9/9**, exit 0, no skips,
+cancellations or TODOs, in **92,166.0688ms**. The dry run preserves all 8,290
+other complete rows. Its projected 1,911 unresolved groups are not the current
+canonical count; no main-builder or canonical report changes are made here.
+
+The historical serial integration run remains live in gap-review (PID 23500),
+after three passes and one explicit 3GB heap-limit failure. It has not yet
+finished owner-grid or retried the unchanged failed button-request suite with
+adequate memory. Complete harness and enforced parity acceptance remain open.
+
 ## Root-cause handoff replay
 
 The [updated implementation priorities](material-root-cause-implementation-handoff.md)
