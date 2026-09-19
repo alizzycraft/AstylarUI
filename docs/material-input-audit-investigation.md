@@ -3,6 +3,19 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Prepared alignment/font classification boundary
+
+The [source-replayed adapter](material-alignment-font-source-adapter.md) binds
+72 groups / 4,016 original observations from the reviewed alignment and
+additional control font-style plans. A read-only full-current-payload dry run
+preserves all other 8,267 complete rows and would reduce unresolved groups from
+1,960 to 1,888. It does not yet change canonical classifications. Source-stage
+differences and unequal authoring remain distinct from renderer causes or
+equivalent computed/used styles. The machine receipt retains all transitioned
+row hashes and complete canonical provenance.
+Adapter, transition, receipt and inventory checks pass **9/9**, exit 0,
+in **86,454.4118ms**, with no skips/cancellations/TODOs.
+
 ## Public range paint ownership
 
 The [passive range paint investigation](material-public-range-paint-audit.md)

@@ -61,8 +61,8 @@ The six unchanged historical production-integration suites started serially at
 with `--max-old-space-size=3072 --test --test-concurrency=1`: button box-sizing,
 button fixed-width, button requests, owner grid initial values, explicit gap,
 and gap review. Their log is `followup-six-historical-integrations.log`.
-The first suite passes **1/1**, in **1,106,262.4695ms**; the second child (button
-fixed-width) is live. A completed source-helper test is not substituted for
+The first two suites pass: button box sizing in **1,106,262.4695ms** and fixed
+width in **1,246,738.7431ms**. The third child (button requests) is live. A completed source-helper test is not substituted for
 these original production assertions, and no six-suite pass is claimed yet.
 
 ### Historical verification checkpoints

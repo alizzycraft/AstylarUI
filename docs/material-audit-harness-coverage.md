@@ -1,5 +1,18 @@
 # Complete audit harness coverage
 
+## Current inventory: alignment/font source adapter
+
+Discovery contains **164 files** (156 Material + four general + four TTS; all
+43 legacy files retained). `alignment-font-audit-source-binding.spec.mjs` covers
+the [prepared 72-group adapter](material-alignment-font-source-adapter.md).
+Its read-only full-current-payload dry run preserves 8,267 other complete rows;
+the projected 1,888 unresolved groups are not the current canonical count.
+The receipt-inclusive adapter and inventory verification passes **9/9**, exit 0,
+no skips/cancellations/TODOs, in **86,454.4118ms**.
+No main-builder, canonical report, renderer or comparison input changes are
+part of this increment. The six historical integration suites remain in progress
+after two passes. This is not complete-harness or enforced parity acceptance.
+
 ## Current inventory: passive range paint evidence
 
 Discovery contains **163 files** (155 Material + four general + four TTS, all

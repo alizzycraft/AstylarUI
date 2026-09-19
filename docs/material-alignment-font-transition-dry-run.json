@@ -1,0 +1,683 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-replayed-alignment-font-current-dry-run",
+  "sourceBinding": {
+    "file": "tests/material-parity/alignment-font-audit-source-binding.mjs",
+    "sha256": "6d4293becbecbdc6058533f0dec425c0f0e6a1a4d131f1c508eb0600fa9b89f7"
+  },
+  "log": {
+    "file": "artifacts/material-parity/field-host-flow-input-audit/alignment-font-current-dry-run.log",
+    "sha256": "f10d893aea55dbb907e5dd4235ef7e95bbf6f1ed500a79887fb349172a5d5506"
+  },
+  "canonicalIntegration": false,
+  "canonical": {
+    "format": "astylar-material-input-audit-gzip",
+    "formatVersion": 1,
+    "auditSchemaVersion": 3,
+    "payload": "material-input-equivalence-audit.json.gz",
+    "encoding": "utf-8",
+    "compression": "gzip",
+    "compressedBytes": 53455290,
+    "compressedSha256": "72b148d9be7f4aaf3bd5872faedad2273f408d2a5ef1c258f6944f60be5ffd07",
+    "uncompressedBytes": 1979347068,
+    "uncompressedSha256": "ee6db8ce5777cd316d6266f435502a732761a7177c3d8a45b2e7d40d45642e6a"
+  },
+  "canonicalRows": 8339,
+  "changes": [
+    {
+      "family": "autocomplete",
+      "element": "autocomplete-primary",
+      "property": "verticalAlign",
+      "occurrences": 110,
+      "previousCompleteRowSha256": "514bdaa817b74429debabd387f0b6ac7422bd7b2f728e47ec6074b9eaecc1369",
+      "projectedCompleteRowSha256": "46a9fd22630aa8dd9d9c92cd51307c732e89d3d660aff7fa8199a81d493a47d4",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "badge",
+      "element": "badge-count",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "0b348f39abfb02ca1d2f9f9ec622bbb71a481025a1a051a4f923189f19300ac6",
+      "projectedCompleteRowSha256": "552a0ca588cee6619108edc06f0870ac2f758b2baf2822f8ad34ba2f21ca6e04",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "badge",
+      "element": "badge-label",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "1db96fe397c61371bf21a440d30e9bed5a1e1b9fe88d45b8dcbfc01a1aaef7eb",
+      "projectedCompleteRowSha256": "b1d0e5d842c37ecbc3185edd614d9e20d14ee344c50b5279698568325b6f2424",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "badge",
+      "element": "badge-primary",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "225e77876c75069553ca2410e68112188b3019d3f06b4cdc9a0de4d91e8655d0",
+      "projectedCompleteRowSha256": "f2d964b82a419de7929c69b8366cff60e8888183249ea444eeeab2236aa5b456",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-copy",
+      "property": "verticalAlign",
+      "occurrences": 25,
+      "previousCompleteRowSha256": "ab2b0a55b781ffd34363d0f50fb3364fb95b14ddb8ed18f2c03d7f87d216efe1",
+      "projectedCompleteRowSha256": "dba428a8a5d827f8e640e54df234af01188da559465df859e3a71d8c59e2b0a9",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-dismiss",
+      "property": "verticalAlign",
+      "occurrences": 25,
+      "previousCompleteRowSha256": "e7359c9aecfaab94f19cd83ea6eab3e98a7d5f76ca9d68e1b3fc14e6c16ec619",
+      "projectedCompleteRowSha256": "573748fd78469fe0771f35061767785d161a0134574efac9ef320351bc8cbe43",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-panel",
+      "property": "verticalAlign",
+      "occurrences": 25,
+      "previousCompleteRowSha256": "f262957c06249d340ebedf537dd144ef6b694cff3daa5a640c27bb1e47ab85b2",
+      "projectedCompleteRowSha256": "92ae1f1bae2e0bf6220b30269fd1d851b4fe7f9d59e8d510dc85491624b50fe6",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "button-toggle",
+      "element": "button-toggle-one",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "0440673e94ca0fafcc84ed2a4f893863a054accf00f822bedcf26083d0b8e5b7",
+      "projectedCompleteRowSha256": "e3bf06265604afbb93214255f83931dcf1278e45efd3fee96b2310a4cfb9b2d4",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "button-toggle",
+      "element": "button-toggle-primary",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "252176fbefc70c9843d7a49b009fc482a276bea8085671d62ca3d3366a6eeb0d",
+      "projectedCompleteRowSha256": "2efaef3972167eb45b397ba184f45151e08cc79d22e52834831e60eec6400f1e",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "button-toggle",
+      "element": "button-toggle-two",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "77385767d07c067d7b3d22e44d9956ef3dd473775b1658b7e36aae28233cf17a",
+      "projectedCompleteRowSha256": "63cf5a45bd12f33e17212a8c963813621fd7275e416c2834483b4d9826ae3d30",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "card",
+      "element": "card-copy",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "69a3a9497f4be18352a7a45f805192ffadabf242c1c94ac7e8a40ab737d379d5",
+      "projectedCompleteRowSha256": "96e76230379a29c4280a4a1ce9bfd68d6675a6d241ea8a1ff29b6e7025b805e3",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "card",
+      "element": "card-open",
+      "property": "fontStyle",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "3760606ece99ca3837401150ae4c449cf1bcd54299436de9f6ea4aa33fea409e",
+      "projectedCompleteRowSha256": "1cc00ea062d2c8de6051844f50bb7a2eafd6c0127d937e204222c8aab542a295",
+      "attribution": "reviewed-additional-control-font-style-reset-omission"
+    },
+    {
+      "family": "card",
+      "element": "card-open",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "a8449103132a7703340cc6ca30c3f87663ffebc5a06dc11074e31ce7846893f8",
+      "projectedCompleteRowSha256": "e2fd8b6490c3934f15a6abfd971246df40b33d70110e4b0ff70fa087030154e3",
+      "attribution": "reviewed-reference-alignment-request-omission"
+    },
+    {
+      "family": "card",
+      "element": "card-primary",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "4e6f2623af7a88adf4adb925dbaa241e6821c9cb8df12058075bc89a78717370",
+      "projectedCompleteRowSha256": "309b7faf1262ea0e29bc8afe223b346c79ef7c61366b498f8eba569dc388b35f",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "card",
+      "element": "card-title",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "f15a54f77ee76eb2b863e4d4647a06f4e5ab0ce8e5d29d45389e9bb6107ebecf",
+      "projectedCompleteRowSha256": "799db16a9dca6647d58434a1fb63c05651fee5554e33d00faf4cec110dea10de",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "checkbox",
+      "element": "checkbox-label",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "a1c19a1dddc02583894b646d0b06054094e3410bc150b083c5c328a7797945a0",
+      "projectedCompleteRowSha256": "5f85216d834e23a926e3572c9c66571672a1eabb7c55522df28669cd44c9528f",
+      "attribution": "reviewed-candidate-alignment-request-substitution"
+    },
+    {
+      "family": "checkbox",
+      "element": "checkbox-primary",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "1ef51f8496b6ada21a0cdc006b607582ed3b16f4348a7c8870fb86f2bc0c635c",
+      "projectedCompleteRowSha256": "e044da21dc00ee6f58f2bf46fba29dfc8f87fa4b80e85e1228aaaf083bfc373f",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "chips",
+      "element": "chip-0",
+      "property": "verticalAlign",
+      "occurrences": 76,
+      "previousCompleteRowSha256": "e95371efb9dc1fbd10de42898e33a99860d110ab60e8048f1cde57dc23ef790d",
+      "projectedCompleteRowSha256": "3e55243f810c119c1f096db519530fadebbe1aeb9176c3603692b985079613c3",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "chips",
+      "element": "chip-1",
+      "property": "verticalAlign",
+      "occurrences": 76,
+      "previousCompleteRowSha256": "494f162d37cae0f4957fd34933620d2160651c938be88d4e2d47ea74b023163e",
+      "projectedCompleteRowSha256": "a6845b709840d419df4d207b32a4d771445b2ab8d54c77e377747748113d85bf",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "chips",
+      "element": "chips-primary",
+      "property": "verticalAlign",
+      "occurrences": 76,
+      "previousCompleteRowSha256": "3d5abc8f8f853487f2b44cbc3b82412c60664d7930e232680241fb3561147814",
+      "projectedCompleteRowSha256": "4169be053e6f2eab7ae94034078f813fb7e03902a916062800cf96a4ac27bab1",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "datepicker",
+      "element": "datepicker-primary",
+      "property": "verticalAlign",
+      "occurrences": 111,
+      "previousCompleteRowSha256": "dde87aa863954d6dafb416bbc66973651e05c2010dcfff40081efa551d466798",
+      "projectedCompleteRowSha256": "4c1cb40feee105c47086c0f880244f47c12ab06f050f79fad407859b2f829b7e",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-actions",
+      "property": "verticalAlign",
+      "occurrences": 32,
+      "previousCompleteRowSha256": "6d6b214f090a301fde9f232dbd2072f77b5fc6be0a6489add1505059df789a99",
+      "projectedCompleteRowSha256": "96b7d75fde2360f206e0991e3944b59995e4317dc33a99f8bf788fad344ca967",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-cancel",
+      "property": "fontStyle",
+      "occurrences": 32,
+      "previousCompleteRowSha256": "79b44937a893afc95aa5c73598008404ca8ea33a3f6435193ef8ff2164c8162a",
+      "projectedCompleteRowSha256": "c151811d205b65990f1d60844a95490c0f6a146604433286615174121f5c7fa0",
+      "attribution": "reviewed-additional-control-font-style-reset-omission"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-cancel",
+      "property": "verticalAlign",
+      "occurrences": 32,
+      "previousCompleteRowSha256": "a7eca33340b6c4026cc0325e85107db55c503dcf4d8fc6269ac0f2eff9dc9bcc",
+      "projectedCompleteRowSha256": "fe4030f82803e43dfdada16f0ff4285834285eb61e59139ce09227f4a6472577",
+      "attribution": "reviewed-reference-alignment-request-omission"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-copy",
+      "property": "verticalAlign",
+      "occurrences": 32,
+      "previousCompleteRowSha256": "3d063d6c94a4dfa65bcc466822df8a5c0eee0bd04b8b44cc345d770452d4d24d",
+      "projectedCompleteRowSha256": "d8937ef5abeea28fde9347954ed0cfd8ef4bbc2afbb14f19509fd91c7d39b375",
+      "attribution": "reviewed-candidate-alignment-request-substitution"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-panel",
+      "property": "verticalAlign",
+      "occurrences": 32,
+      "previousCompleteRowSha256": "9a44e6dcf4e300abc868e176d00a38cae8a526648b601e894be96e7bd1841ec5",
+      "projectedCompleteRowSha256": "9ab1c9ee90f699a9908bde4f322ed1998b68099c7de5061c3a0775b156597e4e",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-save",
+      "property": "fontStyle",
+      "occurrences": 32,
+      "previousCompleteRowSha256": "9036709368e1a758a82b2d35cea7ba9ae81d26cec2f57acfb195d470ad1449f4",
+      "projectedCompleteRowSha256": "3ecbb6dd8eabb4af28387c3bf4e22d0252ff00ec7c2e8d2181c8df9bbfccd96a",
+      "attribution": "reviewed-additional-control-font-style-reset-omission"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-save",
+      "property": "verticalAlign",
+      "occurrences": 32,
+      "previousCompleteRowSha256": "bf077dc8fe128c061d860379a29ff0cc0c05b1d9fd517861c1f17d948268e4eb",
+      "projectedCompleteRowSha256": "6f338684e93156e992a238cb39fd62e9ae4754b6006a0ba95729325ee5548448",
+      "attribution": "reviewed-reference-alignment-request-omission"
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-title",
+      "property": "verticalAlign",
+      "occurrences": 32,
+      "previousCompleteRowSha256": "dfa286b55e36a4dd3aab9065dc2a27979025fb57cb9f0b1bbd5f1c0cfc0f9b3e",
+      "projectedCompleteRowSha256": "7241ceabc0376656cc2b6b897fd1473c002a0df0633e5c4dd113ec9bd8d5a61e",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "divider",
+      "element": "divider-above",
+      "property": "verticalAlign",
+      "occurrences": 24,
+      "previousCompleteRowSha256": "65461457d2cc1ad83b8d168b85c86c7c7d0c022598e8ce5ea00f21f2ee0afb2c",
+      "projectedCompleteRowSha256": "229c4e10d8b996cc587ae8f27ada9cfe759355a21d2d73bcb3e53c652dffab5b",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "divider",
+      "element": "divider-below",
+      "property": "verticalAlign",
+      "occurrences": 24,
+      "previousCompleteRowSha256": "6867f082ed99ff41d3e532e23f62bc1e75754258de4811439ea47ccbfc9d62cf",
+      "projectedCompleteRowSha256": "609b387daab47ed8ac070e3068622b7555040420686e88710f2a38ec27f80723",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "divider",
+      "element": "divider-primary",
+      "property": "verticalAlign",
+      "occurrences": 24,
+      "previousCompleteRowSha256": "e914d9c0b906f5588c8acd168a6c96c1acb3bd64c97b1d682b1016c5a0557865",
+      "projectedCompleteRowSha256": "49721dffa10c9228357b1fb32323cbf2145d1c8f251fbddb77d62fab78e53b31",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "expansion",
+      "element": "expansion-title",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "14a0bb5e70cebc0287893e8caac709bb72a6dc51f23d78fe378ef1a67869653b",
+      "projectedCompleteRowSha256": "a704ed1075f57a5d6f9ec72bc029648f0217b427961b07d24ac59710cd42fa2d",
+      "attribution": "reviewed-candidate-alignment-request-substitution"
+    },
+    {
+      "family": "form-field",
+      "element": "form-field-primary",
+      "property": "verticalAlign",
+      "occurrences": 76,
+      "previousCompleteRowSha256": "b0362d39f43ef895184d1c160378d44e8e80dc048ca8955dc5b1c69d145582ad",
+      "projectedCompleteRowSha256": "00257063aa7524d8281f83f284bc872cc319170b1b82e57d488ab97bf1a7d71b",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-list-primary",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "adc238ae60abf6bbdc2fcd05382d9f24d4411ddeae5d237068c52d5fc8aaf7af",
+      "projectedCompleteRowSha256": "dee002797b3f52ee782a2f6989081d5458964c23923c32f7320f54d1bc50e0a7",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-tile-one",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "a7ce6f2d12976042885d814ee46285e2bf2a1fe72c64e406c70a5d0de2c447f1",
+      "projectedCompleteRowSha256": "cea9e8e324fc0023a749ae726ac9505774e7c6b02b5dd141a3748b659d24e640",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-tile-two",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "eac9be21a43ec9d89c7c48036fdca1e1bf1317855814ee7ad77463a6785718f7",
+      "projectedCompleteRowSha256": "31849110191a5e571cb97a85e109096401b9564f4b4bffcf4c023d30c01f7434",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "icon",
+      "element": "icon-primary",
+      "property": "verticalAlign",
+      "occurrences": 20,
+      "previousCompleteRowSha256": "3cca196148ff5780c2cb909ad1c4aaa9eda614aaaca51923b9833b0ca64a788b",
+      "projectedCompleteRowSha256": "91fdf214f3d97b453da57ceb10911f6b913441cc5805bec8cc59c0939083ab3e",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "input",
+      "element": "input-primary",
+      "property": "verticalAlign",
+      "occurrences": 76,
+      "previousCompleteRowSha256": "0be398ca6644dcf7fb15211e65c4f20a3ba743e39477ee61194c56e5118c9259",
+      "projectedCompleteRowSha256": "83846aa9593fd19d156ddceb0fb08b4776c62357d4381f8847527ca1cf0e21de",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "list",
+      "element": "list-primary",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "589c95b960bc0eeacf2e2414be69bd0219c4212bf9e9be5a54725261db135005",
+      "projectedCompleteRowSha256": "5c2a5c5f38110652cd1f3f41f9fff3069c506ab587a7f1a66b206bbe9e49d055",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "paginator",
+      "element": "paginator-primary",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "58c6e618a8404d6200deb45f5fef282e6503e14602e096f39139570762635b72",
+      "projectedCompleteRowSha256": "790076f798d8efc1c28ffdfd73fd1504bd96a2bd90729f8b755bfe2f1a981ab0",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "paginator",
+      "element": "paginator-range",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "940a4dd3d6acb225b84e35dbd079d03805bfb9967e3485c5bd392f4184174bae",
+      "projectedCompleteRowSha256": "f6e43251b5c9dde2e676b514b1fe52c780e95a7d14310ff576387c0008093493",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "paginator",
+      "element": "paginator-size",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "f84009ec06f5e3b478d86e6c095e2d2e9667e40e5a655b5fa981890de70c8412",
+      "projectedCompleteRowSha256": "e3ddfe10bb08076fa3c44449c77684461e64ff37b88a6cbf609f12a017f12e72",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "progress-bar",
+      "element": "progress-bar-primary",
+      "property": "verticalAlign",
+      "occurrences": 20,
+      "previousCompleteRowSha256": "dbe5f18f875156a97245c3a5d66f593ddfb0f3487ec1272fc41b5bb0174f0811",
+      "projectedCompleteRowSha256": "bc8133e51a143284bb1e9b65c55878138e043f681b2b081a830d96cd8f3953d9",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "progress-spinner",
+      "element": "progress-spinner-primary",
+      "property": "verticalAlign",
+      "occurrences": 20,
+      "previousCompleteRowSha256": "7516b65a12c9fead4df260442faa1a988edc6d0fcbefd527d0a08c5613b6f7a7",
+      "projectedCompleteRowSha256": "e04a2bc174cefd696c16998b241e0a5a92532ce9f0273719ce772f402803db3f",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "radio",
+      "element": "radio-primary",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "7685cad1c6ab41b5cb9478b58734ea538f33e06471b2bf41a56fd4bd27a17e39",
+      "projectedCompleteRowSha256": "ed2109f23e36ade5cae9f496d13f6619a9ea1e8eecb8d0b2557415e479dc7e71",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "radio",
+      "element": "radio-solo-label",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "2c3dbe6be0b4abeaf9b9920789ce35d92c04e4f8cde666d21b1b57e806186550",
+      "projectedCompleteRowSha256": "3b27bfae5b487fdeaf54bb155b5eef6016c717261e3fd1d59ea213e33ed6ac5b",
+      "attribution": "reviewed-candidate-alignment-request-substitution"
+    },
+    {
+      "family": "radio",
+      "element": "radio-team-label",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "56b6d3e0e6ccba99753616dc5bc72d012a324a67bb166e780ba9b88ac298a080",
+      "projectedCompleteRowSha256": "769a7c9ce7a1eb76313ad3705b21f81f6dc2b668fcadcc1651968cbaa99caf4a",
+      "attribution": "reviewed-candidate-alignment-request-substitution"
+    },
+    {
+      "family": "select",
+      "element": "select-primary",
+      "property": "verticalAlign",
+      "occurrences": 94,
+      "previousCompleteRowSha256": "eae69b7c26cafb3a4a02532a7d880f9f647324c01f687936ea6160f237073a2f",
+      "projectedCompleteRowSha256": "8b9af7c345cd1a449b8e8d53cc7a8fd35aedbec3a559d1a6cd906b2e5413efb8",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "sidenav",
+      "element": "sidenav-primary",
+      "property": "verticalAlign",
+      "occurrences": 62,
+      "previousCompleteRowSha256": "d8ea73c87b6134fb7600c48a49591e99eee5f9fea6c2ba618429e7197e452d76",
+      "projectedCompleteRowSha256": "55eb2419398901adc2e06c44b82b693e9be143267ec6dac90a4c5982a0b8ceb2",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "slide-toggle",
+      "element": "slide-toggle-label",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "29ab5e0835a03dead01a84bde5b748489acb84011362e43563d4cc2e8ed5ca05",
+      "projectedCompleteRowSha256": "6fff13154a8514e5c893294920d35409c8674516f08d76a43b599f8f43fcd2b0",
+      "attribution": "reviewed-candidate-alignment-request-substitution"
+    },
+    {
+      "family": "slide-toggle",
+      "element": "slide-toggle-primary",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "203556cd9600ec29a8cd30e5e8eae2d92e0659609e3b1bbf24c9c56422a5ac03",
+      "projectedCompleteRowSha256": "5c7a8ab5532760035bb2e7ec13d2b36586b599f47d38a03caff43b475188a200",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "slider",
+      "element": "slider-primary",
+      "property": "verticalAlign",
+      "occurrences": 78,
+      "previousCompleteRowSha256": "6f1ca2cdc0ec0d4c49bb895e585d1263a77c5988590880ff3da4e613c9b2b9ff",
+      "projectedCompleteRowSha256": "d5238e246c647e1f21754256964b5e7197a551b2cba2b8f17809a429ddbb991e",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "slider",
+      "element": "slider-start",
+      "property": "verticalAlign",
+      "occurrences": 78,
+      "previousCompleteRowSha256": "6a01bc79d5781e6e54011116729bab9f9bb5bff2b21d1208f26319d8c8c7d56d",
+      "projectedCompleteRowSha256": "b5c494b5510864c7cb85a11dfba253dbb97923466f07157a65f21ab5263a2042",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "slider",
+      "element": "slider-visual",
+      "property": "verticalAlign",
+      "occurrences": 78,
+      "previousCompleteRowSha256": "b197b85558cb042ebaeacab8f4f63f25187d59a4fcc81c2bfadf1f4acffb201a",
+      "projectedCompleteRowSha256": "56d5c06bc4240fe1598d5e5db75150c0917f9705e087124e9a35dc27ede13bcd",
+      "attribution": "reviewed-reference-alignment-request-omission"
+    },
+    {
+      "family": "snack-bar",
+      "element": "snack-bar-surface",
+      "property": "verticalAlign",
+      "occurrences": 34,
+      "previousCompleteRowSha256": "6eb7055c329fe83a51d01b93810ac64d3b501c9ecc00f99950d16ab1c7cd0d6d",
+      "projectedCompleteRowSha256": "6d72157ab35abf77bc406ea8a5101aae0c102ffc03b871f055b1d76568796d34",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "sort",
+      "element": "sort-primary",
+      "property": "verticalAlign",
+      "occurrences": 60,
+      "previousCompleteRowSha256": "6007fcfff9fcb9ebc1f9c6e528e870ba45677c349dbb87b47d9bd53d501b4512",
+      "projectedCompleteRowSha256": "d5a166c9c0b453f2c9efdf634d48a2aaec8f0c192ba25c83b7547634242ad17c",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "stepper",
+      "element": "step-details-text",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "deb951bd6cb091f013d1c89378ccc43e2d248c7f5bb1afd52440b370fe670444",
+      "projectedCompleteRowSha256": "88927f916df8e037c2ff7d4f148e1803a60a8ef81078343742604afbdc5dd50d",
+      "attribution": "reviewed-candidate-alignment-request-substitution"
+    },
+    {
+      "family": "stepper",
+      "element": "step-review-text",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "2c3c4a6a68e0ac09051d779d3fd3d837f1bf2bf386614f7294ea41e669db7eca",
+      "projectedCompleteRowSha256": "d76d9f8d8bae3b5ca7d7e3421d950d9fb62b55ce48c673ab765b402f85c084cc",
+      "attribution": "reviewed-candidate-alignment-request-substitution"
+    },
+    {
+      "family": "stepper",
+      "element": "stepper-content",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "ba938cad1b37558542110180bcca7bbb41bf8ebce604db9c26f0e637e1b50b10",
+      "projectedCompleteRowSha256": "ba31e90d435f1964ec4a32351274088d9c36549d6c4efbed572084a50bb798a7",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "stepper",
+      "element": "stepper-primary",
+      "property": "verticalAlign",
+      "occurrences": 68,
+      "previousCompleteRowSha256": "1ef87b909d96e4f7ea7be5a2f3c4a02295679463db3510a0085337474f85194b",
+      "projectedCompleteRowSha256": "c9707e5d7652c69034b6d5103ca386ca9ad4bfc61137a672b4524122569aada1",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "table",
+      "element": "table-primary",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "a315bf0784da92d7510cac3211e2f786a0a17cf005da854d07e38051414305b1",
+      "projectedCompleteRowSha256": "27c3ac63508419644651e3b47a2ac86b56dc62365cc2519d208a539c8d286778",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "tabs",
+      "element": "tab-activity",
+      "property": "verticalAlign",
+      "occurrences": 70,
+      "previousCompleteRowSha256": "9bc1542436d1602e05ad2b775b07c914e9ff89f378a30fdffbf67345f0b6c3dd",
+      "projectedCompleteRowSha256": "c5afcf6d4105e70d238c1e6010351940a82b1c4d852811050a8f83075d8dc3de",
+      "attribution": "reviewed-candidate-alignment-request-substitution"
+    },
+    {
+      "family": "tabs",
+      "element": "tab-overview",
+      "property": "verticalAlign",
+      "occurrences": 70,
+      "previousCompleteRowSha256": "a2214395b43d8d3bf34d00c8d4e5795663b0056b9f255c853266d95c7e527acf",
+      "projectedCompleteRowSha256": "bea5d9c13e7bfe754d747cba4bffc5ed09a2c32882176d31b1aae0c80b6caa5c",
+      "attribution": "reviewed-candidate-alignment-request-substitution"
+    },
+    {
+      "family": "tabs",
+      "element": "tab-panel",
+      "property": "verticalAlign",
+      "occurrences": 70,
+      "previousCompleteRowSha256": "97b9931bd9549bf273dbfc054cf96a5f2fa67e386e14c2540d672e010e065d1c",
+      "projectedCompleteRowSha256": "bbf3e7d3bfe68f28bbf07200aa03f86d60b67e1f2b5cfa71ebe3e76dd4650e27",
+      "attribution": "reviewed-candidate-alignment-request-substitution"
+    },
+    {
+      "family": "tabs",
+      "element": "tabs-primary",
+      "property": "verticalAlign",
+      "occurrences": 70,
+      "previousCompleteRowSha256": "480cbf98814a1048875d1a93163b943d2c14fcc138c8cebc35e9dbd547de4231",
+      "projectedCompleteRowSha256": "a47b6fc7010d175eb3b306a53e4d84bd013f93fd2fef0f729ff2f83274a4a0aa",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "timepicker",
+      "element": "timepicker-primary",
+      "property": "verticalAlign",
+      "occurrences": 110,
+      "previousCompleteRowSha256": "f7fcca8f17d5fe57e2425b4dd16f94ce01917f8d034416b0c67c3a71cf41d044",
+      "projectedCompleteRowSha256": "9c9f83f4f3bc313553556ea519161f282a010f6d8c3dd31edffa0d177499fec3",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "toolbar",
+      "element": "toolbar-action",
+      "property": "fontStyle",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "2333c556e22c46fb672dbd77e99511b4e3223c13e37fdbaaa77c47485a4999b5",
+      "projectedCompleteRowSha256": "6fef7be0ad13ff430cd58122dd8a596ea8161fa6a7f523c0d322e37e029dcec3",
+      "attribution": "reviewed-additional-control-font-style-reset-omission"
+    },
+    {
+      "family": "toolbar",
+      "element": "toolbar-primary",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "10a5cbabc4e75fe701097292f7e0c4253660f31439a093868853eceb29bad95b",
+      "projectedCompleteRowSha256": "53603d7793c1ca7e490664540bb68d04985b800d20e317dc42df21c435684464",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "toolbar",
+      "element": "toolbar-title",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "9c11ca40f5cb7f64578f25b3b28ea2f6c0c0b0d386abdeb6f552c2787dbd0d97",
+      "projectedCompleteRowSha256": "1f2ebbe1911c51c0187c402a1f84be9ced55dc1f6b335f0639ff038518b842ee",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "tooltip",
+      "element": "tooltip-popup",
+      "property": "verticalAlign",
+      "occurrences": 18,
+      "previousCompleteRowSha256": "b4ba81b9d6dc6887805f84b7b37b821c899379fd8f80e84fe20b422dd4663427",
+      "projectedCompleteRowSha256": "7c957482f46dfeb7d168be8b44a90ac52139518505eeb58ca09d7816b698ca5d",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    },
+    {
+      "family": "tree",
+      "element": "tree-primary",
+      "property": "verticalAlign",
+      "occurrences": 52,
+      "previousCompleteRowSha256": "93a69003ccee7f4b5c4d166745ee81409b42610dce0157b7c10f9dc2a0154916",
+      "projectedCompleteRowSha256": "ca8f628ce586956bdcaf0a1354a50076c643ca8d727b01156d85ffb2c4dc96d4",
+      "attribution": "reviewed-alignment-observation-stage-mismatch"
+    }
+  ],
+  "unchangedCompleteRows": 8267,
+  "unchangedOrderedRowDigestsSha256": "3e9fbd9e6d1df52e39a5a57a7473d3f7c77e18e81ebcece3eee227ece519d7b0",
+  "previousUnresolved": 1960,
+  "projectedUnresolved": 1888,
+  "canonicalFilesChanged": false,
+  "inputEquivalent": false,
+  "renderingEquivalent": false
+}
