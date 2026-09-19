@@ -66,7 +66,9 @@ width in **1,246,738.7431ms**. The third child (button requests) has failed,
 exit **134**, in **952,653.3361ms**. Its log explicitly reports
 `Reached heap limit Allocation failed - JavaScript heap out of memory` near
 the imposed 3GB cap. This is not an assertion result. The unchanged serial run
-continues with owner-grid initial values (child process 7448). Finish its
+continues with explicit-gap integration (child process 7448, confirmed by its
+current command line; the previous owner-grid label incorrectly assumed
+argument order). Finish its
 remaining suites, then retry the unchanged failed suite with adequate memory;
 do not weaken its populations or conservation assertions. A completed
 source-helper test is not substituted for these original production assertions,

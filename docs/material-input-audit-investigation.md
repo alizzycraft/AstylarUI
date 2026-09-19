@@ -18,6 +18,15 @@ in **86,454.4118ms**, with no skips/cancellations/TODOs.
 
 ## Text-alignment ancestry population
 
+The [exact canonical membership proposal](material-text-align-canonical-plan.md)
+now independently joins this full population to frozen `957774a`: 48
+observation-stage groups / 2,659 observations and one tooltip authoring-omission
+group / 18 observations are proposed. It preserves 42 earlier group reviews,
+retains 10 groups / 413 observations for specific investigation, and leaves
+8,290 other complete rows outside the proposal. The full-source/full-payload
+no-write proof, 29 negative controls and inventory checks pass **8/8**, exit 0,
+in **145,748.1348ms**. No current canonical classifications are changed.
+
 The [original text-alignment census](material-text-align-ancestry.md) now covers
 all 101 differing groups / 5,978 observations across all 2,311 original cases.
 It retains 960 equal scalar observations, eight missing tooltip counterparts,
@@ -31,8 +40,10 @@ in 36,946.388ms. This is a source survey, not a canonical attribution reduction.
 The six historical integration suites have reached two passes and one failure:
 button requests exhausted the explicitly imposed 3GB V8 heap (exit 134) after
 952,653.3361ms. The log explicitly reports a JavaScript heap-limit allocation
-failure; no assertion failure or corrected behavior is inferred. The serial
-run continues with owner-grid initial values. Its remaining suites must finish,
+failure; no assertion failure or corrected behavior is inferred. The current
+child command confirms the serial run is executing **explicit-gap** integration
+(PID 7448), not owner-grid as the earlier checkpoint assumed from argument order.
+Its remaining suites must finish,
 then the unchanged failed test needs a memory-adequate retry before promotion.
 
 ## Public range paint ownership

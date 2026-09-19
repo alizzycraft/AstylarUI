@@ -1,5 +1,22 @@
 # Complete audit harness coverage
 
+## Current inventory: text-alignment canonical membership
+
+Discovery contains **166 files** (158 Material + four general + four TTS;
+all 43 legacy files retained). `text-align-canonical-plan.spec.mjs` verifies the
+[49-group source-bound proposal](material-text-align-canonical-plan.md), full
+original membership, all frozen canonical bytes, conservation and 29 negative
+controls. Together with inventory checks it passes **8/8**, exit 0, in
+**145,748.1348ms**, with no failures/skips/cancellations/TODOs.
+Canonical classifications and comparison inputs remain unchanged.
+
+The six-suite historical run remains live after two passes and the button-request
+3GB heap-limit failure. The current child command identifies explicit-gap
+integration (PID 7448). The prior owner-grid progress label was inferred from
+argument order and was not correct; no owner-grid result is claimed.
+The unchanged failed test still needs a memory-adequate retry after the serial
+run. Complete current harness and enforced parity acceptance remain outstanding.
+
 ## Current inventory: text-alignment ancestry
 
 Discovery contains **165 files** (157 Material + four general + four TTS;
