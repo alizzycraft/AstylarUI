@@ -120,3 +120,41 @@ fully classified. The active audit goal is incomplete.
 Unless otherwise specified, logs above are under
 `artifacts/material-parity/field-host-flow-input-audit/`. Future retries must use
 new log names and report their exact terminal results separately.
+
+## Alignment integration: complete conservation, freshness running
+
+The isolated integration worktree completed the three full canonical-row suites
+on September 20: **3/3 pass**, exit 0, **1,673,119.289ms**, with zero failures,
+skips, cancellations or TODOs. The exact suites are
+`prepared-alignment-canonical-integration.spec.mjs`,
+`followup-input-canonical-integration.spec.mjs`, and
+`reviewed-input-canonical-integration.spec.mjs`.
+
+They authenticate every byte of the generated payload and the corresponding
+historical payloads, independently replay the 125-group alignment transition,
+and compose the earlier 66- and 134-group reviews without dropping unrelated
+rows. The full composition accounts for 325 groups / 12,836 observations and
+preserves 8,014 other complete rows, whose ordered digest is
+`8957656d3239c3000fa312a851d8ce9f536315eafbe25d2b02a6dd97bcb29ce4`.
+Current count remains 8,339 groups / 386,891 observations, including 1,835
+unresolved groups. These counts are not renderer bug counts or input equivalence.
+
+Log: `alignment-full-canonical-conservation-current-sep20.log`. The generated
+payload's compressed digest is
+`c08d24e94671c18e0c640638ca234b9571720080474115cc2b8388a2883a810e`;
+decoded digest is
+`33ff5976cc035a770d96d2e9e4f408bb75284065950e01885187d2e921ede41c`.
+
+After requiring this exact successful terminal TAP summary, the queued CLI
+freshness job started at **19:04:09 Africa/Johannesburg**. It runs the actual
+`scripts/run-material-input-audit.mjs --check` with all original main,
+normal-line-box, control-line-box, supplemental-line-box and supplemental-root
+inputs. Log: `alignment-canonical-cli-freshness-current-sep20.log`. Its terminal
+result is pending; silence while the confirmed process runs is not failure.
+Canonical inputs remain unchanged during this check.
+
+The previous launch-time 171-file test inventory is historical. New standalone
+authoring and motion proofs have expanded the inventory; the final complete
+harness must discover all current files. Neither these three conservation
+suites nor the new focused browser proofs replace the complete enforced parity
+matrix. No renderer, plugin or canonical fixture behavior was changed.
