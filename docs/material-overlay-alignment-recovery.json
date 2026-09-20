@@ -1,0 +1,3998 @@
+{
+  "schemaVersion": 1,
+  "kind": "overlay-alignment-context-recovery",
+  "sourceSelection": {
+    "file": "docs/material-remaining-text-alignment.json",
+    "sha256": "dea5e1d68c6d5fdb29ea4445729ef52b36fb5333691da7e439bf6c461cb864a7"
+  },
+  "contextCapture": {
+    "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/latest-report.json",
+    "sha256": "74813a6a0872c7215e338639d395279a5e0016bfb3b0a44123e4994a8501489e",
+    "verifiedCases": 91,
+    "matchedOwners": 200
+  },
+  "sourceFingerprints": [
+    {
+      "file": "tests/material-parity/original-overlay-context-survey.mjs",
+      "sha256": "71422c360dcd115e4ee2f49162f3de882d757435aab1f531840355c7eea32c93"
+    },
+    {
+      "file": "tests/material-parity/origin-alias-mapping-evidence.mjs",
+      "sha256": "bd6a621438f2053d7edacc3d669e927f3306753c636849ff5df8e724b3fc472d"
+    },
+    {
+      "file": "tests/material-parity/overlay-owner-declaration-review.mjs",
+      "sha256": "491756e3c4c948e43a264d70f39d69a0114abb6fda8999b84e674e5d359736bc"
+    }
+  ],
+  "recoverySource": {
+    "file": "scripts/audit-overlay-alignment-recovery.mjs",
+    "sha256": "cbfb06cd9db8b0abf2c866c1ed16fe723c68304f4a6283eecd95bfb735552a36"
+  },
+  "groupCount": 2,
+  "observations": 59,
+  "patterns": [
+    {
+      "sha256": "0a25be25acb360acbb1f121b724df947e12e6e16611660733e05d3913efdc025",
+      "proof": {
+        "identity": {
+          "status": "mapped-with-scalar-rule-gap",
+          "method": "existing-generated-owner-proof",
+          "referenceNode": "overlay:0/1",
+          "candidateNode": "root/0/2/1",
+          "referenceType": "div",
+          "candidateType": "div",
+          "checkedReferenceProperties": 89,
+          "referenceOrigin": "720px 500px",
+          "candidateOrigin": "<omitted>",
+          "missingRules": [
+            {
+              "selector": ".cdk-global-overlay-wrapper",
+              "declarations": {
+                "z-index": {
+                  "value": "1000",
+                  "important": false
+                }
+              }
+            }
+          ],
+          "extraRules": [],
+          "referencePath": [
+            "overlay:0/1",
+            "overlay:0"
+          ],
+          "candidatePath": [
+            "root/0/2/1",
+            "root/0/2",
+            "root/0",
+            "root"
+          ],
+          "inputEquivalent": false,
+          "computedCandidateOriginVerified": false,
+          "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+        },
+        "traces": {
+          "textAlign": {
+            "property": "textAlign",
+            "referencePath": [
+              {
+                "node": "overlay:0/1",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "start",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "start",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "bottom-sheet-overlay",
+                  "class": "modal-overlay bottom-sheet-overlay",
+                  "role": "dialog",
+                  "ariaLabel": "Open bottom sheet"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "bottom-sheet-root",
+                  "ariaLabel": "bottom-sheet showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "direction": {
+            "property": "direction",
+            "referencePath": [
+              {
+                "node": "overlay:0/1",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "ltr",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "ltr",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "bottom-sheet-overlay",
+                  "class": "modal-overlay bottom-sheet-overlay",
+                  "role": "dialog",
+                  "ariaLabel": "Open bottom sheet"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "bottom-sheet-root",
+                  "ariaLabel": "bottom-sheet showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "unicodeBidi": {
+            "property": "unicodeBidi",
+            "referencePath": [
+              {
+                "node": "overlay:0/1",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "isolate",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "isolate",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "bottom-sheet-overlay",
+                  "class": "modal-overlay bottom-sheet-overlay",
+                  "role": "dialog",
+                  "ariaLabel": "Open bottom sheet"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "bottom-sheet-root",
+                  "ariaLabel": "bottom-sheet showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "writingMode": {
+            "property": "writingMode",
+            "referencePath": [
+              {
+                "node": "overlay:0/1",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "horizontal-tb",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "horizontal-tb",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "bottom-sheet-overlay",
+                  "class": "modal-overlay bottom-sheet-overlay",
+                  "role": "dialog",
+                  "ariaLabel": "Open bottom sheet"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "bottom-sheet-root",
+                  "ariaLabel": "bottom-sheet showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          }
+        },
+        "externalReferencePath": [
+          {
+            "node": "html/1/14",
+            "parent": "html/1",
+            "type": "div",
+            "attributes": {
+              "class": "cdk-overlay-container"
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "isolate",
+              "writingMode": "horizontal-tb"
+            }
+          },
+          {
+            "node": "html/1",
+            "parent": "html",
+            "type": "body",
+            "attributes": {
+              "ngcm": ""
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "normal",
+              "writingMode": "horizontal-tb"
+            }
+          },
+          {
+            "node": "html",
+            "parent": null,
+            "type": "html",
+            "attributes": {
+              "lang": "en",
+              "data-beasties-container": ""
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "normal",
+              "writingMode": "horizontal-tb"
+            }
+          }
+        ],
+        "externalStylesheets": [
+          {
+            "index": 0,
+            "sha256": "09aece073cd69a7da6658faf8a6ecc4c707938be31c2af66dd41e17fbd9ff7a7",
+            "ruleCount": 29
+          },
+          {
+            "index": 1,
+            "sha256": "30971205e474b6a8e006d9115ceb639123888c496c8bb8edebb732c45e2739b6",
+            "ruleCount": 162
+          },
+          {
+            "index": 2,
+            "sha256": "1f4107bb58abe00cfc5a9c72a552220deb79783ffa7dfc8342bd3f20a7d45f13",
+            "ruleCount": 5
+          },
+          {
+            "index": 3,
+            "sha256": "4571a9f35eb3a88e03198fa0a08d7a1db7c3a59003a6b67de48439fc2ed25bc4",
+            "ruleCount": 16
+          },
+          {
+            "index": 4,
+            "sha256": "dae8505299704119fdc5adb68e5c37bfd93a01535496f90c46d07dfcc4dc1eb4",
+            "ruleCount": 103
+          },
+          {
+            "index": 5,
+            "sha256": "8492944c7fa97fac4315250dc1ed16c1b76bc5abb9f2f1832706ee5bded553c6",
+            "ruleCount": 1
+          },
+          {
+            "index": 6,
+            "sha256": "d670a524620d0ea2a7afe404b69e09eb4f08b148cea6a4b76b5d91c6a0ad6a26",
+            "ruleCount": 4
+          },
+          {
+            "index": 7,
+            "sha256": "06c0929024500e4aa5b799dad2aa638f08ee7f8db10dea7a2af051a499a78e25",
+            "ruleCount": 6
+          },
+          {
+            "index": 8,
+            "sha256": "405098c0c73bea2a02e7effd246ec355ccafab38499c4557d6274626bda125e7",
+            "ruleCount": 20
+          },
+          {
+            "index": 9,
+            "sha256": "ab76f85b9da0d9bef653f3c15b9a97dc6f4759655737da55cbdac55e24d7c41a",
+            "ruleCount": 11
+          },
+          {
+            "index": 10,
+            "sha256": "2035206c6d28f817886aa17e57dc48018b74352ce2b95fb5a47ed2a88e6d055a",
+            "ruleCount": 2
+          },
+          {
+            "index": 11,
+            "sha256": "862e066f0a5fe1bc1652ae9755e3e7d250a0a2ce4890e10baeceb65f82ca9910",
+            "ruleCount": 96
+          }
+        ],
+        "status": "owner-paths-recovered-with-retained-rule-gap",
+        "originalExternalAncestryCaptured": false,
+        "referenceExternalAncestryReplayed": true,
+        "externalStylesheetApplicabilityResolved": false,
+        "candidateInheritanceResolved": false,
+        "captureGapExplainsAlignment": false,
+        "captureGapExplainsMissingOverlay": false,
+        "candidateComputedVerified": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false,
+        "canonicalAttributionChanged": false
+      }
+    },
+    {
+      "sha256": "82d63b964150b2e98a87ab92703614842b33621b699780ea94eba9b818b7b10e",
+      "proof": {
+        "identity": {
+          "status": "mapped-with-scalar-rule-gap",
+          "method": "existing-generated-owner-proof",
+          "referenceNode": "overlay:0/1",
+          "candidateNode": "root/0/2/1",
+          "referenceType": "div",
+          "candidateType": "div",
+          "checkedReferenceProperties": 89,
+          "referenceOrigin": "450px 400px",
+          "candidateOrigin": "<omitted>",
+          "missingRules": [
+            {
+              "selector": ".cdk-global-overlay-wrapper",
+              "declarations": {
+                "z-index": {
+                  "value": "1000",
+                  "important": false
+                }
+              }
+            }
+          ],
+          "extraRules": [],
+          "referencePath": [
+            "overlay:0/1",
+            "overlay:0"
+          ],
+          "candidatePath": [
+            "root/0/2/1",
+            "root/0/2",
+            "root/0",
+            "root"
+          ],
+          "inputEquivalent": false,
+          "computedCandidateOriginVerified": false,
+          "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+        },
+        "traces": {
+          "textAlign": {
+            "property": "textAlign",
+            "referencePath": [
+              {
+                "node": "overlay:0/1",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "start",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "start",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "bottom-sheet-overlay",
+                  "class": "modal-overlay bottom-sheet-overlay",
+                  "role": "dialog",
+                  "ariaLabel": "Open bottom sheet"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "bottom-sheet-root",
+                  "ariaLabel": "bottom-sheet showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "direction": {
+            "property": "direction",
+            "referencePath": [
+              {
+                "node": "overlay:0/1",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "ltr",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "ltr",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "bottom-sheet-overlay",
+                  "class": "modal-overlay bottom-sheet-overlay",
+                  "role": "dialog",
+                  "ariaLabel": "Open bottom sheet"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "bottom-sheet-root",
+                  "ariaLabel": "bottom-sheet showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "unicodeBidi": {
+            "property": "unicodeBidi",
+            "referencePath": [
+              {
+                "node": "overlay:0/1",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "isolate",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "isolate",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "bottom-sheet-overlay",
+                  "class": "modal-overlay bottom-sheet-overlay",
+                  "role": "dialog",
+                  "ariaLabel": "Open bottom sheet"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "bottom-sheet-root",
+                  "ariaLabel": "bottom-sheet showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "writingMode": {
+            "property": "writingMode",
+            "referencePath": [
+              {
+                "node": "overlay:0/1",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "horizontal-tb",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "horizontal-tb",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "bottom-sheet-overlay",
+                  "class": "modal-overlay bottom-sheet-overlay",
+                  "role": "dialog",
+                  "ariaLabel": "Open bottom sheet"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "bottom-sheet-root",
+                  "ariaLabel": "bottom-sheet showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          }
+        },
+        "externalReferencePath": [
+          {
+            "node": "html/1/14",
+            "parent": "html/1",
+            "type": "div",
+            "attributes": {
+              "class": "cdk-overlay-container"
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "isolate",
+              "writingMode": "horizontal-tb"
+            }
+          },
+          {
+            "node": "html/1",
+            "parent": "html",
+            "type": "body",
+            "attributes": {
+              "ngcm": ""
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "normal",
+              "writingMode": "horizontal-tb"
+            }
+          },
+          {
+            "node": "html",
+            "parent": null,
+            "type": "html",
+            "attributes": {
+              "lang": "en",
+              "data-beasties-container": ""
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "normal",
+              "writingMode": "horizontal-tb"
+            }
+          }
+        ],
+        "externalStylesheets": [
+          {
+            "index": 0,
+            "sha256": "09aece073cd69a7da6658faf8a6ecc4c707938be31c2af66dd41e17fbd9ff7a7",
+            "ruleCount": 29
+          },
+          {
+            "index": 1,
+            "sha256": "30971205e474b6a8e006d9115ceb639123888c496c8bb8edebb732c45e2739b6",
+            "ruleCount": 162
+          },
+          {
+            "index": 2,
+            "sha256": "1f4107bb58abe00cfc5a9c72a552220deb79783ffa7dfc8342bd3f20a7d45f13",
+            "ruleCount": 5
+          },
+          {
+            "index": 3,
+            "sha256": "4571a9f35eb3a88e03198fa0a08d7a1db7c3a59003a6b67de48439fc2ed25bc4",
+            "ruleCount": 16
+          },
+          {
+            "index": 4,
+            "sha256": "dae8505299704119fdc5adb68e5c37bfd93a01535496f90c46d07dfcc4dc1eb4",
+            "ruleCount": 103
+          },
+          {
+            "index": 5,
+            "sha256": "8492944c7fa97fac4315250dc1ed16c1b76bc5abb9f2f1832706ee5bded553c6",
+            "ruleCount": 1
+          },
+          {
+            "index": 6,
+            "sha256": "d670a524620d0ea2a7afe404b69e09eb4f08b148cea6a4b76b5d91c6a0ad6a26",
+            "ruleCount": 4
+          },
+          {
+            "index": 7,
+            "sha256": "06c0929024500e4aa5b799dad2aa638f08ee7f8db10dea7a2af051a499a78e25",
+            "ruleCount": 6
+          },
+          {
+            "index": 8,
+            "sha256": "405098c0c73bea2a02e7effd246ec355ccafab38499c4557d6274626bda125e7",
+            "ruleCount": 20
+          },
+          {
+            "index": 9,
+            "sha256": "ab76f85b9da0d9bef653f3c15b9a97dc6f4759655737da55cbdac55e24d7c41a",
+            "ruleCount": 11
+          },
+          {
+            "index": 10,
+            "sha256": "2035206c6d28f817886aa17e57dc48018b74352ce2b95fb5a47ed2a88e6d055a",
+            "ruleCount": 2
+          },
+          {
+            "index": 11,
+            "sha256": "862e066f0a5fe1bc1652ae9755e3e7d250a0a2ce4890e10baeceb65f82ca9910",
+            "ruleCount": 96
+          }
+        ],
+        "status": "owner-paths-recovered-with-retained-rule-gap",
+        "originalExternalAncestryCaptured": false,
+        "referenceExternalAncestryReplayed": true,
+        "externalStylesheetApplicabilityResolved": false,
+        "candidateInheritanceResolved": false,
+        "captureGapExplainsAlignment": false,
+        "captureGapExplainsMissingOverlay": false,
+        "candidateComputedVerified": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false,
+        "canonicalAttributionChanged": false
+      }
+    },
+    {
+      "sha256": "476ca9d334667a4648c1940b81e2be91a2040d8497bae0fd33c85ea208193a62",
+      "proof": {
+        "identity": {
+          "status": "mapped-with-scalar-rule-gap",
+          "method": "existing-generated-owner-proof",
+          "referenceNode": "overlay:0/0",
+          "candidateNode": "root/0/2/1",
+          "referenceType": "div",
+          "candidateType": "div",
+          "checkedReferenceProperties": 89,
+          "referenceOrigin": "720px 500px",
+          "candidateOrigin": "<omitted>",
+          "missingRules": [
+            {
+              "selector": ".cdk-global-overlay-wrapper",
+              "declarations": {
+                "z-index": {
+                  "value": "1000",
+                  "important": false
+                }
+              }
+            }
+          ],
+          "extraRules": [],
+          "referencePath": [
+            "overlay:0/0",
+            "overlay:0"
+          ],
+          "candidatePath": [
+            "root/0/2/1",
+            "root/0/2",
+            "root/0",
+            "root"
+          ],
+          "inputEquivalent": false,
+          "computedCandidateOriginVerified": false,
+          "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+        },
+        "traces": {
+          "textAlign": {
+            "property": "textAlign",
+            "referencePath": [
+              {
+                "node": "overlay:0/0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "start",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "start",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "snack-bar-overlay",
+                  "class": "snack-overlay"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "snack-bar-root",
+                  "ariaLabel": "snack-bar showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "direction": {
+            "property": "direction",
+            "referencePath": [
+              {
+                "node": "overlay:0/0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "ltr",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "ltr",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "snack-bar-overlay",
+                  "class": "snack-overlay"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "snack-bar-root",
+                  "ariaLabel": "snack-bar showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "unicodeBidi": {
+            "property": "unicodeBidi",
+            "referencePath": [
+              {
+                "node": "overlay:0/0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "isolate",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "isolate",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "snack-bar-overlay",
+                  "class": "snack-overlay"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "snack-bar-root",
+                  "ariaLabel": "snack-bar showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "writingMode": {
+            "property": "writingMode",
+            "referencePath": [
+              {
+                "node": "overlay:0/0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "horizontal-tb",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "horizontal-tb",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "snack-bar-overlay",
+                  "class": "snack-overlay"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "snack-bar-root",
+                  "ariaLabel": "snack-bar showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          }
+        },
+        "externalReferencePath": [
+          {
+            "node": "html/1/14",
+            "parent": "html/1",
+            "type": "div",
+            "attributes": {
+              "class": "cdk-overlay-container"
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "isolate",
+              "writingMode": "horizontal-tb"
+            }
+          },
+          {
+            "node": "html/1",
+            "parent": "html",
+            "type": "body",
+            "attributes": {
+              "ngcm": ""
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "normal",
+              "writingMode": "horizontal-tb"
+            }
+          },
+          {
+            "node": "html",
+            "parent": null,
+            "type": "html",
+            "attributes": {
+              "lang": "en",
+              "data-beasties-container": ""
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "normal",
+              "writingMode": "horizontal-tb"
+            }
+          }
+        ],
+        "externalStylesheets": [
+          {
+            "index": 0,
+            "sha256": "09aece073cd69a7da6658faf8a6ecc4c707938be31c2af66dd41e17fbd9ff7a7",
+            "ruleCount": 29
+          },
+          {
+            "index": 1,
+            "sha256": "30971205e474b6a8e006d9115ceb639123888c496c8bb8edebb732c45e2739b6",
+            "ruleCount": 162
+          },
+          {
+            "index": 2,
+            "sha256": "c7675d8c33fd6a2d304e010c72c6828a54b517c686d3045d7891cc0835a96016",
+            "ruleCount": 3
+          },
+          {
+            "index": 3,
+            "sha256": "4571a9f35eb3a88e03198fa0a08d7a1db7c3a59003a6b67de48439fc2ed25bc4",
+            "ruleCount": 16
+          },
+          {
+            "index": 4,
+            "sha256": "dae8505299704119fdc5adb68e5c37bfd93a01535496f90c46d07dfcc4dc1eb4",
+            "ruleCount": 103
+          },
+          {
+            "index": 5,
+            "sha256": "8492944c7fa97fac4315250dc1ed16c1b76bc5abb9f2f1832706ee5bded553c6",
+            "ruleCount": 1
+          },
+          {
+            "index": 6,
+            "sha256": "d670a524620d0ea2a7afe404b69e09eb4f08b148cea6a4b76b5d91c6a0ad6a26",
+            "ruleCount": 4
+          },
+          {
+            "index": 7,
+            "sha256": "06c0929024500e4aa5b799dad2aa638f08ee7f8db10dea7a2af051a499a78e25",
+            "ruleCount": 6
+          },
+          {
+            "index": 8,
+            "sha256": "405098c0c73bea2a02e7effd246ec355ccafab38499c4557d6274626bda125e7",
+            "ruleCount": 20
+          },
+          {
+            "index": 9,
+            "sha256": "2233fc3de20d9bf8a9066f4dd7645677c237bca5c5990ff9154293d580ce8f15",
+            "ruleCount": 22
+          },
+          {
+            "index": 10,
+            "sha256": "ac0da4f039e48effb5171b9df1d351a8b5c60e1c30b334693936fa1b56b4ffda",
+            "ruleCount": 1
+          }
+        ],
+        "status": "owner-paths-recovered-with-retained-rule-gap",
+        "originalExternalAncestryCaptured": false,
+        "referenceExternalAncestryReplayed": true,
+        "externalStylesheetApplicabilityResolved": false,
+        "candidateInheritanceResolved": false,
+        "captureGapExplainsAlignment": false,
+        "captureGapExplainsMissingOverlay": false,
+        "candidateComputedVerified": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false,
+        "canonicalAttributionChanged": false
+      }
+    },
+    {
+      "sha256": "01779e39039ed30c255ddf74f46b4e4d62f0192055f8cc88c96e13b336968562",
+      "proof": {
+        "identity": {
+          "status": "mapped-with-scalar-rule-gap",
+          "method": "existing-generated-owner-proof",
+          "referenceNode": "overlay:0/0",
+          "candidateNode": "root/0/2/1",
+          "referenceType": "div",
+          "candidateType": "div",
+          "checkedReferenceProperties": 89,
+          "referenceOrigin": "304.5px 422px",
+          "candidateOrigin": "<omitted>",
+          "missingRules": [
+            {
+              "selector": ".cdk-global-overlay-wrapper",
+              "declarations": {
+                "z-index": {
+                  "value": "1000",
+                  "important": false
+                }
+              }
+            }
+          ],
+          "extraRules": [],
+          "referencePath": [
+            "overlay:0/0",
+            "overlay:0"
+          ],
+          "candidatePath": [
+            "root/0/2/1",
+            "root/0/2",
+            "root/0",
+            "root"
+          ],
+          "inputEquivalent": false,
+          "computedCandidateOriginVerified": false,
+          "claim": "Captured measurement identity and scalar/node consistency only. Rule gaps remain explicit; no style, structure, origin or output equivalence inferred."
+        },
+        "traces": {
+          "textAlign": {
+            "property": "textAlign",
+            "referencePath": [
+              {
+                "node": "overlay:0/0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "start",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "start",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "snack-bar-overlay",
+                  "class": "snack-overlay"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "snack-bar-root",
+                  "ariaLabel": "snack-bar showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "direction": {
+            "property": "direction",
+            "referencePath": [
+              {
+                "node": "overlay:0/0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "ltr",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "ltr",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "snack-bar-overlay",
+                  "class": "snack-overlay"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "snack-bar-root",
+                  "ariaLabel": "snack-bar showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "unicodeBidi": {
+            "property": "unicodeBidi",
+            "referencePath": [
+              {
+                "node": "overlay:0/0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "isolate",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "isolate",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "snack-bar-overlay",
+                  "class": "snack-overlay"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "snack-bar-root",
+                  "ariaLabel": "snack-bar showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          },
+          "writingMode": {
+            "property": "writingMode",
+            "referencePath": [
+              {
+                "node": "overlay:0/0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-global-overlay-wrapper",
+                  "dir": "ltr",
+                  "style": "justify-content: center; align-items: flex-end;"
+                },
+                "computed": "horizontal-tb",
+                "inline": {},
+                "rules": []
+              },
+              {
+                "node": "overlay:0",
+                "type": "div",
+                "attributes": {
+                  "class": "cdk-overlay-container"
+                },
+                "computed": "horizontal-tb",
+                "inline": {},
+                "rules": []
+              }
+            ],
+            "candidatePath": [
+              {
+                "node": "root/0/2/1",
+                "authored": {
+                  "type": "div",
+                  "id": "snack-bar-overlay",
+                  "class": "snack-overlay"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0/2",
+                "authored": {
+                  "type": "section",
+                  "id": "snack-bar-root",
+                  "ariaLabel": "snack-bar showcase"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root/0",
+                "authored": {
+                  "type": "main",
+                  "id": "page"
+                },
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              },
+              {
+                "node": "root",
+                "authored": {},
+                "localValues": {
+                  "resolvedStyle": "<omitted>",
+                  "normalResolvedStyle": "<omitted>",
+                  "interactionResolvedStyle": "<omitted>"
+                },
+                "declarations": {
+                  "resolvedStyle": {},
+                  "normalResolvedStyle": {},
+                  "interactionResolvedStyle": {}
+                },
+                "inline": {},
+                "possibleRules": []
+              }
+            ],
+            "hasRelevantRequest": false,
+            "hasMotionRequest": false,
+            "ruleGaps": {
+              "missing": [
+                {
+                  "selector": ".cdk-global-overlay-wrapper",
+                  "declarations": {
+                    "z-index": {
+                      "value": "1000",
+                      "important": false
+                    }
+                  }
+                }
+              ],
+              "extra": []
+            },
+            "candidateComputedVerified": false,
+            "inputEquivalent": false,
+            "renderingEquivalent": false,
+            "limitation": "Captured owner-to-root paths only. Possible candidate rules are conservative, not proven matches. External ancestor CSSOM is separately retained, not resolved here. Motion presence is not animation activity. No initial/default classification follows from absent requests."
+          }
+        },
+        "externalReferencePath": [
+          {
+            "node": "html/1/14",
+            "parent": "html/1",
+            "type": "div",
+            "attributes": {
+              "class": "cdk-overlay-container"
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "isolate",
+              "writingMode": "horizontal-tb"
+            }
+          },
+          {
+            "node": "html/1",
+            "parent": "html",
+            "type": "body",
+            "attributes": {
+              "ngcm": ""
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "normal",
+              "writingMode": "horizontal-tb"
+            }
+          },
+          {
+            "node": "html",
+            "parent": null,
+            "type": "html",
+            "attributes": {
+              "lang": "en",
+              "data-beasties-container": ""
+            },
+            "inline": {},
+            "computed": {
+              "textAlign": "start",
+              "direction": "ltr",
+              "unicodeBidi": "normal",
+              "writingMode": "horizontal-tb"
+            }
+          }
+        ],
+        "externalStylesheets": [
+          {
+            "index": 0,
+            "sha256": "09aece073cd69a7da6658faf8a6ecc4c707938be31c2af66dd41e17fbd9ff7a7",
+            "ruleCount": 29
+          },
+          {
+            "index": 1,
+            "sha256": "30971205e474b6a8e006d9115ceb639123888c496c8bb8edebb732c45e2739b6",
+            "ruleCount": 162
+          },
+          {
+            "index": 2,
+            "sha256": "c7675d8c33fd6a2d304e010c72c6828a54b517c686d3045d7891cc0835a96016",
+            "ruleCount": 3
+          },
+          {
+            "index": 3,
+            "sha256": "4571a9f35eb3a88e03198fa0a08d7a1db7c3a59003a6b67de48439fc2ed25bc4",
+            "ruleCount": 16
+          },
+          {
+            "index": 4,
+            "sha256": "dae8505299704119fdc5adb68e5c37bfd93a01535496f90c46d07dfcc4dc1eb4",
+            "ruleCount": 103
+          },
+          {
+            "index": 5,
+            "sha256": "8492944c7fa97fac4315250dc1ed16c1b76bc5abb9f2f1832706ee5bded553c6",
+            "ruleCount": 1
+          },
+          {
+            "index": 6,
+            "sha256": "d670a524620d0ea2a7afe404b69e09eb4f08b148cea6a4b76b5d91c6a0ad6a26",
+            "ruleCount": 4
+          },
+          {
+            "index": 7,
+            "sha256": "06c0929024500e4aa5b799dad2aa638f08ee7f8db10dea7a2af051a499a78e25",
+            "ruleCount": 6
+          },
+          {
+            "index": 8,
+            "sha256": "405098c0c73bea2a02e7effd246ec355ccafab38499c4557d6274626bda125e7",
+            "ruleCount": 20
+          },
+          {
+            "index": 9,
+            "sha256": "2233fc3de20d9bf8a9066f4dd7645677c237bca5c5990ff9154293d580ce8f15",
+            "ruleCount": 22
+          },
+          {
+            "index": 10,
+            "sha256": "ac0da4f039e48effb5171b9df1d351a8b5c60e1c30b334693936fa1b56b4ffda",
+            "ruleCount": 1
+          }
+        ],
+        "status": "owner-paths-recovered-with-retained-rule-gap",
+        "originalExternalAncestryCaptured": false,
+        "referenceExternalAncestryReplayed": true,
+        "externalStylesheetApplicabilityResolved": false,
+        "candidateInheritanceResolved": false,
+        "captureGapExplainsAlignment": false,
+        "captureGapExplainsMissingOverlay": false,
+        "candidateComputedVerified": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false,
+        "canonicalAttributionChanged": false
+      }
+    }
+  ],
+  "findings": [
+    {
+      "case": "interaction:bottom-sheet@light/desktop-dpr1/activate",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "32887a8b0599e7ec8573f03de74f26ca05579e72acca3f4f2635d199ec96c29a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "b179a875666f40d4f557e39d5d3b73d631a36ffd943c03c512d5719c74a87c0b"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@light/desktop-dpr1/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/75d450fe876ecb4ea29e2ca55ffa3861dde2561c3c45b76742dcd97724c26373.json",
+        "sha256": "3f20391089806e8701b3d02c15e92480e3821984c9415bf3e08a1d032fc43644"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "32887a8b0599e7ec8573f03de74f26ca05579e72acca3f4f2635d199ec96c29a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "f2ba201bf760d60cc1c532cce26f52c23b640edb1f12a6d47cc29c3406de0409"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@light/desktop-dpr1/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/06d589789222999182f187b1a14c5ec5a7d80dfffff6df19dcb15ba70d011e94.json",
+        "sha256": "69d62eeafdbc95dc50114653ab6727eb9099e1f615f0df1857216b6520be5104"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@light/desktop-dpr1/open",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "32887a8b0599e7ec8573f03de74f26ca05579e72acca3f4f2635d199ec96c29a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "b179a875666f40d4f557e39d5d3b73d631a36ffd943c03c512d5719c74a87c0b"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@light/desktop-dpr1/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/85f495422d63898505dd322990206070c81d2d1f73c0de9cb15455f5d65891c3.json",
+        "sha256": "0dc10a02bf6d5695edd1023adfc5f19991bca8f728c5bbcd43764f19ef336fda"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@light/desktop-dpr2/activate",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "32887a8b0599e7ec8573f03de74f26ca05579e72acca3f4f2635d199ec96c29a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "b179a875666f40d4f557e39d5d3b73d631a36ffd943c03c512d5719c74a87c0b"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@light/desktop-dpr2/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/10513c79686bc3e278058caf014861ebbd200c34b524f86c3cc35309053be1f6.json",
+        "sha256": "9730576c32e99db01196ee2328a5e33ab5f0947cb0d83b5f76a58831d28cf6fd"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@light/desktop-dpr2/activate-leave",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "32887a8b0599e7ec8573f03de74f26ca05579e72acca3f4f2635d199ec96c29a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "f2ba201bf760d60cc1c532cce26f52c23b640edb1f12a6d47cc29c3406de0409"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@light/desktop-dpr2/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/d2f7d322b62f899b1a4b75167cd3658f6f30e043c10fe741c67d89f3406708d6.json",
+        "sha256": "d4f7fd7a0a95b5cf7725b402998afcacbdb1305da4d75fac6f6d9d895dba141c"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@light/desktop-dpr2/open",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "32887a8b0599e7ec8573f03de74f26ca05579e72acca3f4f2635d199ec96c29a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "b179a875666f40d4f557e39d5d3b73d631a36ffd943c03c512d5719c74a87c0b"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@light/desktop-dpr2/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/acb1f7aa37d8bb15646fb25e5fa29bd6f7ba07997ab23b17643fdfbe347de006.json",
+        "sha256": "0219456cca18b95e0a7f1dda4939be3fdfef65137b680584c33d43c348de9bec"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@dark/desktop-dpr1/activate",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "2b0d027ec216f09163b068f056050008fd77d3d5f1552d1de2765def020d7f97"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "d40e7224dce143c3b551b1aee5f4ff999b589b5d9c415c4f7186f1a2341a708c"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@dark/desktop-dpr1/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/9cad1606e978554bbfad54ca7d2b74237d1849a098d46cc5405a1a11197fa849.json",
+        "sha256": "cf0ba743614badd73216675b507f11fde3acf96b2c832898d30403582e745fe1"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@dark/desktop-dpr1/activate-leave",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "2b0d027ec216f09163b068f056050008fd77d3d5f1552d1de2765def020d7f97"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "b80ac2f07bb921a7e5be65a3dcd4d706fc46762fd5a3aa630fbb98f0e3c5a644"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@dark/desktop-dpr1/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/1216485c90a6c9fd9a68d98d6e6c966dfc25217133817168954e10fec5705e39.json",
+        "sha256": "3c09388382ae91844a8923eb6c7efab1469044056b9cbacf129279788a4777cf"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@dark/desktop-dpr1/open",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "2b0d027ec216f09163b068f056050008fd77d3d5f1552d1de2765def020d7f97"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "d40e7224dce143c3b551b1aee5f4ff999b589b5d9c415c4f7186f1a2341a708c"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@dark/desktop-dpr1/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/80138f02170c0df3f1edc06c1b3eaabb3da518fcf7c6ae1e38b34f35ff4ebd1e.json",
+        "sha256": "6764d127a8ce4934d2d033bff37b53582cb86dc8cd2afa6e91939c4eeaa61347"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@dark/desktop-dpr2/activate",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "2b0d027ec216f09163b068f056050008fd77d3d5f1552d1de2765def020d7f97"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "d40e7224dce143c3b551b1aee5f4ff999b589b5d9c415c4f7186f1a2341a708c"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@dark/desktop-dpr2/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/504e7b8da5220246cf210f29f492987f0d2a7f5f73a076e1bbccf5948566d489.json",
+        "sha256": "87ac8d4da1d1136541d8cb465a596eb4d680d81243570f83c979d2b12055effa"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@dark/desktop-dpr2/activate-leave",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "2b0d027ec216f09163b068f056050008fd77d3d5f1552d1de2765def020d7f97"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "b80ac2f07bb921a7e5be65a3dcd4d706fc46762fd5a3aa630fbb98f0e3c5a644"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@dark/desktop-dpr2/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/b539643abe492b8cfd6ee6aae7109dc11cfe6751c4aef676f78f89e6b62cbff4.json",
+        "sha256": "3a8697ff23227ededb22128d394d6614e86e9b88f2b5189e03c607a7985948a5"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@dark/desktop-dpr2/open",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "ecce1130555bb10eb98b59aad5467b79d51d7ce5f1bc5ed805f52af2c681a1b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "2b0d027ec216f09163b068f056050008fd77d3d5f1552d1de2765def020d7f97"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/dark/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "d40e7224dce143c3b551b1aee5f4ff999b589b5d9c415c4f7186f1a2341a708c"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@dark/desktop-dpr2/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/bf61cf0dd9c44c65cc17f9310e76ac96d83f182d52739b83b851dc335d6dd617.json",
+        "sha256": "04f0f38cfc65df794ba36040afc9f16fa7c9cc066489a954516e62602dd642d1"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@contrast/desktop-dpr1/activate",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "a208f6ae513db8d974bdc549c833031168effc60dda61ab914bf396c9f1b7bca",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "fea190d347f4161efecf86890b61b4b94c4263b1a6d56674ccd7d3241d343b35"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "cbaba06153cd9a45a4d330679422e80e4768bd5307ba6db7966f8a5ccff111a0"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@contrast/desktop-dpr1/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/396fe8c0a0f213b66595aaa915c07e2703a500cf66b31671a882efc40192a070.json",
+        "sha256": "41ea1b86ab8be44bb2869bb9671446cb5d5593c68a51a2720fbf52043f3db37b"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@contrast/desktop-dpr1/activate-leave",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "a208f6ae513db8d974bdc549c833031168effc60dda61ab914bf396c9f1b7bca",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "fea190d347f4161efecf86890b61b4b94c4263b1a6d56674ccd7d3241d343b35"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "187e9ba319465eb2cb9e4dab2f6040a33f9aed5240ce3bb6266ba08a609b5278"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@contrast/desktop-dpr1/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/a1e18926ab8531771ef87be7384b208affe431c81c4c66706a3d8e43ad4a56d1.json",
+        "sha256": "5b42f19dac0befb8992a2310324ae2f8e516e0e883e0d245df9441d02063a085"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@contrast/desktop-dpr1/open",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "a208f6ae513db8d974bdc549c833031168effc60dda61ab914bf396c9f1b7bca",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "fea190d347f4161efecf86890b61b4b94c4263b1a6d56674ccd7d3241d343b35"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "cbaba06153cd9a45a4d330679422e80e4768bd5307ba6db7966f8a5ccff111a0"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@contrast/desktop-dpr1/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/b6eeffed2b769cebd1fc53335e159048be622f810b871c6f189823a1fb4ec973.json",
+        "sha256": "bd9bd6aa7828a72e5fb021eb547729b82fa1f46087ea28a4931c8913e1440160"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@contrast/desktop-dpr2/activate",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "a208f6ae513db8d974bdc549c833031168effc60dda61ab914bf396c9f1b7bca",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "fea190d347f4161efecf86890b61b4b94c4263b1a6d56674ccd7d3241d343b35"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "69886065645f18d853c550a95780e5106699bba582cdbea00485a4d9ff3af6a4"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@contrast/desktop-dpr2/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/9a536c443e3d6fe8b9ea6cb04bc5e4242fc9a73824bdfee961be2714771ba7fa.json",
+        "sha256": "f2629a3d5412fc9c18c775366d71c1637a5ce5dd8aacccdd00f69ba844fb7103"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@contrast/desktop-dpr2/activate-leave",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "a208f6ae513db8d974bdc549c833031168effc60dda61ab914bf396c9f1b7bca",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "fea190d347f4161efecf86890b61b4b94c4263b1a6d56674ccd7d3241d343b35"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "dc1014c1f8e8f743181614f60a5cce960fb517b81a8d51e6e49ff2b8c2ca26ff"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@contrast/desktop-dpr2/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/65303beb5bd2ab9fe5f2aef7f31563d2000d227275875f7c128ae5a7f12423c7.json",
+        "sha256": "c335a19b9a351673e92dd1006be8443c4211d1f630673fff88c4fe499be4c046"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@contrast/desktop-dpr2/open",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "a208f6ae513db8d974bdc549c833031168effc60dda61ab914bf396c9f1b7bca",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "fea190d347f4161efecf86890b61b4b94c4263b1a6d56674ccd7d3241d343b35"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/contrast/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "69886065645f18d853c550a95780e5106699bba582cdbea00485a4d9ff3af6a4"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@contrast/desktop-dpr2/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/fcda6fa98054d13c2bf3197ffab15e0cd07a290383ce80ce8a9aac29d0cf2faf.json",
+        "sha256": "86effec1599c07eaa79622a4684f856ad125ef908d7ea32c1f28457489d6449f"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@custom/desktop-dpr1/activate",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "5a9da516d4ccf655f804e2a75db6db336664a63e6a6f06b9ed7c8bf5b0f0e4e4",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "ce1f46223461c405d56d2991896c464c1084852b75a5872a6ea3f42bc6ff3805"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "6e5cad23e85e0fc5816bc4e1c9973643fb96b403aac659b4f4784a8cb8d7ff33"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@custom/desktop-dpr1/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/297f0dd1f41369f9060d30c7511ea49a0a5f094f76c8354faaef2350c4017804.json",
+        "sha256": "e888f5160246c0d265843a5da41ca28e8ff55f06cd5409ad7e8035bf295776c4"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@custom/desktop-dpr1/activate-leave",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "5a9da516d4ccf655f804e2a75db6db336664a63e6a6f06b9ed7c8bf5b0f0e4e4",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "ce1f46223461c405d56d2991896c464c1084852b75a5872a6ea3f42bc6ff3805"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "a4b83bf8f68bd4e6deb325a086ddb7c00329fa24522fdcd7a25ff196e6a18f96"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@custom/desktop-dpr1/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/bb13a25708d1c6cba20be9f161baeba600b9c17f73ed2860393d38732a37a48c.json",
+        "sha256": "5936ad679199b847ddf36954f503d2860e304099b3800bcc12742fd96dd3ce5f"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@custom/desktop-dpr1/open",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "5a9da516d4ccf655f804e2a75db6db336664a63e6a6f06b9ed7c8bf5b0f0e4e4",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "ce1f46223461c405d56d2991896c464c1084852b75a5872a6ea3f42bc6ff3805"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "6e5cad23e85e0fc5816bc4e1c9973643fb96b403aac659b4f4784a8cb8d7ff33"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@custom/desktop-dpr1/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/485c0fa5ec4fe544da12c81d3b8fbb034d100582887c20fa1b526b9e86722ed9.json",
+        "sha256": "9a23c6adf7e5ca3f0cfe303e9f25fd8350186da6ae3808d6fb457933f28ab45d"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@custom/desktop-dpr2/activate",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "5a9da516d4ccf655f804e2a75db6db336664a63e6a6f06b9ed7c8bf5b0f0e4e4",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "ce1f46223461c405d56d2991896c464c1084852b75a5872a6ea3f42bc6ff3805"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "e53e5f2ebb9fd7bcda2fc4177c03efe80c0f9e6f7b923d9c600517de7a881497"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@custom/desktop-dpr2/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/6038806b8e1a9d9657bca682c5b09281fdf87588823e2908c741ae521c2a8737.json",
+        "sha256": "05416e5fa0c1bd4f82dc80c981fc2dc9ecd79cc7823f9d6c87c2ece41c5072ac"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@custom/desktop-dpr2/activate-leave",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "5a9da516d4ccf655f804e2a75db6db336664a63e6a6f06b9ed7c8bf5b0f0e4e4",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "ce1f46223461c405d56d2991896c464c1084852b75a5872a6ea3f42bc6ff3805"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "51f6355faf27184cdf74770af82bba45aedfbcc04bb4d560c0eb574613ecbb3a"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@custom/desktop-dpr2/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/8b874a3be080d59de09a440573417ff9916c64ce23f74885ff1c713b0121f4a3.json",
+        "sha256": "c899f938d98d3f5b4abd912709ef3a11314edcf0493f9122b2500a93dec8b2c0"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@custom/desktop-dpr2/open",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "5a9da516d4ccf655f804e2a75db6db336664a63e6a6f06b9ed7c8bf5b0f0e4e4",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "ce1f46223461c405d56d2991896c464c1084852b75a5872a6ea3f42bc6ff3805"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/custom/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "e53e5f2ebb9fd7bcda2fc4177c03efe80c0f9e6f7b923d9c600517de7a881497"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@custom/desktop-dpr2/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/e0874982771d27c1ff025d6873ebca02ac6a76662ff96f049a7f0d92880be258.json",
+        "sha256": "590139ca39f124e6d1088853e787cf910577cb95a7e035d21f5fcc984be189bd"
+      },
+      "pattern": 0
+    },
+    {
+      "case": "interaction:bottom-sheet@light/comparison-pane-dpr1/activate",
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "originalInputSha256": "4e7835f79be2f35e97d1b4044e2809f08a23855bdec13dda662c4a099ece5d5a",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/comparison-pane-dpr1/activate/reference-input-tree.json",
+          "sha256": "0b5b604a21ba335c86249358460610aa541cb666b4ac2de75f84ed3febb12661"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/bottom-sheet/light/comparison-pane-dpr1/activate/astylar-input-tree.json",
+          "sha256": "99775f042c401fb4ffa90c101f68dee8a07dc2fad854e8370e91fd2b0adeb241"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:bottom-sheet@light/comparison-pane-dpr1/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/33e58b467466f833df0f73d6a11d57a2286d3870480b2b82f3fb9cf20e0faa54.json",
+        "sha256": "79591e2880e8cc620383854425d6a7064a9729840675009855c1516f4c62295a"
+      },
+      "pattern": 1
+    },
+    {
+      "case": "interaction:snack-bar@light/desktop-dpr1/activate",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "6cd9307ba2edf648565437e58fdca201aedb31a059e00ae4b8257975cab3d98a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "a2b1067670894e8e026b670cf3b33665386f73be5946e32ae999633e79038122"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@light/desktop-dpr1/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/0100603506b83890d3816730e5e0c6c6fa100d28e49f35aeef82b13d7c7b3429.json",
+        "sha256": "513ba5a069a8e35d9e0db49922b526466e5345729b629eccac9be8fb8b74b2d8"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@light/desktop-dpr1/activate-leave",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "4baa868bfa6bbabdc2cf6de46426a4fd81f20d4b8b1a6d5c4b4b28b81594279d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "ef2c4e535527c99f8d80fff487f1a6e8e27e8e49055a4550a7cd4660828a103d"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@light/desktop-dpr1/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/390b770b070cf63e24de8ec41affb622be27e8403a064efae56c010a6057f731.json",
+        "sha256": "6ede1e45935c6072d6308d74d6f32603ebe3daac7fbcb1b060a938ff3b12d9bb"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@light/desktop-dpr1/activate-twice",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr1/activate-twice/reference-input-tree.json",
+          "sha256": "957658c1d58cf838cd6b54d95d3431c4690c6efbfd6a17aac899d0053a0b438c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr1/activate-twice/astylar-input-tree.json",
+          "sha256": "9d81179feb59eb6098dc1bda11091ea87130a2ec7867448b332d8806ca457ef7"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@light/desktop-dpr1/activate-twice",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/170de9e053cffcd58b175c9d1d368d484e54b13a8793c1222c28e5883d562591.json",
+        "sha256": "f15d61c07c651a0b45e6b16efeefc1e4e47f255e8b891ec8130649c43691d9d5"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@light/desktop-dpr1/open",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "6cd9307ba2edf648565437e58fdca201aedb31a059e00ae4b8257975cab3d98a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "a2b1067670894e8e026b670cf3b33665386f73be5946e32ae999633e79038122"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@light/desktop-dpr1/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/64cc11ee3adad44062620ea87b93abc315ba692919a066be3204cf9fde5ac32d.json",
+        "sha256": "a768cc36e71686ea00c55a37c414317d98dfb7a8958b47ac90439386a7acb03a"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@light/desktop-dpr2/activate",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "6cd9307ba2edf648565437e58fdca201aedb31a059e00ae4b8257975cab3d98a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "a2b1067670894e8e026b670cf3b33665386f73be5946e32ae999633e79038122"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@light/desktop-dpr2/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/92b831ea919cc90d354826fc8cb27e24e7dd43205f777fc03403adf90e72b29c.json",
+        "sha256": "e5a73748e0dd15d67ff6fa537bfdb9a2f16981749b346a778c0c4737a2a4e61c"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@light/desktop-dpr2/activate-leave",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "4baa868bfa6bbabdc2cf6de46426a4fd81f20d4b8b1a6d5c4b4b28b81594279d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "ef2c4e535527c99f8d80fff487f1a6e8e27e8e49055a4550a7cd4660828a103d"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@light/desktop-dpr2/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/18af383d607c7a1dd51c90f1de592da4761e89fdf4afa8e267f7d9f4d62820b7.json",
+        "sha256": "c9837d549198e3f56c1ee6d4cf759a920848acc932976c233e8fdd0394347ac8"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@light/desktop-dpr2/activate-twice",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr2/activate-twice/reference-input-tree.json",
+          "sha256": "957658c1d58cf838cd6b54d95d3431c4690c6efbfd6a17aac899d0053a0b438c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr2/activate-twice/astylar-input-tree.json",
+          "sha256": "9d81179feb59eb6098dc1bda11091ea87130a2ec7867448b332d8806ca457ef7"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@light/desktop-dpr2/activate-twice",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/a5b89a26cc7340c71aabeb73d260d943d455cad092008b3fb4a3231b86903d25.json",
+        "sha256": "9700dfedd88f73b9b6f17981408eeb485a9730e20d0e0ba44ef56aeb02e40481"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@light/desktop-dpr2/open",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "6cd9307ba2edf648565437e58fdca201aedb31a059e00ae4b8257975cab3d98a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "a2b1067670894e8e026b670cf3b33665386f73be5946e32ae999633e79038122"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@light/desktop-dpr2/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/68dd9344eed855691f3137e0390a679885c8128ef997a78a18884764b3716755.json",
+        "sha256": "813abf037e6d90db6d4558b6bb18d8a701ded5a2e5977dbd787910f27ff27a9d"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@dark/desktop-dpr1/activate",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "c3bb459d262dd477539d801bed43fcefb116de8ca06db0e7cb814723a51a1eaa"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "8ef96c8717eee974ab44e18f3ae597c8ff34e573189df6e2289d8a6a23e4cd50"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@dark/desktop-dpr1/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/430979fef98135949d61aeee9a69f2493e3f1e9eec5d97e24a9b217e5c3fc94b.json",
+        "sha256": "4021b0ed8246bcee65bdbd1953ca5aa49073443afd57fc4fe25ed31ecf6ebc6b"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@dark/desktop-dpr1/activate-leave",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "da19fa65d0a13511b26e76703d0ae8a3f6fab54ccdf5c3cea209a2e17d2d9f5e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "c8f2c009215f56dc76857ce9659ab78db0fe6a784cbc74709aa0614f24cf9f96"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@dark/desktop-dpr1/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/df131ed9eee3797a85b2f10c42b0d8d72ab06f6431d0e676c30b3f520778c43d.json",
+        "sha256": "60bcc7dec4e58d7b18d54789399ec2b97c5db8052f445e7b032c4b638ea9a849"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@dark/desktop-dpr1/activate-twice",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr1/activate-twice/reference-input-tree.json",
+          "sha256": "5b77a58cfca02d9e476a5c1cbfb0e94601a744148155daca51edc0a947e9d687"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr1/activate-twice/astylar-input-tree.json",
+          "sha256": "531f77f6cc9a9a785233880ea6b290f2d76096bea33fb814806e2af437a753c0"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@dark/desktop-dpr1/activate-twice",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/724dbf06170c785122974cf316815ab572432ccf31e9fd2bd44cce831382501b.json",
+        "sha256": "4dd351191f28ff690f6669a8ade0b233847358dcc9a0f428487ca10f70bf5b24"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@dark/desktop-dpr1/open",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "c3bb459d262dd477539d801bed43fcefb116de8ca06db0e7cb814723a51a1eaa"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "8ef96c8717eee974ab44e18f3ae597c8ff34e573189df6e2289d8a6a23e4cd50"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@dark/desktop-dpr1/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/0a5c9c8c937a93b93085d904f7173f302c68f50649ee6e4843c8d15f88b28778.json",
+        "sha256": "a2643f25a735ff6ceddf8e1be15049d638714d20d4efa3667a4fe77b19247e9f"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@dark/desktop-dpr2/activate",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "c3bb459d262dd477539d801bed43fcefb116de8ca06db0e7cb814723a51a1eaa"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "531f77f6cc9a9a785233880ea6b290f2d76096bea33fb814806e2af437a753c0"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@dark/desktop-dpr2/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/5330fe537529edfe998ef3e66b08ff6eba5ed2ce81e590a075b339f9a7c60f33.json",
+        "sha256": "6edd43f9ccfc3423ce77f5c278ba6199b1e9fe68da1c28620bff42f999952dd4"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@dark/desktop-dpr2/activate-leave",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "da19fa65d0a13511b26e76703d0ae8a3f6fab54ccdf5c3cea209a2e17d2d9f5e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "46411e62a2b4b2687ac2938976723e7f9f7792e4c0ecc179c09dbe86f468fb10"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@dark/desktop-dpr2/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/95063069ea8c63bdfce2bc92ec58c152ec5274094592e325aff7d80f9b2e1b93.json",
+        "sha256": "f4ffe668d50f9ac40a596428dde81c5ece66a86644d29a57868a50f448d4b4a8"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@dark/desktop-dpr2/activate-twice",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr2/activate-twice/reference-input-tree.json",
+          "sha256": "5b77a58cfca02d9e476a5c1cbfb0e94601a744148155daca51edc0a947e9d687"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr2/activate-twice/astylar-input-tree.json",
+          "sha256": "531f77f6cc9a9a785233880ea6b290f2d76096bea33fb814806e2af437a753c0"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@dark/desktop-dpr2/activate-twice",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/dd0e73046bc0597a2da67214e6542a0afb8825a3468b7aef53d61ecc62efced1.json",
+        "sha256": "fd5f3bae1e52e29c5197844bffa374328d6b420ad3adc510988da1f903d545a7"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@dark/desktop-dpr2/open",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "f3d045e7abdbf9be509f0816d72725555a9d46a8e651f856057f00d388d79ea5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "c3bb459d262dd477539d801bed43fcefb116de8ca06db0e7cb814723a51a1eaa"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/dark/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "531f77f6cc9a9a785233880ea6b290f2d76096bea33fb814806e2af437a753c0"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@dark/desktop-dpr2/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/95230a8ab10e93f0a7eb2d6e38a3fe9ea537be37032c34fc09c168510e1e7b03.json",
+        "sha256": "c266a05393f130a10a940eabc6b48f20915f7c498e024d6299e9b2310f640ecd"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@contrast/desktop-dpr1/activate",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "c6e5a468cfaea96b32219bae5432f390ce40f0c50aca71fe3cdd10dfd1e7d5b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "4e1a27f719a7a07c126977e2a2e1d2aab0aeedfce4086d90ce68cc5cb3e91f65"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "cea70928741762b03ce5fe5289d6fd4c884032819e02eefdf4b9319b784742a8"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@contrast/desktop-dpr1/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/412929941458f6c515ab04ec0cd31d5fafdbafec0bd2b7ae4fe80ef09b40d97a.json",
+        "sha256": "751af784996749e61fea4e75240fbcb13fd99673498e743a873e8264924cc17f"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@contrast/desktop-dpr1/activate-leave",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "c6e5a468cfaea96b32219bae5432f390ce40f0c50aca71fe3cdd10dfd1e7d5b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "088da9beaaedb002d1d4b33f9aea9c8a472c0ae714332fb398aaf943f758ca7f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "00b1fcf57c17a39c45d5ba96b0e48e6479c02175487f5a10d688c8030d754369"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@contrast/desktop-dpr1/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/140ba8e44b319804539e67e60610395722693b95e1eb690dd150a312a46b801b.json",
+        "sha256": "feafdfce3498f2be0bc6aa9a861a02a9c0d8b95d0c87c77065d3e52d91f12e32"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@contrast/desktop-dpr1/activate-twice",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "c6e5a468cfaea96b32219bae5432f390ce40f0c50aca71fe3cdd10dfd1e7d5b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr1/activate-twice/reference-input-tree.json",
+          "sha256": "cad58af932b5465928d90e4518c89ff7f58b59ff68677cbdf398e5579f59de16"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr1/activate-twice/astylar-input-tree.json",
+          "sha256": "82a2359bc3a91786af30785f0653c3bff8d051d960b33bdc3c3c4088e48f5fd1"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@contrast/desktop-dpr1/activate-twice",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/0b14784ac00f35fe4d0baf868d8bdeec9a6d0f75320d324e429d7f25bb36f69d.json",
+        "sha256": "a01fb18966fd96d06c27f2048e4f62bd59b10e59d77d44d37b881ec3e24b5ca0"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@contrast/desktop-dpr1/open",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "c6e5a468cfaea96b32219bae5432f390ce40f0c50aca71fe3cdd10dfd1e7d5b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "4e1a27f719a7a07c126977e2a2e1d2aab0aeedfce4086d90ce68cc5cb3e91f65"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "c85f5bc21d57230fac99878f251b9e9457acb6e4993c7a9af441698fd88ab3d2"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@contrast/desktop-dpr1/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/1789dac7a5039e2ae7a7bb46bd270890b50051bb45938cdaa0384dcc5e10f1e6.json",
+        "sha256": "0598bec8fda1f541db95a034fad3413017a20dedb769ed79bacadde3fec108b2"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@contrast/desktop-dpr2/activate",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "c6e5a468cfaea96b32219bae5432f390ce40f0c50aca71fe3cdd10dfd1e7d5b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "4e1a27f719a7a07c126977e2a2e1d2aab0aeedfce4086d90ce68cc5cb3e91f65"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "18f53946c1d97eb2f161b58542a0f57a4e491c697273c9576cd0d86bb9050220"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@contrast/desktop-dpr2/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/56a652a100786d464a277901f4c42acddd1f940c260e33b2acf29dba11aafc7d.json",
+        "sha256": "5617a92b158c5b9816dad4ca22b5952032f180d384d8b6ccd7ebfa2d1ef46003"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@contrast/desktop-dpr2/activate-leave",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "c6e5a468cfaea96b32219bae5432f390ce40f0c50aca71fe3cdd10dfd1e7d5b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "088da9beaaedb002d1d4b33f9aea9c8a472c0ae714332fb398aaf943f758ca7f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "96185a3d59317d7e5634c14b2bf76b0ed580f0bb940eb33d9ec247630ef97a9b"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@contrast/desktop-dpr2/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/09f902a147fffcc934fc7e830008e93f68dbc6d435a560c4ec0c05c6debeb85d.json",
+        "sha256": "fe649542aa83d7b2de34b2ec0ac143760fb55803bd5413f81097cae30503853d"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@contrast/desktop-dpr2/activate-twice",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "c6e5a468cfaea96b32219bae5432f390ce40f0c50aca71fe3cdd10dfd1e7d5b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr2/activate-twice/reference-input-tree.json",
+          "sha256": "cad58af932b5465928d90e4518c89ff7f58b59ff68677cbdf398e5579f59de16"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr2/activate-twice/astylar-input-tree.json",
+          "sha256": "1f72ac423144a7947756beda08eca7b5f8d9cb0cc55fb56185caced21638cb16"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@contrast/desktop-dpr2/activate-twice",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/367af183d56dcd07b155cc9fd43df71ab4c0468e7dc0b52c1bc130547fa268e8.json",
+        "sha256": "7b4ec544b4488634914def4c4631e356298f9566692281dbebc48b621eaee107"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@contrast/desktop-dpr2/open",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "c6e5a468cfaea96b32219bae5432f390ce40f0c50aca71fe3cdd10dfd1e7d5b5",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "4e1a27f719a7a07c126977e2a2e1d2aab0aeedfce4086d90ce68cc5cb3e91f65"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/contrast/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "18f53946c1d97eb2f161b58542a0f57a4e491c697273c9576cd0d86bb9050220"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@contrast/desktop-dpr2/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/c4d6172b417f6de44dd7df5bcc67f625726c22b02a6365777f30afb33cfecb79.json",
+        "sha256": "edc98887d0d3e08064bc844f7c34e00d2e53a0a530f2a4e0ba0f20cfb5b43c0a"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@custom/desktop-dpr1/activate",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "6dd19a88e08d358df17dd4541e7c6df2af9f57ea57834c2ba5d87d9ddbea9d32",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "828c17034bedf89683fdd4b924f6f10ae17d234e9ddf12e655573033e2ad7442"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "26e7dba8d28944e9a1798ef490626fd1a1b539c690fdfd533e63bf172ac63beb"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@custom/desktop-dpr1/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/479722f0b0515c2f9f7bcde0be64cb1f45826e18d109e6f8787699e4a3fc6cae.json",
+        "sha256": "79e17ecd14702aeec150eb60477a4cb9347f2f833e8bf7a00dbc0705281488ea"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@custom/desktop-dpr1/activate-leave",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "6dd19a88e08d358df17dd4541e7c6df2af9f57ea57834c2ba5d87d9ddbea9d32",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "2e35ef39eaabe7da000aedbbeed136e9c13bb8dc48df22bf433c8e79796d98ef"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "d5f6c4a1ba521450f01d3e2741dbebdb395710a12f639e8feee4eabeea0c7f7c"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@custom/desktop-dpr1/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/e7700125f553158cc0802b8f55bc71af65be23260c307bb8f6bf9ca76d40576d.json",
+        "sha256": "ea0fce5a4ea165904cc25639b157d5ba86cc1f51082d39a4264d9328b593cafa"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@custom/desktop-dpr1/activate-twice",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "6dd19a88e08d358df17dd4541e7c6df2af9f57ea57834c2ba5d87d9ddbea9d32",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr1/activate-twice/reference-input-tree.json",
+          "sha256": "d0606dbec5eeeef81e74c7302f9e1a897bc5eb2f8aeb24654b3765aeded8b69e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr1/activate-twice/astylar-input-tree.json",
+          "sha256": "c29e365221908063b2463f0f6ae5ae195c2a560a13341169d7f54acafa3bf3b7"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@custom/desktop-dpr1/activate-twice",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/8bd53e5fd1630abf9765319eb542c0351efe62bdec76dec2f5678db87e490fdc.json",
+        "sha256": "2596d766dc7cc13945ba16362fd41e45d1aa7f7f23a03dd422970465f3556b93"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@custom/desktop-dpr1/open",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "6dd19a88e08d358df17dd4541e7c6df2af9f57ea57834c2ba5d87d9ddbea9d32",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr1/open/reference-input-tree.json",
+          "sha256": "828c17034bedf89683fdd4b924f6f10ae17d234e9ddf12e655573033e2ad7442"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr1/open/astylar-input-tree.json",
+          "sha256": "26e7dba8d28944e9a1798ef490626fd1a1b539c690fdfd533e63bf172ac63beb"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@custom/desktop-dpr1/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/597f77880eb15dd9f16547deae7e88e4dd066d74223c4aa49525fa44c79846d3.json",
+        "sha256": "ca8f736d6d34e1af107455a891e33d917141112f4d34b49a1d2f726c2523ddd0"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@custom/desktop-dpr2/activate",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "6dd19a88e08d358df17dd4541e7c6df2af9f57ea57834c2ba5d87d9ddbea9d32",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "828c17034bedf89683fdd4b924f6f10ae17d234e9ddf12e655573033e2ad7442"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "2ea5ba483ac7bc0bbd01e828657b310047a1fd9f65de8a96bf3ac5f3898b6e0b"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@custom/desktop-dpr2/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/ad541357cce5e8abe3c95be3aa099a22717002b84008465a56730b3b2ec7bbe8.json",
+        "sha256": "8fdaca2a753fe2d0de5128d706d7cc4c82781497763dda26d53e6810fc40155a"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@custom/desktop-dpr2/activate-leave",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "6dd19a88e08d358df17dd4541e7c6df2af9f57ea57834c2ba5d87d9ddbea9d32",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "2e35ef39eaabe7da000aedbbeed136e9c13bb8dc48df22bf433c8e79796d98ef"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "6cc7a06a310463ac98f1546c2d14e7de6cc05e35995dd8653b1ce0133537bb5f"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@custom/desktop-dpr2/activate-leave",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/9e2986bef360ce14a99f4a3b2ba0dd242ca5b0c8cdc055451950c1f0ed42ee28.json",
+        "sha256": "ab88511e40644912a209e06a8f83d7c22c79e5455bf8a6a16fe828329e5e5ea7"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@custom/desktop-dpr2/activate-twice",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "6dd19a88e08d358df17dd4541e7c6df2af9f57ea57834c2ba5d87d9ddbea9d32",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr2/activate-twice/reference-input-tree.json",
+          "sha256": "d0606dbec5eeeef81e74c7302f9e1a897bc5eb2f8aeb24654b3765aeded8b69e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr2/activate-twice/astylar-input-tree.json",
+          "sha256": "25a70c966bccfb39fbe94072590d56071f6b73344ea220bb4ca40a98be121a9d"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@custom/desktop-dpr2/activate-twice",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/f9c892644967b4721c28fe8e54477c96357f4e3f63bfca96d183696625e441bd.json",
+        "sha256": "fa9034da7846eeda3ca35639dfb4267b93ab42e402706301bffcf7eb82a61183"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@custom/desktop-dpr2/open",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "6dd19a88e08d358df17dd4541e7c6df2af9f57ea57834c2ba5d87d9ddbea9d32",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr2/open/reference-input-tree.json",
+          "sha256": "828c17034bedf89683fdd4b924f6f10ae17d234e9ddf12e655573033e2ad7442"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/custom/desktop-dpr2/open/astylar-input-tree.json",
+          "sha256": "df318b28564523b0f652373384e105b195d253f1c548338ff7528f277ff95fa5"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@custom/desktop-dpr2/open",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/6160c52f05de96327a765dca66cb310d09e2dea41228b835e084d6c796083a93.json",
+        "sha256": "c9bc953ba80acfb137cd18645edc4825589cb36a9938a61a553687f41c20ead1"
+      },
+      "pattern": 2
+    },
+    {
+      "case": "interaction:snack-bar@light/comparison/activate",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "03fde9713b8adc7c4a69c6820c96929d8bcf51429985b6fe7f9c28fd5009b248",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/comparison/activate/reference-input-tree.json",
+          "sha256": "41971f94f31a189101aea647edb30daef1aee451bee36335acd157180c8c2d04"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/comparison/activate/astylar-input-tree.json",
+          "sha256": "9d81179feb59eb6098dc1bda11091ea87130a2ec7867448b332d8806ca457ef7"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@light/comparison/activate",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/1bfcace54a3c904bb35c3071a615450d9153a73dcc2e7c36e6b29c0634e911c7.json",
+        "sha256": "06b6abc25051d72a722d259d52ccdd11ba2cb05197bb633965bc3073b4626c7d"
+      },
+      "pattern": 3
+    },
+    {
+      "case": "interaction:snack-bar@light/comparison/activate-twice",
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "originalInputSha256": "03fde9713b8adc7c4a69c6820c96929d8bcf51429985b6fe7f9c28fd5009b248",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/comparison/activate-twice/reference-input-tree.json",
+          "sha256": "0b42507b334633a4f969a11fdbdd191ead47fd446ed119a4447c8761aaebaa6c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/snack-bar/light/comparison/activate-twice/astylar-input-tree.json",
+          "sha256": "1932fd578ed4627620143cc9b421ea6924be8473c50eeb219d08138661df8bcc"
+        }
+      },
+      "contextRecord": {
+        "case": "interaction:snack-bar@light/comparison/activate-twice",
+        "file": "artifacts/material-parity/original-overlay-context-current-ancestry-audit/172b488b103d5d4e798e1e7fc43099be0030fae13136f80da4c8e3b7790084b0.json",
+        "sha256": "7fecd1acdae618475bc7da94f6650bf6a1076071b28108c7a298f05b456ec4a4"
+      },
+      "pattern": 3
+    }
+  ],
+  "candidateComputedVerified": false,
+  "inputEquivalent": false,
+  "renderingEquivalent": false,
+  "rendererCauseProven": false,
+  "canonicalAttributionChanged": false,
+  "limits": [
+    "Identity and all original scalar values are replayed, not whole-element input equivalence.",
+    "The known missing layered z-index rule remains recorded; neither scalar nor canonical evidence is rewritten.",
+    "External reference ancestors are a later same-state replay, not previously unrecorded historical observations.",
+    "External CSSOM is hash-bound but not resolved here; candidate stages are local declarations, not computed inheritance.",
+    "This evidence does not explain missing, clipped, low, blurry or misaligned overlay rendering."
+  ]
+}
