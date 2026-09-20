@@ -1,0 +1,4170 @@
+{
+  "schemaVersion": 1,
+  "kind": "badge-explicit-whitespace-input-audit",
+  "capture": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+  },
+  "casesScanned": 2311,
+  "observations": 52,
+  "findings": [
+    {
+      "case": "static:badge@light/desktop",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/light/desktop/reference-input-tree.json",
+          "sha256": "586473187028318cc74d460d7c2026c05968f800a133cef8666fb38500a07c10"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/light/desktop/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "static:badge@light/tablet",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/light/tablet/reference-input-tree.json",
+          "sha256": "d9c5cf8057d675216b4939ef6548ab7eaa0962ef3fd76bc44f52eddbdbe6062b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/light/tablet/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "static:badge@light/mobile",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/light/mobile/reference-input-tree.json",
+          "sha256": "2139e007cd39a84acfa0c1b0453866460b925bf3b90b5654758ddaefbc5ef95a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/light/mobile/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "static:badge@dark/desktop",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/dark/desktop/reference-input-tree.json",
+          "sha256": "440d5705131d06b40a33f7180e77731db2e241380501bd915bcc01dd54fe78db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/dark/desktop/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "static:badge@dark/tablet",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/dark/tablet/reference-input-tree.json",
+          "sha256": "e7d0163f8a24d148e44790444a1c6e1488ebdc12164ebeb4b5691d87c2ca09d3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/dark/tablet/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "static:badge@dark/mobile",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/dark/mobile/reference-input-tree.json",
+          "sha256": "9805e0fe016a112f435bd8d30177257618e677d3c2077fb75fbb92520734ab5d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/dark/mobile/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "static:badge@contrast/desktop",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/contrast/desktop/reference-input-tree.json",
+          "sha256": "091ee6014bd5a04b8b2a6db49a635b5db9fdbfcf3d3f797bd7a3abb9f3c6b344"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/contrast/desktop/astylar-input-tree.json",
+          "sha256": "8a21748e0444110bf2e500c2930727643ab4ae0489eeca203c69675d24435844"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "static:badge@contrast/tablet",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/contrast/tablet/reference-input-tree.json",
+          "sha256": "d7ccf7e1813a5cea1c54010fa158828eba209a2b5a3f3ca8228e00cbb47fc1e9"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/contrast/tablet/astylar-input-tree.json",
+          "sha256": "8a21748e0444110bf2e500c2930727643ab4ae0489eeca203c69675d24435844"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "static:badge@contrast/mobile",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/contrast/mobile/reference-input-tree.json",
+          "sha256": "711d728cc95e8409c01705ea6d316c95e2123212bac631ab029df11af49e3835"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/contrast/mobile/astylar-input-tree.json",
+          "sha256": "b2e4d16775dd128725a12fbe56b21c491f5cef6dc8e92173762022d5f0aad9b4"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "static:badge@custom/desktop",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/custom/desktop/reference-input-tree.json",
+          "sha256": "a99a6fa8c23d7bb8284a22b625085b108cc00ba9c507a7f5453fd6e1e7240fcb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/custom/desktop/astylar-input-tree.json",
+          "sha256": "13d558cc6a2f4067e6da1542c93176d290107a44ba861a540a4c46cb65dc3d55"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "static:badge@custom/tablet",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/custom/tablet/reference-input-tree.json",
+          "sha256": "3e5277e33b0fd200c181fec55a7ac95fc33ceeff150f6f5ebe00b6ad6ae73f7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/custom/tablet/astylar-input-tree.json",
+          "sha256": "13d558cc6a2f4067e6da1542c93176d290107a44ba861a540a4c46cb65dc3d55"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "static:badge@custom/mobile",
+      "kind": "static",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/custom/mobile/reference-input-tree.json",
+          "sha256": "11df5b6f0c6ae0b73861f70804a28d911d8d600c8589af54027a4a9971fcdc0c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/badge/custom/mobile/astylar-input-tree.json",
+          "sha256": "14c97067df54f90e8021976a2ea919b3850c3156e3c519a30f2d90182316efba"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@light/desktop-dpr1/focus",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "586473187028318cc74d460d7c2026c05968f800a133cef8666fb38500a07c10"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@light/desktop-dpr1/hover",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "586473187028318cc74d460d7c2026c05968f800a133cef8666fb38500a07c10"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@light/desktop-dpr1/held",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "586473187028318cc74d460d7c2026c05968f800a133cef8666fb38500a07c10"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@light/desktop-dpr1/activate",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "586473187028318cc74d460d7c2026c05968f800a133cef8666fb38500a07c10"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@light/desktop-dpr1/activate-leave",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "586473187028318cc74d460d7c2026c05968f800a133cef8666fb38500a07c10"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "98166e4c2b73c2356a21b48faf30711739ce7d81a89fdb50f4ef7e6f77ae4549"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 4,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@light/desktop-dpr2/focus",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "586473187028318cc74d460d7c2026c05968f800a133cef8666fb38500a07c10"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@light/desktop-dpr2/hover",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "586473187028318cc74d460d7c2026c05968f800a133cef8666fb38500a07c10"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@light/desktop-dpr2/held",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "586473187028318cc74d460d7c2026c05968f800a133cef8666fb38500a07c10"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@light/desktop-dpr2/activate",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "586473187028318cc74d460d7c2026c05968f800a133cef8666fb38500a07c10"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@light/desktop-dpr2/activate-leave",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "586473187028318cc74d460d7c2026c05968f800a133cef8666fb38500a07c10"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "2af990da244145b1cf83c77346f294791f59ab41fd66cfd4ee15e1772d69e5cf"
+        }
+      },
+      "inputSha256": "dfaa96c864b2dd17517264c34d45230d317ae565f3c043065e105e7a4b647d10",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@dark/desktop-dpr1/focus",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "440d5705131d06b40a33f7180e77731db2e241380501bd915bcc01dd54fe78db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@dark/desktop-dpr1/hover",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "440d5705131d06b40a33f7180e77731db2e241380501bd915bcc01dd54fe78db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@dark/desktop-dpr1/held",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "440d5705131d06b40a33f7180e77731db2e241380501bd915bcc01dd54fe78db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@dark/desktop-dpr1/activate",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "440d5705131d06b40a33f7180e77731db2e241380501bd915bcc01dd54fe78db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@dark/desktop-dpr1/activate-leave",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "440d5705131d06b40a33f7180e77731db2e241380501bd915bcc01dd54fe78db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@dark/desktop-dpr2/focus",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "440d5705131d06b40a33f7180e77731db2e241380501bd915bcc01dd54fe78db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@dark/desktop-dpr2/hover",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "440d5705131d06b40a33f7180e77731db2e241380501bd915bcc01dd54fe78db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@dark/desktop-dpr2/held",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "440d5705131d06b40a33f7180e77731db2e241380501bd915bcc01dd54fe78db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@dark/desktop-dpr2/activate",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "440d5705131d06b40a33f7180e77731db2e241380501bd915bcc01dd54fe78db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@dark/desktop-dpr2/activate-leave",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "440d5705131d06b40a33f7180e77731db2e241380501bd915bcc01dd54fe78db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "f46e66f717bc990762fc54d4a7fd7599236979c82318c2f244266eae7906caed"
+        }
+      },
+      "inputSha256": "835d1a3db77d7c0023b13d2a18c4fed3cf557e41edcd1defc350a584f1d2cf15",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@contrast/desktop-dpr1/focus",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "091ee6014bd5a04b8b2a6db49a635b5db9fdbfcf3d3f797bd7a3abb9f3c6b344"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "8a21748e0444110bf2e500c2930727643ab4ae0489eeca203c69675d24435844"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@contrast/desktop-dpr1/hover",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "091ee6014bd5a04b8b2a6db49a635b5db9fdbfcf3d3f797bd7a3abb9f3c6b344"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "8a21748e0444110bf2e500c2930727643ab4ae0489eeca203c69675d24435844"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@contrast/desktop-dpr1/held",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "091ee6014bd5a04b8b2a6db49a635b5db9fdbfcf3d3f797bd7a3abb9f3c6b344"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "8a21748e0444110bf2e500c2930727643ab4ae0489eeca203c69675d24435844"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@contrast/desktop-dpr1/activate",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "091ee6014bd5a04b8b2a6db49a635b5db9fdbfcf3d3f797bd7a3abb9f3c6b344"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "8a21748e0444110bf2e500c2930727643ab4ae0489eeca203c69675d24435844"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@contrast/desktop-dpr1/activate-leave",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "091ee6014bd5a04b8b2a6db49a635b5db9fdbfcf3d3f797bd7a3abb9f3c6b344"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "8a21748e0444110bf2e500c2930727643ab4ae0489eeca203c69675d24435844"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@contrast/desktop-dpr2/focus",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "091ee6014bd5a04b8b2a6db49a635b5db9fdbfcf3d3f797bd7a3abb9f3c6b344"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "b2e4d16775dd128725a12fbe56b21c491f5cef6dc8e92173762022d5f0aad9b4"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@contrast/desktop-dpr2/hover",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "091ee6014bd5a04b8b2a6db49a635b5db9fdbfcf3d3f797bd7a3abb9f3c6b344"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "b2e4d16775dd128725a12fbe56b21c491f5cef6dc8e92173762022d5f0aad9b4"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@contrast/desktop-dpr2/held",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "091ee6014bd5a04b8b2a6db49a635b5db9fdbfcf3d3f797bd7a3abb9f3c6b344"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "b2e4d16775dd128725a12fbe56b21c491f5cef6dc8e92173762022d5f0aad9b4"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@contrast/desktop-dpr2/activate",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "091ee6014bd5a04b8b2a6db49a635b5db9fdbfcf3d3f797bd7a3abb9f3c6b344"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "b2e4d16775dd128725a12fbe56b21c491f5cef6dc8e92173762022d5f0aad9b4"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@contrast/desktop-dpr2/activate-leave",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "091ee6014bd5a04b8b2a6db49a635b5db9fdbfcf3d3f797bd7a3abb9f3c6b344"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "b2e4d16775dd128725a12fbe56b21c491f5cef6dc8e92173762022d5f0aad9b4"
+        }
+      },
+      "inputSha256": "73c6b51e82463ee00f496dd6fbf381e9f59eec35c870992f94f3b823f155b08d",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@custom/desktop-dpr1/focus",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "a99a6fa8c23d7bb8284a22b625085b108cc00ba9c507a7f5453fd6e1e7240fcb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "13d558cc6a2f4067e6da1542c93176d290107a44ba861a540a4c46cb65dc3d55"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@custom/desktop-dpr1/hover",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "a99a6fa8c23d7bb8284a22b625085b108cc00ba9c507a7f5453fd6e1e7240fcb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "13d558cc6a2f4067e6da1542c93176d290107a44ba861a540a4c46cb65dc3d55"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@custom/desktop-dpr1/held",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "a99a6fa8c23d7bb8284a22b625085b108cc00ba9c507a7f5453fd6e1e7240fcb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "13d558cc6a2f4067e6da1542c93176d290107a44ba861a540a4c46cb65dc3d55"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@custom/desktop-dpr1/activate",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "a99a6fa8c23d7bb8284a22b625085b108cc00ba9c507a7f5453fd6e1e7240fcb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "13d558cc6a2f4067e6da1542c93176d290107a44ba861a540a4c46cb65dc3d55"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@custom/desktop-dpr1/activate-leave",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "a99a6fa8c23d7bb8284a22b625085b108cc00ba9c507a7f5453fd6e1e7240fcb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "13d558cc6a2f4067e6da1542c93176d290107a44ba861a540a4c46cb65dc3d55"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@custom/desktop-dpr2/focus",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "a99a6fa8c23d7bb8284a22b625085b108cc00ba9c507a7f5453fd6e1e7240fcb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "3ffc98debf4ec0961fdd02e745b5cf83679e261cd63e204ea096890e2fe5ee54"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@custom/desktop-dpr2/hover",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "a99a6fa8c23d7bb8284a22b625085b108cc00ba9c507a7f5453fd6e1e7240fcb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "3ffc98debf4ec0961fdd02e745b5cf83679e261cd63e204ea096890e2fe5ee54"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@custom/desktop-dpr2/held",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "a99a6fa8c23d7bb8284a22b625085b108cc00ba9c507a7f5453fd6e1e7240fcb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "3ffc98debf4ec0961fdd02e745b5cf83679e261cd63e204ea096890e2fe5ee54"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@custom/desktop-dpr2/activate",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "a99a6fa8c23d7bb8284a22b625085b108cc00ba9c507a7f5453fd6e1e7240fcb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "3ffc98debf4ec0961fdd02e745b5cf83679e261cd63e204ea096890e2fe5ee54"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    },
+    {
+      "case": "interaction:badge@custom/desktop-dpr2/activate-leave",
+      "kind": "interaction",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "a99a6fa8c23d7bb8284a22b625085b108cc00ba9c507a7f5453fd6e1e7240fcb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/badge/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "3ffc98debf4ec0961fdd02e745b5cf83679e261cd63e204ea096890e2fe5ee54"
+        }
+      },
+      "inputSha256": "be4a6c838d6eec9c87f066938c148c2c5c85a09d0512b71a105c3728f9985ce3",
+      "proof": {
+        "property": "whiteSpace",
+        "element": "badge-label",
+        "issues": [
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "resolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "normalResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": "interactionResolvedStyle",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          },
+          {
+            "reason": "explicit-relevant-request",
+            "side": "astylar",
+            "node": "root/0/2/0/0",
+            "source": ".badge-label",
+            "key": "whiteSpace",
+            "value": "nowrap"
+          }
+        ],
+        "disposition": "requires-specific-review",
+        "computedCandidateVerified": false,
+        "renderingEquivalent": false,
+        "referenceComputed": "normal",
+        "candidateLocalDeclaration": "nowrap",
+        "referencePath": [
+          "frame",
+          "frame/2",
+          "frame/2/0",
+          "frame/2/0/0"
+        ],
+        "candidatePath": [
+          "root",
+          "root/0",
+          "root/0/2",
+          "root/0/2/0",
+          "root/0/2/0/0"
+        ],
+        "source": "core-style-inspection",
+        "revision": 3,
+        "classification": "application-plugin-authoring-defect",
+        "attribution": "badge-label-explicit-nowrap-versus-reference-normal",
+        "firstDivergence": "authored whitespace request",
+        "inputEquivalent": false,
+        "rendererCauseProven": false,
+        "visualEffectProven": false
+      }
+    }
+  ],
+  "history": [
+    {
+      "commit": "fcde1b7dd2f5622599283ea80f8f920bd45243d2",
+      "sourceSha256": "df8d48294fdabffd6a1ccf998d1e7bc9247e2e6b3394dc49ab4676fcfe3d3e74",
+      "witnesses": []
+    },
+    {
+      "commit": "7945a42ba72a2f90c48ef0b2482ff5f9290ea281",
+      "sourceSha256": "ad4136edacb8c83df53b37e2edcf29a43846f01b3c358c5382ec5dfd95aa1038",
+      "witnesses": [
+        {
+          "line": 326,
+          "text": "        { selector: '.badge-label', position: 'relative', top: `${theme.density <= -5 ? '-0.5px' : '-2px'}`, whiteSpace: 'nowrap' },"
+        },
+        {
+          "line": 327,
+          "text": "        ...(theme.density <= -5 ? [{ selector: '.badge-label', mediaMaxWidth: '500px', top: '-1px' }] : []),"
+        }
+      ]
+    },
+    {
+      "commit": "48c994e3752985c54c12c028dd642f99be1f66e0",
+      "sourceSha256": "480545ce8b4dec89b7354a2a240e5d712a9f1ed363d977e33d086c589ba865dc",
+      "witnesses": [
+        {
+          "line": 689,
+          "text": "        { selector: '.badge-label', whiteSpace: 'nowrap' },"
+        }
+      ]
+    }
+  ],
+  "currentSource": {
+    "file": "examples/material-showcase/src/app/astylar.component.ts",
+    "sha256": "b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90",
+    "witnesses": [
+      {
+        "line": 688,
+        "text": "        { selector: '.badge-label', whiteSpace: 'nowrap' },"
+      }
+    ]
+  },
+  "collectorSha256": "2e6f969215e697b9f4ce20297af5ac2632018bd6fb5ddcd8d8cb33c5bd03e5e0",
+  "canonicalAttributionChanged": false,
+  "rendererChanged": false,
+  "limits": [
+    "No canonical classifications are changed.",
+    "The parent/child history proves introduction at this edge and later retention, not developer intent or a rendering bisect.",
+    "The unbroken word Notifications does not demonstrate a visual effect of nowrap.",
+    "Existing intrinsic parent-width and positioned-margin proofs are separate; nowrap is not proved to cause or repair them."
+  ]
+}
