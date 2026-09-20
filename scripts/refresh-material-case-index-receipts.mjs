@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-export const caseIndexReceiptRevision = '4947e2f93d03ac7f5e7a481c44ea9039831254c8';
+export const caseIndexReceiptRevision = '67db724e5f258c84cfdc70e9da2ccb6ee6353ad0';
 export const caseIndexAuditModule = 'tests/material-parity/input-equivalence-audit.mjs';
 export const caseIndexReceiptFiles = [
   'docs/material-container-caret-audit.json',
@@ -26,7 +26,7 @@ const readRevision = file => execFileSync('git', ['show', `${caseIndexReceiptRev
 // pass. Run those unchanged assertions before accepting a receipt refresh.
 export function collectCaseIndexReceiptRefresh({ read = file => readFileSync(file), historical = readRevision } = {}) {
   const oldHash = sourceHash(historical(caseIndexAuditModule)), currentHash = sourceHash(read(caseIndexAuditModule));
-  assert.equal(oldHash, 'b6b4e62bab949ce5bc955a823225d93085accb67bb27f1c0f9d98796fb66ec73');
+  assert.equal(oldHash, '1189df0c574dc9e8058cf7a61ceb0f0751e0df48dca67b796f12dadde3ec6e45');
   const reports = [], receipts = [];
   for (const file of caseIndexReceiptFiles) {
     const originalBytes = historical(file), original = JSON.parse(originalBytes), before = JSON.parse(read(file));

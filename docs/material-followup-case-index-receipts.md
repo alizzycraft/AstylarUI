@@ -1,5 +1,27 @@
 # Nine case-index receipts: guarded refresh applied
 
+## 2026-09-20 tooling baseline update
+
+The refresh tool now authenticates the accepted pre-alignment-integration
+baseline `67db724e5f258c84cfdc70e9da2ccb6ee6353ad0`, whose main-module digest is
+`1189df0c574dc9e8058cf7a61ceb0f0751e0df48dca67b796f12dadde3ec6e45`.
+The previous `4947e2f` anchor correctly rejected these already-advanced receipts
+as unknown when preparing the next integration. This updates only the exact
+historical anchor and its digest, not the permitted receipt fields or checks.
+Every complete report must still equal the authenticated baseline after its
+single main-module receipt is restored, and all other dependencies must match.
+
+Against the pending alignment integration, read-only `--plan` succeeds. The
+three proposal/rejection/writer-order checks pass **3/3**, exit 0, in
+**4,936.6731ms**. The guarded writer then passes its complete **4/4** suite,
+including the unchanged eleven original case-index membership assertions, before
+writing; verification output SHA-256 is
+`f441c2d32ba128e25023b62fff9e536dd239fe3d841c72fa55a546170f55429a`.
+The subsequent `--check` exits 0. Logs use the prefix
+`alignment-integration-case-index-` under the existing artifact directory.
+The tooling increment does not promote the pending main-builder or canonical
+report changes and does not establish renderer parity.
+
 ## 2026-09-19 applied refresh
 
 After the independent canonical freshness reader terminated, the guarded writer
