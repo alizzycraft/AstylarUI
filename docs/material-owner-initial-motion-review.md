@@ -81,3 +81,44 @@ transition groups. This check reuses the hash-authenticated motion review; it
 does not freshly replay its source proofs, join the still-generating current
 canonical payload, establish classification eligibility, or change a canonical
 row. Those remain prerequisites for integration, not consequences of membership.
+
+## Source-replayed attribution proposal
+
+[The proposal](material-owner-motion-attribution-plan.json) now freshly replays
+the complete original motion review and authenticates the entire frozen canonical
+payload at `67db724`. It proposes **86 groups / 4,708 observations** as
+`parity-harness-defect`: browser-computed initial values are compared with
+omissions in candidate local declaration stages. The captured reference motion
+targets have been independently reviewed as disjoint from the audited property.
+This does not supply missing candidate computed values, certify external
+inheritance, or waive indirect motion effects, layout, paint or interaction.
+
+All **35 groups / 2,546 observations** still requiring specific review remain
+explicitly retained. The proposal records original complete-row and proof-group
+hashes, full ordered case membership, observation digests and preserved static
+cases. The other **8,253 complete rows** have ordered digest
+`f9eeb1626d403c169d07d1defc99ca08eda122e7c92659c78a95c9ee1814d816`.
+No canonical row or count is changed by generating this historical proposal.
+Integration must still compare against the accepted current canonical population.
+
+Verification:
+
+```text
+node --max-old-space-size=1536 scripts/audit-material-owner-motion-attribution.mjs
+node --max-old-space-size=1536 --test --test-concurrency=1 tests/material-parity/owner-motion-attribution.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs
+```
+
+The final generation exits 0 and the complete test run passes **7/7**, exit 0,
+**119,880.7958ms**, no skips, cancellations or TODOs. It includes 32 rejection
+controls and a complete source/payload freshness replay with writes prohibited.
+Proposal SHA-256:
+`fd25668197bd401d1aa806a802c1655ac4315bfa177ca705c8acb4eaf3e98eda`.
+Logs are `owner-motion-attribution-generation-retry-sep20.log` and
+`owner-motion-attribution-full-sep20.log` in the existing artifact directory.
+
+Initial failed attempts are retained too: the small test fixture first omitted
+the static-state key, and the first full generation compared raw `0px` directly
+with canonical `0` for word spacing. The final checker uses the already bound
+production normalization function for that stage comparison; captured raw values
+and source proofs remain unchanged. The positive test explicitly covers this
+representation difference before exercising rejection controls.
