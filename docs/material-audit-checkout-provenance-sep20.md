@@ -105,6 +105,23 @@ source verification for the 134-group/3,325-observation and
 generator has started (`alignment-canonical-conserved-retry-sep20.log`); its
 output still requires validation and full-row conservation before acceptance.
 
+The current historical-reconstruction and harness-discovery suites subsequently
+passed **8/8**, exit 0, **170,944.0212ms**, with no failures, skips, cancellations
+or TODOs:
+
+```text
+node --max-old-space-size=1536 --test --test-concurrency=1 tests/material-parity/later-reviewed-input-conservation.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs
+```
+
+Log: `alignment-historical-conservation-current-sep20.log` in the same artifact
+directory. The reconstruction checks independently replay the earlier 134-group /
+3,325-observation source population with writes prohibited, preserve unrelated
+differences, and reject 20 membership/raw-input/metadata mutations. The inventory
+checks retain full discovery, real child execution and failure propagation. This
+does **not** verify the new 125-group canonical transition, the separate earlier
+66-group composition, or a complete harness run. The canonical generator remains
+live with its source inputs unchanged; its result is still pending.
+
 ## Separate direct-entry failure retained
 
 `node scripts/audit-material-overlay-font-inputs.mjs --check` fails before
