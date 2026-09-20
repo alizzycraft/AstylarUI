@@ -26,7 +26,7 @@ const definitions = {
   tab: { file: 'docs/material-tab-panel-inputs.json', collect: collectTabPanelInputs,
     targets: ['tab-panel'], attribution: 'reviewed-tab-panel-private-typography-inputs' },
   overlay: { file: 'docs/material-overlay-font-inputs.json', collect: collectOverlayFontInputs,
-    targets: Object.keys(overlayFontTargets), attribution: 'reviewed-overlay-font-inheritance-inputs' },
+    get targets() { return Object.keys(overlayFontTargets); }, attribution: 'reviewed-overlay-font-inheritance-inputs' },
 };
 
 export function planFontOwnershipAttribution(proofs, original, rows, normalize) {
