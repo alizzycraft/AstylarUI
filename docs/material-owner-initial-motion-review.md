@@ -60,3 +60,24 @@ tests (exit 0, 605.585ms, no skips or cancellations).
 The report SHA-256 is
 `f8f90799191604823875d849fb6ae56de46dd96c37e3f91c8d540bdd48916294`.
 These are audit-evidence tests, not renderer fixes or full parity acceptance.
+
+## Historical canonical membership cross-check
+
+A read-only join on 2026-09-20 authenticated every compressed and decoded byte
+of the accepted `67db724e5f258c84cfdc70e9da2ccb6ee6353ad0` canonical payload,
+then matched **all 121 groups / 7,254 observations** to its unresolved rows.
+The comparison uses the independently bound production normalization functions,
+requires a unique family/element/property/value/omission match, and verifies
+exact occurrence counts, ordered captured case samples and unique complete
+source memberships. Each joined result retains the complete canonical-row hash
+and ordered full-case hash. The 86 directly disjoint groups account for 4,708
+observations; the other 35 groups remain review cases.
+
+The diagnostic exited 0. Its full machine output is retained at
+`artifacts/material-parity/field-host-flow-input-audit/owner-motion-historical-membership-sep20.log`
+(raw SHA-256 `6ee7c151623f4814baf147113f6cb183252ee67526c18190c2e146defb44f25e`).
+A separate identity comparison found no overlap with the 72 saved alignment/font
+transition groups. This check reuses the hash-authenticated motion review; it
+does not freshly replay its source proofs, join the still-generating current
+canonical payload, establish classification eligibility, or change a canonical
+row. Those remain prerequisites for integration, not consequences of membership.
