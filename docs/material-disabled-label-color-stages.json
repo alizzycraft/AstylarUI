@@ -1,0 +1,996 @@
+{
+  "schemaVersion": 1,
+  "kind": "disabled-label-color-stage-reconciliation",
+  "capture": {
+    "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
+    "sha256": "b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a"
+  },
+  "transition": {
+    "file": "docs/material-color-normalization-transition.json",
+    "sha256": "8578efa6882d25a5ad82f58edf36f327542f4ec9c9c5c31d73479931a644cd81"
+  },
+  "normalization": {
+    "module": "tests/material-parity/input-equivalence-audit.mjs",
+    "functions": [
+      "canonicalStyle",
+      "expandQuad",
+      "expandPair",
+      "splitCssTerms",
+      "normalizeValue",
+      "normalizeColor",
+      "formatNumber"
+    ],
+    "sha256": "27fcf8d751bb10a5a7e9426a4d21b83de3c0d9242387d75a67613b953940c773"
+  },
+  "counts": {
+    "groups": 8,
+    "cases": 24,
+    "observations": 32,
+    "ownColorOmitted": 24
+  },
+  "observations": [
+    {
+      "case": "interaction:checkbox@light/desktop-dpr1/disabled",
+      "family": "checkbox",
+      "element": "checkbox-label",
+      "property": "color",
+      "originalInputSha256": "87a1a345d165d723d464449da2f179c2c856ba674e34dd8adb4ad267a3839584",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": "rgba(29,27,32,1)",
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": false,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "4c6daafa113b15a21bafdc59ea74ec4384cde09a578e817a632baeb6f040c8f1",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/light/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "0974097eb89b1c2e211ca231c8395f2e897d826c9122cca1aa8ddf7bbbe6c8ae"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/light/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "76b3e3738839a4cfdd3bc447aee50d97d02a036af1d52e9713bd1faeb03cd420"
+        }
+      }
+    },
+    {
+      "case": "interaction:checkbox@light/desktop-dpr2/disabled",
+      "family": "checkbox",
+      "element": "checkbox-label",
+      "property": "color",
+      "originalInputSha256": "87a1a345d165d723d464449da2f179c2c856ba674e34dd8adb4ad267a3839584",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": "rgba(29,27,32,1)",
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": false,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "d72933fb13a370428c8cd90e8b8dc1f69a119d96e85ea2e61aee7bf860e4153f",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/light/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "0974097eb89b1c2e211ca231c8395f2e897d826c9122cca1aa8ddf7bbbe6c8ae"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/light/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "76b3e3738839a4cfdd3bc447aee50d97d02a036af1d52e9713bd1faeb03cd420"
+        }
+      }
+    },
+    {
+      "case": "interaction:checkbox@contrast/desktop-dpr1/disabled",
+      "family": "checkbox",
+      "element": "checkbox-label",
+      "property": "color",
+      "originalInputSha256": "ba0d52b73965f4685c818df2938edf2d95f4d21450af470662f5f5410c0ceb9f",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": "rgba(29,27,32,1)",
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": false,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "3076bbfec24f40cf35d578191df8f29bb2412184c6cf190e9aeb4e1652400c51",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/contrast/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "daaa6c31fcbfe1fd1160fb174d9d65bf252617fc3c2b2fdde466590a34eb1047"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/contrast/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "87dc013c845b56823151c4c09551813d3bda711ecbca1e5311e5ce2c5812ded8"
+        }
+      }
+    },
+    {
+      "case": "interaction:checkbox@contrast/desktop-dpr2/disabled",
+      "family": "checkbox",
+      "element": "checkbox-label",
+      "property": "color",
+      "originalInputSha256": "ba0d52b73965f4685c818df2938edf2d95f4d21450af470662f5f5410c0ceb9f",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": "rgba(29,27,32,1)",
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": false,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "ed5f8e3cc5afbfabb7039c7257e417d3ab265db141622784bd5661f0466ed2ed",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/contrast/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "daaa6c31fcbfe1fd1160fb174d9d65bf252617fc3c2b2fdde466590a34eb1047"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/contrast/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "dfce61c4138f2ea369469ce4169de30dc85a27cb8301d460c91839a48f5501b3"
+        }
+      }
+    },
+    {
+      "case": "interaction:checkbox@custom/desktop-dpr1/disabled",
+      "family": "checkbox",
+      "element": "checkbox-label",
+      "property": "color",
+      "originalInputSha256": "7553c48fb1823d585b8fd619d0a73f01c9690153dd8d76ca3850b718edc00948",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": "rgba(29,27,32,1)",
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": false,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "cac43452cb3bb959443b1ec12f8ac044756053780cfd800db2ecf20ea995f759",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/custom/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "80ff7558f83d2e6dc082976f2d58516eb3aa3c4ef9a9451a67e1845042cd2b37"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/custom/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "bea5b5584b7dac9f863a67ae7b8f253e09346ee80a9a6db1e7b15f306a34f1e7"
+        }
+      }
+    },
+    {
+      "case": "interaction:checkbox@custom/desktop-dpr2/disabled",
+      "family": "checkbox",
+      "element": "checkbox-label",
+      "property": "color",
+      "originalInputSha256": "7553c48fb1823d585b8fd619d0a73f01c9690153dd8d76ca3850b718edc00948",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": "rgba(29,27,32,1)",
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": false,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "04beee715f61c424d6def4291079fd474389223d03046f5e8f4f5d66e3623784",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/custom/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "80ff7558f83d2e6dc082976f2d58516eb3aa3c4ef9a9451a67e1845042cd2b37"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/custom/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "f744a6f2d042dabe792832f6b1dd8a777a49ced1aa4ffdd07f8ad62a1b182057"
+        }
+      }
+    },
+    {
+      "case": "interaction:checkbox@dark/desktop-dpr1/disabled",
+      "family": "checkbox",
+      "element": "checkbox-label",
+      "property": "color",
+      "originalInputSha256": "c9a219882262b718db330e95bb18582dc2b543943b204193c29c39e51e600b8f",
+      "reference": "rgba(230.000055,225.000015,228.999945,0.38)",
+      "candidateLocal": "rgba(230,225,229,1)",
+      "candidateRetained": "rgba(230,225,229,1)",
+      "ownColorOmitted": false,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "b4d3d8976ed5ab3d015461e4a71b958d5023897145e08e64e92f7ee9c31881d1",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/dark/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "7d482cdbf3c5e319c1e4541c22b2bb18de34a501317b13e71382dbe02a41e7e8"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/dark/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "53b54f777ec158c46968c8f8ad21aa2dd93f59b788184a9f33803f23d4757248"
+        }
+      }
+    },
+    {
+      "case": "interaction:checkbox@dark/desktop-dpr2/disabled",
+      "family": "checkbox",
+      "element": "checkbox-label",
+      "property": "color",
+      "originalInputSha256": "c9a219882262b718db330e95bb18582dc2b543943b204193c29c39e51e600b8f",
+      "reference": "rgba(230.000055,225.000015,228.999945,0.38)",
+      "candidateLocal": "rgba(230,225,229,1)",
+      "candidateRetained": "rgba(230,225,229,1)",
+      "ownColorOmitted": false,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "d3b1f570b5be92c98f402ee0bdf1fad7f007ba1c83065721e54b72397412f612",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/dark/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "7d482cdbf3c5e319c1e4541c22b2bb18de34a501317b13e71382dbe02a41e7e8"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/checkbox/dark/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "6814de90eb8426b6e58245d30f7aaebcae2034bc9e469c188df4511f9f6260ff"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr1/disabled",
+      "family": "radio",
+      "element": "radio-solo-label",
+      "property": "color",
+      "originalInputSha256": "de96f6465cedfe0af18d106815d3f56a9f4544cfdcd39568260729289afbbe79",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "48d615f1dfc422481072656cf3c8f92d0f144155ce048ad7ff4effc428b4f8fe",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "e44222b92406250b88d52d813b5a35c9a732b1a251d709c21077cad64e55f163"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "03b1580802b534d0d9e4718a7e59912ae81cf0271ed160d1b84b0f2114116871"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr2/disabled",
+      "family": "radio",
+      "element": "radio-solo-label",
+      "property": "color",
+      "originalInputSha256": "de96f6465cedfe0af18d106815d3f56a9f4544cfdcd39568260729289afbbe79",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "ebe525818d1782e0157f6bb08c042f5abaca5909d9a4586025f11a93419328d3",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "e44222b92406250b88d52d813b5a35c9a732b1a251d709c21077cad64e55f163"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "03b1580802b534d0d9e4718a7e59912ae81cf0271ed160d1b84b0f2114116871"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr1/disabled",
+      "family": "radio",
+      "element": "radio-solo-label",
+      "property": "color",
+      "originalInputSha256": "de96f6465cedfe0af18d106815d3f56a9f4544cfdcd39568260729289afbbe79",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "0f4a40a2a6253f1de5b5871a0a614a6a435628b2936b1cee4c7527be96a28ad2",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "605959285a228a724259e911be5d430847b26b0b4d59d743644c76082698bbc3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "00807ee5eff99eb252ea9ae08f466b08880c13fb3aee59126d60189410a41932"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr2/disabled",
+      "family": "radio",
+      "element": "radio-solo-label",
+      "property": "color",
+      "originalInputSha256": "de96f6465cedfe0af18d106815d3f56a9f4544cfdcd39568260729289afbbe79",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "f458b41924348423710eaaa30288fd1181bad5a616f17217667aef7b88292db2",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "605959285a228a724259e911be5d430847b26b0b4d59d743644c76082698bbc3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "2299241f34d056ced3fbff724c8ee340469d8b3009ebf8fb773071bd8f4a1b31"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr1/disabled",
+      "family": "radio",
+      "element": "radio-solo-label",
+      "property": "color",
+      "originalInputSha256": "aaa8880059eb86cdc8de5c9296b2966817525fbb859118012e466d49d9a4f11e",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "9759c0feab180687f4156b4b631ca65b8cf2923cfc7353fc39b0225b002316f3",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "8fd471a135de1be3b3f4c9102da6a7a7077f66b3e5d783bc402a9bd53d8fc12b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "e1af49289304c251754de603e6bcdf531cb2ae4219fd5a70dcc87067c0013d53"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr2/disabled",
+      "family": "radio",
+      "element": "radio-solo-label",
+      "property": "color",
+      "originalInputSha256": "aaa8880059eb86cdc8de5c9296b2966817525fbb859118012e466d49d9a4f11e",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "51c42280c7157626d13f10b2dfeec2076913bd722d7193f94af34877d3dc2249",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "8fd471a135de1be3b3f4c9102da6a7a7077f66b3e5d783bc402a9bd53d8fc12b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "277db651fb380c75c275bf255b6d7f5c0a1063f21380184bd346988fcbb6f948"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr1/disabled",
+      "family": "radio",
+      "element": "radio-team-label",
+      "property": "color",
+      "originalInputSha256": "e82d58a09db7dd40f54ae2b10d0f88fbb16430f9d2fb894a8b903f81f7712474",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "d7ee60948e7e99b6d97ee5d4be0eeb0d951aa13a28e50b2b0840153ac2a0fa54",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "e44222b92406250b88d52d813b5a35c9a732b1a251d709c21077cad64e55f163"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "03b1580802b534d0d9e4718a7e59912ae81cf0271ed160d1b84b0f2114116871"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr2/disabled",
+      "family": "radio",
+      "element": "radio-team-label",
+      "property": "color",
+      "originalInputSha256": "e82d58a09db7dd40f54ae2b10d0f88fbb16430f9d2fb894a8b903f81f7712474",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "ac670694c7d000c33ba03608739b7e3753fd545d20438cdd286f75bc692e1e77",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "e44222b92406250b88d52d813b5a35c9a732b1a251d709c21077cad64e55f163"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "03b1580802b534d0d9e4718a7e59912ae81cf0271ed160d1b84b0f2114116871"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr1/disabled",
+      "family": "radio",
+      "element": "radio-team-label",
+      "property": "color",
+      "originalInputSha256": "e82d58a09db7dd40f54ae2b10d0f88fbb16430f9d2fb894a8b903f81f7712474",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "9cc6645a836428cfa0627e11bef0ad34ec778370ebf1e09eaf182722f44b578e",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "605959285a228a724259e911be5d430847b26b0b4d59d743644c76082698bbc3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "00807ee5eff99eb252ea9ae08f466b08880c13fb3aee59126d60189410a41932"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr2/disabled",
+      "family": "radio",
+      "element": "radio-team-label",
+      "property": "color",
+      "originalInputSha256": "e82d58a09db7dd40f54ae2b10d0f88fbb16430f9d2fb894a8b903f81f7712474",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "d065bc1055db6977e6302a35fc64b342ca61c799a555d5e4f97025f8d4403822",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "605959285a228a724259e911be5d430847b26b0b4d59d743644c76082698bbc3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "2299241f34d056ced3fbff724c8ee340469d8b3009ebf8fb773071bd8f4a1b31"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr1/disabled",
+      "family": "radio",
+      "element": "radio-team-label",
+      "property": "color",
+      "originalInputSha256": "610d348e241d7a30893a527f3be025084003237f9e8909848a47e4848d8fabb3",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "e5f389713d56bd2cf73708c64cfd6346c96ade80ac4c6047dc495e3ff89180bc",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "8fd471a135de1be3b3f4c9102da6a7a7077f66b3e5d783bc402a9bd53d8fc12b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "e1af49289304c251754de603e6bcdf531cb2ae4219fd5a70dcc87067c0013d53"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr2/disabled",
+      "family": "radio",
+      "element": "radio-team-label",
+      "property": "color",
+      "originalInputSha256": "610d348e241d7a30893a527f3be025084003237f9e8909848a47e4848d8fabb3",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(29,27,32,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "c8745f9cd763d7534302040d660432666b368f2ac47f60bf50a85fb9b10f257f",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "8fd471a135de1be3b3f4c9102da6a7a7077f66b3e5d783bc402a9bd53d8fc12b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "277db651fb380c75c275bf255b6d7f5c0a1063f21380184bd346988fcbb6f948"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr1/disabled",
+      "family": "radio",
+      "element": "radio-solo-label",
+      "property": "color",
+      "originalInputSha256": "cc58ac53685f515c7e9548429e5c3387854b4e39de3d112d2ef495b923e1d004",
+      "reference": "rgba(230.000055,225.000015,228.999945,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(230,225,229,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "a579a2175545f6a16a4914a01840d413b36bc46e5e49002304fdcd9a305e0530",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "01737ea37afb660b4c7936a2894284a68990e5aa0151f841bf5fa0fea1328f25"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "c367624a58fa5fb313504690ac58af244eda44add9b610e6ef2db6cc0065a6b2"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr2/disabled",
+      "family": "radio",
+      "element": "radio-solo-label",
+      "property": "color",
+      "originalInputSha256": "cc58ac53685f515c7e9548429e5c3387854b4e39de3d112d2ef495b923e1d004",
+      "reference": "rgba(230.000055,225.000015,228.999945,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(230,225,229,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "d0bd6ed1a91586d8f7cad83511eca08c3ad301bd5be3b03b6618890a3b37cafa",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "01737ea37afb660b4c7936a2894284a68990e5aa0151f841bf5fa0fea1328f25"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "c367624a58fa5fb313504690ac58af244eda44add9b610e6ef2db6cc0065a6b2"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr1/disabled",
+      "family": "radio",
+      "element": "radio-team-label",
+      "property": "color",
+      "originalInputSha256": "075c030283a47bd872e63364dfd0bd3d16d37c41fb9ed543850529c4707955e0",
+      "reference": "rgba(230.000055,225.000015,228.999945,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(230,225,229,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "5b887fcd8a934597ad10fb4e7a6facd19bb9d45ca51fe77467465295c4e511e1",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "01737ea37afb660b4c7936a2894284a68990e5aa0151f841bf5fa0fea1328f25"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "c367624a58fa5fb313504690ac58af244eda44add9b610e6ef2db6cc0065a6b2"
+        }
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr2/disabled",
+      "family": "radio",
+      "element": "radio-team-label",
+      "property": "color",
+      "originalInputSha256": "075c030283a47bd872e63364dfd0bd3d16d37c41fb9ed543850529c4707955e0",
+      "reference": "rgba(230.000055,225.000015,228.999945,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(230,225,229,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-choice-label-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled checkbox/radio label token translation",
+      "justification": "The disabled native reference control labels inherit the explicit component disabled-label-color token from their associated label. The candidate ARIA-disabled custom control still supplies an opaque theme.onSurface literal directly to checkbox text or through the radio option parent. Normal/effective inputs and retained color agree with that literal. This is omitted disabled-state styling, not proof of a core alpha conversion defect. Token fallback origin, disabled interaction behavior, ancestor compositing and final raster remain separate obligations.",
+      "retainedReviewSha256": "7f4f9f0cca1b2cf33eabcecf8b5508b8873c7451c907f770402dbf067b1be2e7",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "01737ea37afb660b4c7936a2894284a68990e5aa0151f841bf5fa0fea1328f25"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "c367624a58fa5fb313504690ac58af244eda44add9b610e6ef2db6cc0065a6b2"
+        }
+      }
+    },
+    {
+      "case": "interaction:expansion@light/desktop-dpr1/disabled",
+      "family": "expansion",
+      "element": "expansion-title",
+      "property": "color",
+      "originalInputSha256": "bb2eba624b343a0959e86b2cfc82bed85c41071e42230adf9e91e02b02f19e4c",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(169,166,170,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-component-opaque-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled select and expansion color-token translation",
+      "justification": "The disabled reference component preserves its translucent disabled-text token through the exact captured cascade and text-owner ancestry. Candidate disabled select supplies fixed opaque #79747e; candidate expansion supplies a surface-preblended opaque color inherited from its trigger. Captured declarations and normal/effective/retained stages agree. These are unequal authored color inputs, not proof of core alpha failure or equivalent composited pixels. Preserve tokens and transparency before testing core compositing; disabled interaction and final raster remain separate obligations.",
+      "retainedReviewSha256": "0dbbe9a27052ed0d490cd3ba9c006248e473e8359d6435393d70d6f287c6af5d",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/light/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "f6e43b1dd8f3aaeef37a222a44a4ee47fb547443f57c22ea5ef13e4ce6afc296"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/light/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "a4d3d48b964441dbe4590cde520e9186c4ddac976689deb4c7f3e45c14556f39"
+        }
+      }
+    },
+    {
+      "case": "interaction:expansion@light/desktop-dpr2/disabled",
+      "family": "expansion",
+      "element": "expansion-title",
+      "property": "color",
+      "originalInputSha256": "bb2eba624b343a0959e86b2cfc82bed85c41071e42230adf9e91e02b02f19e4c",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(169,166,170,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-component-opaque-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled select and expansion color-token translation",
+      "justification": "The disabled reference component preserves its translucent disabled-text token through the exact captured cascade and text-owner ancestry. Candidate disabled select supplies fixed opaque #79747e; candidate expansion supplies a surface-preblended opaque color inherited from its trigger. Captured declarations and normal/effective/retained stages agree. These are unequal authored color inputs, not proof of core alpha failure or equivalent composited pixels. Preserve tokens and transparency before testing core compositing; disabled interaction and final raster remain separate obligations.",
+      "retainedReviewSha256": "e634aeef15884d74903ece8082146e5071f0bffe7f71e67c0e11de06a73e8539",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/light/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "f6e43b1dd8f3aaeef37a222a44a4ee47fb547443f57c22ea5ef13e4ce6afc296"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/light/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "a4d3d48b964441dbe4590cde520e9186c4ddac976689deb4c7f3e45c14556f39"
+        }
+      }
+    },
+    {
+      "case": "interaction:expansion@contrast/desktop-dpr1/disabled",
+      "family": "expansion",
+      "element": "expansion-title",
+      "property": "color",
+      "originalInputSha256": "412e7c8f1b824d1256b8e3e179b10bd12e99d505267abfe96edaacfb653a16cf",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(169,168,170,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-component-opaque-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled select and expansion color-token translation",
+      "justification": "The disabled reference component preserves its translucent disabled-text token through the exact captured cascade and text-owner ancestry. Candidate disabled select supplies fixed opaque #79747e; candidate expansion supplies a surface-preblended opaque color inherited from its trigger. Captured declarations and normal/effective/retained stages agree. These are unequal authored color inputs, not proof of core alpha failure or equivalent composited pixels. Preserve tokens and transparency before testing core compositing; disabled interaction and final raster remain separate obligations.",
+      "retainedReviewSha256": "ceb3d632919703a25dab44ed20036a1cb58b67de1aa63279ddba9361124e3b7b",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/contrast/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "dee947186798047acfda4492a5944a706a10f73a48216c2536acf604d133a8ce"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/contrast/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "2961c5c5b57abf9112b2cf810f34798fc5e86e83fc6c3fbc2f81eff141d5bae8"
+        }
+      }
+    },
+    {
+      "case": "interaction:expansion@contrast/desktop-dpr2/disabled",
+      "family": "expansion",
+      "element": "expansion-title",
+      "property": "color",
+      "originalInputSha256": "412e7c8f1b824d1256b8e3e179b10bd12e99d505267abfe96edaacfb653a16cf",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(169,168,170,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-component-opaque-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled select and expansion color-token translation",
+      "justification": "The disabled reference component preserves its translucent disabled-text token through the exact captured cascade and text-owner ancestry. Candidate disabled select supplies fixed opaque #79747e; candidate expansion supplies a surface-preblended opaque color inherited from its trigger. Captured declarations and normal/effective/retained stages agree. These are unequal authored color inputs, not proof of core alpha failure or equivalent composited pixels. Preserve tokens and transparency before testing core compositing; disabled interaction and final raster remain separate obligations.",
+      "retainedReviewSha256": "aa4672e79190cadb66e643948d3d2ac7a4d716b19629a25100e68d6e3c6e215e",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/contrast/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "dee947186798047acfda4492a5944a706a10f73a48216c2536acf604d133a8ce"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/contrast/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "d8daeaeee28d91de5405f4d95e1ba8e58fe8dd9c12c483944831a0ef75a819a0"
+        }
+      }
+    },
+    {
+      "case": "interaction:expansion@custom/desktop-dpr1/disabled",
+      "family": "expansion",
+      "element": "expansion-title",
+      "property": "color",
+      "originalInputSha256": "5c139f7094b0bb7b06bb3c68a8f45de67d39ac7441bb136ec884c6c959ece220",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(162,166,167,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-component-opaque-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled select and expansion color-token translation",
+      "justification": "The disabled reference component preserves its translucent disabled-text token through the exact captured cascade and text-owner ancestry. Candidate disabled select supplies fixed opaque #79747e; candidate expansion supplies a surface-preblended opaque color inherited from its trigger. Captured declarations and normal/effective/retained stages agree. These are unequal authored color inputs, not proof of core alpha failure or equivalent composited pixels. Preserve tokens and transparency before testing core compositing; disabled interaction and final raster remain separate obligations.",
+      "retainedReviewSha256": "10e9ed5389d87ebff81836c9f9ed5547e8c2edb93b602f8a3f384e851a28a863",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/custom/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "47d44a82b21cdf3903ed2d9044ec086e474936947e8680f4a28dffa538c381d3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/custom/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "b8980f8d2376217dd74f5b2c007427d1207001a4cd7ca30fe09222cdfe92f8a2"
+        }
+      }
+    },
+    {
+      "case": "interaction:expansion@custom/desktop-dpr2/disabled",
+      "family": "expansion",
+      "element": "expansion-title",
+      "property": "color",
+      "originalInputSha256": "5c139f7094b0bb7b06bb3c68a8f45de67d39ac7441bb136ec884c6c959ece220",
+      "reference": "rgba(28.999875,26.99991,31.99995,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(162,166,167,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-component-opaque-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled select and expansion color-token translation",
+      "justification": "The disabled reference component preserves its translucent disabled-text token through the exact captured cascade and text-owner ancestry. Candidate disabled select supplies fixed opaque #79747e; candidate expansion supplies a surface-preblended opaque color inherited from its trigger. Captured declarations and normal/effective/retained stages agree. These are unequal authored color inputs, not proof of core alpha failure or equivalent composited pixels. Preserve tokens and transparency before testing core compositing; disabled interaction and final raster remain separate obligations.",
+      "retainedReviewSha256": "f559d843abbf3d8d68f15fc8e33d7d02d16e1efdfa5eccab093df3382e54bf82",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/custom/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "47d44a82b21cdf3903ed2d9044ec086e474936947e8680f4a28dffa538c381d3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/custom/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "8abc677cfa3b2e57cdd70fb96e6407ec068bfb5cdeaa667868a010434619cd50"
+        }
+      }
+    },
+    {
+      "case": "interaction:expansion@dark/desktop-dpr1/disabled",
+      "family": "expansion",
+      "element": "expansion-title",
+      "property": "color",
+      "originalInputSha256": "035b5f70ee05ee366e2e1901589431202aa71259704ec8481c168e2502ff7f9a",
+      "reference": "rgba(230.000055,225.000015,228.999945,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(105,102,106,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-component-opaque-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled select and expansion color-token translation",
+      "justification": "The disabled reference component preserves its translucent disabled-text token through the exact captured cascade and text-owner ancestry. Candidate disabled select supplies fixed opaque #79747e; candidate expansion supplies a surface-preblended opaque color inherited from its trigger. Captured declarations and normal/effective/retained stages agree. These are unequal authored color inputs, not proof of core alpha failure or equivalent composited pixels. Preserve tokens and transparency before testing core compositing; disabled interaction and final raster remain separate obligations.",
+      "retainedReviewSha256": "ed75519789cf09975e84c8b18d80e04c3a6ef48043f2e6be74ac404e87e9670b",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/dark/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "f94dbef79433d3587e853c2d2d9853cd989b7767d08cf44a6177d6018622323e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/dark/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "46742540b3d6cbffd4fb6f2a2ab7b434e93aa8d0d0dde9aad791f4ae4205af60"
+        }
+      }
+    },
+    {
+      "case": "interaction:expansion@dark/desktop-dpr2/disabled",
+      "family": "expansion",
+      "element": "expansion-title",
+      "property": "color",
+      "originalInputSha256": "035b5f70ee05ee366e2e1901589431202aa71259704ec8481c168e2502ff7f9a",
+      "reference": "rgba(230.000055,225.000015,228.999945,0.38)",
+      "candidateLocal": null,
+      "candidateRetained": "rgba(105,102,106,1)",
+      "ownColorOmitted": true,
+      "attribution": "reviewed-disabled-component-opaque-ink-input",
+      "classification": "application-plugin-authoring-defect",
+      "recommendedOwner": "showcase disabled select and expansion color-token translation",
+      "justification": "The disabled reference component preserves its translucent disabled-text token through the exact captured cascade and text-owner ancestry. Candidate disabled select supplies fixed opaque #79747e; candidate expansion supplies a surface-preblended opaque color inherited from its trigger. Captured declarations and normal/effective/retained stages agree. These are unequal authored color inputs, not proof of core alpha failure or equivalent composited pixels. Preserve tokens and transparency before testing core compositing; disabled interaction and final raster remain separate obligations.",
+      "retainedReviewSha256": "c0340d31a3c2d3700f3057a0e8b6f3f6aa9690aef7fe4192c118cca738080d17",
+      "localOmissionPreserved": true,
+      "canonicalAttributionChanged": false,
+      "inputEquivalent": false,
+      "renderingEquivalent": false,
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/dark/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "f94dbef79433d3587e853c2d2d9853cd989b7767d08cf44a6177d6018622323e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/expansion/dark/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "46742540b3d6cbffd4fb6f2a2ab7b434e93aa8d0d0dde9aad791f4ae4205af60"
+        }
+      }
+    }
+  ],
+  "canonicalAttributionChanged": false,
+  "rendererChanged": false,
+  "limitation": "Reconciles current precise local-style differences with independently replayed retained typography findings. Does not rewrite omitted styles as inherited values or prove raster equivalence. Canonical discrepancy classification remains separate."
+}
