@@ -1,5 +1,11 @@
 # Complete audit harness coverage
 
+The [2026-09-20 checkpoint](material-audit-verification-sep20.md) supersedes the
+live-process claims below. TTS completed with acceptance failures; Material
+stopped at page readiness; the 170-file audit process is no longer live and has
+no complete result. Current discovery is 171 files, including the new public
+cursor proof (focused evidence plus inventory checks: 11/11, exit 0).
+
 The [2026-09-19 verification checkpoint](material-audit-verification-sep19.md)
 supersedes the process status below: the release retry stopped during general
 parity, its focused lifecycle diagnostic failed texture-count assertions, and
