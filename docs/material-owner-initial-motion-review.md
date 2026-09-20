@@ -122,3 +122,15 @@ with canonical `0` for word spacing. The final checker uses the already bound
 production normalization function for that stage comparison; captured raw values
 and source proofs remain unchanged. The positive test explicitly covers this
 representation difference before exercising rejection controls.
+
+The subsequent read-only current-payload join also completed with exit 0. It
+authenticates generated payload `c08d24e9...a810e` and compares every proposed
+and retained group object, including complete-row hashes, against the verified
+historical proposal. All 86 proposed and 35 retained objects are unchanged;
+the 125-group alignment integration did not consume or relabel them. Current
+unresolved count remains 1,835. The other 8,253 current rows have ordered digest
+`c7530e5f1f61087dfb0896f3d10502db3f210236348026ecde591ddea8d075ac`.
+Log: `owner-motion-current-membership-sep20.log` (SHA-256
+`31b6aafb1193ff793897d015bf2c678d8210437094ead10fd8b9301ffa6d74c1`).
+This scoped join does not freshly replay the source proof or replace the pending
+all-row conservation and CLI freshness checks for the canonical integration.
