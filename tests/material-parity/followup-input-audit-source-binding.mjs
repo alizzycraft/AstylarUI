@@ -55,6 +55,7 @@ export function collectFollowupInputAuditInputs(report, { root = process.cwd(), 
       originalCapture: replay.originalCapture, proposalBinding: replay.proposalBinding,
       transition: { file: transitionFile, revision: transitionRevision, sha256: hash(transitionBytes) },
       sourceProofsReplayed: true, sourcePlans: replay.descriptors,
+      normalizationContracts: replay.normalizationContracts,
       frozenCanonicalJoinReplayedNow: false, frozenCanonicalJoinVerifiedAt: transitionRevision },
       ...projectFollowupInputAuditInputs(replay.binding, transition, supplied, replay.original, replay.normalize) };
   } catch (error) { return { ...empty, binding: { status: 'invalid', error: String(error) } }; }

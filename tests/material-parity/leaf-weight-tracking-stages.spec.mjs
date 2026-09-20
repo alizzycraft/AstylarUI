@@ -3,14 +3,13 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { inspectLeafWeightTracking } from '../../scripts/audit-material-leaf-weight-tracking-stages.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { inspectLeafWeightTracking, bindLeafWeightTrackingNormalization } from '../../scripts/audit-material-leaf-weight-tracking-stages.mjs';
 
 const reportFile = 'docs/material-leaf-weight-tracking-stages.json';
 const hash = x => createHash('sha256').update(x).digest('hex');
 const proof = JSON.parse(readFileSync(reportFile));
 const original = JSON.parse(readFileSync(proof.originalCapture.file));
-const normalize = bindOwnerCaretNormalization(readFileSync(proof.productionNormalization.module, 'utf8'), proof.productionNormalization);
+const normalize = bindLeafWeightTrackingNormalization();
 const caseId = (kind, e) => `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 const entries = new Map([['static', original.results], ['interaction', original.interactions]].flatMap(([kind, es]) => es.map(e => [caseId(kind, e), e])));
 function fixture(f = proof.findings[0]) {

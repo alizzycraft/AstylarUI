@@ -6,7 +6,7 @@ import { collectLeafFontFamily } from '../../scripts/audit-material-leaf-font-fa
 import { collectLeafWeightTracking } from '../../scripts/audit-material-leaf-weight-tracking-stages.mjs';
 import { collectExpansionOwnerMapping } from '../../scripts/audit-material-expansion-owner-mapping.mjs';
 import { collectControlFontStyleReset } from '../../scripts/audit-material-control-font-style-reset.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const digest = x => hash(JSON.stringify(x));
@@ -86,7 +86,7 @@ export function replayFollowupInputSourcePlans() {
   const bytes = readFileSync(originalCapture.file);
   assert.equal(hash(bytes), originalCapture.sha256);
   const original = JSON.parse(bytes);
-  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const normalize = bindPreciseAuditNormalization();
   const descriptors = {}, plans = {};
   for (const [kind, collect] of Object.entries(collectors)) {
     const descriptor = binding.plans[kind];
@@ -98,6 +98,7 @@ export function replayFollowupInputSourcePlans() {
     plans[kind] = plan;
   }
   return { binding, original, normalize, plans, descriptors, originalCapture,
+    normalizationContracts: { historicalPlans: normalization, current: preciseAuditNormalization },
     proposalBinding: { file: bindingFile, revision: bindingRevision, sha256: hash(pinned.bytes) },
     sourceProofsReplayed: true, frozenCanonicalJoinReplayedNow: false };
 }

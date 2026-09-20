@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { collectFollowupInputAuditInputs, projectFollowupInputAuditInputs,
   followupInputClassificationContexts, classifyFollowupInput, validateFollowupInputAuditInputs,
   validateFollowupInputClassifications } from './followup-input-audit-source-binding.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const originalFile = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
@@ -16,6 +16,7 @@ test('followup builder boundary replays original sources and binds all observati
   const guard = `import fs from 'node:fs';import{syncBuiltinESMExports}from'node:module';
     fs.writeFileSync=()=>{throw Error('CHECK_MODE_ATTEMPTED_WRITE')};syncBuiltinESMExports();`;
   const code = `import assert from 'node:assert/strict';import{readFileSync}from'node:fs';
+    import{bindPreciseAuditNormalization}from'./tests/material-parity/audit-normalization-contracts.mjs';
     import{collectFollowupInputAuditInputs,validateFollowupInputAuditInputs,followupInputClassificationContexts,classifyFollowupInput}
       from'./tests/material-parity/followup-input-audit-source-binding.mjs';
     const report=JSON.parse(readFileSync('${originalFile}'));
@@ -24,13 +25,15 @@ test('followup builder boundary replays original sources and binds all observati
     assert.equal(e.groups.length,66);assert.equal(e.observations.length,2640);
     assert.equal(e.binding.sourceProofsReplayed,true);assert.equal(e.binding.frozenCanonicalJoinReplayedNow,false);
     assert.deepEqual(validateFollowupInputAuditInputs(e),[]);
+    assert.notEqual(e.binding.normalizationContracts.current.sha256,e.binding.normalizationContracts.historicalPlans.sha256);
+    const normalize=bindPreciseAuditNormalization();
     const contexts=followupInputClassificationContexts(e);assert.equal(contexts.size,2640);
     let classified=0;
     for(const[kind,entries]of[['static',report.results],['interaction',report.interactions]])for(const entry of entries){
       const c=kind+':'+entry.family+'@'+entry.profile+'/'+entry.viewport.id+(entry.state?'/'+entry.state:'');
       for(const input of entry.styleInputs)for(const o of e.observations.filter(o=>o.case===c&&o.element===input.id)){
         assert.equal(contexts.get(JSON.stringify([c,input.id,o.property])),o);
-        const result=classifyFollowupInput(input,o.property,o.reference,o.astylar,o);
+        const result=classifyFollowupInput(input,o.property,normalize(input.reference)[o.property],normalize(input.astylar)[o.property],o);
         assert.equal(result.attribution,o.classification.attribution);assert.equal(result.reviewEvidence.inputEquivalent,false);classified++;
       }
     }
@@ -52,14 +55,19 @@ function fixture() {
       binding.groups.find(g => g.kind === k).proposal.observations.slice(0, 2).map(o => o.case)));
     const supplied = { results: original.results.filter(e => wanted.has(caseKey('static', e))),
       interactions: original.interactions.filter(e => wanted.has(caseKey('interaction', e))) };
-    const descriptor = JSON.parse(readFileSync(binding.plans.controlFontStyle.file)).productionNormalization;
-    const normalize = bindOwnerCaretNormalization(readFileSync(descriptor.module, 'utf8'), descriptor);
+    const normalize = bindPreciseAuditNormalization();
     fixtureSource = { binding, transition, original, supplied, normalize };
   }
   const { original, normalize, ...mutable } = fixtureSource;
   return { ...structuredClone(mutable), original, normalize };
 }
 const project = f => projectFollowupInputAuditInputs(f.binding, f.transition, f.supplied, f.original, f.normalize);
+
+test('changed current normalization values cannot inherit historical followup classifications', () => {
+  const f = fixture(), normalize = f.normalize;
+  f.normalize = input => ({ ...normalize(input), fontFamily: 'invented-family' });
+  assert.throws(() => project(f));
+});
 
 test('followup subsets enumerate omissions and preserve exact classifier boundaries', () => {
   const f = fixture(), before = digest(f.supplied), result = project(f);

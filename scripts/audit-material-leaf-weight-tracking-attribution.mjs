@@ -6,7 +6,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { collectLeafWeightTracking } from './audit-material-leaf-weight-tracking-stages.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const digest = x => hash(JSON.stringify(x));
@@ -74,7 +74,7 @@ export async function collectLeafWeightTrackingAttribution() {
   const file = 'docs/material-leaf-weight-tracking-stages.json', bytes = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
   const proof = collectLeafWeightTracking(); assert.equal(bytes, JSON.stringify(proof, null, 2) + '\n');
   const source = readFileSync(proof.originalCapture.file); assert.equal(hash(source), proof.originalCapture.sha256);
-  const normalize = bindOwnerCaretNormalization(readFileSync(proof.productionNormalization.module, 'utf8'), proof.productionNormalization);
+  const normalize = bindHistoricalAuditNormalization(proof.productionNormalization, revision);
   const canonical = await readCaretConservationRows(f => execFileSync('git', ['show', `${revision}:${f}`], { maxBuffer: 64 * 1024 * 1024 }));
   return { schemaVersion: 1, kind: 'leaf-weight-tracking-proposed-attribution', canonicalRevision: revision,
     canonicalPayload: canonical.manifest, sourceProof: { file, sha256: hash(bytes) }, originalCapture: proof.originalCapture,

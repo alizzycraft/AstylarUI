@@ -6,7 +6,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { collectControlFontStyleReset } from './audit-material-control-font-style-reset.mjs';
 import { selectedButtonInputs } from '../tests/material-parity/button-pill-radius-evidence.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -100,7 +100,7 @@ export async function collectControlFontStyleAttribution() {
   const file = 'docs/material-control-font-style-reset.json', bytes = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
   const proof = collectControlFontStyleReset(); assert.equal(bytes, JSON.stringify(proof, null, 2) + '\n');
   const original = readFileSync(proof.originalCapture.file); assert.equal(hash(original), proof.originalCapture.sha256);
-  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const normalize = bindHistoricalAuditNormalization(normalization, revision);
   const canonical = await readCaretConservationRows(f =>
     execFileSync('git', ['show', `${revision}:${f}`], { maxBuffer: 64 * 1024 * 1024 }));
   return { schemaVersion: 1, kind: 'control-font-style-reset-proposed-attribution',

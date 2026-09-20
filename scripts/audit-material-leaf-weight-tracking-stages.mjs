@@ -5,7 +5,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { inspectLeafFontFamily, leafFontFamilyTargets } from './audit-material-leaf-font-family-stages.mjs';
 import { selectorCanApply } from '../tests/material-parity/border-initial-input-evidence.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization, bindPreciseAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const digest = x => hash(JSON.stringify(x));
@@ -72,11 +72,24 @@ export function inspectLeafWeightTracking(family, input, reference, candidate, p
     limitation: 'The candidate local omission is not absence of a text input: retained core-text weight/tracking matches the reference scalar under unchanged production normalization. No authored dependency equivalence beyond the checked path, physical font, glyph spacing/raster, geometry, other property or entire component equivalence follows.' };
 }
 
+// Preserve the historical proof only after checking its selected typography
+// values against the precise live implementation. Do not expose old colors.
+export function bindLeafWeightTrackingNormalization(currentSource) {
+  const historical = bindHistoricalAuditNormalization(normalization, '957774a');
+  const current = bindPreciseAuditNormalization(currentSource);
+  return input => {
+    const before = historical(input), after = current(input);
+    for (const property of Object.keys(fields)) assert.equal(after[property], before[property],
+      `current ${property} differs from historical weight/tracking evidence`);
+    return Object.fromEntries(Object.keys(fields).map(property => [property, after[property]]));
+  };
+}
+
 export function collectLeafWeightTracking() {
   const file = 'artifacts/material-parity/current-ancestry-audit/latest-report.json', bytes = readFileSync(file);
   assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const original = JSON.parse(bytes), seen = new Set(), findings = [], boundary = realpathSync('artifacts/material-parity') + path.sep;
-  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const normalize = bindLeafWeightTrackingNormalization();
   const tree = d => { const file = realpathSync(d.file); assert.ok(file.startsWith(boundary));
     const bytes = readFileSync(file); assert.equal(hash(bytes), d.sha256); return JSON.parse(bytes); };
   for (const [kind, entries] of [['static', original.results], ['interaction', original.interactions]]) for (const e of entries) {

@@ -8452,6 +8452,8 @@ function sourceFingerprints(root) {
     'tests/material-parity/followup-input-audit-source-binding.spec.mjs',
     'tests/material-parity/followup-input-source-replay.mjs',
     'tests/material-parity/followup-input-source-replay.spec.mjs',
+    'tests/material-parity/audit-normalization-contracts.mjs',
+    'tests/material-parity/audit-normalization-contracts.spec.mjs',
     'tests/material-parity/followup-input-proposal-transition.mjs',
     'tests/material-parity/followup-input-proposal-transition.spec.mjs',
     'tests/material-parity/followup-input-proposal-binding.spec.mjs',

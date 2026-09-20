@@ -15,6 +15,8 @@ test('followup source replay freshly validates all four proofs without writes or
     assert.equal(r.binding.groups.length,66);assert.equal(r.binding.proposedObservations,2640);
     assert.equal(r.binding.canonicalIntegration,false);
     assert.equal(r.normalize({fontFamily:'Roboto, Arial, sans-serif'}).fontFamily,'roboto,arial,sans-serif');
+    assert.equal(r.normalize({color:'color(srgb .5 0 1)'}).color,'rgba(127.5,0,255,1)');
+    assert.notEqual(r.normalizationContracts.current.sha256,r.normalizationContracts.historicalPlans.sha256);
     const ds=Object.values(r.descriptors);
     assert.equal(ds.reduce((n,d)=>n+d.proposedGroups,0),66);
     assert.equal(ds.reduce((n,d)=>n+d.proposedObservations,0),2640);
