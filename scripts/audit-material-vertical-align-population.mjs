@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { conserveAlignmentSurveySnapshot } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
@@ -188,7 +189,7 @@ export function collectVerticalAlignPopulation() {
   const selectors = [...new Set(findings.filter(f => f.proof.status === 'candidate-explicit-middle-versus-reference-baseline')
     .map(f => f.proof.candidatePossibleRequests[0].selector))].sort();
   assert.equal(selectors.length, 8);
-  return { schemaVersion: 1, kind: 'complete-original-scalar-vertical-align-population',
+  return conserveAlignmentSurveySnapshot('docs/material-vertical-align-population.json', { schemaVersion: 1, kind: 'complete-original-scalar-vertical-align-population',
     originalCapture: { file, sha256: hash(bytes) }, casesScanned: seen.size, groupCount: groups.size,
     sourceFingerprints: ['scripts/audit-material-vertical-align-population.mjs',
       'tests/material-parity/root-initial-style-evidence.mjs', 'tests/material-parity/border-initial-input-evidence.mjs',
@@ -207,7 +208,7 @@ export function collectVerticalAlignPopulation() {
       'Candidate rules use conservative possible applicability; no cascade winner is synthesized for ambiguous rules, conditions or inline attributes.',
       'Retained text values and private plugin types are recorded, not accepted as glyph, control paint or plugin-consumer proof.',
       'Generated owners use existing structural/measurement-alias proofs with all 89 original scalar fields; unresolved owners, rule gaps and missing scalar evidence remain explicit.',
-      'No rendering, fixture, normalizer or canonical classification change is made by this survey.'] };
+      'No rendering, fixture, normalizer or canonical classification change is made by this survey.'] });
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {

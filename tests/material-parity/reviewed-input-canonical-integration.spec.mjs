@@ -10,6 +10,7 @@ import { readCaretConservationRows } from './owner-caret-canonical-conservation.
 import { collectFollowupInputProposalBinding } from '../../scripts/bind-material-followup-input-proposals.mjs';
 import { stageFollowupInputTransitions } from './followup-input-proposal-transition.mjs';
 import { conserveIntermediateCanonicalRows } from './canonical-transition-composition.mjs';
+import { replayPreparedAlignmentCanonicalTransition } from './prepared-alignment-canonical-transition.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const fields = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
@@ -37,13 +38,14 @@ test('canonical reviewed inputs match independently replayed full-population tra
   const finalExpected = stageFollowupInputTransitions(conserved.rows, followupBinding);
   assert.equal(finalExpected.changedGroups, 66); assert.equal(finalExpected.changedObservations, 2640);
   assert.equal(finalExpected.otherCompleteRows, 8273);
+  const prepared = await replayPreparedAlignmentCanonicalTransition(finalExpected.rows);
   const current = await readCaretConservationRows(file => readFileSync(file));
   assert.equal(current.rows.length, 8339); assert.equal(current.rows.reduce((n, r) => n + r.occurrences, 0), 386891);
-  assert.equal(current.rows.filter(r => r.attribution === 'unresolved').length, 1960,
+  assert.equal(current.rows.filter(r => r.attribution === 'unresolved').length, 1835,
     'verified proposal classifications have not all reached the canonical report');
   let changed = 0, observations = 0; const other = [];
   for (let i = 0; i < original.rows.length; i++) {
-    const before = original.rows[i], after = current.rows[i], planned = finalExpected.rows[i];
+    const before = original.rows[i], after = current.rows[i], planned = prepared.rows[i];
     assert.ok(isDeepStrictEqual(after, planned), `canonical row ${i} differs from independently replayed transition: ${before.family}/${before.element}/${before.property}`);
     assert.ok(isDeepStrictEqual(raw(after), raw(before)), `raw input changed at ${i}`);
     if (isDeepStrictEqual(before, after)) other.push(after);
@@ -52,12 +54,12 @@ test('canonical reviewed inputs match independently replayed full-population tra
       changed++; observations += after.occurrences;
     }
   }
-  assert.equal(changed, 200); assert.equal(observations, 5965); assert.equal(other.length, 8139);
+  assert.equal(changed, 325); assert.equal(observations, 12836); assert.equal(other.length, 8014);
   assert.equal(digest(other.map(digest)), digest(original.rows.filter((r, i) =>
-    isDeepStrictEqual(r, finalExpected.rows[i])).map(digest)));
+    isDeepStrictEqual(r, prepared.rows[i])).map(digest)));
   console.log(JSON.stringify({ canonicalRows: current.rows.length, rawObservations: 386891,
     changedGroups: changed, changedObservations: observations, otherCompleteRows: other.length,
-    otherOrderedRowDigestsSha256: digest(other.map(digest)), remainingUnresolved: 1960,
+    otherOrderedRowDigestsSha256: digest(other.map(digest)), remainingUnresolved: 1835,
     originalReviewedGroups: expected.changedGroups, independentlyVerifiedFollowupGroups: finalExpected.changedGroups,
     intermediateSerializationOnlyRows: conserved.serializationOnlyRows,
     currentCanonicalManifest: current.manifest, inputEquivalent: false, renderingEquivalent: false,

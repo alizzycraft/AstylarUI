@@ -185,3 +185,25 @@ passed **7/7** (11,029.3032ms), committed as `cb00ff4`. Both are pushed; neither
 changes canonical classifications or renderer/comparison behavior. Current
 unfiltered harness discovery contains **189 files**: 181 Material, four general,
 four TTS. A complete current-inventory run and enforced matrix remain required.
+
+## Stable-input canonical freshness completed
+
+The 19:36:49 restored-dependency CLI retry has terminated. It passed the complete
+fresh machine-payload and Markdown comparisons and returned exit **1** solely
+for the expected **1,835 unresolved classifications**. There were no other
+validation or source-binding errors. Coverage remains **436/436 static plus
+1,875/1,875 interaction cases**, **8,339 groups / 386,891 observations**, with
+**132 source findings**. The exact command and scope are recorded in
+[alignment integration](material-alignment-integration.md).
+
+Raw log SHA-256 for `alignment-canonical-cli-freshness-restored-sep20.log`:
+`fc41880d698e9154041267d1dac8294546e425695f9c0b147c77b7dad45118ee`.
+Combined with the independently source-replayed full-row conservation tests,
+this clears the bounded 125-group integration for commit. It is not audit or
+output-parity acceptance. The full matrix and unresolved inventory remain open.
+
+The latest separate diagnostic commit `d9b374f` adds a real-browser chip-motion
+counterexample and authenticates all 1,216 retained chip observations. Its six
+focused/discovery checks pass; the sixteen chip groups remain unresolved rather
+than being waived on the basis of 1ms durations. Inventory increased to 192
+files after that commit; later additions must be included in the final discovery.

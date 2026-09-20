@@ -10,7 +10,7 @@
   "sourceFingerprints": [
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
-      "sha256": "1189df0c574dc9e8058cf7a61ceb0f0751e0df48dca67b796f12dadde3ec6e45"
+      "sha256": "82854bccdaa6ff23fc5f9df987f6ec5cf3e22d0da5dbe64357109d5a03035f3b"
     },
     {
       "file": "tests/material-parity/root-typography-input-evidence.mjs",

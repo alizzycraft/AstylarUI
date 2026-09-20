@@ -4,6 +4,9 @@ import { validateReviewedInputAuditInputs, validateReviewedInputClassifications 
 import { reviewedInputAttributions } from './reviewed-input-proposal-transition.mjs';
 import { validateFollowupInputAuditInputs, validateFollowupInputClassifications } from './followup-input-audit-source-binding.mjs';
 import { followupInputAttributions } from './followup-input-proposal-transition.mjs';
+import { validateAlignmentFontAuditInputs, validateAlignmentFontClassifications, alignmentFontAttributions } from './alignment-font-audit-source-binding.mjs';
+import { validateTextAlignAuditInputs, validateTextAlignClassifications, textAlignAttributions } from './text-align-audit-source-binding.mjs';
+import { validateLtrAlignmentAuditInputs, validateLtrAlignmentClassifications, ltrAlignmentAttribution } from './ltr-alignment-audit-source-binding.mjs';
 
 const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
 const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
@@ -46,6 +49,18 @@ function reconstructMetadata(previous, current, evidence, attributions, validate
 
 export function independentlyReconstructBeforeReviewedInputs(audit, previous, options = {}) {
   let current = audit.discrepancies, followupChanges;
+  const alignmentChanges = [];
+  for (const [field, attributions, validateSource, validateRows] of [
+    ['alignmentFontInputs', alignmentFontAttributions, validateAlignmentFontAuditInputs, validateAlignmentFontClassifications],
+    ['textAlignInputs', textAlignAttributions, validateTextAlignAuditInputs, validateTextAlignClassifications],
+    ['ltrAlignmentInputs', [ltrAlignmentAttribution], validateLtrAlignmentAuditInputs, validateLtrAlignmentClassifications],
+  ]) {
+    if (audit[field] !== undefined || current.some(row => attributions.includes(row.attribution))) {
+      assert.deepEqual(validateSource(audit[field], { ...options, requireComplete: false }), []);
+      const restored = reconstructMetadata(previous.discrepancies, current, audit[field], attributions, validateRows);
+      current = restored.rows; alignmentChanges.push(...restored.changes);
+    }
+  }
   if (audit.followupInputs !== undefined || current.some(row => followupInputAttributions.includes(row.attribution))) {
     // Later findings are not a blanket exclusion. Re-read the original capture
     // and replay every follow-up source proof for this exact historical subset.
@@ -61,5 +76,6 @@ export function independentlyReconstructBeforeReviewedInputs(audit, previous, op
   const result = reconstructBeforeReviewedInputMetadata(previous.discrepancies, current, audit.reviewedInputs);
   // Existing callers keep their original 134-set counts and complete-row checks.
   // The separately authenticated follow-up population is reported independently.
-  return followupChanges === undefined ? result : { ...result, followupChanges };
+  return { ...result, ...(followupChanges === undefined ? {} : { followupChanges }),
+    ...(alignmentChanges.length ? { alignmentChanges } : {}) };
 }

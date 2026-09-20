@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { conserveAlignmentSurveySnapshot } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { createHash } from 'node:crypto';
 import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -118,7 +119,7 @@ export function collectTextAlignAncestry() {
     'tests/material-parity/root-initial-style-evidence.mjs', 'tests/material-parity/border-initial-input-evidence.mjs',
     'tests/material-parity/origin-alias-mapping-evidence.mjs', 'tests/material-parity/generated-node-mapping-evidence.mjs',
     'tests/material-parity/input-equivalence-audit.mjs'];
-  return { schemaVersion: 1, kind: 'original-text-alignment-owner-ancestry-survey', originalCapture: { file, sha256: hash(bytes) },
+  return conserveAlignmentSurveySnapshot('docs/material-text-align-ancestry.json', { schemaVersion: 1, kind: 'original-text-alignment-owner-ancestry-survey', originalCapture: { file, sha256: hash(bytes) },
     sourceFingerprints: sourceFiles.map(file => ({ file, sha256: hash(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')) })),
     casesScanned: seen.size, observations: observations.length, groupCount: groups.size, equalScalarObservations: equal,
     missingScalarObservations: missing, statusCounts: statuses, groups: [...groups.values()], patterns, findings: observations,
@@ -128,7 +129,7 @@ export function collectTextAlignAncestry() {
       'Possible candidate rules over-approximate selectors and retain conditions; no new cascade evaluator or winner is introduced.',
       'Reference captured paths end at the surface or overlay root. External body/html context is not silently inferred.',
       'Motion requests, raw attributes, synthetic roots, retained text and private controls stay distinct from computed/used/raster proof.',
-      'Known alias scalar-rule gaps and one-sided tooltip scalar observations remain unresolved.'] };
+      'Known alias scalar-rule gaps and one-sided tooltip scalar observations remain unresolved.'] });
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {

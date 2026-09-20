@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { conserveAlignmentSurveySnapshot } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -135,7 +136,7 @@ export function collectRemainingTextAlignment() {
     return { ...g, observations: observations.map(({ review: _, ...o }) => o), review };
   });
   assert.equal(groups.length, 5); assert.equal(groups.reduce((n, g) => n + g.observations.length, 0), 167);
-  return { schemaVersion: 1, kind: 'remaining-original-text-alignment-review',
+  return conserveAlignmentSurveySnapshot('docs/material-remaining-text-alignment.json', { schemaVersion: 1, kind: 'remaining-original-text-alignment-review',
     sourcePlan: { file: planFile, revision: 'e3bc804', sha256: hash(planText) }, sourceProof: plan.sourceProof,
     originalCapture: source.originalCapture, sourceFingerprints: [
       'scripts/audit-remaining-text-alignment.mjs', 'scripts/audit-material-text-align-ancestry.mjs',
@@ -150,7 +151,7 @@ export function collectRemainingTextAlignment() {
       'The 59 overlay observations have a diagnosed capture gap but alignment inputs still lack a complete context disposition.',
       'Motion declarations remain in the retained patterns; no animation settlement or plugin rendering equivalence is asserted.',
       'The expansion parent alignment request and progress plugin geometry require their own equal-input verification.',
-    ] };
+    ] });
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { conserveAlignmentSurveySnapshot } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
@@ -75,7 +76,7 @@ export function collectLtrAlignmentReview() {
   assert.ok(history[0].declarations.slice(0, 2).every(d => d.source.includes("textAlign: 'left'")));
   assert.ok(!history[1].declarations[2].source.includes('textAlign'));
   assert.ok(history[2].declarations[2].source.includes("textAlign: 'left'"));
-  return { schemaVersion: 1, kind: 'original-direction-scoped-text-alignment-review',
+  return conserveAlignmentSurveySnapshot('docs/material-ltr-alignment-review.json', { schemaVersion: 1, kind: 'original-direction-scoped-text-alignment-review',
     sourcePlan: { file: planFile, revision: 'e3bc804', sha256: hash(planText) }, sourceProof: plan.sourceProof,
     originalCapture: source.originalCapture,
     browserControl: { file: logFile, sha256: hash(logBytes), source: reference.source,
@@ -90,7 +91,7 @@ export function collectLtrAlignmentReview() {
       'Candidate local requests are not computed inheritance, used line boxes or actual painted alignment.',
       'Browser controls test keyword geometry only; no Astylar rendering or Material screenshot equivalence is claimed.',
       'Historical source introductions do not prove author intent or the behavior of historical builds.',
-      'Six other retained groups, including the separately reviewed expansion owner, stay outside this proposal.'] };
+      'Six other retained groups, including the separately reviewed expansion owner, stay outside this proposal.'] });
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
