@@ -106,7 +106,7 @@ export function collectTextAlignAuditInputs(report, { root = process.cwd(), pari
     const bytes = readFileSync(target), supplied = JSON.parse(bytes);
     assert.equal(bindOwnerCaretCaptureSubset(report, supplied).coverage.complete, true);
     const replay = replayTextAlignPlan();
-    return { schemaVersion: 1, binding: { status: 'bound', file: path.relative(root, target).replaceAll('\\', '/'),
+    return { schemaVersion: 1, binding: { status: 'bound', file: path.relative(root, path.resolve(root, parityPath)).replaceAll('\\', '/'),
       sha256: hash(bytes), originalCapture: { file: originalFile, sha256: originalSha256 }, sourcePlan: replay.descriptor,
       sourceProofReplayed: true, frozenCanonicalJoinReplayedNow: false }, ...projectTextAlignInputs(supplied, replay) };
   } catch (error) { return { ...empty, binding: { status: 'invalid', error: String(error) } }; }

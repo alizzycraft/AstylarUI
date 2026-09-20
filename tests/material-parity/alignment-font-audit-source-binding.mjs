@@ -125,7 +125,7 @@ export function collectAlignmentFontAuditInputs(report, { root = process.cwd(), 
     // Also protects original order and missing owner/case enumeration.
     const caller = bindOwnerCaretCaptureSubset(report, supplied); assert.equal(caller.coverage.complete, true);
     const replay = replayAlignmentFontPlans();
-    return { schemaVersion: 1, binding: { status: 'bound', file: path.relative(root, target).replaceAll('\\', '/'),
+    return { schemaVersion: 1, binding: { status: 'bound', file: path.relative(root, path.resolve(root, parityPath)).replaceAll('\\', '/'),
       sha256: hash(bytes), originalCapture: { file: originalFile, sha256: originalSha256 }, sourcePlans: replay.descriptors,
       sourceProofsReplayed: true, frozenCanonicalJoinReplayedNow: false }, ...projectAlignmentFontInputs(supplied, replay) };
   } catch (error) { return { ...empty, binding: { status: 'invalid', error: String(error) } }; }

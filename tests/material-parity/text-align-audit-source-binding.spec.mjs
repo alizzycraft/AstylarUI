@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { assertAlignmentAdapterReceiptSource } from './alignment-adapter-receipt-source.mjs';
 import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
 import { projectTextAlignInputs, textAlignClassificationContexts, classifyTextAlignInput,
   validateTextAlignClassifications, stageTextAlignTransitions, collectTextAlignAuditInputs } from './text-align-audit-source-binding.mjs';
@@ -121,7 +122,7 @@ test('text alignment transition preserves all raw fields and rejects changed or 
 test('current full-payload dry-run receipt binds every proposed row without claiming canonical integration', () => {
   const receipt = JSON.parse(readFileSync('docs/material-text-align-transition-dry-run.json'));
   assert.equal(receipt.kind, 'source-replayed-text-alignment-current-dry-run-receipt');
-  assert.equal(receipt.sourceBinding.sha256, hash(readFileSync(receipt.sourceBinding.file)));
+  assertAlignmentAdapterReceiptSource(receipt.sourceBinding);
   const bytes = readFileSync(receipt.log.file); assert.equal(hash(bytes), receipt.log.sha256);
   const result = JSON.parse(bytes), plan = fixture().plan;
   assert.equal(result.kind, 'source-replayed-text-alignment-current-dry-run');

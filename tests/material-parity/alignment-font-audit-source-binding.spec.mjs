@@ -6,6 +6,7 @@ import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
 import { projectAlignmentFontInputs, alignmentFontClassificationContexts, classifyAlignmentFontInput,
   validateAlignmentFontClassifications, stageAlignmentFontTransitions } from './alignment-font-audit-source-binding.mjs';
 import { createHash } from 'node:crypto';
+import { assertAlignmentAdapterReceiptSource } from './alignment-adapter-receipt-source.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const originalFile = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
@@ -137,7 +138,7 @@ test('alignment/font metadata transition refuses changed or previously classifie
 test('saved current dry run preserves its exact source and full-row transition receipt without claiming promotion', () => {
   const receipt = JSON.parse(readFileSync('docs/material-alignment-font-transition-dry-run.json'));
   assert.equal(receipt.kind, 'source-replayed-alignment-font-current-dry-run');
-  assert.equal(receipt.sourceBinding.sha256, hash(readFileSync(receipt.sourceBinding.file)));
+  assertAlignmentAdapterReceiptSource(receipt.sourceBinding);
   const log = readFileSync(receipt.log.file);
   assert.equal(hash(log), 'f10d893aea55dbb907e5dd4235ef7e95bbf6f1ed500a79887fb349172a5d5506');
   assert.equal(hash(log), receipt.log.sha256);

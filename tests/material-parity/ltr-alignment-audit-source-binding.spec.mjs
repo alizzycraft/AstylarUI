@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { assertAlignmentAdapterReceiptSource } from './alignment-adapter-receipt-source.mjs';
 import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
 import { projectLtrAlignmentInputs, ltrAlignmentClassificationContexts, classifyLtrAlignmentInput,
   validateLtrAlignmentClassifications, stageLtrAlignmentTransitions, collectLtrAlignmentAuditInputs } from './ltr-alignment-audit-source-binding.mjs';
@@ -127,7 +128,7 @@ test('LTR transition changes metadata only and rejects changed or previously rev
 test('full-current-payload receipt binds every proposed LTR row without claiming integration', () => {
   const receipt = JSON.parse(readFileSync('docs/material-ltr-alignment-transition-dry-run.json'));
   assert.equal(receipt.kind, 'source-replayed-ltr-alignment-current-dry-run-receipt');
-  assert.equal(receipt.sourceBinding.sha256, hash(readFileSync(receipt.sourceBinding.file)));
+  assertAlignmentAdapterReceiptSource(receipt.sourceBinding);
   const bytes = readFileSync(receipt.log.file); assert.equal(hash(bytes), receipt.log.sha256);
   const result = JSON.parse(bytes), review = fixture().review;
   assert.equal(result.kind, 'source-replayed-ltr-alignment-current-dry-run');

@@ -89,7 +89,7 @@ export function collectLtrAlignmentAuditInputs(report, { root = process.cwd(), p
     const bytes = readFileSync(target), supplied = JSON.parse(bytes);
     assert.equal(bindOwnerCaretCaptureSubset(report, supplied).coverage.complete, true);
     const replay = replayLtrAlignmentReview();
-    return { schemaVersion: 1, binding: { status: 'bound', file: path.relative(root, target).replaceAll('\\', '/'),
+    return { schemaVersion: 1, binding: { status: 'bound', file: path.relative(root, path.resolve(root, parityPath)).replaceAll('\\', '/'),
       sha256: hash(bytes), originalCapture: replay.review.originalCapture, sourceReview: replay.descriptor },
       ...projectLtrAlignmentInputs(supplied, replay) };
   } catch (error) { return { ...empty, binding: { status: 'invalid', error: String(error) } }; }
