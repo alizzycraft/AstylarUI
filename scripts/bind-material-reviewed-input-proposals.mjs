@@ -30,6 +30,25 @@ const canonicalRevision = '06e50dbcd3594c5987d63a4ec38e792b87b08dde';
 const normalization = { module: 'tests/material-parity/input-equivalence-audit.mjs',
   functions: ['canonicalStyle', 'expandQuad', 'expandPair', 'splitCssTerms', 'normalizeValue', 'normalizeColor', 'formatNumber'],
   sha256: '8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e' };
+
+// Frozen proposal joins must retain the contract under which they were proved.
+// Live classification uses a separately authenticated precise normalizer and
+// must compare its actual values with each original proposal before accepting it.
+export function bindReviewedInputNormalizers(currentSource = readFileSync(normalization.module, 'utf8')) {
+  const historicalSource = execFileSync('git', ['show', `${canonicalRevision}:${normalization.module}`],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  const current = { ...normalization, sha256: '27fcf8d751bb10a5a7e9426a4d21b83de3c0d9242387d75a67613b953940c773' };
+  return {
+    normalize: bindOwnerCaretNormalization(historicalSource, normalization),
+    currentNormalize: bindOwnerCaretNormalization(currentSource, current),
+    equivalent: bindAuthoringInputEquivalence(currentSource),
+    normalizationContracts: {
+      historical: { ...normalization, revision: canonicalRevision,
+        moduleSha256: hash(historicalSource.replaceAll('\r\n', '\n')) },
+      current,
+    },
+  };
+}
 const proof = (name, collect) => ({ file: `docs/material-${name}.json`, collect });
 const definitions = {
   containerSize: { revision: 'f5285a4', file: 'docs/material-container-font-stage-plan.json', field: 'findings',
@@ -115,8 +134,7 @@ export function replayReviewedInputSourcePlans(manifest) {
     sha256: 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a' };
   const originalBytes = readFileSync(originalCapture.file); assert.equal(hash(originalBytes), originalCapture.sha256);
   const original = JSON.parse(originalBytes);
-  const source = readFileSync(normalization.module, 'utf8');
-  const normalize = bindOwnerCaretNormalization(source, normalization), equivalent = bindAuthoringInputEquivalence(source);
+  const contracts = bindReviewedInputNormalizers();
   const plans = {}, descriptors = {}, sourceProofs = {};
   for (const [kind, definition] of Object.entries(definitions)) {
     const revision = execFileSync('git', ['rev-parse', definition.revision], { encoding: 'utf8' }).trim();
@@ -135,7 +153,7 @@ export function replayReviewedInputSourcePlans(manifest) {
     plans[kind] = plan; sourceProofs[kind] = proofs;
     descriptors[kind] = { file: definition.file, revision, sha256: hash(committed), proofs: proofDescriptors };
   }
-  return { original, originalCapture, normalize, equivalent, plans, descriptors, sourceProofs };
+  return { original, originalCapture, ...contracts, plans, descriptors, sourceProofs };
 }
 
 // `canonical` must come from the byte-authenticating reader above. Sharing its

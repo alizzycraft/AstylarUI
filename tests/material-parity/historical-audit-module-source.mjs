@@ -13,9 +13,11 @@ export const originalOverlayAuditSourceCommit = '65487aeba6a26f9715f302f92b4ee45
 export const originalOverlayAuditSourceFile = 'tests/material-parity/input-equivalence-audit.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const mappingAuditRevision = '4dc770a';
-// The integration changes audit orchestration, not any mapping implementation.
-// Verify every other statement exactly and reject references from retained
-// statements into the changed functions. This is not a blanket hash exemption.
+// Mapping implementations remain unchanged. The precise-color instrumentation
+// correction is a separately authenticated semantic change, NOT a claim that
+// current color values equal historical ones. Fresh owner-proof replay and live
+// scalar validation remain required by callers. All other retained statements
+// must match exactly; orchestration is not reachable from retained statements.
 export function verifyOverlayMappingAuditProjection(recorded, currentBytes, historicalBytes) {
   const old = historicalBytes.toString('utf8').replaceAll('\r\n', '\n');
   const current = currentBytes.toString('utf8').replaceAll('\r\n', '\n');
@@ -36,11 +38,25 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
     ['./ltr-alignment-audit-source-binding.mjs', ['collectLtrAlignmentAuditInputs', 'validateLtrAlignmentAuditInputs',
       'ltrAlignmentClassificationContexts', 'classifyLtrAlignmentInput', 'validateLtrAlignmentClassifications', 'ltrAlignmentAttribution']],
   ]);
+  const colorTransition = {
+    function: 'normalizeColor',
+    historicalSha256: '8fb8ac9b17cc2a2cad2fce61e36c8dd1b77991bb56c73e3dee94354aa4a28a1a',
+    currentSha256: '72ccd81044437192569c028d93be8312b700cd199e3cb0f173d16f64b0839d42',
+    correctionRevision: '704b2eb299c4fb654229b74a9f5b51877cbf6f98',
+    historicalAndCurrentColorValuesEquivalent: false,
+  };
   function project(text, isCurrent) {
     const parsed = ts.createSourceFile(recorded.file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
     assert.equal(parsed.parseDiagnostics.length, 0, 'Current mapping source cannot be parsed');
     const removed = new Set(), imports = new Set(), statements = [];
+    let colorFunctions = 0;
     for (const node of parsed.statements) {
+      if (ts.isFunctionDeclaration(node) && node.name?.text === 'normalizeColor') {
+        colorFunctions++;
+        assert.equal(hash(node.getText(parsed)), isCurrent ? colorTransition.currentSha256 : colorTransition.historicalSha256,
+          'Mapping projection color normalizer differs from the reviewed precision correction');
+        continue;
+      }
       if (ts.isFunctionDeclaration(node) && excluded.has(node.name?.text)) {
         assert.ok(!removed.has(node.name.text)); removed.add(node.name.text); continue;
       }
@@ -55,13 +71,17 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
       visit(node); statements.push(node.getText(parsed));
     }
     assert.deepEqual([...removed].sort(), [...excluded].sort());
+    assert.equal(colorFunctions, 1, 'Mapping projection requires one authenticated color normalizer');
     return statements;
   }
   const before = project(old, false), after = project(current, true);
-  assert.deepEqual(after, before, 'Current mapping source changed outside reviewed audit orchestration');
+  // Keep the exact deep comparison, but do not ask assert's diff formatter to
+  // expand nearly a megabyte of module statements for each negative control.
+  assert.ok(isDeepStrictEqual(after, before), 'Current mapping source changed outside reviewed audit orchestration');
   return { file: recorded.file, historicalRevision: mappingAuditRevision, recordedSha256: recorded.sha256,
     currentSha256: hash(current), retainedStatements: before.length, retainedStatementsSha256: hash(JSON.stringify(before)),
-    verification: 'all-other-statements-identical-and-no-retained-references-to-changed-orchestration' };
+    normalizationTransition: colorTransition,
+    verification: 'reviewed-color-correction-with-all-other-retained-statements-identical-and-no-retained-references-to-changed-orchestration' };
 }
 export function verifyHistoricalAuditModuleSource(recorded, currentBytes, { root = process.cwd(),
   readRevision = () => execFileSync('git', ['show', `${originalOverlayAuditSourceCommit}:${originalOverlayAuditSourceFile}`],

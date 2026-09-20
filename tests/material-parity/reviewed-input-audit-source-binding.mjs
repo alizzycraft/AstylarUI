@@ -114,8 +114,9 @@ export function collectReviewedInputAuditInputs(report, { root = process.cwd(), 
       file: path.relative(root, path.resolve(root, parityPath)).replaceAll('\\', '/'), sha256: hash(bytes),
       originalCapture: replay.originalCapture, proposalBinding: bound.descriptor, transition: staged.descriptor,
       sourceProofsReplayed: true, sourcePlans: replay.descriptors,
+      normalizationContracts: replay.normalizationContracts,
       frozenCanonicalJoinReplayedNow: false, frozenCanonicalJoinVerifiedAt: revision },
-      ...projectReviewedInputAuditInputs(bound.report, staged.report, supplied, replay.original, replay.normalize) };
+      ...projectReviewedInputAuditInputs(bound.report, staged.report, supplied, replay.original, replay.currentNormalize) };
   } catch (error) { return { ...empty, binding: { status: 'invalid', error: String(error) } }; }
 }
 

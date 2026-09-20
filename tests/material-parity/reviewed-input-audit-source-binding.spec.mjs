@@ -7,6 +7,7 @@ import { collectReviewedInputAuditInputs, projectReviewedInputAuditInputs,
   reviewedInputClassificationContexts, classifyReviewedInput, validateReviewedInputAuditInputs,
   validateReviewedInputClassifications } from './reviewed-input-audit-source-binding.mjs';
 import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindReviewedInputNormalizers } from '../../scripts/bind-material-reviewed-input-proposals.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const originalFile = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
@@ -16,6 +17,7 @@ test('synchronous builder boundary independently replays all source proofs witho
   const guard = `import fs from 'node:fs';import{syncBuiltinESMExports}from'node:module';
     fs.writeFileSync=()=>{throw Error('CHECK_MODE_ATTEMPTED_WRITE')};syncBuiltinESMExports();`;
   const code = `import assert from 'node:assert/strict';import{readFileSync}from'node:fs';
+    import{bindOwnerCaretNormalization}from'./tests/material-parity/owner-caret-source-binding.mjs';
     import{collectReviewedInputAuditInputs,validateReviewedInputAuditInputs,reviewedInputClassificationContexts,classifyReviewedInput}
       from './tests/material-parity/reviewed-input-audit-source-binding.mjs';
     const report=JSON.parse(readFileSync('${originalFile}'));
@@ -24,13 +26,15 @@ test('synchronous builder boundary independently replays all source proofs witho
     assert.equal(e.groups.length,134);assert.equal(e.observations.length,3325);
     assert.equal(e.binding.sourceProofsReplayed,true);assert.equal(e.binding.frozenCanonicalJoinReplayedNow,false);
     assert.deepEqual(validateReviewedInputAuditInputs(e),[]);
+    const current=e.binding.normalizationContracts.current;
+    const normalize=bindOwnerCaretNormalization(readFileSync(current.module,'utf8'),current);
     const contexts=reviewedInputClassificationContexts(e);assert.equal(contexts.size,3325);
     let classified=0;
     for(const[kind,entries]of[['static',report.results],['interaction',report.interactions]])for(const entry of entries){
       const c=kind+':'+entry.family+'@'+entry.profile+'/'+entry.viewport.id+(entry.state?'/'+entry.state:'');
       for(const input of entry.styleInputs)for(const property of['fontSize','fontFamily','fontWeight','letterSpacing','opacity','backgroundColor']){
         const o=contexts.get(JSON.stringify([c,input.id,property]));if(!o)continue;
-        const result=classifyReviewedInput(input,property,o.reference,o.astylar,o);
+        const result=classifyReviewedInput(input,property,normalize(input.reference)[property],normalize(input.astylar)[property],o);
         assert.equal(result.attribution,o.classification.attribution);assert.equal(result.reviewEvidence.inputEquivalent,false);classified++;
       }
     }
@@ -52,13 +56,27 @@ function fixture() {
     const wanted = new Set(Object.keys(binding.plans).map(k => binding.groups.find(g => g.kind === k).proposal.observations[0].case));
     const supplied = { results: original.results.filter(e => wanted.has(caseKey('static', e))),
       interactions: original.interactions.filter(e => wanted.has(caseKey('interaction', e))) };
-    const normalize = bindOwnerCaretNormalization(readFileSync(binding.productionNormalization.module, 'utf8'), binding.productionNormalization);
+    const normalize = bindReviewedInputNormalizers().currentNormalize;
     fixtureSource = { binding, transition, original, supplied, normalize };
   }
   const { original, normalize, ...mutable } = fixtureSource;
   return { ...structuredClone(mutable), original, normalize };
 }
 const project = f => projectReviewedInputAuditInputs(f.binding, f.transition, f.supplied, f.original, f.normalize);
+
+test('historical normalization remains explicit and cannot stand in for current values', () => {
+  const contracts = bindReviewedInputNormalizers();
+  assert.notEqual(contracts.normalizationContracts.historical.sha256, contracts.normalizationContracts.current.sha256);
+  assert.equal(contracts.normalize({ color: 'color(srgb .5 0 1)' }).color, 'rgba(128,0,255,1)');
+  assert.equal(contracts.currentNormalize({ color: 'color(srgb .5 0 1)' }).color, 'rgba(127.5,0,255,1)');
+  const f = fixture(), normalize = f.normalize;
+  f.normalize = input => ({ ...normalize(input), fontSize: '999px' });
+  assert.throws(() => project(f));
+  const current = contracts.normalizationContracts.current;
+  const source = readFileSync(current.module, 'utf8');
+  assert.throws(() => bindOwnerCaretNormalization(source, contracts.normalizationContracts.historical), /normalization changed/);
+  assert.throws(() => bindReviewedInputNormalizers(source.replace('function normalizeColor(', 'function changedNormalizeColor(')));
+});
 
 test('partial original captures enumerate omissions and preserve exact classifier inputs', () => {
   const f = fixture(), before = digest(f.supplied), result = project(f);

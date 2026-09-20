@@ -179,9 +179,17 @@ test('mapping projection rejects changed retained functions imports and links in
     "\nimport { followupInputAttributions } from './followup-input-proposal-transition.mjs';\n";
   const result = verifyOverlayMappingAuditProjection(source, Buffer.from(current), anchor);
   assert.ok(result.retainedStatements > 100); assert.equal(result.recordedSha256, source.sha256);
+  assert.equal(result.normalizationTransition.historicalAndCurrentColorValuesEquivalent, false);
+  assert.notEqual(result.normalizationTransition.historicalSha256, result.normalizationTransition.currentSha256);
+  const corrected = execFileSync('git', ['show', `${result.normalizationTransition.correctionRevision}:${source.file}`],
+    { maxBuffer: 4 * 1024 * 1024 });
+  assert.deepEqual(verifyOverlayMappingAuditProjection(source, corrected, anchor).normalizationTransition,
+    result.normalizationTransition);
   const mutations = [
     s => s.replace('function reviewedTemplateTextMappings(', 'function alteredTemplateTextMappings('),
     s => s.replace('function canonicalStyle(', 'function alteredCanonicalStyle('),
+    s => s.replace('function normalizeColor(', 'function alteredNormalizeColor('),
+    s => s.replace('function normalizeColor(value) {', "function normalizeColor(value) { return 'rounded-away';"),
     s => s + '\nconst unexplainedMappingInput = 1;\n',
     s => s + '\nimport { unrelated } from "./unreviewed.mjs";\n',
     s => s.replace("from './benchmark.config.mjs'", "from './changed-benchmark.mjs'"),
@@ -197,6 +205,7 @@ test('mapping projection rejects changed retained functions imports and links in
   for (const mutate of mutations) { const changed = mutate(current); assert.notEqual(changed, current);
     assert.throws(() => verifyOverlayMappingAuditProjection(source, Buffer.from(changed), anchor)); }
   assert.throws(() => verifyOverlayMappingAuditProjection({ ...source, sha256: '0'.repeat(64) }, Buffer.from(current), anchor));
+  assert.throws(() => verifyOverlayMappingAuditProjection(source, anchor, anchor), /color normalizer/);
 });
 
 test('original context snapshot preserves all observations and rejects receipt laundering', () => {
