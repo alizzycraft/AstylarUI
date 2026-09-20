@@ -9,6 +9,9 @@ The input plan is pinned to `e66deef` and SHA-256
 The transition itself is deliberately **not** a source authenticator. Its caller
 must independently replay the source reports; the focused test runs the complete
 existing batch collector and canonical join with writes prohibited.
+The baseline reader is pinned to accepted alignment commit
+`7cd5cb79f65f30a6468a41cbd9d643aadb723d72`; it does not follow later changes to
+the working-tree canonical report. All source reports still replay freshly.
 
 ## Verified transition
 
@@ -47,3 +50,9 @@ Includes 13 rejection controls, complete payload authentication, raw-field and
 prior-classification conservation, plus fresh source replay with writes forbidden.
 Log: `artifacts/material-parity/field-host-flow-input-audit/reviewed-source-batch-transition-sep20.log`.
 This is not an unfiltered audit-harness or enforced parity-matrix pass.
+
+The subsequent historical-baseline binding run passes **12/12**, exit 0,
+**433,244.3257ms**, including both preparation and transition suites. It verifies
+the same complete-row result while the preparation CLI is forbidden from reading
+the mutable canonical payload. See the accepted historical baseline checkpoint
+in `material-reviewed-source-batch.md`.

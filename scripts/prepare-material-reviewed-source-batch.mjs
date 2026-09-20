@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import path from 'node:path';
@@ -23,6 +24,11 @@ const same = (a,b,message) => assert.ok(isDeepStrictEqual(a,b),message);
 const signature = r => JSON.stringify([r.family,r.element,r.property,r.reference,r.astylar]);
 const states = cases => [...new Set(cases.map(k => k.startsWith('static:') ? 'static' : k.split('/').slice(2).join('/')))];
 const canonicalSha256 = 'c08d24e94671c18e0c640638ca234b9571720080474115cc2b8388a2883a810e';
+// This proposal describes the accepted alignment baseline, not the mutable
+// current report. Source proofs are still freshly replayed below.
+const canonicalRevision = '7cd5cb79f65f30a6468a41cbd9d643aadb723d72';
+const readCanonicalBaseline = file => execFileSync('git', ['show', `${canonicalRevision}:${file}`],
+  { maxBuffer: 64 * 1024 * 1024 });
 
 // Join the two newer proof populations without widening their stated scope.
 export function additionalReviewedGroups(base, delay, normalize) {
@@ -109,8 +115,8 @@ export async function collectReviewedSourceBatch() {
   const normalization=JSON.parse(readFileSync('docs/material-font-ownership-attribution-plan.json')).productionNormalization;
   assert.equal(normalization.sha256,'8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e');
   const normalize=bindOwnerCaretNormalization(readFileSync(normalization.module,'utf8'),normalization);
-  const {manifest,rows}=await readCaretConservationRows(readFileSync);
-  assert.equal(manifest.compressedSha256,canonicalSha256,'prepared alignment payload changed; review transition before rebinding');
+  const {manifest,rows}=await readCaretConservationRows(readCanonicalBaseline);
+  assert.equal(manifest.compressedSha256,canonicalSha256,'accepted alignment baseline differs from the reviewed receipt');
   const m=planOwnerMotionAttribution(motion,rows,normalize), l=planLayoutRequestAttribution(layout,rows,normalize),
     p=planButtonPaintAttribution(paint,rows,normalize);
   const groups=[...m.proposed.map(g=>({...g,batch:'owner-motion'})),

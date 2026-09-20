@@ -72,8 +72,15 @@ test('new alpha/delay groups retain observation limits and reject inflated proof
   ]) {const altered=load();mutate(altered);assert.throws(()=>additionalReviewedGroups(altered.base,altered.delay,normalize));}
 });
 
-test('prepared batch freshly replays all reports and authenticates the complete current payload without writes',()=>{
-  const guard=`import fs from'node:fs';import{syncBuiltinESMExports}from'node:module';fs.writeFileSync=()=>{throw Error('CHECK_MODE_ATTEMPTED_WRITE')};syncBuiltinESMExports();`;
+test('prepared batch freshly replays sources against its accepted historical payload without reading the current payload or writing',()=>{
+  const guard=`import fs from'node:fs';import{syncBuiltinESMExports}from'node:module';
+    const read=fs.readFileSync;fs.readFileSync=(file,...args)=>{
+      const name=String(file).replaceAll('\\\\','/');
+      if(name.endsWith('docs/material-input-equivalence-audit.json')||name.endsWith('docs/material-input-equivalence-audit.json.gz'))
+        throw Error('PREPARED_PROPOSAL_READ_MUTABLE_CANONICAL_PAYLOAD');
+      return read(file,...args);
+    };
+    fs.writeFileSync=()=>{throw Error('CHECK_MODE_ATTEMPTED_WRITE')};syncBuiltinESMExports();`;
   const output=execFileSync(process.execPath,['--max-old-space-size=1536','--import',
     'data:text/javascript;base64,'+Buffer.from(guard).toString('base64'),
     'scripts/prepare-material-reviewed-source-batch.mjs','--check'],{encoding:'utf8',maxBuffer:1024*1024});

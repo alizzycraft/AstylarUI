@@ -12,7 +12,8 @@ const metadata = new Set(['classification', 'attribution', 'justification', 'rec
 const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
 const plan = JSON.parse(readFileSync('docs/material-reviewed-source-batch.json'));
 let pending;
-const baseline = () => pending ??= readCaretConservationRows(readFileSync);
+const baseline = () => pending ??= readCaretConservationRows(file => execFileSync('git',
+  ['show', `7cd5cb79f65f30a6468a41cbd9d643aadb723d72:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
 
 test('prepared source batch changes only 146 reviewed metadata rows and preserves every other complete row', async () => {
   const original = await baseline();

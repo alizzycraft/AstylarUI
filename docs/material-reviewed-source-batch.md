@@ -2,8 +2,9 @@
 
 This is a read-only preparation, not a canonical update or parity acceptance.
 It joins the existing independently reviewed source populations to the exact
-alignment-candidate payload and checks that their classifications do not overlap.
-The alignment candidate itself still requires a stable-input CLI freshness pass.
+accepted alignment payload and checks that their classifications do not overlap.
+That baseline is commit `7cd5cb79f65f30a6468a41cbd9d643aadb723d72`, whose
+stable-input CLI freshness result is recorded in `material-alignment-integration.md`.
 
 ## Verified prepared membership
 
@@ -28,11 +29,13 @@ the complete 600-owner button census and 121-group motion review. It uses the
 independently bound production normalization functions; raw observations remain
 in their source reports and their hashes/case membership remain in this batch.
 
-The current candidate payload is pinned to compressed SHA-256
+The historical baseline payload is pinned to compressed SHA-256
 `c08d24e94671c18e0c640638ca234b9571720080474115cc2b8388a2883a810e`.
 Every compressed and decoded byte is authenticated by the canonical reader.
-Changing that payload requires explicit review before rebinding, not an automatic
-hash refresh. The join requires a unique unresolved canonical row, exact occurrence
+The collector reads this exact commit, not the mutable current canonical files.
+Later canonical refreshes must not silently rebind an already reviewed proposal.
+Changing that baseline requires explicit review, not an automatic hash refresh.
+The join requires a unique unresolved canonical row, exact occurrence
 count, ordered case sample and complete state membership for every proposed group.
 It refuses overlapping proposals and preserves prior classifications.
 
@@ -87,3 +90,22 @@ logs use the `reviewed-source-batch-` prefix under
 Unfiltered discovery now contains 190 test files (182 Material, four general,
 four TTS). The nine checks above are not a complete harness run or an enforced
 rendering matrix result.
+
+## Accepted historical baseline binding
+
+After the alignment integration was accepted at `7cd5cb7`, the prepared collector
+and transition proof were pinned to that exact historical payload. This changes
+only where the already-reviewed baseline is read: source reports still rebuild
+from the original captures, and the prepared report digest above is unchanged.
+An executable filesystem guard now rejects any attempt by the preparation CLI
+to read the mutable working-tree canonical manifest/payload or write a file.
+
+```text
+node --max-old-space-size=1536 --test --test-concurrency=1 tests/material-parity/reviewed-source-batch.spec.mjs tests/material-parity/reviewed-source-batch-transition.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs
+```
+
+**12/12 pass**, exit 0, **433,244.3257ms**, no failures, skips, cancellations or
+TODOs. Both complete source/payload replays pass. The transition still preserves
+all 8,193 other complete rows and all 6,504 prior classifications. No canonical
+classification changed. Log:
+`artifacts/material-parity/field-host-flow-input-audit/reviewed-source-batch-historical-binding-sep20.log`.
