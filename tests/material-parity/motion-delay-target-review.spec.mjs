@@ -61,12 +61,16 @@ test('missing, foreign, conditional, overlapping and malformed targets remain re
   assert.equal(inspectMotionDelayTargets(g).disposition, 'requires-specific-review');
 });
 
-test('complete delay-target review freshly replays its parent with writes prohibited', () => {
+test('complete delay-target review replays its conserved historical parent with writes prohibited', () => {
   const guard = `import fs from 'node:fs';import{syncBuiltinESMExports}from'node:module';
     fs.writeFileSync=()=>{throw Error('CHECK_MODE_ATTEMPTED_WRITE')};syncBuiltinESMExports();`;
   const result = JSON.parse(execFileSync(process.execPath, ['--max-old-space-size=1536', '--import',
     'data:text/javascript;base64,' + Buffer.from(guard).toString('base64'),
-    'scripts/audit-material-motion-delay-targets.mjs', '--check'], { encoding: 'utf8', maxBuffer: 1024 * 1024 }));
+    '--input-type=module', '-e', `import { replayReviewedBatchMotion } from './tests/material-parity/reviewed-batch-motion-replay.mjs';
+      const {delay, conservation} = replayReviewedBatchMotion();
+      console.log(JSON.stringify({...delay, conservation}));`], { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }));
   assert.equal(result.groups, 35); assert.equal(result.reviewedGroups, 12);
   assert.equal(result.reviewedObservations, 840); assert.equal(result.retainedGroups, 23);
+  assert.equal(result.conservation.delayReexecutedAgainstConservedHistoricalParent, true);
+  assert.equal(result.conservation.historicalReceiptsRewritten, false);
 });

@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import { syncBuiltinESMExports } from 'node:module';
 import test from 'node:test';
 import { collectOwnerInitialMotion, inspectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
+import { verifyMotionSourceConservation } from './motion-source-conservation.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const file = 'docs/material-owner-initial-motion-review.json';
@@ -24,7 +26,12 @@ test('motion review replays all original members and retains the 35 unproven gro
     fs.writeFileSync = () => { throw Error('CHECK_MODE_ATTEMPTED_WRITE'); }; syncBuiltinESMExports();
     actual = collectOwnerInitialMotion();
   } finally { fs.writeFileSync = write; syncBuiltinESMExports(); }
-  assert.equal(hash(JSON.stringify(actual, null, 2) + '\n'), hash(saved));
+  const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const historical = execFileSync('git', ['show', `4650791a7208b841dd29f1ced015f98234949623:${moduleFile}`],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  const conservation = verifyMotionSourceConservation(report, actual, historical, fs.readFileSync(moduleFile, 'utf8'));
+  assert.equal(conservation.allNonReceiptEvidenceFreshlyReplayed, true);
+  assert.equal(conservation.historicalReceiptsRewritten, false);
   assert.equal(hash(fs.readFileSync(canonical)), before);
   assert.equal(actual.groups, 121); assert.equal(actual.observations, 7254);
   assert.equal(actual.disjointGroups, 86); assert.equal(actual.remainingReviewGroups, 35);

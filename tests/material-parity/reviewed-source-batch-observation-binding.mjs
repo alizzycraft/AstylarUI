@@ -2,15 +2,14 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
-import { collectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
+import { replayReviewedBatchMotion } from './reviewed-batch-motion-replay.mjs';
 import { collectControlSelfAlignment } from '../../scripts/audit-material-control-self-alignment.mjs';
 import { collectContentFlexRequests } from '../../scripts/audit-material-content-flex-requests.mjs';
 import { collectBadgeWhitespace } from '../../scripts/audit-material-badge-whitespace.mjs';
 import { collectButtonPaintAllStates } from '../../scripts/audit-material-button-paint-all-states.mjs';
 import { collectButtonBaseAlpha } from '../../scripts/audit-material-button-base-alpha.mjs';
-import { collectMotionDelayTargets } from '../../scripts/audit-material-motion-delay-targets.mjs';
 import { bindOwnerCaretCaptureSubset } from './owner-caret-audit-source-binding.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization, bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { reviewedSourceBatchDescriptor } from './reviewed-source-batch-transition.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -21,13 +20,13 @@ const key = (...xs) => JSON.stringify(xs);
 const capture = { file: 'artifacts/material-parity/current-ancestry-audit/latest-report.json',
   sha256: 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a' };
 const definitions = {
-  motion: ['docs/material-owner-initial-motion-review.json', collectOwnerInitialMotion],
+  motion: ['docs/material-owner-initial-motion-review.json', undefined],
   alignment: ['docs/material-control-self-alignment.json', collectControlSelfAlignment],
   flex: ['docs/material-content-flex-requests.json', collectContentFlexRequests],
   whitespace: ['docs/material-badge-whitespace-audit.json', collectBadgeWhitespace],
   paint: ['docs/material-button-paint-all-states.json', collectButtonPaintAllStates],
   alpha: ['docs/material-button-base-alpha.json', collectButtonBaseAlpha],
-  delay: ['docs/material-motion-delay-target-review.json', collectMotionDelayTargets],
+  delay: ['docs/material-motion-delay-target-review.json', undefined],
 };
 
 // Freshly replay the complete source proofs, not just the proposed members.
@@ -37,16 +36,18 @@ export function replayReviewedSourceBatchObservations() {
   const text = readFileSync(reviewedSourceBatchDescriptor.file, 'utf8').replaceAll('\r\n', '\n');
   assert.equal(hash(text), reviewedSourceBatchDescriptor.sha256);
   const plan = JSON.parse(text), sources = {};
+  const motionReplay = replayReviewedBatchMotion();
   for (const [kind, [file, collect]] of Object.entries(definitions)) {
     const saved = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
     assert.equal(hash(saved), plan.sources[file]);
-    sources[kind] = collect();
+    sources[kind] = collect ? collect() : motionReplay[kind];
     assert.equal(serializedHash(sources[kind]), plan.sources[file], `source replay changed: ${kind}`);
   }
   const bytes = readFileSync(capture.file); assert.equal(hash(bytes), capture.sha256);
-  const normalize = bindOwnerCaretNormalization(readFileSync(plan.productionNormalization.module, 'utf8'),
-    plan.productionNormalization);
-  return { plan, sources, original: JSON.parse(bytes), normalize };
+  const normalize = bindHistoricalAuditNormalization(plan.productionNormalization, '7cd5cb79f65f30a6468a41cbd9d643aadb723d72');
+  return { plan, sources, original: JSON.parse(bytes), normalize,
+    currentNormalize: bindPreciseAuditNormalization(), sourceConservation: motionReplay.conservation,
+    normalizationContracts: { historicalPlan: plan.productionNormalization, current: preciseAuditNormalization } };
 }
 
 function sourceMembers(group, sources) {

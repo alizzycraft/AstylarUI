@@ -4,11 +4,11 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { additionalReviewedGroups, joinReviewedSourceBatch } from '../../scripts/prepare-material-reviewed-source-batch.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const digest=x=>createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const report=JSON.parse(readFileSync('docs/material-reviewed-source-batch.json'));
-const normalize=bindOwnerCaretNormalization(readFileSync(report.productionNormalization.module,'utf8'),report.productionNormalization);
+const normalize=bindHistoricalAuditNormalization(report.productionNormalization,'7cd5cb79f65f30a6468a41cbd9d643aadb723d72');
 function fixture() {
   const groups=structuredClone(report.findings);
   const rows=groups.map(g=>({...Object.fromEntries(['family','element','property','reference','astylar'].filter(k=>Object.hasOwn(g,k)).map(k=>[k,g[k]])),

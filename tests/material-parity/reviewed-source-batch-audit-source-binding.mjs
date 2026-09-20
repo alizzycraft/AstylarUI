@@ -29,9 +29,25 @@ export function projectReviewedSourceBatchAuditInputs(supplied, replay) {
   const plans = new Map(replay.plan.findings.map(g => [g.canonicalRowSha256, g]));
   assert.equal(plans.size, 146);
   const classifications = new Map([...plans].map(([id, group]) => [id, reviewedSourceBatchMetadata(group)]));
-  const observations = bound.observations.map(o => ({ ...o, inputSha256: o.originalInputSha256,
-    classification: classifications.get(o.originalCompleteRowSha256) }));
-  const groups = bound.groups.map(g => {
+  const owners = new Map([['static', replay.original.results], ['interaction', replay.original.interactions]]
+    .flatMap(([kind, entries]) => entries.flatMap(e => e.styleInputs.map(input => [JSON.stringify([
+      `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`, input.id]), input]))));
+  const observations = bound.observations.map(o => {
+    const input = owners.get(JSON.stringify([o.case, o.element])); assert.ok(input);
+    assert.equal(digest(input), o.originalInputSha256);
+    const reference = replay.currentNormalize(input.reference ?? {})[o.property];
+    const astylar = replay.currentNormalize(input.astylar ?? {})[o.property];
+    assert.equal(astylar, o.astylar, 'candidate scalar unexpectedly changed');
+    if (reference !== o.reference) {
+      assert.equal(o.attribution, 'reviewed-disabled-base-alpha-replaced-by-opaque-fill');
+      assert.equal(o.property, 'backgroundColor');
+      assert.equal(o.element, 'button-disabled');
+    }
+    return { ...o, historicalReference: o.reference, historicalAstylar: o.astylar,
+      reference, astylar, inputSha256: o.originalInputSha256,
+      classification: classifications.get(o.originalCompleteRowSha256) };
+  });
+  const historicalGroups = bound.groups.map(g => {
     const plan = plans.get(g.originalCompleteRowSha256); assert.ok(plan);
     return { ...classifications.get(g.originalCompleteRowSha256),
       family: plan.family, element: plan.element, property: plan.property,
@@ -40,7 +56,23 @@ export function projectReviewedSourceBatchAuditInputs(supplied, replay) {
       cases: g.cases.slice(0, 12), reviewedCases: g.cases,
       states: [...new Set(g.cases.map(c => c.startsWith('static:') ? 'static' : c.split('/').slice(2).join('/')))] };
   });
-  return { ...bound, observations, groups };
+  const groups = historicalGroups.map(g => {
+    const members = observations.filter(o => o.originalCompleteRowSha256 === g.originalCompleteRowSha256);
+    assert.equal(members.length, g.occurrences);
+    const { reference, astylar } = members[0];
+    assert.ok(members.every(o => o.reference === reference && o.astylar === astylar), 'current group requires splitting');
+    return { ...g, reference, astylar };
+  });
+  const changed = observations.filter(o => o.reference !== o.historicalReference);
+  if (bound.coverage.complete) {
+    assert.equal(changed.length, 60);
+    assert.equal(new Set(changed.map(o => o.originalCompleteRowSha256)).size, 4);
+  }
+  return { ...bound, observations, groups, historicalGroups,
+    normalizationContracts: replay.normalizationContracts,
+    normalizationTransition: { changedReferenceObservations: changed.length,
+      changedReferenceGroups: new Set(changed.map(o => o.originalCompleteRowSha256)).size,
+      historicalPlanRewritten: false, currentValuesUsedForClassification: true } };
 }
 
 export function collectReviewedSourceBatchAuditInputs(report, { root = process.cwd(), parityPath } = {}) {
@@ -55,6 +87,7 @@ export function collectReviewedSourceBatchAuditInputs(report, { root = process.c
     return { schemaVersion: 1, binding: { status: 'bound',
       file: path.relative(root, path.resolve(root, parityPath)).replaceAll('\\', '/'), sha256: hash(bytes),
       sourceReports: replay.plan.sources, sourceProofsReplayed: true,
+      sourceConservation: replay.sourceConservation,
       frozenCanonicalJoinReplayedNow: false,
       frozenCanonicalBaselineRevision: '7cd5cb79f65f30a6468a41cbd9d643aadb723d72',
       frozenCanonicalJoinVerifiedAt: '7b842cb590c6d63c807de8e1576bedd6901706b5' },
@@ -95,8 +128,11 @@ export function validateReviewedSourceBatchClassifications(evidence, rows) {
 // unresolved rows. This is a dry run; main-builder integration remains separate.
 export function stageReviewedSourceBatchAuditTransitions(rows, evidence) {
   assert.equal(evidence.binding.status, 'bound'); assert.equal(evidence.coverage.complete, true);
-  const expected = new Map(evidence.groups.map(g => [g.originalCompleteRowSha256, g]));
-  assert.equal(expected.size, evidence.groups.length);
+  // This dry run is explicitly historical. Current scalar classifications are
+  // exposed separately in evidence.groups; never project them into old rows.
+  assert.ok(Array.isArray(evidence.historicalGroups));
+  const expected = new Map(evidence.historicalGroups.map(g => [g.originalCompleteRowSha256, g]));
+  assert.equal(expected.size, evidence.historicalGroups.length);
   const seen = new Set(), changes = [], unchanged = [];
   const projected = rows.map(row => {
     const before = digest(row), group = expected.get(before);
@@ -112,7 +148,7 @@ export function stageReviewedSourceBatchAuditTransitions(rows, evidence) {
     return after;
   });
   assert.equal(seen.size, expected.size, 'missing or changed original reviewed row');
-  same(validateReviewedSourceBatchClassifications(evidence, projected), [], 'classification coverage differs');
+  same(validateReviewedSourceBatchClassifications({ ...evidence, groups: evidence.historicalGroups }, projected), [], 'historical classification coverage differs');
   return { rows: projected, changes, unchangedCompleteRows: unchanged.length,
     unchangedOrderedRowDigestsSha256: digest(unchanged),
     previousUnresolved: rows.filter(r => r.attribution === 'unresolved').length,

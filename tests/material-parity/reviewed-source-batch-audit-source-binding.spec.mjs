@@ -29,6 +29,11 @@ test('classifier adapter independently replays complete original sources and val
   assert.equal(e.binding.frozenCanonicalJoinReplayedNow, false);
   assert.equal(e.binding.frozenCanonicalBaselineRevision, '7cd5cb79f65f30a6468a41cbd9d643aadb723d72');
   assert.equal(e.binding.frozenCanonicalJoinVerifiedAt, '7b842cb590c6d63c807de8e1576bedd6901706b5');
+  assert.equal(e.binding.sourceConservation.delayReexecutedAgainstConservedHistoricalParent, true);
+  assert.equal(e.binding.sourceConservation.delayObservations, 2546);
+  assert.deepEqual(e.normalizationTransition, { changedReferenceObservations: 60, changedReferenceGroups: 4,
+    historicalPlanRewritten: false, currentValuesUsedForClassification: true });
+  assert.notEqual(e.normalizationContracts.current.sha256, e.normalizationContracts.historicalPlan.sha256);
   assert.deepEqual(validateReviewedSourceBatchAuditInputs(e), []);
   assert.deepEqual(validateReviewedSourceBatchClassifications(e, e.groups), []);
   console.log(JSON.stringify({ groups: e.groups.length, observations: e.observations.length,
@@ -48,6 +53,10 @@ test('all classification contexts require the original input, property and value
     const classified = classifyReviewedSourceBatchInput(input, o.property, o.reference, o.astylar, o);
     const { recommendedOwner, ...metadata } = o.classification;
     assert.deepEqual(classified, { ...metadata, owner: recommendedOwner });
+    if (o.reference !== o.historicalReference) {
+      assert.equal(o.attribution, 'reviewed-disabled-base-alpha-replaced-by-opaque-fill');
+      assert.throws(() => classifyReviewedSourceBatchInput(input, o.property, o.historicalReference, o.astylar, o));
+    }
   }
   const o = e.observations[0], input = owners.get(JSON.stringify([o.case, o.element]));
   for (const args of [

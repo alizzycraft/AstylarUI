@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { collectOwnerInitialMotion } from './audit-material-owner-initial-motion.mjs';
+import { replayReviewedBatchMotion } from '../tests/material-parity/reviewed-batch-motion-replay.mjs';
 import { planOwnerMotionAttribution } from './audit-material-owner-motion-attribution.mjs';
 import { collectControlSelfAlignment } from './audit-material-control-self-alignment.mjs';
 import { collectContentFlexRequests } from './audit-material-content-flex-requests.mjs';
@@ -14,8 +14,7 @@ import { planLayoutRequestAttribution } from './audit-material-layout-request-at
 import { collectButtonPaintAllStates } from './audit-material-button-paint-all-states.mjs';
 import { planButtonPaintAttribution } from './audit-material-shared-button-paint-attribution.mjs';
 import { collectButtonBaseAlpha } from './audit-material-button-base-alpha.mjs';
-import { collectMotionDelayTargets } from './audit-material-motion-delay-targets.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -105,16 +104,17 @@ export async function collectReviewedSourceBatch() {
     same(value,JSON.parse(bytes),'complete source report must freshly replay: '+file);
     sources[file]=hash(bytes); return value;
   };
-  const motion=fresh('docs/material-owner-initial-motion-review.json',collectOwnerInitialMotion);
+  const motionReplay=replayReviewedBatchMotion();
+  const motion=fresh('docs/material-owner-initial-motion-review.json',()=>motionReplay.motion);
   const layout={alignment:fresh('docs/material-control-self-alignment.json',collectControlSelfAlignment),
     flex:fresh('docs/material-content-flex-requests.json',collectContentFlexRequests),
     whitespace:fresh('docs/material-badge-whitespace-audit.json',collectBadgeWhitespace)};
   const paint=fresh('docs/material-button-paint-all-states.json',collectButtonPaintAllStates);
   const base=fresh('docs/material-button-base-alpha.json',collectButtonBaseAlpha);
-  const delay=fresh('docs/material-motion-delay-target-review.json',collectMotionDelayTargets);
+  const delay=fresh('docs/material-motion-delay-target-review.json',()=>motionReplay.delay);
   const normalization=JSON.parse(readFileSync('docs/material-font-ownership-attribution-plan.json')).productionNormalization;
   assert.equal(normalization.sha256,'8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e');
-  const normalize=bindOwnerCaretNormalization(readFileSync(normalization.module,'utf8'),normalization);
+  const normalize=bindHistoricalAuditNormalization(normalization,canonicalRevision);
   const {manifest,rows}=await readCaretConservationRows(readCanonicalBaseline);
   assert.equal(manifest.compressedSha256,canonicalSha256,'accepted alignment baseline differs from the reviewed receipt');
   const m=planOwnerMotionAttribution(motion,rows,normalize), l=planLayoutRequestAttribution(layout,rows,normalize),
