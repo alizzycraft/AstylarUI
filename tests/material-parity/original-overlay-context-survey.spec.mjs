@@ -3,7 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
-import { collectOriginalOverlayContextSurvey } from './original-overlay-context-survey.mjs';
+import { assertOriginalOverlayEvidencePath, collectOriginalOverlayContextSurvey } from './original-overlay-context-survey.mjs';
 import { originalOverlayAuditSourceCommit, originalOverlayAuditSourceFile,
   verifyHistoricalAuditModuleSource, originalOverlayMappingSourceCommit,
   originalOverlayMappingSourceFile, verifyHistoricalOverlayMappingSource,
@@ -13,6 +13,25 @@ import { execFileSync } from 'node:child_process';
 const file = 'artifacts/material-parity/original-overlay-context-current-ancestry-audit/latest-report.json';
 const baseline = JSON.parse(readFileSync(file)), root = process.cwd();
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+test('recorded TypeScript source permits a shared package root, not arbitrary source or artifact escapes', () => {
+  const dependency = 'node_modules/typescript/lib/typescript.js';
+  assertOriginalOverlayEvidencePath(root, dependency, true);
+  const external = path.resolve(root, '../external-test-dependency');
+  const resolve = value => value === path.resolve(root, 'node_modules/typescript') ? external
+    : value === path.resolve(root, dependency) ? path.join(external, 'lib/typescript.js') : value;
+  assertOriginalOverlayEvidencePath(root, dependency, true, resolve);
+  assert.throws(() => assertOriginalOverlayEvidencePath(root, '../escaped.mjs', true, resolve));
+  assert.throws(() => assertOriginalOverlayEvidencePath(root, dependency, false, resolve));
+  assert.throws(() => assertOriginalOverlayEvidencePath(root, 'tests/escaped.mjs', true,
+    value => value === path.resolve(root, 'tests/escaped.mjs') ? path.join(external, 'escaped.mjs') : value));
+  assert.throws(() => assertOriginalOverlayEvidencePath(root, 'artifacts/material-parity/escaped.json', false,
+    value => value === path.resolve(root, 'artifacts/material-parity/escaped.json') ? path.join(external, 'escaped.json') : value));
+  assert.throws(() => assertOriginalOverlayEvidencePath(root, dependency, true,
+    value => value === path.resolve(root, dependency) ? path.resolve(external, '../wrong-package/typescript.js') : resolve(value)));
+  assert.throws(() => assertOriginalOverlayEvidencePath(root, 'node_modules/typescript/other.js', true,
+    value => value === path.resolve(root, 'node_modules/typescript/other.js') ? path.join(external, 'other.js') : value));
+});
+
 function probe(mutate) {
   const raw = structuredClone(baseline), overrides = new Map();
   const put = (name, value) => {

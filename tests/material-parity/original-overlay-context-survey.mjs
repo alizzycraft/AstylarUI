@@ -9,12 +9,25 @@ import { originalOverlayAuditSourceFile, verifyHistoricalAuditModuleSource,
   verifyHistoricalOverlayMappingSource } from './historical-audit-module-source.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const inside = (base, file) => { const r = path.relative(base, file); return r !== '' && r !== '..' && !r.startsWith(`..${path.sep}`) && !path.isAbsolute(r); };
+
+export function assertOriginalOverlayEvidencePath(root, file, source, resolve = realpathSync) {
+  const boundary = path.resolve(root, source ? '.' : 'artifacts/material-parity'), absolute = path.resolve(root, file);
+  assert.ok(inside(boundary, absolute), 'overlay evidence escapes its logical boundary');
+  // This one recorded producer dependency is installed under node_modules,
+  // which may legitimately be a shared worktree junction. Author/project
+  // sources still require real workspace containment; captured artifacts still
+  // require real artifact containment. The caller also verifies exact bytes.
+  const realBoundary = source && file === 'node_modules/typescript/lib/typescript.js'
+    ? resolve(path.resolve(root, 'node_modules/typescript')) : resolve(boundary);
+  assert.ok(inside(realBoundary, resolve(absolute)), 'overlay evidence escapes its real boundary');
+}
+
 export function collectOriginalOverlayContextSurvey(reportFile, { root = process.cwd(), readBytes = readFileSync } = {}) {
-  const inside = (base, file) => { const r = path.relative(base, file); return r !== '' && r !== '..' && !r.startsWith(`..${path.sep}`) && !path.isAbsolute(r); };
   const read = (file, source = false) => {
     const boundary = path.resolve(root, source ? '.' : 'artifacts/material-parity'), absolute = path.resolve(root, file);
     assert.ok(inside(boundary, absolute));
-    if (readBytes === readFileSync) assert.ok(inside(realpathSync(boundary), realpathSync(absolute)));
+    if (readBytes === readFileSync) assertOriginalOverlayEvidencePath(root, file, source);
     return readBytes(absolute);
   };
   const hashed = (item, source = false) => {
