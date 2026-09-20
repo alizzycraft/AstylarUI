@@ -1,5 +1,21 @@
 # Complete audit harness coverage
 
+## Prepared composition increment
+
+Discovery now contains **172 files** (164 Material, four general, four TTS;
+all 43 legacy files retained). The new
+[alignment composition proof](material-prepared-alignment-composition.md) passes
+its focused mechanics, receipt and inventory tests **7/7**, exit 0, in
+**1,661.6479ms** on the final rerun. Both source-replayed full-payload generation and independent
+write-prohibited check exit 0. These prove a metadata-only projection, not
+integrated classifications or renderer parity.
+
+The September 20 complete harness launched with 171 files before this new suite
+existed; its scope remains 171, with this new focused result recorded separately.
+No complete harness pass is claimed. General parity is running against the
+ready 167-fixture server; an unfiltered Material checkpoint-resume run follows,
+requiring identical recorded build/harness provenance and intact evidence.
+
 The [2026-09-20 checkpoint](material-audit-verification-sep20.md) supersedes the
 live-process claims below. TTS completed with acceptance failures; Material
 stopped at page readiness; the 170-file audit process is no longer live and has

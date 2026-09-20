@@ -3,6 +3,17 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Combined prepared alignment transition
+
+The [full-payload composition proof](material-prepared-alignment-composition.md)
+now verifies the three prepared adapters together: 125 disjoint groups / 6,871
+observations, with all 8,214 unrelated complete rows conserved. Generation and
+independent write-prohibited replay both exit 0; focused mechanics, receipt and
+inventory tests pass 7/7. The projected unresolved count is 1,835, but the actual
+canonical count remains 1,960 until main-builder integration and generated-output
+conservation pass. Observation-stage classifications do not establish equal
+computed styles, actual placement or renderer causality.
+
 ## Public cursor reduction: defaults versus effective pointer behavior
 
 The [36-pair public cursor proof](material-public-cursor-defaults-audit.md)
