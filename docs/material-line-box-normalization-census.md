@@ -58,3 +58,24 @@ Next: bind this bounded transition into a versioned evidence reconciliation
 that retains both contracts, then run the full independent reader and verify
 canonical old-to-new conservation. Do not restore observations by ignoring
 color, rounding current values, or trusting this diagnostic join alone.
+
+## Separate broad-suite result
+
+The already-running command below completed after the census commit:
+
+```text
+node --max-old-space-size=1536 --test --test-concurrency=1 tests/material-parity/input-equivalence-audit.spec.mjs
+```
+
+Result: **378 passed, 10 failed, 388 total**, no cancellations or skips;
+2,085,773.8191 ms. This run reached completion, unlike the earlier process
+failure. The returned output was truncated, so the complete identities and
+causes of all ten failures have not yet been retained. Do not infer that all
+ten have the same cause. One retained failure is the source-fingerprint check
+in `button appearance case index retains every original reset and explicit
+mapping follow-up` (`input-equivalence-audit.spec.mjs`, source assertion at
+line 12120). The current main audit module differs from its historical receipt.
+This needs historical-source binding and fresh evidence replay, not replacement
+of an old receipt with the current hash. A later broad rerun must save its full
+machine-readable output before summarizing it. The seven-test census result
+above does not supersede these ten failures.
