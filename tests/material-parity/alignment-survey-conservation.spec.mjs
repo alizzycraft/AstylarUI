@@ -13,8 +13,12 @@ const main = 'tests/material-parity/input-equivalence-audit.mjs';
 const source = 'scripts/audit-material-text-align-ancestry.mjs';
 const report = 'docs/material-text-align-ancestry.json';
 
-test('alignment integration changes only reviewed orchestration and final snapshot conservation calls', () => {
-  assert.equal(verifyAlignmentAuditProjection(old(main), read(main)).retainedStatements, 231);
+test('alignment integration permits only reviewed orchestration, precise normalization and snapshot conservation', () => {
+  const result = verifyAlignmentAuditProjection(old(main), read(main));
+  assert.equal(result.retainedStatements, 230);
+  assert.equal(result.normalizationTransition.colorValuesEquivalent, false);
+  assert.notEqual(result.normalizationTransition.historical.sha256, result.normalizationTransition.current.sha256);
+  assert.throws(() => verifyAlignmentAuditProjection(old(main), old(main)), /normalization changed/);
   for (const [reportName, sourceName] of [
     ['material-vertical-align-population', 'audit-material-vertical-align-population'],
     ['material-text-align-ancestry', 'audit-material-text-align-ancestry'],
@@ -35,6 +39,8 @@ test('audit projection rejects retained behavior changes, import aliases and orc
     s => s + '\nconst hiddenCoupling = buildMaterialInputAudit;\n',
     s => s + "\nimport { classifyAlignmentFontInput } from './alignment-font-audit-source-binding.mjs';\n",
     s => s.replace('function sourceFingerprints(root)', 'function renamedSourceFingerprints(root)'),
+    s => s.replace('function normalizeColor(', 'function changedNormalizeColor('),
+    s => s.replace('function canonicalStyle(', 'function changedCanonicalStyle('),
   ];
   for (const mutate of mutations) { const changed = mutate(current); assert.notEqual(changed, current); assert.throws(() => verifyAlignmentAuditProjection(previous, changed)); }
 });

@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { collectVerticalAlignPopulation } from './audit-material-vertical-align-population.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -146,7 +146,7 @@ export async function collectVerticalAlignCanonicalPlan() {
     { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }).replaceAll('\r\n', '\n'));
   const proof = collectVerticalAlignPopulation(); assert.equal(bytes, JSON.stringify(proof, null, 2) + '\n');
   const originalBytes = readFileSync(proof.originalCapture.file); assert.equal(hash(originalBytes), proof.originalCapture.sha256);
-  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const normalize = bindHistoricalAuditNormalization(normalization, '957774a');
   const reservedFile = 'docs/material-followup-input-proposal-binding.json';
   const reservedBytes = readFileSync(reservedFile, 'utf8').replaceAll('\r\n', '\n');
   assert.equal(reservedBytes, execFileSync('git', ['show', `11bd538:${reservedFile}`],

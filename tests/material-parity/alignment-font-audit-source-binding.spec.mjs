@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { projectAlignmentFontInputs, alignmentFontClassificationContexts, classifyAlignmentFontInput,
   validateAlignmentFontClassifications, stageAlignmentFontTransitions } from './alignment-font-audit-source-binding.mjs';
 import { createHash } from 'node:crypto';
@@ -19,6 +19,8 @@ test('alignment/font adapter independently replays all original sources and vali
     const r=JSON.parse(readFileSync('${originalFile}'));
     const e=collectAlignmentFontAuditInputs(r,{parityPath:'${originalFile}'});
     assert.equal(e.binding.status,'bound',e.binding.error);assert.equal(e.coverage.complete,true);
+    assert.equal(e.binding.normalizationContracts.current.sha256,'27fcf8d751bb10a5a7e9426a4d21b83de3c0d9242387d75a67613b953940c773');
+    assert.notEqual(e.binding.normalizationContracts.historicalPlans.sha256,e.binding.normalizationContracts.current.sha256);
     assert.equal(e.binding.sourceProofsReplayed,true);assert.equal(e.binding.frozenCanonicalJoinReplayedNow,false);
     assert.equal(e.groups.length,72);assert.equal(e.observations.length,4016);
     assert.deepEqual(validateAlignmentFontAuditInputs(e),[]);
@@ -41,7 +43,7 @@ function fixture() {
       proofs[kind] = JSON.parse(readFileSync(plans[kind].sourceProof.file));
     }
     const n = plans.alignment.productionNormalization;
-    const normalize = bindOwnerCaretNormalization(readFileSync(n.module, 'utf8'), n);
+    const normalize = bindPreciseAuditNormalization();
     const wanted = new Set(Object.values(plans).flatMap(p => p.proposed.flatMap(g => g.observations.slice(0, 1).map(o => o.case))));
     const subset = {};
     for (const [kind, field] of [['static', 'results'], ['interaction', 'interactions']])
@@ -66,7 +68,10 @@ test('alignment/font projection preserves subset gaps, exact classifier input an
   for (const o of e.observations) {
     const input = inputs.get(JSON.stringify([o.case, o.element]));
     assert.equal(contexts.get(JSON.stringify([o.case, o.element, o.property])), o);
-    const c = classifyAlignmentFontInput(input, o.property, o.reference, o.astylar, o);
+    const reference = f.normalize(input.reference ?? {})[o.property];
+    const astylar = f.normalize(input.astylar ?? {})[o.property];
+    assert.equal(reference, o.reference); assert.equal(astylar, o.astylar);
+    const c = classifyAlignmentFontInput(input, o.property, reference, astylar, o);
     assert.equal(c.attribution, o.classification.attribution); assert.equal(c.reviewEvidence.rendererCauseProven, false);
   }
   assert.deepEqual(validateAlignmentFontClassifications(e, e.groups), []);
@@ -91,6 +96,8 @@ test('alignment/font projection rejects changed plans, proofs, original inputs a
     f => { f.subset.results[0].viewport.width++; },
     f => { f.subset.results.push(f.subset.results[0]); },
     f => { f.subset.results.reverse(); },
+    f => { const normalize = f.normalize; f.normalize = input => ({
+      ...normalize(input), verticalAlign: 'incorrect-current-value', fontStyle: 'incorrect-current-value' }); },
   ];
   for (const [i, mutate] of changes.entries()) {
     const f = fixture(); mutate(f);

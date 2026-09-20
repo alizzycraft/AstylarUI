@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { planAdditionalControlFontStyle } from '../../scripts/audit-material-additional-control-font-style-attribution.mjs';
 import { additionalControlFontStyleTargets } from '../../scripts/audit-material-additional-control-font-style.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const file = 'docs/material-additional-control-font-style-attribution-plan.json';
 test('additional control attribution independently replays original sources and the whole frozen canonical payload', () => {
@@ -36,7 +36,7 @@ function fixture() {
       'occurrences', 'cases', 'states'].map(k => [k, p[k]])), attribution: 'unresolved' }));
     rows.push({ family: 'sentinel', element: 'other', property: 'color', reference: 'red', astylar: 'blue',
       attribution: 'previous-review', retained: true });
-    const normalize = bindOwnerCaretNormalization(readFileSync(plan.productionNormalization.module, 'utf8'), plan.productionNormalization);
+    const normalize = bindHistoricalAuditNormalization(plan.productionNormalization, '957774a');
     template = { proof, original, rows, normalize };
   }
   const { normalize, ...mutable } = template;

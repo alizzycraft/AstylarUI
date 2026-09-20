@@ -5,7 +5,7 @@ import { readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { collectLtrAlignmentReview } from '../../scripts/audit-material-ltr-alignment.mjs';
 import { bindOwnerCaretCaptureSubset } from './owner-caret-audit-source-binding.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { reviewedInputClassificationContexts, classifyReviewedInput } from './reviewed-input-audit-source-binding.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -25,7 +25,8 @@ export function replayLtrAlignmentReview() {
   const bytes = readFileSync(review.originalCapture.file); assert.equal(hash(bytes), review.originalCapture.sha256);
   const plan = JSON.parse(readFileSync(review.sourcePlan.file)), n = plan.productionNormalization;
   return { review, original: JSON.parse(bytes),
-    normalize: bindOwnerCaretNormalization(readFileSync(n.module, 'utf8'), n),
+    normalize: bindPreciseAuditNormalization(),
+    normalizationContracts: { historicalPlans: n, current: preciseAuditNormalization },
     descriptor: { file, revision, sha256: hash(text), sourceProofReplayed: true,
       frozenCanonicalJoinReplayedNow: false, frozenCanonicalJoinVerifiedAt: review.sourcePlan.revision } };
 }
@@ -90,7 +91,8 @@ export function collectLtrAlignmentAuditInputs(report, { root = process.cwd(), p
     assert.equal(bindOwnerCaretCaptureSubset(report, supplied).coverage.complete, true);
     const replay = replayLtrAlignmentReview();
     return { schemaVersion: 1, binding: { status: 'bound', file: path.relative(root, path.resolve(root, parityPath)).replaceAll('\\', '/'),
-      sha256: hash(bytes), originalCapture: replay.review.originalCapture, sourceReview: replay.descriptor },
+      sha256: hash(bytes), originalCapture: replay.review.originalCapture, sourceReview: replay.descriptor,
+      normalizationContracts: replay.normalizationContracts },
       ...projectLtrAlignmentInputs(supplied, replay) };
   } catch (error) { return { ...empty, binding: { status: 'invalid', error: String(error) } }; }
 }

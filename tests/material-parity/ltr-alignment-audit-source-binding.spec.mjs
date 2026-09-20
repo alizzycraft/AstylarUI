@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { assertAlignmentAdapterReceiptSource } from './alignment-adapter-receipt-source.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { projectLtrAlignmentInputs, ltrAlignmentClassificationContexts, classifyLtrAlignmentInput,
   validateLtrAlignmentClassifications, stageLtrAlignmentTransitions, collectLtrAlignmentAuditInputs } from './ltr-alignment-audit-source-binding.mjs';
 
@@ -21,6 +21,8 @@ test('LTR adapter independently replays original contexts, browser control and s
     const r=JSON.parse(readFileSync('${originalFile}'));
     const e=collectLtrAlignmentAuditInputs(r,{parityPath:'${originalFile}'});
     assert.equal(e.binding.status,'bound',e.binding.error);assert.equal(e.coverage.complete,true);
+    assert.equal(e.binding.normalizationContracts.current.sha256,'27fcf8d751bb10a5a7e9426a4d21b83de3c0d9242387d75a67613b953940c773');
+    assert.notEqual(e.binding.normalizationContracts.historicalPlans.sha256,e.binding.normalizationContracts.current.sha256);
     assert.equal(e.binding.sourceReview.sourceProofReplayed,true);
     assert.equal(e.binding.sourceReview.frozenCanonicalJoinReplayedNow,false);
     assert.deepEqual(validateLtrAlignmentAuditInputs(e),[]);assert.deepEqual(validateLtrAlignmentClassifications(e,e.groups),[]);
@@ -38,7 +40,7 @@ function fixture() {
     const original = JSON.parse(readFileSync(originalFile)), file = 'docs/material-ltr-alignment-review.json';
     const text = readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), review = JSON.parse(text);
     const plan = JSON.parse(readFileSync(review.sourcePlan.file)), n = plan.productionNormalization;
-    const normalize = bindOwnerCaretNormalization(readFileSync(n.module, 'utf8'), n);
+    const normalize = bindPreciseAuditNormalization();
     const wanted = new Set(review.groups.map(p => p.observations[0].case)), subset = {};
     for (const [kind, field] of [['static', 'results'], ['interaction', 'interactions']])
       subset[field] = original[field].filter(e => wanted.has(`${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`));
@@ -60,7 +62,10 @@ test('LTR subset projection preserves missing coverage, original identity and si
   for (const o of e.observations) {
     const input = inputs.get(JSON.stringify([o.case, o.element]));
     assert.equal(contexts.get(JSON.stringify([o.case, o.element, o.property])), o);
-    const c = classifyLtrAlignmentInput(input, o.property, o.reference, o.astylar, o);
+    const reference = f.normalize(input.reference ?? {})[o.property];
+    const astylar = f.normalize(input.astylar ?? {})[o.property];
+    assert.equal(reference, o.reference); assert.equal(astylar, o.astylar);
+    const c = classifyLtrAlignmentInput(input, o.property, reference, astylar, o);
     assert.equal(c.attribution, o.classification.attribution); assert.equal(c.reviewEvidence.actualPlacementVerified, false);
   }
   assert.deepEqual(validateLtrAlignmentClassifications(e, e.groups), []);
@@ -88,6 +93,8 @@ test('LTR projection rejects changed direction, scope, members and original inpu
     f => { f.subset.results[0].viewport.width++; },
     f => { f.subset.results.push(f.subset.results[0]); },
     f => { f.subset.results.reverse(); },
+    f => { const normalize = f.normalize; f.normalize = input => ({
+      ...normalize(input), textAlign: 'incorrect-current-value' }); },
   ];
   for (const [index, mutate] of mutations.entries()) {
     const f = fixture(); mutate(f); assert.throws(() => projectLtrAlignmentInputs(f.subset, f), `mutation ${index}`);

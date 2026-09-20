@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { assertAlignmentAdapterReceiptSource } from './alignment-adapter-receipt-source.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { projectTextAlignInputs, textAlignClassificationContexts, classifyTextAlignInput,
   validateTextAlignClassifications, stageTextAlignTransitions, collectTextAlignAuditInputs } from './text-align-audit-source-binding.mjs';
 
@@ -19,6 +19,8 @@ test('text alignment adapter independently replays complete original ancestry an
     const r=JSON.parse(readFileSync('${originalFile}'));
     const e=collectTextAlignAuditInputs(r,{parityPath:'${originalFile}'});
     assert.equal(e.binding.status,'bound',e.binding.error);assert.equal(e.coverage.complete,true);
+    assert.equal(e.binding.normalizationContracts.current.sha256,'27fcf8d751bb10a5a7e9426a4d21b83de3c0d9242387d75a67613b953940c773');
+    assert.notEqual(e.binding.normalizationContracts.historicalPlans.sha256,e.binding.normalizationContracts.current.sha256);
     assert.equal(e.binding.sourceProofReplayed,true);assert.equal(e.binding.frozenCanonicalJoinReplayedNow,false);
     assert.deepEqual(validateTextAlignAuditInputs(e),[]);assert.deepEqual(validateTextAlignClassifications(e,e.groups),[]);
     console.log(JSON.stringify({groups:e.groups.length,observations:e.observations.length,cases:e.coverage.sourceCases}));`;
@@ -34,7 +36,7 @@ function fixture() {
     const original = JSON.parse(readFileSync(originalFile)), file = 'docs/material-text-align-canonical-plan.json';
     const text = readFileSync(file, 'utf8').replaceAll('\r\n', '\n'), plan = JSON.parse(text);
     const proof = JSON.parse(readFileSync(plan.sourceProof.file)), n = plan.productionNormalization;
-    const normalize = bindOwnerCaretNormalization(readFileSync(n.module, 'utf8'), n);
+    const normalize = bindPreciseAuditNormalization();
     const wanted = new Set(plan.proposed.map(p => p.observations[0].case)), subset = {};
     for (const [kind, field] of [['static', 'results'], ['interaction', 'interactions']])
       subset[field] = original[field].filter(e => wanted.has(`${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`));
@@ -56,7 +58,10 @@ test('text alignment subset keeps missing coverage, classifier identity and all 
   for (const o of e.observations) {
     const input = inputs.get(JSON.stringify([o.case, o.element]));
     assert.equal(contexts.get(JSON.stringify([o.case, o.element, o.property])), o);
-    const c = classifyTextAlignInput(input, o.property, o.reference, o.astylar, o);
+    const reference = f.normalize(input.reference ?? {})[o.property];
+    const astylar = f.normalize(input.astylar ?? {})[o.property];
+    assert.equal(reference, o.reference); assert.equal(astylar, o.astylar);
+    const c = classifyTextAlignInput(input, o.property, reference, astylar, o);
     assert.equal(c.attribution, o.classification.attribution); assert.equal(c.reviewEvidence.computedCandidateVerified, false);
   }
   assert.deepEqual(validateTextAlignClassifications(e, e.groups), []);
@@ -83,6 +88,8 @@ test('text alignment projection rejects changed proposals, ancestry, members and
     f => { f.subset.results[0].viewport.width++; },
     f => { f.subset.results.push(f.subset.results[0]); },
     f => { f.subset.results.reverse(); },
+    f => { const normalize = f.normalize; f.normalize = input => ({
+      ...normalize(input), textAlign: 'incorrect-current-value' }); },
   ];
   for (const [index, mutate] of mutations.entries()) {
     const f = fixture(); mutate(f); assert.throws(() => projectTextAlignInputs(f.subset, f), `mutation ${index}`);

@@ -6,7 +6,7 @@ import path from 'node:path';
 import { collectVerticalAlignPopulation } from '../../scripts/audit-material-vertical-align-population.mjs';
 import { collectAdditionalControlFontStyle } from '../../scripts/audit-material-additional-control-font-style.mjs';
 import { bindOwnerCaretCaptureSubset } from './owner-caret-audit-source-binding.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { reviewedInputClassificationContexts, classifyReviewedInput } from './reviewed-input-audit-source-binding.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -55,8 +55,9 @@ export function replayAlignmentFontPlans() {
   }
   assert.deepEqual(plans.alignment.productionNormalization, plans.fontStyle.productionNormalization);
   const n = plans.alignment.productionNormalization;
-  const normalize = bindOwnerCaretNormalization(readFileSync(n.module, 'utf8'), n);
-  return { original, plans, proofs, descriptors, normalize };
+  const normalize = bindPreciseAuditNormalization();
+  return { original, plans, proofs, descriptors, normalize,
+    normalizationContracts: { historicalPlans: n, current: preciseAuditNormalization } };
 }
 
 export function projectAlignmentFontInputs(supplied, replay) {
@@ -127,6 +128,7 @@ export function collectAlignmentFontAuditInputs(report, { root = process.cwd(), 
     const replay = replayAlignmentFontPlans();
     return { schemaVersion: 1, binding: { status: 'bound', file: path.relative(root, path.resolve(root, parityPath)).replaceAll('\\', '/'),
       sha256: hash(bytes), originalCapture: { file: originalFile, sha256: originalSha256 }, sourcePlans: replay.descriptors,
+      normalizationContracts: replay.normalizationContracts,
       sourceProofsReplayed: true, frozenCanonicalJoinReplayedNow: false }, ...projectAlignmentFontInputs(supplied, replay) };
   } catch (error) { return { ...empty, binding: { status: 'invalid', error: String(error) } }; }
 }

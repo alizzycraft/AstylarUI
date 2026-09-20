@@ -3,7 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { planVerticalAlignPopulation } from '../../scripts/bind-material-vertical-align-population.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const file = 'docs/material-vertical-align-canonical-plan.json';
 test('alignment membership independently replays all original proofs and authenticates the frozen canonical payload without writes', () => {
@@ -41,7 +41,7 @@ function fixture() {
       p.proposal.canonicalRowSha256 === g.canonicalRowSha256).originalCompleteRow);
     rows.push({ family: 'sentinel', element: 'unrelated', property: 'color', reference: 'red', astylar: 'blue',
       attribution: 'previous-review', retained: true });
-    const normalize = bindOwnerCaretNormalization(readFileSync(plan.productionNormalization.module, 'utf8'), plan.productionNormalization);
+    const normalize = bindHistoricalAuditNormalization(plan.productionNormalization, '957774a');
     template = { original, proof, rows, normalize, existingPlan };
   }
   const { normalize, ...mutable } = template;

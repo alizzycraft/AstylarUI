@@ -7,12 +7,14 @@ import { assertAlignmentAdapterReceiptSource, verifyAlignmentAdapterReceiptSourc
 const receipts = ['alignment-font', 'text-align', 'ltr-alignment'].map(name =>
   JSON.parse(readFileSync(`docs/material-${name}-transition-dry-run.json`)).sourceBinding);
 
-test('historical adapter receipts retain exact committed bytes across logical-path serialization', () => {
+test('historical adapter receipts retain exact bytes across the explicit live-normalizer transition', () => {
   for (const receipt of receipts) {
     const result = assertAlignmentAdapterReceiptSource(receipt);
     assert.equal(result.historicalSha256, receipt.sha256);
     assert.equal(result.historicalReceiptPreserved, true);
-    assert.equal(result.onlyLogicalPathSerializationChanged, true);
+    assert.equal(result.onlyLogicalPathSerializationChanged, false);
+    assert.equal(result.historicalExecutionReinterpreted, false);
+    assert.deepEqual(result.reviewedChanges, ['logical-path-serialization', 'precise-live-normalization-binding']);
     assert.notEqual(result.currentNormalizedSha256, result.historicalSha256);
   }
 });
@@ -28,6 +30,8 @@ test('adapter conservation rejects changed receipts, classification, containment
       [ receipt, Buffer.concat([historical, Buffer.from('\n')]), current ],
       [ receipt, historical, current.replace("status: 'bound'", "status: 'invalid'") ],
       [ receipt, historical, current.replace('realpathSync(', 'path.resolve(') ],
+      [ receipt, historical, current.replace('normalize: bindPreciseAuditNormalization()', 'normalize: () => ({})').replace('const normalize = bindPreciseAuditNormalization()', 'const normalize = () => ({})') ],
+      [ receipt, historical, current.replace('current: preciseAuditNormalization', 'current: n') ],
       [ receipt, historical, current.replace('path.resolve(root, parityPath)', 'path.resolve(root, target)') ],
       [ receipt, historical, current + '\n// unreviewed change\n' ],
       [ receipt, historical, historical ],

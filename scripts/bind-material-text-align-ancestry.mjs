@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { collectTextAlignAncestry } from './audit-material-text-align-ancestry.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -122,7 +122,7 @@ export async function collectTextAlignmentPlan() {
   assert.equal(bytes, execFileSync('git', ['show', `7fa9b1b:${proofFile}`], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }).replaceAll('\r\n', '\n'));
   const proof = collectTextAlignAncestry(); assert.equal(hash(JSON.stringify(proof, null, 2) + '\n'), hash(bytes));
   const originalBytes = readFileSync(proof.originalCapture.file); assert.equal(hash(originalBytes), proof.originalCapture.sha256);
-  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const normalize = bindHistoricalAuditNormalization(normalization, '957774a');
   const canonical = await readCaretConservationRows(file => execFileSync('git', ['show', `957774a:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   return { schemaVersion: 1, kind: 'source-bound-text-alignment-canonical-membership-proposal',
     sourceProof: { file: proofFile, revision: '7fa9b1b', sha256: hash(bytes) }, originalCapture: proof.originalCapture,

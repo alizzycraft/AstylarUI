@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { collectTextAlignmentPlan, planTextAlignment, reviewTextAlignmentObservation } from '../../scripts/bind-material-text-align-ancestry.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const digest = value => hash(JSON.stringify(value));
@@ -14,7 +14,7 @@ assert.equal(hash(sourceBytes), saved.sourceProof.sha256);
 const proof = JSON.parse(sourceBytes), originalBytes = readFileSync(saved.originalCapture.file);
 assert.equal(hash(originalBytes), saved.originalCapture.sha256);
 const original = JSON.parse(originalBytes);
-const normalize = bindOwnerCaretNormalization(readFileSync(saved.productionNormalization.module, 'utf8'), saved.productionNormalization);
+const normalize = bindHistoricalAuditNormalization(saved.productionNormalization, '957774a');
 const observations = ['proposed', 'retained', 'previous'].flatMap(name => saved[name]);
 const rows = observations.map(group => ({ family: group.family, element: group.element, property: group.property,
   reference: group.reference, ...(Object.hasOwn(group, 'astylar') ? { astylar: group.astylar } : {}),

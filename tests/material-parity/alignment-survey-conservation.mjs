@@ -3,6 +3,8 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
+import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 
 export const alignmentSurveyBaseline = '67db724e5f258c84cfdc70e9da2ccb6ee6353ad0';
 const auditFile = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -35,16 +37,22 @@ function exactNamedImport(node, names) {
   assert.ok(node.importClause && !node.importClause.name && !node.importClause.isTypeOnly);
   assert.ok(ts.isNamedImports(node.importClause.namedBindings));
   assert.deepEqual(node.importClause.namedBindings.elements.map(n => {
-    assert.equal(n.propertyName, undefined); return n.name.text;
+    assert.ok(n.propertyName === undefined, 'import aliases are not permitted'); return n.name.text;
   }), names);
 }
 
-// Permit precisely the new orchestration imports/functions. Every retained
-// mapping/normalization statement must match and must not reach the exclusions.
+// Permit reviewed orchestration and the separately authenticated color-precision
+// correction. All other retained statements must match; this does not assert
+// that historical/current normalized color values are equivalent.
 export function verifyAlignmentAuditProjection(previous, current) {
+  const historicalNormalization = { ...preciseAuditNormalization,
+    sha256: '8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e' };
+  bindOwnerCaretNormalization(normalized(previous), historicalNormalization);
+  bindPreciseAuditNormalization(normalized(current));
   const project = (source, changed) => {
     const ast = parse(auditFile, source), removed = new Set(), imports = new Set(), retained = [];
     for (const node of ast.statements) {
+      if (ts.isFunctionDeclaration(node) && node.name?.text === 'normalizeColor') continue;
       if (ts.isFunctionDeclaration(node) && orchestration.has(node.name?.text)) {
         assert.ok(!removed.has(node.name.text)); removed.add(node.name.text); continue;
       }
@@ -63,7 +71,9 @@ export function verifyAlignmentAuditProjection(previous, current) {
   };
   const before = project(previous, false), after = project(current, true);
   assert.equal(hash(JSON.stringify(after)), hash(JSON.stringify(before)), 'mapping or normalization changed');
-  return { retainedStatements: before.length, retainedStatementsSha256: hash(JSON.stringify(before)) };
+  return { retainedStatements: before.length, retainedStatementsSha256: hash(JSON.stringify(before)),
+    normalizationTransition: { historical: historicalNormalization, current: preciseAuditNormalization,
+      colorValuesEquivalent: false } };
 }
 
 // Collector changes are restricted to one exact import and wrapping its final
@@ -83,7 +93,7 @@ export function verifyAlignmentCollectorProjection(reportFile, previous, current
         assert.ok(ts.isReturnStatement(node.parent)); assert.ok(ts.isBlock(node.parent.parent));
         const owner = node.parent.parent.parent;
         assert.ok(ts.isFunctionDeclaration(owner) && owner.name?.text === functionName);
-        assert.equal(owner.body.statements.at(-1), node.parent); wraps++;
+        assert.ok(owner.body.statements.at(-1) === node.parent, 'conservation must wrap the final return'); wraps++;
         return node.arguments[1];
       }
       return ts.visitEachChild(node, visit, context);

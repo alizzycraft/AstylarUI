@@ -6,7 +6,7 @@ import path from 'node:path';
 import { collectTextAlignAncestry } from '../../scripts/audit-material-text-align-ancestry.mjs';
 import { reviewTextAlignmentObservation } from '../../scripts/bind-material-text-align-ancestry.mjs';
 import { bindOwnerCaretCaptureSubset } from './owner-caret-audit-source-binding.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { reviewedInputClassificationContexts, classifyReviewedInput } from './reviewed-input-audit-source-binding.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -34,7 +34,8 @@ export function replayTextAlignPlan() {
   assert.deepEqual(proof.originalCapture, plan.originalCapture);
   const normalization = plan.productionNormalization;
   return { original: JSON.parse(bytes), plan, proof,
-    normalize: bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization),
+    normalize: bindPreciseAuditNormalization(),
+    normalizationContracts: { historicalPlans: normalization, current: preciseAuditNormalization },
     descriptor: { file: planFile, revision, sha256: hash(text), sourceProof: plan.sourceProof,
       sourceProofReplayed: true, frozenCanonicalJoinReplayedNow: false, frozenCanonicalJoinVerifiedAt: revision } };
 }
@@ -108,6 +109,7 @@ export function collectTextAlignAuditInputs(report, { root = process.cwd(), pari
     const replay = replayTextAlignPlan();
     return { schemaVersion: 1, binding: { status: 'bound', file: path.relative(root, path.resolve(root, parityPath)).replaceAll('\\', '/'),
       sha256: hash(bytes), originalCapture: { file: originalFile, sha256: originalSha256 }, sourcePlan: replay.descriptor,
+      normalizationContracts: replay.normalizationContracts,
       sourceProofReplayed: true, frozenCanonicalJoinReplayedNow: false }, ...projectTextAlignInputs(supplied, replay) };
   } catch (error) { return { ...empty, binding: { status: 'invalid', error: String(error) } }; }
 }
