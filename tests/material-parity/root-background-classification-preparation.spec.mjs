@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { prepareRootBackgroundClassifications, rootBackgroundClassificationContexts,
-  classifyRootBackgroundInput, rootBackgroundAttribution } from './root-background-classification-preparation.mjs';
+  classifyRootBackgroundInput, rootBackgroundAttribution, validateRootBackgroundEvidence,
+  validateRootBackgroundClassifications } from './root-background-classification-preparation.mjs';
 
 test('all root background source proofs bind precise unequal values to exact original cases', () => {
   const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
@@ -39,4 +40,33 @@ test('all root background source proofs bind precise unequal values to exact ori
   assert.equal(rootBackgroundClassificationContexts({ ...evidence, binding: { status: 'unbound' } }).size, 0);
   assert.throws(() => rootBackgroundClassificationContexts({ ...evidence,
     observations: [...evidence.observations, evidence.observations[0]] }));
+  assert.deepEqual(validateRootBackgroundEvidence(evidence), []);
+  assert.deepEqual(validateRootBackgroundClassifications(evidence, evidence.groups), []);
+  assert.deepEqual(validateRootBackgroundClassifications(evidence,
+    [...evidence.groups].reverse().concat({ attribution: 'unrelated' })), []);
+  const controls = [
+    rows => rows.pop(),
+    rows => rows.push(structuredClone(rows[0])),
+    rows => { rows[0].reference = rows[0].astylar; },
+    rows => { rows[0].occurrences++; },
+    rows => { rows[0].reviewedCases[0] = 'unreviewed-case'; },
+    rows => { rows[0].cases.pop(); },
+    rows => { rows[0].states = []; },
+    rows => { rows[0].classification = 'equivalent'; },
+    rows => { rows[0].recommendedOwner = 'renderer'; },
+    rows => { rows[0].reviewEvidence.rendererCauseProven = true; },
+    rows => { rows[0].attribution = 'unresolved'; },
+  ];
+  for (const mutate of controls) {
+    const rows = structuredClone(evidence.groups); mutate(rows);
+    assert.equal(validateRootBackgroundClassifications(evidence, rows).length, 1);
+  }
+  assert.equal(validateRootBackgroundClassifications({ ...evidence,
+    binding: { status: 'unbound' } }, evidence.groups).length, 1);
+  // A forged claim can remain internally consistent; only independent source
+  // replay can reject it. Exercise that distinction explicitly.
+  const forged = structuredClone(evidence);
+  forged.groups[0].reviewEvidence.rendererCauseProven = true;
+  assert.deepEqual(validateRootBackgroundClassifications(forged, forged.groups), []);
+  assert.equal(validateRootBackgroundEvidence(forged).length, 1);
 });

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { isDeepStrictEqual } from 'node:util';
 import { collectRootBackgroundInputs } from '../../scripts/audit-material-root-background-inputs.mjs';
 import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { bindOwnerCaretCaptureSubset } from './owner-caret-audit-source-binding.mjs';
@@ -8,6 +9,8 @@ import { reviewedInputClassificationContexts, classifyReviewedInput } from './re
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const digest = value => hash(JSON.stringify(value));
+const signature = row => JSON.stringify([row.family, row.element, row.property, row.reference, row.astylar]);
+const metadataKeys = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence'];
 export const rootBackgroundAttribution = 'reviewed-root-background-prequantized-theme-input';
 export const rootBackgroundClassificationContexts = reviewedInputClassificationContexts;
 export const classifyRootBackgroundInput = classifyReviewedInput;
@@ -22,6 +25,10 @@ export function prepareRootBackgroundClassifications(supplied) {
   const subset = bindOwnerCaretCaptureSubset(supplied, original);
   assert.equal(subset.coverage.complete, true, 'complete original capture required');
   const normalize = bindPreciseAuditNormalization();
+  const states = new Map([['static', original.results], ['interaction', original.interactions]]
+    .flatMap(([kind, entries]) => entries.map(entry => [
+      `${kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`,
+      entry.state ?? 'static'])));
   const observations = [], groups = [], seen = new Set();
   for (const finding of proof.findings) {
     const reference = normalize({ backgroundColor: finding.reference }).backgroundColor;
@@ -51,11 +58,47 @@ export function prepareRootBackgroundClassifications(supplied) {
     observations.push(...members);
     groups.push({ ...classification, family: finding.family, element: finding.element,
       property: finding.property, reference, astylar, occurrences: members.length,
-      reviewedCases: members.map(member => member.case) });
+      cases: members.slice(0, 12).map(member => member.case),
+      reviewedCases: members.map(member => member.case),
+      states: [...new Set(members.map(member => states.get(member.case)))] });
   }
   assert.equal(groups.length, 144); assert.equal(observations.length, 2311);
   return { schemaVersion: 1, binding: { status: 'bound', capture: proof.capture,
     sourceProofsReplayed: true, normalization: preciseAuditNormalization },
-    observations, groups, canonicalIntegration: false, canonicalCoverageProven: false,
+    observations, groups, coverage: subset.coverage, canonicalIntegration: false, canonicalCoverageProven: false,
     inputEquivalent: false, renderingEquivalent: false };
+}
+
+// Evidence must reproduce independently, not merely have plausible counts or
+// self-consistent metadata. Use the fixed original capture, never a caller path.
+export function validateRootBackgroundEvidence(evidence) {
+  try {
+    const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
+    const replay = prepareRootBackgroundClassifications(original);
+    assert.ok(isDeepStrictEqual(evidence, replay), 'root background evidence differs from fresh source replay');
+  } catch (error) { return [`root background evidence replay failed: ${error}`]; }
+  return [];
+}
+
+// Separate from source authentication: this proves no reviewed observation was
+// dropped, duplicated, relabeled, or attached to another scalar/owner by a caller.
+export function validateRootBackgroundClassifications(evidence, rows) {
+  try {
+    assert.equal(evidence?.binding?.status, 'bound');
+    assert.equal(evidence?.coverage?.complete, true);
+    assert.equal(evidence.groups.length, 144);
+    const expected = new Map(evidence.groups.map(group => [signature(group), group]));
+    assert.equal(expected.size, evidence.groups.length, 'duplicate expected root group');
+    const actual = rows.filter(row => row.attribution === rootBackgroundAttribution);
+    const indexed = new Map(actual.map(row => [signature(row), row]));
+    assert.equal(indexed.size, actual.length, 'duplicate classified root group');
+    assert.equal(indexed.size, expected.size, 'root group coverage changed');
+    for (const [key, group] of expected) {
+      const row = indexed.get(key); assert.ok(row, 'root group missing or scalar changed');
+      for (const field of [...metadataKeys, 'occurrences', 'cases', 'reviewedCases', 'states'])
+        assert.ok(isDeepStrictEqual(row[field], group[field]), `root ${field} changed`);
+    }
+    assert.equal(actual.reduce((count, row) => count + row.occurrences, 0), 2311);
+  } catch (error) { return [`root background classification coverage failed: ${error}`]; }
+  return [];
 }

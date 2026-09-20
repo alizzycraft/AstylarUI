@@ -38,8 +38,23 @@ The existing source proof and audit-discovery checks also passed 7/7 in
 node --max-old-space-size=1536 --test --test-concurrency=1 tests/material-parity/root-background-inputs.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs
 ```
 
-Next: wire the prepared evidence into the production discrepancy pipeline with
-independent evidence replay and complete classified-row coverage checks. Verify
+Independent evidence replay and classified-row coverage checks are now supplied
+by `validateRootBackgroundEvidence` and
+`validateRootBackgroundClassifications`. The former recomputes the entire
+source-bound preparation from the fixed original capture; the latter checks all
+144 group signatures, metadata, observation counts, complete case memberships,
+sampled case lists, and state lists. Row order and unrelated classifications do
+not affect coverage.
+
+The expanded focused test passed 1/1 in 57,426 ms. In addition to the original
+per-observation mutations, it rejects 11 row-coverage mutations and unbound
+evidence. It also demonstrates why both checks are necessary: a forged
+renderer-cause claim can be internally consistent with its own rows, but fails
+independent source replay. Neither validator promotes this preparation into a
+claim of canonical coverage.
+
+Next: wire the prepared evidence and both validators into the production
+discrepancy pipeline. Verify
 that unrelated rows and observations remain conserved before regenerating the
 canonical report. The earlier report regeneration was already running when this
 preparation was added and does not include it.
