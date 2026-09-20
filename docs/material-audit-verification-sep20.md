@@ -4,6 +4,39 @@ This supersedes live-process claims in the
 [September 19 checkpoint](material-audit-verification-sep19.md). It is not audit
 completion or a rendering-parity pass.
 
+## Isolated alignment integration: bounded assertion diagnostics
+
+Work on `codex/material-audit-alignment-integration` leaves the original live
+171-file harness checkout unchanged. The pending 125-group integration has not
+been promoted. `5ae0c5a` separately updates the guarded case-index refresh tool
+to its authenticated pre-integration baseline.
+
+The first dependent-receipt replay exposed excessive allocation while formatting
+intentional large-object inequality failures. Its field-host test child reached
+8,351 MiB working set; a concurrent `git diff --check` failed to allocate memory.
+Both field-host tests eventually passed, but the rejection test took
+114,412.1024ms. The broader replay was deliberately stopped after verifying its
+parent/child commands; wrapper exit -1 is not a complete suite result.
+
+The two conservation assertions now evaluate `isDeepStrictEqual` and assert its
+boolean result with a bounded message instead of constructing the complete
+multi-megabyte object diff. Both versions use strict deep equality. No compared
+field, permitted receipt, historical anchor, mutation, or rejection was removed.
+
+The corrected field-host file completed both tests within the subsequent batch;
+the same 15 rejection controls took 1,345.6143ms. The gap conservation/rejection
+subset separately passes **2/2**, exit 0, **3,882.3649ms**, including its 16
+negative controls. The broader field-host-weight and write-prohibited producer
+replays remain separate required verification, not implied by these results.
+Syntax checks passed for all 19 currently changed/new JavaScript modules, and
+`git diff --check` succeeded after memory pressure subsided.
+
+Logs in the usual artifact directory:
+`alignment-integration-dependent-receipts-after-sep20.log` (stopped),
+`alignment-integration-dependent-receipts-bounded-sep20.log` (broader retry), and
+`alignment-integration-gap-rejection-bounded-sep20.log` (terminal subset).
+This is a test-diagnostic correction, not a renderer or comparison change.
+
 ## Cursor increment committed and pushed
 
 `91b531474ca66e25473e3503e80b1bd542721b61` adds the

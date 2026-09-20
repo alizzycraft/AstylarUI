@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { isDeepStrictEqual } from 'node:util';
 
 const revision = '80bf8879713ff53fdfdf97b187cabd2242e69d1b';
 const main = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -36,7 +37,9 @@ function conserve(reports, read = readFileSync) {
   }
   advance(projected[1].survey, original[1].survey, false);
   assert.equal(changes.length, 6);
-  assert.deepEqual(projected, original, 'field-host evidence changed beyond the six receipts');
+  // Keep strict deep equality without constructing a multi-megabyte diff for
+  // every intentional mutation in the rejection tests.
+  assert.ok(isDeepStrictEqual(projected, original), 'field-host evidence changed beyond the six receipts');
   for (const report of reports) for (const source of report.sourceFingerprints)
     assert.equal(sourceHash(read(source.file)), source.sha256, 'another producer dependency changed');
   return changes;

@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { isDeepStrictEqual } from 'node:util';
 
 const revision = '84861a6';
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -55,7 +56,9 @@ function conserve(reports, readSource = read) {
   receipt(5, projected[5].parent, original[5].parent);
   assert.equal(projected[6].sources.length, 3);
   projected[6].sources.forEach((s, i) => receipt(6, s, original[6].sources[i]));
-  assert.deepEqual(projected, original, 'gap evidence changed beyond the eleven dependency receipts');
+  // Mutation rejection requires exact equality, not formatting the entire
+  // captured population into an assertion-error diff.
+  assert.ok(isDeepStrictEqual(projected, original), 'gap evidence changed beyond the eleven dependency receipts');
   assert.equal(changes.length, 11);
   for (const source of reports[0].sourceFingerprints.filter(s => s.file !== auditModule))
     assert.equal(sourceHash(readSource(source.file)), source.sha256, 'gap implementation dependency changed');
