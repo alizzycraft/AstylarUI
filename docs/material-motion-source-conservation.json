@@ -5,12 +5,12 @@
     "file": "docs/material-owner-initial-motion-review.json",
     "sha256": "f8f90799191604823875d849fb6ae56de46dd96c37e3f91c8d540bdd48916294"
   },
-  "currentReportSha256": "cd8adede73edd16f2992f7dc526c8a7ee1d0621a83a84e6703aa64a6a3790443",
+  "currentReportSha256": "0d578722f683ed49cb79cfb89094b7717bbc7a53eccb3ba64c8004ece99cb8fa",
   "sourceReceiptTransitions": [
     {
       "file": "tests/material-parity/input-equivalence-audit.mjs",
       "historicalSha256": "82854bccdaa6ff23fc5f9df987f6ec5cf3e22d0da5dbe64357109d5a03035f3b",
-      "currentSha256": "c9eccd1c91b59a890df12070cc6cf0fccb70cef15513d72741a76cee0c757066"
+      "currentSha256": "b5427627f83d43027499798a505bfe7243ed7c690038934637663ac25e50f327"
     }
   ],
   "unchangedMappingDeclarations": [

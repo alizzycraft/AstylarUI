@@ -19,6 +19,8 @@ const definitions = {
   'docs/material-remaining-text-alignment.json': ['scripts/audit-remaining-text-alignment.mjs', 'collectRemainingTextAlignment', 'sourceFingerprints'],
 };
 export const alignmentAuditImports = new Map([
+  ['./reviewed-source-batch-audit-source-binding.mjs', ['collectReviewedSourceBatchAuditInputs', 'validateReviewedSourceBatchAuditInputs',
+    'reviewedSourceBatchClassificationContexts', 'classifyReviewedSourceBatchInput', 'validateReviewedSourceBatchClassifications', 'reviewedSourceBatchAttributions']],
   ['./alignment-font-audit-source-binding.mjs', ['collectAlignmentFontAuditInputs', 'validateAlignmentFontAuditInputs',
     'alignmentFontClassificationContexts', 'classifyAlignmentFontInput', 'validateAlignmentFontClassifications', 'alignmentFontAttributions']],
   ['./text-align-audit-source-binding.mjs', ['collectTextAlignAuditInputs', 'validateTextAlignAuditInputs',

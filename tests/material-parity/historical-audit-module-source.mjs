@@ -25,6 +25,8 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
   const excluded = new Set(['buildMaterialInputAudit', 'validateMaterialInputAudit', 'renderMaterialInputAuditMarkdown',
     'collectStyleDiscrepancies', 'sourceFingerprints', 'focusedProofInventory']);
   const additions = new Map([
+    ['./reviewed-source-batch-audit-source-binding.mjs', ['collectReviewedSourceBatchAuditInputs', 'validateReviewedSourceBatchAuditInputs',
+      'reviewedSourceBatchClassificationContexts', 'classifyReviewedSourceBatchInput', 'validateReviewedSourceBatchClassifications', 'reviewedSourceBatchAttributions']],
     ['./reviewed-input-audit-source-binding.mjs', ['collectReviewedInputAuditInputs', 'validateReviewedInputAuditInputs',
       'reviewedInputClassificationContexts', 'classifyReviewedInput', 'validateReviewedInputClassifications']],
     ['./reviewed-input-proposal-transition.mjs', ['reviewedInputAttributions']],
