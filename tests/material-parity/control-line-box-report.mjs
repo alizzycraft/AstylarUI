@@ -3,6 +3,8 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { validateControlLineBoxMeasurement } from './control-line-box-validation.mjs';
+import { bindControlLineBoxNormalization, historicalControlLineBoxReportSha256,
+  reconcileControlLineBoxMeasurement } from './control-line-box-normalization.mjs';
 
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const identity = item => JSON.stringify([item.case, item.element, item.referenceNode]);
@@ -57,10 +59,15 @@ export function loadControlLineBoxReport({ root = process.cwd(), reportPath, cas
       assert.equal(path.basename(item.snapshot), `source-${item.sha256}.txt`, 'source snapshot filename changed');
       hashed({ file: item.snapshot, sha256: item.sha256 });
       // The measurement algorithm must still be the reviewed implementation.
-      // Target-selection code may evolve; its old bytes are retained, never
-      // executed, and the expected target set is independently rebuilt above.
+      // Target-selection code may evolve; the expected target set is rebuilt
+      // independently above. Only the separately authenticated normalization
+      // functions may be extracted from its snapshot for the pinned transition.
       if (item.file === measurementFiles[0]) hashed(item, true);
     }
+    const normalizationSource = raw.measurementSources.find(item => item.file === measurementFiles[1]);
+    const normalization = result.sha256 === historicalControlLineBoxReportSha256
+      ? bindControlLineBoxNormalization(result.sha256, normalizationSource,
+        read(normalizationSource.snapshot), read(normalizationSource.file, true)) : undefined;
     const assets = new Map(expectedProvenance.browserFiles.map(item => [item.file, item.sha256]));
     assert.equal(assets.size, expectedProvenance.browserFiles.length, 'duplicate expected assets');
     const selectedByKey = new Map(selectedCases.map(item => [caseKey(item), item]));
@@ -119,8 +126,17 @@ export function loadControlLineBoxReport({ root = process.cwd(), reportPath, cas
       for (const measurement of evidence.measurements) {
         const id = identity({ ...measurement, case: index.case }), target = targetByKey.get(id);
         assert.ok(target, 'unmapped metric'); assert.ok(!seen.has(id), 'duplicate metric'); seen.add(id);
-        validateControlLineBoxMeasurement({ measurement, target, fresh, original, inventory, selected });
-        observations.push({ ...measurement, case: index.case, evidence: { file: index.file, sha256: index.sha256,
+        let observation = measurement, validationTarget = target;
+        if (normalization) {
+          const owners = original.nodes.filter(node => node.key === target.referenceNode);
+          assert.equal(owners.length, 1, 'ambiguous normalization owner');
+          const rawStyle = inventory.styles[owners[0].style];
+          assert.equal(rawStyle?.side, 'reference', 'wrong normalization style owner');
+          const reconciled = reconcileControlLineBoxMeasurement(measurement, target, rawStyle.value, normalization);
+          validationTarget = reconciled.historicalTarget; observation = reconciled.observation;
+        }
+        validateControlLineBoxMeasurement({ measurement, target: validationTarget, fresh, original, inventory, selected });
+        observations.push({ ...observation, case: index.case, evidence: { file: index.file, sha256: index.sha256,
           inputTree: evidence.inputTree, screenshot: evidence.screenshot, checkpointRecord: evidence.checkpointRecord,
           checkpointInputTrees: evidence.checkpointInputTrees, capture: raw.capture, measurementSources: raw.measurementSources } });
       }
