@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
+import { execFileSync } from 'node:child_process';
 import { collectOwnerCaretInputs } from '../tests/material-parity/owner-caret-source-binding.mjs';
 import { expectedOwnerCaretAttributionRows, validateOwnerCaretAttributionRows } from '../tests/material-parity/owner-caret-attribution-coverage.mjs';
 
@@ -20,7 +21,8 @@ assert.equal(hash(readFileSync(saved.capture.file)), saved.capture.sha256);
 // executable boundary. The binder records both whole-module source digests.
 const replay = collectOwnerCaretInputs(raw, { parityPath: saved.capture.file });
 assert.equal(replay.binding.status, 'bound', replay.binding.error);
-const source = readFileSync(parent.productionNormalization.module, 'utf8');
+const source = execFileSync('git', ['show', `${saved.parent.revision}:${parent.productionNormalization.module}`],
+  { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
 const parsed = ts.createSourceFile(parent.productionNormalization.module, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
 const functions = parent.productionNormalization.functions.map(name => {
   const nodes = parsed.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
@@ -28,8 +30,11 @@ const functions = parent.productionNormalization.functions.map(name => {
 }).join('\n');
 assert.equal(hash(functions.replaceAll('\r\n', '\n')), parent.productionNormalization.sha256);
 const normalize = new Function(functions + '\nreturn canonicalStyle;')();
-const expected = expectedOwnerCaretAttributionRows(saved, parent, raw, normalize);
-assert.deepEqual(expected, replay.plannedCoverage, 'independent scalar coverage differs from authenticated replay');
+const historicalExpected = expectedOwnerCaretAttributionRows(saved, parent, raw, normalize);
+assert.deepEqual(historicalExpected, replay.historicalCoverage, 'independent historical scalar coverage differs from authenticated replay');
+// Current values are separately regrouped after every classification is replayed.
+// The source-binding command independently builds and compares these current rows.
+const expected = replay.plannedCoverage;
 assert.deepEqual([expected.originalCasesScanned, expected.reviewedGroups, expected.reviewedObservations,
   expected.pendingGroups, expected.pendingObservations], [2311, 118, 3154, 27, 896]);
 assert.deepEqual(validateOwnerCaretAttributionRows(expected, expected.rows), []);
