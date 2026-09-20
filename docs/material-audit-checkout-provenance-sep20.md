@@ -122,6 +122,22 @@ does **not** verify the new 125-group canonical transition, the separate earlier
 66-group composition, or a complete harness run. The canonical generator remains
 live with its source inputs unchanged; its result is still pending.
 
+The complete follow-up reconstruction suite also passed **5/5**, exit 0,
+**184,491.3481ms**, with no skips, cancellations or TODOs:
+
+```text
+node --max-old-space-size=1536 --test --test-concurrency=1 tests/material-parity/later-followup-input-conservation.spec.mjs
+```
+
+Log: `alignment-followup-conservation-current-sep20.log`. This independently
+replays both original source sets (134 groups / 3,325 observations and 66 groups /
+2,640 observations), proves the composed historical reconstruction does not mutate
+its inputs, and rejects 26 altered membership/raw-evidence/metadata controls.
+The current canonical payload's later 125-group integration still requires the
+separate full-row tests. Those tests are queued behind the live generator and
+will run only if generation reports exactly the expected unresolved-only error
+for 1,835 remaining groups; any other error stops that verification sequence.
+
 ## Separate direct-entry failure retained
 
 `node scripts/audit-material-overlay-font-inputs.mjs --check` fails before
@@ -137,3 +153,19 @@ instrumentation increment, retain the single target definition, and verify both
 direct CLI and builder entry orders. Do not use an import-order shim as final
 acceptance. This is a distinct harness initialization issue, not a renderer or
 Material input discrepancy. Its source is frozen during the current generator.
+
+A four-run cold-import intervention now isolates that initialization boundary.
+Overlay-first import fails with the original eager read; replacing only
+`targets: Object.keys(overlayFontTargets)` with a deferred getter in the child
+process's module loader makes that entry order pass. Builder-first import passes
+both before and after the same intervention. The module source bytes remain
+unchanged (raw SHA-256
+`1fca79efc22041545ed05c8778e9af9b8d7ed86ed63a9bcdd29e74084fe92579`).
+The diagnostic exited 0 and retained all four statuses and the original stack in
+`overlay-import-cycle-intervention-sep20.log` (SHA-256
+`51d1fa75112af9d3b7f6f48c8469e395face7714b773cf6d0e1d201e3581af73`).
+This proves the eager imported-binding read causes the cold-import failure; it
+does not establish successful collection, unchanged report output, or a shipped
+fix. The loader intervention is diagnostic only, not the proposed production
+execution path. Apply the owning source correction and permanent cold-entry
+regression tests after the frozen canonical integration is verified.
