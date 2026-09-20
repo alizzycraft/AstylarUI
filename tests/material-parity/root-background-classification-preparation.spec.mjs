@@ -1,13 +1,15 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { prepareRootBackgroundClassifications, rootBackgroundClassificationContexts,
+import { collectRootBackgroundAuditInputs, rootBackgroundClassificationContexts,
   classifyRootBackgroundInput, rootBackgroundAttribution, validateRootBackgroundEvidence,
   validateRootBackgroundClassifications } from './root-background-classification-preparation.mjs';
 
 test('all root background source proofs bind precise unequal values to exact original cases', () => {
   const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
-  const evidence = prepareRootBackgroundClassifications(original);
+  const evidence = collectRootBackgroundAuditInputs(original,
+    { parityPath: 'artifacts/material-parity/current-ancestry-audit/latest-report.json' });
+  assert.equal(evidence.binding.status, 'bound', evidence.binding.error);
   const contexts = rootBackgroundClassificationContexts(evidence);
   assert.equal(contexts.size, 2311); assert.equal(evidence.groups.length, 144);
   assert.equal(evidence.canonicalIntegration, false);
@@ -69,4 +71,20 @@ test('all root background source proofs bind precise unequal values to exact ori
   forged.groups[0].reviewEvidence.rendererCauseProven = true;
   assert.deepEqual(validateRootBackgroundClassifications(forged, forged.groups), []);
   assert.equal(validateRootBackgroundEvidence(forged).length, 1);
+});
+
+test('collector refuses missing provenance, another worktree, external paths and incomplete callers', () => {
+  const parityPath = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
+  assert.equal(collectRootBackgroundAuditInputs({}).binding.status, 'unbound');
+  for (const options of [
+    { parityPath, root: '..' },
+    { parityPath: 'docs/material-root-background-inputs.json' },
+    { parityPath },
+  ]) {
+    const evidence = collectRootBackgroundAuditInputs({}, options);
+    assert.equal(evidence.binding.status, 'invalid');
+    assert.deepEqual(evidence.observations, []);
+    assert.deepEqual(evidence.groups, []);
+    assert.equal(rootBackgroundClassificationContexts(evidence).size, 0);
+  }
 });

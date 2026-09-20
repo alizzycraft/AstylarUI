@@ -53,6 +53,20 @@ renderer-cause claim can be internally consistent with its own rows, but fails
 independent source replay. Neither validator promotes this preparation into a
 claim of canonical coverage.
 
+The builder-facing collector now additionally checks that its caller matches
+the supplied capture and that the capture resolves inside this worktree's
+Material artifact boundary. Missing provenance stays unbound; invalid paths,
+another worktree, and incomplete callers produce invalid evidence with no
+classification contexts. A successful collection still performs the complete
+source replay and precise-scalar binding. These checks do not implement a
+new cascade or change comparison inputs.
+
+Collector verification passed 2/2 in 66,029 ms using
+`node --max-old-space-size=1024 --test tests/material-parity/root-background-classification-preparation.spec.mjs`.
+After making the other-worktree negative control portable (`..` rather than a
+machine-specific checkout), that control was rerun with
+`--test-name-pattern="collector refuses"`: 1/1 passed in 2,288 ms.
+
 Next: wire the prepared evidence and both validators into the production
 discrepancy pipeline. Verify
 that unrelated rows and observations remain conserved before regenerating the

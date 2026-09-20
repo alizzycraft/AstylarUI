@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
+import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { collectRootBackgroundInputs } from '../../scripts/audit-material-root-background-inputs.mjs';
 import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
@@ -14,6 +15,23 @@ const metadataKeys = ['classification', 'attribution', 'justification', 'recomme
 export const rootBackgroundAttribution = 'reviewed-root-background-prequantized-theme-input';
 export const rootBackgroundClassificationContexts = reviewedInputClassificationContexts;
 export const classifyRootBackgroundInput = classifyReviewedInput;
+
+export function collectRootBackgroundAuditInputs(report, { root = process.cwd(), parityPath } = {}) {
+  const empty = { schemaVersion: 1, binding: { status: 'unbound' }, observations: [], groups: [] };
+  if (!parityPath) return empty;
+  try {
+    assert.equal(realpathSync(root), realpathSync(process.cwd()), 'root background replay requires the current worktree');
+    const boundary = realpathSync(path.resolve(root, 'artifacts/material-parity'));
+    const target = realpathSync(path.resolve(root, parityPath));
+    const relative = path.relative(boundary, target);
+    assert.ok(relative && relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative),
+      'root background capture escapes Material artifacts');
+    const supplied = JSON.parse(readFileSync(target));
+    assert.equal(bindOwnerCaretCaptureSubset(report, supplied).coverage.complete, true,
+      'root background caller differs from supplied capture');
+    return prepareRootBackgroundClassifications(supplied);
+  } catch (error) { return { ...empty, binding: { status: 'invalid', error: String(error) } }; }
+}
 
 // Preparation only: no canonical report is read, written, or reclassified here.
 // Re-run the source proof before projecting its exact captured observations.
