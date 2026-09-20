@@ -41,6 +41,17 @@ promoted by this source survey, and no renderer or comparison code was changed.
 
 ## Implementation handoff
 
+The earlier [alignment population history](material-vertical-align-population.md)
+already scans 102 candidate revisions. It identifies `354084e` as introducing
+the expansion title's `middle` request and `bc0e449` as adding dialog content
+height, flex alignment and padding together. The existing
+[investigation ledger](material-input-audit-investigation.md) also records
+`d102828` (dialog title span/flex-flow substitution) and `5b02171` (later title
+and content padding adjustments). Direct review of those diffs confirms this
+lineage. Reuse those historical findings alongside the three new flex-property
+groups; the new source survey is not a new historical browser bisect or proof
+that any particular offset was necessary to compensate for a core failure.
+
 Restore the reference component structure and flex/size constraints as a whole
 in the later implementation task. Test expansion width, labels and sibling
 indicator layout, and dialog content growth, wrapping and scrolling, including
