@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Public cursor reduction: defaults versus effective pointer behavior
+
+The [36-pair public cursor proof](material-public-cursor-defaults-audit.md)
+separates documented button/label type-default differences from a confirmed
+core defect: an explicitly resolved default cursor becomes text after owned-text
+hit resolution. It retains 180 paired state boundaries and 148 stage-specific
+differences, with package-matched source-method evaluation. The evidence and
+inventory tests pass 11/11; the renderer reproduction still fails. This does not
+close the original Material owner census or change canonical classifications.
+
 ## Explicit cursor ownership and missing hit-target coverage
 
 The [complete explicit-cursor census](material-explicit-cursor-inputs.md)

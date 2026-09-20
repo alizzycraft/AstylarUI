@@ -1,0 +1,4578 @@
+{
+  "kind": "public-equal-input-cursor-default-reduction",
+  "artifactRoot": "artifacts/material-parity/public-cursor-defaults-audit-v2",
+  "reportSha256": "c68a5e4448457667413a8c2902bf8ad5c80e3741b1f9dbebe2336d3efa65250b",
+  "provenance": {
+    "file": "provenance.json",
+    "sha256": "1347066c9f3cb58b8964b056d61a1f44cfa2e8235439f05c1f0afa10a02a0c2d"
+  },
+  "sourceCommit": "9d9bdc1511fa72ad63cefabe4b695b2ee91e049f",
+  "browser": "152.0.7977.84",
+  "packages": {
+    "@angular/core": "20.3.29",
+    "@angular/platform-browser": "20.3.29",
+    "@babylonjs/core": "8.56.2",
+    "astylarui": "0.2.0",
+    "esbuild": "0.28.1"
+  },
+  "cases": 36,
+  "boundaries": 180,
+  "screenshots": 72,
+  "runtimeErrors": 0,
+  "sourceProof": {
+    "witnesses": [
+      {
+        "file": "src/app/config/browser-defaults.ts",
+        "sha256": "82fb3a97989cd04015fa441f76154a9fa3112754ef5cd63f032bbd12917746c1",
+        "installed": "examples/material-showcase/node_modules/astylarui/dist/lib/app/config/browser-defaults.js",
+        "installedSha256": "5a0f4ced0db345b5a26b3b8606d5198c3462dfcfbd3ed842105d697bfde8530b",
+        "projectionSha256": "4819c1e456bd520c20711ba625339dee5d35efcb5cac8178f064a7ed3ad5255e"
+      },
+      {
+        "file": "src/app/services/dom/style-defaults.service.ts",
+        "sha256": "37ba8605ecae96dfbe43579053f6f888f88f5315a728769edabcd19dd93ddcb1",
+        "installed": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/style-defaults.service.js",
+        "installedSha256": "a11515a342f8fb441f775a16b7ad7480e711934d046084d686c0ef098ae4cafa",
+        "projectionSha256": "813dde4299784a3934912b317386891c08dc495a772fe8c45eab069ffe5af3dd"
+      },
+      {
+        "file": "src/app/services/dom/interaction/pointer-interaction.service.ts",
+        "sha256": "f98691a7e77b9cc2fb3f5c4f7e1f11f163dc60eb654d09edaa27f9fdf93a7ef5",
+        "installed": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/interaction/pointer-interaction.service.js",
+        "installedSha256": "6c543fc4072c5ae380848b6a527a02ab4822323f37533d2aa29411eda6fc2687",
+        "projectionSha256": "fb6d2c483a41fa93c6cbb5fbc8f2a5097f3faaf5bed9103164ac724d66cca73c"
+      },
+      {
+        "file": "src/app/services/dom/interaction/text-interaction-registry.service.ts",
+        "sha256": "affa64db0f57d122ac9609909b9e2ac6fa6c1a1e28fa8f0e64b3ef655ccebbf4",
+        "installed": "examples/material-showcase/node_modules/astylarui/dist/lib/app/services/dom/interaction/text-interaction-registry.service.js",
+        "installedSha256": "26f57d91980e90fa51758765deed2d225cf529767b2f820023bd0064d77d41ba",
+        "projectionSha256": "6e45fcd07d1347a7fc152da1d1d050a72c9c3761479e4d35ccf7d9d92108703d"
+      }
+    ],
+    "defaultStyles": {
+      "button": "pointer",
+      "label": "pointer",
+      "div": "default"
+    },
+    "controls": [
+      {
+        "cursor": "default",
+        "textOwner": false,
+        "directPick": "owner-box",
+        "selected": "owner-box",
+        "result": "default"
+      },
+      {
+        "cursor": "default",
+        "textOwner": true,
+        "directPick": "owner-box",
+        "selected": "owned-text",
+        "result": "text"
+      },
+      {
+        "cursor": "auto",
+        "textOwner": false,
+        "directPick": "owner-box",
+        "selected": "owner-box",
+        "result": "auto"
+      },
+      {
+        "cursor": "auto",
+        "textOwner": true,
+        "directPick": "owner-box",
+        "selected": "owned-text",
+        "result": "text"
+      },
+      {
+        "cursor": "pointer",
+        "textOwner": false,
+        "directPick": "owner-box",
+        "selected": "owner-box",
+        "result": "pointer"
+      },
+      {
+        "cursor": "pointer",
+        "textOwner": true,
+        "directPick": "owner-box",
+        "selected": "owned-text",
+        "result": "pointer"
+      },
+      {
+        "cursor": "crosshair",
+        "textOwner": false,
+        "directPick": "owner-box",
+        "selected": "owner-box",
+        "result": "crosshair"
+      },
+      {
+        "cursor": "crosshair",
+        "textOwner": true,
+        "directPick": "owner-box",
+        "selected": "owned-text",
+        "result": "crosshair"
+      }
+    ]
+  },
+  "observations": [
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-omitted-dpr1-translatedfalse-reference.png",
+          "sha256": "2b4a489cce0ea2ff8794d54c13b1bce1c6afdd5b6f2c2d7ae1a0d485f05561ce"
+        },
+        {
+          "file": "button-omitted-dpr1-translatedfalse-astylar.png",
+          "sha256": "5b7cd02b1f8fdcb7891a382016d00eac3c2833914caffe92a52e88e21a0e0873"
+        }
+      ]
+    },
+    {
+      "name": "button-default",
+      "dpr": 1,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-default-dpr1-translatedfalse-reference.png",
+          "sha256": "2b4a489cce0ea2ff8794d54c13b1bce1c6afdd5b6f2c2d7ae1a0d485f05561ce"
+        },
+        {
+          "file": "button-default-dpr1-translatedfalse-astylar.png",
+          "sha256": "5b7cd02b1f8fdcb7891a382016d00eac3c2833914caffe92a52e88e21a0e0873"
+        }
+      ]
+    },
+    {
+      "name": "button-pointer",
+      "dpr": 1,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-pointer-dpr1-translatedfalse-reference.png",
+          "sha256": "2b4a489cce0ea2ff8794d54c13b1bce1c6afdd5b6f2c2d7ae1a0d485f05561ce"
+        },
+        {
+          "file": "button-pointer-dpr1-translatedfalse-astylar.png",
+          "sha256": "5b7cd02b1f8fdcb7891a382016d00eac3c2833914caffe92a52e88e21a0e0873"
+        }
+      ]
+    },
+    {
+      "name": "button-hover",
+      "dpr": 1,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-hover-dpr1-translatedfalse-reference.png",
+          "sha256": "2b4a489cce0ea2ff8794d54c13b1bce1c6afdd5b6f2c2d7ae1a0d485f05561ce"
+        },
+        {
+          "file": "button-hover-dpr1-translatedfalse-astylar.png",
+          "sha256": "5b7cd02b1f8fdcb7891a382016d00eac3c2833914caffe92a52e88e21a0e0873"
+        }
+      ]
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-parent-dpr1-translatedfalse-reference.png",
+          "sha256": "2b4a489cce0ea2ff8794d54c13b1bce1c6afdd5b6f2c2d7ae1a0d485f05561ce"
+        },
+        {
+          "file": "button-parent-dpr1-translatedfalse-astylar.png",
+          "sha256": "5b7cd02b1f8fdcb7891a382016d00eac3c2833914caffe92a52e88e21a0e0873"
+        }
+      ]
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-omitted-dpr1-translatedfalse-reference.png",
+          "sha256": "8c3e691c980261cc2f7be991dfec9df21fad745837f58f185bfd60284f58fc77"
+        },
+        {
+          "file": "label-omitted-dpr1-translatedfalse-astylar.png",
+          "sha256": "4c5e54385d56abc56810bd1db10c735da6bc4751d405afcc6479ba25182f9fa5"
+        }
+      ]
+    },
+    {
+      "name": "label-default",
+      "dpr": 1,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-default-dpr1-translatedfalse-reference.png",
+          "sha256": "8c3e691c980261cc2f7be991dfec9df21fad745837f58f185bfd60284f58fc77"
+        },
+        {
+          "file": "label-default-dpr1-translatedfalse-astylar.png",
+          "sha256": "4c5e54385d56abc56810bd1db10c735da6bc4751d405afcc6479ba25182f9fa5"
+        }
+      ]
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-parent-dpr1-translatedfalse-reference.png",
+          "sha256": "8c3e691c980261cc2f7be991dfec9df21fad745837f58f185bfd60284f58fc77"
+        },
+        {
+          "file": "label-parent-dpr1-translatedfalse-astylar.png",
+          "sha256": "4c5e54385d56abc56810bd1db10c735da6bc4751d405afcc6479ba25182f9fa5"
+        }
+      ]
+    },
+    {
+      "name": "div-parent",
+      "dpr": 1,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "div-parent-dpr1-translatedfalse-reference.png",
+          "sha256": "8c3e691c980261cc2f7be991dfec9df21fad745837f58f185bfd60284f58fc77"
+        },
+        {
+          "file": "div-parent-dpr1-translatedfalse-astylar.png",
+          "sha256": "4c5e54385d56abc56810bd1db10c735da6bc4751d405afcc6479ba25182f9fa5"
+        }
+      ]
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-omitted-dpr1-translatedtrue-reference.png",
+          "sha256": "ba1b0ba44dd38af653c8bc96bae8355e2687ce28cdd7c372d0258a5908996cd9"
+        },
+        {
+          "file": "button-omitted-dpr1-translatedtrue-astylar.png",
+          "sha256": "464ea6e08a9b1fc0712f9be4efb195c834b29fca4b7fc80f5b7f5b9d1465696d"
+        }
+      ]
+    },
+    {
+      "name": "button-default",
+      "dpr": 1,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-default-dpr1-translatedtrue-reference.png",
+          "sha256": "ba1b0ba44dd38af653c8bc96bae8355e2687ce28cdd7c372d0258a5908996cd9"
+        },
+        {
+          "file": "button-default-dpr1-translatedtrue-astylar.png",
+          "sha256": "464ea6e08a9b1fc0712f9be4efb195c834b29fca4b7fc80f5b7f5b9d1465696d"
+        }
+      ]
+    },
+    {
+      "name": "button-pointer",
+      "dpr": 1,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-pointer-dpr1-translatedtrue-reference.png",
+          "sha256": "ba1b0ba44dd38af653c8bc96bae8355e2687ce28cdd7c372d0258a5908996cd9"
+        },
+        {
+          "file": "button-pointer-dpr1-translatedtrue-astylar.png",
+          "sha256": "464ea6e08a9b1fc0712f9be4efb195c834b29fca4b7fc80f5b7f5b9d1465696d"
+        }
+      ]
+    },
+    {
+      "name": "button-hover",
+      "dpr": 1,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-hover-dpr1-translatedtrue-reference.png",
+          "sha256": "ba1b0ba44dd38af653c8bc96bae8355e2687ce28cdd7c372d0258a5908996cd9"
+        },
+        {
+          "file": "button-hover-dpr1-translatedtrue-astylar.png",
+          "sha256": "464ea6e08a9b1fc0712f9be4efb195c834b29fca4b7fc80f5b7f5b9d1465696d"
+        }
+      ]
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-parent-dpr1-translatedtrue-reference.png",
+          "sha256": "ba1b0ba44dd38af653c8bc96bae8355e2687ce28cdd7c372d0258a5908996cd9"
+        },
+        {
+          "file": "button-parent-dpr1-translatedtrue-astylar.png",
+          "sha256": "464ea6e08a9b1fc0712f9be4efb195c834b29fca4b7fc80f5b7f5b9d1465696d"
+        }
+      ]
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-omitted-dpr1-translatedtrue-reference.png",
+          "sha256": "50440550b57b508c364da1604fc4768c763217303f37772c6fe2b940ed4a055b"
+        },
+        {
+          "file": "label-omitted-dpr1-translatedtrue-astylar.png",
+          "sha256": "b5d0a5cce4db0ee7cbc6baf5b1d8e97f865f67d86e64c7ff96ada1e446563b47"
+        }
+      ]
+    },
+    {
+      "name": "label-default",
+      "dpr": 1,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-default-dpr1-translatedtrue-reference.png",
+          "sha256": "50440550b57b508c364da1604fc4768c763217303f37772c6fe2b940ed4a055b"
+        },
+        {
+          "file": "label-default-dpr1-translatedtrue-astylar.png",
+          "sha256": "b5d0a5cce4db0ee7cbc6baf5b1d8e97f865f67d86e64c7ff96ada1e446563b47"
+        }
+      ]
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-parent-dpr1-translatedtrue-reference.png",
+          "sha256": "50440550b57b508c364da1604fc4768c763217303f37772c6fe2b940ed4a055b"
+        },
+        {
+          "file": "label-parent-dpr1-translatedtrue-astylar.png",
+          "sha256": "b5d0a5cce4db0ee7cbc6baf5b1d8e97f865f67d86e64c7ff96ada1e446563b47"
+        }
+      ]
+    },
+    {
+      "name": "div-parent",
+      "dpr": 1,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "div-parent-dpr1-translatedtrue-reference.png",
+          "sha256": "50440550b57b508c364da1604fc4768c763217303f37772c6fe2b940ed4a055b"
+        },
+        {
+          "file": "div-parent-dpr1-translatedtrue-astylar.png",
+          "sha256": "b5d0a5cce4db0ee7cbc6baf5b1d8e97f865f67d86e64c7ff96ada1e446563b47"
+        }
+      ]
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-omitted-dpr2-translatedfalse-reference.png",
+          "sha256": "c3723d87f1fe33cf460ef97f4f72837c6527b0a59135f79b7b8d407e50fedd23"
+        },
+        {
+          "file": "button-omitted-dpr2-translatedfalse-astylar.png",
+          "sha256": "9c718dd3906abac649368bfec62203d1e86c94bd87d7efab6538e761def6572e"
+        }
+      ]
+    },
+    {
+      "name": "button-default",
+      "dpr": 2,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-default-dpr2-translatedfalse-reference.png",
+          "sha256": "c3723d87f1fe33cf460ef97f4f72837c6527b0a59135f79b7b8d407e50fedd23"
+        },
+        {
+          "file": "button-default-dpr2-translatedfalse-astylar.png",
+          "sha256": "9c718dd3906abac649368bfec62203d1e86c94bd87d7efab6538e761def6572e"
+        }
+      ]
+    },
+    {
+      "name": "button-pointer",
+      "dpr": 2,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-pointer-dpr2-translatedfalse-reference.png",
+          "sha256": "c3723d87f1fe33cf460ef97f4f72837c6527b0a59135f79b7b8d407e50fedd23"
+        },
+        {
+          "file": "button-pointer-dpr2-translatedfalse-astylar.png",
+          "sha256": "9c718dd3906abac649368bfec62203d1e86c94bd87d7efab6538e761def6572e"
+        }
+      ]
+    },
+    {
+      "name": "button-hover",
+      "dpr": 2,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-hover-dpr2-translatedfalse-reference.png",
+          "sha256": "c3723d87f1fe33cf460ef97f4f72837c6527b0a59135f79b7b8d407e50fedd23"
+        },
+        {
+          "file": "button-hover-dpr2-translatedfalse-astylar.png",
+          "sha256": "9c718dd3906abac649368bfec62203d1e86c94bd87d7efab6538e761def6572e"
+        }
+      ]
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-parent-dpr2-translatedfalse-reference.png",
+          "sha256": "c3723d87f1fe33cf460ef97f4f72837c6527b0a59135f79b7b8d407e50fedd23"
+        },
+        {
+          "file": "button-parent-dpr2-translatedfalse-astylar.png",
+          "sha256": "9c718dd3906abac649368bfec62203d1e86c94bd87d7efab6538e761def6572e"
+        }
+      ]
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-omitted-dpr2-translatedfalse-reference.png",
+          "sha256": "b9c89f32358d14727a578b5624a0de135f88260623a5a37889f341bb86e6fc0d"
+        },
+        {
+          "file": "label-omitted-dpr2-translatedfalse-astylar.png",
+          "sha256": "b4aa1b3a5b74758cc25d874edfbe0cc13172e65f605c7d70e1be641f56869633"
+        }
+      ]
+    },
+    {
+      "name": "label-default",
+      "dpr": 2,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-default-dpr2-translatedfalse-reference.png",
+          "sha256": "b9c89f32358d14727a578b5624a0de135f88260623a5a37889f341bb86e6fc0d"
+        },
+        {
+          "file": "label-default-dpr2-translatedfalse-astylar.png",
+          "sha256": "b4aa1b3a5b74758cc25d874edfbe0cc13172e65f605c7d70e1be641f56869633"
+        }
+      ]
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-parent-dpr2-translatedfalse-reference.png",
+          "sha256": "b9c89f32358d14727a578b5624a0de135f88260623a5a37889f341bb86e6fc0d"
+        },
+        {
+          "file": "label-parent-dpr2-translatedfalse-astylar.png",
+          "sha256": "b4aa1b3a5b74758cc25d874edfbe0cc13172e65f605c7d70e1be641f56869633"
+        }
+      ]
+    },
+    {
+      "name": "div-parent",
+      "dpr": 2,
+      "translated": false,
+      "insidePoint": {
+        "x": 172,
+        "y": 84
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "div-parent-dpr2-translatedfalse-reference.png",
+          "sha256": "b9c89f32358d14727a578b5624a0de135f88260623a5a37889f341bb86e6fc0d"
+        },
+        {
+          "file": "div-parent-dpr2-translatedfalse-astylar.png",
+          "sha256": "b4aa1b3a5b74758cc25d874edfbe0cc13172e65f605c7d70e1be641f56869633"
+        }
+      ]
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-omitted-dpr2-translatedtrue-reference.png",
+          "sha256": "a917b6bd318d835372f275b164eea55e01076634b3ba307146ce20da3d14f618"
+        },
+        {
+          "file": "button-omitted-dpr2-translatedtrue-astylar.png",
+          "sha256": "9580f2759a1f65fcd61d3b2f3411144f7c687f1b776437a7ca54d0a37b200509"
+        }
+      ]
+    },
+    {
+      "name": "button-default",
+      "dpr": 2,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-default-dpr2-translatedtrue-reference.png",
+          "sha256": "a917b6bd318d835372f275b164eea55e01076634b3ba307146ce20da3d14f618"
+        },
+        {
+          "file": "button-default-dpr2-translatedtrue-astylar.png",
+          "sha256": "9580f2759a1f65fcd61d3b2f3411144f7c687f1b776437a7ca54d0a37b200509"
+        }
+      ]
+    },
+    {
+      "name": "button-pointer",
+      "dpr": 2,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-pointer-dpr2-translatedtrue-reference.png",
+          "sha256": "a917b6bd318d835372f275b164eea55e01076634b3ba307146ce20da3d14f618"
+        },
+        {
+          "file": "button-pointer-dpr2-translatedtrue-astylar.png",
+          "sha256": "9580f2759a1f65fcd61d3b2f3411144f7c687f1b776437a7ca54d0a37b200509"
+        }
+      ]
+    },
+    {
+      "name": "button-hover",
+      "dpr": 2,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-hover-dpr2-translatedtrue-reference.png",
+          "sha256": "a917b6bd318d835372f275b164eea55e01076634b3ba307146ce20da3d14f618"
+        },
+        {
+          "file": "button-hover-dpr2-translatedtrue-astylar.png",
+          "sha256": "9580f2759a1f65fcd61d3b2f3411144f7c687f1b776437a7ca54d0a37b200509"
+        }
+      ]
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "button",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "button-parent-dpr2-translatedtrue-reference.png",
+          "sha256": "a917b6bd318d835372f275b164eea55e01076634b3ba307146ce20da3d14f618"
+        },
+        {
+          "file": "button-parent-dpr2-translatedtrue-astylar.png",
+          "sha256": "9580f2759a1f65fcd61d3b2f3411144f7c687f1b776437a7ca54d0a37b200509"
+        }
+      ]
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-omitted-dpr2-translatedtrue-reference.png",
+          "sha256": "b71d90b607c75d7c74b6f02acd2f3eb8c85f36c9ea6588d5d5c342aebf8b4a32"
+        },
+        {
+          "file": "label-omitted-dpr2-translatedtrue-astylar.png",
+          "sha256": "bb5e28be72602f06df39c35ef705c2b04f5a51962f76fc65dc7ee7487a817725"
+        }
+      ]
+    },
+    {
+      "name": "label-default",
+      "dpr": 2,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "default",
+          "canvasCursor": "text",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-default-dpr2-translatedtrue-reference.png",
+          "sha256": "b71d90b607c75d7c74b6f02acd2f3eb8c85f36c9ea6588d5d5c342aebf8b4a32"
+        },
+        {
+          "file": "label-default-dpr2-translatedtrue-astylar.png",
+          "sha256": "bb5e28be72602f06df39c35ef705c2b04f5a51962f76fc65dc7ee7487a817725"
+        }
+      ]
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "label",
+            "cursor": "default",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "default",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "label-parent-dpr2-translatedtrue-reference.png",
+          "sha256": "b71d90b607c75d7c74b6f02acd2f3eb8c85f36c9ea6588d5d5c342aebf8b4a32"
+        },
+        {
+          "file": "label-parent-dpr2-translatedtrue-astylar.png",
+          "sha256": "bb5e28be72602f06df39c35ef705c2b04f5a51962f76fc65dc7ee7487a817725"
+        }
+      ]
+    },
+    {
+      "name": "div-parent",
+      "dpr": 2,
+      "translated": true,
+      "insidePoint": {
+        "x": 236,
+        "y": 124
+      },
+      "stages": [
+        {
+          "stage": "initial",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "default",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": null
+        },
+        {
+          "stage": "hover",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "held",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "release",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "target",
+            "type": "div",
+            "cursor": "pointer",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        },
+        {
+          "stage": "leave",
+          "referenceOwnerCursor": "pointer",
+          "candidateOwnerCursor": "pointer",
+          "canvasCursor": "pointer",
+          "referenceHit": {
+            "id": "",
+            "type": "html",
+            "cursor": "auto",
+            "pointTouchesText": false
+          },
+          "candidateHoveredOwner": "target"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "div-parent-dpr2-translatedtrue-reference.png",
+          "sha256": "b71d90b607c75d7c74b6f02acd2f3eb8c85f36c9ea6588d5d5c342aebf8b4a32"
+        },
+        {
+          "file": "div-parent-dpr2-translatedtrue-astylar.png",
+          "sha256": "bb5e28be72602f06df39c35ef705c2b04f5a51962f76fc65dc7ee7487a817725"
+        }
+      ]
+    }
+  ],
+  "differences": [
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-hover",
+      "dpr": 1,
+      "translated": false,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-hover",
+      "dpr": 1,
+      "translated": false,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": false,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-default",
+      "dpr": 1,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-default",
+      "dpr": 1,
+      "translated": false,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-default",
+      "dpr": 1,
+      "translated": false,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": false,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-hover",
+      "dpr": 1,
+      "translated": true,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-hover",
+      "dpr": 1,
+      "translated": true,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 1,
+      "translated": true,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-default",
+      "dpr": 1,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-default",
+      "dpr": 1,
+      "translated": true,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-default",
+      "dpr": 1,
+      "translated": true,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 1,
+      "translated": true,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-hover",
+      "dpr": 2,
+      "translated": false,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-hover",
+      "dpr": 2,
+      "translated": false,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": false,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-default",
+      "dpr": 2,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-default",
+      "dpr": 2,
+      "translated": false,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-default",
+      "dpr": 2,
+      "translated": false,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": false,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-hover",
+      "dpr": 2,
+      "translated": true,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-hover",
+      "dpr": 2,
+      "translated": true,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "button-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-omitted",
+      "dpr": 2,
+      "translated": true,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-default",
+      "dpr": 2,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-default",
+      "dpr": 2,
+      "translated": true,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-default",
+      "dpr": 2,
+      "translated": true,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "text"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "initial",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "hover",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "held",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "held",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "release",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "release",
+      "boundary": "blank-inset-effective-cursor",
+      "reference": "default",
+      "astylar": "pointer"
+    },
+    {
+      "name": "label-parent",
+      "dpr": 2,
+      "translated": true,
+      "stage": "leave",
+      "boundary": "owner-style",
+      "reference": "default",
+      "astylar": "pointer"
+    }
+  ],
+  "findings": [
+    {
+      "id": "cursor-type-defaults",
+      "classification": "documented-core-default-difference",
+      "firstDivergence": "Core button/label defaults inject pointer before layout or hit testing; browser computed value is default.",
+      "owner": "src/app/config/browser-defaults.ts",
+      "cases": [
+        "button-omitted",
+        "button-parent",
+        "label-omitted",
+        "label-parent",
+        "button-hover"
+      ],
+      "limitation": "The defaults file already documents deliberate legacy styling; this is not evidence that the catalog promises exact UA defaults."
+    },
+    {
+      "id": "cursor-explicit-default-overridden",
+      "classification": "confirmed-core-defect",
+      "firstDivergence": "Resolved explicit default is preserved, then owner-box selection prefers owned text and updateCursor converts default to text.",
+      "owner": "src/app/services/dom/interaction/pointer-interaction.service.ts",
+      "cases": [
+        "label-default"
+      ],
+      "limitation": "Public capture plus package-matched method evaluation; no claim that every Material missing hand cursor has this cause."
+    }
+  ],
+  "originalMaterialCursorCauseProven": false,
+  "completeRenderingEquivalent": false,
+  "rendererChanged": false
+}

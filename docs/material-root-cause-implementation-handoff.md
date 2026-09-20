@@ -102,6 +102,14 @@ omission is already vertically correct and adding middle makes it worse.
 
 ## 6. Continue the other shared core tracks, not component calibration
 
+The [public cursor reduction](material-public-cursor-defaults-audit.md) adds a
+confirmed interaction-boundary defect: explicit resolved default becomes text
+when owner-box selection prefers an owned text mesh. Preserve explicit cursor
+intent in core pointer resolution. Separately review the documented legacy
+button/label pointer defaults against the measured browser baseline. Neither
+finding justifies unconditional pointer styles or per-fixture cursor patches.
+Recheck actual owner/state targets; one passing family hover probe is insufficient.
+
 Keep the detailed inventory's transform reference-box/units/origin/order,
 transformed fixed containing blocks, intrinsic inline sizing, anonymous flex
 text, positioned margins/heights, grid-none parsing, computed-font length
