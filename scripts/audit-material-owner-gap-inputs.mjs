@@ -7,15 +7,17 @@ import { Readable } from 'node:stream';
 import { createGunzip } from 'node:zlib';
 import Parser from 'jsonparse';
 import ts from 'typescript';
+import { readGapSurveySource, bindGapSurveyNormalizer } from '../tests/material-parity/gap-survey-source-replay.mjs';
 import { inspectOwnerGapInput, ownerGapProperties } from '../tests/material-parity/owner-gap-input-evidence.mjs';
 
 const args = process.argv.slice(2);
 assert.ok(args.length === 0 || args.length === 1 && args[0] === '--check', 'only --check is accepted');
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-// Use the actual production comparison functions, without running a second
-// multi-gigabyte builder or inventing a gap-specific normalization shortcut.
+// Replay the historical survey with its exact production normalizer, and
+// independently check current gap outputs before retaining any historical join.
 const auditModule = 'tests/material-parity/input-equivalence-audit.mjs';
-const auditSource = readFileSync(auditModule, 'utf8');
+const auditDescriptor = { file: auditModule, sha256: '82854bccdaa6ff23fc5f9df987f6ec5cf3e22d0da5dbe64357109d5a03035f3b' };
+const auditSource = readGapSurveySource(auditDescriptor);
 const parsedAudit = ts.createSourceFile(auditModule, auditSource, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
 const normalizationNames = ['canonicalStyle', 'expandQuad', 'expandPair', 'splitCssTerms', 'normalizeValue', 'normalizeColor', 'formatNumber'];
 const normalizationSource = normalizationNames.map(name => {
@@ -23,7 +25,9 @@ const normalizationSource = normalizationNames.map(name => {
   assert.equal(matches.length, 1, `missing/ambiguous production ${name}`);
   return matches[0].getText(parsedAudit);
 }).join('\n');
-const canonicalStyle = new Function(normalizationSource + '\nreturn canonicalStyle;')();
+const canonicalStyle = bindGapSurveyNormalizer({ sourceFingerprints: [auditDescriptor],
+  productionNormalization: { module: auditModule, functions: normalizationNames,
+    sha256: hash(normalizationSource.replaceAll('\r\n', '\n')) } });
 const baselineRevision = '2408285b0a3cff2a6366825bb9dee214758bf91d';
 const gitFile = file => execFileSync('git', ['show', `${baselineRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 });
 const manifest = JSON.parse(gitFile('docs/material-input-equivalence-audit.json'));
@@ -93,7 +97,8 @@ const sources = ['scripts/audit-material-owner-gap-inputs.mjs', 'tests/material-
 const result = { schemaVersion: 1, kind: 'owner-gap-local-input-survey', baselineRevision,
   baselineCompressedSha256: manifest.compressedSha256, capture,
   productionNormalization: { module: auditModule, functions: normalizationNames, sha256: hash(normalizationSource.replaceAll('\r\n', '\n')) },
-  sourceFingerprints: sources.map(file => ({ file, sha256: hash(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')) })),
+  sourceFingerprints: sources.map(file => ({ file, sha256: hash((file === auditModule
+    ? auditSource : readFileSync(file, 'utf8')).replaceAll('\r\n', '\n')) })),
   groupCount: findings.length, originalCaseCount: cases.length,
   canonicalOccurrences: findings.reduce((n, g) => n + g.canonicalOccurrences, 0),
   observations: findings.reduce((n, g) => n + g.originalCases.length, 0),

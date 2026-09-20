@@ -8758,6 +8758,8 @@ function sourceFingerprints(root) {
     'tests/material-parity/gap-review-classification.mjs',
     'tests/material-parity/gap-review-classification.spec.mjs',
     'tests/material-parity/gap-review-source-binding.mjs',
+    'tests/material-parity/gap-survey-source-replay.mjs',
+    'tests/material-parity/gap-survey-source-replay.spec.mjs',
     'tests/material-parity/gap-review-source-binding.spec.mjs',
     'tests/material-parity/gap-review-coverage.mjs',
     'tests/material-parity/gap-review-coverage.spec.mjs',

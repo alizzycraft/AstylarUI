@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
 import { createHash } from 'node:crypto';
 import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -94,8 +95,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const controls = checkGapMotionControls();
   const parentFile = 'docs/material-owner-gap-input-survey.json';
   const survey = JSON.parse(readFileSync(parentFile));
-  for (const source of survey.sourceFingerprints)
-    assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256);
+  for (const source of survey.sourceFingerprints) readGapSurveySource(source);
   const canonicalFiles = ['docs/material-input-equivalence-audit.json', 'docs/material-input-equivalence-audit.json.gz',
     'docs/material-input-equivalence-audit.md'];
   const canonicalHashes = canonicalFiles.map(file => ({ file, sha256: hash(readFileSync(file)) }));

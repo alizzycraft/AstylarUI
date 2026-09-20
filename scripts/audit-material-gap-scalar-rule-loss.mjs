@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
 import { createHash } from 'node:crypto';
 import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -56,8 +57,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const args = process.argv.slice(2); assert.ok(!args.length || args.length === 1 && args[0] === '--check');
   const parentFile = 'docs/material-owner-gap-input-survey.json', parentBytes = readFileSync(parentFile);
   const parent = JSON.parse(parentBytes);
-  for (const source of parent.sourceFingerprints)
-    assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256);
+  for (const source of parent.sourceFingerprints) readGapSurveySource(source);
   const rawBytes = readFileSync(parent.capture.file); assert.equal(hash(rawBytes), parent.capture.sha256);
   const raw = JSON.parse(rawBytes), entries = new Map(raw.interactions.map(e =>
     [`interaction:${e.family}@${e.profile}/${e.viewport.id}/${e.state}`, e]));

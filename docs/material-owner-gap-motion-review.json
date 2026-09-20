@@ -3,7 +3,7 @@
   "kind": "owner-gap-motion-declaration-review",
   "parent": {
     "file": "docs/material-owner-gap-input-survey.json",
-    "sha256": "b6d7dd33c9cf027878392a325e6a95437be5ab5b5b697ff68cc81d9f41c7c94c"
+    "sha256": "3a36522878febc51d87ed2526c318e60d79e61a761238665b4292952d20a368e"
   },
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
@@ -12,7 +12,7 @@
   "sources": [
     {
       "file": "scripts/audit-material-gap-motion-requests.mjs",
-      "sha256": "467af0db7d73af878d226e1a08062c7df575973da6f59de2efcb78af86417cad"
+      "sha256": "717751e70c139d479fc69f454b8b18b3b89e8612576e6b3a780114ed6e779dcd"
     },
     {
       "file": "tests/material-parity/owner-gap-input-evidence.mjs",

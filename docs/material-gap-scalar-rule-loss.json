@@ -3,7 +3,7 @@
   "kind": "owner-gap-scalar-layer-rule-loss-review",
   "parent": {
     "file": "docs/material-owner-gap-input-survey.json",
-    "sha256": "b6d7dd33c9cf027878392a325e6a95437be5ab5b5b697ff68cc81d9f41c7c94c"
+    "sha256": "3a36522878febc51d87ed2526c318e60d79e61a761238665b4292952d20a368e"
   },
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
@@ -12,7 +12,7 @@
   "sourceFingerprints": [
     {
       "file": "scripts/audit-material-gap-scalar-rule-loss.mjs",
-      "sha256": "bc6d17e104cd2080575a26311b6ebf9704e623efdb8d72708f8d6c1aaf40568d"
+      "sha256": "2b4fb7e6fea46366b0d456c8d14c2da194558e95bfbb11b007eb8581a047187a"
     },
     {
       "file": "tests/material-parity/owner-gap-input-evidence.mjs",

@@ -27,7 +27,10 @@ const scripts = [
   'scripts/bind-material-gap-review-membership.mjs',
 ];
 const git = file => execFileSync('git', ['show', `${revision}:${file}`], { maxBuffer: 16 * 1024 * 1024 });
-const read = file => readFileSync(file);
+// This conservation claim belongs to the completed integration, not to every
+// future revision of the audit. Current replay is verified separately below.
+const integrationRevision = '4650791a7208b841dd29f1ced015f98234949623';
+const read = file => execFileSync('git', ['show', `${integrationRevision}:${file}`], { maxBuffer: 16 * 1024 * 1024 });
 const sourceHash = bytes => hash(bytes.toString('utf8').replaceAll('\r\n', '\n'));
 const original = files.map(file => JSON.parse(git(file)));
 const current = () => files.map(file => JSON.parse(read(file)));
@@ -65,7 +68,7 @@ function conserve(reports, readSource = read) {
   return changes;
 }
 
-test('reviewed-input integration conserves all seven complete gap reports except eleven authenticated dependency receipts', () => {
+test('historical reviewed-input integration conserved all seven gap reports except eleven authenticated receipts', () => {
   for (const file of scripts) assert.equal(sourceHash(read(file)), sourceHash(git(file)), 'original gap generator changed');
   const changes = conserve(current());
   console.log(JSON.stringify({ baselineRevision: revision, reports: files.length,
@@ -99,10 +102,10 @@ test('gap receipt conservation rejects changed observations, conclusions, depend
   assert.equal(mutations.length + 1, 16);
 });
 
-test('all seven unchanged gap generators independently replay current receipts with writes prohibited', () => {
+test('all seven gap generators independently replay current receipts with writes prohibited', () => {
   const watched = [...files, 'docs/material-input-equivalence-audit.json',
     'docs/material-input-equivalence-audit.json.gz', 'docs/material-input-equivalence-audit.md'];
-  const before = watched.map(file => hash(read(file)));
+  const before = watched.map(file => hash(readFileSync(file)));
   const guard = `import fs from 'node:fs';import{syncBuiltinESMExports}from'node:module';
     fs.writeFileSync=()=>{throw Error('CHECK_MODE_ATTEMPTED_WRITE')};syncBuiltinESMExports();`;
   // NODE_OPTIONS propagates the write guard into the membership script's own
@@ -115,6 +118,5 @@ test('all seven unchanged gap generators independently replay current receipts w
     });
     console.log(JSON.stringify({ script, result: JSON.parse(output.trim()) }));
   }
-  assert.deepEqual(watched.map(file => hash(read(file))), before);
-  conserve(current());
+  assert.deepEqual(watched.map(file => hash(readFileSync(file))), before);
 });

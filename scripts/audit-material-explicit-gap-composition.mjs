@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
 import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -117,7 +118,7 @@ function composition(input, r, a, family) {
 const surveyFile = 'docs/material-owner-gap-input-survey.json', joinFile = 'docs/material-owner-gap-canonical-join.json';
 const surveyBytes = readFileSync(surveyFile), survey = JSON.parse(surveyBytes), joinBytes = readFileSync(joinFile), join = JSON.parse(joinBytes);
 assert.equal(hash(surveyBytes), join.survey.sha256);
-for (const source of survey.sourceFingerprints) assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256);
+for (const source of survey.sourceFingerprints) readGapSurveySource(source);
 const originalBytes = readFileSync(survey.capture.file); assert.equal(hash(originalBytes), survey.capture.sha256);
 const original = JSON.parse(originalBytes), entries = new Map();
 for (const [kind, list] of [['static', original.results], ['interaction', original.interactions]]) for (const e of list) {

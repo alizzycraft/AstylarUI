@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readGapSurveySource, bindGapSurveyNormalizer } from '../tests/material-parity/gap-survey-source-replay.mjs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -85,16 +86,19 @@ export async function loadExplicitGapBindingInputs() {
   // Only dependency receipt hashes may advance after independently replaying
   // the same proof. Every finding, scalar, tree digest and membership stays fixed.
   assert.deepEqual({ ...composition,
+    sourceFingerprint: { ...composition.sourceFingerprint, sha256: originalComposition.sourceFingerprint.sha256 },
     survey: { ...composition.survey, sha256: originalComposition.survey.sha256 },
     join: { ...composition.join, sha256: originalComposition.join.sha256 } }, originalComposition,
     'complete composition evidence changed beyond dependency receipts');
-  assert.deepEqual({ ...join, survey: { ...join.survey, sha256: originalJoin.survey.sha256 } }, originalJoin,
+  assert.deepEqual({ ...join, sourceFingerprint: { ...join.sourceFingerprint, sha256: originalJoin.sourceFingerprint.sha256 },
+    survey: { ...join.survey, sha256: originalJoin.survey.sha256 } }, originalJoin,
     'independent canonical join changed beyond its survey receipt');
   assert.equal(hash(readFileSync(composition.sourceFingerprint.file, 'utf8').replaceAll('\r\n', '\n')), composition.sourceFingerprint.sha256);
+  assert.equal(hash(readFileSync(join.sourceFingerprint.file, 'utf8').replaceAll('\r\n', '\n')), join.sourceFingerprint.sha256);
   const surveyBytes = readFileSync(composition.survey.file); assert.equal(hash(surveyBytes), composition.survey.sha256);
   const survey = JSON.parse(surveyBytes);
-  for (const source of survey.sourceFingerprints)
-    assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256);
+  for (const source of survey.sourceFingerprints) readGapSurveySource(source);
+  const normalizeGap = bindGapSurveyNormalizer(survey);
   const auditFile = 'tests/material-parity/input-equivalence-audit.mjs';
   const parsed = bytes => ts.createSourceFile(auditFile, bytes.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const previous = parsed(git(auditFile)), current = parsed(readFileSync(auditFile));
@@ -103,13 +107,17 @@ export async function loadExplicitGapBindingInputs() {
     assert.equal(matches.length, 1); return matches[0].getText(file);
   };
   for (const name of ['canonicalStyle', 'expandQuad', 'expandPair', 'splitCssTerms', 'normalizeValue',
-    'normalizeColor', 'formatNumber', 'reviewedTemplateTextMappings'])
+    'formatNumber', 'reviewedTemplateTextMappings'])
     assert.equal(functionText(current, name), functionText(previous, name), `unchanged original gap dependency ${name}`);
   const rawBytes = readFileSync(join.capture.file); assert.equal(hash(rawBytes), join.capture.sha256);
   const raw = JSON.parse(rawBytes), inputs = new Map();
   for (const [kind, entries] of [['static', raw.results], ['interaction', raw.interactions]]) for (const entry of entries) {
     const caseId = `${kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`;
     for (const input of entry.styleInputs) {
+      // The changed color function is permitted only after checking the actual
+      // gap outputs against the pinned historical normalizer for every input.
+      for (const stage of ['reference', 'astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'])
+        normalizeGap(input[stage] ?? {});
       const id = `${caseId}/${input.id}`; assert.ok(!inputs.has(id));
       inputs.set(id, { input, inputTrees: entry.inputTrees });
     }

@@ -6,7 +6,7 @@ import { Readable } from 'node:stream';
 import { createGunzip } from 'node:zlib';
 import { pathToFileURL } from 'node:url';
 import Parser from 'jsonparse';
-import ts from 'typescript';
+import { readGapSurveySource, bindGapSurveyNormalizer } from '../tests/material-parity/gap-survey-source-replay.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const surveyFile = 'docs/material-owner-gap-input-survey.json';
@@ -80,8 +80,7 @@ export function joinOwnerGapInputs(survey, rows, originalIndex) {
 
 export async function loadGapJoinInputs() {
   const surveyBytes = readFileSync(surveyFile), survey = JSON.parse(surveyBytes);
-  for (const source of survey.sourceFingerprints)
-    assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256);
+  for (const source of survey.sourceFingerprints) readGapSurveySource(source);
   assert.equal(survey.baselineRevision, canonicalRevision);
   const git = file => execFileSync('git', ['show', `${canonicalRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 });
   const manifest = JSON.parse(git('docs/material-input-equivalence-audit.json'));
@@ -101,14 +100,7 @@ export async function loadGapJoinInputs() {
   };
   for await (const chunk of Readable.from([payload]).pipe(createGunzip())) { parser.write(chunk); if (done) break; }
   assert.ok(done); assert.equal(rows.length, 162); assert.equal(canonicalTotalGroups, 8339);
-  const module = survey.productionNormalization.module, source = readFileSync(module, 'utf8');
-  const parsed = ts.createSourceFile(module, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
-  const normalizationSource = survey.productionNormalization.functions.map(name => {
-    const matches = parsed.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
-    assert.equal(matches.length, 1); return matches[0].getText(parsed);
-  }).join('\n');
-  assert.equal(hash(normalizationSource.replaceAll('\r\n', '\n')), survey.productionNormalization.sha256);
-  const canonicalStyle = new Function(normalizationSource + '\nreturn canonicalStyle;')();
+  const canonicalStyle = bindGapSurveyNormalizer(survey);
   const bytes = readFileSync(survey.capture.file); assert.equal(hash(bytes), survey.capture.sha256);
   const original = JSON.parse(bytes);
   const originalIndex = prepareGapOriginalIndex(original, rows, canonicalStyle);
