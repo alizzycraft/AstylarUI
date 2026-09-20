@@ -3,7 +3,9 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import ts from 'typescript';
+import path from 'node:path';
 import { recoverOriginalOverlayRunnerSource } from './original-overlay-runner-source.mjs';
+import { collectOriginalOverlayContextSurvey } from './original-overlay-context-survey.mjs';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
 const captureFile = 'artifacts/material-parity/original-overlay-context-current-ancestry-audit/latest-report.json';
@@ -50,4 +52,29 @@ test('rejects altered line-ending provenance even when counts are retained', () 
     const changed = structuredClone(endings); mutate(changed);
     assert.throws(() => recoverOriginalOverlayRunnerSource(receipt, current, changed), `mutation ${index}`);
   }
+});
+
+test('recovered producer bytes compose with all 91 original overlay states and reject corrupted owners', () => {
+  const sourcePath = path.resolve(file), manifestPath = path.resolve(captureFile);
+  const read = overrides => name => {
+    const bytes = overrides.get(name) ?? readFileSync(name);
+    return name === sourcePath ? recoverOriginalOverlayRunnerSource(receipt, bytes).bytes : bytes;
+  };
+  const result = collectOriginalOverlayContextSurvey(captureFile, { readBytes: read(new Map()) });
+  assert.equal(result.cases, 91); assert.equal(result.matchedOriginalOwners, 200);
+  assert.equal(result.rootProperties, 17654); assert.equal(result.candidateReplayed, false);
+  assert.equal(result.renderingEquivalent, false); assert.equal(result.canonicalAttributionChanged, false);
+  // Keep the reader's independent owner and coverage checks reachable after
+  // resolving the earlier byte mismatch. Recompute outer hashes deliberately.
+  const raw = structuredClone(capture), descriptor = raw.results[0];
+  const record = JSON.parse(readFileSync(descriptor.file));
+  const node = record.freshReferenceTree.nodes.find(n => n.key === record.proofs[0].proof.referenceNode);
+  record.freshReferenceTree.styles[node.style].fontSize = '99px';
+  const recordBytes = Buffer.from(JSON.stringify(record)); descriptor.sha256 = hash(recordBytes);
+  const overrides = new Map([[path.resolve(descriptor.file), recordBytes],
+    [manifestPath, Buffer.from(JSON.stringify(raw))]]);
+  assert.throws(() => collectOriginalOverlayContextSurvey(captureFile, { readBytes: read(overrides) }), /Fresh mapped owner/);
+  const incomplete = structuredClone(capture); incomplete.results.pop(); incomplete.cases--;
+  assert.throws(() => collectOriginalOverlayContextSurvey(captureFile, {
+    readBytes: read(new Map([[manifestPath, Buffer.from(JSON.stringify(incomplete))]])) }));
 });

@@ -42,3 +42,20 @@ live inputs nor the original full-harness worktree was modified. Integration
 must preserve original byte and function receipts, owner/state coverage and
 all existing rejection checks. Do not claim this focused pass establishes
 complete overlay replay or rendering equivalence.
+
+## Composed reader proof
+
+The recovery is now exercised through the existing reader's `readBytes`
+dependency in a separate test. Only the known runner source is reconstructed;
+all other evidence is read unchanged. The reader replays all **91 states**,
+**200 mapped original owners** and **17,654 root-property observations**.
+Two additional controls corrupt an owner while recomputing its outer hashes,
+and remove a state; the existing downstream checks reject both.
+
+The expanded recovery/inventory command passes **8/8**, exit 0,
+**5,061.5932ms**, with no failures, skips, cancellations or TODOs. Log:
+`artifacts/material-parity/field-host-flow-input-audit/overlay-runner-composed-source-tests-sep20.log`.
+This is the recovery suite plus inventory checks, not the separate eight-test
+`original-overlay-context-survey.spec.mjs` suite. That suite and the default
+reader's eventual integration remain pending. No new browser capture, candidate
+replay, canonical classification or rendering equivalence is claimed.
