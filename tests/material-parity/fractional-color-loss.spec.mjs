@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import test from 'node:test';
 import { bindFractionalColorBaseline, collectFractionalColorLoss, inspectFractionalColorLoss } from '../../scripts/audit-material-fractional-color-loss.mjs';
 
 const normalize = bindFractionalColorBaseline();
-test('production sRGB rounding merges a fractional color with a different integer color', () => {
+test('pinned pre-correction sRGB rounding merges a fractional color with a different integer color', () => {
   const proof = inspectFractionalColorLoss({ reference: { color: 'color(srgb 0.5 0 1)' },
     astylar: { color: '#8000ff' } }, 'color', normalize);
   assert.deepEqual(proof.scaledChannels, [127.5, 0, 255]);
@@ -34,6 +35,12 @@ test('complete original capture replays the checked-in diagnostic without changi
   const before = files.map(file => readFileSync(file));
   const report = collectFractionalColorLoss();
   assert.deepEqual(report, JSON.parse(readFileSync('docs/material-fractional-color-loss.json')));
+  const historical = JSON.parse(execFileSync('git', ['show', '65a122f2b8be2ed83fccdac59491a949c8771a7b:docs/material-fractional-color-loss.json'],
+    { maxBuffer: 4 * 1024 * 1024 }));
+  const { revision, ...normalizationWithoutRevision } = report.normalization;
+  assert.equal(revision, '65a122f2b8be2ed83fccdac59491a949c8771a7b');
+  assert.deepEqual({ ...report, normalization: normalizationWithoutRevision }, historical,
+    'historical diagnostic changed beyond the explicit normalization revision receipt');
   assert.equal(report.counts.cases, 2311);
   assert.deepEqual(report.counts, { cases: 2311, owners: 6946, srgbProperties: 2923, affected: 2923, groups: 210,
     dispositions: { 'difference-suppressed-by-rounding': { groups: 144, observations: 2311 },

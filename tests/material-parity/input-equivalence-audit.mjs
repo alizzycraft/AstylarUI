@@ -2207,6 +2207,28 @@ function normalizeValue(property, value) {
 }
 
 function normalizeColor(value) {
+  // Color input evidence must not inherit layout's three-decimal tolerance or
+  // 8-bit raster quantization. Convert finite decimal channels by integer
+  // arithmetic so equivalent RGB/sRGB notation has the same precise value.
+  const decimal = (raw, multiplier = 1n) => {
+    const text = String(raw);
+    if (!Number.isFinite(Number(text))) return undefined;
+    const match = /^([+-]?)(?:(\d+)(?:\.(\d*))?|\.(\d+))(?:e([+-]?\d+))?$/i.exec(text);
+    if (!match) return undefined;
+    const fraction = match[3] ?? match[4] ?? '';
+    const places = fraction.length - Number(match[5] ?? 0);
+    // Leave extreme/unsupported notation unnormalized instead of rounding it
+    // to zero or allocating an unbounded expansion from captured input.
+    if (Math.abs(places) > 1000) return undefined;
+    const coefficient = BigInt((match[2] ?? '0') + fraction) * multiplier;
+    if (coefficient === 0n) return '0';
+    const sign = match[1] === '-' ? '-' : '';
+    const digits = coefficient.toString();
+    if (places <= 0) return sign + digits + '0'.repeat(-places);
+    const padded = digits.padStart(places + 1, '0');
+    const tail = padded.slice(-places).replace(/0+$/, '');
+    return sign + padded.slice(0, -places) + (tail ? '.' + tail : '');
+  };
   const lower = value.toLowerCase();
   if (lower === 'transparent') return 'rgba(0,0,0,0)';
   const hex = lower.match(/^#([0-9a-f]{3,8})$/)?.[1];
@@ -2215,19 +2237,22 @@ function normalizeColor(value) {
     if (![6, 8].includes(expanded.length)) return undefined;
     const channels = [0, 2, 4].map((index) => Number.parseInt(expanded.slice(index, index + 2), 16));
     const alpha = expanded.length === 8 ? Number.parseInt(expanded.slice(6, 8), 16) / 255 : 1;
-    return `rgba(${channels.join(',')},${formatNumber(alpha)})`;
+    return `rgba(${channels.join(',')},${decimal(alpha)})`;
   }
   const rgb = lower.match(/^rgba?\(([^)]+)\)$/);
   if (rgb) {
-    const channels = rgb[1].replace(/\//g, ' ').split(/[ ,]+/).filter(Boolean).map(Number);
-    if (channels.length >= 3 && channels.every(Number.isFinite)) {
-      return `rgba(${channels.slice(0, 3).map((channel) => formatNumber(channel)).join(',')},${formatNumber(channels[3] ?? 1)})`;
+    const channels = rgb[1].replace(/\//g, ' ').split(/[ ,]+/).filter(Boolean).map(channel => decimal(channel));
+    if ([3, 4].includes(channels.length) && channels.every(channel => channel !== undefined)) {
+      return `rgba(${channels.slice(0, 3).join(',')},${channels[3] ?? '1'})`;
     }
   }
   const srgb = lower.match(/^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+))?\)$/);
   if (srgb) {
-    const channels = srgb.slice(1, 4).map((channel) => Math.round(Number(channel) * 255));
-    return `rgba(${channels.join(',')},${formatNumber(Number(srgb[4] ?? 1))})`;
+    const channels = srgb.slice(1, 4).map(channel => decimal(channel, 255n));
+    const alpha = decimal(srgb[4] ?? '1');
+    if (channels.every(channel => channel !== undefined) && alpha !== undefined) {
+      return `rgba(${channels.join(',')},${alpha})`;
+    }
   }
   return undefined;
 }

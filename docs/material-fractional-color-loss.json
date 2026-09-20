@@ -7,6 +7,7 @@
   },
   "normalization": {
     "module": "tests/material-parity/input-equivalence-audit.mjs",
+    "revision": "65a122f2b8be2ed83fccdac59491a949c8771a7b",
     "functions": [
       "canonicalStyle",
       "expandQuad",

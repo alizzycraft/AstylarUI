@@ -2,7 +2,7 @@
 
 ## Finding and scope
 
-The audit's `normalizeColor` in
+At baseline commit `65a122f`, the audit's `normalizeColor` in
 `tests/material-parity/input-equivalence-audit.mjs:2229` rounds the three
 `color(srgb ...)` channels to integers after multiplying by 255. Its legacy
 `rgb(...)` branch does not apply that integer rounding. This is a confirmed
@@ -108,6 +108,19 @@ All three tests passed, including synthetic loss, alpha/omission controls and
 complete original-capture replay. The canonical manifest and normalizer bytes
 were unchanged by the test. The diagnostic `--check` also passed.
 
-Diagnostic report SHA-256:
+Original diagnostic report SHA-256:
 `ea0fb1de4f5af13f3aeb1c4148227ee45b46c65644cbe9ec3a6a86e2c00aa302`.
 These checks are not the full enforced parity matrix.
+
+## Historical preservation during correction
+
+The diagnostic now explicitly loads its normalizer from commit
+`65a122f2b8be2ed83fccdac59491a949c8771a7b`. It no longer requires the live
+normalizer to retain the bug. The report adds that revision receipt; every other
+field is compared to the committed historical report in the regression test.
+The updated diagnostic SHA-256 is
+`5ef8e858b98b17d8585e236b989eeb652e6c089fca554eb2a65fcabd753c2be1`.
+
+The live correction and its whole-capture scalar impact are separate evidence in
+`material-color-normalization-transition.md`. Historical loss, corrected
+normalization, source ownership and final rendered parity must not be conflated.

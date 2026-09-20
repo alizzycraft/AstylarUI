@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -9,6 +10,7 @@ import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-care
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalization = {
   module: 'tests/material-parity/input-equivalence-audit.mjs',
+  revision: '65a122f2b8be2ed83fccdac59491a949c8771a7b',
   functions: ['canonicalStyle', 'expandQuad', 'expandPair', 'splitCssTerms', 'normalizeValue', 'normalizeColor', 'formatNumber'],
   sha256: '8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e',
 };
@@ -16,7 +18,11 @@ const capture = { file: 'artifacts/material-parity/current-ancestry-audit/latest
   sha256: 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a' };
 
 export function bindFractionalColorBaseline() {
-  return bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  // Preserve the demonstrated pre-correction behavior as historical evidence.
+  // Never require the live normalizer to retain the bug for this test to pass.
+  const source = execFileSync('git', ['show', `${normalization.revision}:${normalization.module}`],
+    { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  return bindOwnerCaretNormalization(source, normalization);
 }
 
 // Diagnostic only: preserve the original serialization and expose the exact
