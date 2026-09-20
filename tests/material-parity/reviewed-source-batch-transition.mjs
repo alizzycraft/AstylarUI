@@ -33,6 +33,30 @@ const supplemental = {
   },
 };
 
+export const reviewedSourceBatchAttributions = [
+  'reviewed-owner-motion-initial-observation-stage', 'reviewed-shared-button-state-paint-composition',
+  ...Object.keys(supplemental),
+];
+
+// Metadata only. Callers must authenticate the plan and replay source proofs;
+// this formatter cannot establish that an observation deserves classification.
+export function reviewedSourceBatchMetadata(group) {
+  assert.ok(reviewedSourceBatchAttributions.includes(group.attribution));
+  for (const flag of ['inputEquivalent', 'renderingEquivalent', 'rendererCauseProven']) assert.equal(group[flag], false);
+  const defaults = supplemental[group.attribution] ?? {};
+  const justification = group.justification ?? defaults.justification;
+  const recommendedOwner = group.recommendedOwner ?? group.owner ?? defaults.recommendedOwner;
+  assert.equal(typeof justification, 'string'); assert.ok(justification.length > 40);
+  assert.equal(typeof recommendedOwner, 'string'); assert.ok(recommendedOwner.length > 10);
+  return { classification: group.classification, attribution: group.attribution, justification, recommendedOwner,
+    reviewEvidence: { sourcePlan: reviewedSourceBatchDescriptor,
+      originalCompleteRowSha256: group.canonicalRowSha256, sourceProposalSha256: digest(group),
+      originalObservationsSha256: group.orderedObservationSha256 ?? digest(group.observations),
+      inputEquivalent: false, wholeElementInputEquivalent: false, computedCandidateVerified: false,
+      cascadeWinnerProven: false, inactiveMotionProven: false, renderingEquivalent: false,
+      rendererCauseProven: false, compensationNecessityProven: false } };
+}
+
 // This is a pure metadata transition, NOT a source authenticator. Its caller
 // must independently replay the pinned plan's source reports. The pinned plan
 // hash is necessary but not sufficient proof that source observations still hold.
@@ -63,20 +87,7 @@ export function stageReviewedSourceBatch(rows, plan) {
     assert.equal(new Set(group.cases).size, row.occurrences);
     for (const flag of ['inputEquivalent', 'renderingEquivalent', 'rendererCauseProven'])
       assert.equal(group[flag], false);
-    const defaults = supplemental[group.attribution] ?? {};
-    const justification = group.justification ?? defaults.justification;
-    const recommendedOwner = group.recommendedOwner ?? group.owner ?? defaults.recommendedOwner;
-    assert.equal(typeof justification, 'string'); assert.ok(justification.length > 40);
-    assert.equal(typeof recommendedOwner, 'string'); assert.ok(recommendedOwner.length > 10);
-    const after = { ...row, classification: group.classification, attribution: group.attribution,
-      justification, recommendedOwner,
-      reviewEvidence: { sourcePlan: reviewedSourceBatchDescriptor,
-        originalCompleteRowSha256: previousCompleteRowSha256, sourceProposalSha256: digest(group),
-        originalObservationsSha256: group.orderedObservationSha256 ?? digest(group.observations),
-        inputEquivalent: false, wholeElementInputEquivalent: false, computedCandidateVerified: false,
-        cascadeWinnerProven: false, inactiveMotionProven: false, renderingEquivalent: false,
-        rendererCauseProven: false, compensationNecessityProven: false },
-      reviewedCases: [...group.cases] };
+    const after = { ...row, ...reviewedSourceBatchMetadata(group), reviewedCases: [...group.cases] };
     changes.push({ family: row.family, element: row.element, property: row.property, batch: group.batch,
       occurrences: row.occurrences, previousCompleteRowSha256,
       projectedCompleteRowSha256: digest(after), attribution: after.attribution });
