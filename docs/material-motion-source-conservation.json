@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "historicalRevision": "4650791a7208b841dd29f1ced015f98234949623",
+  "historicalReport": {
+    "file": "docs/material-owner-initial-motion-review.json",
+    "sha256": "f8f90799191604823875d849fb6ae56de46dd96c37e3f91c8d540bdd48916294"
+  },
+  "currentReportSha256": "cd8adede73edd16f2992f7dc526c8a7ee1d0621a83a84e6703aa64a6a3790443",
+  "sourceReceiptTransitions": [
+    {
+      "file": "tests/material-parity/input-equivalence-audit.mjs",
+      "historicalSha256": "82854bccdaa6ff23fc5f9df987f6ec5cf3e22d0da5dbe64357109d5a03035f3b",
+      "currentSha256": "c9eccd1c91b59a890df12070cc6cf0fccb70cef15513d72741a76cee0c757066"
+    }
+  ],
+  "unchangedMappingDeclarations": [
+    {
+      "name": "reviewedTemplateTextMappings",
+      "sha256": "5c82f14c366cb755256bf239ad8f9d1da759330a1ead175d555d4125c31e6395"
+    },
+    {
+      "name": "reviewedCalendarWeekdayMappings",
+      "sha256": "18232b958f4c2d9fab77dd580ae91e5b08955576b5d242a9c20e46e0f5501eb5"
+    },
+    {
+      "name": "reviewedCalendarMonthMarkerMappings",
+      "sha256": "bba23c544e69437239a25e977a2339924d3dc893933e7dfa728eca39c622e349"
+    },
+    {
+      "name": "reviewedTimepickerOptionMappings",
+      "sha256": "f5b4bea804168fca806265a188d24a9a3ab42b9d0131ba1917c37a0f48738ecc"
+    },
+    {
+      "name": "reviewedMaterialOptionMappings",
+      "sha256": "3599ab0956441b5ccd4ed560fc2a06e0c2a7546c0371ecbaf1d95b2f3f9f74bc"
+    },
+    {
+      "name": "reviewedSnackbarMessageMappings",
+      "sha256": "d746c8cb9ecb76ef73bb18379ff4677d2ae365fe4aa9d120ce16fea0b5eaa834"
+    },
+    {
+      "name": "reviewedTooltipTextMappings",
+      "sha256": "f16673e87ebf2c35e9f41195246bdd4abe3fb9d12726c0c771ee5d4cff1517ba"
+    },
+    {
+      "name": "reviewedMenuTextMappings",
+      "sha256": "4411daa2071e3a619d0ae2f31308629823a4c3ef758387067479e95cf0aec2f2"
+    },
+    {
+      "name": "reviewedDialogTextMappings",
+      "sha256": "a8117722bbdf78487dffeabb4ba9b77076680b0e220a46aab323e32d6e24ccf3"
+    },
+    {
+      "name": "reviewedFieldErrorMappings",
+      "sha256": "87b8aeac09673fecd89b2631add5858f1e7eb78211b7505b67aaa58fc6b718ed"
+    },
+    {
+      "name": "reviewedCalendarCellControl",
+      "sha256": "af345a418d56b357cd1243db1c027e720b8a2b1cbb1ef2e0e2364125552ef84b"
+    },
+    {
+      "name": "reviewedSnackbarActionControl",
+      "sha256": "7940c0e70f43ff6e093c88f83d1892a031abd3a330d2bc936c209a97622624bf"
+    }
+  ],
+  "groups": 121,
+  "observations": 7254,
+  "allNonReceiptEvidenceFreshlyReplayed": true,
+  "historicalReceiptsRewritten": false,
+  "canonicalAttributionChanged": false,
+  "inputEquivalent": false,
+  "renderingEquivalent": false
+}
