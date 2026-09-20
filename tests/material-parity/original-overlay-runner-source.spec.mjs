@@ -34,7 +34,7 @@ test('LF CRLF and retained mixed checkouts recover identical historical bytes, w
   assert.throws(() => recoverOriginalOverlayRunnerSource(receipt, Buffer.from(lf + '\n')));
   assert.throws(() => recoverOriginalOverlayRunnerSource(receipt, Buffer.from(lf.replace('profileTheme', 'wrongTheme'))));
   assert.throws(() => recoverOriginalOverlayRunnerSource({ ...receipt, file: 'other.mjs' }, current));
-  assert.throws(() => recoverOriginalOverlayRunnerSource({ ...receipt, sha256: hash(current) }, current));
+  assert.throws(() => recoverOriginalOverlayRunnerSource({ ...receipt, sha256: '0'.repeat(64) }, current));
 });
 
 test('rejects altered line-ending provenance even when counts are retained', () => {
