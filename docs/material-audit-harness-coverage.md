@@ -1,5 +1,28 @@
 # Complete audit harness coverage
 
+## Remaining alignment review and current verification state
+
+Discovery now contains **173 files** (165 Material, four general, four TTS;
+all 43 legacy files retained), including
+`remaining-text-alignment.spec.mjs`. The September 20 complete run was launched
+with **171 files**; the two later suites are not retroactively included in it.
+The new review and inventory tests pass **9/9**, exit 0, in **45,910.7379ms**;
+see the [167-observation review](material-remaining-text-alignment.md) for the
+initial JSON/object assertion mismatch and its independently verified correction.
+The complete harness process has advanced through the historical button-box proof; no full
+harness result is claimed.
+
+The September 20 general enforced run stopped on `page.goto` after 30 seconds at
+`/parity/astylar/reactive-lifecycle-cycles?viewport=tablet&dynamic-state=1`, while
+waiting for `domcontentloaded` (`run-parity.mjs:280`, called from the dynamic
+fixture path at `:411`). Cause is unproved. This is an incomplete run, not a
+completed failing aggregate score or a new resource-leak diagnosis. Retained
+log: `artifacts/material-parity/field-host-flow-input-audit/complete-general-parity-sep20.log`,
+SHA-256 `d625a4918ddbfefb4cbc31eedd0974cab22db79d697ee39c1c8b5a85e404afc7`.
+The separately sequenced unfiltered
+Material resume passed checkpoint provenance validation and has reached the
+interaction matrix; it remains live. Full enforced matrix completion is pending.
+
 ## Prepared composition increment
 
 Discovery now contains **172 files** (164 Material, four general, four TTS;

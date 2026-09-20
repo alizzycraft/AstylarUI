@@ -3,6 +3,16 @@
 This is an investigation record, not a declaration of completed parity or a renderer fix.
 The machine report is generated separately from the full benchmark output.
 
+## Remaining original alignment contexts
+
+The [five-group review](material-remaining-text-alignment.md) covers 167 original
+observations: expansion title local-versus-retained alignment, a progress-bar
+explicit request omission, spinner stage/direction differences, and 59 overlay
+observations whose known layer-capture gap still prevents a complete alignment
+context disposition. It preserves motion and private-plugin uncertainty. These
+are standalone evidence dispositions; neither the current 1,960 unresolved
+canonical groups nor the prepared 125-group integration count changes.
+
 ## Combined prepared alignment transition
 
 The [full-payload composition proof](material-prepared-alignment-composition.md)
