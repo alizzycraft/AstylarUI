@@ -5,7 +5,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { resolveOriginAliasPair } from '../tests/material-parity/origin-alias-mapping-evidence.mjs';
 import { collectOriginalOverlayContextSurvey } from '../tests/material-parity/original-overlay-context-survey.mjs';
-import { conserveOriginalOverlayContextSnapshot } from '../tests/material-parity/historical-audit-module-source.mjs';
+import { conserveOriginalOverlayContextSnapshot, conserveOverlayFontInputSnapshot } from '../tests/material-parity/historical-audit-module-source.mjs';
 import { selectorCanApply } from '../tests/material-parity/border-initial-input-evidence.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -124,12 +124,12 @@ export function collectOverlayFontInputs() {
     matchingPageSizes: 94, differingPageSizes: 88, scalarRuleGapsPreserved: 59 });
   const sources = ['examples/material-showcase/src/app/astylar.component.ts',
     'tests/material-parity/origin-alias-mapping-evidence.mjs', 'tests/material-parity/original-overlay-context-survey.mjs'];
-  return { schemaVersion: 1, kind: 'original-overlay-font-inheritance-inputs', originalCapture: { file, sha256 },
+  return conserveOverlayFontInputSnapshot({ schemaVersion: 1, kind: 'original-overlay-font-inheritance-inputs', originalCapture: { file, sha256 },
     originalCasesScanned: seen.size, observations: findings.length, contextCases: usedContexts.size, counts, findings,
     referenceContext: { capture: context.capture, independentSurveySha256: hash(JSON.stringify(context)),
       browser: context.browser, originalCandidateReplayed: false, historicalAncestorsReconstructed: false },
     sources: sources.map(file => ({ file, sha256: hash(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')) })),
-    canonicalAttributionChanged: false, rendererChanged: false, inputEquivalent: false };
+    canonicalAttributionChanged: false, rendererChanged: false, inputEquivalent: false });
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {

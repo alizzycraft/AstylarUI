@@ -7,12 +7,37 @@ import { assertOriginalOverlayEvidencePath, collectOriginalOverlayContextSurvey 
 import { originalOverlayAuditSourceCommit, originalOverlayAuditSourceFile,
   verifyHistoricalAuditModuleSource, originalOverlayMappingSourceCommit,
   originalOverlayMappingSourceFile, verifyHistoricalOverlayMappingSource,
-  verifyOverlayMappingAuditProjection, conserveOriginalOverlayContextSnapshot } from './historical-audit-module-source.mjs';
+  verifyOverlayMappingAuditProjection, conserveOriginalOverlayContextSnapshot, verifyOverlayFontSnapshot } from './historical-audit-module-source.mjs';
 import { execFileSync } from 'node:child_process';
 
 const file = 'artifacts/material-parity/original-overlay-context-current-ancestry-audit/latest-report.json';
 const baseline = JSON.parse(readFileSync(file)), root = process.cwd();
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+test('overlay font snapshot retains its historical receipt only after complete data and exact current-reader checks', () => {
+  const historical = execFileSync('git', ['show', '67db724:docs/material-overlay-font-inputs.json'], { maxBuffer: 8 * 1024 * 1024 });
+  const reader = readFileSync('tests/material-parity/original-overlay-context-survey.mjs');
+  const live = JSON.parse(historical);
+  live.sources.find(s => s.file === 'tests/material-parity/original-overlay-context-survey.mjs').sha256 =
+    hash(reader.toString('utf8').replaceAll('\r\n', '\n'));
+  const before = structuredClone(live);
+  assert.deepEqual(verifyOverlayFontSnapshot(live, historical, reader), JSON.parse(historical));
+  assert.deepEqual(live, before);
+  const mutations = [
+    r => { r.findings.pop(); }, r => { r.observations--; },
+    r => { r.findings[0].proof.inputEquivalent = true; },
+    r => { r.findings[0].originalInputSha256 = '0'.repeat(64); },
+    r => { r.sources[0].sha256 = '0'.repeat(64); }, r => { r.sources[2].sha256 = '0'.repeat(64); },
+    r => { r.sources.push(r.sources[2]); }, r => { r.referenceContext.independentSurveySha256 = '0'.repeat(64); },
+    r => { r.inputEquivalent = true; }, r => { r.extraUnexplainedField = true; },
+  ];
+  for (const mutate of mutations) {
+    const changed = structuredClone(live); mutate(changed);
+    assert.throws(() => verifyOverlayFontSnapshot(changed, historical, reader));
+  }
+  assert.throws(() => verifyOverlayFontSnapshot(live, Buffer.concat([historical, Buffer.from('\n')]), reader));
+  assert.throws(() => verifyOverlayFontSnapshot(live, historical, Buffer.concat([reader, Buffer.from('\n')])));
+});
+
 test('recorded TypeScript source permits a shared package root, not arbitrary source or artifact escapes', () => {
   const dependency = 'node_modules/typescript/lib/typescript.js';
   assertOriginalOverlayEvidencePath(root, dependency, true);

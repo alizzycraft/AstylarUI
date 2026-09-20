@@ -56,3 +56,67 @@ with exit -1073741819, without test evidence. Its terminal status was confirmed
 before retrying. A retry of both complete prior-binding suites is required before
 regeneration. The failed candidate report must then be replaced, followed by
 complete row conservation, CLI freshness and the current full harness/matrix.
+
+## Preserve the historical font snapshot after fresh replay
+
+The first prior-binding retry passed 9/10 tests. All five follow-up tests passed,
+restoring the 66-group source boundary. The remaining reviewed-input failure
+was a single source-fingerprint change in the overlay font proof: its corrected
+reader now hashes to `e94b253c1c51105c785ee361863fc1d58d5b8b7b406911d6853d7b3c5b56016f`
+instead of the historical `71422c360dcd115e4ee2f49162f3de882d757435aab1f531840355c7eea32c93`.
+An independent complete-object comparison found no other difference.
+
+`conserveOverlayFontInputSnapshot` now authenticates the original committed
+snapshot at `67db724` (raw SHA-256
+`3f06636fd36443605c6a5df9667ab159d2abc0a87672bd1546d5aabbfabfa759`).
+It requires the entire current reader to match the reviewed `2144373` source
+hash, checks the fresh proof's reader hash, and compares **every other field**
+with the historical snapshot. Only then does it return that original snapshot.
+Its source receipt is explicitly historical, not a claim that current source
+bytes are unchanged. All 182 fresh font-owner observations, 91 context cases,
+raw inputs, lineage and other source receipts must still match. No saved file,
+capture receipt or proposal is rewritten.
+
+The same historical-source module includes the three exact named-import shapes
+required by the pending alignment integration. Its existing AST checks still
+reject all other changes outside reviewed orchestration and references from
+retained statements into changed functions.
+
+The first expanded test attempt terminated with an allocation failure (exit 134);
+its four completed source-recovery tests do not establish suite success. The
+sequential bounded-heap retry passed **14/14**, exit 0, **128,296.599ms**, with no
+skips or cancellations. Twelve new rejection controls cover altered observations,
+claims, source identity, lineage, historical bytes and current reader bytes.
+Log: `overlay-font-source-conservation-evening-sep20.log` in the same artifact
+directory. Complete prior-binding verification and canonical regeneration follow
+as conditional phases; neither is accepted from this focused result alone.
+
+The failed canonical manifest, compressed payload and human report are retained
+under `alignment-canonical-failed-sep20/` in that artifact directory. The original
+171-suite harness is no longer live and has no terminal completion summary in
+its log (last recorded test 187); it remains incomplete. The current discovered
+inventory contains **182 suites**, which must receive its own full run.
+
+The conditional complete prior-binding run then passed **10/10**, exit 0,
+**145,102.8268ms**, without skips or cancellations. This restores independent
+source verification for the 134-group/3,325-observation and
+66-group/2,640-observation populations. Log:
+`conserved-prior-source-binding-tests-evening-sep20.log`. The corrected canonical
+generator has started (`alignment-canonical-conserved-retry-sep20.log`); its
+output still requires validation and full-row conservation before acceptance.
+
+## Separate direct-entry failure retained
+
+`node scripts/audit-material-overlay-font-inputs.mjs --check` fails before
+collection with `Cannot access 'overlayFontTargets' before initialization` at
+`scripts/audit-material-font-ownership-attribution.mjs:29`. The top-level
+`Object.keys(overlayFontTargets)` participates in a circular import involving
+the audit builder, its source bindings and the source collectors. Importing the
+builder first allowed the diagnostic replay but is not a fix for the CLI.
+Log: `overlay-font-direct-entry-sep20.log`.
+
+Remove the module-initialization dependency at its owner in a subsequent bounded
+instrumentation increment, retain the single target definition, and verify both
+direct CLI and builder entry orders. Do not use an import-order shim as final
+acceptance. This is a distinct harness initialization issue, not a renderer or
+Material input discrepancy. Its source is frozen during the current generator.

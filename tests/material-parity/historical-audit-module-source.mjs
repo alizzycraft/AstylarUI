@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
+import { isDeepStrictEqual } from 'node:util';
 
 // The 91-state capture predates tooltip wrapping classification. Its source
 // receipt describes the producer then, not a promise that today's audit module
@@ -28,6 +29,12 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
     ['./followup-input-audit-source-binding.mjs', ['collectFollowupInputAuditInputs', 'validateFollowupInputAuditInputs',
       'followupInputClassificationContexts', 'classifyFollowupInput', 'validateFollowupInputClassifications']],
     ['./followup-input-proposal-transition.mjs', ['followupInputAttributions']],
+    ['./alignment-font-audit-source-binding.mjs', ['collectAlignmentFontAuditInputs', 'validateAlignmentFontAuditInputs',
+      'alignmentFontClassificationContexts', 'classifyAlignmentFontInput', 'validateAlignmentFontClassifications', 'alignmentFontAttributions']],
+    ['./text-align-audit-source-binding.mjs', ['collectTextAlignAuditInputs', 'validateTextAlignAuditInputs',
+      'textAlignClassificationContexts', 'classifyTextAlignInput', 'validateTextAlignClassifications', 'textAlignAttributions']],
+    ['./ltr-alignment-audit-source-binding.mjs', ['collectLtrAlignmentAuditInputs', 'validateLtrAlignmentAuditInputs',
+      'ltrAlignmentClassificationContexts', 'classifyLtrAlignmentInput', 'validateLtrAlignmentClassifications', 'ltrAlignmentAttribution']],
   ]);
   function project(text, isCurrent) {
     const parsed = ts.createSourceFile(recorded.file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
@@ -139,4 +146,31 @@ export function conserveOriginalOverlayContextSnapshot(context, { root = process
   }
   assert.deepEqual(projected, original, 'original overlay context data or non-current receipt changed');
   return original;
+}
+
+// The shared-dependency boundary correction in 2144373 changes the verifier,
+// not the captured font observations. Preserve the historical snapshot only
+// after full fresh replay matches it and the current reader is exactly the
+// reviewed corrected implementation. Never rewrite its original source receipt.
+export function verifyOverlayFontSnapshot(live, historicalBytes, currentReaderBytes) {
+  assert.equal(hash(historicalBytes), '3f06636fd36443605c6a5df9667ab159d2abc0a87672bd1546d5aabbfabfa759',
+    'historical overlay font snapshot changed');
+  const currentSha = hash(currentReaderBytes.toString('utf8').replaceAll('\r\n', '\n'));
+  assert.equal(currentSha, 'e94b253c1c51105c785ee361863fc1d58d5b8b7b406911d6853d7b3c5b56016f',
+    'overlay reader differs from the reviewed shared-dependency correction');
+  const original = JSON.parse(historicalBytes), projected = structuredClone(live);
+  const file = 'tests/material-parity/original-overlay-context-survey.mjs';
+  const old = original.sources.filter(s => s.file === file), now = projected.sources.filter(s => s.file === file);
+  assert.equal(old.length, 1); assert.equal(now.length, 1);
+  assert.equal(old[0].sha256, '71422c360dcd115e4ee2f49162f3de882d757435aab1f531840355c7eea32c93');
+  assert.equal(now[0].sha256, currentSha);
+  now[0].sha256 = old[0].sha256;
+  assert.ok(isDeepStrictEqual(projected, original), 'fresh overlay font data or other lineage changed');
+  return original;
+}
+
+export function conserveOverlayFontInputSnapshot(live) {
+  return verifyOverlayFontSnapshot(live, execFileSync('git',
+    ['show', '67db724e5f258c84cfdc70e9da2ccb6ee6353ad0:docs/material-overlay-font-inputs.json'],
+    { maxBuffer: 8 * 1024 * 1024 }), readFileSync('tests/material-parity/original-overlay-context-survey.mjs'));
 }
