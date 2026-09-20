@@ -158,3 +158,30 @@ authoring and motion proofs have expanded the inventory; the final complete
 harness must discover all current files. Neither these three conservation
 suites nor the new focused browser proofs replace the complete enforced parity
 matrix. No renderer, plugin or canonical fixture behavior was changed.
+
+## Freshness rejection and stable-dependency retry
+
+The 19:04:09 canonical CLI run terminated with exit 1 and
+`checked-in machine audit is stale`, before a successful full-object/Markdown
+comparison. It is not accepted. During that run, the new shared-button proposal
+briefly reused the historical button-paint script/report names. Pre-commit
+review caught the collision; both historical files were restored in full and
+compared against `547d349`. The new work has separate filenames. The earlier
+continuous-input-freeze statement therefore does not hold for this run; the
+collision is a plausible source of staleness, not a proven exact differing byte.
+
+After confirmed termination, a read-only prefix check compared all **356**
+recorded source fingerprints to current normalized source bytes: zero mismatches.
+That is not a full payload/freshness check. A new actual canonical CLI `--check`
+started at **19:36:49 Africa/Johannesburg**, with the same complete report inputs
+and a 4GB heap. Log: `alignment-canonical-cli-freshness-restored-sep20.log`.
+Keep those dependencies unchanged until its terminal result. The only expected
+bounded result is a complete freshness match followed by the retained
+1,835-unresolved error; do not accept any earlier assertion failure.
+
+The historical/new button paint suites and inventory checks passed **13/13**
+(200,078.7142ms), committed as `c7dddd1`. The separate inactive-base alpha review
+passed **7/7** (11,029.3032ms), committed as `cb00ff4`. Both are pushed; neither
+changes canonical classifications or renderer/comparison behavior. Current
+unfiltered harness discovery contains **189 files**: 181 Material, four general,
+four TTS. A complete current-inventory run and enforced matrix remain required.
