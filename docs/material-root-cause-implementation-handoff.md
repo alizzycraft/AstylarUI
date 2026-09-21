@@ -349,3 +349,16 @@ conditional text or custom plugin painting. Prove layout retention, inherited
 hidden state, explicit visible descendants, paint suppression and interaction
 behavior with equivalent public-API/browser fixtures. Audit tabs' private text
 painting separately; do not add a component-specific visibility workaround.
+
+The [public browser reduction](material-public-visibility-audit.md) now confirms
+hidden boxes remain painted and hoverable at DPR 1 and 2, including inherited
+hiding. The omitted/explicit-visible controls match at the sampled points.
+This is evidence of the unsupported core contract, not a Material overlay cause.
+
+The [complete owner ancestry replay](material-visibility-ancestry.md) extends
+the trace to all 668 observations / 646 distinct captured trees. Only tabs and
+stepper (138 observations) have ancestor visibility declarations. The other
+15 groups / 530 observations have none, including snackbar and tooltip. Do not
+attribute their placement or absence to an observed hidden rule. Classify their
+visible-state representation separately from the missing hidden-state capability;
+retain geometry, clipping, lifecycle and custom-paint investigations.
