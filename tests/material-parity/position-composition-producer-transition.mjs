@@ -37,4 +37,3 @@ export function restorePositionProducer(source) {
   return { restoredSource: restored, previousModuleSha256: hash(restored),
     currentModuleSha256: hash(current), wholeModuleConserved: true };
 }
-
