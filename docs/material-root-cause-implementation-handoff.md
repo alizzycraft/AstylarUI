@@ -295,7 +295,7 @@ of that comparator, not a demonstrated full-harness false pass or a renderer
 diagnosis. Add calibrated horizontal/size checks before relying on its green
 result as complete geometry evidence. Keep visibility/raster proof separate.
 
-## Remaining legacy source-inventory assertion
+## Legacy source-inventory assertion (now integrated)
 
 The full 388-test run after case-index migration finished with 387 passes and
 one failure: the source receipt test still expects 356 entries while the then
@@ -317,3 +317,35 @@ test correction; it does not change the checked-in legacy test or claim the full
 suite is green. Apply the bounded assertion update after canonical regeneration
 finishes, explicitly preserve the earlier nine case-index assertion migrations,
 and rerun the affected conservation checks before the full suite.
+
+Update: `b452ed6` applied this bounded assertion correction, preserving the
+complete historical suite outside the nine receipt replacements and exact
+inventory extension. The focused legacy assertion and conservation tests pass;
+a fresh complete suite remains required. See
+[the integration record](material-source-inventory-assertion-integration.md).
+
+## CSS visibility support gap: preserve state semantics
+
+The [remaining visibility census](material-visibility-input-population.md)
+contains 17 groups / 668 observations. All compare browser computed `visible`
+against a missing local candidate field; they must not be default-normalized
+into equivalence. Across 138 tab/stepper observations, full reference ancestry
+contains active hidden and visible state rules, even though the mapped text
+node has no direct visibility declaration.
+
+`scripts/audit-material-visibility-support.mjs` establishes a public input-support
+gap: the current `StyleRule` interface, core validation allow-list and loaded-CSS
+mapping lack `visibility`. A package-root TypeScript reduction rejects
+`visibility: 'hidden'` with TS2353 while accepting `overflow: 'hidden'`. The
+installed and source interfaces are compared in full; the imported type must
+resolve to its actual 87 properties rather than `any`. Machine evidence is
+`docs/material-visibility-support.json`.
+
+The first demonstrated boundary here is public authoring/support, before layout
+or Babylon projection. This does not prove a raster fault for omitted visible
+values, explain the missing snackbar, or classify every census row. Implement
+the general CSS visibility contract before replacing reference state rules with
+conditional text or custom plugin painting. Prove layout retention, inherited
+hidden state, explicit visible descendants, paint suppression and interaction
+behavior with equivalent public-API/browser fixtures. Audit tabs' private text
+painting separately; do not add a component-specific visibility workaround.

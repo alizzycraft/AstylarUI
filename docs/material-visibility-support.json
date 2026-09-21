@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "classification": "documented-limitation",
+  "finding": "CSS visibility is absent from the current typed core style contract, validation allow-list and loaded-CSS mapping.",
+  "owner": "core style support, inheritance, paint and interaction semantics",
+  "sources": [
+    {
+      "file": "src/app/types/style-rule.ts",
+      "sha256": "f59e9522605eeb64c7ffa0369f3a6b023a54a1e7e329434d6a5bd9420adadfae"
+    },
+    {
+      "file": "examples/material-showcase/node_modules/astylarui/dist/lib/app/types/style-rule.d.ts",
+      "sha256": "1e4cb286b38fef688fd1fd619cc9e7624792e475b85521b17b128e1021b1a8a3"
+    },
+    {
+      "file": "src/lib/astylar-diagnostics.ts",
+      "sha256": "d53a6540d80d041c703271fc3c7455b187ca90563fa4dce3893680763419b571"
+    },
+    {
+      "file": "src/lib/astylar-document-style-resolver.ts",
+      "sha256": "3cb04ca0d3a7a76deec3743768a429bb89f1a3f8722cc49dfc4dee2144bba8f9"
+    }
+  ],
+  "publicPackageImport": "astylarui",
+  "packedAndCurrentStyleInterfacesEqual": true,
+  "unsupported": {
+    "source": "import type { StyleRule } from 'astylarui';\nconst rule: StyleRule = { selector: '#probe', visibility: 'hidden' };\nvoid rule;\n",
+    "resolvedStylePropertyCount": 87,
+    "diagnostics": [
+      {
+        "code": 2353,
+        "message": "Object literal may only specify known properties, and 'visibility' does not exist in type 'StyleRule'.",
+        "file": "examples/material-showcase/visibility-public-contract-probe.ts"
+      }
+    ]
+  },
+  "control": {
+    "source": "import type { StyleRule } from 'astylarui';\nconst rule: StyleRule = { selector: '#probe', overflow: 'hidden' };\nvoid rule;\n",
+    "resolvedStylePropertyCount": 87,
+    "diagnostics": []
+  },
+  "canonicalAttributionChanged": false,
+  "renderingTested": false,
+  "missingSnackbarCauseProven": false,
+  "limitation": "This proves a public input-support gap, not that omitted visible values cause a raster defect. State-owner substitutions and runtime behavior require separate proof."
+}
