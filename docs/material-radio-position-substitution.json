@@ -1,0 +1,2872 @@
+{
+  "schemaVersion": 1,
+  "kind": "radio-position-substitution",
+  "population": {
+    "file": "docs/material-position-input-population.json",
+    "sha256": "71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff"
+  },
+  "priorRowSha256": "c1317bbbb4f2b6a27f182608ec6fa04aaa862f10f4af8810763be3bf1ae9dff7",
+  "observations": [
+    {
+      "case": "static:radio@light/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/light/desktop/reference-input-tree.json",
+          "sha256": "6216c920720080fe498b7f537de84e7b1a400133e886a4632eb05ef858ff33ad"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/light/desktop/astylar-input-tree.json",
+          "sha256": "250d16c9ade377b0c8684a9389776866e262ae2c773105d8ea62f7022c706c26"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:radio@light/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/light/tablet/reference-input-tree.json",
+          "sha256": "8c3d45177e0dad84ab54c95f0226d0bead2f91b5ee2a0c249ff203a76139f37a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/light/tablet/astylar-input-tree.json",
+          "sha256": "250d16c9ade377b0c8684a9389776866e262ae2c773105d8ea62f7022c706c26"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:radio@light/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/light/mobile/reference-input-tree.json",
+          "sha256": "25d18fe802588580f046a352989fc78f6fb9fc4a8cec897785fea074788c230b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/light/mobile/astylar-input-tree.json",
+          "sha256": "250d16c9ade377b0c8684a9389776866e262ae2c773105d8ea62f7022c706c26"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:radio@dark/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/dark/desktop/reference-input-tree.json",
+          "sha256": "6131f7269832191b996915dad6af797615c0f378681c072767ee0532e1d35155"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/dark/desktop/astylar-input-tree.json",
+          "sha256": "25b59ef027ad8922a595b3f41c9c06cdb2655ef0fd7146a0561f157fa0078832"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:radio@dark/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/dark/tablet/reference-input-tree.json",
+          "sha256": "864e2e7e98af205fde52183456689b3ae44cb2c5b0845f0a6ed2a3f42769d2b6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/dark/tablet/astylar-input-tree.json",
+          "sha256": "25b59ef027ad8922a595b3f41c9c06cdb2655ef0fd7146a0561f157fa0078832"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:radio@dark/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/dark/mobile/reference-input-tree.json",
+          "sha256": "0cf5fd9bd725c06867e8ce3019f526a50c3e3a8e8f01444576ce072fcc2fa088"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/dark/mobile/astylar-input-tree.json",
+          "sha256": "25b59ef027ad8922a595b3f41c9c06cdb2655ef0fd7146a0561f157fa0078832"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:radio@contrast/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/contrast/desktop/reference-input-tree.json",
+          "sha256": "cc87a52d774b0d0b91ebca05bdb9592433893c333e85148994ca9dd3ce784424"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/contrast/desktop/astylar-input-tree.json",
+          "sha256": "34b39ca3de3757cd48fd3d3b58a8751abb8cc007396d6e540291c67d2c902ab2"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:radio@contrast/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/contrast/tablet/reference-input-tree.json",
+          "sha256": "68bd02a4efbecb8cf988bd3bbff830a6317495a1c9df5741fd4bd9f4ff8d12d3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/contrast/tablet/astylar-input-tree.json",
+          "sha256": "34b39ca3de3757cd48fd3d3b58a8751abb8cc007396d6e540291c67d2c902ab2"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:radio@contrast/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/contrast/mobile/reference-input-tree.json",
+          "sha256": "13f5edc53baf7da76425c060e970399707f54b0d86b2fee8154c0c9199000b11"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/contrast/mobile/astylar-input-tree.json",
+          "sha256": "c0ee1b8b7073f90436a0664f7e4ceef42594dd3571d3b1c5d48811b540017bed"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:radio@custom/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/custom/desktop/reference-input-tree.json",
+          "sha256": "372eaed0970873b7bdd68b0fc37a136245e5ebc00ecc7b0b6aca7f1abaad9792"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/custom/desktop/astylar-input-tree.json",
+          "sha256": "98a11860d7e1777688f222d81da0c02b0bfd26aa317b7bb3c9b31ebbf11beb9b"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:radio@custom/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/custom/tablet/reference-input-tree.json",
+          "sha256": "161e358e3c40d7fdc3c477539a1bf044bf19a9778827ac4b9832a437bb672745"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/custom/tablet/astylar-input-tree.json",
+          "sha256": "98a11860d7e1777688f222d81da0c02b0bfd26aa317b7bb3c9b31ebbf11beb9b"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:radio@custom/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/custom/mobile/reference-input-tree.json",
+          "sha256": "adc6bb88c0efc7eacfd7ddbec46a60ccc7a4585f06471bc3f6db5fe6692afc8f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/radio/custom/mobile/astylar-input-tree.json",
+          "sha256": "23670d76dee6a66f4bb420a18f4551d3b26c69f2e9fd1608a60a26c129d264f2"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "0082963f2ce4d86ecc5e602aa13dcccf1cbf24b72b29e7c267dad72250dd4006"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "250d16c9ade377b0c8684a9389776866e262ae2c773105d8ea62f7022c706c26"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "b887e91d06588c8702629b5bb6111d4d9a4b80a5f525ac76674619e9f15df739"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "46c7b0c505f83e0c91345e4570785127837b9f7398a0a7fc282f82d182a42efd"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "45cce6c3c909b11e4d5f9e476abccef0560eca1a1f7a2621a88008ab68efa78b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "68319167c036f0f9bbee64376e4ecd58d4002a9be64aab302855ca5be2d2ab5e"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "afc8e8518eabf98d692935961f608fcf4705a372db84fd244d65f50823d5df54"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "d88f56cb875b304b913f0bf973094b0105c32cdc2a9d89cd9cbf704a4e30bd84"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "8e22c96dc9713add5d9c0fc7ae4e817a2beba0508102f658d5bb8f81a4aadf01"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "ba2b1b6563518b46fb5aefc070c6f76a354a82f97194947c0d2d2d357c700db5"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "e44222b92406250b88d52d813b5a35c9a732b1a251d709c21077cad64e55f163"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "03b1580802b534d0d9e4718a7e59912ae81cf0271ed160d1b84b0f2114116871"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "6216c920720080fe498b7f537de84e7b1a400133e886a4632eb05ef858ff33ad"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "250d16c9ade377b0c8684a9389776866e262ae2c773105d8ea62f7022c706c26"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "0082963f2ce4d86ecc5e602aa13dcccf1cbf24b72b29e7c267dad72250dd4006"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "250d16c9ade377b0c8684a9389776866e262ae2c773105d8ea62f7022c706c26"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "b887e91d06588c8702629b5bb6111d4d9a4b80a5f525ac76674619e9f15df739"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "46c7b0c505f83e0c91345e4570785127837b9f7398a0a7fc282f82d182a42efd"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "45cce6c3c909b11e4d5f9e476abccef0560eca1a1f7a2621a88008ab68efa78b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "68319167c036f0f9bbee64376e4ecd58d4002a9be64aab302855ca5be2d2ab5e"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "afc8e8518eabf98d692935961f608fcf4705a372db84fd244d65f50823d5df54"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "d88f56cb875b304b913f0bf973094b0105c32cdc2a9d89cd9cbf704a4e30bd84"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "8e22c96dc9713add5d9c0fc7ae4e817a2beba0508102f658d5bb8f81a4aadf01"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "ba2b1b6563518b46fb5aefc070c6f76a354a82f97194947c0d2d2d357c700db5"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "e44222b92406250b88d52d813b5a35c9a732b1a251d709c21077cad64e55f163"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "03b1580802b534d0d9e4718a7e59912ae81cf0271ed160d1b84b0f2114116871"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@light/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "6216c920720080fe498b7f537de84e7b1a400133e886a4632eb05ef858ff33ad"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/light/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "250d16c9ade377b0c8684a9389776866e262ae2c773105d8ea62f7022c706c26"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "86059c0d2658feb3b7331a7006cfbbb62c6bdf5ac90aa536f259f2a410db2a3f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "25b59ef027ad8922a595b3f41c9c06cdb2655ef0fd7146a0561f157fa0078832"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "c384eb340cb1f950d37b89ed0d0d2dc881b734d5cfa6c843356dc480644ccbc7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "6abba533b106b68a7fbf728906b9376ff2d9ebad1eb1fe050544ac29a83fe970"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "419e97975ce42826ee11adf2c74b9a8d43723c01726cf4aa721ba397d5438457"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "238d58872afa195f013a2328a23f272932aadbb1e7adcfb274d12d32d5fcd35b"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "df8f7e038d48888283dafb0dbcb97e71bba8ae5ff7eb4d7d2c4e30db3fe6e6ed"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "6abba533b106b68a7fbf728906b9376ff2d9ebad1eb1fe050544ac29a83fe970"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "1b57bc99608858a82f9b0c2c98a10e69d572d1a7159f21f7a9ebe1504ad935ff"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "35a3d429cfbdb3d925af5f475bcac0c05f7abeedd76976a3624ba4b42b43b861"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "01737ea37afb660b4c7936a2894284a68990e5aa0151f841bf5fa0fea1328f25"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "c367624a58fa5fb313504690ac58af244eda44add9b610e6ef2db6cc0065a6b2"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "6131f7269832191b996915dad6af797615c0f378681c072767ee0532e1d35155"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "25b59ef027ad8922a595b3f41c9c06cdb2655ef0fd7146a0561f157fa0078832"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "86059c0d2658feb3b7331a7006cfbbb62c6bdf5ac90aa536f259f2a410db2a3f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "25b59ef027ad8922a595b3f41c9c06cdb2655ef0fd7146a0561f157fa0078832"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "c384eb340cb1f950d37b89ed0d0d2dc881b734d5cfa6c843356dc480644ccbc7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "09ad84142c2af75d5168daa1e773bcb942052bf576297222ea370ceee5ee4425"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "419e97975ce42826ee11adf2c74b9a8d43723c01726cf4aa721ba397d5438457"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "238d58872afa195f013a2328a23f272932aadbb1e7adcfb274d12d32d5fcd35b"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "df8f7e038d48888283dafb0dbcb97e71bba8ae5ff7eb4d7d2c4e30db3fe6e6ed"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "6abba533b106b68a7fbf728906b9376ff2d9ebad1eb1fe050544ac29a83fe970"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "1b57bc99608858a82f9b0c2c98a10e69d572d1a7159f21f7a9ebe1504ad935ff"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "35a3d429cfbdb3d925af5f475bcac0c05f7abeedd76976a3624ba4b42b43b861"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "01737ea37afb660b4c7936a2894284a68990e5aa0151f841bf5fa0fea1328f25"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "c367624a58fa5fb313504690ac58af244eda44add9b610e6ef2db6cc0065a6b2"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@dark/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "6131f7269832191b996915dad6af797615c0f378681c072767ee0532e1d35155"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/dark/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "25b59ef027ad8922a595b3f41c9c06cdb2655ef0fd7146a0561f157fa0078832"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "42e45188e1dc129229708ffce2c974913d0eb9241f63951caa27d04b15de61a5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "34b39ca3de3757cd48fd3d3b58a8751abb8cc007396d6e540291c67d2c902ab2"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "64b8b8967c3804a6948b7a8996fbc2d46517d96e10738047bcd879c447b15acb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "ee1ece091739431864649f531eed6ba7fcd9072a5b6208fdc501379a61f4fa88"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "b8e8399032425527bbd4fbc74f46d23c9334f3c6a83e2948e7ed5111a32698a0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "1daf0828a21e4d764342f1de3f39fd1991f5b37291e7f388dd7a487af8655c39"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "f4739f4f2ccb033ca2fe400ac9ba57f667597013ba001d2f9db54c51b7d28b48"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "a8ada8a65dff9a305aecdfcc59106a97c4656233d31167cb85ff2223fd0a906f"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "f4739f4f2ccb033ca2fe400ac9ba57f667597013ba001d2f9db54c51b7d28b48"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "a60cc09eae4e2a31fbadd1a9c53587a898ee0d9f79982cf5f12855c816cc10a0"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "605959285a228a724259e911be5d430847b26b0b4d59d743644c76082698bbc3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "00807ee5eff99eb252ea9ae08f466b08880c13fb3aee59126d60189410a41932"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "cc87a52d774b0d0b91ebca05bdb9592433893c333e85148994ca9dd3ce784424"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "34b39ca3de3757cd48fd3d3b58a8751abb8cc007396d6e540291c67d2c902ab2"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "42e45188e1dc129229708ffce2c974913d0eb9241f63951caa27d04b15de61a5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "c0ee1b8b7073f90436a0664f7e4ceef42594dd3571d3b1c5d48811b540017bed"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "64b8b8967c3804a6948b7a8996fbc2d46517d96e10738047bcd879c447b15acb"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "fe7e345e3ae3825f1a3d8d193e4f580ccbefa21d5f93c01086e38efcd79452ad"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "b8e8399032425527bbd4fbc74f46d23c9334f3c6a83e2948e7ed5111a32698a0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "cbfbc957f4f4a5144fb062b8fd29403c625da32a2a9ad42de7e2c20a658174d5"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "f4739f4f2ccb033ca2fe400ac9ba57f667597013ba001d2f9db54c51b7d28b48"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "32d4c3b2d55abf25c91ac189ae49c26df2c987645426448f48ad0accd8ddaf7a"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "f4739f4f2ccb033ca2fe400ac9ba57f667597013ba001d2f9db54c51b7d28b48"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "7b7ee78e5e240c97512ac175d895ec88d8f1a38e52bdb9ad260d97e11772fc44"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "605959285a228a724259e911be5d430847b26b0b4d59d743644c76082698bbc3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "2299241f34d056ced3fbff724c8ee340469d8b3009ebf8fb773071bd8f4a1b31"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@contrast/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "cc87a52d774b0d0b91ebca05bdb9592433893c333e85148994ca9dd3ce784424"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/contrast/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "c0ee1b8b7073f90436a0664f7e4ceef42594dd3571d3b1c5d48811b540017bed"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "918e40e6e85d368968bb224eb43269690a073d834de2f617693e930e71f191d6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "98a11860d7e1777688f222d81da0c02b0bfd26aa317b7bb3c9b31ebbf11beb9b"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "11b27a1d6172c940ce5c27d253c0afc809b0a63dbfabf354bdc4bad1f4e12f86"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "dbb663b5f4fa85cc7719a40dfcaf8997fa98b8b8fedb5417385b16709f1cc74f"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "a981891f8a675af37e83d60caf5d019b20e5cebb4e95c2bc6ec9f27e2b2219cf"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "51b45e7a091904408a9dad0506f4346b6690a643faf145d310a29f115db00603"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "d3022510de479454600255de3fa5d24ecfc0de1e733d8b3a93b45a546fc87fd1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "abc8f31f2c2a598338d8312e871a6c936eab05af0adf7a84650c73dbe663d1a9"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "d3022510de479454600255de3fa5d24ecfc0de1e733d8b3a93b45a546fc87fd1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "897fe8660bbeeb771a664f6fafdd5955a13d831d515e86052c01c78bb5b1a8ee"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "8fd471a135de1be3b3f4c9102da6a7a7077f66b3e5d783bc402a9bd53d8fc12b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "e1af49289304c251754de603e6bcdf531cb2ae4219fd5a70dcc87067c0013d53"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "372eaed0970873b7bdd68b0fc37a136245e5ebc00ecc7b0b6aca7f1abaad9792"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "98a11860d7e1777688f222d81da0c02b0bfd26aa317b7bb3c9b31ebbf11beb9b"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "918e40e6e85d368968bb224eb43269690a073d834de2f617693e930e71f191d6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "2a0e00d873e2d92c0b3893edb5e32569ac3c150f19ff68b65c67a5cb3063d8dd"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "11b27a1d6172c940ce5c27d253c0afc809b0a63dbfabf354bdc4bad1f4e12f86"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "927486ef2a637a34e4e66203c36854898966198ab0aa844ac2ba1f24fba5679f"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "a981891f8a675af37e83d60caf5d019b20e5cebb4e95c2bc6ec9f27e2b2219cf"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "af5505f6da9581772134c828dc2cdb95f501aa9d9c7165ef97d815b3b0029e6c"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "d3022510de479454600255de3fa5d24ecfc0de1e733d8b3a93b45a546fc87fd1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "98f4abebc160fee429741266e3375456ba727bf63251ea9754970c5443381762"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "d3022510de479454600255de3fa5d24ecfc0de1e733d8b3a93b45a546fc87fd1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "0fbfd34148df35ebda5fd993502c04a90b3e6c09b08a2b81bd1ad5dc8ffca8c3"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "8fd471a135de1be3b3f4c9102da6a7a7077f66b3e5d783bc402a9bd53d8fc12b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "277db651fb380c75c275bf255b6d7f5c0a1063f21380184bd346988fcbb6f948"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:radio@custom/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "372eaed0970873b7bdd68b0fc37a136245e5ebc00ecc7b0b6aca7f1abaad9792"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/radio/custom/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "2a0e00d873e2d92c0b3893edb5e32569ac3c150f19ff68b65c67a5cb3063d8dd"
+        }
+      },
+      "proof": {
+        "referenceHost": "frame/2/0",
+        "referenceOptions": [
+          "frame/2/0/0",
+          "frame/2/0/1"
+        ],
+        "candidateHost": "root/0/2/0",
+        "options": [
+          {
+            "key": "root/0/2/0/0",
+            "top": "-10px",
+            "left": "0",
+            "width": "68px",
+            "height": "40px"
+          },
+          {
+            "key": "root/0/2/0/1",
+            "top": "-10px",
+            "left": "73px",
+            "width": "80px",
+            "height": "40px"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "inline option flow replaced by absolute authored placement",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    }
+  ],
+  "counts": {
+    "groups": 1,
+    "observations": 68
+  },
+  "canonicalAttributionChanged": false
+}

@@ -6,7 +6,7 @@ test('position queue accounts for every original group without claiming canonica
   const q = collectPositionQueue();
   assert.deepEqual(q, JSON.parse(readFileSync('docs/material-position-review-queue.json')));
   assert.equal(q.groups.length, 58); assert.equal(q.groups.reduce((n, g) => n + g.observations, 0), 2950);
-  assert.deepEqual(q.counts['classified-integration-pending'], { groups: 10, observations: 496 });
+  assert.deepEqual(q.counts['classified-integration-pending'], { groups: 11, observations: 564 });
   assert.deepEqual(q.counts['producer-integrated-conservation-pending'], { groups: 6, observations: 316 });
 });
 test('queue refuses duplicated, incomplete, reordered and unknown review membership', () => {

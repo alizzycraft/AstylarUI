@@ -444,8 +444,11 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "c1317bbbb4f2b6a27f182608ec6fa04aaa862f10f4af8810763be3bf1ae9dff7",
-      "status": "investigation-pending",
-      "source": null
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-radio-position-substitution.json",
+        "sha256": "7fe3d1a6f71eab1cfecb187740f47a3d658044acb8d096ca9625be2f02bb1e1b"
+      }
     },
     {
       "family": "radio",
@@ -756,12 +759,12 @@
   ],
   "counts": {
     "classified-integration-pending": {
-      "groups": 10,
-      "observations": 496
+      "groups": 11,
+      "observations": 564
     },
     "investigation-pending": {
-      "groups": 41,
-      "observations": 2078
+      "groups": 40,
+      "observations": 2010
     },
     "producer-integrated-conservation-pending": {
       "groups": 6,

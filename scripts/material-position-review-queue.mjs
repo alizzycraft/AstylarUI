@@ -42,6 +42,7 @@ export function collectPositionQueue() {
     ['material-tooltip-position-composition', 'tooltip-popup', 'classified-integration-pending'],
     ['material-tab-position-substitution', 'tabs-primary', 'classified-integration-pending'],
     ['material-stepper-position-substitution', 'stepper-primary', 'classified-integration-pending'],
+    ['material-radio-position-substitution', 'radio-primary', 'classified-integration-pending'],
     ['material-sort-focus-placement', 'sort-primary', 'inspection-classification-pending'],
   ]) {
     const { data, source } = load(name);
