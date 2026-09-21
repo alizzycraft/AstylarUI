@@ -60,3 +60,34 @@ text paint, compositing, and output parity remain separate obligations. Restore
 equivalent token/transparency inputs in the later implementation task before
 using this comparison to diagnose core alpha rendering; do not replace the
 literal with a newly calibrated opaque color.
+
+## Canonical control-typography classification regression
+
+The canonical payload committed at `6833850` retains 60 unresolved control-texture
+typography differences. Streaming and authenticating its full decoded payload
+shows that all 60 are the disabled button's `color`, not outstanding line-height
+cases. Their case identities, reference colors and painted candidate colors
+match this review's 60 findings exactly.
+
+`reviewedButtonPaintInput` in the main audit module requires integer reference
+RGB channels with the guard `/^rgba\(\d+,\d+,\d+,0\.38\)$/`. The precise normalizer
+now preserves fractional channels, for example
+`rgba(28.999875,26.99991,31.99995,0.38)`. Consequently this prerequisite rejects
+every one of the 60 records before attribution. An integer-channel control
+still passes. This demonstrates a classifier/normalizer contract mismatch,
+not a new core rendering defect or justification for rounding those values.
+
+Verification: `node --max-old-space-size=768 scripts/check-material-disabled-ink-classifier-gap.mjs`.
+The read-only checker completed with exit 0, authenticated all 2,016,962,991
+decoded bytes, extracted the actual source guard through its AST, and confirmed
+all 60 rejections. Full machine-readable output is retained at
+`artifacts/material-parity/disabled-ink-classifier-gap-2f9680b.json`.
+An independent case/value join to this review also passed for all 60 records.
+
+The next integration must accept valid precise channels without rounding or
+changing alpha, and replay the entire attribution's owner/rule/stage conditions,
+not merely its regex. Preserve all other differences and reject changed alpha,
+competing declarations and detached source evidence. The checker establishes
+this failed prerequisite only; it does not replay every remaining classification
+condition or change canonical attribution. The main audit module is left
+unchanged while the full legacy suite runs.
