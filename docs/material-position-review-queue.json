@@ -147,8 +147,11 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "460ae98921fef0c4158d2cb115e98b834b07207651fecd018e4f6e6549c78427",
-      "status": "investigation-pending",
-      "source": null
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-choice-label-stacking-substitution.json",
+        "sha256": "575d34b0fe4cb1cb165d05efa18c54035d6f0aa6f6ebc96cd4ac5451b73f0be8"
+      }
     },
     {
       "family": "chips",
@@ -468,8 +471,11 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "4ee4bb972957fff7fbc203b4382957a30856eabcb321c0f3aa7cdc3699b712fd",
-      "status": "investigation-pending",
-      "source": null
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-choice-label-stacking-substitution.json",
+        "sha256": "575d34b0fe4cb1cb165d05efa18c54035d6f0aa6f6ebc96cd4ac5451b73f0be8"
+      }
     },
     {
       "family": "radio",
@@ -480,8 +486,11 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "afa297688830a3995716c7d20b8b56cf50b209a47402fc16e500039f141b081e",
-      "status": "investigation-pending",
-      "source": null
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-choice-label-stacking-substitution.json",
+        "sha256": "575d34b0fe4cb1cb165d05efa18c54035d6f0aa6f6ebc96cd4ac5451b73f0be8"
+      }
     },
     {
       "family": "sidenav",
@@ -771,12 +780,12 @@
   ],
   "counts": {
     "classified-integration-pending": {
-      "groups": 11,
-      "observations": 564
+      "groups": 14,
+      "observations": 768
     },
     "investigation-pending": {
-      "groups": 36,
-      "observations": 1754
+      "groups": 33,
+      "observations": 1550
     },
     "inspection-classification-pending": {
       "groups": 5,
