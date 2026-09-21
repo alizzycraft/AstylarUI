@@ -180,3 +180,14 @@ overwriting an existing file (SHA-256
 Dependency installation uses `--package-lock=false --ignore-scripts --no-audit
 --no-fund`; its completion and the enforced TTS gate remain pending. No package
 manifest or existing lockfile was intentionally changed.
+
+TTS preparation subsequently completed with exit 0: 562 packages installed in
+one minute. npm reported deprecations for inflight 1.0.6, rimraf 3.0.2 and glob
+7.2.3. Before starting the next run, 271 prior TTS artifact files were copied to
+`artifacts/tts-parity-before-full-0cb5711`, with every copied SHA-256 verified.
+The installed AstylarUI package's real path was checked to be inside this
+integration worktree before the harness's normal package refresh.
+
+The unfiltered `npm run tts-parity:check` is now running, with no interaction
+filter and without skipping its build. Log:
+`artifacts/material-parity/tts-full-0cb5711.log`. Its result remains pending.
