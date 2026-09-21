@@ -91,3 +91,26 @@ competing declarations and detached source evidence. The checker establishes
 this failed prerequisite only; it does not replay every remaining classification
 condition or change canonical attribution. The main audit module is left
 unchanged while the full legacy suite runs.
+
+### Prepared complete-classifier replay
+
+`tests/material-parity/disabled-ink-precision-preparation.spec.mjs` extracts the
+entire current `reviewedButtonPaintInput` function and changes only its reference
+RGB-channel regex in memory to permit fractional decimal channels. It executes
+both original and proposed functions with the unchanged, authenticated precise
+normalizer and the original paired trees for all 60 owners. Reference label,
+host, rules, normal/effective and actual painted-texture stages are retained.
+No production audit function or captured input is changed by this test.
+
+The original function returns no attribution for all 60; the prepared version
+returns the existing unequal-authoring classification for all 60, preserving
+the exact fractional reference and opaque painted colors. Ten negative controls
+retain rejection for changed alpha, disabled identity/state, missing rules,
+different parent ink and changed normal/effective/painted stages. Inputs remain
+unchanged after both function calls.
+
+Command: `node --max-old-space-size=768 --test tests/material-parity/disabled-ink-precision-preparation.spec.mjs`.
+Result: **2/2 passed**, no skips or failures, **1,958.2016 ms**. This is preparation
+for a bounded classifier correction, not its integration or a regenerated
+canonical result. Broader declaration safety remains covered by the independent
+17-control source review above; no new universal cascade claim is made.
