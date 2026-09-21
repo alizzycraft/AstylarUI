@@ -47,3 +47,26 @@ The regeneration run was launched with all five original evidence arguments;
 its output is retained in
 `artifacts/material-parity/visibility-canonical-regeneration-v1.log`.
 At this checkpoint it is still running, so canonical conservation is **pending**.
+
+## Regeneration and scalar/control replay completed
+
+Regeneration finished with exit 1, reporting only the retained **1,674 unresolved
+resolved-style groups**. Coverage remains 436/436 static and 1,875/1,875 interaction
+captures, 8,483 distinct scalar records and 389,202 occurrences. Input equivalence
+remains false. No source-binding error was reported.
+
+The streaming scalar/control checker then completed with **exit 0**. Exactly
+15 groups / 530 observations changed classification, and all other 8,468 complete
+scalar records are unchanged. All 48 allowed control-record changes contain only
+the authenticated producer-module receipt; every other control field is conserved.
+The whole-module transition proof passed from `ac8d32f078d75affd9ddf7d2d77d58f61fef9a3d78de2146fd69f6aeb471c095`
+to `4ac2017e9b2d546de80dfb7cc209cee27b623a1f30f7cb73a024839b096b6213`.
+
+Result: `artifacts/material-parity/visibility-canonical-conservation-v1.json`,
+SHA-256 `28ef70fe859f918771d65105ba52360c9d07c643445a9198dd79148a06169cff`.
+Regenerated compressed payload SHA-256:
+`c4854fb17cd7c380b514e9cc8cfae97d7cffc721f1f57d6052a9836a29616029`;
+decoded SHA-256: `287ebb396d68ab064dca40a0c372879e8a0c3fd2c7f56498110577615bd430a2`.
+
+The independent whole-report section inventory is still running. These successful
+scalar/control checks alone do not approve changes elsewhere in the report.
