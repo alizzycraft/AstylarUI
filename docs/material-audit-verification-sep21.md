@@ -125,3 +125,22 @@ by `examples/angular-consumer/src/app/style-inspection.browser.spec.ts:70`, whic
 asserts that inspection after disposal throws. It is not silently omitted from
 this record. The check verifies package boundaries and these consumer scenarios,
 not complete Material input equivalence or the enforced parity matrix.
+
+## General enforced run: startup failure retained
+
+The unfiltered `npm run parity:check` attempt at `88367da` finished with **exit 1**
+before fixture execution. The harness could not fetch
+`http://127.0.0.1:4300/parity/fixtures.json` within its 120-second development-server
+startup window. This is incomplete matrix execution, not a fixture parity result.
+
+Log: `artifacts/material-parity/general-full-88367da.log`, SHA-256
+`b026d7a06220876361f8667d7d4a424d75acb5637bfb8d52e277fad8bc2c0a26`.
+Before this attempt, all 1,245 existing general-parity artifact files were copied
+to `artifacts/parity-before-full-88367da` and each copy's SHA-256 was compared
+with its source. The original evidence is preserved.
+
+A separately logged invocation of the same development-server command is now
+being observed at `artifacts/material-parity/general-server-88367da.log` to
+distinguish slow startup from a build failure. No timeout, fixture, or rendering
+threshold was changed. Its startup result and any subsequent enforced rerun are
+still pending at this checkpoint.
