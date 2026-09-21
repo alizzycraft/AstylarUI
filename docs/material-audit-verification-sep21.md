@@ -96,3 +96,16 @@ Log: `artifacts/material-parity/library-build-a34586e.log`, SHA-256
 This proves library compilation only. The application build was started after
 this command completed; packed-consumer runtime and enforced parity remain
 separate pending gates.
+
+## Application build completed
+
+`npm run build` finished with **exit 0**, prerendering two static routes in
+651.646 seconds. It reported two budget warnings: the initial bundle is 6.83 MB
+against a 2.00 MB warning budget, and `src/app/app.scss` is 4.59 kB against a
+4.00 kB warning budget (595 bytes over). Neither warning was suppressed.
+
+Log: `artifacts/material-parity/application-build-a34586e.log`, SHA-256
+`0fec02b0520270f6bc95e937227afa38301b7d4c82520473088d78ec4ff1c377`.
+The original execution handle returned exit 0. This is compilation/prerender
+evidence only; consumer runtime, canonical conservation, remaining input
+classifications and the complete enforced parity matrix are still outstanding.
