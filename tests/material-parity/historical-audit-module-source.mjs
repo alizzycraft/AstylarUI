@@ -26,6 +26,8 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
   const excluded = new Set(['buildMaterialInputAudit', 'validateMaterialInputAudit', 'renderMaterialInputAuditMarkdown',
     'collectStyleDiscrepancies', 'sourceFingerprints', 'focusedProofInventory']);
   const additions = new Map([
+    ['./visibility-audit-source-binding.mjs', ['collectVisibilityAuditInputs', 'applyVisibilityAuditRows', 'validateVisibilityAuditInputs',
+      'validateVisibilityAuditClassifications', 'visibilityObservationAttribution']],
     ['./root-background-classification-preparation.mjs', ['collectRootBackgroundAuditInputs', 'validateRootBackgroundEvidence', 'rootBackgroundClassificationContexts',
       'classifyRootBackgroundInput', 'validateRootBackgroundClassifications', 'rootBackgroundAttribution']],
     ['./reviewed-source-batch-audit-source-binding.mjs', ['collectReviewedSourceBatchAuditInputs', 'validateReviewedSourceBatchAuditInputs',

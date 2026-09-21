@@ -29,8 +29,22 @@ const additions = [
   'scripts/prepare-material-reviewed-source-batch.mjs',
   'scripts/audit-material-root-background-inputs.mjs', 'docs/material-root-background-inputs.json',
   'scripts/audit-material-line-box-normalization.mjs', 'docs/material-line-box-normalization-census.json',
+  'tests/material-parity/visibility-audit-source-binding.mjs',
+  'tests/material-parity/visibility-audit-source-binding.spec.mjs',
+  'tests/material-parity/visibility-audit-pipeline.spec.mjs',
+  'tests/material-parity/visibility-observation-stage.mjs',
+  'tests/material-parity/visibility-observation-stage.spec.mjs',
+  'tests/material-parity/visibility-observation-binding.mjs',
+  'tests/material-parity/visibility-observation-binding.spec.mjs',
+  'scripts/audit-material-visibility-ancestry.mjs',
+  'scripts/audit-material-visibility-population.mjs',
+  'scripts/prepare-material-visibility-observation-stages.mjs',
+  'tests/material-parity/visibility-ancestry.spec.mjs',
+  'tests/material-parity/visibility-input-population.spec.mjs',
+  'docs/material-visibility-input-population.json',
+  'docs/material-visibility-observation-stages.json',
 ];
-assert.equal(additions.length, 39); assert.equal(new Set(additions).size, 39);
+assert.equal(additions.length, 53); assert.equal(new Set(additions).size, 53);
 const file = 'tests/material-parity/input-equivalence-audit.spec.mjs';
 const source = restoreInventoryAssertion(readFileSync(file, 'utf8')).replaceAll('\r\n', '\n');
 const ast = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
@@ -41,12 +55,12 @@ const fixture = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.
 function prepare(original) {
   let updated = original;
   const edits = [
-    ['audit.sourceFingerprints.length, 356', 'audit.sourceFingerprints.length, 395'],
-    ['entry.file)).size, 356', 'entry.file)).size, 395'],
+    ['audit.sourceFingerprints.length, 356', 'audit.sourceFingerprints.length, 409'],
+    ['entry.file)).size, 356', 'entry.file)).size, 409'],
     ['!followupFiles.includes(f) && !alignmentFiles.includes(f)', '!followupFiles.includes(f) && !alignmentFiles.includes(f) && !additions.includes(f)'],
     ['[...followupFiles, ...alignmentFiles].sort()', '[...followupFiles, ...alignmentFiles, ...additions].sort()'],
     ['for (const file of [...followupFiles, ...alignmentFiles])', 'for (const file of [...followupFiles, ...alignmentFiles, ...additions])'],
-    ['38 follow-up and 10 alignment dependencies', '38 follow-up, 10 alignment and 39 additional dependencies'],
+    ['38 follow-up and 10 alignment dependencies', '38 follow-up, 10 alignment and 53 additional dependencies'],
   ];
   for (const [before, after] of edits) {
     assert.equal(updated.split(before).length, 2); updated = updated.replace(before, after);
@@ -60,7 +74,7 @@ const run = (callbackSource, builder) => new Function('assert', 'buildMaterialIn
   'createHash', 'execFileSync', 'ts', 'additions', `${fixture}\nreturn (${callbackSource})();`)
   (assert, builder, readFileSync, createHash, execFileSync, ts, additions);
 
-test('prepared inventory assertion retains the full original test and checks all 395 exact source receipts', () => {
+test('prepared inventory assertion retains the full original test and checks all 409 exact source receipts', () => {
   run(prepare(callback), buildMaterialInputAudit);
 });
 
@@ -77,5 +91,5 @@ test('prepared inventory assertion rejects missing, duplicate, reordered and for
       const result = buildMaterialInputAudit(...args); mutate(result); return result;
     }));
   }
-  assert.equal(baseline.sourceFingerprints.length, 395);
+  assert.equal(baseline.sourceFingerprints.length, 409);
 });

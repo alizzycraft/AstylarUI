@@ -85,7 +85,7 @@ passes **1/1**, no skips, **13,990.7748 ms**, including all original inputs,
 fresh source replay, eight aggregation mutations, a forged source observation,
 unbound use and an out-of-bound source path.
 
-This adapter is not yet imported by the production builder. Remaining integration:
+The adapter preparation above predates production wiring. Integration checklist:
 
 1. Wire collection, serialization, classification and both validation paths;
    preserve full reviewed case membership in grouping.
@@ -99,3 +99,45 @@ This adapter is not yet imported by the production builder. Remaining integratio
    newly classified.
 5. Regenerate the canonical report once the bounded integration proofs pass,
    then verify complete canonical conservation and required full gates.
+
+### Production wiring and conservation checks
+
+The builder now collects and serializes the visibility evidence, applies its
+15 reviewed groups after ordinary aggregation, and validates both the fresh
+source evidence and exact classified membership. The original complete row
+digest must match before any classification changes; another review cannot be
+overwritten. Raw inputs and the ordinary aggregation implementation are unchanged.
+
+Fourteen explicit dependencies extend the source inventory from 395 to 409.
+The historical assertion projection still preserves the whole earlier suite,
+including all nine previously reviewed receipt checks. A negative control was
+updated from the obsolete count 395 to the current count 409; the first rerun
+failed because that stale replacement made no mutation, not because the
+conservation proof accepted a changed assertion.
+
+The whole-module transition independently reconstructs the exact prior producer
+(LF SHA-256 `ac8d32f078d75affd9ddf7d2d77d58f61fef9a3d78de2146fd69f6aeb471c095`)
+by removing only the reviewed import, orchestration, serialization, validation
+entry and 14 inventory entries. Unrelated edits, changed arguments, skipped
+classification, missing inventory and modified serialization/validation reject.
+The previous disabled-ink guard proof operates on that authenticated projection,
+rather than relaxing its original whole-module expectation.
+
+Verification:
+
+- Focused source-transition, disabled-ink, inventory, legacy-assertion and
+  alignment-conservation checks: **11/11**, no skips, **14,330.649 ms**.
+- Actual legacy `records source fingerprints and actual visual acceptance fields`
+  assertion: **1/1**, no skips, **2,879.4074 ms** total process duration.
+- The isolated aggregation test covers all original captured cases but supplies
+  the other proof populations as empty on both sides. It is not a replacement
+  for regeneration with all evidence populations.
+  `node --max-old-space-size=1536 --test tests/material-parity/visibility-audit-pipeline.spec.mjs`
+  passes **2/2**, no skips, **51,133.7672 ms**: 8,362 rows, exactly 15 changed
+  groups / 530 observations, and 8,347 unchanged complete rows. All raw fields
+  and ordering are conserved; five predecessor mutation controls reject.
+
+Canonical report regeneration, complete row conservation (including separately
+explained module-receipt changes), and the full verification matrix remain
+pending. The checked-in canonical report still represents the preceding producer;
+do not present this wiring as a refreshed canonical result or a renderer fix.

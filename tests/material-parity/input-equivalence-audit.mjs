@@ -1,4 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { collectVisibilityAuditInputs, applyVisibilityAuditRows, validateVisibilityAuditInputs,
+  validateVisibilityAuditClassifications, visibilityObservationAttribution } from './visibility-audit-source-binding.mjs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { loadNormalLineBoxReport } from './normal-line-box-report.mjs';
@@ -246,7 +248,9 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const controlTypography = attributeObservedSupplementalLineBoxes(attributeObservedControlLineBoxes(
     attributeObservedNormalLineBoxes(rawControlTypography, elementInventory, normalLineBoxes), elementInventory, controlLineBoxes),
     elementInventory, supplementalLineBoxes);
-  const discrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence, tooltipWrappingInputs, rootShadowInputs, rootFlowHeightInputs, buttonPillRadiusInputs, buttonFlexInputs, buttonHostRequestInputs, buttonFixedWidthInputs, ownerGridInitialInputs, buttonBoxSizingInputs, fieldHostLayoutInputs, ownerGapInputs, explicitGapInputs, gapReviewInputs, ownerCaretInputs, reviewedInputs, followupInputs, alignmentFontInputs, textAlignInputs, ltrAlignmentInputs, reviewedSourceBatchInputs, rootBackgroundInputs);
+  const unreviewedDiscrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence, tooltipWrappingInputs, rootShadowInputs, rootFlowHeightInputs, buttonPillRadiusInputs, buttonFlexInputs, buttonHostRequestInputs, buttonFixedWidthInputs, ownerGridInitialInputs, buttonBoxSizingInputs, fieldHostLayoutInputs, ownerGapInputs, explicitGapInputs, gapReviewInputs, ownerCaretInputs, reviewedInputs, followupInputs, alignmentFontInputs, textAlignInputs, ltrAlignmentInputs, reviewedSourceBatchInputs, rootBackgroundInputs);
+  const visibilityAuditInputs = collectVisibilityAuditInputs(parityReport, { root, parityPath: options.parityPath });
+  const discrepancies = applyVisibilityAuditRows(unreviewedDiscrepancies, visibilityAuditInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -348,6 +352,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     ltrAlignmentInputs,
     reviewedSourceBatchInputs,
     rootBackgroundInputs,
+    visibilityAuditInputs,
     sliderInputBoxes,
     sliderBorderDefaults,
     rootHeightInputs,
@@ -374,6 +379,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
   for (const [key, attributions, validateSource, validateRows] of [
+    ['visibilityAuditInputs', [visibilityObservationAttribution], validateVisibilityAuditInputs, validateVisibilityAuditClassifications],
     ['rootBackgroundInputs', [rootBackgroundAttribution], validateRootBackgroundEvidence, validateRootBackgroundClassifications],
     ['reviewedSourceBatchInputs', reviewedSourceBatchAttributions, validateReviewedSourceBatchAuditInputs, validateReviewedSourceBatchClassifications],
     ['alignmentFontInputs', alignmentFontAttributions, validateAlignmentFontAuditInputs, validateAlignmentFontClassifications],
@@ -8716,6 +8722,20 @@ function sourceFingerprints(root) {
     'tests/material-parity/root-background-classification-preparation.mjs',
     'tests/material-parity/root-background-classification-preparation.spec.mjs',
     'tests/material-parity/root-background-pipeline.spec.mjs',
+    'tests/material-parity/visibility-audit-source-binding.mjs',
+    'tests/material-parity/visibility-audit-source-binding.spec.mjs',
+    'tests/material-parity/visibility-audit-pipeline.spec.mjs',
+    'tests/material-parity/visibility-observation-stage.mjs',
+    'tests/material-parity/visibility-observation-stage.spec.mjs',
+    'tests/material-parity/visibility-observation-binding.mjs',
+    'tests/material-parity/visibility-observation-binding.spec.mjs',
+    'scripts/audit-material-visibility-ancestry.mjs',
+    'scripts/audit-material-visibility-population.mjs',
+    'scripts/prepare-material-visibility-observation-stages.mjs',
+    'tests/material-parity/visibility-ancestry.spec.mjs',
+    'tests/material-parity/visibility-input-population.spec.mjs',
+    'docs/material-visibility-input-population.json',
+    'docs/material-visibility-observation-stages.json',
     'scripts/audit-material-root-background-inputs.mjs',
     'docs/material-root-background-inputs.json',
     'tests/material-parity/control-line-box-reconciliation.spec.mjs',

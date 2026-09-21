@@ -3,9 +3,13 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
 import { verifyDisabledInkModuleTransition, reconcileDisabledInkModuleReceipts } from './disabled-ink-module-receipts.mjs';
+import { verifyVisibilityAuditModuleTransition } from './visibility-audit-source-binding.mjs';
 const file = 'tests/material-parity/input-equivalence-audit.mjs';
 const previousSource = execFileSync('git', ['show', `6833850:${file}`], { maxBuffer: 4 * 1024 * 1024 });
-const currentSource = readFileSync(file, 'utf8');
+const visibilityBaseline = execFileSync('git', ['show', `c090e1b:${file}`], { maxBuffer: 4 * 1024 * 1024 });
+// Keep the old guard proof intact; authenticate the newer transition before
+// projecting back to the exact source on which that proof was established.
+const currentSource = verifyVisibilityAuditModuleTransition(visibilityBaseline, readFileSync(file, 'utf8')).restoredSource;
 
 test('whole module permits only the exact decimal guard and three inventory entries', () => {
   const proof = verifyDisabledInkModuleTransition(previousSource, currentSource);

@@ -1395,11 +1395,27 @@ test('records source fingerprints and actual visual acceptance fields', () => {
     'scripts/audit-material-root-background-inputs.mjs', 'docs/material-root-background-inputs.json',
     'scripts/audit-material-line-box-normalization.mjs', 'docs/material-line-box-normalization-census.json',
   ];
+  const visibilityFiles = [
+    'tests/material-parity/visibility-audit-source-binding.mjs',
+    'tests/material-parity/visibility-audit-source-binding.spec.mjs',
+    'tests/material-parity/visibility-audit-pipeline.spec.mjs',
+    'tests/material-parity/visibility-observation-stage.mjs',
+    'tests/material-parity/visibility-observation-stage.spec.mjs',
+    'tests/material-parity/visibility-observation-binding.mjs',
+    'tests/material-parity/visibility-observation-binding.spec.mjs',
+    'scripts/audit-material-visibility-ancestry.mjs',
+    'scripts/audit-material-visibility-population.mjs',
+    'scripts/prepare-material-visibility-observation-stages.mjs',
+    'tests/material-parity/visibility-ancestry.spec.mjs',
+    'tests/material-parity/visibility-input-population.spec.mjs',
+    'docs/material-visibility-input-population.json',
+    'docs/material-visibility-observation-stages.json',
+  ];
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 395);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 395);
+  assert.equal(audit.sourceFingerprints.length, 409);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 409);
   const alignmentFiles = [
     'tests/material-parity/alignment-survey-conservation.mjs',
     'tests/material-parity/alignment-survey-conservation.spec.mjs',
@@ -1449,11 +1465,11 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   assert.ok(declaration.initializer.elements.every(ts.isStringLiteral));
   const baselineFiles = declaration.initializer.elements.map(n => n.text);
   assert.equal(baselineFiles.length, 308);
-  assert.deepEqual(audit.sourceFingerprints.map(e => e.file).filter(f => !followupFiles.includes(f) && !alignmentFiles.includes(f) && !additions.includes(f)), baselineFiles,
+  assert.deepEqual(audit.sourceFingerprints.map(e => e.file).filter(f => !followupFiles.includes(f) && !alignmentFiles.includes(f) && !additions.includes(f) && !visibilityFiles.includes(f)), baselineFiles,
     'every previous fingerprint remains in original order');
   assert.deepEqual(audit.sourceFingerprints.map(e => e.file).filter(f => !baselineFiles.includes(f)).sort(),
-    [...followupFiles, ...alignmentFiles, ...additions].sort(), 'only the independently inventoried 38 follow-up, 10 alignment and 39 additional dependencies are added');
-  for (const file of [...followupFiles, ...alignmentFiles, ...additions]) assert.deepEqual(audit.sourceFingerprints.filter(entry => entry.file === file),
+    [...followupFiles, ...alignmentFiles, ...additions, ...visibilityFiles].sort(), 'only the independently inventoried 38 follow-up, 10 alignment and 39 additional and 14 visibility dependencies are added');
+  for (const file of [...followupFiles, ...alignmentFiles, ...additions, ...visibilityFiles]) assert.deepEqual(audit.sourceFingerprints.filter(entry => entry.file === file),
     [{ file, sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') }]);
   assert.ok(audit.focusedProofs.some(entry => entry.file ===
     'tests/material-parity/followup-input-canonical-integration.spec.mjs' && entry.status !== 'missing'));

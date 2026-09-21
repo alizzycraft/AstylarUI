@@ -24,6 +24,25 @@ export function restoreInventoryAssertion(source) {
     '20da22f11520f94760ed996f0c25c6673795b9f1d4e33696c9249360c8d6a52c', 'independent inventory table changed');
   let restored = callback.getText(ast);
   restored = restored.replace(declaration.getText(ast), '');
+  const visibility = callback.body.statements.filter(n => ts.isVariableStatement(n)
+    && n.declarationList.declarations[0]?.name.getText(ast) === 'visibilityFiles');
+  if (visibility.length) {
+    assert.equal(visibility.length, 1);
+    assert.equal(createHash('sha256').update(printer.printNode(ts.EmitHint.Unspecified, visibility[0], ast)).digest('hex'),
+      'cb1b499cb94b95ae9191d818b4064599f03fd927f996af26ccaaa8bcfdae457f', 'visibility inventory table changed');
+    restored = restored.replace(visibility[0].getText(ast), '');
+    for (const [current, previous] of [
+      ['audit.sourceFingerprints.length, 409', 'audit.sourceFingerprints.length, 395'],
+      ['entry.file)).size, 409', 'entry.file)).size, 395'],
+      ['!additions.includes(f) && !visibilityFiles.includes(f)', '!additions.includes(f)'],
+      ['[...followupFiles, ...alignmentFiles, ...additions, ...visibilityFiles].sort()', '[...followupFiles, ...alignmentFiles, ...additions].sort()'],
+      ['for (const file of [...followupFiles, ...alignmentFiles, ...additions, ...visibilityFiles])', 'for (const file of [...followupFiles, ...alignmentFiles, ...additions])'],
+      ['39 additional and 14 visibility dependencies', '39 additional dependencies'],
+    ]) {
+      assert.equal(restored.split(current).length, 2, `missing or repeated visibility assertion: ${current}`);
+      restored = restored.replace(current, previous);
+    }
+  }
   for (const [current, previous] of [
     ['audit.sourceFingerprints.length, 395', 'audit.sourceFingerprints.length, 356'],
     ['entry.file)).size, 395', 'entry.file)).size, 356'],

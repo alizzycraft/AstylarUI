@@ -9,6 +9,42 @@ import { bindVisibilityObservationStages } from './visibility-observation-bindin
 import { reviewedInputClassificationContexts, classifyReviewedInput } from './reviewed-input-audit-source-binding.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
+// Prove the entire producer transition, including orchestration excluded by
+// the older mapping projections. No unchanged function is exempt from this check.
+export function verifyVisibilityAuditModuleTransition(previous, current) {
+  const before = previous.toString().replaceAll('\r\n', '\n');
+  const after = current.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(before), 'ac8d32f078d75affd9ddf7d2d77d58f61fef9a3d78de2146fd69f6aeb471c095');
+  let restored = after;
+  const replaceOnce = (from, to = '') => {
+    assert.equal(restored.split(from).length, 2, `expected exactly one visibility integration fragment: ${from}`);
+    restored = restored.replace(from, to);
+  };
+  replaceOnce("import { collectVisibilityAuditInputs, applyVisibilityAuditRows, validateVisibilityAuditInputs,\n  validateVisibilityAuditClassifications, visibilityObservationAttribution } from './visibility-audit-source-binding.mjs';\n");
+  replaceOnce('  const unreviewedDiscrepancies = collectStyleDiscrepancies(', '  const discrepancies = collectStyleDiscrepancies(');
+  replaceOnce('  const visibilityAuditInputs = collectVisibilityAuditInputs(parityReport, { root, parityPath: options.parityPath });\n  const discrepancies = applyVisibilityAuditRows(unreviewedDiscrepancies, visibilityAuditInputs);\n');
+  replaceOnce('    visibilityAuditInputs,\n');
+  replaceOnce("    ['visibilityAuditInputs', [visibilityObservationAttribution], validateVisibilityAuditInputs, validateVisibilityAuditClassifications],\n");
+  for (const file of [
+    'tests/material-parity/visibility-audit-source-binding.mjs',
+    'tests/material-parity/visibility-audit-source-binding.spec.mjs',
+    'tests/material-parity/visibility-audit-pipeline.spec.mjs',
+    'tests/material-parity/visibility-observation-stage.mjs',
+    'tests/material-parity/visibility-observation-stage.spec.mjs',
+    'tests/material-parity/visibility-observation-binding.mjs',
+    'tests/material-parity/visibility-observation-binding.spec.mjs',
+    'scripts/audit-material-visibility-ancestry.mjs',
+    'scripts/audit-material-visibility-population.mjs',
+    'scripts/prepare-material-visibility-observation-stages.mjs',
+    'tests/material-parity/visibility-ancestry.spec.mjs',
+    'tests/material-parity/visibility-input-population.spec.mjs',
+    'docs/material-visibility-input-population.json',
+    'docs/material-visibility-observation-stages.json',
+  ]) replaceOnce(`    '${file}',\n`);
+  assert.equal(restored, before, 'producer changed beyond the exact visibility integration');
+  return { previousModuleSha256: hash(before), currentModuleSha256: hash(after),
+    wholeModuleConserved: true, restoredSource: restored };
+}
 const digest = x => hash(JSON.stringify(x));
 const capture = { file: 'artifacts/material-parity/current-ancestry-audit/latest-report.json',
   sha256: 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a' };
@@ -93,4 +129,27 @@ export function validateVisibilityAuditClassifications(evidence, rows) {
     assert.equal(actual.reduce((n, r) => n + r.occurrences, 0), 530);
   } catch (error) { return [`visibility classification coverage failed: ${error}`]; }
   return [];
+}
+
+// Apply after ordinary aggregation, so an exact complete predecessor digest
+// protects raw values, authored examples, ordering and all case membership.
+export function applyVisibilityAuditRows(rows, evidence) {
+  if (evidence?.binding?.status !== 'bound') {
+    assert.ok(!rows.some(r => r.attribution === visibilityObservationAttribution));
+    return rows;
+  }
+  assert.deepEqual(validateVisibilityAuditInputs(evidence), []);
+  const expected = new Map(evidence.groups.map(g => [signature(g), g]));
+  const seen = new Set();
+  const output = rows.map(row => {
+    const key = signature(row), group = expected.get(key);
+    if (!group) return row;
+    assert.ok(!seen.has(key), 'duplicate visibility predecessor'); seen.add(key);
+    assert.equal(row.attribution, 'unresolved', 'visibility cannot replace another review');
+    assert.equal(digest(row), group.reviewEvidence.originalCompleteRowSha256, 'complete visibility predecessor changed');
+    return { ...row, ...Object.fromEntries([...metadata, 'reviewedCases'].map(field => [field, structuredClone(group[field])])) };
+  });
+  assert.equal(seen.size, 15, 'visibility predecessor population incomplete');
+  assert.deepEqual(validateVisibilityAuditClassifications(evidence, output), []);
+  return output;
 }
