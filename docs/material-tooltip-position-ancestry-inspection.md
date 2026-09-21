@@ -76,3 +76,32 @@ review: viewport-edge fallback, scrolling, clipping, trigger resizing, and overl
 ownership cannot be inferred from its nominal centered layout. This follow-up
 does not claim that the historical calibration identifies the responsible core
 defect or proves the currently reported offset's cause.
+
+## Focused classification proof
+
+`material-tooltip-position-composition.json` now records all 18 authenticated
+ancestry observations and classifies this positioning substitution as an
+application/plugin authoring defect. The decisive difference is flow ownership:
+the reference pane is absolute inside a fixed overlay, while the relative
+candidate is a flex item in the local trigger wrapper. A similar nominal position
+cannot make those placement inputs equivalent. No scalar position keyword is
+being treated as sufficient evidence by itself.
+
+The owning proof checks exact ancestry linkage, unique keys, reference generated
+classes, candidate IDs, anchor layout/dimensions, explicit versus omitted
+positions, and absence of candidate transform declarations. Ten negative controls
+reject changed containing blocks, mappings, linkage, layout, and absence claims.
+Fresh collection must equal the checked-in machine-readable report.
+
+Verification: `node --test tests/material-parity/tooltip-position-composition.spec.mjs
+tests/material-parity/tooltip-position-history.spec.mjs` passed 3/3, exit 0,
+659.5546 ms. The first serialized-report comparison exposed JavaScript-only
+undefined fields omitted by JSON serialization; optional structural metadata now
+uses explicit nulls. CSS property presence/value pairs remain unchanged. The
+initial failure is not a rendering finding.
+
+Canonical integration remains pending: the existing canonical regeneration is
+still live and its producer/dependencies have not been changed. This focused
+classification does not reduce the canonical unresolved count yet. Core layout
+and overlay support still require equivalent-input proof; no shared snackbar
+cause or rendering equivalence is claimed.
