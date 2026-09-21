@@ -16,6 +16,8 @@ const report = 'docs/material-text-align-ancestry.json';
 test('alignment integration permits only reviewed orchestration, precise normalization and snapshot conservation', () => {
   const result = verifyAlignmentAuditProjection(old(main), read(main));
   assert.equal(result.retainedStatements, 230);
+  assert.equal(result.disabledInkGuardTransition.decimalGuardApplied, true);
+  assert.equal(result.disabledInkGuardTransition.colorValuesEquivalent, false);
   assert.equal(result.normalizationTransition.colorValuesEquivalent, false);
   assert.notEqual(result.normalizationTransition.historical.sha256, result.normalizationTransition.current.sha256);
   assert.throws(() => verifyAlignmentAuditProjection(old(main), old(main)), /normalization changed/);

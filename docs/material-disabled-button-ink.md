@@ -132,3 +132,25 @@ Result: **4/4 passed**, no failures or skips, **3,771.8339 ms**, including the
 complete 60-owner replay. This helper is prepared but not yet wired into the
 historical source projection. The active full legacy run retains its original
 inputs; the production audit classifier and canonical evidence remain unchanged.
+
+### Classifier integration after the full legacy run
+
+The full legacy run at `0a50c92` terminated with **387/388 passing**, one failure,
+no skips or cancellations, **1,933,488.1386 ms**. Its retained TAP file is
+`artifacts/material-parity/legacy-full-0a50c92.tap`, SHA-256
+`b211ccf652d92d60036a34236c84574fed0396bcfaae8a2e862845d843ab442a`.
+The sole failure is the stale source-inventory expectation:
+392 actual versus 356 expected. The nine migrated case-index assertions passed.
+
+After that run ended, the exact decimal-channel guard was applied to the audit
+classifier. Historical source conservation now restores only this authenticated
+guard before comparing all other retained statements. The three focused
+transition/replay files are included in the audit source receipts. The replay
+requires that the actual production declaration equals the reviewed correction;
+all 60 original-owner classifications and ten rejection controls pass.
+
+Command: `node --max-old-space-size=1024 --test --test-concurrency=1 tests/material-parity/disabled-ink-source-transition.spec.mjs tests/material-parity/disabled-ink-precision-preparation.spec.mjs tests/material-parity/alignment-survey-conservation.spec.mjs tests/material-parity/explicit-cursor-census-conservation.spec.mjs`.
+Result: **10/10 passed**, no failures or skips, **22,654.8507 ms**, rerun after
+adding the three source-receipt entries. Canonical regeneration and whole-record
+conservation are still required. This is an audit-classifier correction; no
+renderer, plugin, comparison fixture or reference color was changed.

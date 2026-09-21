@@ -6962,7 +6962,7 @@ function reviewedButtonPaintInput(entry, property, ref, parent, ast, stages, ref
   }
   if (property === 'color' && entry.family === 'button' && ast.authored.id === 'button-disabled' &&
       ast.authored.disabled === true && Object.hasOwn(parent.attributes ?? {}, 'disabled') &&
-      /^rgba\(\d+,\d+,\d+,0\.38\)$/.test(stages.reference.color) && referenceParent.color === stages.reference.color &&
+      /^rgba\(\d+(?:\.\d+)?,\d+(?:\.\d+)?,\d+(?:\.\d+)?,0\.38\)$/.test(stages.reference.color) && referenceParent.color === stages.reference.color &&
       /^rgba\(\d+,\d+,\d+,1\)$/.test(stages.normal.color) && stages.effective.color === stages.normal.color && stages.painted.color === stages.normal.color) {
     const refRules = rulesAt(parent, 'reference').filter((rule) => rule.active === true &&
       rule.selector === '.mat-mdc-unelevated-button[disabled], .mat-mdc-unelevated-button.mat-mdc-button-disabled' &&
@@ -8849,6 +8849,9 @@ function sourceFingerprints(root) {
     'scripts/audit-material-slider-border-defaults.mjs',
     'docs/material-slider-border-defaults.json',
     'tests/material-parity/supplemental-capture-evidence.spec.mjs',
+    'tests/material-parity/disabled-ink-source-transition.mjs',
+    'tests/material-parity/disabled-ink-source-transition.spec.mjs',
+    'tests/material-parity/disabled-ink-precision-preparation.spec.mjs',
   ];
   return files.map((file) => ({ file, sha256: createHash('sha256')
     .update(readFileSync(path.resolve(root, file), 'utf8').replace(/\r\n/g, '\n')).digest('hex') }));
