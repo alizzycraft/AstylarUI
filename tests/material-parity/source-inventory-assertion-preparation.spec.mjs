@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { buildMaterialInputAudit } from './input-equivalence-audit.mjs';
+import { restoreInventoryAssertion } from './case-index-assertion-migration.mjs';
 
 // Independently enumerate additions missing from the existing 356-file test.
 const additions = [
@@ -31,7 +32,7 @@ const additions = [
 ];
 assert.equal(additions.length, 39); assert.equal(new Set(additions).size, 39);
 const file = 'tests/material-parity/input-equivalence-audit.spec.mjs';
-const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+const source = restoreInventoryAssertion(readFileSync(file, 'utf8')).replaceAll('\r\n', '\n');
 const ast = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
 const target = ast.statements.find(n => ts.isExpressionStatement(n) && ts.isCallExpression(n.expression) &&
   n.expression.arguments[0]?.text === 'records source fingerprints and actual visual acceptance fields');
@@ -45,6 +46,7 @@ function prepare(original) {
     ['!followupFiles.includes(f) && !alignmentFiles.includes(f)', '!followupFiles.includes(f) && !alignmentFiles.includes(f) && !additions.includes(f)'],
     ['[...followupFiles, ...alignmentFiles].sort()', '[...followupFiles, ...alignmentFiles, ...additions].sort()'],
     ['for (const file of [...followupFiles, ...alignmentFiles])', 'for (const file of [...followupFiles, ...alignmentFiles, ...additions])'],
+    ['38 follow-up and 10 alignment dependencies', '38 follow-up, 10 alignment and 39 additional dependencies'],
   ];
   for (const [before, after] of edits) {
     assert.equal(updated.split(before).length, 2); updated = updated.replace(before, after);

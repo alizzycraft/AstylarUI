@@ -7,7 +7,7 @@ const file = 'tests/material-parity/input-equivalence-audit.spec.mjs';
 const previous = execFileSync('git', ['show', `6833850:${file}`], { maxBuffer: 8 * 1024 * 1024 });
 const current = readFileSync(file, 'utf8');
 
-test('entire legacy suite conserves every statement except nine authenticated receipt checks', () => {
+test('entire legacy suite conserves statements outside nine receipt checks and the exact inventory extension', () => {
   const result = verifyCaseIndexAssertionMigration(previous, current);
   assert.equal(result.replacedReceiptAssertions, 9);
   assert.equal(result.allOtherStatementsConserved, true);
@@ -18,6 +18,9 @@ test('migration proof rejects unrelated assertion changes, missing checks and wr
     current.replace('assert.equal(index.sourceFingerprints.length, 11)', 'assert.equal(index.sourceFingerprints.length, 10)'),
     current.replace("assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index);", ''),
     current.replace("assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index)", "assertHistoricalCaseIndexSources('docs/material-root-height-audit.json', index)"),
+    current.replace('audit.sourceFingerprints.length, 395', 'audit.sourceFingerprints.length, 394'),
+    current.replace("'reviewed-source-batch-pipeline.spec.mjs',", "'wrong-source.spec.mjs',"),
+    current.replace(' && !additions.includes(f)', ''),
   ]) {
     assert.notEqual(changed, current); assert.throws(() => verifyCaseIndexAssertionMigration(previous, changed));
   }

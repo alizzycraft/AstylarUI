@@ -1373,11 +1373,33 @@ test('matching text and descendant IDs do not waive a different framework host t
 });
 
 test('records source fingerprints and actual visual acceptance fields', () => {
+  const additions = [
+    ...['reviewed-source-batch-audit-source-binding.mjs', 'reviewed-source-batch-audit-source-binding.spec.mjs',
+      'reviewed-source-batch-pipeline.spec.mjs', 'reviewed-source-batch-observation-binding.mjs',
+      'reviewed-source-batch-observation-binding.spec.mjs', 'reviewed-source-batch-transition.mjs',
+      'reviewed-source-batch-transition.spec.mjs', 'reviewed-source-batch.spec.mjs',
+      'reviewed-batch-motion-replay.mjs', 'motion-source-conservation.mjs', 'motion-source-conservation.spec.mjs',
+      'alignment-adapter-receipt-source.mjs', 'alignment-adapter-receipt-source.spec.mjs',
+      'alignment-font-audit-source-binding.spec.mjs', 'text-align-audit-source-binding.spec.mjs',
+      'ltr-alignment-audit-source-binding.spec.mjs', 'vertical-align-canonical-plan.spec.mjs',
+      'text-align-canonical-plan.spec.mjs', 'additional-control-font-style-attribution.spec.mjs',
+      'audit-normalization-contracts.mjs', 'audit-normalization-contracts.spec.mjs',
+      'control-line-box-normalization.mjs', 'root-background-classification-preparation.mjs',
+      'root-background-classification-preparation.spec.mjs', 'root-background-pipeline.spec.mjs',
+      'control-line-box-reconciliation.spec.mjs', 'control-line-box-normalization-transition.spec.mjs',
+      'line-box-normalization-census.spec.mjs', 'gap-survey-source-replay.mjs',
+      'gap-survey-source-replay.spec.mjs', 'caret-normalization-transition.spec.mjs',
+      'disabled-ink-source-transition.mjs', 'disabled-ink-source-transition.spec.mjs',
+      'disabled-ink-precision-preparation.spec.mjs'].map(file => `tests/material-parity/${file}`),
+    'scripts/prepare-material-reviewed-source-batch.mjs',
+    'scripts/audit-material-root-background-inputs.mjs', 'docs/material-root-background-inputs.json',
+    'scripts/audit-material-line-box-normalization.mjs', 'docs/material-line-box-normalization-census.json',
+  ];
   const report = parityReport({}, {});
   const audit = buildMaterialInputAudit(report);
   assert.equal(audit.coverage.visualParityGreen, true);
-  assert.equal(audit.sourceFingerprints.length, 356);
-  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 356);
+  assert.equal(audit.sourceFingerprints.length, 395);
+  assert.equal(new Set(audit.sourceFingerprints.map(entry => entry.file)).size, 395);
   const alignmentFiles = [
     'tests/material-parity/alignment-survey-conservation.mjs',
     'tests/material-parity/alignment-survey-conservation.spec.mjs',
@@ -1427,11 +1449,11 @@ test('records source fingerprints and actual visual acceptance fields', () => {
   assert.ok(declaration.initializer.elements.every(ts.isStringLiteral));
   const baselineFiles = declaration.initializer.elements.map(n => n.text);
   assert.equal(baselineFiles.length, 308);
-  assert.deepEqual(audit.sourceFingerprints.map(e => e.file).filter(f => !followupFiles.includes(f) && !alignmentFiles.includes(f)), baselineFiles,
+  assert.deepEqual(audit.sourceFingerprints.map(e => e.file).filter(f => !followupFiles.includes(f) && !alignmentFiles.includes(f) && !additions.includes(f)), baselineFiles,
     'every previous fingerprint remains in original order');
   assert.deepEqual(audit.sourceFingerprints.map(e => e.file).filter(f => !baselineFiles.includes(f)).sort(),
-    [...followupFiles, ...alignmentFiles].sort(), 'only the independently inventoried 38 follow-up and 10 alignment dependencies are added');
-  for (const file of [...followupFiles, ...alignmentFiles]) assert.deepEqual(audit.sourceFingerprints.filter(entry => entry.file === file),
+    [...followupFiles, ...alignmentFiles, ...additions].sort(), 'only the independently inventoried 38 follow-up, 10 alignment and 39 additional dependencies are added');
+  for (const file of [...followupFiles, ...alignmentFiles, ...additions]) assert.deepEqual(audit.sourceFingerprints.filter(entry => entry.file === file),
     [{ file, sha256: createHash('sha256').update(readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex') }]);
   assert.ok(audit.focusedProofs.some(entry => entry.file ===
     'tests/material-parity/followup-input-canonical-integration.spec.mjs' && entry.status !== 'missing'));

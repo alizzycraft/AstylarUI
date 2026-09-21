@@ -11,10 +11,37 @@ const printer = ts.createPrinter({ removeComments: true, newLine: ts.NewLineKind
 const canonical = ast => printer.printFile(ast);
 const tests = ast => ast.statements.filter(n => ts.isExpressionStatement(n) && ts.isCallExpression(n.expression) && n.expression.expression.getText(ast) === 'test');
 
+// Authenticate the independently enumerated 39-file extension, then restore
+// only its five membership/count expressions and diagnostic before comparing the whole suite.
+export function restoreInventoryAssertion(source) {
+  const ast = parse(source);
+  const targets = tests(ast).filter(n => n.expression.arguments[0]?.text === 'records source fingerprints and actual visual acceptance fields');
+  assert.equal(targets.length, 1);
+  const callback = targets[0].expression.arguments[1];
+  const declaration = callback.body.statements[0];
+  const printed = printer.printNode(ts.EmitHint.Unspecified, declaration, ast);
+  assert.equal(createHash('sha256').update(printed).digest('hex'),
+    '20da22f11520f94760ed996f0c25c6673795b9f1d4e33696c9249360c8d6a52c', 'independent inventory table changed');
+  let restored = callback.getText(ast);
+  restored = restored.replace(declaration.getText(ast), '');
+  for (const [current, previous] of [
+    ['audit.sourceFingerprints.length, 395', 'audit.sourceFingerprints.length, 356'],
+    ['entry.file)).size, 395', 'entry.file)).size, 356'],
+    ['!followupFiles.includes(f) && !alignmentFiles.includes(f) && !additions.includes(f)', '!followupFiles.includes(f) && !alignmentFiles.includes(f)'],
+    ['[...followupFiles, ...alignmentFiles, ...additions].sort()', '[...followupFiles, ...alignmentFiles].sort()'],
+    ['for (const file of [...followupFiles, ...alignmentFiles, ...additions])', 'for (const file of [...followupFiles, ...alignmentFiles])'],
+    ['38 follow-up, 10 alignment and 39 additional dependencies', '38 follow-up and 10 alignment dependencies'],
+  ]) {
+    assert.equal(restored.split(current).length, 2, `missing or repeated inventory assertion: ${current}`);
+    restored = restored.replace(current, previous);
+  }
+  return ast.text.slice(0, callback.getStart(ast)) + restored + ast.text.slice(callback.end);
+}
+
 // Restore only the nine exact receipt checks and remove their one new import.
 // The entire reconstructed suite, not just selected membership tests, must match.
 export function verifyCaseIndexAssertionMigration(previous, current) {
-  const before = parse(previous), after = parse(current), edits = [], seen = new Set();
+  const before = parse(previous), after = parse(restoreInventoryAssertion(current)), edits = [], seen = new Set();
   const imports = after.statements.filter(n => ts.isImportDeclaration(n) && n.moduleSpecifier.text === './historical-case-index-source-assertion.mjs');
   assert.equal(imports.length, 1);
   assert.equal(imports[0].importClause?.name, undefined);
@@ -44,7 +71,7 @@ export function verifyCaseIndexAssertionMigration(previous, current) {
   assert.deepEqual([...seen].sort(), [...caseIndexReceiptFiles].sort());
   let restored = after.text;
   for (const edit of edits.sort((a, b) => b.start - a.start)) restored = restored.slice(0, edit.start) + edit.text + restored.slice(edit.end);
-  assert.equal(canonical(parse(restored)), canonical(before), 'suite changed beyond nine receipt assertions and one import');
+  assert.equal(canonical(parse(restored)), canonical(before), 'suite changed beyond nine receipt assertions, one import and the authenticated inventory extension');
   return { replacedReceiptAssertions: seen.size, allOtherStatementsConserved: true,
     originalSuiteAstSha256: createHash('sha256').update(canonical(before)).digest('hex') };
 }
