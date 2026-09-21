@@ -6,13 +6,13 @@ population. It does not claim completion of the larger input-equivalence audit.
 | Status | Groups | Observations |
 | --- | ---: | ---: |
 | Producer integrated; canonical conservation pending | 6 | 316 |
-| Classified in standalone proof; integration pending | 9 | 428 |
+| Classified in standalone proof; integration pending | 10 | 496 |
 | Inspected; classification pending | 1 | 60 |
-| Investigation pending | 42 | 2,146 |
+| Investigation pending | 41 | 2,078 |
 
 The six producer-integrated groups are grid-list root/tiles, divider and switch
 placement. Their running regeneration must be conserved before acceptance.
-The nine standalone groups are tooltip, tabs and seven static-position
+The ten standalone groups are tooltip, tabs, stepper and seven static-position
 observation-stage cases. Sort focus placement has complete inspection evidence
 but is not represented as an integrated classification. Every other row remains
 explicitly pending, including relative-position omissions and overlay wrappers.

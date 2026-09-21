@@ -1,0 +1,2464 @@
+{
+  "schemaVersion": 1,
+  "kind": "stepper-position-substitution",
+  "population": {
+    "file": "docs/material-position-input-population.json",
+    "sha256": "71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff"
+  },
+  "priorRowSha256": "a16e787c3ba731814df80291bfaed094932932d1bc1f8fc5ffb5b6eeb00570d5",
+  "observations": [
+    {
+      "case": "static:stepper@light/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/light/desktop/reference-input-tree.json",
+          "sha256": "0614cfcb92f59683ea5e95f1baba33238a0996f2f4af755f1dcff6d3b39c999f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/light/desktop/astylar-input-tree.json",
+          "sha256": "08e2488a461f0fd4f10361c6b991bb31d0dc2f4512522270f6a9f7933c6845ce"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:stepper@light/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/light/tablet/reference-input-tree.json",
+          "sha256": "445d3c85a266247645ca875e42b0187c3519b4474e9b6403235d745509fa85f4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/light/tablet/astylar-input-tree.json",
+          "sha256": "0476d5574d3e4cc00a166efe18a1643fb06bfec2040358d13d096b1fb6b84bb2"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "69.5%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:stepper@light/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/light/mobile/reference-input-tree.json",
+          "sha256": "c48f6f4154b6364f77b693499518e1566ecb9fd2396c2b0e715f65d5724a4af4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/light/mobile/astylar-input-tree.json",
+          "sha256": "af3efbb622478072d9d69c1c8d942ca0ba98f063f197e855e2d8b2f3826d8d45"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "90px",
+          "connectorWidth": "15.1%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:stepper@dark/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/dark/desktop/reference-input-tree.json",
+          "sha256": "b41b6e939a883c15acd2ee1e5482a0ce15a622c34ca79a258f84cf8bd81d896f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/dark/desktop/astylar-input-tree.json",
+          "sha256": "7212a77750612c40bbd2eddfffa8919d6f46c02317d19162ca44826c598a9341"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:stepper@dark/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/dark/tablet/reference-input-tree.json",
+          "sha256": "d09abb512f142ac6fdf0efa74ea41b77c8784550ad96293667bd18466449d21e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/dark/tablet/astylar-input-tree.json",
+          "sha256": "5c63534b20b4ac0842bd774640079da2e713e58b1b8d46e6b31bac7fa6c43c15"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "69.5%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:stepper@dark/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/dark/mobile/reference-input-tree.json",
+          "sha256": "2d85a0c470ba8bb8d126b6e5ef79235df2be9958e8f9344ce8ff32631b840ee6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/dark/mobile/astylar-input-tree.json",
+          "sha256": "38476ce19e32291e0649e447c048f05e19f36f1e878a109d8dd9817d91540846"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "90px",
+          "connectorWidth": "15.1%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:stepper@contrast/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/contrast/desktop/reference-input-tree.json",
+          "sha256": "82c3e572b9bc04297f6d02b78c23511578ac7ae7ed6fde0163f3f955eccd8fe7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/contrast/desktop/astylar-input-tree.json",
+          "sha256": "321cd7c0cc6f4b6a61cac699dd5950bffca10276091cbf04d894e65928f87478"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:stepper@contrast/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/contrast/tablet/reference-input-tree.json",
+          "sha256": "af87393812a6e15d24b5fbd96a39990481f828487ef119d9ff32852542d3736b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/contrast/tablet/astylar-input-tree.json",
+          "sha256": "3536ae34dfc211a4a75d6b3bae761a043dde1c0f9d01fcda0532e1146bd500c5"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "69.5%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:stepper@contrast/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/contrast/mobile/reference-input-tree.json",
+          "sha256": "1c4f5fd6e601f59e9b461d04c969014a3f272b8f5bff2ffedda49905bc0c1369"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/contrast/mobile/astylar-input-tree.json",
+          "sha256": "be91ffe50b9f6f8f28f30a3cdd4b1152412e50397a4dd7b13b08c88453b3cc75"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "90px",
+          "connectorWidth": "15.1%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:stepper@custom/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/custom/desktop/reference-input-tree.json",
+          "sha256": "cdd4333e370164effbc5692b592233bc0ed0c386d50b4cbd4e3a3e410f00a0c4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/custom/desktop/astylar-input-tree.json",
+          "sha256": "8be77a256d309e78c04fa22820820e7f9f8a604396382b3a6edd5ee3f159810d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:stepper@custom/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/custom/tablet/reference-input-tree.json",
+          "sha256": "2199db33f88b3a072eacb8e74488ea79c05d3c1545adc8ca1b2a04315396f533"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/custom/tablet/astylar-input-tree.json",
+          "sha256": "cfdde66d88e06b2f8ae3ceb59a38649703be9f67084783fb76fa166f152a0222"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "69.5%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:stepper@custom/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/custom/mobile/reference-input-tree.json",
+          "sha256": "f8fc65a423a90228cefeadee4e9d8763c838c21798b527d28cbfb560645f9c53"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/stepper/custom/mobile/astylar-input-tree.json",
+          "sha256": "5bd5113f69d1bccfd6ad5b261fa43dc7d7fb55b188fe4f4d5878169b4af44c5c"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "90px",
+          "connectorWidth": "15.1%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "75f03a147fba2feb6f9f7ed7af1083431a8f972a1846f11ca7f1af167baa62e5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "a53cf18cd326441917a8f3c8961fcddebabb334af424a8606ac3151d1cdacaaa"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "877dbdba93d1794f4d75b243715575322bb8395c12c532b40c58620abc8e75c1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "c95afe54d46e2dd4234ca8499217505e5137f1b4ef2d2a741be282960522005c"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "dce742547b8b18803240f5386843d6252ae13e8753347fe0dd14f342f442ce0a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "b2c23f49603c9222c7a69539e8b89a67f033c7670bbc034e68b4d9f35250fba5"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "12485d0aa3112e1edc8830cde1e191b3a840f3251b268e4263e13987468662d8"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "53e1506c92d41695a3b480b290a31c3954e7f5d22348e26614734cefafc0d545"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "46d3c598b346a2ea1ee867d413d0d87138b6144e6002194730be719befef2e5c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "53e1506c92d41695a3b480b290a31c3954e7f5d22348e26614734cefafc0d545"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "0614cfcb92f59683ea5e95f1baba33238a0996f2f4af755f1dcff6d3b39c999f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "b6ec48688de0c7661f32aaf08e064762709c45e440a860584e421021ff16edbf"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "0614cfcb92f59683ea5e95f1baba33238a0996f2f4af755f1dcff6d3b39c999f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "08e2488a461f0fd4f10361c6b991bb31d0dc2f4512522270f6a9f7933c6845ce"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "75f03a147fba2feb6f9f7ed7af1083431a8f972a1846f11ca7f1af167baa62e5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "a53cf18cd326441917a8f3c8961fcddebabb334af424a8606ac3151d1cdacaaa"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "877dbdba93d1794f4d75b243715575322bb8395c12c532b40c58620abc8e75c1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "c95afe54d46e2dd4234ca8499217505e5137f1b4ef2d2a741be282960522005c"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "dce742547b8b18803240f5386843d6252ae13e8753347fe0dd14f342f442ce0a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "b2c23f49603c9222c7a69539e8b89a67f033c7670bbc034e68b4d9f35250fba5"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "12485d0aa3112e1edc8830cde1e191b3a840f3251b268e4263e13987468662d8"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "53e1506c92d41695a3b480b290a31c3954e7f5d22348e26614734cefafc0d545"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "46d3c598b346a2ea1ee867d413d0d87138b6144e6002194730be719befef2e5c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "53e1506c92d41695a3b480b290a31c3954e7f5d22348e26614734cefafc0d545"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "0614cfcb92f59683ea5e95f1baba33238a0996f2f4af755f1dcff6d3b39c999f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "b6ec48688de0c7661f32aaf08e064762709c45e440a860584e421021ff16edbf"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@light/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "0614cfcb92f59683ea5e95f1baba33238a0996f2f4af755f1dcff6d3b39c999f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/light/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "08e2488a461f0fd4f10361c6b991bb31d0dc2f4512522270f6a9f7933c6845ce"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "a1e15749d08eccd81c9342c945e05b071923bdfa6b573bcf2148611277eaab72"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "ccf3aa7966ec36bac88c8f84e0c49fefb4dd50536abb40de9dc10f8053f3aaf1"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "c9eb27b224e1449be3517642aae51cc1405bedba9a8d0e56a328ef43c65c5e0f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "cdffe448f4b54b0b21053ff5500f4911b0ec9d5b3641d3023837da73857ebf07"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "cabe3570bf5f4228c167357816189eb3a9604986d103fd7b34d0f933bdd9422a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "46e44ee7b0b4828dd21dea8d83050abace111703233b506db878b93e0859ed01"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "4e70eb0857214bae678e7ebfcccb0857737fc24f3700621311282686dd86e36e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "351aa9f1fd05ebf9845b4c1f0bf927f6654d4abdbbf3fa22108b7a47295a59c8"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "87113cde0013884f236c46fc8be77c2af99bac0e986c44eca0406888adb337b1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "351aa9f1fd05ebf9845b4c1f0bf927f6654d4abdbbf3fa22108b7a47295a59c8"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "b41b6e939a883c15acd2ee1e5482a0ce15a622c34ca79a258f84cf8bd81d896f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "d66d7b9f757fc669c1e58a91abef231fbec086bd53b02b4911b72c92ace6a308"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "b41b6e939a883c15acd2ee1e5482a0ce15a622c34ca79a258f84cf8bd81d896f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "7212a77750612c40bbd2eddfffa8919d6f46c02317d19162ca44826c598a9341"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "a1e15749d08eccd81c9342c945e05b071923bdfa6b573bcf2148611277eaab72"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "ccf3aa7966ec36bac88c8f84e0c49fefb4dd50536abb40de9dc10f8053f3aaf1"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "c9eb27b224e1449be3517642aae51cc1405bedba9a8d0e56a328ef43c65c5e0f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "cdffe448f4b54b0b21053ff5500f4911b0ec9d5b3641d3023837da73857ebf07"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "cabe3570bf5f4228c167357816189eb3a9604986d103fd7b34d0f933bdd9422a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "46e44ee7b0b4828dd21dea8d83050abace111703233b506db878b93e0859ed01"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "4e70eb0857214bae678e7ebfcccb0857737fc24f3700621311282686dd86e36e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "351aa9f1fd05ebf9845b4c1f0bf927f6654d4abdbbf3fa22108b7a47295a59c8"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "87113cde0013884f236c46fc8be77c2af99bac0e986c44eca0406888adb337b1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "351aa9f1fd05ebf9845b4c1f0bf927f6654d4abdbbf3fa22108b7a47295a59c8"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "b41b6e939a883c15acd2ee1e5482a0ce15a622c34ca79a258f84cf8bd81d896f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "d66d7b9f757fc669c1e58a91abef231fbec086bd53b02b4911b72c92ace6a308"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@dark/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "b41b6e939a883c15acd2ee1e5482a0ce15a622c34ca79a258f84cf8bd81d896f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/dark/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "7212a77750612c40bbd2eddfffa8919d6f46c02317d19162ca44826c598a9341"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "35px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "840142aba53dd855f1742349d24543cc91ee4f064d17e14b4905369665ce0004"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "26c449241ef97002fafc6c2c739f73b57f7f24df1d2dac925912170772d7cd22"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "f0f644588b8220aeee4548819fdca25aeff5b4675b431dbc99efcba0c838d04a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "068b4c6c586befc8e1a61df94fa55258b1f120456ed901b382364fd46674e17c"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "7bdb76ef4ffa792e0d66b1ebd0ee1201dbf69ab3c7dacc7e52832be5b0abcdc8"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "20907a592a09cb1412967e0d96b10dbdbb478a02925234f39100421a050616c9"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "50a420672ec78332b0a40bf99f3d5d4cb24113f86ee1c49ff7fb1eed9f3a7635"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "81fc07bf5f58fa80f7df3cdf82561d39f656a356e844effca245bbf29d174009"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "79c3135d7fc5ddea5dd9870b44955a6ae47021d5bc318b62af64a4810ba1939d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "81fc07bf5f58fa80f7df3cdf82561d39f656a356e844effca245bbf29d174009"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "82c3e572b9bc04297f6d02b78c23511578ac7ae7ed6fde0163f3f955eccd8fe7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "3f0d3150469978d697dd9abf8df11d35e4172183a18e352c830d36089aae8ba8"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "82c3e572b9bc04297f6d02b78c23511578ac7ae7ed6fde0163f3f955eccd8fe7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "321cd7c0cc6f4b6a61cac699dd5950bffca10276091cbf04d894e65928f87478"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "840142aba53dd855f1742349d24543cc91ee4f064d17e14b4905369665ce0004"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "cbb8942aa1646a2afda11facf1140c443462a0d937cc148a46478ef4f1c5919e"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "f0f644588b8220aeee4548819fdca25aeff5b4675b431dbc99efcba0c838d04a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "725bca73f032db4c72b83f8db39b98920f098b9a1eb231cb9f0a2ba980201382"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "7bdb76ef4ffa792e0d66b1ebd0ee1201dbf69ab3c7dacc7e52832be5b0abcdc8"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "1ab3812b7fd3b09ed4f6bac2878ce937e3455a0d5ba0aca0ad17b1ff4adaccf0"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "50a420672ec78332b0a40bf99f3d5d4cb24113f86ee1c49ff7fb1eed9f3a7635"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "8e328425413fbce26a628c026a4294e46a7094980bdffacfb7b61c248ee19635"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "79c3135d7fc5ddea5dd9870b44955a6ae47021d5bc318b62af64a4810ba1939d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "8e328425413fbce26a628c026a4294e46a7094980bdffacfb7b61c248ee19635"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "82c3e572b9bc04297f6d02b78c23511578ac7ae7ed6fde0163f3f955eccd8fe7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "bba5c8d118501e7551683c6b3e75ac0fad1ad0edf38e8c290e4e1fc97f704cee"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@contrast/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "82c3e572b9bc04297f6d02b78c23511578ac7ae7ed6fde0163f3f955eccd8fe7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/contrast/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "401a6d218aa5a0f791891ce9ff3686b13fec0ea9495858cd557693f65dcd789b"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "21px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "d2bc2470812d5988b237fa2b28e2d88e1e2d395ce3736eb59773a489672764f7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "a5f8bc5a6bd30ebca41f84ec5abdfdad13d2c6306d024ebad1055e75ba776152"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "5c1204eba27d4f84c2e5d05d821868df08542618c808de7dd512e3cfe0d7cad1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "a9828ce46a127986cd6d95b9933b668672f7495dabbb76928dcdff28092a4b23"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "91bd628ba4fff19177f8973cbd1d2db45937a245d40fb99be9682574bf9524f5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "cd1ec26ba9b7417f0e9c8f3e7c9ced495d9f36df44703c84650035e05d381b7b"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "ed8c74abad07b2735c046c25ecc301799ee8a49686698803110fd3f18c0f6b7d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "4fad10daa875f21b67e8fd0a99b8ecb37d8bec97f23b450a479bac774c029bae"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "0548d4b411b05a013804f58f4199af3c2f028544d5aff20425ee9ebbcfd8fa21"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "4fad10daa875f21b67e8fd0a99b8ecb37d8bec97f23b450a479bac774c029bae"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "cdd4333e370164effbc5692b592233bc0ed0c386d50b4cbd4e3a3e410f00a0c4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "2dcdf8377731c8b5b072eb46dc30169062bc9c0ae130bce70d44a5ea4aeaf163"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "cdd4333e370164effbc5692b592233bc0ed0c386d50b4cbd4e3a3e410f00a0c4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "8be77a256d309e78c04fa22820820e7f9f8a604396382b3a6edd5ee3f159810d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "d2bc2470812d5988b237fa2b28e2d88e1e2d395ce3736eb59773a489672764f7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "8119140b2685650131028f1f8502cfa7580abb20520e3eba176b5c6d47f5e4f0"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "5c1204eba27d4f84c2e5d05d821868df08542618c808de7dd512e3cfe0d7cad1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "2dba4964b88d979522715764e52ed7d0c950f81909b6d1c6b71db696733570f2"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "91bd628ba4fff19177f8973cbd1d2db45937a245d40fb99be9682574bf9524f5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "91a55517fbc5c7985c2ff80bfa6415bac58402cd6a409586b019cde2728edd02"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "ed8c74abad07b2735c046c25ecc301799ee8a49686698803110fd3f18c0f6b7d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "dc775c5242833bd6100775e37c7e70383dd1705c12e9afab6627a6e62f5598a4"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "0548d4b411b05a013804f58f4199af3c2f028544d5aff20425ee9ebbcfd8fa21"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "dc775c5242833bd6100775e37c7e70383dd1705c12e9afab6627a6e62f5598a4"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "cdd4333e370164effbc5692b592233bc0ed0c386d50b4cbd4e3a3e410f00a0c4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "f9c26e77a6347ffac559928294c0d51ef807e8c83675bb211eed7fc81eb7ae08"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:stepper@custom/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "cdd4333e370164effbc5692b592233bc0ed0c386d50b4cbd4e3a3e410f00a0c4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/stepper/custom/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "191e7ac95d82a7773cf30b7d57ed3e18f868351aabfb17efe575ff470cad5a44"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "head": "frame/2/0/0/0",
+          "connector": "frame/2/0/0/0/1",
+          "layout": "in-flow headers with flex-growing zero-height border connector"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "head": "root/0/2/0/0",
+          "headerWidth": "130px",
+          "startLeft": "-24px",
+          "endRight": "-24px",
+          "connectorTop": "32px",
+          "connectorLeft": "89px",
+          "connectorWidth": "73.2%"
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored header and connector layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    }
+  ],
+  "counts": {
+    "groups": 1,
+    "observations": 68
+  },
+  "canonicalAttributionChanged": false
+}

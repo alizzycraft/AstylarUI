@@ -615,8 +615,11 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "a16e787c3ba731814df80291bfaed094932932d1bc1f8fc5ffb5b6eeb00570d5",
-      "status": "investigation-pending",
-      "source": null
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-stepper-position-substitution.json",
+        "sha256": "a61d25b6ba5a88983e3b128deb1a355a1757be9fdfc760c0e3f55e52056ef60f"
+      }
     },
     {
       "family": "table",
@@ -753,12 +756,12 @@
   ],
   "counts": {
     "classified-integration-pending": {
-      "groups": 9,
-      "observations": 428
+      "groups": 10,
+      "observations": 496
     },
     "investigation-pending": {
-      "groups": 42,
-      "observations": 2146
+      "groups": 41,
+      "observations": 2078
     },
     "producer-integrated-conservation-pending": {
       "groups": 6,
