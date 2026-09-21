@@ -6,6 +6,7 @@ import { collectFlowPositionSubstitutions } from '../../scripts/audit-material-f
 const hash = v => createHash('sha256').update(v).digest('hex');
 const digest = v => hash(JSON.stringify(v));
 const signature = r => JSON.stringify([r.family, r.element, r.property, r.reference, r.astylar]);
+const metadata = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'];
 export const positionCompositionAttribution = 'reviewed-position-composition-substitution';
 
 export function collectPositionCompositionReview() {
@@ -55,14 +56,43 @@ export function validatePositionCompositionReview(review) {
 export function applyPositionCompositionReview(rows, review) {
   validatePositionCompositionReview(review);
   const expected = new Map(review.groups.map(g => [signature(g), g])), seen = new Set();
-  const metadata = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'];
   const output = rows.map(row => {
     const key = signature(row), decision = expected.get(key); if (!decision) return row;
     assert.ok(!seen.has(key)); seen.add(key);
     assert.equal(row.attribution, 'unresolved');
     assert.equal(digest(row), decision.reviewEvidence.originalCompleteRowSha256, 'complete original position row changed');
-    return { ...row, ...Object.fromEntries(metadata.map(k => [k, structuredClone(decision[k])])) };
+    const priorMetadata = metadata.map(field => ({ field, present: Object.hasOwn(row, field),
+      ...(Object.hasOwn(row, field) ? { value: structuredClone(row[field]) } : {}) }));
+    return { ...row, ...Object.fromEntries(metadata.map(k => [k, structuredClone(decision[k])])),
+      reviewEvidence: { ...structuredClone(decision.reviewEvidence), priorMetadata } };
   });
   assert.equal(seen.size, 6, 'position review population incomplete');
   return output;
+}
+
+// Reconstruct the complete predecessor from serialized metadata, then require
+// its independently pinned digest. This protects raw fields and field absence,
+// not merely selected scalar values or a self-reported observation count.
+export function validatePositionCompositionRows(rows, review) {
+  validatePositionCompositionReview(review);
+  const actual = rows.filter(row => row.attribution === positionCompositionAttribution);
+  const indexed = new Map(actual.map(row => [signature(row), row]));
+  assert.equal(actual.length, 6); assert.equal(indexed.size, 6);
+  for (const decision of review.groups) {
+    const row = indexed.get(signature(decision)); assert.ok(row, 'position row missing');
+    for (const field of metadata.filter(f => f !== 'reviewEvidence'))
+      assert.deepEqual(row[field], decision[field], `position ${field} changed`);
+    const { priorMetadata, ...proof } = row.reviewEvidence;
+    assert.deepEqual(proof, decision.reviewEvidence);
+    assert.deepEqual(priorMetadata.map(item => item.field), metadata);
+    const original = structuredClone(row);
+    for (const item of priorMetadata) {
+      assert.equal(typeof item.present, 'boolean');
+      assert.deepEqual(Object.keys(item).sort(), (item.present ? ['field', 'present', 'value'] : ['field', 'present']).sort());
+      if (item.present) original[item.field] = structuredClone(item.value);
+      else delete original[item.field];
+    }
+    assert.equal(original.attribution, 'unresolved');
+    assert.equal(digest(original), proof.originalCompleteRowSha256, 'serialized position predecessor changed');
+  }
 }

@@ -41,3 +41,19 @@ Source investigations:
 
 - [Grid positioning substitution](material-grid-position-substitution.md)
 - [Divider and switch flow substitutions](material-flow-position-substitutions.md)
+
+## Serialized-row integrity
+
+The pending adapter now preserves the original presence/value of each replaced
+metadata field. `validatePositionCompositionRows` checks exact six-group
+membership and independently replayed decisions, reconstructs each complete
+predecessor and checks its pinned original digest. This catches raw changes
+outside selected scalar fields, including extra fields and loss of absence.
+
+The same three-test suite passed again: **3/3**, zero skips, **42,648.8235 ms**.
+It includes a JSON serialization round trip and eight new rejection controls:
+missing/duplicate row, changed occurrence count, lost case, forged/reordered
+predecessor metadata, invented renderer-cause claim and an extra raw field.
+Log: `artifacts/material-parity/position-composition-serialized-validation-e62e846.tap`.
+This strengthens the future production validation boundary; the batch is still
+not wired into the canonical producer.

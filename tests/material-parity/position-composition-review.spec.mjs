@@ -4,7 +4,8 @@ import { readFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import ts from 'typescript';
 import { collectStyleDiscrepancies } from './input-equivalence-audit.mjs';
-import { collectPositionCompositionReview, validatePositionCompositionReview, applyPositionCompositionReview } from './position-composition-review.mjs';
+import { collectPositionCompositionReview, validatePositionCompositionReview, applyPositionCompositionReview,
+  validatePositionCompositionRows } from './position-composition-review.mjs';
 test('position batch replays all six source-backed groups without inventing candidate defaults', () => {
   const review = collectPositionCompositionReview();
   validatePositionCompositionReview(review);
@@ -36,6 +37,7 @@ test('actual aggregation changes exactly the six complete predecessors and prese
     : Object.assign([], { observations: [], comparisons: [], differences: [], groups: [] })));
   const snapshot = structuredClone(before), review = collectPositionCompositionReview();
   const after = applyPositionCompositionReview(before, review);
+  validatePositionCompositionRows(JSON.parse(JSON.stringify(after)), review);
   assert.deepEqual(before, snapshot); assert.equal(after.length, before.length);
   const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
   const input = row => Object.fromEntries(Object.entries(row).filter(([k]) => !metadata.has(k)));
@@ -46,6 +48,15 @@ test('actual aggregation changes exactly the six complete predecessors and prese
   }
   assert.equal(changed, 6);
   const index = before.findIndex(r => r.property === 'position' && r.element === 'grid-tile-one');
+  for (const mutate of [r => r.splice(index, 1), r => r.push(structuredClone(r[index])),
+    r => { r[index].occurrences--; }, r => { r[index].cases.pop(); },
+    r => { r[index].reviewEvidence.priorMetadata[0].value = 'invented'; },
+    r => { r[index].reviewEvidence.priorMetadata.reverse(); },
+    r => { r[index].reviewEvidence.rendererCauseProven = true; },
+    r => { r[index].unexpectedRawField = true; }]) {
+    const altered = structuredClone(after); mutate(altered);
+    assert.throws(() => validatePositionCompositionRows(altered, review));
+  }
   for (const mutate of [r => r.splice(index, 1), r => r.push(structuredClone(r[index])),
     r => { r[index].reference = 'static'; }, r => { r[index].attribution = 'another-review'; }]) {
     const altered = structuredClone(before); mutate(altered); assert.throws(() => applyPositionCompositionReview(altered, review));
