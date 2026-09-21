@@ -1,0 +1,1194 @@
+{
+  "schemaVersion": 1,
+  "before": {
+    "format": "astylar-material-input-audit-gzip",
+    "formatVersion": 1,
+    "auditSchemaVersion": 3,
+    "payload": "material-input-equivalence-audit.json.gz",
+    "encoding": "utf-8",
+    "compression": "gzip",
+    "compressedBytes": 53328256,
+    "compressedSha256": "d4dc68ab9a12d9de733e2a3c9aa462724ed2bb013ec402f04f8ab9fa291b6d7c",
+    "uncompressedBytes": 1994913361,
+    "uncompressedSha256": "a69aaa74eaa8d18e7891f1db60dc4bcc63aa40edaf5ed28a73e6098d6ba6fee3"
+  },
+  "after": {
+    "format": "astylar-material-input-audit-gzip",
+    "formatVersion": 1,
+    "auditSchemaVersion": 3,
+    "payload": "material-input-equivalence-audit.json.gz",
+    "encoding": "utf-8",
+    "compression": "gzip",
+    "compressedBytes": 54772538,
+    "compressedSha256": "ca6403047204b4c62d36239ece6c6446b92f12daae35dffe862c02a67eee484b",
+    "uncompressedBytes": 2016962991,
+    "uncompressedSha256": "b1a0e6e9f8c2a72625666444f9828f46e42d649acafd95354b5b75e62731424e"
+  },
+  "result": {
+    "rows": 8483,
+    "occurrences": 389202,
+    "changedRows": 144,
+    "changedOccurrences": 2311,
+    "unchangedRows": 8339,
+    "unchangedOrderedDigestsSha256": "dd436b2cab1d7f0b84c0273d23fa606e9050e4e20001bae3e0b5c8aaa7415ab3",
+    "changes": [
+      {
+        "family": "autocomplete",
+        "element": "autocomplete-root",
+        "property": "backgroundColor",
+        "occurrences": 28,
+        "previousRowSha256": "e1417908594caede7d9bfe9c9a162ea6a32181e510037995c7e554b7589c3943",
+        "currentRowSha256": "ff732292b6f71793efd2604f5dde8754191eeb14149d254c38bda7500ee1b304"
+      },
+      {
+        "family": "autocomplete",
+        "element": "autocomplete-root",
+        "property": "backgroundColor",
+        "occurrences": 28,
+        "previousRowSha256": "9b863e456b37f4fe129e6db27cffc1707c4eaf47237c6e188d2f897fab2cb5ad",
+        "currentRowSha256": "bc28d8a4b30fcf49d5528fd839aebb15879dec69d0f327c505f2074c7a9cc00f"
+      },
+      {
+        "family": "autocomplete",
+        "element": "autocomplete-root",
+        "property": "backgroundColor",
+        "occurrences": 27,
+        "previousRowSha256": "32949793fd21256ddc5a1914081231d8c8aef08dbbbe32034c0d2b3a2e70c39e",
+        "currentRowSha256": "ed954b91fbc81b9a8f1a21ccdf95444e84167f0c8ba88b9554439487478db5f2"
+      },
+      {
+        "family": "autocomplete",
+        "element": "autocomplete-root",
+        "property": "backgroundColor",
+        "occurrences": 27,
+        "previousRowSha256": "da233d2261aa915a33e6a2132a26362e365662fff15c728909ea977328709337",
+        "currentRowSha256": "cd9bc7574b7d3a754ccdbfea2d490a3af34a789083cdae82ca334404eaf7e7b8"
+      },
+      {
+        "family": "badge",
+        "element": "badge-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "d042ff72132206d5ccbb698a74a859383b3bacd48971036d4777a263b742f935",
+        "currentRowSha256": "e2248e92a0fd5067dbda31b0eb3ef567a960f56f96d0a6069086094cbb769681"
+      },
+      {
+        "family": "badge",
+        "element": "badge-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "66d6480db48ac24cfdcf19584488033eabb03f6c0f2a98c03c70328b8ee1a984",
+        "currentRowSha256": "7d2b58ebe9936f065aa5610acd0b2d1bc9f38894380903db82bbdba6a4e6beb0"
+      },
+      {
+        "family": "badge",
+        "element": "badge-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "ebfdc5d637532674218646f23dca6e70eb81cecc7e4b20d620c2c7daa00c2274",
+        "currentRowSha256": "e7e280eadb4c153003ad5c79b3ed38e163394d1568dbdd6c77a2ed76a44e2000"
+      },
+      {
+        "family": "badge",
+        "element": "badge-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "578b36159088b8f66dbeced5c60e193a4c69d14147e74f5a19c56d6e4e648f4e",
+        "currentRowSha256": "5249d51ec21fae0f8864e530465b03c91ac500d7acab72c8874280eb6acfc80e"
+      },
+      {
+        "family": "bottom-sheet",
+        "element": "bottom-sheet-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "bc8e4a57af75ef13118e6fc7d74c26db92e8604ea3ae3e7507f2e454018b0a8c",
+        "currentRowSha256": "2ec9299a0d018f992baa103fc24b6598e18fddb859a4f51339cf869ce403c34f"
+      },
+      {
+        "family": "bottom-sheet",
+        "element": "bottom-sheet-root",
+        "property": "backgroundColor",
+        "occurrences": 16,
+        "previousRowSha256": "6152608873e81b97958e1c79a54215c02b24549beffad303d6c1f27b0468bed0",
+        "currentRowSha256": "9d2be691cd9c50befc2a66b9789af4d2ae8a5ebcf88a611fdc223eb908f4610c"
+      },
+      {
+        "family": "bottom-sheet",
+        "element": "bottom-sheet-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "17cea009ad8d961ea7c24a3606115028b14e354f5cfa282fd834408fb98e4129",
+        "currentRowSha256": "c7aba925ac5eb5a4f7560f8bc3de078781eb6a933c9d35e4b235a8ee8ef30ef9"
+      },
+      {
+        "family": "bottom-sheet",
+        "element": "bottom-sheet-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "a905ebe86cb8705d678cf2bfd8663c180aac28b2e61413d1eec7e67b3a9dd05e",
+        "currentRowSha256": "c8a30e1df9d2976312aa4f7315e7d1db52b84b578c14e789a25348488ef962b0"
+      },
+      {
+        "family": "button",
+        "element": "button-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "1c0219fb4a8e1dcd17e1a170ce28f2cca928522f14e68841c4f36a308c530e91",
+        "currentRowSha256": "87ec8b9f8adf604952406ea4a11fdfa7fe3596173f8266e1e016a091a3666e04"
+      },
+      {
+        "family": "button",
+        "element": "button-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "5988a2e1c3b3f0de53595c694f3e784b58bbfb3b2be0dd5f65df3a118acb59b5",
+        "currentRowSha256": "241112ad88c00927d03dca00ff9fd8d8a01b81426c7bc35536cf0d26dc68ae26"
+      },
+      {
+        "family": "button",
+        "element": "button-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "d9859bee576ba14779933dfff5626a569e81d1dbe882854a4294202f77de8921",
+        "currentRowSha256": "c390fcaf3ad8d555e84f714effdf8fa72d7bebeb3aa5e6db0b727ae89ed03df2"
+      },
+      {
+        "family": "button",
+        "element": "button-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "f5168109978d411caf583bc45ede281ce12751ea3bb0e2f2416cb0780cf0f1f0",
+        "currentRowSha256": "c980d1db14a1f8a8494ec3ee0d1dc53401d610754c8e7b226cb307f948756908"
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "303484f3bde0234779ce0eb7081f8c33db87acd8f0ecd6d7df2fc8eb25794a4d",
+        "currentRowSha256": "ba4ee8b06cf1c51c24e51c5eb864114dcdfb0bd618d364eccc08b449279558f1"
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "597e465ef802dd731d3876d087320afbf6d3cff401ec6f5feb400ce889090a9f",
+        "currentRowSha256": "4b7c6c349743adecd58c01b11e2a58e0fa058e826cb4f60f5d07a04c77529bd3"
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "e2bdff300433b9a7eef7546968442a365d792635be2f8234063930755deebb27",
+        "currentRowSha256": "91ad2ec525180e029bc71cbebc0e3379469f7921777b18475fadc7dfbc2fa28d"
+      },
+      {
+        "family": "button-toggle",
+        "element": "button-toggle-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "927e762433a9c2e2ed41d50584744d713b6c7e77d3ef5b69271e94f229e021e0",
+        "currentRowSha256": "de23862898974101f93899adbd3bcfa8283fccb1467747159808f51033f0cab4"
+      },
+      {
+        "family": "card",
+        "element": "card-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "3b348f65cef3d61456a925ac12d9d7766c69c9cd28e1a08387629373d8408c60",
+        "currentRowSha256": "13e93a6cec2ba95eae104e7f6c0a5f387ddbb41dc05a9d474568eac60f3d3d87"
+      },
+      {
+        "family": "card",
+        "element": "card-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "44f4a051c456f2bd7498b7a66985edde08b4103ae1c49ebc14f370adcdc47b00",
+        "currentRowSha256": "60633a648d15a59f7c3961ad1ea47ebfd60afa8c8120b3cc9eb57437a86575f5"
+      },
+      {
+        "family": "card",
+        "element": "card-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "d48cd7e164ea50249efc6ded45df002a8cb1efe3923465e5d2d587bb3da39188",
+        "currentRowSha256": "0595588de080a23c0288f33c7643dd79564886fdc60a2481810e08989f3dea6e"
+      },
+      {
+        "family": "card",
+        "element": "card-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "86cca187bde876e04385f54f4277f27be6cd5be0230beed1115159e140ba28a2",
+        "currentRowSha256": "070653ddd8a311dd40992ce97cec4dade455496a5aa770594b4d15d97a58f249"
+      },
+      {
+        "family": "checkbox",
+        "element": "checkbox-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "7923e5f2f61092627b759697bbca1c94590d4ec055a4298825881390c14e4c22",
+        "currentRowSha256": "5a3d444ff57823df3b06aa49979c0fb3962ea6b3c245add7b5b7d510d5d5f98e"
+      },
+      {
+        "family": "checkbox",
+        "element": "checkbox-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "0a68b1bc25db170cfa9170f6e07ba5644da887f541237c2195adcda524629cd4",
+        "currentRowSha256": "b9562415fe0705f4de7a4a772d0003e0969a19ebb3776d6eb9e9332badab1c57"
+      },
+      {
+        "family": "checkbox",
+        "element": "checkbox-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "b29f16871c97266165c550279789e080531a0a51f4b391fa748a62f75f8b22df",
+        "currentRowSha256": "86b2872ed5f981cb279d0c09ff079b2da2908a7c404ecef958c62bd1c7e8eb21"
+      },
+      {
+        "family": "checkbox",
+        "element": "checkbox-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "eab258fb43aeb7f25d3dbdc63daaf0d70deae333bd007178f6b6e294545c2597",
+        "currentRowSha256": "e3817727cea3b81ab86bb9827f30a5482b26307f6e5cad6054d2616e69f90693"
+      },
+      {
+        "family": "chips",
+        "element": "chips-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "875712ec477d669d15c5ab81d1e09a5c67ea432319dc8ce567e921d84d6cfd88",
+        "currentRowSha256": "128dd639191543155fb8577b329bb7c531208b6fda22501a23cd6373239a6f57"
+      },
+      {
+        "family": "chips",
+        "element": "chips-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "f921ade031b9fba83756bd918ec8d9f195a4f7602737b38e07211eb57441f6f9",
+        "currentRowSha256": "d8ea3736373d5b7093d6629edcc0787c7eff896090d3517bf716d342f4806741"
+      },
+      {
+        "family": "chips",
+        "element": "chips-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "6294697289f68f26f228e84aaaf16c5d8ef7810571eb3589963ccd07c2dd1337",
+        "currentRowSha256": "07db8099ba604d61ab4a3f620d2a2994a3ea69974fb8243ebf24eb3f6c3d9d80"
+      },
+      {
+        "family": "chips",
+        "element": "chips-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "a3c9b94ec913663c0052ee786c9b7bb5611832236901277158304cd3ff8be684",
+        "currentRowSha256": "2036997942a09358ef51b2522994dabc5a938e833fd602ffc1509eaab78b5cae"
+      },
+      {
+        "family": "core",
+        "element": "core-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "805b200080f558336d64749f5c56565e1417cb37529e7fca74aeb2443d9486c0",
+        "currentRowSha256": "14991c3e9dbff322d9167a24136d6d71758b3e985a3ad2e79954c3323378e717"
+      },
+      {
+        "family": "core",
+        "element": "core-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "43f9a886ffe5a85e1c930d671f06364678e66032f31ff2a9444858851d42ec13",
+        "currentRowSha256": "9d5c971f797765a70ca8d4af15f134734fc4852c6bb4f5073d81469b88c1a22a"
+      },
+      {
+        "family": "core",
+        "element": "core-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "55f4090880a157c7d2230ff411329530b779dce7505119b02aa3358de2e1c1c5",
+        "currentRowSha256": "fdd2e5a809cd14b00190d2c46e8c4fbc0cea5a8343a7c7801157319a8e5d4d51"
+      },
+      {
+        "family": "core",
+        "element": "core-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "f2f0023316268d3627e99b712f7d3756759d9a3c435d61a7201b58f9566afc81",
+        "currentRowSha256": "4ecb832e1acf935628c87989c0c87391f82dadd81c205015e91aada5cb033a72"
+      },
+      {
+        "family": "datepicker",
+        "element": "datepicker-root",
+        "property": "backgroundColor",
+        "occurrences": 29,
+        "previousRowSha256": "3fde02e159af9b6d1faa0b203ae74e501fb442d50c3c423176f88f3edc3fe55e",
+        "currentRowSha256": "11707d486cc3bd76d8876408a686efa59eb5e17cb8730f1013c1cf872d2da812"
+      },
+      {
+        "family": "datepicker",
+        "element": "datepicker-root",
+        "property": "backgroundColor",
+        "occurrences": 28,
+        "previousRowSha256": "61f3754e95c74b53e4219a80d9f8cea1c30171fb0e4db924db61773a67ace0a1",
+        "currentRowSha256": "929da7b94d3e99554dadfc8804a413546eabe833e81ef3a3a98a89077e8dee1d"
+      },
+      {
+        "family": "datepicker",
+        "element": "datepicker-root",
+        "property": "backgroundColor",
+        "occurrences": 27,
+        "previousRowSha256": "08560f671944972ed73a50df033d60f5314706e6fa19f49231696485a4e0c7eb",
+        "currentRowSha256": "c2001c67bcf580cbd357be2214b70e38f371b624ada83f0ed040c619991df9bf"
+      },
+      {
+        "family": "datepicker",
+        "element": "datepicker-root",
+        "property": "backgroundColor",
+        "occurrences": 27,
+        "previousRowSha256": "913ac4c448ebde16272c92673242601c4c6dd2811b3b6eeb99c3ec9ec97bcbc5",
+        "currentRowSha256": "229c580d70b0f0fb44c5ee12889e6290855e14c5a63f2c7a698f45e69152c889"
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-root",
+        "property": "backgroundColor",
+        "occurrences": 20,
+        "previousRowSha256": "216666d6849b398cb786c8b0a3300bc32087feba928039d0afea8a00eb5501c5",
+        "currentRowSha256": "932455b7aeffbf4b91ff5d77e4887323e64b24dd4dcc53c458e40f46533dec1f"
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-root",
+        "property": "backgroundColor",
+        "occurrences": 20,
+        "previousRowSha256": "72fee279b505e63a095ebcd0ac2f053da40473385cc3c95569fa1890edfadbd7",
+        "currentRowSha256": "dca46f71ee8978cb82a5145418b12947ea094bdbf75280d29afe3185343236f1"
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "e4320197edfb08d3fba2f9c2544722a854a22e074ae422d962fe89f8e5373fed",
+        "currentRowSha256": "f73bb3f17d0492ed3943795dd661d854c634d415cf6d3fee997ec721abdf2328"
+      },
+      {
+        "family": "dialog",
+        "element": "dialog-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "36bb765659051d312c999e46f6053321ecfad1002a34730665ee8aa212066cbb",
+        "currentRowSha256": "b3cd9138b491813f706d539d5c671a0d0db3cb124e9d9e51f05a63255402fa36"
+      },
+      {
+        "family": "divider",
+        "element": "divider-root",
+        "property": "backgroundColor",
+        "occurrences": 6,
+        "previousRowSha256": "74c36674983efc3a9204fd53cd2385d2ea55df48e9dc09609478ff55a101459a",
+        "currentRowSha256": "1fb3a67a89d3d0c2ff6b0ac1728f3cf328d59499573ed16fc650e528bb8b7f80"
+      },
+      {
+        "family": "divider",
+        "element": "divider-root",
+        "property": "backgroundColor",
+        "occurrences": 6,
+        "previousRowSha256": "8467557a16c9ab246f6b8c338e3ada989de77f2fd931c99f79f8b188be54c6c7",
+        "currentRowSha256": "78759600ffb847a45363b7db1490e66af64677804b8c76d3580ff46ac1d9cf84"
+      },
+      {
+        "family": "divider",
+        "element": "divider-root",
+        "property": "backgroundColor",
+        "occurrences": 6,
+        "previousRowSha256": "29f94c871337620ef1f290192496533bab9317dcd3f854a5d4bf7d92b5d62062",
+        "currentRowSha256": "812d998b6b4483f20da89cb9646187bbc8ebb276ca51c606496d1d4d82097f18"
+      },
+      {
+        "family": "divider",
+        "element": "divider-root",
+        "property": "backgroundColor",
+        "occurrences": 6,
+        "previousRowSha256": "9678fd73d3daa64dac2287bcf82a05f069fab9833071049015e41803c093f39f",
+        "currentRowSha256": "0a15b30766445e011745362438a087e96f2b9e96b61e9062a5305bb4c45c93af"
+      },
+      {
+        "family": "expansion",
+        "element": "expansion-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "8373a5205b618d8b5d9fe2f1c154bc08dba910383050a0110c8e7d4dabaea880",
+        "currentRowSha256": "1c620cc431ffb8bd90077bdd6ea4a1e2616aaf7a15ca43e63e9ae9d75c2f8e99"
+      },
+      {
+        "family": "expansion",
+        "element": "expansion-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "231630bd65f2fc96acc7e8bbe03a4187263a914d62a8c13f5194141c84778401",
+        "currentRowSha256": "9830bd6836820137083389d06c77911774b1b42302c03529b329527c5f2a1314"
+      },
+      {
+        "family": "expansion",
+        "element": "expansion-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "71c3e76c7ad2a24007d0eb5ab97cf96366e62e04f82222590c849fe1f5a8a5ce",
+        "currentRowSha256": "fd2ad736593013cf5d66498517d5e50dd11e1baa17f89e2b8e93346216f96a84"
+      },
+      {
+        "family": "expansion",
+        "element": "expansion-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "bf19aa4c1c69c745befd245ff548f63cc55fa0ca3563833f1b5ee2eef516a370",
+        "currentRowSha256": "89ce7d3f27f2339d23f1bb1b62786e9421441b90a3dd2c8ab6a80f43ff0b11d6"
+      },
+      {
+        "family": "form-field",
+        "element": "form-field-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "dd7594efa3cd468661141fe641f9199160632a167d138e99c0c4c667b157d60f",
+        "currentRowSha256": "483bc19357a276c5982f0bf184ed1e534f2501dea69b66c0c6527570e17601a2"
+      },
+      {
+        "family": "form-field",
+        "element": "form-field-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "3868e572bb6c061e22878c3c78cb9cd877a2f17b14abcab3d7bce46de93cfacc",
+        "currentRowSha256": "aa20d13da9d24fd665b70a1129961168b4c937897c3875f85305e206788980bd"
+      },
+      {
+        "family": "form-field",
+        "element": "form-field-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "582ae188aed9521f5e80b464764671a82a183f4738ff2d3625464392ec0017bf",
+        "currentRowSha256": "d00a7ec3fa3827464470629c30cea89c4c649bd251fd49ad5b842853c105993b"
+      },
+      {
+        "family": "form-field",
+        "element": "form-field-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "c505348404846ec0d23d1feedac7f1644628f6b7ad8cb463c55e5d71a34c4e20",
+        "currentRowSha256": "be05b731c28fff90c9650f0521e9fb05395c04c4d951567e72d8c248767e19fb"
+      },
+      {
+        "family": "grid-list",
+        "element": "grid-list-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "dc861f0ba0fadbe6acfe8a65aa34cea5c8b83469aea1fdd21fa8403cf73ac39e",
+        "currentRowSha256": "70cd864a5927e367c8c5e13316b8df4f1fabee5893b6e47cc6e9ee6cb9fe5128"
+      },
+      {
+        "family": "grid-list",
+        "element": "grid-list-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "643ad1c1aec913a343c3de004d105f08cfd950cf5bfe605882dae79a50a25f4b",
+        "currentRowSha256": "efcdecdff838075e0a8419c8364ac6ae45922f571a9683256e1a668368059c8e"
+      },
+      {
+        "family": "grid-list",
+        "element": "grid-list-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "89c6ce5568d5a272340db051d2c561c413170e58c436634bf60b504231e37194",
+        "currentRowSha256": "19591493c09a63a4e7688e42e1ffe962a5da17470c85589afcc6f74c5bc69076"
+      },
+      {
+        "family": "grid-list",
+        "element": "grid-list-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "333dbff05d2e204b6004c9a3dbf8a8f994cfb66fd522c26025251f8daf3aacff",
+        "currentRowSha256": "7a12b496ae8e638b6d1cb0dc11f14ee32111084c8064acd571d2e798fad02e48"
+      },
+      {
+        "family": "icon",
+        "element": "icon-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "0f2ee30b410898ebd6fc2f3fe8a749e8413a770c49101f7520d0dd4db47e49db",
+        "currentRowSha256": "d140dce7b3a1e457a2a4f14e4960e32e1b9f5ee22799501d4fd34938eaa672ec"
+      },
+      {
+        "family": "icon",
+        "element": "icon-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "416ee49f4015baa74a4d14caa0225fe3035a2739cf59f9bae4888f679835cccb",
+        "currentRowSha256": "412ed2b57ed725eb580e78d5779602b49e78e3ded564af15c4f1865c2f247674"
+      },
+      {
+        "family": "icon",
+        "element": "icon-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "e0c4e3c3189f2b7d36fd62456b2b5e8a54e848a0ee813bbee9b9334c35ec5131",
+        "currentRowSha256": "b7290efa900007fc847ea8ada19823d7ba8ab81089bfa5c96bc4c8e1f6dfa7d6"
+      },
+      {
+        "family": "icon",
+        "element": "icon-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "197e580c7089b304e946053c7802dd018f8d841072b277844298ba50533aaf6e",
+        "currentRowSha256": "d66bdc6f8f7566cec6cc2c95700886edf6e5904d7fa5a7a94f0254f4b4c5f9ce"
+      },
+      {
+        "family": "input",
+        "element": "input-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "a774a08e59721e0bf5ebb89d9551c37d3e6a19476d2a637ba81947f9fa99c198",
+        "currentRowSha256": "a16fc9153309ece048b1e5a8fee85d8a57a5431dd02189ff3d7efa8290ed507f"
+      },
+      {
+        "family": "input",
+        "element": "input-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "b09c648a8f55658471bef821270697872eda8f7976d0350b5ab04e808f613786",
+        "currentRowSha256": "f54e091931658a414b041d106b310dee9b18c8ad3b001d9497eadadaf2c5bd81"
+      },
+      {
+        "family": "input",
+        "element": "input-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "423ff457f18042c3a941b37c83fe0b627318bac3c65a7cf96593c3b9e1129aec",
+        "currentRowSha256": "7295cd4f870b3ea9766e4d620f5d52e9771fab8be9c09256de093e99da32c7b8"
+      },
+      {
+        "family": "input",
+        "element": "input-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "6dbf23ff3ad18cd2b963fad5743b2b1c0eac39be592bbf5eaa20faa9b37fd0a7",
+        "currentRowSha256": "8d472e7b4fc7c3e8877b3b914c171c724eb64c3dff983e0652aab6c580e7768a"
+      },
+      {
+        "family": "list",
+        "element": "list-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "b26d56603fe91936f894e476b22fd95f20948823f3788e51aee7f813cb191daa",
+        "currentRowSha256": "44fac22d2868ec18141ca3ab253cc40f40f467393b34496ccc8c514198f23f2a"
+      },
+      {
+        "family": "list",
+        "element": "list-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "09a119b863d6501f694a3d2bcd7c1d75798b3f10cd68acde641a4912046f45ac",
+        "currentRowSha256": "7ea15f04cce0201e07b391ec8022227e038d2ba37bb1d7c48be87a55e2cde0cd"
+      },
+      {
+        "family": "list",
+        "element": "list-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "f1308ed945d53f3faac8173a8d7cd9327ee59e8e9e527e451186a8bbbc84b522",
+        "currentRowSha256": "c500f7a2671b6b228c05c14e23dcac16ace9a23e0a1ca82f74c82e453288858e"
+      },
+      {
+        "family": "list",
+        "element": "list-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "55be093f30f5a3aaa82047f4834f704bc9f8062cf3ce7cc336fc84bd5fadf87f",
+        "currentRowSha256": "88c51a08602e9eda9a6c33d003dd4355940e12d9d714b01fa5561bf37600d8f5"
+      },
+      {
+        "family": "menu",
+        "element": "menu-root",
+        "property": "backgroundColor",
+        "occurrences": 24,
+        "previousRowSha256": "f8263a86c6572266ebc1c773a4872cda1712e961baf0296a91f7c958a333441b",
+        "currentRowSha256": "dc303d19afc356b8700544bae0c0cfc1d8a6cb533a6129200784b3dd4447d0f4"
+      },
+      {
+        "family": "menu",
+        "element": "menu-root",
+        "property": "backgroundColor",
+        "occurrences": 24,
+        "previousRowSha256": "c6ef5a850f6180f9c962e4db894f6541fda46bbff4e8cf4a3f52851f7af03689",
+        "currentRowSha256": "cf5078e896c300289e9413059ffac3dce46d4cc8bf41c57214fc1ca75a6239ae"
+      },
+      {
+        "family": "menu",
+        "element": "menu-root",
+        "property": "backgroundColor",
+        "occurrences": 23,
+        "previousRowSha256": "da7da94f108a9dc7e384c3080f5892a57142f5d3e99af5a32232e8d8aa4acfd6",
+        "currentRowSha256": "54041af45aafa5308ee3fb99f5ba13e853ee33621de0c017d1ce8514ec9081b4"
+      },
+      {
+        "family": "menu",
+        "element": "menu-root",
+        "property": "backgroundColor",
+        "occurrences": 23,
+        "previousRowSha256": "d4e6588ed9cabf0159bd81e30f42deed4a3a5c436c83c9d54dd6f5eba976980f",
+        "currentRowSha256": "ae7b269dbd750bfa7b20ec7d39fd6a891946eb60b49952f09a307c59e25a6508"
+      },
+      {
+        "family": "paginator",
+        "element": "paginator-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "548d72c9f4f5523af694e08cff04a5ab792bf2225d9fbd7870d22b630291921c",
+        "currentRowSha256": "642345c4f913509a41039234787ce2337ae73f272f39b1b3f3b5f6b8893cfff7"
+      },
+      {
+        "family": "paginator",
+        "element": "paginator-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "61e29c90439f241f116553e2c1d8f690b07a8baf073db2ccbc5a010a74b094fd",
+        "currentRowSha256": "b77cbab43449ed9f92ff47bcfa7335112e03708924a6e5cf3f29e05cfc6f5486"
+      },
+      {
+        "family": "paginator",
+        "element": "paginator-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "5fac609716ddbc93b1bc86bf1e14dd12ec826c1c95858a7ad6064855d266eb80",
+        "currentRowSha256": "c780b2e778eaffa2658328ae2e327526fe5a1e05639353d89a435adf2ccddfd3"
+      },
+      {
+        "family": "paginator",
+        "element": "paginator-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "744f6b31d0faddf3bfe73164853e654b2c23c8171eac4def46b1e2235204080b",
+        "currentRowSha256": "6deb3471d0dd7af5b6155fe83a38ba38c6519e472a7e3ba5d9ae9a49c1c79eac"
+      },
+      {
+        "family": "progress-bar",
+        "element": "progress-bar-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "c0543d41e543d413e773992488e840bb1a53349f56f8b253c65d3cd06ed56d57",
+        "currentRowSha256": "fd4077bfddcb8c9b2345043ede94df9d3643f939c1b7c1191b1619bedde4e5b8"
+      },
+      {
+        "family": "progress-bar",
+        "element": "progress-bar-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "59651ee7cb75216d18fb80edc440ab43c93cd8088fc15e0a93920e597bbfe93e",
+        "currentRowSha256": "f553ae18da6f8c0cb764f667f7b681c76c23079d7ab1d581328af7169e93be3e"
+      },
+      {
+        "family": "progress-bar",
+        "element": "progress-bar-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "0c42a3de6764ee6e658d33ff19bc9303bf990c2b3ed298c7ef19657ed191d066",
+        "currentRowSha256": "fed836bcb7db016ae62f9d33986632cc96cd98280f330e0a94b0411db04719c1"
+      },
+      {
+        "family": "progress-bar",
+        "element": "progress-bar-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "cadc6a5858cfe7fca25ab0d8adeb820c2ed9cce0e6caf04ce2d33cc3bcf2c640",
+        "currentRowSha256": "761218f6f4a426ca943d2b67fd75ad9b228fb83c7d67deea35596623abc8fa81"
+      },
+      {
+        "family": "progress-spinner",
+        "element": "progress-spinner-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "41dc2fc88cc370bf6f68ffe48f34a97701dc55e9247e0485368a8e6bcbfdfa29",
+        "currentRowSha256": "f4a27c426171d65f0bd7dea9ad5a1f23ef025d304c15e49538e7b8f5df299de5"
+      },
+      {
+        "family": "progress-spinner",
+        "element": "progress-spinner-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "feadc08c46090bb9d34aaf6bdcf52e7e39567e434330401887507c6194bda75b",
+        "currentRowSha256": "9f93617a26eb6d45bc1c1bb1eed6fe80c7ea6792254ddf2e6c99c7bfae5dacea"
+      },
+      {
+        "family": "progress-spinner",
+        "element": "progress-spinner-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "9c5a95bdc6649d92e84d9f5c4a895786d2ba079245e5097f95716662be263931",
+        "currentRowSha256": "3aada05a315c2ef74d4d92b9da8329f5f491dd122783b44688c02aa1ed0bdd18"
+      },
+      {
+        "family": "progress-spinner",
+        "element": "progress-spinner-root",
+        "property": "backgroundColor",
+        "occurrences": 5,
+        "previousRowSha256": "418345f1b6b2800b9c526e7bd0131be06883e2653e96ed0af01507fec6615dcb",
+        "currentRowSha256": "23871d8959b937f3c713cacab43cf24021f7550d44abd5b109f38cf3b761908f"
+      },
+      {
+        "family": "radio",
+        "element": "radio-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "cc1edd79d2babb36c0b30bba5d2167e7f5921325024776e27211148735b328c3",
+        "currentRowSha256": "cbf1dec1925febcbcd4be10c45cfc9c1e514e780383b7210ded635a7bf686744"
+      },
+      {
+        "family": "radio",
+        "element": "radio-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "c1858906cef643d16463e3579a7731e68cd56ae5fda2a9c12becfd759c0166bb",
+        "currentRowSha256": "2c5935632b24bc070f8bed94900f29444f81468391c712734811d9ccfbbbc356"
+      },
+      {
+        "family": "radio",
+        "element": "radio-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "167c5a97370b747204d6b68ea4f598c47f6abe8944e23a3f908b0a37665607f2",
+        "currentRowSha256": "1cd098527e5261f6cebe5c025f7bba21efd7c3191f3edd7a5f9b4ed1c598c2dd"
+      },
+      {
+        "family": "radio",
+        "element": "radio-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "f633c4e0a8a3756c158708016e3967033e331438977124e0588deaf43a2e6cbe",
+        "currentRowSha256": "4589a9f0a93a3e8223d22ca33f79ad7e3c1db7ba82064aa9f97b7c6d0a9d0224"
+      },
+      {
+        "family": "select",
+        "element": "select-root",
+        "property": "backgroundColor",
+        "occurrences": 24,
+        "previousRowSha256": "118e78640d36b10ca578d83666eb53e909c32f4d5a9f0b171d750ec335955350",
+        "currentRowSha256": "c7116338763069b83a8a09d6d89a83a8810962161746dcfcb6ceedcd21806064"
+      },
+      {
+        "family": "select",
+        "element": "select-root",
+        "property": "backgroundColor",
+        "occurrences": 24,
+        "previousRowSha256": "6ac7455afd1cc16a5e52527b0bc723f6a18e7397b93043a7489c5896b5f10bf7",
+        "currentRowSha256": "3eba5a3c61b1fb4dc7d9879c61ee282c68ed1c9691cb145f255bcd7b9e1f7eab"
+      },
+      {
+        "family": "select",
+        "element": "select-root",
+        "property": "backgroundColor",
+        "occurrences": 23,
+        "previousRowSha256": "4cdf00382399ed0c59ec9b75ea3005d82f9483d0010302e496df65edcbbfd4f4",
+        "currentRowSha256": "2d12f123fcea08ac4069347903e23a58eccd4084c8739c58f3b9d4cf4e156954"
+      },
+      {
+        "family": "select",
+        "element": "select-root",
+        "property": "backgroundColor",
+        "occurrences": 23,
+        "previousRowSha256": "ad99f471c4abb3bd7b33035ee4d945bf1d8bc47f8a2088bcf41229145a97f413",
+        "currentRowSha256": "815a9d457dfbe4ce7979bf0f961a7c4ce3b734e0bd71db509670413fc0d7d93f"
+      },
+      {
+        "family": "sidenav",
+        "element": "sidenav-root",
+        "property": "backgroundColor",
+        "occurrences": 16,
+        "previousRowSha256": "1a85940c4c08a5752b2eabeb81760c94b8dd6477618cb7311bc385750c47a848",
+        "currentRowSha256": "aa4df5f2783b9fd1fdac15da9486874fac4349b1afdffc1edaaaca665284290a"
+      },
+      {
+        "family": "sidenav",
+        "element": "sidenav-root",
+        "property": "backgroundColor",
+        "occurrences": 16,
+        "previousRowSha256": "285289246d5f572359cb463a8b1eb5dc9b36f4777e62b0c6095790084d48a6b8",
+        "currentRowSha256": "26c09d920b566e2f88602136d53911dc09fd5a1cbbdce04e333ab3a2f3b3aca4"
+      },
+      {
+        "family": "sidenav",
+        "element": "sidenav-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "f8208fdc136649342e0dc45dfb872c987353842c5469b6c086bd983b9afb35f0",
+        "currentRowSha256": "6c97e68d0f176db6c7049476ec5f4c26d97be5ac351daf4700133c9e79cf09f8"
+      },
+      {
+        "family": "sidenav",
+        "element": "sidenav-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "b43398a8a69947051969ddd9aa3eb73fb9fdf9eea340a8e72b3b4c922b9e2515",
+        "currentRowSha256": "c907f326c75c0bf8303e594094fa61ff94a01f20d36204526e3e73a5f160b771"
+      },
+      {
+        "family": "slide-toggle",
+        "element": "slide-toggle-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "4f8dff7ba3b38845a8843507ad3354fde048907098973a1a5c86ed5694fcd0f2",
+        "currentRowSha256": "6c2a94ac6769097cf06ffc0df182e7abc51f4eb7ab7d29389e221b326bb430dd"
+      },
+      {
+        "family": "slide-toggle",
+        "element": "slide-toggle-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "283cefa0fc901e39cedc635f15da84f6fd4746ab9b0036b21efbe26b0aa22c88",
+        "currentRowSha256": "3af0a64640a60138772d8b565050c735c1e083575ae7cc1472e38bb59ddf9381"
+      },
+      {
+        "family": "slide-toggle",
+        "element": "slide-toggle-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "dbfa9e80bc2f88d1c101f95e12d598f2e1ca2e8f085eeaaa0b52c8651e92f7a2",
+        "currentRowSha256": "166b1c6c94a6f5a391f5fc4e7e51237aa13594b660e74f7220385e37f6651e50"
+      },
+      {
+        "family": "slide-toggle",
+        "element": "slide-toggle-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "afeff93089d4554e1bd4b41cb33f30795daf280ce50c468a2263bf304e5e5f04",
+        "currentRowSha256": "70c6ecac7ebafe08c274f46d47b028a433802f481824b8619608031966d072d5"
+      },
+      {
+        "family": "slider",
+        "element": "slider-root",
+        "property": "backgroundColor",
+        "occurrences": 21,
+        "previousRowSha256": "da480b22933bdd886e4785a1336e7ee40f21c033aa917fbb0700042f70e20426",
+        "currentRowSha256": "181b6926b5ae637f01db6c84e6ea2d7672bbca9cc225c7d118537f84deabae50"
+      },
+      {
+        "family": "slider",
+        "element": "slider-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "96ff8687ab6ebb9a88730b7c59e058698ce0135f60be0699a10c34c56c8dcae1",
+        "currentRowSha256": "2c795a829f185759ab0af76e968686341edcc0efd403a3260982349e62dfcf94"
+      },
+      {
+        "family": "slider",
+        "element": "slider-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "6b6e0eba49ae393ecc4815fbf5d2499aebccab23a05766dd8412b5fb60961d5d",
+        "currentRowSha256": "28f8bf61da3b502198230b430a22f76b79532392277191a80b8b619215eb7062"
+      },
+      {
+        "family": "slider",
+        "element": "slider-root",
+        "property": "backgroundColor",
+        "occurrences": 19,
+        "previousRowSha256": "f812af7a6ba47aa237c919e5fb7aede9555b53fda1de6974beb85985426b4dc7",
+        "currentRowSha256": "bc0010b7766812bdd89c722b742bd2b5ee8a80e9dd0e24a40ecd1be89f3e3910"
+      },
+      {
+        "family": "snack-bar",
+        "element": "snack-bar-root",
+        "property": "backgroundColor",
+        "occurrences": 20,
+        "previousRowSha256": "12a065ac813c7dc7590a4c0a8ca0f00d0f18280bb61834fa322a5c9147f0f90c",
+        "currentRowSha256": "c8b507a653361c72b405853105fc05a23f195676d671424b3429b77f5b6a21d1"
+      },
+      {
+        "family": "snack-bar",
+        "element": "snack-bar-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "4583972de543e0c7b353f0edab464b28fa35152fd06c111af45249365c487b29",
+        "currentRowSha256": "0a588b789d16fdb2b6ae6dcf400c2d741672786e9962043e1a79eae0ee150442"
+      },
+      {
+        "family": "snack-bar",
+        "element": "snack-bar-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "b7277c84a8a2fac25f65514fc1a2d60c84e7c78e8b61172956a0698a6f934939",
+        "currentRowSha256": "a4c15bdc59f444414fe79506c87b02f9886d50bd393636c33fe39bf5e3e0dd97"
+      },
+      {
+        "family": "snack-bar",
+        "element": "snack-bar-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "048a4625d1082e7d7dcc1c1fdc03ec67272d08323cd673879d133a2f3b89bd43",
+        "currentRowSha256": "d107c4c592fd1c3ed5ccba64d4b7b3ffa16b63c4dc9f658d370e814b9f1ec26a"
+      },
+      {
+        "family": "sort",
+        "element": "sort-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "7bafd32987eae857a5203a0c4ad983fad4ee00c870e2ff376d0a086b93c50865",
+        "currentRowSha256": "4ed73971158edf2b4ba9877f6f178eed4088f477eecbf6100696b9d3ee00224c"
+      },
+      {
+        "family": "sort",
+        "element": "sort-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "bd00d52009f7c65397f57f09ed1b07df22606c5e6e392c50ec70152364c5f4fa",
+        "currentRowSha256": "e6421b5a3741609fcf90df975429daab5c5369ff401ebc96664e3f36b1639479"
+      },
+      {
+        "family": "sort",
+        "element": "sort-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "25cba0f21665418012bbf9d9a6d6ab43fb41cf08b0f87a2504e172fde5fe2ca5",
+        "currentRowSha256": "0cbcacccec58b60363a5135de361972e1104215155f6fdc06a06e0cdd1a7bf57"
+      },
+      {
+        "family": "sort",
+        "element": "sort-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "8aa201b4660f26be4c3fbfca3f294de354b37b4373048e936b84ed0ad8bdb4fa",
+        "currentRowSha256": "4c2f9a414086b13d3ff8d878c51c0a21bb85db0b99dbe88c6341ca698ee11786"
+      },
+      {
+        "family": "stepper",
+        "element": "stepper-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "c59969e2d09aa566784ca6963bc6338c1ddb3c85f7568d8d25e12cea73a75fee",
+        "currentRowSha256": "6e9c94a8c13631514aa7800b446651cd2a94d45453fbe81028c93a50cbfb6897"
+      },
+      {
+        "family": "stepper",
+        "element": "stepper-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "72383eacc518681f707b3c8a34dfdc746d00256907b2082679bc61429804377b",
+        "currentRowSha256": "ccb2ef1e398ac3ba11effcf75bf234e2c59d3fa2d579b475e371c57b2347fd98"
+      },
+      {
+        "family": "stepper",
+        "element": "stepper-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "ea9cfb087462f8ab1e5b52de6425de267bbfba84d235143fd7fcff3ecfe81042",
+        "currentRowSha256": "470da6455306836f03c6433fe8b88621ad3aaf218bf7ef7002316e3c9d1a593b"
+      },
+      {
+        "family": "stepper",
+        "element": "stepper-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "7868c58c8b8082af81d72173810c700495c956b82622cbe67dc9cc8bd18b460c",
+        "currentRowSha256": "3550e4c04f87328c4a97f08483117f25b0be7077997acdd96194076b02ba8fbd"
+      },
+      {
+        "family": "table",
+        "element": "table-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "15e49c7ca862d3348aa5c58a2b67d51201c73bbdd5a48ce0c0a671a896e8ee6c",
+        "currentRowSha256": "587d3451613d38e84b6180c55ca124b89355292ccce2df4a8ff43ff472fe5c2b"
+      },
+      {
+        "family": "table",
+        "element": "table-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "287ebf11ca7f08f0715ae6dc67b55b20a1d76cbb71d88bcc349abe51a16ad10b",
+        "currentRowSha256": "67e31fe59b2b1a5da8a8c6e73a968c5cca3bb4788fc28b5867217fb7545942d4"
+      },
+      {
+        "family": "table",
+        "element": "table-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "e892968d1c7e030122d079c4df2c3e43c6727eeccbb774005b444e8b001b41db",
+        "currentRowSha256": "48add874f092d7df0fc675799ee090a1509055d5aa55e0619df4905769a12426"
+      },
+      {
+        "family": "table",
+        "element": "table-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "a7e2dcb8de0bdfee655b6cb5f57b507404cbf06fd659f2df2c27c7aa53ec310a",
+        "currentRowSha256": "b8ed193abf3b3ac0d2cbe3dccd3fc5375c37b00e3f7085a8a6fc68fb56707098"
+      },
+      {
+        "family": "tabs",
+        "element": "tabs-root",
+        "property": "backgroundColor",
+        "occurrences": 18,
+        "previousRowSha256": "d9863614be65c67ee1c3ec4334791404b1f7afcc1bb0e97bf2d2bb8fb4868172",
+        "currentRowSha256": "ca0a49af227367ba7d2e85bdb76a2fe1ad0af19a6bc99694300999cb5c8af53e"
+      },
+      {
+        "family": "tabs",
+        "element": "tabs-root",
+        "property": "backgroundColor",
+        "occurrences": 18,
+        "previousRowSha256": "d4d547a4929e85efcc5dd5dca889b9f990244569c9a67a69b36bf94634b023cd",
+        "currentRowSha256": "d2ccc83232b0dd998dd7dae3542c8458159a670bffbd91dbd4305f8dcb5bc461"
+      },
+      {
+        "family": "tabs",
+        "element": "tabs-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "e5928c410ad60fdd38a0f24cd92448c534af50f04c3614d3296ee678236bcfb9",
+        "currentRowSha256": "4f798371bfc3cf104c89ac6cfcc1b3c93777b8aad52db2222688b1416647a8b1"
+      },
+      {
+        "family": "tabs",
+        "element": "tabs-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "6e0e74370681b45b0f29f5bb519f24d5e1aa94ae63e2a88d3b6229dd64a7a6a9",
+        "currentRowSha256": "a7411d370757d24e3c6a066507d76da0f32a247905af5646aedd994a2d8160fa"
+      },
+      {
+        "family": "timepicker",
+        "element": "timepicker-root",
+        "property": "backgroundColor",
+        "occurrences": 28,
+        "previousRowSha256": "dd9c1bac8c8c5f4891dcf8002a51b13e5c9f0e285ceddc5db171fa733f7dc5de",
+        "currentRowSha256": "5183fcffd220ff8d31d6e0b968f275cd66d5e5796dd50409d87c6d1cb76d25aa"
+      },
+      {
+        "family": "timepicker",
+        "element": "timepicker-root",
+        "property": "backgroundColor",
+        "occurrences": 28,
+        "previousRowSha256": "dc991ba9664f06fae9422735a4ff256e78236e78d190e81c21d98ec60a5b237f",
+        "currentRowSha256": "c2b088e6ce73bd61c7fa0ede84099cf3c933097349c11d5fbf3fa6a57b451617"
+      },
+      {
+        "family": "timepicker",
+        "element": "timepicker-root",
+        "property": "backgroundColor",
+        "occurrences": 27,
+        "previousRowSha256": "93aa6d8451e1970e1a7919dbcf6bca50bb456732a9acdb98fa6db12d2512a13a",
+        "currentRowSha256": "b94aa57ad77df03dd50f7692dd026df27a0d9f3db1cf0e91f221a5f902f55970"
+      },
+      {
+        "family": "timepicker",
+        "element": "timepicker-root",
+        "property": "backgroundColor",
+        "occurrences": 27,
+        "previousRowSha256": "b6b5ae603ebbab31aec401f3ae2dc53ae87cddf5e47dd13ced7889a65fc3efbd",
+        "currentRowSha256": "676313f1c923b839c0f4e0247a5b41fca6037c959aadb23642b9aa889dfeae7f"
+      },
+      {
+        "family": "toolbar",
+        "element": "toolbar-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "fe708833863ff116062a3348bb3daa11e2066b910e36f23ca6796818f946ba7d",
+        "currentRowSha256": "80f512cb6e51bb6b997f5f847d8bbc638819e60fd6f2edb042e66172c5ccd8cc"
+      },
+      {
+        "family": "toolbar",
+        "element": "toolbar-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "a1eba9fba21dc0c2187a5346d492ee0bc7d049b0505273ecf7a33048373cec1d",
+        "currentRowSha256": "82012a00937b512a8c851034c5a51c24911e57b69449dfe2bca3c81812538b59"
+      },
+      {
+        "family": "toolbar",
+        "element": "toolbar-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "b6d9a99d45400953bcf040be00ec799d2304938b85d2e7e8abe9da7ced3f4eda",
+        "currentRowSha256": "27f27def169c46c1eb20cee02280b29b801ffbc2022286247f6ff01c34028a97"
+      },
+      {
+        "family": "toolbar",
+        "element": "toolbar-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "3e217934747ce242ca2d07da1b11975f731cc52fd9db37e49f3a10668c49c196",
+        "currentRowSha256": "c37667954e9d28e748a0797785923387f1ddd28878bba1f8f8d5286b25dfbacb"
+      },
+      {
+        "family": "tooltip",
+        "element": "tooltip-root",
+        "property": "backgroundColor",
+        "occurrences": 17,
+        "previousRowSha256": "77b1687a753b875dbea49075d92363ac8c41c450ff29d15aee73c7d11373dc5d",
+        "currentRowSha256": "fd4b034f05ca470f1c47f2d5e95db938b396a538af579de542e64c68745bfbcf"
+      },
+      {
+        "family": "tooltip",
+        "element": "tooltip-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "07a2e926db5438a713e971b4133ef2b914dcf16d34863c8589f7848657cd745d",
+        "currentRowSha256": "02a43e09aa7043c43e3a0b6d51f10821f126270e0e418e535b75ab3eb520f888"
+      },
+      {
+        "family": "tooltip",
+        "element": "tooltip-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "74777a6329df73dbc9bba219e99eedb823377e350a6b65d975448bc3261bf90e",
+        "currentRowSha256": "73adbcdbc2649660d2c941196e8886db496864d10043bd3e780eef7e47260828"
+      },
+      {
+        "family": "tooltip",
+        "element": "tooltip-root",
+        "property": "backgroundColor",
+        "occurrences": 15,
+        "previousRowSha256": "fadee209e6ad21abb4478246b62df574b2787fbb97a30e0c41e2084b632e0660",
+        "currentRowSha256": "cf81f5228752fc30547e469af3beec3112d98f8fae6b45c2134ece1eb53e41a5"
+      },
+      {
+        "family": "tree",
+        "element": "tree-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "3092d3c9cf36d5eebea927d93ca2d1565ee826af63407256982c016fc5de30d1",
+        "currentRowSha256": "e5eb333a57665d64b3c4b3198c3ab399ba177023ea298a555b03b4171b50bd72"
+      },
+      {
+        "family": "tree",
+        "element": "tree-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "748f794bfe59ac4a35781c554864067124d2e02769f4d9275f63ec4d0fccfb6f",
+        "currentRowSha256": "a5000db34604f1bddff03acd4ada0a8645836de7cfa3d3bc8c4cb6c77a3edaa1"
+      },
+      {
+        "family": "tree",
+        "element": "tree-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "d088d566a4ead059e7975d57f8cfd44e2bb30136bf4a7f62b98c5b55d0b37157",
+        "currentRowSha256": "7f78085e3a16050b1e1d2e8ec226e8034914001ec8305c232141e3f7d6a2820c"
+      },
+      {
+        "family": "tree",
+        "element": "tree-root",
+        "property": "backgroundColor",
+        "occurrences": 13,
+        "previousRowSha256": "2ddfcdeaba616fdb74b50b2dac92dc554de53e44888437d88942d60ed16ad611",
+        "currentRowSha256": "f38d3b50a4c9658ed86a3f412d3548e2c99cf06a5fcaccaf59cd0f58e239538b"
+      }
+    ],
+    "previousUnresolved": 1833,
+    "currentUnresolved": 1689,
+    "inputEquivalent": false,
+    "renderingEquivalent": false
+  },
+  "scope": "All canonical discrepancy rows. Control typography, full document provenance and enforced output parity require separate verification."
+}

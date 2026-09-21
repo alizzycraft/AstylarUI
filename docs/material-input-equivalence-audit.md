@@ -14,6 +14,9 @@ Follow-up reviewed inputs: 2640 original property observations support 66 source
 
 Alignment and additional font-style reviews: 6871 original observations support 125 source-replayed groups. Original survey source receipts are conserved only after exact observation and source-projection checks. Raw omissions, explicit requests and prior classifications remain intact; no candidate computed alignment, used placement or rendering equivalence is inferred.
 
+Reviewed source batch: 6295 original observations support 146 source-replayed motion-observation, layout-authoring and button-paint groups. Historical membership and receipts remain explicit; live classifications use precise current scalar values. Prior classifications are preserved. This does not establish input equivalence, rendering parity, inactive motion or renderer causality.
+Root background authoring: 2311 original observations support 144 source-replayed fractional CSS mix versus integer-hex theme groups. Unequal inputs remain unequal; this does not establish a renderer or raster defect.
+
 Bounded reviewed inputs: 3325 original property observations support 134 source-replayed measurement-stage or authoring/ownership groups. Raw values, original membership and prior classifications are retained. Missing original observations: 0. This does not establish whole-element input equivalence, rendering parity or renderer causality.
 
 Bounded caret reviews: 4050 original observations support 118 observation-stage groups; 896 observations remain pending. Raw omissions and full source membership are retained. This does not establish candidate computed caret values, editable-descendant behavior, visible caret paint, equivalent inputs or renderer causality.
@@ -22,9 +25,9 @@ Bounded gap reviews: 1902 original observations support 36 capture/observation-s
 
 Explicit gap composition: 1032 original observations support 16 unequal application/plugin spacing groups. Full composition replay and independent source coverage preserve explicit shorthand, raw omitted longhands, all original memberships and prior classifications. Missing proof observations: 0. This is not computed-gap, layout or rendering equivalence; equivalent-input core reductions remain required before removing the substitutions.
 
-Visual parity is green, but input equivalence is **not established**. The audit found 8339 unique normalized input differences across 386891 occurrences.
+Visual parity is green, but input equivalence is **not established**. The audit found 8483 unique normalized input differences across 389202 occurrences.
 
-1835 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
+1689 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
 
 Border initial-color evidence: 3580 uniquely paired node observations prove omitted author/inline color inputs with browser currentColor versus core transparent defaults. Attribution rejects possibly applicable state/media/reset rules and unknown selectors, and is not an equivalence waiver. Alpha paint, contextual-color paint, structure and final raster require separate evidence.
 
@@ -151,10 +154,10 @@ This means the existing screenshot score cannot be used as evidence that the ren
 
 | Classification | Unique signatures |
 | --- | ---: |
-| application-plugin-authoring-defect | 942 |
+| application-plugin-authoring-defect | 1134 |
 | equivalent-representation | 2086 |
 | intentional-documented-limitation | 336 |
-| parity-harness-defect | 4975 |
+| parity-harness-defect | 4927 |
 
 ## Source-level compensation findings
 

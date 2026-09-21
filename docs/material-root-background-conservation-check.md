@@ -46,3 +46,40 @@ canonical integration. The command will write
 `material-root-background-canonical-conservation.json` only after all checks
 pass. Restored control-line-box evidence, other report sections, source
 provenance and the full enforced parity matrix require separate verification.
+
+## Completed regeneration and conservation check
+
+Regeneration session `39286` subsequently finished with exit **1**, correctly
+rejecting incomplete audit acceptance: **1,689** resolved-style attributions
+and **60** control texture typography differences remain unresolved. Coverage is
+436/436 static cases and 1,875/1,875 interaction cases. No renderer fixes or
+output-parity acceptance are implied.
+
+The conservation command then completed with exit **0**. All **8,483** rows /
+**389,202** observations were retained. Exactly **144** root classifications /
+**2,311** observations changed; **8,339** complete unrelated rows are identical.
+Unresolved scalar attributions decreased from 1,833 to 1,689. The machine receipt
+is now checked in as `material-root-background-canonical-conservation.json`.
+Its unchanged-row digest is
+`dd436b2cab1d7f0b84c0273d23fa606e9050e4e20001bae3e0b5c8aaa7415ab3`.
+
+New canonical compressed SHA-256:
+`ca6403047204b4c62d36239ece6c6446b92f12daae35dffe862c02a67eee484b`.
+Decoded payload: 2,016,962,991 bytes, SHA-256
+`b1a0e6e9f8c2a72625666444f9828f46e42d649acafd95354b5b75e62731424e`.
+
+A separate complete streamed read authenticated the decoded payload and
+inspected the restored line-box section: **671** observations, **48** historical
+normalization reconciliations, zero errors and zero missing observations.
+Control typography retains **637** interactive natural-line-box attributions
+and **34** snackbar line-box size dependencies. The generated module receipt
+matches `ec5fd9d1b35795b7614c43a5c667b1817c017a52f4ebc35c957e4d1813601f6a`.
+This inspection complements the independently replayed 112 line-box checks
+recorded in `material-root-background-main-integration.md`; it is not another
+browser capture or a complete new test-suite run.
+
+Logs: `artifacts/material-parity/root-background-canonical-regeneration.log`
+and `root-background-canonical-conservation-ab7c20a.log`. The generated
+Markdown's visual-parity statement describes its pinned input capture, not the
+latest enforced release matrix. The complete audit and that matrix remain
+unfinished.
