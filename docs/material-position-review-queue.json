@@ -1,0 +1,775 @@
+{
+  "population": {
+    "file": "docs/material-position-input-population.json",
+    "sha256": "71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff"
+  },
+  "schemaVersion": 1,
+  "kind": "position-review-integration-queue",
+  "groups": [
+    {
+      "family": "badge",
+      "element": "badge-label",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "63f660fe1fc7a15bb3a5ca588ef389868c5330420ab633dbe21cec72d89a306d",
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-static-position-observation.json",
+        "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
+      }
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-copy",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 25,
+      "priorRowSha256": "5fc7d165f4e796a9934ca857baef7006a729c6ec50b2fe16bf69d1269231a517",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-dismiss",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 25,
+      "priorRowSha256": "f75e5443a0204e490bb5686d1ee226b89733df17544da13b9c0dd2cc7ca5688f",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-overlay",
+      "property": "position",
+      "reference": "absolute",
+      "candidate": "fixed",
+      "candidateOmitted": false,
+      "observations": 25,
+      "priorRowSha256": "dcd814bc82f108c24bfbbb4f35b86dc92316f3ddbd3db53ae35acf1e68510ec0",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "bottom-sheet",
+      "element": "bottom-sheet-panel",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 25,
+      "priorRowSha256": "ca149f8f9ef9ab1ef224d7ce570cc9e07bd3349fabe8122a5954fb39df2a9f3f",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "button-toggle",
+      "element": "button-toggle-one",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 68,
+      "priorRowSha256": "1c3a05d11286279935c9b9e1d7613c23857c954f96bb4d5a549019c7e8346e3e",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "button-toggle",
+      "element": "button-toggle-primary",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 68,
+      "priorRowSha256": "f6ce16bf40f26e348cd9cdd2a8a10c4086e4bbf9f58d835e6b37bade87eb5d11",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "button-toggle",
+      "element": "button-toggle-two",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 68,
+      "priorRowSha256": "c9ff75fe548a70e45cde1bdfd6be0467b31809eca19351b7326d4b389d282349",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "card",
+      "element": "card-copy",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "e2aa9abf8757e3ecdd569659504a3cdcd51c4c6f08cba9a0328acbd16b07d26f",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "card",
+      "element": "card-title",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "8cc3c162b11db97b7b5bef7c6d744a0197b8430ec086baf5ecfb0d83c5fb2231",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "checkbox",
+      "element": "checkbox-label",
+      "property": "position",
+      "reference": "static",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 68,
+      "priorRowSha256": "460ae98921fef0c4158d2cb115e98b834b07207651fecd018e4f6e6549c78427",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "chips",
+      "element": "chip-0",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 76,
+      "priorRowSha256": "ec0a3c9c16869ff2e6013d1b85d53fc15645523dfb7160fca4c8a1ac51899f3b",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "chips",
+      "element": "chip-1",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 76,
+      "priorRowSha256": "1d4a2c902996789d0a6a3825930f1020882fb05da49914575fcb2b29d0a69d2d",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "chips",
+      "element": "chips-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 76,
+      "priorRowSha256": "2aa389382fa5e86a24cc6b3f4b7ececddfa68514ffa2eff196e598ca0fd8d2bd",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-actions",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 32,
+      "priorRowSha256": "79fcfb552e3c4d0c3489be5d904835fc2d1825454f4d781399d19f6e493d8769",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-cancel",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 32,
+      "priorRowSha256": "2d592bbb2403907ba35acf4ebdf676cecf32337d2519fdabc9f59c1ebc0c68ac",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-copy",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 32,
+      "priorRowSha256": "ec18b742c69c701a97753f88a85b64600fb013d0071bbbde6a0c44f03216c594",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-panel",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 32,
+      "priorRowSha256": "f8a0e940cd279ce9f34bf22a076a6fbef7af46e72daa5247f152b81f54e12505",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-save",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 32,
+      "priorRowSha256": "2367c4cdc70fce329af3645af882f8e96ab9f10c7444746e5595684499a8e4e6",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "dialog",
+      "element": "dialog-title",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 32,
+      "priorRowSha256": "c14e6e929abae8da1b7484e7767e81356f41d859cd8141e2627a72b79c7d86b6",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "divider",
+      "element": "divider-above",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 24,
+      "priorRowSha256": "b011013f865aa9e53f0cb638eb9e48c3bffc8b6fa0f15feba1f33a4d9a24e345",
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-static-position-observation.json",
+        "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
+      }
+    },
+    {
+      "family": "divider",
+      "element": "divider-below",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 24,
+      "priorRowSha256": "757d0bf196cae0bdbcdaa26c583eea45b74b9eb9ba54b66391d204ba95797519",
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-static-position-observation.json",
+        "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
+      }
+    },
+    {
+      "family": "divider",
+      "element": "divider-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": "absolute",
+      "candidateOmitted": false,
+      "observations": 24,
+      "priorRowSha256": "962bd5b2dfee4923a74544cecffa896b06c5023a59803d8ddac21dc9b0aa75be",
+      "status": "producer-integrated-conservation-pending",
+      "source": {
+        "file": "docs/material-flow-position-substitutions.json",
+        "sha256": "ae18da9453f68f2c5ed68bac464db6bd465cc6b74c3d5a5304f80dd60477403f"
+      }
+    },
+    {
+      "family": "expansion",
+      "element": "expansion-title",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 68,
+      "priorRowSha256": "d3826b6a352a1c17c431b19fa5ee4f4685e037654fca5d1744c4b02044f69c9b",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-list-primary",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "f62c24536a5eb4eed0a6e195e48f72fa4f737f53e5a336e73308f2ec62271304",
+      "status": "producer-integrated-conservation-pending",
+      "source": {
+        "file": "docs/material-grid-position-substitution.json",
+        "sha256": "eface143a0232cbdc48eb9160ab0da250bc278f858344844b5fc983a97a2241c"
+      }
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-tile-one",
+      "property": "position",
+      "reference": "absolute",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 52,
+      "priorRowSha256": "712506aa94ef807d373f72165db13c0523625cdcdc0ffd7f904fe0badda6b235",
+      "status": "producer-integrated-conservation-pending",
+      "source": {
+        "file": "docs/material-grid-position-substitution.json",
+        "sha256": "eface143a0232cbdc48eb9160ab0da250bc278f858344844b5fc983a97a2241c"
+      }
+    },
+    {
+      "family": "grid-list",
+      "element": "grid-tile-two",
+      "property": "position",
+      "reference": "absolute",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 52,
+      "priorRowSha256": "08eb07d3b538fd4ad17ec951437a9c03c4ee70ff9abc7e025efcf9342220b46a",
+      "status": "producer-integrated-conservation-pending",
+      "source": {
+        "file": "docs/material-grid-position-substitution.json",
+        "sha256": "eface143a0232cbdc48eb9160ab0da250bc278f858344844b5fc983a97a2241c"
+      }
+    },
+    {
+      "family": "icon",
+      "element": "icon-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 20,
+      "priorRowSha256": "e3522c2ee4916304f26d3d9aeb53d17502bf46ecd567ca3ae94a2423ef80c845",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "list",
+      "element": "list-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "59508157a9fa944193c95092d0e3c21a1514128f44408931377cfca728d6a2f0",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "paginator",
+      "element": "paginator-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "24ec5f1c4963358a4f6b50f7baf9feec93c917aa49073ac43cf4adeeb951b254",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "paginator",
+      "element": "paginator-range",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "ded2739195128121652a98a18a10c892496eaa23e59293489af5a2aad29b8734",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "paginator",
+      "element": "paginator-size",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "af0a163432f20926b0da7d39d4d5ab7a6079f917debb1fed07d30bc79354cf1b",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "progress-bar",
+      "element": "progress-bar-primary",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 20,
+      "priorRowSha256": "f6fd8c9246c9e95df2b411e0e98aa3e89ca49e10423bc19325c1a938960fe27a",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "progress-spinner",
+      "element": "progress-spinner-primary",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 20,
+      "priorRowSha256": "dc583f2110302c23ef66e3131e62639ae4883c9d0470547a7feb66abb47f9fe0",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "radio",
+      "element": "radio-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 68,
+      "priorRowSha256": "c1317bbbb4f2b6a27f182608ec6fa04aaa862f10f4af8810763be3bf1ae9dff7",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "radio",
+      "element": "radio-solo-label",
+      "property": "position",
+      "reference": "static",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 68,
+      "priorRowSha256": "4ee4bb972957fff7fbc203b4382957a30856eabcb321c0f3aa7cdc3699b712fd",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "radio",
+      "element": "radio-team-label",
+      "property": "position",
+      "reference": "static",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 68,
+      "priorRowSha256": "afa297688830a3995716c7d20b8b56cf50b209a47402fc16e500039f141b081e",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "sidenav",
+      "element": "sidenav-primary",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 62,
+      "priorRowSha256": "7228042efe4d100ecc5afbee1efedd9cf06366462a108878cfefff9b67abcf66",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "slide-toggle",
+      "element": "slide-toggle-label",
+      "property": "position",
+      "reference": "static",
+      "candidate": "absolute",
+      "candidateOmitted": false,
+      "observations": 68,
+      "priorRowSha256": "9882df5713732581af3cc2952c31cdf61c8dbb73eb1f068300ceb9b238a420ec",
+      "status": "producer-integrated-conservation-pending",
+      "source": {
+        "file": "docs/material-flow-position-substitutions.json",
+        "sha256": "ae18da9453f68f2c5ed68bac464db6bd465cc6b74c3d5a5304f80dd60477403f"
+      }
+    },
+    {
+      "family": "slide-toggle",
+      "element": "slide-toggle-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 68,
+      "priorRowSha256": "0cbf642103ba749b9aceb1e44287c6f9bdbb5b94d6555b4eb3fed1861e8bc03f",
+      "status": "producer-integrated-conservation-pending",
+      "source": {
+        "file": "docs/material-flow-position-substitutions.json",
+        "sha256": "ae18da9453f68f2c5ed68bac464db6bd465cc6b74c3d5a5304f80dd60477403f"
+      }
+    },
+    {
+      "family": "slider",
+      "element": "slider-visual",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 78,
+      "priorRowSha256": "60d0297034af521a92b54ba90d626dedaaf49e690ff7f261332b732041ed8854",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "snack-bar",
+      "element": "snack-bar-overlay",
+      "property": "position",
+      "reference": "absolute",
+      "candidate": "fixed",
+      "candidateOmitted": false,
+      "observations": 34,
+      "priorRowSha256": "4268e61ef54218e1ee3b06f7509120bf2281f2254dc995fad60bd48dd6465f02",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "snack-bar",
+      "element": "snack-bar-surface",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 34,
+      "priorRowSha256": "aa1d73fe1345f296dd05c2b883f00a7ee568e19687a9ff6ead744587d2a8336f",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "sort",
+      "element": "sort-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 60,
+      "priorRowSha256": "fee7821c73fc5eb53921ecf5cc277c958894057b7c4e3d32484b3f578e32f60b",
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-sort-focus-placement.json",
+        "sha256": "1a78f5e2321c7dbe29b2fffdf2d8112b99613d02d8dd0c4f06ac6c54e89f1a9b"
+      }
+    },
+    {
+      "family": "stepper",
+      "element": "step-details-text",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 68,
+      "priorRowSha256": "2b584caee4ae858fcee56317a49a359744a34a0197b8bbbfc817a0060df80cbe",
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-static-position-observation.json",
+        "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
+      }
+    },
+    {
+      "family": "stepper",
+      "element": "step-review-text",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 68,
+      "priorRowSha256": "53602ec1510b35adee06e9aaf596d02504355d42c60e9ae4f0346579db394b41",
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-static-position-observation.json",
+        "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
+      }
+    },
+    {
+      "family": "stepper",
+      "element": "stepper-content",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 68,
+      "priorRowSha256": "fcde388e9d87db0647d93a0545ee42ea93ea450807c7b4b1d60495bb8ecbf7e0",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "stepper",
+      "element": "stepper-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 68,
+      "priorRowSha256": "a16e787c3ba731814df80291bfaed094932932d1bc1f8fc5ffb5b6eeb00570d5",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "table",
+      "element": "table-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "1596b2c7479729c7402d424730a03e600b070534c3cec1f26af0ff0261d245af",
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-static-position-observation.json",
+        "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
+      }
+    },
+    {
+      "family": "tabs",
+      "element": "tab-activity",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 70,
+      "priorRowSha256": "a8615a8ef535fdf4795bcaf4470735b855b18aa7b5b280d8ab10a3b20ef2ae8a",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "tabs",
+      "element": "tab-overview",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 70,
+      "priorRowSha256": "6ef395eec588cf8b8084453b93e1fdc574e0f87a73d9ab79998aa4f582316c0f",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "tabs",
+      "element": "tab-panel",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 70,
+      "priorRowSha256": "6da96847d413ed2262e66e63d044fbebf7de9900c90f0d1b87ece3581b4a138f",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "tabs",
+      "element": "tabs-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 70,
+      "priorRowSha256": "701d1e39fa87de4a2a2410f2249cbc3f27ace221ec5c010a9e995c1744d3628f",
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-tab-position-substitution.json",
+        "sha256": "7d1707bf870fd4e37597414cfd8d2f33e21475ffc672580bc5626b472491b8de"
+      }
+    },
+    {
+      "family": "toolbar",
+      "element": "toolbar-action",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "4dd7803e47b913ab7cda8bc2583236af33b1da604048cdb80bc0a78d3c2971c5",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "toolbar",
+      "element": "toolbar-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 52,
+      "priorRowSha256": "a4677f4e60174f79c32b3847524f9925e68ff9bb374647f40ecbd0ae665eb174",
+      "status": "investigation-pending",
+      "source": null
+    },
+    {
+      "family": "toolbar",
+      "element": "toolbar-title",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "4c51aecce1107fc6a34cd92395e8649130be2d53720a2724e9c1150d4a446fcc",
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-static-position-observation.json",
+        "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
+      }
+    },
+    {
+      "family": "tooltip",
+      "element": "tooltip-popup",
+      "property": "position",
+      "reference": "static",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "observations": 18,
+      "priorRowSha256": "6f6c647b23737ea57c984c41030d3917978395e159d0c9f26d604eafd47a1df9",
+      "status": "classified-integration-pending",
+      "source": {
+        "file": "docs/material-tooltip-position-composition.json",
+        "sha256": "aeccadb5da490df9fdcab1d0354d392e51d2f50c1ea6dbb692ec307167e6e8e6"
+      }
+    },
+    {
+      "family": "tree",
+      "element": "tree-primary",
+      "property": "position",
+      "reference": "static",
+      "candidate": null,
+      "candidateOmitted": true,
+      "observations": 52,
+      "priorRowSha256": "55180393681af75e138883829459c1e6ed790aaff2be2a69c3954c7b34ca70be",
+      "status": "investigation-pending",
+      "source": null
+    }
+  ],
+  "counts": {
+    "classified-integration-pending": {
+      "groups": 9,
+      "observations": 428
+    },
+    "investigation-pending": {
+      "groups": 42,
+      "observations": 2146
+    },
+    "producer-integrated-conservation-pending": {
+      "groups": 6,
+      "observations": 316
+    },
+    "inspection-classification-pending": {
+      "groups": 1,
+      "observations": 60
+    }
+  },
+  "canonicalAcceptanceClaimed": false,
+  "inputEquivalent": false,
+  "renderingEquivalent": false
+}
