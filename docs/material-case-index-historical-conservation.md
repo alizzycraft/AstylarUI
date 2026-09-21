@@ -66,3 +66,24 @@ node --max-old-space-size=1536 --test --test-concurrency=1 --test-reporter=tap -
 
 Result: **6/6 passed**, no skips or failures, 17,475.5637 ms. The full output is
 retained at the reporter destination above.
+## Explicit assertion adapter (prepared, not integrated)
+
+`tests/material-parity/historical-case-index-source-assertion.mjs` provides an
+explicit replacement for comparing a historical module receipt to today's full
+module bytes. It authenticates the saved historical report and the separately
+reviewed current-source projection, then requires the caller's entire index to
+equal that authenticated saved object. It never rewrites disk receipts or mutates
+the caller's index, and makes no canonical-classification acceptance claim.
+
+All nine indexes passed the adapter; negative checks reject an unknown index,
+changed caller membership and a changed retained source declaration. Command:
+
+```text
+node --test --test-reporter=tap --test-reporter-destination=artifacts/material-parity/historical-case-index-source-assertion-c35c080.tap tests/material-parity/historical-case-index-source-assertion.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs
+```
+
+Result: **6/6 passed**, no skips/cancellations, 15,471.6705ms. The main legacy
+suite has not yet been changed: it is fingerprinted by the live regeneration.
+Integration must preserve every original membership assertion and verify the
+scope of the sole source-receipt assertion replacement. This adapter's focused
+pass is not a pass of that legacy suite or the complete discovered audit harness.
