@@ -1,0 +1,2956 @@
+{
+  "schemaVersion": 1,
+  "kind": "tab-position-substitution",
+  "population": {
+    "file": "docs/material-position-input-population.json",
+    "sha256": "71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff"
+  },
+  "priorRowSha256": "701d1e39fa87de4a2a2410f2249cbc3f27ace221ec5c010a9e995c1744d3628f",
+  "observations": [
+    {
+      "case": "static:tabs@light/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/light/desktop/reference-input-tree.json",
+          "sha256": "0c942575f82b70c7b2164bcf9669fe59fb40a5d585f1c8e8d8fd6c9a96887174"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/light/desktop/astylar-input-tree.json",
+          "sha256": "d83d2753c5aafedfc0ff17aba1afb3b7b24c1acd50370db693fe76f89352db49"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:tabs@light/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/light/tablet/reference-input-tree.json",
+          "sha256": "618b8a21985974a38774aebf4bd1bd343675cf8f6279fd0a91809fe913275a41"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/light/tablet/astylar-input-tree.json",
+          "sha256": "a96169355d7bc9a09fb478a1e72bc90d8137b14fc2457c04c119ebcdea0d38e5"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "51%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:tabs@light/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/light/mobile/reference-input-tree.json",
+          "sha256": "a29ba0ea187750a76211dccb39be57348087d5910a2120d8977d5d626bc233ca"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/light/mobile/astylar-input-tree.json",
+          "sha256": "7dab00921760e1292f0b8ccfd73dcd1485148668cb9ce4a4cac5bb69f42c859e"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "51.9%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:tabs@dark/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/dark/desktop/reference-input-tree.json",
+          "sha256": "9b86ae608b844244783e58af07dd523fe78668c552ea6c31b20612e271bfd939"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/dark/desktop/astylar-input-tree.json",
+          "sha256": "6b38bd5bcbd9a60e453a6a116f33df98aa2aa531bd51a0d7475611a86a1b2573"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:tabs@dark/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/dark/tablet/reference-input-tree.json",
+          "sha256": "22e7869881edf80c2654bbaa9ecf6cea13b7fced2a8aedf7877f40b0365e0132"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/dark/tablet/astylar-input-tree.json",
+          "sha256": "bb1f0b6f5338b40ca06d2981dd5dda885d4122b3549ce8d11246b2f2d7cbb0b3"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "51%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:tabs@dark/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/dark/mobile/reference-input-tree.json",
+          "sha256": "64faaee229a737df5c7dc90dcb8bd10cce6c702a196fd84e35285732a59638db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/dark/mobile/astylar-input-tree.json",
+          "sha256": "36943c023925b2ff93da5baf9ace751084124aceacae38af0b762392e076713a"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "47.67px",
+            "height": "0.67px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "51.9%",
+            "height": "2.67px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:tabs@contrast/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/contrast/desktop/reference-input-tree.json",
+          "sha256": "480e167176c1b17efb5230f5ec4388189be268ed3fb83eca660305fc84e46b64"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/contrast/desktop/astylar-input-tree.json",
+          "sha256": "c6236a31015628553b418d22f091595360b3b69bfbdf9709843eb4c193a2ae26"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:tabs@contrast/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/contrast/tablet/reference-input-tree.json",
+          "sha256": "5f8db6a790eae900aa986e24f7c48bbc44f0fb57a4bd4044a5fd094159a31d34"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/contrast/tablet/astylar-input-tree.json",
+          "sha256": "fe711afbb691088e7c12c727ff248c32126bd6795154cc81905f710404a7ac53"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "51%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:tabs@contrast/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/contrast/mobile/reference-input-tree.json",
+          "sha256": "2f7fd1e94d766aaae9c4a4c752d53bff4d582b029c4d536ef91a0dac55b59fe6"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/contrast/mobile/astylar-input-tree.json",
+          "sha256": "5452ae88e52dcd84988a4d5c0d251a228eafbbe9209081575089bafc87b4a36e"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "51.9%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:tabs@custom/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/custom/desktop/reference-input-tree.json",
+          "sha256": "60aa5d0f28567f2e356a8607ca9215bcc2c5c220a024607ba322176a962a8076"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/custom/desktop/astylar-input-tree.json",
+          "sha256": "ff319877b2b5d9b6be44554b9267cfd11b543f1633368fa3db4784f8b2586433"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:tabs@custom/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/custom/tablet/reference-input-tree.json",
+          "sha256": "cd24c0d73bee47d9289074b5d37bfa1f4794572970c357fdaa63f070efa5a93b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/custom/tablet/astylar-input-tree.json",
+          "sha256": "16d49faaac5570ecf3d277b11830165c0e2db17cce022988f5dd349c97607457"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "51%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:tabs@custom/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/custom/mobile/reference-input-tree.json",
+          "sha256": "9ef4d6b590955df0baf6d6a15edb79254913da267ec76ba3c411edc463f9dbad"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/tabs/custom/mobile/astylar-input-tree.json",
+          "sha256": "5b2c60b6a28e79d823bcdafcc0f5d0cbe990689272c8d468cdb0c88743ba7f49"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "40px",
+            "height": "0.67px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "37.33px",
+            "left": "0",
+            "width": "51.9%",
+            "height": "2.67px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "dfdeab03f38821390d9a7f65808f5e5bbd6e19fb613bfec86a3f5452866213ee"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "d03d629079831febb294c57e061b6e37249098de24a6056bc6b07566304ad879"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "f8b8c00304ca516ea628ce92a7fec2808ebd05c28766834be8069efea74c88d4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "6d121de834b4c4d56104a29aa955199eae3f5f051b88bb4db78b5f7f0e2bf1ff"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "ff80c6e69071e32ebcf16e0301ef9a8e4279050b7a25ffd8ae57e76994a57e2f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "c5f89accdc18f0252c32acbc652803131e9089d26a9f53c5933be6e48569f485"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "5097f6c91d9b17a32bb0c8fc6c37a0c58bc203f46785e91e60b07e785b69ee79"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "0061f98fac5ab8c9886e488a3205c0aa42558e898a3a8db5a0b7125f7d44e63a"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "5db51e3dfd21bbe049641bfc3e356f035745736946b9f3ac7acd3933bee1eb8e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "0061f98fac5ab8c9886e488a3205c0aa42558e898a3a8db5a0b7125f7d44e63a"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "0c942575f82b70c7b2164bcf9669fe59fb40a5d585f1c8e8d8fd6c9a96887174"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "8f4393b0bdfd938b0aaf8787dc6488a23939638bdd3849844638d99067daa035"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "0c942575f82b70c7b2164bcf9669fe59fb40a5d585f1c8e8d8fd6c9a96887174"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "d83d2753c5aafedfc0ff17aba1afb3b7b24c1acd50370db693fe76f89352db49"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "dfdeab03f38821390d9a7f65808f5e5bbd6e19fb613bfec86a3f5452866213ee"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "d03d629079831febb294c57e061b6e37249098de24a6056bc6b07566304ad879"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "f8b8c00304ca516ea628ce92a7fec2808ebd05c28766834be8069efea74c88d4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "6d121de834b4c4d56104a29aa955199eae3f5f051b88bb4db78b5f7f0e2bf1ff"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "ff80c6e69071e32ebcf16e0301ef9a8e4279050b7a25ffd8ae57e76994a57e2f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "c5f89accdc18f0252c32acbc652803131e9089d26a9f53c5933be6e48569f485"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "5097f6c91d9b17a32bb0c8fc6c37a0c58bc203f46785e91e60b07e785b69ee79"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "0061f98fac5ab8c9886e488a3205c0aa42558e898a3a8db5a0b7125f7d44e63a"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "5db51e3dfd21bbe049641bfc3e356f035745736946b9f3ac7acd3933bee1eb8e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "0061f98fac5ab8c9886e488a3205c0aa42558e898a3a8db5a0b7125f7d44e63a"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "0c942575f82b70c7b2164bcf9669fe59fb40a5d585f1c8e8d8fd6c9a96887174"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "8f4393b0bdfd938b0aaf8787dc6488a23939638bdd3849844638d99067daa035"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "0c942575f82b70c7b2164bcf9669fe59fb40a5d585f1c8e8d8fd6c9a96887174"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "d83d2753c5aafedfc0ff17aba1afb3b7b24c1acd50370db693fe76f89352db49"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "51b0487487b56c74db01f0037cc3e6041cf648f9f35f5905e369925b3f24d587"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "0cc515cf44d1058a8dd0f0fbd703feb6a698ecb29d9f8d3d944ffd18e2ce67b5"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "8e3cdf2b4c8eded53c8c42221100425f7311f584a3ce30df8f500833ceb76631"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "18a0be8dff5528cb221bd1074d60ab02344a9f49768094e2cc1b3d1d08b2e58b"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "a26e77174847c1c3a5682000660d658f963b576bf56b2107f8362d44ba7e57b2"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "88f64d8a7f6255bc0c0b6580123d403cd71251dd83aa966a5a2036de946ad76d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "2a86a2e2addfcd7d7f2a00ef150807e456832090a857db18e6c04036d0b8fe99"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "0cbe3d0e01eadad27ba1604a053052536b2cc37d653a90db014a420d0cf6e86a"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "eed65f6e8a31233b052dccb7da665d6208cbeb066d97f61e68fb32f38eba2d4e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "0cbe3d0e01eadad27ba1604a053052536b2cc37d653a90db014a420d0cf6e86a"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "9b86ae608b844244783e58af07dd523fe78668c552ea6c31b20612e271bfd939"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "d661389b1efb3964e52e5b5d8777fe0611a9316330cb79334430d88547ef1363"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "9b86ae608b844244783e58af07dd523fe78668c552ea6c31b20612e271bfd939"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "6b38bd5bcbd9a60e453a6a116f33df98aa2aa531bd51a0d7475611a86a1b2573"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "51b0487487b56c74db01f0037cc3e6041cf648f9f35f5905e369925b3f24d587"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "0cc515cf44d1058a8dd0f0fbd703feb6a698ecb29d9f8d3d944ffd18e2ce67b5"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "8e3cdf2b4c8eded53c8c42221100425f7311f584a3ce30df8f500833ceb76631"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "18a0be8dff5528cb221bd1074d60ab02344a9f49768094e2cc1b3d1d08b2e58b"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "a26e77174847c1c3a5682000660d658f963b576bf56b2107f8362d44ba7e57b2"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "88f64d8a7f6255bc0c0b6580123d403cd71251dd83aa966a5a2036de946ad76d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "2a86a2e2addfcd7d7f2a00ef150807e456832090a857db18e6c04036d0b8fe99"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "0cbe3d0e01eadad27ba1604a053052536b2cc37d653a90db014a420d0cf6e86a"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "eed65f6e8a31233b052dccb7da665d6208cbeb066d97f61e68fb32f38eba2d4e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "0cbe3d0e01eadad27ba1604a053052536b2cc37d653a90db014a420d0cf6e86a"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "9b86ae608b844244783e58af07dd523fe78668c552ea6c31b20612e271bfd939"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "d661389b1efb3964e52e5b5d8777fe0611a9316330cb79334430d88547ef1363"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "9b86ae608b844244783e58af07dd523fe78668c552ea6c31b20612e271bfd939"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "6b38bd5bcbd9a60e453a6a116f33df98aa2aa531bd51a0d7475611a86a1b2573"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "d98419a4975bdb620ebf8b561ffd83093c8dbe522b1735a1ef48a52cc4d17fef"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "e5443a5a40a47957598bfaaa3cd470f603a1e17c97c1856cc8c3b082aa03ffc0"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "322a3c1485a516ba2c8f238193a0a001226f5c5b7e0fa85a5fb936cac7f32660"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "390e3f550454f2b953cfd79fe76795afde9dd32cd2e51895ee694799796b92a4"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "5263c079abac121a23c41ac4ffbdb936acda2dcad3d141144b073448ade4a0a5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "aee143633391e8b436985a78b347873b8df6c46cc2d2987a9c3e862f0679da24"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "d2949340a3a9de86139125946b04dee488a0170fd94fefa566fae2d064483003"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "a1ab73e23ac62cf2ba8d6c5f7dcddd71dda1111c96c7444ed95c534860d8c7c7"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "a0758ec4d97b7a3c07cdb788912aeb3265eda8fba3d7ac4cc3a7ae819c5c21b7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "a1ab73e23ac62cf2ba8d6c5f7dcddd71dda1111c96c7444ed95c534860d8c7c7"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "480e167176c1b17efb5230f5ec4388189be268ed3fb83eca660305fc84e46b64"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "4d8d7aa5096fa2892f1149ce4b49b9b3e512723a2334a812c3c7965a9c6629b5"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "480e167176c1b17efb5230f5ec4388189be268ed3fb83eca660305fc84e46b64"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "c6236a31015628553b418d22f091595360b3b69bfbdf9709843eb4c193a2ae26"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "d98419a4975bdb620ebf8b561ffd83093c8dbe522b1735a1ef48a52cc4d17fef"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "65723e26d1b3ef77658d6e1dc54b8b2ddd68ff329b202334b28184eaa7a271a6"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "322a3c1485a516ba2c8f238193a0a001226f5c5b7e0fa85a5fb936cac7f32660"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "62c093e2fd71dc9cb5e44d317d13c411f5e28ec2fdaeb1596fed8233f50fccb0"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "5263c079abac121a23c41ac4ffbdb936acda2dcad3d141144b073448ade4a0a5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "6e764a9f1e3018b0895e89d79903c20a6424927020dd1fdf62463ff81b3e7994"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "d2949340a3a9de86139125946b04dee488a0170fd94fefa566fae2d064483003"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "ba39c89002ae6730fee2f0ba948a02052a523fec8be462538c4434b4ec16535a"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "a0758ec4d97b7a3c07cdb788912aeb3265eda8fba3d7ac4cc3a7ae819c5c21b7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "ba39c89002ae6730fee2f0ba948a02052a523fec8be462538c4434b4ec16535a"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "480e167176c1b17efb5230f5ec4388189be268ed3fb83eca660305fc84e46b64"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "58fdcd5d33343875ec290e5e791882e26e93e1c9f4de94b84bc8c3d9a3098876"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@contrast/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "480e167176c1b17efb5230f5ec4388189be268ed3fb83eca660305fc84e46b64"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/contrast/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "888c7221667b08c86d48c7d13eed246624ae4f471e16399c15397733992e8b1d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "32.5px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "30.5px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "a9ea68f147a85c8faa48d229e15d00126a149b0db844711fd868ecf4a1c7f68a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "c2e167e2eaa32e8eb7046c037c1f05dd832eaab951bf9138b87785c164ad963e"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "d47f0d53792177d9f7a92ce461ea92239c2b4c7d6094aa3ec0d057ca6376d090"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "0ff7c8ee38711f71612742bf47c1cba24de2b9391329f173b4fb6c7dc77e1f40"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "96863acb0457e46bb03e152116d9dfdf1875a8bde8491e405aceffb32d032694"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "7a42d3e36b28de36d15c9bea4c024774195e504d6917aa68e8ddad4b9fb416f8"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "066075dee051ef4b312c09c5fb044bd77435b4d3d87af4c2c76e0d243c5bc495"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "5a7632b75c7d4b41a4fb0a315c2caa1b7129858226e84115e01b7709a953c72f"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "b4926cef2b0ca467a1648e8cf820264b076fa2f87bce8ec3112f2566eb3470bd"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "5a7632b75c7d4b41a4fb0a315c2caa1b7129858226e84115e01b7709a953c72f"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "60aa5d0f28567f2e356a8607ca9215bcc2c5c220a024607ba322176a962a8076"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "5e98dec65e82a59912a3ee166b9a02e2a1fa11992f24640a5158e95f74e804bd"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "60aa5d0f28567f2e356a8607ca9215bcc2c5c220a024607ba322176a962a8076"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "ff319877b2b5d9b6be44554b9267cfd11b543f1633368fa3db4784f8b2586433"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "a9ea68f147a85c8faa48d229e15d00126a149b0db844711fd868ecf4a1c7f68a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "600e3fb8ab91db1723ed4d3b606db22741ac00d4553d031ea2dbcf70a1a63fbf"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "d47f0d53792177d9f7a92ce461ea92239c2b4c7d6094aa3ec0d057ca6376d090"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "8e4392990a15e14d8171e46dfb371fc165c3bb10b67e5ed421662f13fddc9538"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "96863acb0457e46bb03e152116d9dfdf1875a8bde8491e405aceffb32d032694"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "253515133f6e2b04409a76f1f8bbacfcd361c35fef6a8606cfc5c8f4133ecf3e"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "066075dee051ef4b312c09c5fb044bd77435b4d3d87af4c2c76e0d243c5bc495"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "8b1b5376aca470b15b856c2cf914648cd045228e276b8029af8279fc6fda0e0c"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "b4926cef2b0ca467a1648e8cf820264b076fa2f87bce8ec3112f2566eb3470bd"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "2c2dd2100a0f95fe872421eaeafa5043c83c270ef754e4ec32819cc4fc9a4320"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "50%",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "60aa5d0f28567f2e356a8607ca9215bcc2c5c220a024607ba322176a962a8076"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "0f43a24ed0955fa589c1fbff9539bb4a13407ebc46bb9dfddd081455a1e6e75e"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@custom/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "60aa5d0f28567f2e356a8607ca9215bcc2c5c220a024607ba322176a962a8076"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/custom/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "b6257ec737f8dd5e29e704db24100ca65e3b617fb0c5ffceeaec46a37b03106d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "39px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "38px",
+            "left": "0",
+            "width": "50.7%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@light/mobile-dpr2/open-dismiss",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/mobile-dpr2/open-dismiss/reference-input-tree.json",
+          "sha256": "726dd3dfd666603279692dc5a048d575d902dd84401b5151f3df45aa3cfdce56"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/light/mobile-dpr2/open-dismiss/astylar-input-tree.json",
+          "sha256": "f9f23c48098edb50161fe04ba2bf0ac410558cea75b86173384fcbbe76d1cba4"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "48px",
+            "height": "1px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "50%",
+            "width": "51.9%",
+            "height": "2px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:tabs@dark/mobile-dpr2/open-dismiss",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/mobile-dpr2/open-dismiss/reference-input-tree.json",
+          "sha256": "7f40fb44275a845e5fc5480619b1587e1bbd7b50ba1a98f1e9764e36f2e54101"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/tabs/dark/mobile-dpr2/open-dismiss/astylar-input-tree.json",
+          "sha256": "35058c0eba5e301c02db7955c5b0ce2a6e75b4e019379ee7ee27bb7181bb3ae9"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "baseline": "frame/2/0/0/1",
+          "position": "static",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(232, 224, 235)"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "baseline": {
+            "top": "47.67px",
+            "height": "0.67px",
+            "background": "#e8e0eb"
+          },
+          "indicator": {
+            "top": "46px",
+            "left": "50%",
+            "width": "51.9%",
+            "height": "2.67px"
+          }
+        },
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored border/indicator ownership before layout",
+        "rendererCauseProven": false,
+        "inputEquivalent": false,
+        "renderingEquivalent": false
+      }
+    }
+  ],
+  "counts": {
+    "groups": 1,
+    "observations": 70
+  },
+  "canonicalAttributionChanged": false
+}
