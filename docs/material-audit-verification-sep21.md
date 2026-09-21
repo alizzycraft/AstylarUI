@@ -67,3 +67,19 @@ they are not implicitly covered by this legacy single-file result.
 This is not the full discovered audit-test suite or the complete enforced parity
 matrix. Those, remaining classifications, builds and other final gates remain
 outstanding. A future canonical integration requires fresh affected verification.
+
+## Full core unit suite completed after visibility wiring
+
+`npm test -- --watch=false --browsers=ChromeHeadless` finished with **exit 0**:
+**462/462 tests passed**, Chrome Headless 152 on Windows. Angular bundle
+generation took 606.440 seconds; Karma reported 8.331 seconds elapsed test time
+(8.023 seconds execution). The run emitted the existing proxied-root warning.
+
+Full output: `artifacts/material-parity/unit-suite-2c595d3.log`, SHA-256
+`63f8fcc658e5bacf7b4b4740cefe52aa2afe13db8d06ee780b774e023510ec1d`.
+Core and its unit-test sources were not edited while it ran. Separate new Node
+audit tests are not covered by this Angular/Karma result.
+
+The visibility canonical regeneration remains live at this checkpoint. The
+full unit result does not close canonical conservation, remaining attribution,
+the full discovered audit-test suite, builds/consumer, or enforced parity gates.
