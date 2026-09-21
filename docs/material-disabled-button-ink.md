@@ -268,3 +268,20 @@ node --max-old-space-size=768 --test --test-concurrency=1 tests/material-parity/
 The real report replay is running as
 `artifacts/material-parity/disabled-ink-canonical-conservation-v3.log`.
 These focused tests do not substitute for its successful terminal result.
+
+### Full scalar/control conservation passed
+
+The v3 replay completed with **exit 0**. It authenticates both complete payloads
+and preserves all **8,483 scalar records**, whose ordered JSON digest is
+`29cea07a66bbda37d5fadae6b0f2fff3dcb8508dd7fd447e5b8eb42872900aca`.
+Exactly **60** disabled-button control records receive the independently reviewed
+classification. Exactly **48** line-box records update only the fully verified
+module receipt; their raw values and classifications remain unchanged. All other
+control evidence is deeply equal after those explicitly reported transitions.
+
+Log `disabled-ink-canonical-conservation-v3.log` has SHA-256
+`38c9893386f97121ff5f6c6104ea3ab2b25057e11bdb6c1c9fdfeeaebbe83aad`.
+This clears the bounded generated report update for commit. It does not assert
+equality of every other top-level metadata section, input equivalence, rendering
+acceptance, or completion of the audit. **1,689** scalar classifications and the
+complete remaining verification matrix are still open.

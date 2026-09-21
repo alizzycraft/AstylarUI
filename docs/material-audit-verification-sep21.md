@@ -42,3 +42,15 @@ pre-disabled-ink payload. The rejected first generation remains preserved in
 A fresh full audit-test discovery/run, complete enforced parity matrix, builds,
 unit suite and consumer verification remain required. Prior interrupted runs
 and focused passes must not be presented as those completed gates.
+
+## Regeneration and bounded conservation completed
+
+The second generation is now terminal. Exit 1 reports only the retained 1,689
+unattributed resolved-style groups, with no source-binding failure. The v3
+scalar/control conservation replay passed: all 8,483 scalar records are intact,
+60 disabled-ink classifications change, and 48 line-box records change only an
+independently verified module receipt. See
+[the full transition record](material-disabled-button-ink.md).
+
+The fresh complete legacy audit test file is still running in
+`legacy-full-1795d21.tap`; partial output is not a full-suite pass.
