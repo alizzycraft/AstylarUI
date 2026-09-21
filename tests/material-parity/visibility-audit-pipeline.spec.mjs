@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { isDeepStrictEqual } from 'node:util';
 import test from 'node:test';
+import { restorePositionProducer } from './position-composition-producer-transition.mjs';
 import ts from 'typescript';
 import { collectStyleDiscrepancies } from './input-equivalence-audit.mjs';
 import { collectVisibilityAuditInputs, applyVisibilityAuditRows, validateVisibilityAuditClassifications,
@@ -11,7 +12,7 @@ import { collectVisibilityAuditInputs, applyVisibilityAuditRows, validateVisibil
 test('whole producer transition accepts only the exact visibility integration', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
   const previous = execFileSync('git', ['show', `c090e1b:${file}`], { maxBuffer: 4 * 1024 * 1024 });
-  const current = readFileSync(file, 'utf8');
+  const current = restorePositionProducer(readFileSync(file, 'utf8')).restoredSource;
   const proof = verifyVisibilityAuditModuleTransition(previous, current);
   assert.equal(proof.wholeModuleConserved, true);
   assert.equal(proof.restoredSource, previous.toString().replaceAll('\r\n', '\n'));

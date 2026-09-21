@@ -74,3 +74,32 @@ out-of-bound evidence paths, missing rows and unbound application attempts.
 Log: `artifacts/material-parity/position-bound-adapter-68bcc35.tap`.
 Producer wiring, its source-transition proof and canonical regeneration remain
 pending; these tests are not a claim that the six findings are integrated.
+
+## Producer wiring
+
+The builder now applies the bound positioning review after the existing visibility
+review, serializes `positionAuditInputs`, and validates its source and complete
+row membership through the standard review boundary. Normalization, mapping and
+all prior aggregation calls are unchanged. Fifteen independently inventoried
+dependencies extend the source list from 409 to 424 without losing or reordering
+previous entries.
+
+An exact whole-module reverse-transition proof reconstructs the `e62e846`
+producer byte-for-byte. Prior visibility and historical test-suite conservation
+checks compose through that proof; they do not omit prior logic or refresh its
+historical hashes. Negative controls still reject unrelated source changes.
+
+Verification:
+
+- Combined transition, historical assertion, disabled-ink and alignment checks:
+  **9/9**, zero skips, 30,033.8187 ms (`position-producer-conservation-dff8c3b.tap`).
+- Actual legacy source inventory assertion: **1/1**, zero skips, 6,900.0035 ms
+  (`position-producer-inventory-dff8c3b.tap`).
+- Existing visibility pipeline and whole-module proof rerun: **2/2**, zero skips
+  (`position-visibility-pipeline-dff8c3b.tap`).
+
+Logs are under `artifacts/material-parity`. The accepted canonical manifest,
+payload and human report were copied and hash-verified at
+`artifacts/material-parity/pre-position-e62e846` before regeneration. Canonical
+regeneration and complete conservation are still pending. No renderer or
+canonical comparison fixture was modified.

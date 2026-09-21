@@ -18,7 +18,7 @@ test('migration proof rejects unrelated assertion changes, missing checks and wr
     current.replace('assert.equal(index.sourceFingerprints.length, 11)', 'assert.equal(index.sourceFingerprints.length, 10)'),
     current.replace("assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index);", ''),
     current.replace("assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index)", "assertHistoricalCaseIndexSources('docs/material-root-height-audit.json', index)"),
-    current.replace('audit.sourceFingerprints.length, 409', 'audit.sourceFingerprints.length, 408'),
+    current.replace('audit.sourceFingerprints.length, 424', 'audit.sourceFingerprints.length, 423'),
     current.replace("'reviewed-source-batch-pipeline.spec.mjs',", "'wrong-source.spec.mjs',"),
     current.replace(' && !additions.includes(f)', ''),
   ]) {

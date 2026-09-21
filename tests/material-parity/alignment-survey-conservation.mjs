@@ -20,6 +20,8 @@ const definitions = {
   'docs/material-remaining-text-alignment.json': ['scripts/audit-remaining-text-alignment.mjs', 'collectRemainingTextAlignment', 'sourceFingerprints'],
 };
 export const alignmentAuditImports = new Map([
+  ['./position-composition-audit-source-binding.mjs', ['collectPositionAuditInputs', 'applyPositionAuditRows', 'validatePositionAuditInputs',
+    'validatePositionAuditClassifications', 'positionCompositionAttribution']],
   ['./visibility-audit-source-binding.mjs', ['collectVisibilityAuditInputs', 'applyVisibilityAuditRows', 'validateVisibilityAuditInputs',
     'validateVisibilityAuditClassifications', 'visibilityObservationAttribution']],
   ['./root-background-classification-preparation.mjs', ['collectRootBackgroundAuditInputs', 'validateRootBackgroundEvidence', 'rootBackgroundClassificationContexts',

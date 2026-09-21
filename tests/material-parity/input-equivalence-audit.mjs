@@ -1,4 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { collectPositionAuditInputs, applyPositionAuditRows, validatePositionAuditInputs,
+  validatePositionAuditClassifications, positionCompositionAttribution } from './position-composition-audit-source-binding.mjs';
 import { collectVisibilityAuditInputs, applyVisibilityAuditRows, validateVisibilityAuditInputs,
   validateVisibilityAuditClassifications, visibilityObservationAttribution } from './visibility-audit-source-binding.mjs';
 import { createHash } from 'node:crypto';
@@ -250,7 +252,9 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     elementInventory, supplementalLineBoxes);
   const unreviewedDiscrepancies = collectStyleDiscrepancies(cases, originStageEvidence, retainedTypography, visibleOverflowInputs, borderInitialInputs, buttonBorderResetInputs, outlineTokenInputs, chipOutlineInputs, nonGridTemplateInputs, buttonTypographyScalarInputs, chipHostTypographyInputs, fieldHostTypographyInputs, rootTypographyInputs, appearanceInitialInputs, buttonAppearanceInputs, rootColorInputs, fieldColorInputs, rootHeightInputs, containerCaretInputs, fieldHostAlignmentInputs, rootInitialStyleInputs, fieldHostWeightTrackingInputs, tooltipUnpairedStyles, sliderInputBoxes, sliderBorderDefaults, fieldHostInitialStyleInputs, ownerInitialStyleEvidence, tooltipWrappingInputs, rootShadowInputs, rootFlowHeightInputs, buttonPillRadiusInputs, buttonFlexInputs, buttonHostRequestInputs, buttonFixedWidthInputs, ownerGridInitialInputs, buttonBoxSizingInputs, fieldHostLayoutInputs, ownerGapInputs, explicitGapInputs, gapReviewInputs, ownerCaretInputs, reviewedInputs, followupInputs, alignmentFontInputs, textAlignInputs, ltrAlignmentInputs, reviewedSourceBatchInputs, rootBackgroundInputs);
   const visibilityAuditInputs = collectVisibilityAuditInputs(parityReport, { root, parityPath: options.parityPath });
-  const discrepancies = applyVisibilityAuditRows(unreviewedDiscrepancies, visibilityAuditInputs);
+  const visibilityReviewedDiscrepancies = applyVisibilityAuditRows(unreviewedDiscrepancies, visibilityAuditInputs);
+  const positionAuditInputs = collectPositionAuditInputs(parityReport, { root, parityPath: options.parityPath });
+  const discrepancies = applyPositionAuditRows(visibilityReviewedDiscrepancies, positionAuditInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -353,6 +357,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     reviewedSourceBatchInputs,
     rootBackgroundInputs,
     visibilityAuditInputs,
+    positionAuditInputs,
     sliderInputBoxes,
     sliderBorderDefaults,
     rootHeightInputs,
@@ -379,6 +384,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
   for (const [key, attributions, validateSource, validateRows] of [
+    ['positionAuditInputs', [positionCompositionAttribution], validatePositionAuditInputs, validatePositionAuditClassifications],
     ['visibilityAuditInputs', [visibilityObservationAttribution], validateVisibilityAuditInputs, validateVisibilityAuditClassifications],
     ['rootBackgroundInputs', [rootBackgroundAttribution], validateRootBackgroundEvidence, validateRootBackgroundClassifications],
     ['reviewedSourceBatchInputs', reviewedSourceBatchAttributions, validateReviewedSourceBatchAuditInputs, validateReviewedSourceBatchClassifications],
@@ -8463,6 +8469,21 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/position-composition-audit-source-binding.mjs',
+    'tests/material-parity/position-composition-audit-source-binding.spec.mjs',
+    'tests/material-parity/position-composition-review.mjs',
+    'tests/material-parity/position-composition-review.spec.mjs',
+    'tests/material-parity/position-composition-producer-transition.mjs',
+    'tests/material-parity/position-composition-producer-transition.spec.mjs',
+    'scripts/audit-material-grid-position-substitution.mjs',
+    'scripts/audit-material-flow-position-substitutions.mjs',
+    'scripts/audit-material-position-population.mjs',
+    'tests/material-parity/grid-position-substitution.spec.mjs',
+    'tests/material-parity/flow-position-substitutions.spec.mjs',
+    'tests/material-parity/position-input-population.spec.mjs',
+    'docs/material-grid-position-substitution.json',
+    'docs/material-flow-position-substitutions.json',
+    'docs/material-position-input-population.json',
     'tests/material-parity/reviewed-source-batch-audit-source-binding.mjs',
     'tests/material-parity/reviewed-source-batch-audit-source-binding.spec.mjs',
     'tests/material-parity/reviewed-source-batch-pipeline.spec.mjs',

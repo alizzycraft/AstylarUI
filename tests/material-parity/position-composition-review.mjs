@@ -49,7 +49,7 @@ export function collectPositionCompositionReview() {
 }
 
 // This boundary cannot accept a caller-invented proof, subset, or reordered
-// review. The production producer is deliberately not wired to it yet.
+// review. The production adapter independently binds its capture before use.
 export function validatePositionCompositionReview(review) {
   assert.deepEqual(review, collectPositionCompositionReview());
 }

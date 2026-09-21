@@ -24,6 +24,25 @@ export function restoreInventoryAssertion(source) {
     '20da22f11520f94760ed996f0c25c6673795b9f1d4e33696c9249360c8d6a52c', 'independent inventory table changed');
   let restored = callback.getText(ast);
   restored = restored.replace(declaration.getText(ast), '');
+  const positioning = callback.body.statements.filter(n => ts.isVariableStatement(n)
+    && n.declarationList.declarations[0]?.name.getText(ast) === 'positionFiles');
+  if (positioning.length) {
+    assert.equal(positioning.length, 1);
+    assert.equal(createHash('sha256').update(printer.printNode(ts.EmitHint.Unspecified, positioning[0], ast)).digest('hex'),
+      'ad7954b55c7e27a6b353c421f0ff1e646510537938503d5ad9bd159bf64b33c5', 'positioning inventory table changed');
+    restored = restored.replace(positioning[0].getText(ast), '');
+    for (const [current, previous] of [
+      ['audit.sourceFingerprints.length, 424', 'audit.sourceFingerprints.length, 409'],
+      ['entry.file)).size, 424', 'entry.file)).size, 409'],
+      ['!visibilityFiles.includes(f) && !positionFiles.includes(f)', '!visibilityFiles.includes(f)'],
+      ['...visibilityFiles, ...positionFiles].sort()', '...visibilityFiles].sort()'],
+      ['...visibilityFiles, ...positionFiles])', '...visibilityFiles])'],
+      ['14 visibility and 15 positioning dependencies', '14 visibility dependencies'],
+    ]) {
+      assert.equal(restored.split(current).length, 2, 'missing or repeated positioning assertion');
+      restored = restored.replace(current, previous);
+    }
+  }
   const visibility = callback.body.statements.filter(n => ts.isVariableStatement(n)
     && n.declarationList.declarations[0]?.name.getText(ast) === 'visibilityFiles');
   if (visibility.length) {

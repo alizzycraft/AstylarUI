@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { restorePositionProducer } from './position-composition-producer-transition.mjs';
 import { createHash } from 'node:crypto';
 import { readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
@@ -15,7 +16,8 @@ export function verifyVisibilityAuditModuleTransition(previous, current) {
   const before = previous.toString().replaceAll('\r\n', '\n');
   const after = current.toString().replaceAll('\r\n', '\n');
   assert.equal(hash(before), 'ac8d32f078d75affd9ddf7d2d77d58f61fef9a3d78de2146fd69f6aeb471c095');
-  let restored = after;
+  let restored = after.includes("from './position-composition-audit-source-binding.mjs'")
+    ? restorePositionProducer(after).restoredSource : after;
   const replaceOnce = (from, to = '') => {
     assert.equal(restored.split(from).length, 2, `expected exactly one visibility integration fragment: ${from}`);
     restored = restored.replace(from, to);
