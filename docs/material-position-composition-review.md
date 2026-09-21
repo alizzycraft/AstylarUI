@@ -57,3 +57,20 @@ predecessor metadata, invented renderer-cause claim and an extra raw field.
 Log: `artifacts/material-parity/position-composition-serialized-validation-e62e846.tap`.
 This strengthens the future production validation boundary; the batch is still
 not wired into the canonical producer.
+
+## Production adapter boundary prepared
+
+`position-composition-audit-source-binding.mjs` adds the production-shaped
+collector, apply and validation entry points. It requires the full unchanged
+original capture, authenticates its bytes, independently replays the six source
+reviews, and retains all 316 observation identities. Unbound diagnostic inputs
+cannot acquire a classification; invalid inputs retain explicit errors rather
+than silently becoming an empty successful review.
+
+`node --max-old-space-size=1536 --test tests/material-parity/position-composition-audit-source-binding.spec.mjs`
+passed **2/2**, no skips, **29,179.7914 ms**. Tests cover serialization, altered
+observations/classification/source hash/equivalence claims, mismatched reports,
+out-of-bound evidence paths, missing rows and unbound application attempts.
+Log: `artifacts/material-parity/position-bound-adapter-68bcc35.tap`.
+Producer wiring, its source-transition proof and canonical regeneration remain
+pending; these tests are not a claim that the six findings are integrated.
