@@ -294,3 +294,26 @@ when containment, bottom gap and semantics pass. This is a confirmed limitation
 of that comparator, not a demonstrated full-harness false pass or a renderer
 diagnosis. Add calibrated horizontal/size checks before relying on its green
 result as complete geometry evidence. Keep visibility/raster proof separate.
+
+## Remaining legacy source-inventory assertion
+
+The full 388-test run after case-index migration finished with 387 passes and
+one failure: the source receipt test still expects 356 entries while the then
+current builder supplies 392. All 356 expected paths remain; the original
+308-file baseline order is preserved. The missing expectation comprises 36
+reviewed batch, alignment, precision, root-background, line-box and gap/caret
+dependencies. The later disabled-ink correction adds three more, for 395.
+
+`tests/material-parity/source-inventory-assertion-preparation.spec.mjs` independently
+enumerates those 39 additions and runs the entire existing test callback with
+only five exact in-memory assertion changes. Reversing those substitutions must
+restore the original callback. All original membership, receipt and visual-field
+checks remain; every additional file's current digest is checked. Four negative
+controls reject missing, duplicate, reordered or forged receipts.
+
+`node --max-old-space-size=1024 --test tests/material-parity/source-inventory-assertion-preparation.spec.mjs`
+passes **2/2**, no failures or skips, **8,062.6889 ms**. This prepares the exact
+test correction; it does not change the checked-in legacy test or claim the full
+suite is green. Apply the bounded assertion update after canonical regeneration
+finishes, explicitly preserve the earlier nine case-index assertion migrations,
+and rerun the affected conservation checks before the full suite.
