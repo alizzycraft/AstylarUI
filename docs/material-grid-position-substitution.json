@@ -1,0 +1,4303 @@
+{
+  "schemaVersion": 1,
+  "kind": "grid-position-authored-substitution",
+  "population": {
+    "file": "docs/material-position-input-population.json",
+    "sha256": "71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff"
+  },
+  "classification": "application-plugin-authoring-defect",
+  "owner": "showcase grid-list translation",
+  "groups": [
+    {
+      "element": "grid-list-primary",
+      "property": "position",
+      "reference": "relative",
+      "candidate": null,
+      "candidateOmitted": true,
+      "occurrences": 52,
+      "priorRowSha256": "f62c24536a5eb4eed0a6e195e48f72fa4f737f53e5a336e73308f2ec62271304",
+      "reviewedCases": [
+        "static:grid-list@light/desktop",
+        "static:grid-list@light/tablet",
+        "static:grid-list@light/mobile",
+        "static:grid-list@dark/desktop",
+        "static:grid-list@dark/tablet",
+        "static:grid-list@dark/mobile",
+        "static:grid-list@contrast/desktop",
+        "static:grid-list@contrast/tablet",
+        "static:grid-list@contrast/mobile",
+        "static:grid-list@custom/desktop",
+        "static:grid-list@custom/tablet",
+        "static:grid-list@custom/mobile",
+        "interaction:grid-list@light/desktop-dpr1/focus",
+        "interaction:grid-list@light/desktop-dpr1/hover",
+        "interaction:grid-list@light/desktop-dpr1/held",
+        "interaction:grid-list@light/desktop-dpr1/activate",
+        "interaction:grid-list@light/desktop-dpr1/activate-leave",
+        "interaction:grid-list@light/desktop-dpr2/focus",
+        "interaction:grid-list@light/desktop-dpr2/hover",
+        "interaction:grid-list@light/desktop-dpr2/held",
+        "interaction:grid-list@light/desktop-dpr2/activate",
+        "interaction:grid-list@light/desktop-dpr2/activate-leave",
+        "interaction:grid-list@dark/desktop-dpr1/focus",
+        "interaction:grid-list@dark/desktop-dpr1/hover",
+        "interaction:grid-list@dark/desktop-dpr1/held",
+        "interaction:grid-list@dark/desktop-dpr1/activate",
+        "interaction:grid-list@dark/desktop-dpr1/activate-leave",
+        "interaction:grid-list@dark/desktop-dpr2/focus",
+        "interaction:grid-list@dark/desktop-dpr2/hover",
+        "interaction:grid-list@dark/desktop-dpr2/held",
+        "interaction:grid-list@dark/desktop-dpr2/activate",
+        "interaction:grid-list@dark/desktop-dpr2/activate-leave",
+        "interaction:grid-list@contrast/desktop-dpr1/focus",
+        "interaction:grid-list@contrast/desktop-dpr1/hover",
+        "interaction:grid-list@contrast/desktop-dpr1/held",
+        "interaction:grid-list@contrast/desktop-dpr1/activate",
+        "interaction:grid-list@contrast/desktop-dpr1/activate-leave",
+        "interaction:grid-list@contrast/desktop-dpr2/focus",
+        "interaction:grid-list@contrast/desktop-dpr2/hover",
+        "interaction:grid-list@contrast/desktop-dpr2/held",
+        "interaction:grid-list@contrast/desktop-dpr2/activate",
+        "interaction:grid-list@contrast/desktop-dpr2/activate-leave",
+        "interaction:grid-list@custom/desktop-dpr1/focus",
+        "interaction:grid-list@custom/desktop-dpr1/hover",
+        "interaction:grid-list@custom/desktop-dpr1/held",
+        "interaction:grid-list@custom/desktop-dpr1/activate",
+        "interaction:grid-list@custom/desktop-dpr1/activate-leave",
+        "interaction:grid-list@custom/desktop-dpr2/focus",
+        "interaction:grid-list@custom/desktop-dpr2/hover",
+        "interaction:grid-list@custom/desktop-dpr2/held",
+        "interaction:grid-list@custom/desktop-dpr2/activate",
+        "interaction:grid-list@custom/desktop-dpr2/activate-leave"
+      ],
+      "originalInputsSha256": "bcc76cd8f70d24f6b53dd1d47e930bc9e17e72e57da11634670d7541b4357e94"
+    },
+    {
+      "element": "grid-tile-one",
+      "property": "position",
+      "reference": "absolute",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "occurrences": 52,
+      "priorRowSha256": "712506aa94ef807d373f72165db13c0523625cdcdc0ffd7f904fe0badda6b235",
+      "reviewedCases": [
+        "static:grid-list@light/desktop",
+        "static:grid-list@light/tablet",
+        "static:grid-list@light/mobile",
+        "static:grid-list@dark/desktop",
+        "static:grid-list@dark/tablet",
+        "static:grid-list@dark/mobile",
+        "static:grid-list@contrast/desktop",
+        "static:grid-list@contrast/tablet",
+        "static:grid-list@contrast/mobile",
+        "static:grid-list@custom/desktop",
+        "static:grid-list@custom/tablet",
+        "static:grid-list@custom/mobile",
+        "interaction:grid-list@light/desktop-dpr1/focus",
+        "interaction:grid-list@light/desktop-dpr1/hover",
+        "interaction:grid-list@light/desktop-dpr1/held",
+        "interaction:grid-list@light/desktop-dpr1/activate",
+        "interaction:grid-list@light/desktop-dpr1/activate-leave",
+        "interaction:grid-list@light/desktop-dpr2/focus",
+        "interaction:grid-list@light/desktop-dpr2/hover",
+        "interaction:grid-list@light/desktop-dpr2/held",
+        "interaction:grid-list@light/desktop-dpr2/activate",
+        "interaction:grid-list@light/desktop-dpr2/activate-leave",
+        "interaction:grid-list@dark/desktop-dpr1/focus",
+        "interaction:grid-list@dark/desktop-dpr1/hover",
+        "interaction:grid-list@dark/desktop-dpr1/held",
+        "interaction:grid-list@dark/desktop-dpr1/activate",
+        "interaction:grid-list@dark/desktop-dpr1/activate-leave",
+        "interaction:grid-list@dark/desktop-dpr2/focus",
+        "interaction:grid-list@dark/desktop-dpr2/hover",
+        "interaction:grid-list@dark/desktop-dpr2/held",
+        "interaction:grid-list@dark/desktop-dpr2/activate",
+        "interaction:grid-list@dark/desktop-dpr2/activate-leave",
+        "interaction:grid-list@contrast/desktop-dpr1/focus",
+        "interaction:grid-list@contrast/desktop-dpr1/hover",
+        "interaction:grid-list@contrast/desktop-dpr1/held",
+        "interaction:grid-list@contrast/desktop-dpr1/activate",
+        "interaction:grid-list@contrast/desktop-dpr1/activate-leave",
+        "interaction:grid-list@contrast/desktop-dpr2/focus",
+        "interaction:grid-list@contrast/desktop-dpr2/hover",
+        "interaction:grid-list@contrast/desktop-dpr2/held",
+        "interaction:grid-list@contrast/desktop-dpr2/activate",
+        "interaction:grid-list@contrast/desktop-dpr2/activate-leave",
+        "interaction:grid-list@custom/desktop-dpr1/focus",
+        "interaction:grid-list@custom/desktop-dpr1/hover",
+        "interaction:grid-list@custom/desktop-dpr1/held",
+        "interaction:grid-list@custom/desktop-dpr1/activate",
+        "interaction:grid-list@custom/desktop-dpr1/activate-leave",
+        "interaction:grid-list@custom/desktop-dpr2/focus",
+        "interaction:grid-list@custom/desktop-dpr2/hover",
+        "interaction:grid-list@custom/desktop-dpr2/held",
+        "interaction:grid-list@custom/desktop-dpr2/activate",
+        "interaction:grid-list@custom/desktop-dpr2/activate-leave"
+      ],
+      "originalInputsSha256": "5a701c8529b24e3a99f77bfe127233fdc9f75b45de3f8aacda3e116f5d8c842f"
+    },
+    {
+      "element": "grid-tile-two",
+      "property": "position",
+      "reference": "absolute",
+      "candidate": "relative",
+      "candidateOmitted": false,
+      "occurrences": 52,
+      "priorRowSha256": "08eb07d3b538fd4ad17ec951437a9c03c4ee70ff9abc7e025efcf9342220b46a",
+      "reviewedCases": [
+        "static:grid-list@light/desktop",
+        "static:grid-list@light/tablet",
+        "static:grid-list@light/mobile",
+        "static:grid-list@dark/desktop",
+        "static:grid-list@dark/tablet",
+        "static:grid-list@dark/mobile",
+        "static:grid-list@contrast/desktop",
+        "static:grid-list@contrast/tablet",
+        "static:grid-list@contrast/mobile",
+        "static:grid-list@custom/desktop",
+        "static:grid-list@custom/tablet",
+        "static:grid-list@custom/mobile",
+        "interaction:grid-list@light/desktop-dpr1/focus",
+        "interaction:grid-list@light/desktop-dpr1/hover",
+        "interaction:grid-list@light/desktop-dpr1/held",
+        "interaction:grid-list@light/desktop-dpr1/activate",
+        "interaction:grid-list@light/desktop-dpr1/activate-leave",
+        "interaction:grid-list@light/desktop-dpr2/focus",
+        "interaction:grid-list@light/desktop-dpr2/hover",
+        "interaction:grid-list@light/desktop-dpr2/held",
+        "interaction:grid-list@light/desktop-dpr2/activate",
+        "interaction:grid-list@light/desktop-dpr2/activate-leave",
+        "interaction:grid-list@dark/desktop-dpr1/focus",
+        "interaction:grid-list@dark/desktop-dpr1/hover",
+        "interaction:grid-list@dark/desktop-dpr1/held",
+        "interaction:grid-list@dark/desktop-dpr1/activate",
+        "interaction:grid-list@dark/desktop-dpr1/activate-leave",
+        "interaction:grid-list@dark/desktop-dpr2/focus",
+        "interaction:grid-list@dark/desktop-dpr2/hover",
+        "interaction:grid-list@dark/desktop-dpr2/held",
+        "interaction:grid-list@dark/desktop-dpr2/activate",
+        "interaction:grid-list@dark/desktop-dpr2/activate-leave",
+        "interaction:grid-list@contrast/desktop-dpr1/focus",
+        "interaction:grid-list@contrast/desktop-dpr1/hover",
+        "interaction:grid-list@contrast/desktop-dpr1/held",
+        "interaction:grid-list@contrast/desktop-dpr1/activate",
+        "interaction:grid-list@contrast/desktop-dpr1/activate-leave",
+        "interaction:grid-list@contrast/desktop-dpr2/focus",
+        "interaction:grid-list@contrast/desktop-dpr2/hover",
+        "interaction:grid-list@contrast/desktop-dpr2/held",
+        "interaction:grid-list@contrast/desktop-dpr2/activate",
+        "interaction:grid-list@contrast/desktop-dpr2/activate-leave",
+        "interaction:grid-list@custom/desktop-dpr1/focus",
+        "interaction:grid-list@custom/desktop-dpr1/hover",
+        "interaction:grid-list@custom/desktop-dpr1/held",
+        "interaction:grid-list@custom/desktop-dpr1/activate",
+        "interaction:grid-list@custom/desktop-dpr1/activate-leave",
+        "interaction:grid-list@custom/desktop-dpr2/focus",
+        "interaction:grid-list@custom/desktop-dpr2/hover",
+        "interaction:grid-list@custom/desktop-dpr2/held",
+        "interaction:grid-list@custom/desktop-dpr2/activate",
+        "interaction:grid-list@custom/desktop-dpr2/activate-leave"
+      ],
+      "originalInputsSha256": "8e12eda06f42a4089d41ddc0dc204da9aa715a3dca1ad9180489cb3c7926ee0a"
+    }
+  ],
+  "counts": {
+    "groups": 3,
+    "scalarObservations": 156,
+    "completeTreePairs": 52
+  },
+  "history": [
+    {
+      "commit": "2f440115",
+      "sourcePath": "examples/material-showcase/src/app/astylar.component.ts",
+      "sourceSha256": "6838d7fef8895e21dffff9f61673f6e55212f45472159c4b06ed09f3996d7a24",
+      "gridRules": [
+        "        { selector: '.grid-list', width: '100%', height: '80px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' },",
+        "        { selector: '.grid-tile', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.mode === 'dark' ? '#2b2930' : '#f3edf7' },"
+      ]
+    },
+    {
+      "commit": "d3ff236",
+      "sourcePath": "examples/material-showcase/src/app/astylar.component.ts",
+      "sourceSha256": "bf0ad72d1a3399ece0e2dd432cc3160f6b4c698d357fa26c39f28c4c9b1066dc",
+      "gridRules": [
+        "        { selector: '.grid-list', width: '100%', height: '80px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' },",
+        "        { selector: '.grid-tile', position: 'relative', height: '80px', background: theme.surfaceContainer },",
+        "        { selector: '.grid-tile-label', position: 'absolute', top: `${theme.density <= -5 ? 30 : theme.typographyScale > 1 ? 26 : 28}px`, left: '0', width: '100%', textAlign: 'center', whiteSpace: 'nowrap' },",
+        "        ...(family === 'grid-list' && theme.density <= -5 ? [{ selector: '.grid-tile-label', mediaMaxWidth: '500px', top: '29px' }] : []),",
+        "        ...(family === 'grid-list' && theme.typographyScale > 1 ? [{ selector: '.grid-tile-label', mediaMaxWidth: '500px', top: '25.5px' }] : []),"
+      ]
+    },
+    {
+      "commit": "2f63b523",
+      "sourcePath": "examples/material-showcase/src/app/astylar.component.ts",
+      "sourceSha256": "a30c06af19e436aef8e51d081809dcb6f2047559592b62b4a35e186a6def9bfc",
+      "gridRules": [
+        "        { selector: '.grid-list', width: '100%', height: '80px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0' },",
+        "        { selector: '.grid-tile', position: 'relative', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.surfaceContainer },",
+        "        { selector: '.grid-tile-label', whiteSpace: 'nowrap' },"
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "case": "static:grid-list@light/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/light/desktop/reference-input-tree.json",
+          "sha256": "a3181d38bbe88432386fa7bfa412cf71db832e49660a97d31ea2adbbea458a22"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/light/desktop/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:grid-list@light/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/light/tablet/reference-input-tree.json",
+          "sha256": "0448f602650c78c0a95a32695fcc86e9b8f132ce6de458ea577ac704ac0e53a3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/light/tablet/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:grid-list@light/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/light/mobile/reference-input-tree.json",
+          "sha256": "f43a2769655fdfe9fee27d4dc458bdd34f5fafeeaff5902908834bb268fa3588"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/light/mobile/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:grid-list@dark/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/dark/desktop/reference-input-tree.json",
+          "sha256": "216be34a8668264805cc4005116aecfcb409725e3861cd6524ebee71bfc84a7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/dark/desktop/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:grid-list@dark/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/dark/tablet/reference-input-tree.json",
+          "sha256": "08b2b2d52d3ce081d94034d8f8a043ed1d5d0538e3c9306f0423322beb1cbee2"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/dark/tablet/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:grid-list@dark/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/dark/mobile/reference-input-tree.json",
+          "sha256": "2f2021fb2f86ca236d4346d62816770cc6bd91e07b19f846839a20c714a7416f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/dark/mobile/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:grid-list@contrast/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/contrast/desktop/reference-input-tree.json",
+          "sha256": "bf019b1b3c9d88a50cd99dbf1b0b9fdcb1b888375a1823e35808a0cae839907b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/contrast/desktop/astylar-input-tree.json",
+          "sha256": "c20024f7349ab05c9df637d44cfaab33a2184c8d6adeaab55bc2744b70ecd3b6"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:grid-list@contrast/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/contrast/tablet/reference-input-tree.json",
+          "sha256": "eaa00d8f33eb3ec1afdeb8316598209a958b1028fe3c19f34f6484ef063468e2"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/contrast/tablet/astylar-input-tree.json",
+          "sha256": "c20024f7349ab05c9df637d44cfaab33a2184c8d6adeaab55bc2744b70ecd3b6"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:grid-list@contrast/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/contrast/mobile/reference-input-tree.json",
+          "sha256": "f21e5d6946a1e9d06731fa827a946fc04e655d2997278f76953f2f31067d512e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/contrast/mobile/astylar-input-tree.json",
+          "sha256": "ddb07eb82ad1ce3fcd488d64c6ec643f0395afb020cb56534ef4e3226155f4d7"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:grid-list@custom/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/custom/desktop/reference-input-tree.json",
+          "sha256": "ae1271bd583471a02d19e4c6447138d3d6e77c47bba1c6c15fd8643b310765c5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/custom/desktop/astylar-input-tree.json",
+          "sha256": "33d07c3f6df17a23037c2ab226984cfe77a6a3c19e406bca87ca5fc4e927dfa8"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:grid-list@custom/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/custom/tablet/reference-input-tree.json",
+          "sha256": "b628a30a8dde20a150dfaa6900f9dd0b8186a2a7f7ef924569a18755e7d37102"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/custom/tablet/astylar-input-tree.json",
+          "sha256": "33d07c3f6df17a23037c2ab226984cfe77a6a3c19e406bca87ca5fc4e927dfa8"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "static:grid-list@custom/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/custom/mobile/reference-input-tree.json",
+          "sha256": "68129011b07672c026cff89af35662b3bb757a64f128d9a5bb477fd8a374d4a1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/grid-list/custom/mobile/astylar-input-tree.json",
+          "sha256": "65eba7eba12e199717c115903efcfd0443a7d155bf3d2ead8c9f58b197471380"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@light/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "a3181d38bbe88432386fa7bfa412cf71db832e49660a97d31ea2adbbea458a22"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@light/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "a3181d38bbe88432386fa7bfa412cf71db832e49660a97d31ea2adbbea458a22"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@light/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "a3181d38bbe88432386fa7bfa412cf71db832e49660a97d31ea2adbbea458a22"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@light/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "a3181d38bbe88432386fa7bfa412cf71db832e49660a97d31ea2adbbea458a22"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@light/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "a3181d38bbe88432386fa7bfa412cf71db832e49660a97d31ea2adbbea458a22"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@light/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "a3181d38bbe88432386fa7bfa412cf71db832e49660a97d31ea2adbbea458a22"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@light/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "a3181d38bbe88432386fa7bfa412cf71db832e49660a97d31ea2adbbea458a22"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@light/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "a3181d38bbe88432386fa7bfa412cf71db832e49660a97d31ea2adbbea458a22"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@light/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "a3181d38bbe88432386fa7bfa412cf71db832e49660a97d31ea2adbbea458a22"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@light/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "a3181d38bbe88432386fa7bfa412cf71db832e49660a97d31ea2adbbea458a22"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "6bfd100d2d12c21975e1308c3d6e7c8f2b599708b38dc4d78a18b81a9508f3f5"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@dark/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "216be34a8668264805cc4005116aecfcb409725e3861cd6524ebee71bfc84a7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@dark/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "216be34a8668264805cc4005116aecfcb409725e3861cd6524ebee71bfc84a7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@dark/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "216be34a8668264805cc4005116aecfcb409725e3861cd6524ebee71bfc84a7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@dark/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "216be34a8668264805cc4005116aecfcb409725e3861cd6524ebee71bfc84a7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@dark/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "216be34a8668264805cc4005116aecfcb409725e3861cd6524ebee71bfc84a7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@dark/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "216be34a8668264805cc4005116aecfcb409725e3861cd6524ebee71bfc84a7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@dark/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "216be34a8668264805cc4005116aecfcb409725e3861cd6524ebee71bfc84a7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@dark/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "216be34a8668264805cc4005116aecfcb409725e3861cd6524ebee71bfc84a7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@dark/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "216be34a8668264805cc4005116aecfcb409725e3861cd6524ebee71bfc84a7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@dark/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "216be34a8668264805cc4005116aecfcb409725e3861cd6524ebee71bfc84a7a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "93200f79548b0521aa1d521c06ca965f2cfef2f52469e86abc519e134c8c1d8a"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@contrast/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "bf019b1b3c9d88a50cd99dbf1b0b9fdcb1b888375a1823e35808a0cae839907b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "c20024f7349ab05c9df637d44cfaab33a2184c8d6adeaab55bc2744b70ecd3b6"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@contrast/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "bf019b1b3c9d88a50cd99dbf1b0b9fdcb1b888375a1823e35808a0cae839907b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "c20024f7349ab05c9df637d44cfaab33a2184c8d6adeaab55bc2744b70ecd3b6"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@contrast/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "bf019b1b3c9d88a50cd99dbf1b0b9fdcb1b888375a1823e35808a0cae839907b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "c20024f7349ab05c9df637d44cfaab33a2184c8d6adeaab55bc2744b70ecd3b6"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@contrast/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "bf019b1b3c9d88a50cd99dbf1b0b9fdcb1b888375a1823e35808a0cae839907b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "c20024f7349ab05c9df637d44cfaab33a2184c8d6adeaab55bc2744b70ecd3b6"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@contrast/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "bf019b1b3c9d88a50cd99dbf1b0b9fdcb1b888375a1823e35808a0cae839907b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "c20024f7349ab05c9df637d44cfaab33a2184c8d6adeaab55bc2744b70ecd3b6"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@contrast/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "bf019b1b3c9d88a50cd99dbf1b0b9fdcb1b888375a1823e35808a0cae839907b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "ddb07eb82ad1ce3fcd488d64c6ec643f0395afb020cb56534ef4e3226155f4d7"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@contrast/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "bf019b1b3c9d88a50cd99dbf1b0b9fdcb1b888375a1823e35808a0cae839907b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "ddb07eb82ad1ce3fcd488d64c6ec643f0395afb020cb56534ef4e3226155f4d7"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@contrast/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "bf019b1b3c9d88a50cd99dbf1b0b9fdcb1b888375a1823e35808a0cae839907b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "ddb07eb82ad1ce3fcd488d64c6ec643f0395afb020cb56534ef4e3226155f4d7"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@contrast/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "bf019b1b3c9d88a50cd99dbf1b0b9fdcb1b888375a1823e35808a0cae839907b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "ddb07eb82ad1ce3fcd488d64c6ec643f0395afb020cb56534ef4e3226155f4d7"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@contrast/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "bf019b1b3c9d88a50cd99dbf1b0b9fdcb1b888375a1823e35808a0cae839907b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "ddb07eb82ad1ce3fcd488d64c6ec643f0395afb020cb56534ef4e3226155f4d7"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@custom/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "ae1271bd583471a02d19e4c6447138d3d6e77c47bba1c6c15fd8643b310765c5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "33d07c3f6df17a23037c2ab226984cfe77a6a3c19e406bca87ca5fc4e927dfa8"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@custom/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "ae1271bd583471a02d19e4c6447138d3d6e77c47bba1c6c15fd8643b310765c5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "33d07c3f6df17a23037c2ab226984cfe77a6a3c19e406bca87ca5fc4e927dfa8"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@custom/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "ae1271bd583471a02d19e4c6447138d3d6e77c47bba1c6c15fd8643b310765c5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "33d07c3f6df17a23037c2ab226984cfe77a6a3c19e406bca87ca5fc4e927dfa8"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@custom/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "ae1271bd583471a02d19e4c6447138d3d6e77c47bba1c6c15fd8643b310765c5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "33d07c3f6df17a23037c2ab226984cfe77a6a3c19e406bca87ca5fc4e927dfa8"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@custom/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "ae1271bd583471a02d19e4c6447138d3d6e77c47bba1c6c15fd8643b310765c5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "33d07c3f6df17a23037c2ab226984cfe77a6a3c19e406bca87ca5fc4e927dfa8"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@custom/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "ae1271bd583471a02d19e4c6447138d3d6e77c47bba1c6c15fd8643b310765c5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "cdca7ae2820772a89e2b45ef7d140613173f3074dbdc93c1fabf30eea2a343c0"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@custom/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "ae1271bd583471a02d19e4c6447138d3d6e77c47bba1c6c15fd8643b310765c5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "cdca7ae2820772a89e2b45ef7d140613173f3074dbdc93c1fabf30eea2a343c0"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@custom/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "ae1271bd583471a02d19e4c6447138d3d6e77c47bba1c6c15fd8643b310765c5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "cdca7ae2820772a89e2b45ef7d140613173f3074dbdc93c1fabf30eea2a343c0"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@custom/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "ae1271bd583471a02d19e4c6447138d3d6e77c47bba1c6c15fd8643b310765c5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "cdca7ae2820772a89e2b45ef7d140613173f3074dbdc93c1fabf30eea2a343c0"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    },
+    {
+      "case": "interaction:grid-list@custom/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "ae1271bd583471a02d19e4c6447138d3d6e77c47bba1c6c15fd8643b310765c5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/grid-list/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "cdca7ae2820772a89e2b45ef7d140613173f3074dbdc93c1fabf30eea2a343c0"
+        }
+      },
+      "proof": {
+        "referenceRootKey": "frame/2/0",
+        "candidateRootKey": "root/0/2/0",
+        "referenceRootPosition": "relative",
+        "candidateRootPositionOmitted": true,
+        "referenceLayout": "block with absolute tiles and calc sizing",
+        "candidateLayout": "zero-gap two-track grid with relative flex tiles",
+        "tiles": [
+          {
+            "id": "grid-tile-one",
+            "referenceKey": "frame/2/0/0/0",
+            "candidateKey": "root/0/2/0/0",
+            "referenceInline": {
+              "left": {
+                "value": "0px",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          },
+          {
+            "id": "grid-tile-two",
+            "referenceKey": "frame/2/0/0/1",
+            "candidateKey": "root/0/2/0/1",
+            "referenceInline": {
+              "left": {
+                "value": "calc(50% + 0.5px)",
+                "important": false
+              },
+              "width": {
+                "value": "calc(50% - 0.5px)",
+                "important": false
+              },
+              "top": {
+                "value": "0px",
+                "important": false
+              },
+              "height": {
+                "value": "calc(80px)",
+                "important": false
+              }
+            },
+            "referencePosition": "absolute",
+            "candidatePosition": "relative"
+          }
+        ],
+        "classification": "application-plugin-authoring-defect",
+        "firstDivergence": "authored layout requests before core layout and projection",
+        "usedCandidateRootPositionProven": false,
+        "rendererCauseProven": false,
+        "renderingEquivalent": false
+      }
+    }
+  ],
+  "canonicalAttributionChanged": false,
+  "rendererCauseProven": false,
+  "renderingEquivalent": false
+}
