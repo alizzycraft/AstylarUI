@@ -253,3 +253,44 @@ Result: **24/24**, exit **0**, no failures, skips, cancellations or TODOs, in
 These are evidence-replay and negative-control passes; the underlying public
 rendering/interaction failures remain retained and unfixed. This is not a fresh
 browser capture, the complete audit harness, or enforced output-parity acceptance.
+
+## Audit integration follow-up after canonical regeneration
+
+The canonical report at `6833850` retains **1,689 unresolved scalar groups**.
+A complete authenticated streamed read confirms these are distributed across
+many properties, including color (105 groups), background color (78), line
+height (64), transform origin (59), position (58), box sizing (55), appearance
+(54) and letter spacing (54). These are review signatures, not counts of core
+bugs. The remaining groups and every original observation stay in the canonical
+payload; this summary is not a replacement for their classification.
+
+The separate **60 unresolved control-texture records** are all disabled-button
+color. The [classifier diagnosis and prepared replay](material-disabled-button-ink.md)
+identify an integer-only RGB guard rejecting the precise normalizer's fractional
+channels. An in-memory one-regex correction passes the complete classifier for
+all 60 authenticated original owners while preserving exact color values and
+ten negative controls. This is an audit classifier defect, separate from the
+underlying already-reviewed unequal foreground authoring. Integration must:
+
+1. Wait for the active full legacy run to finish; preserve its complete result.
+2. Apply only the demonstrated numeric-syntax correction, preserving alpha and
+   all source, owner and stage requirements.
+3. Explicitly account for that correction in historical-source conservation.
+   `verifyAlignmentAuditProjection` currently requires the entire retained
+   classifier to match the historical declaration. Do not bypass that check by
+   treating arbitrary changed code or a fresh hash as equivalent.
+4. Regenerate canonical evidence and verify exact affected membership plus
+   unchanged unrelated records, followed by the full audit and enforced gates.
+
+The [overlay ancestry check](material-position-input-population.md) establishes
+that all 59 sheet/snackbar mapped absolute reference wrappers have fixed parents.
+The candidate uses a directly fixed overlay. This rules out treating the keyword
+mismatch alone as sufficient proof of a positioning defect; actual containing
+blocks, surface boundaries, clipping and interaction remain separate obligations.
+
+The [snackbar sensitivity proof](material-snackbar-placement-sensitivity.md)
+demonstrates that its placement comparator accepts horizontal and size errors
+when containment, bottom gap and semantics pass. This is a confirmed limitation
+of that comparator, not a demonstrated full-harness false pass or a renderer
+diagnosis. Add calibrated horizontal/size checks before relying on its green
+result as complete geometry evidence. Keep visibility/raster proof separate.
