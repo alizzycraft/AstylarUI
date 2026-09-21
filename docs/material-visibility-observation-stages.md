@@ -69,3 +69,33 @@ unreviewed inputs do not, and 11 tampering controls reject. This closes the
 unvalidated-context limitation for callers using the binder; the low-level
 classifier alone still is not a source validator. Canonical wiring, exact row
 conservation, source-receipt accounting and regeneration remain pending.
+
+### Canonical-shaped adapter prepared
+
+`visibility-audit-source-binding.mjs` now exposes collection, per-input contexts,
+fresh source validation and exact grouped-coverage validation in the shape used
+by the production audit. It requires the complete original capture and rejects
+paths outside Material artifacts. Each of the 530 decisions is replayed through
+the validated binder before constructing 15 canonical-shaped groups. Group
+evidence retains the original complete row digest and complete proof digest;
+all equivalence and renderer-cause claims remain false.
+
+`node --max-old-space-size=1536 --test tests/material-parity/visibility-audit-source-binding.spec.mjs`
+passes **1/1**, no skips, **13,990.7748 ms**, including all original inputs,
+fresh source replay, eight aggregation mutations, a forged source observation,
+unbound use and an out-of-bound source path.
+
+This adapter is not yet imported by the production builder. Remaining integration:
+
+1. Wire collection, serialization, classification and both validation paths;
+   preserve full reviewed case membership in grouping.
+2. Add all actual proof dependencies to the source inventory and extend its
+   exact assertion without discarding historical inventory conservation.
+3. Account explicitly for the new orchestration/import in historical mapping
+   and alignment projections. Preserve the disabled-ink transition proof and
+   explain any changed normalization-reconciliation module receipts separately.
+4. Run the actual production aggregation with/without the new evidence, proving
+   all raw and unrelated rows unchanged and exactly 15 groups / 530 observations
+   newly classified.
+5. Regenerate the canonical report once the bounded integration proofs pass,
+   then verify complete canonical conservation and required full gates.
