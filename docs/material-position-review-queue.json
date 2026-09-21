@@ -78,8 +78,11 @@
       "candidateOmitted": true,
       "observations": 68,
       "priorRowSha256": "1c3a05d11286279935c9b9e1d7613c23857c954f96bb4d5a549019c7e8346e3e",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-button-toggle-position-inspection.json",
+        "sha256": "cadc556131d1ce5f54e7b5eab882ae5d2373c8188379c25f915d136456653883"
+      }
     },
     {
       "family": "button-toggle",
@@ -90,8 +93,11 @@
       "candidateOmitted": true,
       "observations": 68,
       "priorRowSha256": "f6ce16bf40f26e348cd9cdd2a8a10c4086e4bbf9f58d835e6b37bade87eb5d11",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-button-toggle-position-inspection.json",
+        "sha256": "cadc556131d1ce5f54e7b5eab882ae5d2373c8188379c25f915d136456653883"
+      }
     },
     {
       "family": "button-toggle",
@@ -102,8 +108,11 @@
       "candidateOmitted": true,
       "observations": 68,
       "priorRowSha256": "c9ff75fe548a70e45cde1bdfd6be0467b31809eca19351b7326d4b389d282349",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-button-toggle-position-inspection.json",
+        "sha256": "cadc556131d1ce5f54e7b5eab882ae5d2373c8188379c25f915d136456653883"
+      }
     },
     {
       "family": "card",
@@ -766,16 +775,16 @@
       "observations": 564
     },
     "investigation-pending": {
-      "groups": 39,
-      "observations": 1958
+      "groups": 36,
+      "observations": 1754
+    },
+    "inspection-classification-pending": {
+      "groups": 5,
+      "observations": 316
     },
     "producer-integrated-conservation-pending": {
       "groups": 6,
       "observations": 316
-    },
-    "inspection-classification-pending": {
-      "groups": 2,
-      "observations": 112
     }
   },
   "canonicalAcceptanceClaimed": false,

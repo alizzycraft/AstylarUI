@@ -1,0 +1,3980 @@
+{
+  "schemaVersion": 1,
+  "kind": "button-toggle-position-inspection",
+  "population": {
+    "file": "docs/material-position-input-population.json",
+    "sha256": "71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff"
+  },
+  "groups": [
+    {
+      "element": "button-toggle-one",
+      "priorRowSha256": "1c3a05d11286279935c9b9e1d7613c23857c954f96bb4d5a549019c7e8346e3e",
+      "cases": [
+        "static:button-toggle@light/desktop",
+        "static:button-toggle@light/tablet",
+        "static:button-toggle@light/mobile",
+        "static:button-toggle@dark/desktop",
+        "static:button-toggle@dark/tablet",
+        "static:button-toggle@dark/mobile",
+        "static:button-toggle@contrast/desktop",
+        "static:button-toggle@contrast/tablet",
+        "static:button-toggle@contrast/mobile",
+        "static:button-toggle@custom/desktop",
+        "static:button-toggle@custom/tablet",
+        "static:button-toggle@custom/mobile",
+        "interaction:button-toggle@light/desktop-dpr1/focus",
+        "interaction:button-toggle@light/desktop-dpr1/hover",
+        "interaction:button-toggle@light/desktop-dpr1/held",
+        "interaction:button-toggle@light/desktop-dpr1/activate",
+        "interaction:button-toggle@light/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@light/desktop-dpr1/disabled",
+        "interaction:button-toggle@light/desktop-dpr1/selected",
+        "interaction:button-toggle@light/desktop-dpr2/focus",
+        "interaction:button-toggle@light/desktop-dpr2/hover",
+        "interaction:button-toggle@light/desktop-dpr2/held",
+        "interaction:button-toggle@light/desktop-dpr2/activate",
+        "interaction:button-toggle@light/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@light/desktop-dpr2/disabled",
+        "interaction:button-toggle@light/desktop-dpr2/selected",
+        "interaction:button-toggle@dark/desktop-dpr1/focus",
+        "interaction:button-toggle@dark/desktop-dpr1/hover",
+        "interaction:button-toggle@dark/desktop-dpr1/held",
+        "interaction:button-toggle@dark/desktop-dpr1/activate",
+        "interaction:button-toggle@dark/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@dark/desktop-dpr1/disabled",
+        "interaction:button-toggle@dark/desktop-dpr1/selected",
+        "interaction:button-toggle@dark/desktop-dpr2/focus",
+        "interaction:button-toggle@dark/desktop-dpr2/hover",
+        "interaction:button-toggle@dark/desktop-dpr2/held",
+        "interaction:button-toggle@dark/desktop-dpr2/activate",
+        "interaction:button-toggle@dark/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@dark/desktop-dpr2/disabled",
+        "interaction:button-toggle@dark/desktop-dpr2/selected",
+        "interaction:button-toggle@contrast/desktop-dpr1/focus",
+        "interaction:button-toggle@contrast/desktop-dpr1/hover",
+        "interaction:button-toggle@contrast/desktop-dpr1/held",
+        "interaction:button-toggle@contrast/desktop-dpr1/activate",
+        "interaction:button-toggle@contrast/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@contrast/desktop-dpr1/disabled",
+        "interaction:button-toggle@contrast/desktop-dpr1/selected",
+        "interaction:button-toggle@contrast/desktop-dpr2/focus",
+        "interaction:button-toggle@contrast/desktop-dpr2/hover",
+        "interaction:button-toggle@contrast/desktop-dpr2/held",
+        "interaction:button-toggle@contrast/desktop-dpr2/activate",
+        "interaction:button-toggle@contrast/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@contrast/desktop-dpr2/disabled",
+        "interaction:button-toggle@contrast/desktop-dpr2/selected",
+        "interaction:button-toggle@custom/desktop-dpr1/focus",
+        "interaction:button-toggle@custom/desktop-dpr1/hover",
+        "interaction:button-toggle@custom/desktop-dpr1/held",
+        "interaction:button-toggle@custom/desktop-dpr1/activate",
+        "interaction:button-toggle@custom/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@custom/desktop-dpr1/disabled",
+        "interaction:button-toggle@custom/desktop-dpr1/selected",
+        "interaction:button-toggle@custom/desktop-dpr2/focus",
+        "interaction:button-toggle@custom/desktop-dpr2/hover",
+        "interaction:button-toggle@custom/desktop-dpr2/held",
+        "interaction:button-toggle@custom/desktop-dpr2/activate",
+        "interaction:button-toggle@custom/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@custom/desktop-dpr2/disabled",
+        "interaction:button-toggle@custom/desktop-dpr2/selected"
+      ]
+    },
+    {
+      "element": "button-toggle-primary",
+      "priorRowSha256": "f6ce16bf40f26e348cd9cdd2a8a10c4086e4bbf9f58d835e6b37bade87eb5d11",
+      "cases": [
+        "static:button-toggle@light/desktop",
+        "static:button-toggle@light/tablet",
+        "static:button-toggle@light/mobile",
+        "static:button-toggle@dark/desktop",
+        "static:button-toggle@dark/tablet",
+        "static:button-toggle@dark/mobile",
+        "static:button-toggle@contrast/desktop",
+        "static:button-toggle@contrast/tablet",
+        "static:button-toggle@contrast/mobile",
+        "static:button-toggle@custom/desktop",
+        "static:button-toggle@custom/tablet",
+        "static:button-toggle@custom/mobile",
+        "interaction:button-toggle@light/desktop-dpr1/focus",
+        "interaction:button-toggle@light/desktop-dpr1/hover",
+        "interaction:button-toggle@light/desktop-dpr1/held",
+        "interaction:button-toggle@light/desktop-dpr1/activate",
+        "interaction:button-toggle@light/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@light/desktop-dpr1/disabled",
+        "interaction:button-toggle@light/desktop-dpr1/selected",
+        "interaction:button-toggle@light/desktop-dpr2/focus",
+        "interaction:button-toggle@light/desktop-dpr2/hover",
+        "interaction:button-toggle@light/desktop-dpr2/held",
+        "interaction:button-toggle@light/desktop-dpr2/activate",
+        "interaction:button-toggle@light/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@light/desktop-dpr2/disabled",
+        "interaction:button-toggle@light/desktop-dpr2/selected",
+        "interaction:button-toggle@dark/desktop-dpr1/focus",
+        "interaction:button-toggle@dark/desktop-dpr1/hover",
+        "interaction:button-toggle@dark/desktop-dpr1/held",
+        "interaction:button-toggle@dark/desktop-dpr1/activate",
+        "interaction:button-toggle@dark/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@dark/desktop-dpr1/disabled",
+        "interaction:button-toggle@dark/desktop-dpr1/selected",
+        "interaction:button-toggle@dark/desktop-dpr2/focus",
+        "interaction:button-toggle@dark/desktop-dpr2/hover",
+        "interaction:button-toggle@dark/desktop-dpr2/held",
+        "interaction:button-toggle@dark/desktop-dpr2/activate",
+        "interaction:button-toggle@dark/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@dark/desktop-dpr2/disabled",
+        "interaction:button-toggle@dark/desktop-dpr2/selected",
+        "interaction:button-toggle@contrast/desktop-dpr1/focus",
+        "interaction:button-toggle@contrast/desktop-dpr1/hover",
+        "interaction:button-toggle@contrast/desktop-dpr1/held",
+        "interaction:button-toggle@contrast/desktop-dpr1/activate",
+        "interaction:button-toggle@contrast/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@contrast/desktop-dpr1/disabled",
+        "interaction:button-toggle@contrast/desktop-dpr1/selected",
+        "interaction:button-toggle@contrast/desktop-dpr2/focus",
+        "interaction:button-toggle@contrast/desktop-dpr2/hover",
+        "interaction:button-toggle@contrast/desktop-dpr2/held",
+        "interaction:button-toggle@contrast/desktop-dpr2/activate",
+        "interaction:button-toggle@contrast/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@contrast/desktop-dpr2/disabled",
+        "interaction:button-toggle@contrast/desktop-dpr2/selected",
+        "interaction:button-toggle@custom/desktop-dpr1/focus",
+        "interaction:button-toggle@custom/desktop-dpr1/hover",
+        "interaction:button-toggle@custom/desktop-dpr1/held",
+        "interaction:button-toggle@custom/desktop-dpr1/activate",
+        "interaction:button-toggle@custom/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@custom/desktop-dpr1/disabled",
+        "interaction:button-toggle@custom/desktop-dpr1/selected",
+        "interaction:button-toggle@custom/desktop-dpr2/focus",
+        "interaction:button-toggle@custom/desktop-dpr2/hover",
+        "interaction:button-toggle@custom/desktop-dpr2/held",
+        "interaction:button-toggle@custom/desktop-dpr2/activate",
+        "interaction:button-toggle@custom/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@custom/desktop-dpr2/disabled",
+        "interaction:button-toggle@custom/desktop-dpr2/selected"
+      ]
+    },
+    {
+      "element": "button-toggle-two",
+      "priorRowSha256": "c9ff75fe548a70e45cde1bdfd6be0467b31809eca19351b7326d4b389d282349",
+      "cases": [
+        "static:button-toggle@light/desktop",
+        "static:button-toggle@light/tablet",
+        "static:button-toggle@light/mobile",
+        "static:button-toggle@dark/desktop",
+        "static:button-toggle@dark/tablet",
+        "static:button-toggle@dark/mobile",
+        "static:button-toggle@contrast/desktop",
+        "static:button-toggle@contrast/tablet",
+        "static:button-toggle@contrast/mobile",
+        "static:button-toggle@custom/desktop",
+        "static:button-toggle@custom/tablet",
+        "static:button-toggle@custom/mobile",
+        "interaction:button-toggle@light/desktop-dpr1/focus",
+        "interaction:button-toggle@light/desktop-dpr1/hover",
+        "interaction:button-toggle@light/desktop-dpr1/held",
+        "interaction:button-toggle@light/desktop-dpr1/activate",
+        "interaction:button-toggle@light/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@light/desktop-dpr1/disabled",
+        "interaction:button-toggle@light/desktop-dpr1/selected",
+        "interaction:button-toggle@light/desktop-dpr2/focus",
+        "interaction:button-toggle@light/desktop-dpr2/hover",
+        "interaction:button-toggle@light/desktop-dpr2/held",
+        "interaction:button-toggle@light/desktop-dpr2/activate",
+        "interaction:button-toggle@light/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@light/desktop-dpr2/disabled",
+        "interaction:button-toggle@light/desktop-dpr2/selected",
+        "interaction:button-toggle@dark/desktop-dpr1/focus",
+        "interaction:button-toggle@dark/desktop-dpr1/hover",
+        "interaction:button-toggle@dark/desktop-dpr1/held",
+        "interaction:button-toggle@dark/desktop-dpr1/activate",
+        "interaction:button-toggle@dark/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@dark/desktop-dpr1/disabled",
+        "interaction:button-toggle@dark/desktop-dpr1/selected",
+        "interaction:button-toggle@dark/desktop-dpr2/focus",
+        "interaction:button-toggle@dark/desktop-dpr2/hover",
+        "interaction:button-toggle@dark/desktop-dpr2/held",
+        "interaction:button-toggle@dark/desktop-dpr2/activate",
+        "interaction:button-toggle@dark/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@dark/desktop-dpr2/disabled",
+        "interaction:button-toggle@dark/desktop-dpr2/selected",
+        "interaction:button-toggle@contrast/desktop-dpr1/focus",
+        "interaction:button-toggle@contrast/desktop-dpr1/hover",
+        "interaction:button-toggle@contrast/desktop-dpr1/held",
+        "interaction:button-toggle@contrast/desktop-dpr1/activate",
+        "interaction:button-toggle@contrast/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@contrast/desktop-dpr1/disabled",
+        "interaction:button-toggle@contrast/desktop-dpr1/selected",
+        "interaction:button-toggle@contrast/desktop-dpr2/focus",
+        "interaction:button-toggle@contrast/desktop-dpr2/hover",
+        "interaction:button-toggle@contrast/desktop-dpr2/held",
+        "interaction:button-toggle@contrast/desktop-dpr2/activate",
+        "interaction:button-toggle@contrast/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@contrast/desktop-dpr2/disabled",
+        "interaction:button-toggle@contrast/desktop-dpr2/selected",
+        "interaction:button-toggle@custom/desktop-dpr1/focus",
+        "interaction:button-toggle@custom/desktop-dpr1/hover",
+        "interaction:button-toggle@custom/desktop-dpr1/held",
+        "interaction:button-toggle@custom/desktop-dpr1/activate",
+        "interaction:button-toggle@custom/desktop-dpr1/activate-leave",
+        "interaction:button-toggle@custom/desktop-dpr1/disabled",
+        "interaction:button-toggle@custom/desktop-dpr1/selected",
+        "interaction:button-toggle@custom/desktop-dpr2/focus",
+        "interaction:button-toggle@custom/desktop-dpr2/hover",
+        "interaction:button-toggle@custom/desktop-dpr2/held",
+        "interaction:button-toggle@custom/desktop-dpr2/activate",
+        "interaction:button-toggle@custom/desktop-dpr2/activate-leave",
+        "interaction:button-toggle@custom/desktop-dpr2/disabled",
+        "interaction:button-toggle@custom/desktop-dpr2/selected"
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "case": "static:button-toggle@light/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/light/desktop/reference-input-tree.json",
+          "sha256": "7791bb3b50f4df77db67bec706a9e0a6f0c32eb958af319f3750291006f7c786"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/light/desktop/astylar-input-tree.json",
+          "sha256": "fcda83f6d5cbc78ac17c2775ca6c1448b991b549f3fcfcfe9aff3c273ebe9713"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "static:button-toggle@light/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/light/tablet/reference-input-tree.json",
+          "sha256": "0b767e2d589230a3055dcb940e5a17b5195fc65e5d6e199ed89a4ca54214412d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/light/tablet/astylar-input-tree.json",
+          "sha256": "fcda83f6d5cbc78ac17c2775ca6c1448b991b549f3fcfcfe9aff3c273ebe9713"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "static:button-toggle@light/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/light/mobile/reference-input-tree.json",
+          "sha256": "7ec7f6ef2160cf76f3fdabc87646fb2fc72890317d5d12ca3b73c0aa6d6c3ebf"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/light/mobile/astylar-input-tree.json",
+          "sha256": "fcda83f6d5cbc78ac17c2775ca6c1448b991b549f3fcfcfe9aff3c273ebe9713"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "static:button-toggle@dark/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/dark/desktop/reference-input-tree.json",
+          "sha256": "1739a5974d82854c04fcc53c763a2778cb82e4ea9a6be1b5583f95f21a392107"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/dark/desktop/astylar-input-tree.json",
+          "sha256": "b91388597ae9f96f56adedece9bebf75f20e0ab25e7db486343d113a79dbbd19"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "static:button-toggle@dark/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/dark/tablet/reference-input-tree.json",
+          "sha256": "9e44439151103b6ba610f428b33e520e86da384b3f733189f44f10288e13e263"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/dark/tablet/astylar-input-tree.json",
+          "sha256": "b91388597ae9f96f56adedece9bebf75f20e0ab25e7db486343d113a79dbbd19"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "static:button-toggle@dark/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/dark/mobile/reference-input-tree.json",
+          "sha256": "a6cc83adcb68337c3405a1f4048e95f2c9552641ba9e9337170832a3446c6b1e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/dark/mobile/astylar-input-tree.json",
+          "sha256": "b91388597ae9f96f56adedece9bebf75f20e0ab25e7db486343d113a79dbbd19"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "static:button-toggle@contrast/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/contrast/desktop/reference-input-tree.json",
+          "sha256": "97e51dcb846d25f3ce1ad54402a716023202db09944ebafac6ede3f2e81f95af"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/contrast/desktop/astylar-input-tree.json",
+          "sha256": "91901989217ee0611796b32531bd0826b257d05c0f46ef7da717ab4a2eae68de"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "static:button-toggle@contrast/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/contrast/tablet/reference-input-tree.json",
+          "sha256": "79f265406f7a5d6897069f2ffce348b42485d9d19b971b48d380640040c8fc55"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/contrast/tablet/astylar-input-tree.json",
+          "sha256": "91901989217ee0611796b32531bd0826b257d05c0f46ef7da717ab4a2eae68de"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "static:button-toggle@contrast/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/contrast/mobile/reference-input-tree.json",
+          "sha256": "74e85cf955da7eaf71b16a01fd50178c8f31757c5db083b7fe93019e895f2edd"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/contrast/mobile/astylar-input-tree.json",
+          "sha256": "5423e06fe572b44e91a70ec3986e21337b714ba8026cbee87184cced6a9aff81"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "static:button-toggle@custom/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/custom/desktop/reference-input-tree.json",
+          "sha256": "64617ebc823f3c824c191b782f0be6d24618e207574b44e7e25fb2e36aea9af0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/custom/desktop/astylar-input-tree.json",
+          "sha256": "839f618f0f42e4ff8911ab3f5da7de427149a2f582e1a3595f0e576f240c5d74"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "static:button-toggle@custom/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/custom/tablet/reference-input-tree.json",
+          "sha256": "ba476d199aed26ce85460708175c0626f6f3783b29009e549134b7df78c21cfa"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/custom/tablet/astylar-input-tree.json",
+          "sha256": "839f618f0f42e4ff8911ab3f5da7de427149a2f582e1a3595f0e576f240c5d74"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "static:button-toggle@custom/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/custom/mobile/reference-input-tree.json",
+          "sha256": "00c2dad66364ce83171e097a7d7e0ce534e10ecbb24c66ca96e7c5a7e14bdc71"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/button-toggle/custom/mobile/astylar-input-tree.json",
+          "sha256": "46b4af90b1106a9837c181d4a88a2821873acf1e25ff48fb5feded02bdef6ff0"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "01ea2c4ef28c839d215a1db9095ce1ffd3aa15113535de1a14236d17e0f290a7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "fcda83f6d5cbc78ac17c2775ca6c1448b991b549f3fcfcfe9aff3c273ebe9713"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "1a837fb3bd0569039ad660008e7d6af0f2d40b37de7ce2af4d804255e0f269db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "8552ace2b904d13283c8559d03514be2688b9ca1e5d96668bae89af8747d4149"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "99ced74f9782e4961fe504e2cd4721d6c340735e4b767eebc8f7317248090952"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "6d49307c175cee912a858d020ae6cc9b2cfd044be905cd21f8d8229bde9c18cb"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "4f84e91ad0cf3fcaf6390cbd1fc476bb9aeb8056fc9613ed96e084a6159223e1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "52672c3b03cba9c8e6cd8c62052ed6d6d5cbf7dd2ca25adf5c2bb536ede29c53"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "d39f3e6c56f49170133e5f56013243f4950e0129529c6eda37fdd80051733a83"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "9490a308bf2bdd9553c697b413b2c9976dfdaecdb9ce5326fd3b036a4ca97fbb"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "7791bb3b50f4df77db67bec706a9e0a6f0c32eb958af319f3750291006f7c786"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "6ca6068cf2911ecbd66c4d8755f63f0f40ee20eeb355f9d84d8543e285244068"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "7791bb3b50f4df77db67bec706a9e0a6f0c32eb958af319f3750291006f7c786"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "fcda83f6d5cbc78ac17c2775ca6c1448b991b549f3fcfcfe9aff3c273ebe9713"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "01ea2c4ef28c839d215a1db9095ce1ffd3aa15113535de1a14236d17e0f290a7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "fcda83f6d5cbc78ac17c2775ca6c1448b991b549f3fcfcfe9aff3c273ebe9713"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "1a837fb3bd0569039ad660008e7d6af0f2d40b37de7ce2af4d804255e0f269db"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "8552ace2b904d13283c8559d03514be2688b9ca1e5d96668bae89af8747d4149"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "99ced74f9782e4961fe504e2cd4721d6c340735e4b767eebc8f7317248090952"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "6d49307c175cee912a858d020ae6cc9b2cfd044be905cd21f8d8229bde9c18cb"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "4f84e91ad0cf3fcaf6390cbd1fc476bb9aeb8056fc9613ed96e084a6159223e1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "52672c3b03cba9c8e6cd8c62052ed6d6d5cbf7dd2ca25adf5c2bb536ede29c53"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "d39f3e6c56f49170133e5f56013243f4950e0129529c6eda37fdd80051733a83"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "9490a308bf2bdd9553c697b413b2c9976dfdaecdb9ce5326fd3b036a4ca97fbb"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "7791bb3b50f4df77db67bec706a9e0a6f0c32eb958af319f3750291006f7c786"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "6ca6068cf2911ecbd66c4d8755f63f0f40ee20eeb355f9d84d8543e285244068"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@light/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "7791bb3b50f4df77db67bec706a9e0a6f0c32eb958af319f3750291006f7c786"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/light/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "fcda83f6d5cbc78ac17c2775ca6c1448b991b549f3fcfcfe9aff3c273ebe9713"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "ff3fabc6441212a25941e1a032a6cd07a50eddce9e98e06b1804233460d6be4d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "b91388597ae9f96f56adedece9bebf75f20e0ab25e7db486343d113a79dbbd19"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "ef3edefba96e275db8800e0f90fa0a0567a63d03132702011554adc4e318b0ef"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "dcb84f4e34e233fa5c03ffc1c54205f18663715d3a9d37fd66be12c304ee9899"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "00dc7039a5b434fd3b84a24d9245c16d5f40e2fb5277d4c4fd884d859e18ba5a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "59cf5d9d75b5550fa15456caf6ca11b24a6a0828ce746616fa780c3a5829b434"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "81830804f8db6d774cf2d1d574af51862d6a64ff9ca63fc898e6ddd8ecb87b85"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "66db6b5b37246ec026d13e8a84abc3262a389d8cb72b25f0d2b0cbbdd6367422"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "95d2260aa201b2945bcafb44a546632af446f5956859aef2516a2274da8848c7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "0f9aa61f5f5c55b52bd0d504c75d0bbfa508d0f370a44237b55abe7df0fbdefa"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "1739a5974d82854c04fcc53c763a2778cb82e4ea9a6be1b5583f95f21a392107"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "ac93eb5157bea4f28584311e3f4e3107aa17756e51ec888239f186ff4c77991c"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "1739a5974d82854c04fcc53c763a2778cb82e4ea9a6be1b5583f95f21a392107"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "b91388597ae9f96f56adedece9bebf75f20e0ab25e7db486343d113a79dbbd19"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "ff3fabc6441212a25941e1a032a6cd07a50eddce9e98e06b1804233460d6be4d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "b91388597ae9f96f56adedece9bebf75f20e0ab25e7db486343d113a79dbbd19"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "ef3edefba96e275db8800e0f90fa0a0567a63d03132702011554adc4e318b0ef"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "dcb84f4e34e233fa5c03ffc1c54205f18663715d3a9d37fd66be12c304ee9899"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "00dc7039a5b434fd3b84a24d9245c16d5f40e2fb5277d4c4fd884d859e18ba5a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "59cf5d9d75b5550fa15456caf6ca11b24a6a0828ce746616fa780c3a5829b434"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "81830804f8db6d774cf2d1d574af51862d6a64ff9ca63fc898e6ddd8ecb87b85"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "66db6b5b37246ec026d13e8a84abc3262a389d8cb72b25f0d2b0cbbdd6367422"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "95d2260aa201b2945bcafb44a546632af446f5956859aef2516a2274da8848c7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "0f9aa61f5f5c55b52bd0d504c75d0bbfa508d0f370a44237b55abe7df0fbdefa"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "1739a5974d82854c04fcc53c763a2778cb82e4ea9a6be1b5583f95f21a392107"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "ac93eb5157bea4f28584311e3f4e3107aa17756e51ec888239f186ff4c77991c"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@dark/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "1739a5974d82854c04fcc53c763a2778cb82e4ea9a6be1b5583f95f21a392107"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/dark/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "b91388597ae9f96f56adedece9bebf75f20e0ab25e7db486343d113a79dbbd19"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "28px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "21px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "81a84a9ed661fa7b5277a15bc07bca686eac919663e697a63500af974b2f8f34"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "91901989217ee0611796b32531bd0826b257d05c0f46ef7da717ab4a2eae68de"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "344b571639948ade93313dda4e4788fab0d89b9189e716de0cd23cfd61810dd0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "830d73c7bbbaccf6107be5c3e211918cb250728672a4fa853fc16f2b5975ae21"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "ccab3cee46edb3be7bafff4554bf3fa4e58dde7790be7146c2f2473375c7147d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "a4c448369f469e06317045f990ab1372d7fbe59b17c8f48c67a5551503db41ab"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "18a606f74cfb046c8f50f3fd16d5e8928213bf6bc7ec88ad4bf63fd7e3a1a6d1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "a81a25a96a372da048bbb4ea89c662fbc693a0021ed060bf7f0dddf973280383"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "05ce234a044ed71680012150be36f7ef2026f70545a61d0710403c71157cefac"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "a48f1f091d2c9a7f786f4e61a16d62c851ca74b26144c778d47d1570a2a39ecc"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "97e51dcb846d25f3ce1ad54402a716023202db09944ebafac6ede3f2e81f95af"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "7563585c9d6696b6e9faa067ae17952da96f5bfc4603f5bc9f447b2dbaaf0518"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "97e51dcb846d25f3ce1ad54402a716023202db09944ebafac6ede3f2e81f95af"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "91901989217ee0611796b32531bd0826b257d05c0f46ef7da717ab4a2eae68de"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "81a84a9ed661fa7b5277a15bc07bca686eac919663e697a63500af974b2f8f34"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "5423e06fe572b44e91a70ec3986e21337b714ba8026cbee87184cced6a9aff81"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "344b571639948ade93313dda4e4788fab0d89b9189e716de0cd23cfd61810dd0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "770fd05ce16302dd4723fa0be168b0e8dfe5572011e28d2c2fa440591da1f765"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "ccab3cee46edb3be7bafff4554bf3fa4e58dde7790be7146c2f2473375c7147d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "8de3e7dfdd83b20f93cc608cab34ed3bbb181ff21aec25cec10eaee15a75ba51"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "18a606f74cfb046c8f50f3fd16d5e8928213bf6bc7ec88ad4bf63fd7e3a1a6d1"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "a286f278b3fa759dbd6364188ab02c58cb4c398a47afb6b90b52493f4e8c06ac"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "05ce234a044ed71680012150be36f7ef2026f70545a61d0710403c71157cefac"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "f1e7fb6ed34edbc39b31b7ec902f5e7733cf29ff71c74a16a00d7b77d7791dd2"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "97e51dcb846d25f3ce1ad54402a716023202db09944ebafac6ede3f2e81f95af"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "180ae557702e4afab3680a1af01dcea69fa622975337d5fb6425ec2b986af57f"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@contrast/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "97e51dcb846d25f3ce1ad54402a716023202db09944ebafac6ede3f2e81f95af"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/contrast/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "5423e06fe572b44e91a70ec3986e21337b714ba8026cbee87184cced6a9aff81"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "21px",
+          "width": "127.953px",
+          "height": "24px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "9.75px",
+          "width": "130px",
+          "height": "26px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "157d33c639087b2f2f450524f22d5abea4285470df94014ffe5149f704c0da01"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "839f618f0f42e4ff8911ab3f5da7de427149a2f582e1a3595f0e576f240c5d74"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "e3ef5dc0a9aea322ec678e8645ca6434cb0494d260b1f5e01e7af8742e1903ab"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "a3c6e62447381665bca6438e311750b40d492f0bb4abab95c61195e52822038b"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "0ceb037c84034a647de32352ad1c0fee258338bcc762e5353c34e2371930fb64"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "ee370246639bd7198419bad649b0cd237b79ee86352f70c7b39c8acb7359eb0f"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "66afee69b89ea1d1092d90707c743c496ddd07055170be05e551eaf479de5514"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "491140dc4a9b009a42d0297dcc8560f8f287d2fdf258fd89adc69a394e7763e2"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "52ab121486c10a29929eba35769e5a66bc39a097e7adbf0af2a0d0022072d8ab"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "0dd12a2d3f11958cbdda3b9c67a8aa4cc776450d7ac548f6a862a07dfa5acdd8"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr1/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/disabled/reference-input-tree.json",
+          "sha256": "64617ebc823f3c824c191b782f0be6d24618e207574b44e7e25fb2e36aea9af0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/disabled/astylar-input-tree.json",
+          "sha256": "840ebb06b5c7d952817d37b68c19796e259c5b756e685f05930f64cfd67d947c"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr1/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/selected/reference-input-tree.json",
+          "sha256": "64617ebc823f3c824c191b782f0be6d24618e207574b44e7e25fb2e36aea9af0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr1/selected/astylar-input-tree.json",
+          "sha256": "839f618f0f42e4ff8911ab3f5da7de427149a2f582e1a3595f0e576f240c5d74"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "157d33c639087b2f2f450524f22d5abea4285470df94014ffe5149f704c0da01"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "d71632aafeb2efdabcb7ff15577907a59ee5e736cff504d5e189b221ebdd59e1"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "e3ef5dc0a9aea322ec678e8645ca6434cb0494d260b1f5e01e7af8742e1903ab"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "590e526170952306aa0e0c912b237ce551eded040b8e9086a1ace1505d7528fe"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "0ceb037c84034a647de32352ad1c0fee258338bcc762e5353c34e2371930fb64"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "3e4a353abaa1274da3b65504cf0aa478b78130090ca2653417a780b1711190d7"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "66afee69b89ea1d1092d90707c743c496ddd07055170be05e551eaf479de5514"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "65eb12566b1fd2f6abc9f42ae25f57ac7fa30c2a0772bf4039718b9091430745"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "52ab121486c10a29929eba35769e5a66bc39a097e7adbf0af2a0d0022072d8ab"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "f0fc4a355c398ab396a5aaec11cd9b455d116d1ea8f10bc13c363c300ebfccdb"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr2/disabled",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/disabled/reference-input-tree.json",
+          "sha256": "64617ebc823f3c824c191b782f0be6d24618e207574b44e7e25fb2e36aea9af0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/disabled/astylar-input-tree.json",
+          "sha256": "4dd836e326e0d332fea873e078db24fdad3e11f80146d797c7a61154d9c6bbf1"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    },
+    {
+      "case": "interaction:button-toggle@custom/desktop-dpr2/selected",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/selected/reference-input-tree.json",
+          "sha256": "64617ebc823f3c824c191b782f0be6d24618e207574b44e7e25fb2e36aea9af0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/button-toggle/custom/desktop-dpr2/selected/astylar-input-tree.json",
+          "sha256": "d71632aafeb2efdabcb7ff15577907a59ee5e736cff504d5e189b221ebdd59e1"
+        }
+      },
+      "proof": {
+        "owners": [
+          {
+            "id": "button-toggle-one",
+            "referenceOwner": "frame/2/0/0",
+            "candidateOwner": "root/0/2/0/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-primary",
+            "referenceOwner": "frame/2/0",
+            "candidateOwner": "root/0/2/0",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          },
+          {
+            "id": "button-toggle-two",
+            "referenceOwner": "frame/2/0/1",
+            "candidateOwner": "root/0/2/0/1",
+            "referencePosition": "relative",
+            "candidatePositionPresent": false
+          }
+        ],
+        "reference": {
+          "radius": "42px",
+          "width": "127.953px",
+          "height": "40px",
+          "boxSizing": "content-box",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        "candidate": {
+          "radius": "31.5px",
+          "width": "130px",
+          "height": "42px",
+          "boxSizing": "border-box"
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Flattened native-button/focus/ripple composition requires paint, containing-block and interaction proof; position omission alone is not equivalent or a confirmed cause."
+      }
+    }
+  ],
+  "counts": {
+    "groups": 3,
+    "observations": 204,
+    "distinctCases": 68
+  },
+  "canonicalAttributionChanged": false
+}

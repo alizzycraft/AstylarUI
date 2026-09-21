@@ -52,6 +52,8 @@ export function collectPositionQueue() {
   const { data, source } = load('material-static-position-observation');
   reviews.push({ source, status: 'classified-integration-pending', groups: data.reviewed.map(g => ({
     element: g.element, priorRowSha256: g.priorRowSha256, cases: g.observations.map(o => o.case) })) });
+  const toggle = load('material-button-toggle-position-inspection');
+  reviews.push({ source: toggle.source, status: 'inspection-classification-pending', groups: toggle.data.groups });
   return { population: population.source, ...assemblePositionQueue(population.data, reviews) };
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
