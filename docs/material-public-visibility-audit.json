@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "classification": "documented-limitation",
+  "owner": "core visibility style support, inheritance, paint and hit testing",
+  "report": "artifacts/material-parity/public-visibility-v2/latest-report.json",
+  "reportSha256": "0f74d9db59e119e8befb9717fddb3e8b8391a7411c784f6a8801e948dff855f8",
+  "provenanceSha256": "9a8aa4025546fd6161f79c38533c0284d81022e4d0901db45aa8a26062d1c5af",
+  "cases": 12,
+  "dprs": [1, 2],
+  "screenshots": 24,
+  "runtimeErrors": 0,
+  "exitCode": 1,
+  "visibilityRasterDifferences": 8,
+  "visibilityHoverDifferences": 8,
+  "separateDisplayNoneBackgroundDifferences": 4,
+  "omittedAndVisibleControlsMatchAtSamplePoints": true,
+  "hiddenBoxesRemainPaintedAndHoverable": true,
+  "canonicalAttributionChanged": false,
+  "missingSnackbarCauseProven": false,
+  "limitations": [
+    "Installed public package 0.2.0; bundled source byte receipts identify the actual tested build.",
+    "Only three interior pixels and hover targets per case; not full raster or geometry parity.",
+    "No click, focus, accessibility, dynamic update or disposal-resource plateau claim.",
+    "No classification of all 17 Material visibility groups follows automatically from this reduction."
+  ]
+}
