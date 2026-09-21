@@ -241,3 +241,30 @@ Logs: `disabled-ink-canonical-regeneration-v2.log`,
 under `artifacts/material-parity`. The full per-record delta is retained there
 as `disabled-ink-control-delta.json`. The full legacy test file has separately
 started with output in `legacy-full-1795d21.tap`; its terminal result is pending.
+
+### Tested bounded module-receipt transition
+
+`disabled-ink-module-receipts.mjs` now authenticates the full original module
+hash, restores only the pinned decimal guard and exactly three inventory lines,
+and requires byte-for-byte normalized equality with the historical module. It
+does not permit an arbitrary current module hash or an unrelated source edit.
+
+For exactly 48 unique historical line-box cases, the helper checks the current
+embedded receipt against that verified module, restores the old receipt in a
+copy, and requires the entire record to equal its predecessor. Raw line-box
+values, classification, ordering, case identity and all other evidence remain
+checked. The original reports are not mutated. The original strict 60-record
+ink comparison then runs on this receipt-reconciled copy; all other control
+sections and all scalar records remain covered by its full comparisons.
+
+The CLI emits the receipt proof and full case population separately from the
+60 classification changes. Whole-module and record mutation controls plus the
+original conservation tests pass **4/4**, **2,468.945 ms**, with no skips:
+
+```text
+node --max-old-space-size=768 --test --test-concurrency=1 tests/material-parity/disabled-ink-module-receipts.spec.mjs tests/material-parity/disabled-ink-canonical-conservation.spec.mjs
+```
+
+The real report replay is running as
+`artifacts/material-parity/disabled-ink-canonical-conservation-v3.log`.
+These focused tests do not substitute for its successful terminal result.

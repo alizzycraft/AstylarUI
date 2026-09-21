@@ -6,6 +6,8 @@ import { isDeepStrictEqual } from 'node:util';
 import Parser from 'jsonparse';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { execFileSync } from 'node:child_process';
+import { reconcileDisabledInkModuleReceipts } from '../tests/material-parity/disabled-ink-module-receipts.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
@@ -80,5 +82,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   const current = await readAudit('docs');
   const bytes = readFileSync('docs/material-disabled-button-ink.json');
   assert.equal(hash(bytes), '7fc910200d9c6727bd72ced2e81fbef2d5bc81f4eae7eb6e2595fae2ce048ee5');
-  console.log(JSON.stringify(compareDisabledInkCanonical(previous, current, JSON.parse(bytes).findings), null, 2));
+  const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  const source = execFileSync('git', ['show', `6833850:${moduleFile}`], { maxBuffer: 4 * 1024 * 1024 });
+  const reconciled = reconcileDisabledInkModuleReceipts(previous, current, source, readFileSync(moduleFile));
+  console.log(JSON.stringify({ ...compareDisabledInkCanonical(previous, reconciled.current, JSON.parse(bytes).findings),
+    embeddedModuleReceiptTransition: reconciled.proof }, null, 2));
 }
