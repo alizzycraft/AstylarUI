@@ -114,3 +114,21 @@ Result: **2/2 passed**, no skips or failures, **1,958.2016 ms**. This is prepara
 for a bounded classifier correction, not its integration or a regenerated
 canonical result. Broader declaration safety remains covered by the independent
 17-control source review above; no new universal cascade claim is made.
+
+### Source-transition conservation prepared
+
+`disabled-ink-source-transition.mjs` authenticates the complete historical
+`reviewedButtonPaintInput` function (SHA-256
+`add6ee139c1c10ce7adca9e61099cec23fe328ee49c99fc8d65069e030b71a5c`).
+It permits only the single exact decimal-channel guard replacement, restores
+that guard for historical source comparison, and preserves every byte outside
+the function in the normalized source. Changes elsewhere are deliberately not
+removed: the enclosing source-conservation check must still reject them.
+Alternative alpha checks, missing functions, extra boolean conditions and
+duplicated guards are rejected. It makes no color-value equivalence claim.
+
+Command: `node --max-old-space-size=1024 --test --test-concurrency=1 tests/material-parity/disabled-ink-source-transition.spec.mjs tests/material-parity/disabled-ink-precision-preparation.spec.mjs`.
+Result: **4/4 passed**, no failures or skips, **3,771.8339 ms**, including the
+complete 60-owner replay. This helper is prepared but not yet wired into the
+historical source projection. The active full legacy run retains its original
+inputs; the production audit classifier and canonical evidence remain unchanged.
