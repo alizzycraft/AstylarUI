@@ -144,3 +144,39 @@ being observed at `artifacts/material-parity/general-server-88367da.log` to
 distinguish slow startup from a build failure. No timeout, fixture, or rendering
 threshold was changed. Its startup result and any subsequent enforced rerun are
 still pending at this checkpoint.
+
+## General enforced parity completed: failing evidence preserved
+
+The separate general development server completed compilation in 437.957 seconds,
+explaining why the earlier 120-second startup attempt could not fetch its manifest.
+After verifying that the served manifest matched the local 167-fixture manifest,
+the unfiltered `npm run parity:check` used that server through
+`ASTYLAR_PARITY_BASE_URL=http://127.0.0.1:4300`. No thresholds changed.
+
+The original execution handle completed with **exit 1**. The report contains:
+
+- 167 fixtures, 562 renders, four viewport profiles.
+- Median SSIM 0.9958078395790046; minimum SSIM 0.9254554638330224.
+- Edges within 2 px: 0.996352860724869; maximum edge error 444 px.
+- All text matches and local sharpness matches: true.
+- Runtime-clean, focused-threshold and completion-threshold flags: false.
+- 98 render results contain 212 entries in `runtimeErrors`. That harness field
+  also includes interaction/ownership assertions, not only JavaScript exceptions.
+  Examples include `semantic-naming` update texture counts exceeding fresh-render
+  counts and `semantic-anchor-navigation` differing scroll states.
+
+Report: `artifacts/parity/latest-report.json`, SHA-256
+`fc74ea4834c3ee6c3f07164bd197ce72b28586a9ee707b7cfcb357d6516588c0`.
+Log: `artifacts/material-parity/general-full-prestarted-e62e846.log`, SHA-256
+`163b4fbaa18081f834d0be283dea4b73c12d5a41dd45cbeaafc9fd61a9be96a2`.
+Prior artifacts remain in the separately verified backup documented above.
+This run is failed output-parity evidence, not proof of Material input equivalence.
+
+The next TTS gate required dependency preparation: this integration worktree had
+neither `examples/ai-tts-demo/node_modules` nor its local `astylarui.tgz` dependency.
+A fresh package was placed at the previously absent local package path without
+overwriting an existing file (SHA-256
+`e7719b709ab515e26a05587f6ada036c1effdc7c2234a225a4c8ca11b1ae7901`).
+Dependency installation uses `--package-lock=false --ignore-scripts --no-audit
+--no-fund`; its completion and the enforced TTS gate remain pending. No package
+manifest or existing lockfile was intentionally changed.
