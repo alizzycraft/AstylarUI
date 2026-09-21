@@ -93,3 +93,33 @@ evidence and assertions were not loosened. Both logs are retained under
 
 Full-current audit harness and enforced rendering acceptance remain separate
 gates. Canonical unresolved count remains **1,960**. The audit is incomplete.
+
+## Integration-worktree replay
+
+The no-write `check-material-cursor-replay-conservation.mjs` replays the complete
+census and authenticates the main audit module's retained-source projection and
+the vertical-alignment helper's exact conservation wrapper. Only their two
+source receipts differ from the saved census. All 19 groups, 763 observations,
+204 patterns, complete membership, raw values and limitations remain identical.
+An initial comparison allowing only the main-module change failed on the helper
+receipt; it was not waived without verifying that helper's source projection.
+
+The same checker independently replays the public cursor proof. The ordinary
+`public-cursor-defaults.spec.mjs` run returned **5 passed / 2 failed** out of seven
+tests (11,195.2108 ms). Its full-report equality and independent CLI equality
+reject four raw source hashes that differ because of line endings. The checker
+authenticates each original raw file against the saved receipt in the frozen
+`D:/dev/github/AstylarUI-material` worktree, then requires its entire text to equal
+the integration file after CRLF-to-LF conversion. It also reruns the original
+package-method, runtime, screenshot and source evidence validator. Restoring
+only those four receipt fields in memory preserves the complete public report.
+The original files and reports are never rewritten. Installed package receipts
+and executable-method projections remain unchanged.
+
+Command: `node --max-old-space-size=1024 scripts/check-material-cursor-replay-conservation.mjs`.
+Exit **0**; full machine output is saved at
+`artifacts/material-parity/cursor-replay-conservation-716748c.json`. This checker
+depends explicitly on the retained original worktree bytes. It is not a repair
+of the ordinary tests or a fresh browser capture. Historical receipt handling
+still needs integration before those tests can be reported passing. No cursor
+classification or original Material hit-target cause is promoted here.
