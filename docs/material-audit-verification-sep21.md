@@ -109,3 +109,19 @@ Log: `artifacts/material-parity/application-build-a34586e.log`, SHA-256
 The original execution handle returned exit 0. This is compilation/prerender
 evidence only; consumer runtime, canonical conservation, remaining input
 classifications and the complete enforced parity matrix are still outstanding.
+
+## Packed-consumer check completed
+
+`npm run consumer:check` finished with **exit 0**, packaging 419 files and
+installing the tarball in a fresh temporary consumer (not a workspace link).
+The consumer build produced browser and SSR outputs and prerendered one route
+in 89.108 seconds. Chrome Headless 152 ran **4/4 passing tests** in 17.003 seconds.
+
+Log: `artifacts/material-parity/consumer-check-f85d40b.log`, SHA-256
+`415d6f11630ff62659f20c7fb81aec5f4ed0826416feb21d86fc469fbce8e6d6`.
+Installation emitted deprecation warnings for `inflight@1.0.6`, `rimraf@3.0.2`
+and `glob@7.2.3`. The logged `surface-disposed` error is exercised deliberately
+by `examples/angular-consumer/src/app/style-inspection.browser.spec.ts:70`, which
+asserts that inspection after disposal throws. It is not silently omitted from
+this record. The check verifies package boundaries and these consumer scenarios,
+not complete Material input equivalence or the enforced parity matrix.
