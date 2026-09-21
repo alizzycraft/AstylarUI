@@ -30,3 +30,22 @@ Implementation planning: reproduce the reference border on its owning control
 through the public API. If the border/layout behavior differs, fix that general
 core rule before replacing the candidate strip and its dependent relative host.
 Do not remove only the host positioning and leave the absolute child behind.
+
+## Complete replay and negative controls
+
+The collector now has a separately callable `proveSortFocusPlacement` function
+and a checked-in `material-sort-focus-placement.json` containing all 60 paired
+receipts and their focused/non-focused evidence. Reference control ancestry is
+verified from the border owner through `sort-trigger` to `sort-primary`; the
+candidate host position is checked at normal, interaction, and resolved stages.
+Duplicate node keys and tree capture errors are rejected.
+
+`node --test tests/material-parity/sort-focus-placement.spec.mjs` passed **2/2**,
+exit 0, 627.6114 ms. It replays the full population against the checked report and
+rejects ten altered-evidence cases: border width/style, owner ancestry, normal
+host positioning, strip positioning/offset/parent, duplicate nodes, capture
+errors, and incorrectly claiming a focused tree is a hover state.
+
+This completes the negative-control follow-up requested above. It does not
+complete an equivalent-input browser reproduction or canonical integration, and
+does not turn the existing output mismatch into a confirmed core diagnosis.

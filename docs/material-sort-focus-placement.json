@@ -1,0 +1,1616 @@
+{
+  "kind": "sort-focus-placement-inspection",
+  "population": {
+    "file": "docs/material-position-input-population.json",
+    "sha256": "71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff"
+  },
+  "observations": [
+    {
+      "case": "static:sort@light/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/light/desktop/reference-input-tree.json",
+          "sha256": "964b8a95e8f3e29971df9df57162dfba05646850d102b3bc9dc85c00f85c4725"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/light/desktop/astylar-input-tree.json",
+          "sha256": "7c3261f078ee215bb9c840bd1141091961a1b14b38afd8677f0c3737498bff00"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "static:sort@light/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/light/tablet/reference-input-tree.json",
+          "sha256": "031d147e866dfd1322f2cc4b44876a0d36f1b1457c6d3959c0d2e1eee6b17112"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/light/tablet/astylar-input-tree.json",
+          "sha256": "7c3261f078ee215bb9c840bd1141091961a1b14b38afd8677f0c3737498bff00"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "static:sort@light/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/light/mobile/reference-input-tree.json",
+          "sha256": "9166a1de7cd5ab3b4928d6b4c0e2b2c1f29eeb312ebed135918eb2b3d21b2755"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/light/mobile/astylar-input-tree.json",
+          "sha256": "7c3261f078ee215bb9c840bd1141091961a1b14b38afd8677f0c3737498bff00"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "static:sort@dark/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/dark/desktop/reference-input-tree.json",
+          "sha256": "2f71b8e9769c1a5e519135243c44a03dc4ad3bd3af56dcfa2f978882476db772"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/dark/desktop/astylar-input-tree.json",
+          "sha256": "06eff0461f68a2f38bccb10513ff016ee155c5c926f2733d9c0156989749acae"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "static:sort@dark/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/dark/tablet/reference-input-tree.json",
+          "sha256": "cd22fd59eb547e1bcff26df91850719e367978233ad9d0ae2126663d392ec3cd"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/dark/tablet/astylar-input-tree.json",
+          "sha256": "06eff0461f68a2f38bccb10513ff016ee155c5c926f2733d9c0156989749acae"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "static:sort@dark/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/dark/mobile/reference-input-tree.json",
+          "sha256": "b84791166f1e8415ced67d9902d0c2d964c19e4037f8228e978fe0c7d2cf8ea5"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/dark/mobile/astylar-input-tree.json",
+          "sha256": "06eff0461f68a2f38bccb10513ff016ee155c5c926f2733d9c0156989749acae"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "static:sort@contrast/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/contrast/desktop/reference-input-tree.json",
+          "sha256": "1be7c0e32004516fdeaa05a5910274870289d5e0e0354c6a1537b35e28b2c7f8"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/contrast/desktop/astylar-input-tree.json",
+          "sha256": "bfdebe979bea24308fa9c9b103b0fcc03f297e2ac6948f948cca3eb2c8632118"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "static:sort@contrast/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/contrast/tablet/reference-input-tree.json",
+          "sha256": "0bf6031f6982f057ef959562728191b78baa15432689acd1299aa710370bfa5a"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/contrast/tablet/astylar-input-tree.json",
+          "sha256": "bfdebe979bea24308fa9c9b103b0fcc03f297e2ac6948f948cca3eb2c8632118"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "static:sort@contrast/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/contrast/mobile/reference-input-tree.json",
+          "sha256": "8b46180c197233782a8ef8ca4af0b1170248a1581bc1b9c2101307dbe255b0a7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/contrast/mobile/astylar-input-tree.json",
+          "sha256": "069d815546719544201213c31d06176003e4af93373fd273ecd275bc8a680372"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "static:sort@custom/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/custom/desktop/reference-input-tree.json",
+          "sha256": "fc8e405cac4c894853e00cbe702b371ed3453a715d20fec7780ff0cac1ff2672"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/custom/desktop/astylar-input-tree.json",
+          "sha256": "a2b4e49b3fc5fed8b770db6df3ca6532cc8785c404b214606fbcb2c447a88301"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "static:sort@custom/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/custom/tablet/reference-input-tree.json",
+          "sha256": "2aeaba9c6722ff751a33523992b7276ffc5b33832ba4ba15ccbdd9dbb9389b11"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/custom/tablet/astylar-input-tree.json",
+          "sha256": "a2b4e49b3fc5fed8b770db6df3ca6532cc8785c404b214606fbcb2c447a88301"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "static:sort@custom/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/custom/mobile/reference-input-tree.json",
+          "sha256": "a59ecb2a6b3e835b6c30c32f352ce595268025b3d473f36a03105928ac6df240"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/sort/custom/mobile/astylar-input-tree.json",
+          "sha256": "6059a2751f4f440f3455adf5036b6fc491318e7f86fafc4f688beb3e3bed1ac6"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "0e9d749d56027c72ac33742dab12601f568fe68b8b6b2bdfd9c2d8faa3e2064e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "812a42405f7b9506f9f5789c9fcbe0a3cddbe43fb069715af516229eee0249f7"
+        }
+      },
+      "focused": true,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "1px",
+        "borderBottomStyle": "solid",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": {
+          "position": "absolute",
+          "top": "19px",
+          "height": "1px",
+          "background": "#1d1b20"
+        }
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "962d6781b906bc55dcbadad85894a1fb5ab587ec224314ec93077edb3815978e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "7c3261f078ee215bb9c840bd1141091961a1b14b38afd8677f0c3737498bff00"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "1e79765556315f3675636bf350de02d903bc8f7cc93e8506abf304fa6e80ab32"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "ae529545cbb13b3566fd01e6b9c60fb8ff1862794f3066f8a14e1ab4b1b3af3e"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "7ad3349a8377ac13d8f08b87b1c8fb647df94d6684cf5ac7df3f0a7a528b4801"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "913cbc608d7c58b7a938406a2cda39af1ac5ca2dc847fdea164b006ef0265cf3"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "c953d2bc598cd61567a4aec9863e3a541930d6d6041a35c46d6f7190984ff08c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "913cbc608d7c58b7a938406a2cda39af1ac5ca2dc847fdea164b006ef0265cf3"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr1/activate-twice",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/activate-twice/reference-input-tree.json",
+          "sha256": "d9507aeb300a50e4d5421652eda62bca5d077a1cba772dc4ec3b2f63df9952a4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr1/activate-twice/astylar-input-tree.json",
+          "sha256": "62ffa58b3cec25ca575d8171fe80ba1ee0161417ae481046215237d0a714f33b"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "0e9d749d56027c72ac33742dab12601f568fe68b8b6b2bdfd9c2d8faa3e2064e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "812a42405f7b9506f9f5789c9fcbe0a3cddbe43fb069715af516229eee0249f7"
+        }
+      },
+      "focused": true,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "1px",
+        "borderBottomStyle": "solid",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": {
+          "position": "absolute",
+          "top": "19px",
+          "height": "1px",
+          "background": "#1d1b20"
+        }
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "962d6781b906bc55dcbadad85894a1fb5ab587ec224314ec93077edb3815978e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "7c3261f078ee215bb9c840bd1141091961a1b14b38afd8677f0c3737498bff00"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "1e79765556315f3675636bf350de02d903bc8f7cc93e8506abf304fa6e80ab32"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "ae529545cbb13b3566fd01e6b9c60fb8ff1862794f3066f8a14e1ab4b1b3af3e"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "7ad3349a8377ac13d8f08b87b1c8fb647df94d6684cf5ac7df3f0a7a528b4801"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "913cbc608d7c58b7a938406a2cda39af1ac5ca2dc847fdea164b006ef0265cf3"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "c953d2bc598cd61567a4aec9863e3a541930d6d6041a35c46d6f7190984ff08c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "913cbc608d7c58b7a938406a2cda39af1ac5ca2dc847fdea164b006ef0265cf3"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@light/desktop-dpr2/activate-twice",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/activate-twice/reference-input-tree.json",
+          "sha256": "d9507aeb300a50e4d5421652eda62bca5d077a1cba772dc4ec3b2f63df9952a4"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/light/desktop-dpr2/activate-twice/astylar-input-tree.json",
+          "sha256": "62ffa58b3cec25ca575d8171fe80ba1ee0161417ae481046215237d0a714f33b"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "ac859120fab78b725ec44ec712167fbe07b5a7d1b0b3dc31fa3690aae8903e1c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "92d4aa8f766cd2ec27cd121ab23bf588b67204ebd4fd3482452d528d660a2f34"
+        }
+      },
+      "focused": true,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "1px",
+        "borderBottomStyle": "solid",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": {
+          "position": "absolute",
+          "top": "19px",
+          "height": "1px",
+          "background": "#e6e1e5"
+        }
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "c236448e7c0e4cd38edb43d0445414ed1287cf43dd99364dc9bb3753696e76e0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "06eff0461f68a2f38bccb10513ff016ee155c5c926f2733d9c0156989749acae"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "cabe6a28421a1ff9f9ba0ee510ce64f04cdd660160fdff3af3f92a1d5b0ecff9"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "bae903bcf9bd4c5b12bbc651976e8314f229390614dea945ae99f1f25ac087da"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "fb9abebb828214154f88736c01faefd471a7dddccfa99f080bf98ac9b095951b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "8008cbb65ec3fd0b6cfec844ac039664e55c87b3973be0fdb5834af5cf78f719"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "405b51c73445ccb05a2d44decb48310d24b574e5cf5f6f9737ef7febe49467e2"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "8008cbb65ec3fd0b6cfec844ac039664e55c87b3973be0fdb5834af5cf78f719"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr1/activate-twice",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/activate-twice/reference-input-tree.json",
+          "sha256": "f9fe16137f9ecf1d34d1d391da5105c780bf52153e5ebfb7db1d01e50e8eb631"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr1/activate-twice/astylar-input-tree.json",
+          "sha256": "09c3563d1170332b99d8d0ff98cb38b2b11a6195f2f7bbed05714091a54d020a"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "ac859120fab78b725ec44ec712167fbe07b5a7d1b0b3dc31fa3690aae8903e1c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "92d4aa8f766cd2ec27cd121ab23bf588b67204ebd4fd3482452d528d660a2f34"
+        }
+      },
+      "focused": true,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "1px",
+        "borderBottomStyle": "solid",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": {
+          "position": "absolute",
+          "top": "19px",
+          "height": "1px",
+          "background": "#e6e1e5"
+        }
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "c236448e7c0e4cd38edb43d0445414ed1287cf43dd99364dc9bb3753696e76e0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "06eff0461f68a2f38bccb10513ff016ee155c5c926f2733d9c0156989749acae"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "cabe6a28421a1ff9f9ba0ee510ce64f04cdd660160fdff3af3f92a1d5b0ecff9"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "bae903bcf9bd4c5b12bbc651976e8314f229390614dea945ae99f1f25ac087da"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "fb9abebb828214154f88736c01faefd471a7dddccfa99f080bf98ac9b095951b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "8008cbb65ec3fd0b6cfec844ac039664e55c87b3973be0fdb5834af5cf78f719"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "405b51c73445ccb05a2d44decb48310d24b574e5cf5f6f9737ef7febe49467e2"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "8008cbb65ec3fd0b6cfec844ac039664e55c87b3973be0fdb5834af5cf78f719"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@dark/desktop-dpr2/activate-twice",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/activate-twice/reference-input-tree.json",
+          "sha256": "f9fe16137f9ecf1d34d1d391da5105c780bf52153e5ebfb7db1d01e50e8eb631"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/dark/desktop-dpr2/activate-twice/astylar-input-tree.json",
+          "sha256": "09c3563d1170332b99d8d0ff98cb38b2b11a6195f2f7bbed05714091a54d020a"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(230, 225, 229)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "259a88f86a54733136e08fb398fb3a938eec6169c6cb86cdd6b56c307869f4dd"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "f5cc001f7d6483eb270093a03e70d3b03ef8ce0ff5e32c61d16c047c9c01d603"
+        }
+      },
+      "focused": true,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "1px",
+        "borderBottomStyle": "solid",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": {
+          "position": "absolute",
+          "top": "19px",
+          "height": "1px",
+          "background": "#1d1b20"
+        }
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "99fcaf71e62dc8669e2b508aefe71a4fe1b4ecc63d1b2812b3ea4d2aa9224304"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "bfdebe979bea24308fa9c9b103b0fcc03f297e2ac6948f948cca3eb2c8632118"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "482ec0757eb60171789633f00c3a2ef1ba15b8715b6d2cebe9311d0a7948ab12"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "2eb31686da2270c559d6f82d12eededa3156ad129552b4f3f350568757436ce5"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "3d5b609dbdbeaaa81f826105efda8710b25c49681fce24b09f36f7486041fadd"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "48b372e44c6f5b3c3df345e999db47954bd4733db39662708444f151c9d68b86"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "68867a695fecf922cff8ac61959e350f9da675d866e9e330967d8e418ff664e3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "48b372e44c6f5b3c3df345e999db47954bd4733db39662708444f151c9d68b86"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr1/activate-twice",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/activate-twice/reference-input-tree.json",
+          "sha256": "adc182df81753f3f274dc9109d83a91a427b05013d91e1937ba85e5cbc5a249d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr1/activate-twice/astylar-input-tree.json",
+          "sha256": "ad4b3a8e930ab59e1146d919a1c757f496362785519296e8c5fa212cc4698344"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "259a88f86a54733136e08fb398fb3a938eec6169c6cb86cdd6b56c307869f4dd"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "3c54b5a5f93fe11ccc4b3b592667efccaf5fc7c5ec56a999a00740a2c46c63df"
+        }
+      },
+      "focused": true,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "1px",
+        "borderBottomStyle": "solid",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": {
+          "position": "absolute",
+          "top": "19px",
+          "height": "1px",
+          "background": "#1d1b20"
+        }
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "99fcaf71e62dc8669e2b508aefe71a4fe1b4ecc63d1b2812b3ea4d2aa9224304"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "069d815546719544201213c31d06176003e4af93373fd273ecd275bc8a680372"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "482ec0757eb60171789633f00c3a2ef1ba15b8715b6d2cebe9311d0a7948ab12"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "b591fbba5749a631068237a0809ba5a34b03ee34e778dcb2e7f7c7e8af16bba0"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "3d5b609dbdbeaaa81f826105efda8710b25c49681fce24b09f36f7486041fadd"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "f481b46875927e6c4390d7100ae7e0cff25d7f98524f3cfb7284b9be49c94176"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "68867a695fecf922cff8ac61959e350f9da675d866e9e330967d8e418ff664e3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "f481b46875927e6c4390d7100ae7e0cff25d7f98524f3cfb7284b9be49c94176"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@contrast/desktop-dpr2/activate-twice",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/activate-twice/reference-input-tree.json",
+          "sha256": "adc182df81753f3f274dc9109d83a91a427b05013d91e1937ba85e5cbc5a249d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/contrast/desktop-dpr2/activate-twice/astylar-input-tree.json",
+          "sha256": "26bcb079af9f2f92d6c6be9c36aab350c6c113d0252c0b799f460c723f8547b9"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "5a558bb68e54b46915f2e07f1733393a7ba1eacaba7f66373563ff04ab10e4e3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "72f26b2bfd8b0615389798f4bddc45701ae16865d72260cf3682a747029dfd05"
+        }
+      },
+      "focused": true,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "1px",
+        "borderBottomStyle": "solid",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": {
+          "position": "absolute",
+          "top": "22px",
+          "height": "1px",
+          "background": "#1d1b20"
+        }
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "6aded09906fec1d7e0ed409c91e3d3ece16719acc722fc7584abc2e96c0022ab"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "a2b4e49b3fc5fed8b770db6df3ca6532cc8785c404b214606fbcb2c447a88301"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "d2b79624ba211ee611221dfb225c33fb5f254dffdcdd1aad06b115b1df309fc7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "fa2638191317abf690574a4e5c68602e7f71ce57ab7b53f06cc781ce9b90d2ed"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "8e4a6a09f21370590fca9563c7d80fa38f5bdbd3c8892621de35dc682e19e79d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "725f596fdc7441b7cc9a6fe1356023f7771391929740733e1c619b1e9cb2de3b"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "35e4f9dad8e1e6c39a79a02c7e771646c73b8124fef470e8d92bcff467e853d7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "725f596fdc7441b7cc9a6fe1356023f7771391929740733e1c619b1e9cb2de3b"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr1/activate-twice",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/activate-twice/reference-input-tree.json",
+          "sha256": "62a9b1bc70f58dea614e40cd8ea8033b6b8910a2e9772f088ea7c4b3609e8b41"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr1/activate-twice/astylar-input-tree.json",
+          "sha256": "e1821093d29003a9efa39fe78d3d8ac33e0068671a8d756047b9b6092eeb6d7f"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "5a558bb68e54b46915f2e07f1733393a7ba1eacaba7f66373563ff04ab10e4e3"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "8c68e39ee4f3dd8817a24d6ea533b76205de97b9af7323c1f471500c13cb495d"
+        }
+      },
+      "focused": true,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "1px",
+        "borderBottomStyle": "solid",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": {
+          "position": "absolute",
+          "top": "22px",
+          "height": "1px",
+          "background": "#1d1b20"
+        }
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "6aded09906fec1d7e0ed409c91e3d3ece16719acc722fc7584abc2e96c0022ab"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "564170c56ad5f05c13f004797a9670e645f47e62899e6dbe781aebf32eb2d3cc"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "d2b79624ba211ee611221dfb225c33fb5f254dffdcdd1aad06b115b1df309fc7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "e2f6c2bdfd1adad7704571c7ab4fea69a6fca1bf1d8233b03f39156f099a1fe8"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "8e4a6a09f21370590fca9563c7d80fa38f5bdbd3c8892621de35dc682e19e79d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "52e5dc505142777d4e9ba0d3dd93762eb311017facf91bfb2ba05a82d4685988"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "35e4f9dad8e1e6c39a79a02c7e771646c73b8124fef470e8d92bcff467e853d7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "52e5dc505142777d4e9ba0d3dd93762eb311017facf91bfb2ba05a82d4685988"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    },
+    {
+      "case": "interaction:sort@custom/desktop-dpr2/activate-twice",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/activate-twice/reference-input-tree.json",
+          "sha256": "62a9b1bc70f58dea614e40cd8ea8033b6b8910a2e9772f088ea7c4b3609e8b41"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/sort/custom/desktop-dpr2/activate-twice/astylar-input-tree.json",
+          "sha256": "387cf1e26fd914c68324be910ee4d5e31c77da54bb0635ad8a18ff5f9ab286d5"
+        }
+      },
+      "focused": false,
+      "reference": {
+        "hostPosition": "static",
+        "focusOwner": "frame/2/0/0/0",
+        "borderBottomWidth": "0px",
+        "borderBottomStyle": "none",
+        "borderBottomColor": "rgb(29, 27, 32)"
+      },
+      "candidate": {
+        "hostPosition": "relative",
+        "trigger": "root/0/2/0/0",
+        "line": null
+      }
+    }
+  ],
+  "counts": {
+    "observations": 60,
+    "focus": 8
+  },
+  "canonicalAttributionChanged": false,
+  "rendererCauseProven": false,
+  "inputEquivalent": false
+}
