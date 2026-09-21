@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
 import { isDeepStrictEqual } from 'node:util';
+import { conserveDisabledInkGuard } from './disabled-ink-source-transition.mjs';
 
 // The 91-state capture predates tooltip wrapping classification. Its source
 // receipt describes the producer then, not a promise that today's audit module
@@ -78,14 +79,18 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
     assert.equal(colorFunctions, 1, 'Mapping projection requires one authenticated color normalizer');
     return statements;
   }
-  const before = project(old, false), after = project(current, true);
+  let disabledInkGuardTransition;
+  try { disabledInkGuardTransition = conserveDisabledInkGuard(current); }
+  catch (cause) { throw new Error('Current mapping source failed disabled-ink source conservation', { cause }); }
+  const before = project(old, false), after = project(disabledInkGuardTransition.source, true);
   // Keep the exact deep comparison, but do not ask assert's diff formatter to
   // expand nearly a megabyte of module statements for each negative control.
   assert.ok(isDeepStrictEqual(after, before), 'Current mapping source changed outside reviewed audit orchestration');
   return { file: recorded.file, historicalRevision: mappingAuditRevision, recordedSha256: recorded.sha256,
     currentSha256: hash(current), retainedStatements: before.length, retainedStatementsSha256: hash(JSON.stringify(before)),
     normalizationTransition: colorTransition,
-    verification: 'reviewed-color-correction-with-all-other-retained-statements-identical-and-no-retained-references-to-changed-orchestration' };
+    disabledInkGuardTransition: Object.fromEntries(Object.entries(disabledInkGuardTransition).filter(([key]) => key !== 'source')),
+    verification: 'reviewed-color-and-disabled-ink-corrections-with-all-other-retained-statements-identical-and-no-retained-references-to-changed-orchestration' };
 }
 export function verifyHistoricalAuditModuleSource(recorded, currentBytes, { root = process.cwd(),
   readRevision = () => execFileSync('git', ['show', `${originalOverlayAuditSourceCommit}:${originalOverlayAuditSourceFile}`],

@@ -172,3 +172,32 @@ forged paint evidence, wrong classification/family, duplicate expected cases,
 and missing classification changes. The synthetic tests establish checker
 sensitivity, not conservation of the real canonical reports. Execution against
 the regenerated payload remains pending while regeneration is active.
+
+### First regeneration rejected; second source-binding boundary identified
+
+The first regeneration terminated with exit 1. Coverage remains 436/436 static
+and 1,875/1,875 interactive cases, 8,483 scalar signatures and 389,202 occurrences.
+It reports **1,823** unresolved scalar groups rather than the previous 1,689,
+plus an invalid reviewed-input binding. Its decoded payload digest is
+`4761d130fe2fce09552cb8aa4de47c9c98779e61627a4701ba128789ebe5093b`.
+The conservation checker rejects it with `scalar discrepancy records changed`;
+this generated result is not accepted or promoted as conserved evidence.
+
+Direct source-plan replay locates the rejection in
+`verifyOverlayMappingAuditProjection` inside `historical-audit-module-source.mjs`.
+This separate historical source verifier also retains the classifier declaration,
+so the exact guard correction must be authenticated there as well. It now uses
+the same complete-function conservation helper, preserving historical receipts
+and every other retained statement. Unrelated mapping edits and widened boolean
+guards remain rejected; no arbitrary hash refresh is permitted.
+
+The seven original source plans replay successfully. A direct call through
+`collectReviewedInputAuditInputs` on the full original capture returns `bound`,
+**134 groups / 3,325 observations**, complete 2,311-case / 6,946-input coverage,
+and no missing cases, inputs or observations. This restores the source-binding
+path in memory; it does not repair the already generated rejected payload.
+Another canonical generation and successful conservation remain required.
+
+Verification: `node --max-old-space-size=1024 --test --test-concurrency=1 tests/material-parity/disabled-ink-source-transition.spec.mjs tests/material-parity/original-overlay-context-survey.spec.mjs`
+passes **13/13**, no failures or skips, **91,258.1999 ms**. Log:
+`artifacts/material-parity/disabled-ink-overlay-binding-tests.log`.
