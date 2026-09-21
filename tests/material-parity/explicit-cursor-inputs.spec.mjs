@@ -3,13 +3,14 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { collectExplicitCursors, inspectExplicitCursor } from '../../scripts/audit-material-explicit-cursors.mjs';
+import { assertExplicitCursorCensusConserved } from './explicit-cursor-census-conservation.mjs';
 
 const read = file => JSON.parse(readFileSync(file));
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const report = read('docs/material-explicit-cursor-inputs.json');
 
 test('explicit cursor census replays every original case and all 763 differing owner inputs', () => {
-  const replay = collectExplicitCursors(); assert.deepEqual(replay, report);
+  const replay = collectExplicitCursors(); assertExplicitCursorCensusConserved(replay);
   assert.equal(report.casesScanned, 2311); assert.equal(report.groupCount, 19);
   assert.equal(report.observations, 763); assert.equal(report.patterns.length, 204);
   assert.equal(report.equalScalarObservations, 881);

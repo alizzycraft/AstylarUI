@@ -147,3 +147,24 @@ No saved report, renderer, fixture or active legacy-suite dependency was edited.
 This corrects public evidence checking, not cursor behavior. The separate
 explicit-cursor census still needs its historical source adapter integrated,
 and canonical classification remains pending.
+
+### Explicit census test integration
+
+The explicit census test now uses `assertExplicitCursorCensusConserved` to
+authenticate the immutable saved report and the two independently reviewed
+source projections. It checks each current receipt against actual current
+source, restores only those two receipts in a copy, and compares the entire
+remaining report. The caller and saved evidence are not mutated. All existing
+membership, ownership, uncertainty and negative-evidence assertions remain.
+
+Verification: `node --max-old-space-size=1024 --test --test-concurrency=1 tests/material-parity/explicit-cursor-census-conservation.spec.mjs tests/material-parity/explicit-cursor-inputs.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs`
+passed **10/10**, no failures or skips, **21,675.9116 ms**. Negative controls
+reject altered counts, case identity, causal claims, receipts, duplicate
+witnesses, attribution flags, saved evidence and unreviewed source edits.
+
+The collector's standalone `--check` remains a strict current-versus-historical
+serialization check and will still report its two source-receipt differences;
+it has not been silently rebaselined. This integration covers the audit test
+suite, not that CLI. No renderer, canonical fixture, saved census or canonical
+classification changed. The 763 cursor observations remain evidence of input
+differences, not demonstrated effective hit-target or rendering equivalence.
