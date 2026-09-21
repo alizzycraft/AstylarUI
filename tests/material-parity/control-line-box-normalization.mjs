@@ -7,12 +7,14 @@ const hash = value => createHash('sha256').update(value).digest('hex');
 const digest = value => hash(JSON.stringify(value));
 export const historicalControlLineBoxReportSha256 = '9e689c9a5d828a16214abbe55804a6ff72037d300c7f26272123ae008d948d11';
 const historicalSourceSha256 = '5a9b9ebf0f8c10ec0cb4670a7ee71174bd19e6dcd8ac0ef9b9675da5d9d8ab29';
-const historicalNormalization = { ...preciseAuditNormalization,
-  sha256: '8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e' };
 
 // Only the independently censused immutable capture can use this transition.
 // The reader must still verify its complete source, tree, action and asset chain.
 export function bindControlLineBoxNormalization(reportSha256, source, historicalBytes, currentBytes) {
+  // Defer imported-contract access until invocation: source-proof collectors
+  // also import the main audit, so their ESM initialization order can differ.
+  const historicalNormalization = { ...preciseAuditNormalization,
+    sha256: '8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e' };
   assert.equal(reportSha256, historicalControlLineBoxReportSha256, 'unreviewed line-box capture');
   assert.equal(source.file, preciseAuditNormalization.module);
   assert.equal(source.sha256, historicalSourceSha256);
