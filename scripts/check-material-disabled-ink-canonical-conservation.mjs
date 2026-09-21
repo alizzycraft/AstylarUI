@@ -9,7 +9,7 @@ import { pathToFileURL } from 'node:url';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
-async function readAudit(directory) {
+export async function readAudit(directory) {
   const manifest = JSON.parse(readFileSync(`${directory}/material-input-equivalence-audit.json`));
   assert.equal(manifest.payload, 'material-input-equivalence-audit.json.gz');
   const path = `${directory}/${manifest.payload}`, compressed = readFileSync(path);

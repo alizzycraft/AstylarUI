@@ -201,3 +201,43 @@ Another canonical generation and successful conservation remain required.
 Verification: `node --max-old-space-size=1024 --test --test-concurrency=1 tests/material-parity/disabled-ink-source-transition.spec.mjs tests/material-parity/original-overlay-context-survey.spec.mjs`
 passes **13/13**, no failures or skips, **91,258.1999 ms**. Log:
 `artifacts/material-parity/disabled-ink-overlay-binding-tests.log`.
+
+### Second regeneration completed; embedded source receipts require conservation
+
+The second generation completed with exit 1 solely for **1,689** unattributed
+resolved-style groups. The source-binding errors from the first attempt are
+gone. Coverage remains 436 static / 1,875 interaction cases, 8,483 scalar rows,
+389,202 occurrences and 132 source findings. Its compressed digest is
+`923a4b5bcb412c181e7b97ad3158cfc4e06c633ab01dae928a7b116122617347`;
+decoded digest is
+`89e1beffd14cc7050456cda0cfba84b51beec9fa0e74ed9b18f305119b6142e0`.
+
+The strict scalar/control checker still rejects the report. Its scalar comparison
+passes, but 48 previously reviewed interactive line-box records also change.
+`scripts/diagnose-material-disabled-ink-control-delta.mjs` identifies every
+changed field without accepting the payload:
+
+- 60 records receive the intended disabled-ink classification/evidence.
+- 48 retain their classification, values and evidence except
+  `reviewEvidence.observation.normalizationReconciliation.currentModuleSha256`.
+  That embedded receipt changes from
+  `ec5fd9d1b35795b7614c43a5c667b1817c017a52f4ebc35c957e4d1813601f6a`
+  to `ac8d32f078d75affd9ddf7d2d77d58f61fef9a3d78de2146fd69f6aeb471c095`.
+
+A read-only complete-source comparison against `6833850` confirms those module
+hashes differ only by the exact decimal guard and three source-inventory entries:
+restoring the pinned guard and removing those exact entries reproduces every
+normalized byte of the original module. This is evidence for a bounded receipt
+transition, not permission to ignore arbitrary review-evidence changes.
+
+The generated Markdown differs only in legacy test-source line references.
+The canonical checker has **not** yet incorporated an independently tested
+receipt transition, so the generated report remains unaccepted and uncommitted.
+Its original strict comparison tests still pass **2/2**, **210.5587 ms**;
+exporting its report reader for the diagnostic changes no acceptance logic.
+
+Logs: `disabled-ink-canonical-regeneration-v2.log`,
+`disabled-ink-canonical-conservation-v2.log`, and `disabled-ink-control-delta.log`
+under `artifacts/material-parity`. The full per-record delta is retained there
+as `disabled-ink-control-delta.json`. The full legacy test file has separately
+started with output in `legacy-full-1795d21.tap`; its terminal result is pending.
