@@ -2,10 +2,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { pathToFileURL } from 'node:url';
-import path from 'node:path';
 import test from 'node:test';
 import ts from 'typescript';
+import { verifyCaseIndexAssertionMigration } from './case-index-assertion-migration.mjs';
 import { caseIndexReceiptRevision, caseIndexAuditModule, caseIndexReceiptFiles, collectCaseIndexReceiptRefresh, applyCaseIndexReceiptRefresh } from '../../scripts/refresh-material-case-index-receipts.mjs';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
@@ -61,7 +60,7 @@ test('receipt writer requires successful membership replay and stable dependenci
   assert.deepEqual(writes, []);
 });
 
-test('all original case-index assertions pass against only in-memory proposed receipts with disk writes forbidden', () => {
+test('all conserved case-index membership assertions pass against historical receipts with disk writes forbidden', () => {
   const file = 'tests/material-parity/input-equivalence-audit.spec.mjs';
   const current = readFileSync(file, 'utf8'), historical = execFileSync('git', ['show', `${caseIndexReceiptRevision}:${file}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
   function statements(source) {
@@ -70,20 +69,13 @@ test('all original case-index assertions pass against only in-memory proposed re
       && n.expression.expression.getText(tree) === 'test' && ts.isStringLiteral(n.expression.arguments[0])
       && n.expression.arguments[0].text.includes('case index')).map(n => n.getText(tree).replaceAll('\r\n', '\n'));
   }
-  assert.equal(statements(current).length, 11); assert.deepEqual(statements(current), statements(historical), 'original membership assertions changed');
+  const beforeMigration = execFileSync('git', ['show', `6833850:${file}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  verifyCaseIndexAssertionMigration(beforeMigration, current);
+  assert.equal(statements(current).length, 11); assert.deepEqual(statements(beforeMigration), statements(historical), 'original membership assertions changed');
   const watched = [...caseIndexReceiptFiles, 'docs/material-input-equivalence-audit.json', 'docs/material-input-equivalence-audit.json.gz', 'docs/material-input-equivalence-audit.md'];
   const before = watched.map(f => hash(readFileSync(f)));
-  const moduleUrl = pathToFileURL(path.resolve('scripts/refresh-material-case-index-receipts.mjs')).href;
-  const guard = `import fs from 'node:fs';import {syncBuiltinESMExports} from 'node:module';import path from 'node:path';import {fileURLToPath} from 'node:url';
-    fs.writeFileSync=()=>{throw Error('CHECK_MODE_ATTEMPTED_WRITE')};syncBuiltinESMExports();
-    const {collectCaseIndexReceiptRefresh}=await import(${JSON.stringify(moduleUrl)});
-    const proposal=collectCaseIndexReceiptRefresh(), nativeRead=fs.readFileSync;
-    const files=new Map(proposal.reports.map(r=>[path.resolve(r.file),r.content]));
-    fs.readFileSync=(file,options)=>{const name=file instanceof URL?fileURLToPath(file):file;
-      const data=typeof name==='string'?files.get(path.resolve(name)):undefined;
-      if(data===undefined)return nativeRead(file,options);
-      const encoding=typeof options==='string'?options:options?.encoding;
-      return encoding?Buffer.from(data).toString(encoding):Buffer.from(data);};syncBuiltinESMExports();`;
+  const guard = `import fs from 'node:fs';import {syncBuiltinESMExports} from 'node:module';
+    fs.writeFileSync=()=>{throw Error('CHECK_MODE_ATTEMPTED_WRITE')};syncBuiltinESMExports();`;
   const env = { ...process.env }; delete env.NODE_TEST_CONTEXT;
   const output = execFileSync(process.execPath, ['--import', 'data:text/javascript;base64,' + Buffer.from(guard).toString('base64'),
     '--test', '--test-name-pattern=case index', file], { encoding: 'utf8', maxBuffer: 2 * 1024 * 1024, env });

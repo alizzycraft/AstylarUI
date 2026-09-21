@@ -7,6 +7,7 @@ import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import { caseIndexReceiptFiles, caseIndexReceiptRevision, caseIndexAuditModule } from './refresh-material-case-index-receipts.mjs';
 import { verifyAlignmentAuditProjection } from '../tests/material-parity/alignment-survey-conservation.mjs';
+import { verifyCaseIndexAssertionMigration } from '../tests/material-parity/case-index-assertion-migration.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalize = value => value.toString().replaceAll('\r\n', '\n');
@@ -58,21 +59,14 @@ export function replayCaseIndexMembership() {
       node.expression.expression.getText(tree) === 'test' && ts.isStringLiteral(node.expression.arguments[0]) &&
       node.expression.arguments[0].text.includes('case index')).map(node => node.getText(tree));
   };
-  const current = statements(readFileSync(file));
+  const beforeMigration = historical('6833850', file);
+  const assertionMigration = verifyCaseIndexAssertionMigration(beforeMigration, readFileSync(file));
+  const current = statements(beforeMigration);
   assert.equal(current.length, 11);
   assert.deepEqual(current, statements(historical(caseIndexReceiptRevision, file)), 'original membership assertions changed');
   const watched = caseIndexReceiptFiles.map(name => ({ file: name, sha256: hash(readFileSync(name)) }));
-  const moduleUrl = pathToFileURL(path.resolve('scripts/audit-material-case-index-conservation.mjs')).href;
-  const guard = `import fs from 'node:fs';import{syncBuiltinESMExports}from'node:module';import path from'node:path';import{fileURLToPath}from'node:url';
-    fs.writeFileSync=()=>{throw Error('MEMBERSHIP_REPLAY_ATTEMPTED_WRITE')};syncBuiltinESMExports();
-    const{collectCaseIndexConservation}=await import(${JSON.stringify(moduleUrl)});
-    const{replayReports}=collectCaseIndexConservation(),nativeRead=fs.readFileSync;
-    const files=new Map(replayReports.map(row=>[path.resolve(row.file),row.content]));
-    fs.readFileSync=(file,options)=>{const name=file instanceof URL?fileURLToPath(file):file;
-      const data=typeof name==='string'?files.get(path.resolve(name)):undefined;
-      if(data===undefined)return nativeRead(file,options);
-      const encoding=typeof options==='string'?options:options?.encoding;
-      return encoding?Buffer.from(data).toString(encoding):Buffer.from(data);};syncBuiltinESMExports();`;
+  const guard = `import fs from 'node:fs';import{syncBuiltinESMExports}from'node:module';
+    fs.writeFileSync=()=>{throw Error('MEMBERSHIP_REPLAY_ATTEMPTED_WRITE')};syncBuiltinESMExports();`;
   const env = { ...process.env }; delete env.NODE_TEST_CONTEXT;
   const output = execFileSync(process.execPath, ['--max-old-space-size=1536', '--import',
     'data:text/javascript;base64,' + Buffer.from(guard).toString('base64'), '--test', '--test-concurrency=1',
@@ -82,7 +76,8 @@ export function replayCaseIndexMembership() {
   for (const receipt of watched) assert.equal(hash(readFileSync(receipt.file)), receipt.sha256, 'saved receipt was changed');
   assert.deepEqual(collectCaseIndexConservation().report, collected.report, 'sources changed during replay');
   return { ...collected.report, membershipAssertionsReplayed: true,
-    membership: { testStatementsSha256: hash(JSON.stringify(current)), tests: 11, failures: 0,
+    membership: { testStatementsSha256: hash(JSON.stringify(current)), assertionMigration,
+      diskReadSubstitution: false, tests: 11, failures: 0,
       outputSha256: hash(output), output } };
 }
 

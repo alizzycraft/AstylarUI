@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { verifyAlignmentAuditProjection } from '../tests/material-parity/alignment-survey-conservation.mjs';
 
 export const caseIndexReceiptRevision = '67db724e5f258c84cfdc70e9da2ccb6ee6353ad0';
 export const caseIndexAuditModule = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -27,13 +28,17 @@ const readRevision = file => execFileSync('git', ['show', `${caseIndexReceiptRev
 export function collectCaseIndexReceiptRefresh({ read = file => readFileSync(file), historical = readRevision } = {}) {
   const oldHash = sourceHash(historical(caseIndexAuditModule)), currentHash = sourceHash(read(caseIndexAuditModule));
   assert.equal(oldHash, '1189df0c574dc9e8058cf7a61ceb0f0751e0df48dca67b796f12dadde3ec6e45');
+  verifyAlignmentAuditProjection(historical(caseIndexAuditModule), read(caseIndexAuditModule));
+  const recordedSource = execFileSync('git', ['show', `4650791a7208b841dd29f1ced015f98234949623:${caseIndexAuditModule}`], { maxBuffer: 16 * 1024 * 1024 });
+  const recordedHash = sourceHash(recordedSource);
+  assert.equal(recordedHash, '82854bccdaa6ff23fc5f9df987f6ec5cf3e22d0da5dbe64357109d5a03035f3b');
   const reports = [], receipts = [];
   for (const file of caseIndexReceiptFiles) {
     const originalBytes = historical(file), original = JSON.parse(originalBytes), before = JSON.parse(read(file));
     const prior = original.sourceFingerprints.filter(s => s.file === caseIndexAuditModule);
     assert.equal(prior.length, 1); assert.equal(prior[0].sha256, oldHash);
     const comparable = structuredClone(before), updated = comparable.sourceFingerprints.filter(s => s.file === caseIndexAuditModule);
-    assert.equal(updated.length, 1); assert.ok([oldHash, currentHash].includes(updated[0].sha256), 'unrecognized receipt');
+    assert.equal(updated.length, 1); assert.ok([oldHash, recordedHash, currentHash].includes(updated[0].sha256), 'unrecognized receipt');
     updated[0].sha256 = oldHash;
     assert.deepEqual(comparable, original, `${file}: finding/capture/membership changed beyond the sole receipt`);
     for (const dependency of before.sourceFingerprints.filter(s => s.file !== caseIndexAuditModule))

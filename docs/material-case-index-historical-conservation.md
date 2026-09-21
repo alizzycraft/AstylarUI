@@ -87,3 +87,34 @@ suite has not yet been changed: it is fingerprinted by the live regeneration.
 Integration must preserve every original membership assertion and verify the
 scope of the sole source-receipt assertion replacement. This adapter's focused
 pass is not a pass of that legacy suite or the complete discovered audit harness.
+
+## Integrated historical-source assertions
+
+After canonical generation completed at `6833850`, the nine legacy receipt
+loops were replaced with explicit calls to the historical-source adapter. The
+saved case-index reports were not rewritten. The replay now reads those actual
+disk reports, without substituting projected reports through a read hook.
+
+`case-index-assertion-migration.mjs` restores the nine original loops and removes
+the single adapter import, then compares the AST of the entire restored suite
+against `6833850`. Every other statement must remain identical. Negative tests
+reject unrelated assertion changes, a dropped assertion, and a wrong index.
+The original suite AST SHA-256 is
+`3ec0eb518e8041fac85e783e0be8fb0fa34254fb41949a3cba3c08126538c742`.
+
+Verification:
+
+- Direct legacy `--test-name-pattern='case index'` run: **11/11 passed**,
+  58,110.4277 ms. Output: `artifacts/material-parity/case-index-integrated-6833850.tap`.
+- Direct historical-report replay with disk writes forbidden: **11/11 passed**,
+  65,480.0043 ms. Output and migration metadata are preserved in the adjacent JSON.
+- Migration, receipt conservation, adapter, and harness inventory suites:
+  **12/12 passed**, no skips, 101,399.239 ms. Output:
+  `artifacts/material-parity/case-index-migration-6833850.tap`.
+
+This is an instrumentation correction, not a renderer fix or a broad-suite
+pass. The earlier full legacy run had ten failures; the focused results address
+nine receipt checks and do not establish the remaining failure's cause. A full
+legacy rerun and the complete enforced gates remain required. The canonical
+report at `6833850` predates this test-source change; its recorded source receipt
+must not be described as current after this integration.

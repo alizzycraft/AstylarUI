@@ -5,6 +5,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'nod
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
+import { assertHistoricalCaseIndexSources } from './historical-case-index-source-assertion.mjs';
 import {
   buildMaterialInputAudit,
   attributeObservedNormalLineBoxes,
@@ -11074,7 +11075,7 @@ test('container caret case index links every root and field observation without 
   const index = JSON.parse(readFileSync('docs/material-container-caret-audit.json', 'utf8'));
   const bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
   assert.equal(index.sourceFingerprints.length, 11);
-  for (const s of index.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replace(/\r\n/g, '\n')), s.sha256, s.file);
+  assertHistoricalCaseIndexSources('docs/material-container-caret-audit.json', index);
   const sources = index.caseSources.map(s => {
     const value = JSON.parse(readFileSync(s.file, 'utf8'));
     assert.deepEqual(value.capture, index.capture); assert.equal(value.groups.length, s.groupCount); return value;
@@ -11190,7 +11191,7 @@ test('root height case index retains all fixed declarations and raw content-box 
   const index = JSON.parse(readFileSync('docs/material-root-height-audit.json', 'utf8'));
   const bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
   assert.equal(index.sourceFingerprints.length, 9);
-  for (const s of index.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replace(/\r\n/g, '\n')), s.sha256, s.file);
+  assertHistoricalCaseIndexSources('docs/material-root-height-audit.json', index);
   const report = JSON.parse(bytes), covered = new Map(), expected = [];
   for (const g of index.groups) {
     assert.equal(g.property, 'height'); assert.equal(g.classification, 'application-plugin-authoring-defect');
@@ -11231,7 +11232,7 @@ test('field host color case index preserves every raw host and separate font aut
   const index = JSON.parse(readFileSync('docs/material-field-host-color-audit.json', 'utf8'));
   const bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
   assert.equal(index.sourceFingerprints.length, 9);
-  for (const s of index.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replace(/\r\n/g, '\n')), s.sha256, s.file);
+  assertHistoricalCaseIndexSources('docs/material-field-host-color-audit.json', index);
   const report = JSON.parse(bytes), covered = new Map(), expected = [];
   for (const g of index.groups) {
     assert.equal(g.property, 'color'); assert.equal(g.candidate, '<omitted>'); assert.equal(g.classification, 'parity-harness-defect');
@@ -11281,7 +11282,7 @@ test('root color case index covers every raw section and retains diagnostic stag
   const index = JSON.parse(readFileSync('docs/material-root-color-audit.json', 'utf8'));
   const bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
   assert.equal(index.sourceFingerprints.length, 7);
-  for (const s of index.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replace(/\r\n/g, '\n')), s.sha256, s.file);
+  assertHistoricalCaseIndexSources('docs/material-root-color-audit.json', index);
   const report = JSON.parse(bytes), covered = new Map(), expected = [];
   for (const group of index.groups) {
     assert.equal(group.property, 'color'); assert.equal(group.candidate, '<omitted>');
@@ -11338,8 +11339,7 @@ test('root typography case index covers every main capture and preserves raw tre
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const index = JSON.parse(readFileSync('docs/material-root-typography-audit.json', 'utf8'));
   const bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
-  for (const source of index.sourceFingerprints)
-    assert.equal(hash(readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')), source.sha256, source.file);
+  assertHistoricalCaseIndexSources('docs/material-root-typography-audit.json', index);
   assert.equal(index.sourceFingerprints.length, 6);
   const report = JSON.parse(bytes), covered = new Map(), expected = [];
   for (const group of index.groups) {
@@ -11372,7 +11372,7 @@ test('field host alignment case index covers all explicit requests and unchanged
   const index = JSON.parse(readFileSync('docs/material-field-host-alignment-audit.json', 'utf8'));
   const bytes = readFileSync(index.capture.file); assert.equal(hash(bytes), index.capture.sha256);
   assert.equal(index.sourceFingerprints.length, 7);
-  for (const s of index.sourceFingerprints) assert.equal(hash(readFileSync(s.file, 'utf8').replace(/\r\n/g, '\n')), s.sha256, s.file);
+  assertHistoricalCaseIndexSources('docs/material-field-host-alignment-audit.json', index);
   const covered = new Map(), expected = [], raw = JSON.parse(bytes);
   const affects = d => Object.keys(d ?? {}).some(k => ['textalign', 'textalignlast', 'direction', 'unicodebidi', 'writingmode', 'all'].includes(k.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(k));
   for (const g of index.groups) {
@@ -11618,8 +11618,7 @@ test('field host case index matches every captured field comparison and source f
   const index = JSON.parse(readFileSync('docs/material-field-host-typography-audit.json', 'utf8'));
   const raw = readFileSync(index.capture.file);
   assert.equal(hash(raw), index.capture.sha256);
-  for (const source of index.sourceFingerprints)
-    assert.equal(hash(readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')), source.sha256, source.file);
+  assertHistoricalCaseIndexSources('docs/material-field-host-typography-audit.json', index);
   assert.equal(index.sourceFingerprints.length, 4);
   const report = JSON.parse(raw), covered = new Map();
   for (const group of index.groups) {
@@ -11978,8 +11977,7 @@ test('non-widget appearance case index preserves all attributed raw main-capture
   const { readFileSync } = await import('node:fs');
   const { createHash } = await import('node:crypto');
   const index = JSON.parse(readFileSync('docs/material-nonwidget-appearance-audit.json', 'utf8'));
-  for (const source of index.sourceFingerprints) assert.equal(createHash('sha256')
-    .update(readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), source.sha256, source.file);
+  assertHistoricalCaseIndexSources('docs/material-nonwidget-appearance-audit.json', index);
   const bytes = readFileSync(index.mainCapture.file);
   assert.equal(createHash('sha256').update(bytes).digest('hex'), index.mainCapture.sha256);
   const report = JSON.parse(bytes), cases = new Map();
@@ -12117,8 +12115,7 @@ test('button appearance case index retains every original reset and explicit map
   const { readFileSync } = await import('node:fs');
   const { createHash } = await import('node:crypto');
   const index = JSON.parse(readFileSync('docs/material-button-appearance-audit.json', 'utf8'));
-  for (const source of index.sourceFingerprints) assert.equal(createHash('sha256')
-    .update(readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), source.sha256, source.file);
+  assertHistoricalCaseIndexSources('docs/material-button-appearance-audit.json', index);
   const bytes = readFileSync(index.mainCapture.file);
   assert.equal(createHash('sha256').update(bytes).digest('hex'), index.mainCapture.sha256);
   const report = JSON.parse(bytes), cases = new Map();
