@@ -8,8 +8,8 @@ test('position queue accounts for every original group without claiming canonica
   assert.equal(q.groups.length, 58); assert.equal(q.groups.reduce((n, g) => n + g.observations, 0), 2950);
   assert.deepEqual(q.counts['classified-integration-pending'], { groups: 14, observations: 768 });
   assert.deepEqual(q.counts['producer-integrated-conservation-pending'], { groups: 6, observations: 316 });
-  assert.deepEqual(q.counts['inspection-classification-pending'], { groups: 8, observations: 544 });
-  assert.deepEqual(q.counts['investigation-pending'], { groups: 30, observations: 1322 });
+  assert.deepEqual(q.counts['inspection-classification-pending'], { groups: 17, observations: 811 });
+  assert.deepEqual(q.counts['investigation-pending'], { groups: 21, observations: 1055 });
 });
 test('queue refuses duplicated, incomplete, reordered and unknown review membership', () => {
   const p = { groups: [{ element: 'sample', observations: [{ case: 'a' }, { case: 'b' }], occurrences: 2 }] };

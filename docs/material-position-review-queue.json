@@ -30,8 +30,11 @@
       "candidateOmitted": true,
       "observations": 25,
       "priorRowSha256": "5fc7d165f4e796a9934ca857baef7006a729c6ec50b2fe16bf69d1269231a517",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-modal-position-inspection.json",
+        "sha256": "4837c14fbb41253f990dc0aed2777fb31c48b0eebbf84c804324d4573d4f24b1"
+      }
     },
     {
       "family": "bottom-sheet",
@@ -42,8 +45,11 @@
       "candidateOmitted": true,
       "observations": 25,
       "priorRowSha256": "f75e5443a0204e490bb5686d1ee226b89733df17544da13b9c0dd2cc7ca5688f",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-modal-position-inspection.json",
+        "sha256": "4837c14fbb41253f990dc0aed2777fb31c48b0eebbf84c804324d4573d4f24b1"
+      }
     },
     {
       "family": "bottom-sheet",
@@ -66,8 +72,11 @@
       "candidateOmitted": true,
       "observations": 25,
       "priorRowSha256": "ca149f8f9ef9ab1ef224d7ce570cc9e07bd3349fabe8122a5954fb39df2a9f3f",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-modal-position-inspection.json",
+        "sha256": "4837c14fbb41253f990dc0aed2777fb31c48b0eebbf84c804324d4573d4f24b1"
+      }
     },
     {
       "family": "button-toggle",
@@ -207,8 +216,11 @@
       "candidateOmitted": true,
       "observations": 32,
       "priorRowSha256": "79fcfb552e3c4d0c3489be5d904835fc2d1825454f4d781399d19f6e493d8769",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-modal-position-inspection.json",
+        "sha256": "4837c14fbb41253f990dc0aed2777fb31c48b0eebbf84c804324d4573d4f24b1"
+      }
     },
     {
       "family": "dialog",
@@ -219,8 +231,11 @@
       "candidateOmitted": true,
       "observations": 32,
       "priorRowSha256": "2d592bbb2403907ba35acf4ebdf676cecf32337d2519fdabc9f59c1ebc0c68ac",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-modal-position-inspection.json",
+        "sha256": "4837c14fbb41253f990dc0aed2777fb31c48b0eebbf84c804324d4573d4f24b1"
+      }
     },
     {
       "family": "dialog",
@@ -231,8 +246,11 @@
       "candidateOmitted": true,
       "observations": 32,
       "priorRowSha256": "ec18b742c69c701a97753f88a85b64600fb013d0071bbbde6a0c44f03216c594",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-modal-position-inspection.json",
+        "sha256": "4837c14fbb41253f990dc0aed2777fb31c48b0eebbf84c804324d4573d4f24b1"
+      }
     },
     {
       "family": "dialog",
@@ -243,8 +261,11 @@
       "candidateOmitted": true,
       "observations": 32,
       "priorRowSha256": "f8a0e940cd279ce9f34bf22a076a6fbef7af46e72daa5247f152b81f54e12505",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-modal-position-inspection.json",
+        "sha256": "4837c14fbb41253f990dc0aed2777fb31c48b0eebbf84c804324d4573d4f24b1"
+      }
     },
     {
       "family": "dialog",
@@ -255,8 +276,11 @@
       "candidateOmitted": true,
       "observations": 32,
       "priorRowSha256": "2367c4cdc70fce329af3645af882f8e96ab9f10c7444746e5595684499a8e4e6",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-modal-position-inspection.json",
+        "sha256": "4837c14fbb41253f990dc0aed2777fb31c48b0eebbf84c804324d4573d4f24b1"
+      }
     },
     {
       "family": "dialog",
@@ -267,8 +291,11 @@
       "candidateOmitted": true,
       "observations": 32,
       "priorRowSha256": "c14e6e929abae8da1b7484e7767e81356f41d859cd8141e2627a72b79c7d86b6",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-modal-position-inspection.json",
+        "sha256": "4837c14fbb41253f990dc0aed2777fb31c48b0eebbf84c804324d4573d4f24b1"
+      }
     },
     {
       "family": "divider",
@@ -792,13 +819,13 @@
       "groups": 14,
       "observations": 768
     },
-    "investigation-pending": {
-      "groups": 30,
-      "observations": 1322
-    },
     "inspection-classification-pending": {
-      "groups": 8,
-      "observations": 544
+      "groups": 17,
+      "observations": 811
+    },
+    "investigation-pending": {
+      "groups": 21,
+      "observations": 1055
     },
     "producer-integrated-conservation-pending": {
       "groups": 6,
