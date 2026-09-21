@@ -70,3 +70,37 @@ decoded SHA-256: `287ebb396d68ab064dca40a0c372879e8a0c3fd2c7f56498110577615bd430
 
 The independent whole-report section inventory is still running. These successful
 scalar/control checks alone do not approve changes elsewhere in the report.
+
+## Whole-report section review completed
+
+The independent section scan completed with exit 0 and authenticated both full
+payloads. All 74 prior sections remain; only `visibilityAuditInputs` is added.
+Of the existing sections, 66 are token-for-token unchanged and eight differ:
+
+- `discrepancies` and `controlTypography`: covered by the exact replay above.
+- `summary`: only unresolved attribution count changes, 1,689 to 1,674.
+- `controlLineBoxes`: only the same 48 producer-module hashes change.
+- `ownerCaretInputs`: only its complete-source producer hash changes.
+- `reviewedSourceBatchInputs`: only the producer hash and derived motion-review
+  report hash change. The source-conservation validator independently replays
+  the motion observations and proves all non-receipt evidence unchanged.
+- `focusedProofs`: only 34 source line numbers move by +16; descriptions and
+  proof membership remain unchanged.
+- `sourceFingerprints`: all 395 previous paths remain in order; the 14 visibility
+  sources are added. Four existing file hashes change: the producer, its test
+  inventory, and the two historical/source-conservation import guards. These
+  are the independently tested changes in `222667e`; no core source hash changes.
+
+Section report: `artifacts/material-parity/visibility-section-conservation-v1.json`,
+SHA-256 `d74709fd618cfd4aa073eef60ce71fa9b3ab498d7e4e37ee0f776e10dbdc3f78`.
+Complete recursive comparison of the six dependent sections (authenticated
+decoded manifests, no sampling):
+`artifacts/material-parity/visibility-dependent-section-diff-v1.json`, SHA-256
+`33ad4558e06a2a303f671281c366f127b5a4e0006788af28c8a9d6e6b2504589`.
+Current source hashes and ordered membership were checked against the resulting
+diff. The human report was also verified to change only its unresolved count
+and those 34 line references.
+
+This accepts the bounded visibility evidence integration, not audit completion.
+The 1,674 remaining attribution gaps and independent rendering failures remain
+open; no fixture, core renderer, or screenshot threshold was changed.
