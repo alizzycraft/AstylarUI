@@ -191,3 +191,35 @@ integration worktree before the harness's normal package refresh.
 The unfiltered `npm run tts-parity:check` is now running, with no interaction
 filter and without skipping its build. Log:
 `artifacts/material-parity/tts-full-0cb5711.log`. Its result remains pending.
+
+## Enforced TTS result
+
+The original TTS execution handle completed **exit 1**, explicitly failing its
+unchanged calibrated acceptance assertion. Infrastructure is complete. All ten
+scenarios were captured; three met static targets. Minimum SSIM is
+0.9462212725690988 and maximum geometry edge error is 2 px. Visibility, scroll
+ownership, reachability and visible text match in 10/10 scenarios; sharpness
+passes in 31/36 regions. Interaction acceptance passes in 48/70 steps, with
+minimum local SSIM 0.42963552267106425. Neither static nor interaction acceptance
+is met. Its build completed in 73.307 seconds, prerendering one route.
+
+Report `artifacts/tts-parity/latest-report.json` SHA-256:
+`2579da52df3da11d85a42da4035253aefd1998344f5108b3f6fb783ba67ed2d0`.
+Log `artifacts/material-parity/tts-full-0cb5711.log` SHA-256:
+`7fa255c04602ce35c0220344592d1ff94713fb8e307570af980f8b504ab376e5`.
+
+## Material full gate preparation
+
+The unfiltered `npm run material-parity:check` has started without skipping its
+build, writing to the new `artifacts/material-parity/enforced-full-e26c6cb`
+directory so earlier captures are not overwritten. Log:
+`artifacts/material-parity/material-full-e26c6cb.log`.
+
+Before preparation, the showcase dependency junction was renamed locally to
+`node_modules.audit-prior-junction`; its target in the other checkout was not
+changed. This allows installation into a real directory in this worktree instead
+of letting preparation refresh the shared dependency. The existing `astylarui.tgz`
+was copied and hash-verified at `artifacts/material-preparation-backup-e26c6cb`.
+The existing Angular cache was renamed `cache.audit-prior-e26c6cb` within
+`.angular`. These preserved inputs need restoration after the gate, without
+deleting their replacement evidence. The gate is still pending.
