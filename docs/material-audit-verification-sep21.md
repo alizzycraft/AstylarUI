@@ -83,3 +83,16 @@ audit tests are not covered by this Angular/Karma result.
 The visibility canonical regeneration remains live at this checkpoint. The
 full unit result does not close canonical conservation, remaining attribution,
 the full discovered audit-test suite, builds/consumer, or enforced parity gates.
+
+## Library build completed
+
+`npm run build:lib` finished with **exit 0**, without warnings in the captured
+output. The configured `dist/lib` output did not exist before this run; the
+parent `dist` directory was verified to be a real directory inside this worktree,
+not a junction to another checkout.
+
+Log: `artifacts/material-parity/library-build-a34586e.log`, SHA-256
+`70e3529b8807eb1864edcf3b50bcbe741661d55e49bc56cbfd8bf0e58c95ffe8`.
+This proves library compilation only. The application build was started after
+this command completed; packed-consumer runtime and enforced parity remain
+separate pending gates.
