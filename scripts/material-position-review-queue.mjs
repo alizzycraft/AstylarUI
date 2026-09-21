@@ -54,6 +54,8 @@ export function collectPositionQueue() {
     element: g.element, priorRowSha256: g.priorRowSha256, cases: g.observations.map(o => o.case) })) });
   const toggle = load('material-button-toggle-position-inspection');
   reviews.push({ source: toggle.source, status: 'inspection-classification-pending', groups: toggle.data.groups });
+  const chips = load('material-chip-position-inspection');
+  reviews.push({ source: chips.source, status: 'inspection-classification-pending', groups: chips.data.groups });
   const labels = load('material-choice-label-stacking-substitution');
   reviews.push({ source: labels.source, status: 'classified-integration-pending', groups: labels.data.groups.map(g => ({
     element: g.element, priorRowSha256: g.priorRowSha256, cases: g.observations.map(o => o.case) })) });

@@ -162,8 +162,11 @@
       "candidateOmitted": true,
       "observations": 76,
       "priorRowSha256": "ec0a3c9c16869ff2e6013d1b85d53fc15645523dfb7160fca4c8a1ac51899f3b",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-chip-position-inspection.json",
+        "sha256": "745ff90d4a1dd294f37d1325f4b0eb20d9578c5012d9663d4c32e2ec6933e5c0"
+      }
     },
     {
       "family": "chips",
@@ -174,8 +177,11 @@
       "candidateOmitted": true,
       "observations": 76,
       "priorRowSha256": "1d4a2c902996789d0a6a3825930f1020882fb05da49914575fcb2b29d0a69d2d",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-chip-position-inspection.json",
+        "sha256": "745ff90d4a1dd294f37d1325f4b0eb20d9578c5012d9663d4c32e2ec6933e5c0"
+      }
     },
     {
       "family": "chips",
@@ -186,8 +192,11 @@
       "candidateOmitted": true,
       "observations": 76,
       "priorRowSha256": "2aa389382fa5e86a24cc6b3f4b7ececddfa68514ffa2eff196e598ca0fd8d2bd",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-chip-position-inspection.json",
+        "sha256": "745ff90d4a1dd294f37d1325f4b0eb20d9578c5012d9663d4c32e2ec6933e5c0"
+      }
     },
     {
       "family": "dialog",
@@ -784,12 +793,12 @@
       "observations": 768
     },
     "investigation-pending": {
-      "groups": 33,
-      "observations": 1550
+      "groups": 30,
+      "observations": 1322
     },
     "inspection-classification-pending": {
-      "groups": 5,
-      "observations": 316
+      "groups": 8,
+      "observations": 544
     },
     "producer-integrated-conservation-pending": {
       "groups": 6,
