@@ -175,6 +175,47 @@ contracts. A passing isolated bottom-overlay primitive does not prove the
 unequally authored Material bottom sheet, and changing its fixture size is not
 a general rendering fix. Keep resource/lifecycle checks separate from rasters.
 
+## 9. Preserve asymmetric borders in natural flow before removing sort paint substitution
+
+The [complete sort structure review](material-sort-focus-structure.md) verifies
+60 original cases. In eight focus cases, the reference paints an in-flow bottom
+border while the candidate paints a separate absolute child under a fixed-height
+relative host. State agreement does not justify that structural translation.
+Commit `994da86b` introduced the host position and paint child together, but its
+motivation has not been demonstrated.
+
+The [equal-input public reduction](material-sort-focus-border-public-proof.md)
+now reproduces a related core failure at two widths in two independent browser
+runs: adding a 1px bottom border leaves the candidate flex owner and ancestor
+1px too short, leaves the following sibling 1px too high, and shifts the content
+up 0.5px. Initial and restored zero-border geometry matches. Normal/effective
+style inspection retains the border request; the exact internal causal path
+after that stage remains to be traced. Both browser runs fail unchanged
+expectations, rather than accepting the current incorrect output.
+
+Owner: core asymmetric border contribution, intrinsic/automatic flex sizing and
+cross-axis positioning. The follow-up extracted-method proof demonstrates that
+`calculateIntrinsicContainerHeight` in both repository and installed sources
+doubles the first border-width scalar, losing bottom-only width and doubling
+top-only width. This matches the public failure but is not yet its full runtime
+call trace. Trace the reproduction through the actual installed path and
+investigate cross-axis displacement separately. Also clarify the public catalog's
+precise border-width value subset.
+
+Future acceptance: preserve the public reduction, add text and real focus-state
+coverage, verify border raster separately, then restore the Material border
+authoring and remove the extra paint child plus its dependent host geometry as
+one reviewed change. Do not correct sibling placement with another offset.
+Proof commits: `1592ce3` (source structure) and `5c56000` (public reduction).
+The six evidence/inventory checks for the reduction pass; the two browser tests
+still fail in each run. No canonical attribution or full output parity claim is
+made by this handoff addition.
+
+Handoff addition verification:
+`node --test tests/material-parity/sort-focus-structure.spec.mjs tests/material-parity/sort-focus-border-public-proof.spec.mjs`
+passed **4/4**, exit 0, 1,694.4133ms, with no skips or cancellations. This
+replays source and retained failing browser evidence, not new renderer fixes.
+
 ## Integration and completion gates
 
 No implementation has been performed by this handoff. The main audit still has

@@ -85,3 +85,31 @@ requests, incorrect DPR and concealed content displacement.
 No core, plugin or canonical comparison fix was made. No canonical discrepancy
 was reclassified by this standalone reduction. Full audit acceptance remains
 outstanding.
+
+## Follow-up: source calculator isolation
+
+`tests/material-parity/sort-border-height-source.spec.mjs` extracts and executes
+the actual `calculateIntrinsicContainerHeight` method separately from both the
+repository TypeScript and the installed package JavaScript. Only zero padding
+and child measurement (64×19px, zero margins) are stubbed. For nowrap row flex,
+both implementations return 19px for a bottom-only 1px border (CSS expectation
+20px) and 21px for a top-only 1px border (CSS expectation 20px). Zero, uniform
+1px, and right-only borders provide controls.
+
+The method parses `borderWidth` with `Number.parseFloat` and contributes that
+first scalar twice. This is a demonstrated defect of the exact sizing
+calculation, not just a suspicious search result. It matches the public
+bottom-border failure. It still does not establish the full public runtime call
+trace or separately explain the content's cross-axis displacement.
+
+LF-normalized source receipts:
+
+- Repository `flex.service.ts`:
+  `37668d3443e104b9bfa8896c7e9ff65f48a00625138bc8d46a3cb9e6ba82d55f`.
+- Installed `dist/lib/app/services/dom/elements/flex.service.js`:
+  `1c587dbb1b2386dc176984cfc0ae725ae6d92a2be4a7605a92598bfdb14b13dd`.
+
+Command: `node --test tests/material-parity/sort-border-height-source.spec.mjs`.
+Result: **1/1 evidence test passed**, 678.3866ms. This test records the faulty
+calculator output; the public browser tests continue to assert correct browser
+geometry and fail. No implementation was changed.
