@@ -52,5 +52,18 @@ scalar/control conservation replay passed: all 8,483 scalar records are intact,
 independently verified module receipt. See
 [the full transition record](material-disabled-button-ink.md).
 
-The fresh complete legacy audit test file is still running in
-`legacy-full-1795d21.tap`; partial output is not a full-suite pass.
+The fresh complete legacy audit test file has now finished with exit 0:
+**388 tests, 388 passes, zero failures, cancellations or skips**, in
+**2,022,686.3083 ms**. It used the explicit single-file command:
+
+`node --max-old-space-size=1536 --test --test-concurrency=1 --test-reporter=tap --test-reporter-destination=artifacts/material-parity/legacy-full-1795d21.tap tests/material-parity/input-equivalence-audit.spec.mjs`
+
+Full TAP SHA-256:
+`b2ebe17e3c6920a6bbb760fd8aa8c05ca693110528faa5c6aa7210782c01757c`.
+The canonical builder and this test file were not changed while it ran. New
+visibility audit modules added during the run have separate focused verification;
+they are not implicitly covered by this legacy single-file result.
+
+This is not the full discovered audit-test suite or the complete enforced parity
+matrix. Those, remaining classifications, builds and other final gates remain
+outstanding. A future canonical integration requires fresh affected verification.

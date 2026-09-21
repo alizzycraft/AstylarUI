@@ -54,3 +54,18 @@ state-owner groups nor any other property may be swept into this classification.
 
 Generate with `node scripts/prepare-material-visibility-observation-stages.mjs`.
 Machine evidence: `docs/material-visibility-observation-stages.json`.
+
+### Validated binding now available
+
+`bindVisibilityObservationStages` independently rederives the complete preparation
+from authenticated source trees and requires whole-object equality before creating
+private classification contexts. Editing a proof, removing/reordering/duplicating
+members, changing classifications or dropping pending groups is rejected. Returned
+metadata and classification results cannot mutate the private contexts.
+
+`node --max-old-space-size=1536 --test tests/material-parity/visibility-observation-binding.spec.mjs`
+passes **2/2**, no skips, **13,984.1966 ms**: all 530 original inputs classify,
+unreviewed inputs do not, and 11 tampering controls reject. This closes the
+unvalidated-context limitation for callers using the binder; the low-level
+classifier alone still is not a source validator. Canonical wiring, exact row
+conservation, source-receipt accounting and regeneration remain pending.
