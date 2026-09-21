@@ -91,3 +91,26 @@ an omitted declaration into a claimed default.
 
 Result: **6/6 tests passed**, no failures, cancellations or skips;
 85,416.4514 ms. Complete TAP output is retained at the named reporter destination.
+
+## Overlay wrapper ancestry follow-up
+
+`node scripts/check-material-overlay-position-ancestry.mjs` authenticates this
+population and all 118 referenced trees for the 25 sheet and 34 snackbar
+observations. In every case the reference's absolute global wrapper has a
+**fixed `.cdk-overlay-container` parent**, whose captured transform is `none`.
+The candidate fixed overlay is nested directly under its relative demo root,
+then `page`, then the document root. Those candidate ancestors omit transform
+in the captured resolved styles; omission is not asserted to be a computed value.
+
+This qualifies the earlier priority note: comparing only the mapped wrapper's
+`absolute`/`fixed` values misses a reference positioning layer. A flattened
+wrapper representation is a hypothesis, not a demonstrated authoring defect or
+equivalence. Establish the actual CSS containing blocks, external surface/DOM
+ancestry, scroll behavior, clipping and pointer ownership before classifying it.
+No canonical classification or missing-snackbar diagnosis is changed here.
+
+The complete ordered observation summaries have SHA-256 values
+`c76e03db0576b093131c8fd3a773c95f88d226cea186169a184ff68b6c90de6b`
+(sheet) and `f8cf539bbc708c2c80227792668d87ff679b7cc249053b8c84dae82d324c16c6`
+(snackbar). The checker is read-only and reports these values with explicit
+unproven-equivalence/cause flags.
