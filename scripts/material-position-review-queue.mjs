@@ -44,6 +44,7 @@ export function collectPositionQueue() {
     ['material-stepper-position-substitution', 'stepper-primary', 'classified-integration-pending'],
     ['material-radio-position-substitution', 'radio-primary', 'classified-integration-pending'],
     ['material-sort-focus-placement', 'sort-primary', 'inspection-classification-pending'],
+    ['material-toolbar-position-inspection', 'toolbar-primary', 'inspection-classification-pending'],
   ]) {
     const { data, source } = load(name);
     reviews.push({ source, status, groups: [{ element, cases: data.observations.map(o => o.case) }] });

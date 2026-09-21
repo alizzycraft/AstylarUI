@@ -711,8 +711,11 @@
       "candidateOmitted": false,
       "observations": 52,
       "priorRowSha256": "a4677f4e60174f79c32b3847524f9925e68ff9bb374647f40ecbd0ae665eb174",
-      "status": "investigation-pending",
-      "source": null
+      "status": "inspection-classification-pending",
+      "source": {
+        "file": "docs/material-toolbar-position-inspection.json",
+        "sha256": "89803eb2b928af14a7708e72aa1c6e8c333ef9e8ccf10c86206e3c9ffdbaa427"
+      }
     },
     {
       "family": "toolbar",
@@ -763,16 +766,16 @@
       "observations": 564
     },
     "investigation-pending": {
-      "groups": 40,
-      "observations": 2010
+      "groups": 39,
+      "observations": 1958
     },
     "producer-integrated-conservation-pending": {
       "groups": 6,
       "observations": 316
     },
     "inspection-classification-pending": {
-      "groups": 1,
-      "observations": 60
+      "groups": 2,
+      "observations": 112
     }
   },
   "canonicalAcceptanceClaimed": false,

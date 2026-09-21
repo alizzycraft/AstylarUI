@@ -1,0 +1,1888 @@
+{
+  "schemaVersion": 1,
+  "kind": "toolbar-position-inspection",
+  "population": {
+    "file": "docs/material-position-input-population.json",
+    "sha256": "71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff"
+  },
+  "priorRowSha256": "a4677f4e60174f79c32b3847524f9925e68ff9bb374647f40ecbd0ae665eb174",
+  "observations": [
+    {
+      "case": "static:toolbar@light/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/light/desktop/reference-input-tree.json",
+          "sha256": "39013d23811aef74626ce1aa0b474d0d3c4a5e15237373a165c5b26bfdba32a9"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/light/desktop/astylar-input-tree.json",
+          "sha256": "68a8950c3461517b49a5d9dd7d368b53131bb737957f832795a08a7d18a846fa"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "static:toolbar@light/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/light/tablet/reference-input-tree.json",
+          "sha256": "56baf5850e9021c4103092abdeb6bbf2c0a3ba663f310ae925731695bdd8ef15"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/light/tablet/astylar-input-tree.json",
+          "sha256": "68a8950c3461517b49a5d9dd7d368b53131bb737957f832795a08a7d18a846fa"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "static:toolbar@light/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/light/mobile/reference-input-tree.json",
+          "sha256": "99624edddd24de4db2cb4d770ee0c8259e123d9d8d290f08456458d2e29306ed"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/light/mobile/astylar-input-tree.json",
+          "sha256": "c83164ac86c88f23e154450cab97aaf48d133a724525dda5786608d1d77d387f"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "64px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "static:toolbar@dark/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/dark/desktop/reference-input-tree.json",
+          "sha256": "568d4e3fefa81a62c947304657829ace6663c61f912c5f72bf8c490bd1cc0cf8"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/dark/desktop/astylar-input-tree.json",
+          "sha256": "3cf2e27a2abfc363147c6277bf287a2c9ca46db81e08092b755364fefefbbb0b"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "static:toolbar@dark/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/dark/tablet/reference-input-tree.json",
+          "sha256": "cc94d4d2b43f2f70a5957b4ed6b133113e87b4380883db341cc0f2994738122d"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/dark/tablet/astylar-input-tree.json",
+          "sha256": "3cf2e27a2abfc363147c6277bf287a2c9ca46db81e08092b755364fefefbbb0b"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "static:toolbar@dark/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/dark/mobile/reference-input-tree.json",
+          "sha256": "292bf29631e8e7e4f2ef3003c2dd3d97859b9fd64473bc69a2eb55105da31d95"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/dark/mobile/astylar-input-tree.json",
+          "sha256": "41b6e8756e375d5dd3c06dda7d014ee0f5fb5568f29a921c12b25d9ecc5d8f27"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "64px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "static:toolbar@contrast/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/contrast/desktop/reference-input-tree.json",
+          "sha256": "f94e8fef143a89836e38af225a6b721e6e959090c6e1bc43072f9acece647425"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/contrast/desktop/astylar-input-tree.json",
+          "sha256": "299ccbfc5627fdf881e5b49a0d7f964f3e2cf8fa07d3914f65044f3f0ac9d488"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "static:toolbar@contrast/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/contrast/tablet/reference-input-tree.json",
+          "sha256": "556e1c78fecd990083917d120333d89d50117d180375d34d578170cc9bb89326"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/contrast/tablet/astylar-input-tree.json",
+          "sha256": "299ccbfc5627fdf881e5b49a0d7f964f3e2cf8fa07d3914f65044f3f0ac9d488"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "static:toolbar@contrast/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/contrast/mobile/reference-input-tree.json",
+          "sha256": "199f43c54b590b88764bfb4ebfb28a4de5c55637c9924317fc79347644767cc0"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/contrast/mobile/astylar-input-tree.json",
+          "sha256": "ddc958c323dff3ba6f20e0e10ffe5ffb1dd5c0c7d227b4afb4c8230ba9852756"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "64px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "static:toolbar@custom/desktop",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/custom/desktop/reference-input-tree.json",
+          "sha256": "4185c396f16dab773141311a27abf375e0143394b9aa9c0be02818c47b183374"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/custom/desktop/astylar-input-tree.json",
+          "sha256": "dd1e495e1b59ba6c04046a2fb3c61347e687fecc75d9227afc005e2b130467fa"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "static:toolbar@custom/tablet",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/custom/tablet/reference-input-tree.json",
+          "sha256": "4fcb72b356e1991e5b94ff523bcfa75d55ee29668c03ede74059678684719dde"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/custom/tablet/astylar-input-tree.json",
+          "sha256": "dd1e495e1b59ba6c04046a2fb3c61347e687fecc75d9227afc005e2b130467fa"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "static:toolbar@custom/mobile",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/custom/mobile/reference-input-tree.json",
+          "sha256": "0f3f36ef0a2d79b521f768b9b8f75d39ebbf3c7301a8babbc1486635716c12a7"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/toolbar/custom/mobile/astylar-input-tree.json",
+          "sha256": "60787821eac19f2aa2a7c05e69334ab455b7f8f0e26a82c43d9d29ec09c4c141"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "64px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@light/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "d21e4061a796981fb015d9321ed8217576b77a9eddad0049c7e85bb2e80abd43"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "9de2f3644022f6718084e9f311dbf86df2fa85b5cb59c8d8a50fe4d1f0a9077d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@light/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "b471690480e5d634d656e3d60b81aac6b3dab5387af1e407bda36bccf996b0bf"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "7a8e330ba943d30fc2a3ddc00573571cb513ac33b7cb8b87c1439496647d02d6"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@light/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "9da5d483da1155f22f1767392d42e54ba156d7d27e1127fb2bdcd0167aff8c47"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "4e6cd5b50ce5d96da8375b7f6faa0af17c46622fdfa2a92ef4e3220da835ab9f"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@light/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "da264c0d5b06b6ca1e3b5f3fcb5b5dcfc264f8e4c760684ace353e7de5b3eb1b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "7a8e330ba943d30fc2a3ddc00573571cb513ac33b7cb8b87c1439496647d02d6"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@light/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "8415b0c1b9013279350090be48bb1bc5e1543cf2de70d4a4daf3ad1bf50a960f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "9de2f3644022f6718084e9f311dbf86df2fa85b5cb59c8d8a50fe4d1f0a9077d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@light/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "d21e4061a796981fb015d9321ed8217576b77a9eddad0049c7e85bb2e80abd43"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "9de2f3644022f6718084e9f311dbf86df2fa85b5cb59c8d8a50fe4d1f0a9077d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@light/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "b471690480e5d634d656e3d60b81aac6b3dab5387af1e407bda36bccf996b0bf"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "7a8e330ba943d30fc2a3ddc00573571cb513ac33b7cb8b87c1439496647d02d6"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@light/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "9da5d483da1155f22f1767392d42e54ba156d7d27e1127fb2bdcd0167aff8c47"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "4e6cd5b50ce5d96da8375b7f6faa0af17c46622fdfa2a92ef4e3220da835ab9f"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@light/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "da264c0d5b06b6ca1e3b5f3fcb5b5dcfc264f8e4c760684ace353e7de5b3eb1b"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "7a8e330ba943d30fc2a3ddc00573571cb513ac33b7cb8b87c1439496647d02d6"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@light/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "8415b0c1b9013279350090be48bb1bc5e1543cf2de70d4a4daf3ad1bf50a960f"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/light/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "9de2f3644022f6718084e9f311dbf86df2fa85b5cb59c8d8a50fe4d1f0a9077d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@dark/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "f7ad76167d2217ddd98627ccc1af9d5ab4d9fc37626dd4e71d7b5ecbb37edaed"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "9dd4c46968e77229de2190bdca77fa3eca33a3c3183e0bc9f856f9789134c2fe"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@dark/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "7684ece44d7fd984e5ef63da6b79a6751886368a809961b1a0ff10040eca9a7c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "e0b8e3d9639cd67d8935808d963c139b0f25be19d07c6a10dde242cf6656caa5"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@dark/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "412861f63318250379d39d59f4bfc39118fe7dc69b5fccfac54b97d431e3c3cf"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "a9fbe0fb1fa7d8bcf5ad2e18463806fbd813cf221fd4ea871520369f51fa9fa3"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@dark/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "6756d57f9ece953ef9dc2f319d229723f2e9566c449dff699dbc962e851afd7c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "e0b8e3d9639cd67d8935808d963c139b0f25be19d07c6a10dde242cf6656caa5"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@dark/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "4048d28840cce36362b3fe905a16b9625a4c22601f75ab51a832461384d9cf1e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "9dd4c46968e77229de2190bdca77fa3eca33a3c3183e0bc9f856f9789134c2fe"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@dark/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "f7ad76167d2217ddd98627ccc1af9d5ab4d9fc37626dd4e71d7b5ecbb37edaed"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "9dd4c46968e77229de2190bdca77fa3eca33a3c3183e0bc9f856f9789134c2fe"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@dark/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "7684ece44d7fd984e5ef63da6b79a6751886368a809961b1a0ff10040eca9a7c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "e0b8e3d9639cd67d8935808d963c139b0f25be19d07c6a10dde242cf6656caa5"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@dark/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "412861f63318250379d39d59f4bfc39118fe7dc69b5fccfac54b97d431e3c3cf"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "a9fbe0fb1fa7d8bcf5ad2e18463806fbd813cf221fd4ea871520369f51fa9fa3"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@dark/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "6756d57f9ece953ef9dc2f319d229723f2e9566c449dff699dbc962e851afd7c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "e0b8e3d9639cd67d8935808d963c139b0f25be19d07c6a10dde242cf6656caa5"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@dark/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "4048d28840cce36362b3fe905a16b9625a4c22601f75ab51a832461384d9cf1e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/dark/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "9dd4c46968e77229de2190bdca77fa3eca33a3c3183e0bc9f856f9789134c2fe"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@contrast/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "2f5c0f494b9820cba357ccdfbf01650430f6100e49724cdf3dcb380c223cbc77"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "4bc85dea33806f384045841fe86bcff7bcff2431a6c58d48ba1114a280eedc48"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@contrast/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "4af1b91302d402f404ff9ffb0a3e86383538114ef42506cfd876fd917e517d73"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "007864d3e956f8624ef9ead16962be08883a6e63b9541b4ccd6358bbc483abe7"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@contrast/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "6a335c93d2ad9957ce67a0e28ef7c688c9ee62ad15c1488a23cd45b0fede9c53"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "dae9433225a4566a9d580558a3d8a053e5abcf97d7db71232d912b0d01271446"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@contrast/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "4116eee07872fa80704eb5bc2781352471996948c206cd751ea0a19b1ce118bc"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "007864d3e956f8624ef9ead16962be08883a6e63b9541b4ccd6358bbc483abe7"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@contrast/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "ebcc71b60f17ed925627be8b569139bb18599fbf7a8257a44e720b92335ab71c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "4bc85dea33806f384045841fe86bcff7bcff2431a6c58d48ba1114a280eedc48"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@contrast/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "2f5c0f494b9820cba357ccdfbf01650430f6100e49724cdf3dcb380c223cbc77"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "99d0a722f18481a2a3a28669e210f8be9b54385ec07fd5236ebc6ce9899f03e8"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@contrast/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "4af1b91302d402f404ff9ffb0a3e86383538114ef42506cfd876fd917e517d73"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "a391e2368509d780558e745302184411985c6ce435591c5769698d1b51206268"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@contrast/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "6a335c93d2ad9957ce67a0e28ef7c688c9ee62ad15c1488a23cd45b0fede9c53"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "d0f6b15425fdb7c7165280e6def1888faeede195c8be631d24c2037d1aa56b92"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@contrast/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "4116eee07872fa80704eb5bc2781352471996948c206cd751ea0a19b1ce118bc"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "a391e2368509d780558e745302184411985c6ce435591c5769698d1b51206268"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@contrast/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "ebcc71b60f17ed925627be8b569139bb18599fbf7a8257a44e720b92335ab71c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/contrast/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "99d0a722f18481a2a3a28669e210f8be9b54385ec07fd5236ebc6ce9899f03e8"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@custom/desktop-dpr1/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr1/focus/reference-input-tree.json",
+          "sha256": "757f5bc09a491537fc802f9c286def2985175c348750cbba1c55995e5f7c74ba"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr1/focus/astylar-input-tree.json",
+          "sha256": "0c706166f731a8762c64e5dab454a73a2965ff19584f05ddb47562066744253d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@custom/desktop-dpr1/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr1/hover/reference-input-tree.json",
+          "sha256": "88e42445421cf9fece7dd4ec18ea31f0916e9cf64d819be0b68d6b9a10f9437e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr1/hover/astylar-input-tree.json",
+          "sha256": "0dfbddedd4e4dd7f4f6c04a200fd57522fd40c7917e536270b294524f52193e4"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@custom/desktop-dpr1/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr1/held/reference-input-tree.json",
+          "sha256": "32fdbdff55ce705674220789e2e3f7986dcba125d6e111f415437a9eacfbc279"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr1/held/astylar-input-tree.json",
+          "sha256": "019a9488ca91993ddb47cbb204322d03535f6a818edcc8ad362fd2265c522026"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@custom/desktop-dpr1/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr1/activate/reference-input-tree.json",
+          "sha256": "d518f7d01c81b8959723d32574fcc46ed5285d1c32274556fba2787ff15add1c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr1/activate/astylar-input-tree.json",
+          "sha256": "0dfbddedd4e4dd7f4f6c04a200fd57522fd40c7917e536270b294524f52193e4"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@custom/desktop-dpr1/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr1/activate-leave/reference-input-tree.json",
+          "sha256": "3b475ec28d79e09ab4f792bce546c0e91376a70f39c7cba11935d86d027cd605"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr1/activate-leave/astylar-input-tree.json",
+          "sha256": "0c706166f731a8762c64e5dab454a73a2965ff19584f05ddb47562066744253d"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@custom/desktop-dpr2/focus",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr2/focus/reference-input-tree.json",
+          "sha256": "757f5bc09a491537fc802f9c286def2985175c348750cbba1c55995e5f7c74ba"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr2/focus/astylar-input-tree.json",
+          "sha256": "cb5a28bc09c7fbb43616debbee2845c45eeb898985aa5c2896447201339577d1"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@custom/desktop-dpr2/hover",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr2/hover/reference-input-tree.json",
+          "sha256": "88e42445421cf9fece7dd4ec18ea31f0916e9cf64d819be0b68d6b9a10f9437e"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr2/hover/astylar-input-tree.json",
+          "sha256": "e61447a93c63f10168bfa0f48b7b04328e4f254dadaff9cbc5b02ac8d53df8b0"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@custom/desktop-dpr2/held",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr2/held/reference-input-tree.json",
+          "sha256": "32fdbdff55ce705674220789e2e3f7986dcba125d6e111f415437a9eacfbc279"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr2/held/astylar-input-tree.json",
+          "sha256": "7c606971823a539da6bdc7198d5e2dad63e8e6f50b275b1d0577fd144dc65e25"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@custom/desktop-dpr2/activate",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr2/activate/reference-input-tree.json",
+          "sha256": "d518f7d01c81b8959723d32574fcc46ed5285d1c32274556fba2787ff15add1c"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr2/activate/astylar-input-tree.json",
+          "sha256": "e61447a93c63f10168bfa0f48b7b04328e4f254dadaff9cbc5b02ac8d53df8b0"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    },
+    {
+      "case": "interaction:toolbar@custom/desktop-dpr2/activate-leave",
+      "inputTrees": {
+        "reference": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr2/activate-leave/reference-input-tree.json",
+          "sha256": "3b475ec28d79e09ab4f792bce546c0e91376a70f39c7cba11935d86d027cd605"
+        },
+        "astylar": {
+          "file": "artifacts/material-parity/current-ancestry-audit/interactions/toolbar/custom/desktop-dpr2/activate-leave/astylar-input-tree.json",
+          "sha256": "cb5a28bc09c7fbb43616debbee2845c45eeb898985aa5c2896447201339577d1"
+        }
+      },
+      "proof": {
+        "reference": {
+          "host": "frame/2/0",
+          "position": "static",
+          "padding": "0px 16px",
+          "spacer": "frame/2/0/1",
+          "spacerFlexGrow": "1"
+        },
+        "candidate": {
+          "host": "root/0/2/0",
+          "position": "relative",
+          "padding": "0",
+          "titleWidth": "192.15625px",
+          "titleMarginLeft": "16px",
+          "actionMargin": "0 16px 0 auto",
+          "actionWidth": "65.140625px",
+          "childPositionDeclarationOmitted": true
+        },
+        "classification": "unresolved",
+        "rendererCauseProven": false,
+        "inputEquivalenceProven": false,
+        "remainingQuestion": "Does retained host positioning affect containing-block or stacking behavior? Spacing substitutions require separate equivalent-input proof."
+      }
+    }
+  ],
+  "counts": {
+    "groups": 1,
+    "observations": 52
+  },
+  "canonicalAttributionChanged": false
+}
