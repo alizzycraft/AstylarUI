@@ -154,3 +154,21 @@ Result: **10/10 passed**, no failures or skips, **22,654.8507 ms**, rerun after
 adding the three source-receipt entries. Canonical regeneration and whole-record
 conservation are still required. This is an audit-classifier correction; no
 renderer, plugin, comparison fixture or reference color was changed.
+
+### Canonical conservation checker
+
+`scripts/check-material-disabled-ink-canonical-conservation.mjs` authenticates
+the compressed and decoded previous/current reports and the independent 60-case
+source review. It compares complete scalar discrepancy rows and every control
+record, permitting only the intended classification fields for the exact
+disabled-button population. Raw values, ordering, mappings, comparisons, gaps
+and unrelated control records must remain unchanged. This does not compare
+every other top-level audit section or establish rendering equivalence.
+
+`node --test tests/material-parity/disabled-ink-canonical-conservation.spec.mjs`
+passes **2/2**, **155.0154 ms**, with eleven negative controls for scalar changes,
+unrelated control changes, new gaps, lost/reordered records, modified colors,
+forged paint evidence, wrong classification/family, duplicate expected cases,
+and missing classification changes. The synthetic tests establish checker
+sensitivity, not conservation of the real canonical reports. Execution against
+the regenerated payload remains pending while regeneration is active.
