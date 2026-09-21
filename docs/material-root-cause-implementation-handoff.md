@@ -362,3 +362,14 @@ stepper (138 observations) have ancestor visibility declarations. The other
 attribute their placement or absence to an observed hidden rule. Classify their
 visible-state representation separately from the missing hidden-state capability;
 retain geometry, clipping, lifecycle and custom-paint investigations.
+
+The [complete panel-state replay](material-panel-state-ownership.md) checks all
+138 tab/stepper cases, including inactive owners and bidirectional header links.
+Stepper retains two reference text nodes, one hidden; tabs retains two outer
+panels but only mounts active text. Both candidate implementations substitute
+one owner. Tabs additionally bypasses core text paint through a custom texture.
+Classify these structural substitutions as application/plugin authoring defects,
+separate from the core visibility support gap. The benchmark pins tab phase to 1;
+it supplies no proof of live intermediate animation. Restore equivalent owner
+structure only after general core support is proven, not through another custom
+paint or offset adjustment.
