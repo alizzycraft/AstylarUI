@@ -123,3 +123,27 @@ depends explicitly on the retained original worktree bytes. It is not a repair
 of the ordinary tests or a fresh browser capture. Historical receipt handling
 still needs integration before those tests can be reported passing. No cursor
 classification or original Material hit-target cause is promoted here.
+
+### Public receipt assertion integrated
+
+The public cursor suite and its no-write CLI now call
+`assertHistoricalCursorReceipt`. This authenticates the saved full report,
+checks all four complete normalized source files against their pinned original
+git revision and LF hashes, validates each current raw receipt, and then compares
+every report field after restoring only the four historical raw hashes in memory.
+Runtime, screenshot, package and executable-method verification still runs first.
+The ordinary checker does not require access to the frozen worktree; that
+worktree supplied the separately recorded original-raw-byte diagnosis above.
+
+The focused integration run passes **13/13**, no failures or skips,
+**9,675.0786 ms**: the seven existing public tests, two new receipt tests and four
+harness inventory tests. Eight negative mutations cover report counts, method
+results, raw/projected/installed hashes, duplicate witnesses, source text and
+saved report corruption. Existing public membership checks remain unchanged.
+
+Command: `node --max-old-space-size=1024 --test --test-concurrency=1 --test-reporter=tap --test-reporter-destination=artifacts/material-parity/cursor-receipt-integration-894fcf1.tap tests/material-parity/historical-cursor-receipt-assertion.spec.mjs tests/material-parity/public-cursor-defaults.spec.mjs tests/parity/material-audit-harness-inventory.spec.mjs`.
+
+No saved report, renderer, fixture or active legacy-suite dependency was edited.
+This corrects public evidence checking, not cursor behavior. The separate
+explicit-cursor census still needs its historical source adapter integrated,
+and canonical classification remains pending.

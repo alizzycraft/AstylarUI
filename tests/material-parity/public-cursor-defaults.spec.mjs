@@ -6,12 +6,13 @@ import ts from 'typescript';
 import { inspectCursorDefaults } from '../../scripts/audit-public-cursor-defaults.mjs';
 import { cursorCases, cursorInput } from '../../examples/material-showcase/audit/cursor-default-input.mjs';
 import { cursorArtifactRoot, cursorSourceProof, validateCursorEvidence } from './public-cursor-defaults-evidence.mjs';
+import { assertHistoricalCursorReceipt } from './historical-cursor-receipt-assertion.mjs';
 const report = JSON.parse(readFileSync(`${cursorArtifactRoot}/latest-report.json`));
 const file = 'docs/material-public-cursor-defaults-audit.json';
 
 test('cursor evidence replays equal inputs, served package bytes, exact hit owners, states and source methods', () => {
   const result = validateCursorEvidence(report);
-  assert.deepEqual(result, JSON.parse(readFileSync(file)));
+  assertHistoricalCursorReceipt(result);
   assert.equal(result.cases, 36); assert.equal(result.boundaries, 180); assert.equal(result.screenshots, 72);
   assert.equal(result.differences.length, 148);
   assert.equal(result.differences.filter(d => d.boundary === 'owner-style').length, 88);
