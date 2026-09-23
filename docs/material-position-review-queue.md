@@ -6,7 +6,7 @@ population. It does not claim completion of the larger input-equivalence audit.
 | Status | Groups | Observations |
 | --- | ---: | ---: |
 | Historical export conserved; current-source reconciliation pending | 6 | 316 |
-| Classified in standalone proof; integration pending | 14 | 768 |
+| Producer integrated; export/conservation pending | 14 | 768 |
 | Inspected; classification pending | 17 | 811 |
 | Investigation pending | 21 | 1,055 |
 
@@ -15,8 +15,12 @@ placement. Their historical export now passes scalar/control conservation;
 see [the transition record](material-position-canonical-conservation.md).
 Later workflow edits changed twelve producer/test receipts, so historical
 conservation is not a claim of current-builder freshness or final acceptance.
-The fourteen standalone groups are tooltip, tabs, stepper, radio, three choice-label
-stacking substitutions and seven static-position observation-stage cases.
+The fourteen newly integrated groups are tooltip, tabs, stepper, radio, three
+choice-label stacking substitutions and seven static-position observation-stage
+cases. The production adapter now collects, applies, serializes and validates
+their bound evidence. Cold integration changes exactly fourteen metadata rows
+and preserves all 8,362 raw rows. The canonical package has not been regenerated:
+full export/conservation and current-source reconciliation remain pending.
 Sort focus placement, toolbar composition and three
 button-toggle owners, three chip owners and nine modal owners have inspection evidence but are not
 represented as integrated classifications. Every other row remains

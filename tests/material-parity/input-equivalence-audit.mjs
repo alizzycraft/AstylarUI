@@ -1,4 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { collectPositionFollowupAuditInputs, applyPositionFollowupAuditRows, validatePositionFollowupAuditInputs,
+  validatePositionFollowupAuditClassifications, positionFollowupAttribution } from './position-followup-audit-source-binding.mjs';
 import { collectPositionAuditInputs, applyPositionAuditRows, validatePositionAuditInputs,
   validatePositionAuditClassifications, positionCompositionAttribution } from './position-composition-audit-source-binding.mjs';
 import { collectVisibilityAuditInputs, applyVisibilityAuditRows, validateVisibilityAuditInputs,
@@ -254,7 +256,9 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const visibilityAuditInputs = collectVisibilityAuditInputs(parityReport, { root, parityPath: options.parityPath });
   const visibilityReviewedDiscrepancies = applyVisibilityAuditRows(unreviewedDiscrepancies, visibilityAuditInputs);
   const positionAuditInputs = collectPositionAuditInputs(parityReport, { root, parityPath: options.parityPath });
-  const discrepancies = applyPositionAuditRows(visibilityReviewedDiscrepancies, positionAuditInputs);
+  const positionReviewedDiscrepancies = applyPositionAuditRows(visibilityReviewedDiscrepancies, positionAuditInputs);
+  const positionFollowupAuditInputs = collectPositionFollowupAuditInputs(parityReport, { root, parityPath: options.parityPath });
+  const discrepancies = applyPositionFollowupAuditRows(positionReviewedDiscrepancies, positionFollowupAuditInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -358,6 +362,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     rootBackgroundInputs,
     visibilityAuditInputs,
     positionAuditInputs,
+    positionFollowupAuditInputs,
     sliderInputBoxes,
     sliderBorderDefaults,
     rootHeightInputs,
@@ -384,6 +389,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
   for (const [key, attributions, validateSource, validateRows] of [
+    ['positionFollowupAuditInputs', [positionFollowupAttribution], validatePositionFollowupAuditInputs, validatePositionFollowupAuditClassifications],
     ['positionAuditInputs', [positionCompositionAttribution], validatePositionAuditInputs, validatePositionAuditClassifications],
     ['visibilityAuditInputs', [visibilityObservationAttribution], validateVisibilityAuditInputs, validateVisibilityAuditClassifications],
     ['rootBackgroundInputs', [rootBackgroundAttribution], validateRootBackgroundEvidence, validateRootBackgroundClassifications],
@@ -8469,6 +8475,23 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/position-followup-audit-source-binding.mjs',
+    'tests/material-parity/position-followup-audit-source-binding.spec.mjs',
+    'tests/material-parity/position-followup-review.mjs',
+    'tests/material-parity/position-followup-review.spec.mjs',
+    'tests/material-parity/position-followup-review-integration.spec.mjs',
+    'tests/material-parity/tooltip-position-composition.mjs',
+    'scripts/audit-material-tab-position-substitution.mjs',
+    'scripts/audit-material-stepper-position-substitution.mjs',
+    'tests/material-parity/radio-position-substitution.mjs',
+    'tests/material-parity/static-position-observation.mjs',
+    'tests/material-parity/choice-label-stacking-substitution.mjs',
+    'docs/material-tooltip-position-composition.json',
+    'docs/material-tab-position-substitution.json',
+    'docs/material-stepper-position-substitution.json',
+    'docs/material-radio-position-substitution.json',
+    'docs/material-static-position-observation.json',
+    'docs/material-choice-label-stacking-substitution.json',
     'tests/material-parity/position-composition-audit-source-binding.mjs',
     'tests/material-parity/position-composition-audit-source-binding.spec.mjs',
     'tests/material-parity/position-composition-review.mjs',

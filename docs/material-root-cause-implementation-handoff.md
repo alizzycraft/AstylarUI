@@ -40,7 +40,17 @@ one investigation per scalar property:
    separate missing computed evidence from unequal declarations. These property
    totals overlap the component populations above.
 
-Position subset: fourteen groups have prepared classifications, seventeen have
+Position subset: fourteen groups / 768 observations are now wired through the
+existing followup adapter into production collection and validation, with source
+fingerprints registered. Cold focused integration preserves all 8,362 raw rows,
+changes exactly fourteen classifications and leaves 8,348 complete rows unchanged.
+The source-transition test restores the exact pinned pre-position producer and
+rejects dropped collection, validation, evidence or fingerprint fragments.
+Export/conservation is still pending: the canonical count above is unchanged.
+Seven groups are authoring defects and seven are measurement/harness defects;
+none is promoted to equivalent rendering or a confirmed renderer cause.
+Verification: source adapter checks 2/2; final cold transition/integration 2/2
+in 23.20 seconds. Seventeen position groups have
 owner inspection, and twenty-one retain open investigations. The six already
 exported groups now pass full scalar/control conservation (8,477 other complete
 rows unchanged); whole-report section reconciliation is recorded separately in
@@ -48,14 +58,29 @@ rows unchanged); whole-report section reconciliation is recorded separately in
 wrapper inspection narrows two of the twenty-one investigations but does not
 promote their position scalars to resolved classifications.
 
-Source-fingerprint reconciliation remains open: using the producer's LF-normalized
-hash convention, **12 of 424** stored source receipts differ after the workflow
-changes. They concern collection/session imports, test splitting and scratch
+Source-fingerprint reconciliation remains open: at the preceding checkpoint,
+using the producer's LF-normalized hash convention, **12 of 424** stored source
+receipts differed after the workflow changes. The new followup integration also
+changes the producer/transition proof and registers seventeen additional receipts;
+do not reuse that earlier difference count as a current measurement. The prior
+twelve concerned collection/session imports, test splitting and scratch
 retention. The showcase source and browser harness still match after correct
 line-ending normalization. Do not rewrite historical receipts to claim currency.
 At the next integration milestone reconcile the changed producers and proof
 inventory, perform cold replay, then export/check once for the coherent batch.
 No full current-builder or enforced-browser acceptance is claimed here.
+
+Overlay runtime-probe status: the uncommitted draft
+`src/parity/overlay-layout-stage.audit.spec.ts` has not reached browser execution.
+Three focused Angular builds were stopped after build-worker memory growth
+(roughly 3 GB, 5.3 GB and over 6 GB respectively); disabling source maps and a
+768 MiB Go soft limit did not solve it. All three sessions are terminal, not
+background work to poll. Do not repeat those builds unchanged or count the draft
+as evidence. A separate native-browser check found that a 321.5 x 201.25 px
+canvas has client size 322 x 201 and the equal-sized iframe's fixed 100% child
+also measures 322 x 201. Thus `clientWidth` rounding alone does not demonstrate
+unequal layout in this reduction. Full paired CSS/projection evidence and the
+Angular build check remain outstanding; no core/fixture repair was attempted.
 
 The sections below retain the detailed root-cause evidence and implementation
 order. Renderer/fixture repairs remain outside this audit's authorization.

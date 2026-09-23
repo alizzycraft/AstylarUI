@@ -39,10 +39,10 @@ export function collectPositionQueue() {
       element: g.element, priorRowSha256: g.priorRowSha256, cases: g.reviewedCases ?? g.observations.map(o => o.case) })) });
   }
   for (const [name, element, status] of [
-    ['material-tooltip-position-composition', 'tooltip-popup', 'classified-integration-pending'],
-    ['material-tab-position-substitution', 'tabs-primary', 'classified-integration-pending'],
-    ['material-stepper-position-substitution', 'stepper-primary', 'classified-integration-pending'],
-    ['material-radio-position-substitution', 'radio-primary', 'classified-integration-pending'],
+    ['material-tooltip-position-composition', 'tooltip-popup', 'producer-integrated-conservation-pending'],
+    ['material-tab-position-substitution', 'tabs-primary', 'producer-integrated-conservation-pending'],
+    ['material-stepper-position-substitution', 'stepper-primary', 'producer-integrated-conservation-pending'],
+    ['material-radio-position-substitution', 'radio-primary', 'producer-integrated-conservation-pending'],
     ['material-sort-focus-placement', 'sort-primary', 'inspection-classification-pending'],
     ['material-toolbar-position-inspection', 'toolbar-primary', 'inspection-classification-pending'],
   ]) {
@@ -50,7 +50,7 @@ export function collectPositionQueue() {
     reviews.push({ source, status, groups: [{ element, cases: data.observations.map(o => o.case) }] });
   }
   const { data, source } = load('material-static-position-observation');
-  reviews.push({ source, status: 'classified-integration-pending', groups: data.reviewed.map(g => ({
+  reviews.push({ source, status: 'producer-integrated-conservation-pending', groups: data.reviewed.map(g => ({
     element: g.element, priorRowSha256: g.priorRowSha256, cases: g.observations.map(o => o.case) })) });
   const toggle = load('material-button-toggle-position-inspection');
   reviews.push({ source: toggle.source, status: 'inspection-classification-pending', groups: toggle.data.groups });
@@ -60,7 +60,7 @@ export function collectPositionQueue() {
   reviews.push({ source: modals.source, status: 'inspection-classification-pending', groups: modals.data.groups.map(g => ({
     element: g.element, priorRowSha256: g.priorRowSha256, cases: g.observations.map(o => o.case) })) });
   const labels = load('material-choice-label-stacking-substitution');
-  reviews.push({ source: labels.source, status: 'classified-integration-pending', groups: labels.data.groups.map(g => ({
+  reviews.push({ source: labels.source, status: 'producer-integrated-conservation-pending', groups: labels.data.groups.map(g => ({
     element: g.element, priorRowSha256: g.priorRowSha256, cases: g.observations.map(o => o.case) })) });
   return { population: population.source, ...assemblePositionQueue(population.data, reviews) };
 }

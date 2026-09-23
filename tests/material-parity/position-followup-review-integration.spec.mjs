@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import ts from 'typescript';
 import { collectStyleDiscrepancies } from './input-equivalence-audit.mjs';
+import { collectPositionFollowupAuditInputs, applyPositionFollowupAuditRows } from './position-followup-audit-source-binding.mjs';
 import { collectPositionFollowupReview, validatePositionFollowupReview,
   applyPositionFollowupReview, validatePositionFollowupRows } from './position-followup-review.mjs';
 test('actual aggregation preserves all raw fields and changes exactly fourteen reviewed predecessors', () => withAuditEvidenceSession(() => {
@@ -16,7 +17,13 @@ test('actual aggregation preserves all raw fields and changes exactly fourteen r
   const before = collectStyleDiscrepancies(...fn.parameters.map(p => p.name.text === 'cases' ? cases
     : Object.assign([], { observations: [], comparisons: [], differences: [], groups: [] })));
   const review = collectPositionFollowupReview(), snapshot = structuredClone(before);
-  const after = applyPositionFollowupReview(before, review);
+  const evidence = collectPositionFollowupAuditInputs(raw, {
+    parityPath: 'artifacts/material-parity/current-ancestry-audit/latest-report.json',
+  });
+  assert.equal(evidence.binding.status, 'bound', evidence.binding.error);
+  assert.equal(evidence.observations.length, 768);
+  assert.deepEqual(evidence.review, review);
+  const after = applyPositionFollowupAuditRows(before, evidence);
   validatePositionFollowupRows(JSON.parse(JSON.stringify(after)), review);
   assert.deepEqual(before, snapshot); assert.equal(after.length, before.length);
   const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);

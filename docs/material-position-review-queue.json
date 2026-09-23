@@ -15,7 +15,7 @@
       "candidateOmitted": true,
       "observations": 52,
       "priorRowSha256": "63f660fe1fc7a15bb3a5ca588ef389868c5330420ab633dbe21cec72d89a306d",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-static-position-observation.json",
         "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
@@ -156,7 +156,7 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "460ae98921fef0c4158d2cb115e98b834b07207651fecd018e4f6e6549c78427",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-choice-label-stacking-substitution.json",
         "sha256": "575d34b0fe4cb1cb165d05efa18c54035d6f0aa6f6ebc96cd4ac5451b73f0be8"
@@ -306,7 +306,7 @@
       "candidateOmitted": true,
       "observations": 24,
       "priorRowSha256": "b011013f865aa9e53f0cb638eb9e48c3bffc8b6fa0f15feba1f33a4d9a24e345",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-static-position-observation.json",
         "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
@@ -321,7 +321,7 @@
       "candidateOmitted": true,
       "observations": 24,
       "priorRowSha256": "757d0bf196cae0bdbcdaa26c583eea45b74b9eb9ba54b66391d204ba95797519",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-static-position-observation.json",
         "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
@@ -492,7 +492,7 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "c1317bbbb4f2b6a27f182608ec6fa04aaa862f10f4af8810763be3bf1ae9dff7",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-radio-position-substitution.json",
         "sha256": "7fe3d1a6f71eab1cfecb187740f47a3d658044acb8d096ca9625be2f02bb1e1b"
@@ -507,7 +507,7 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "4ee4bb972957fff7fbc203b4382957a30856eabcb321c0f3aa7cdc3699b712fd",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-choice-label-stacking-substitution.json",
         "sha256": "575d34b0fe4cb1cb165d05efa18c54035d6f0aa6f6ebc96cd4ac5451b73f0be8"
@@ -522,7 +522,7 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "afa297688830a3995716c7d20b8b56cf50b209a47402fc16e500039f141b081e",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-choice-label-stacking-substitution.json",
         "sha256": "575d34b0fe4cb1cb165d05efa18c54035d6f0aa6f6ebc96cd4ac5451b73f0be8"
@@ -630,7 +630,7 @@
       "candidateOmitted": true,
       "observations": 68,
       "priorRowSha256": "2b584caee4ae858fcee56317a49a359744a34a0197b8bbbfc817a0060df80cbe",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-static-position-observation.json",
         "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
@@ -645,7 +645,7 @@
       "candidateOmitted": true,
       "observations": 68,
       "priorRowSha256": "53602ec1510b35adee06e9aaf596d02504355d42c60e9ae4f0346579db394b41",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-static-position-observation.json",
         "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
@@ -672,7 +672,7 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "a16e787c3ba731814df80291bfaed094932932d1bc1f8fc5ffb5b6eeb00570d5",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-stepper-position-substitution.json",
         "sha256": "a61d25b6ba5a88983e3b128deb1a355a1757be9fdfc760c0e3f55e52056ef60f"
@@ -687,7 +687,7 @@
       "candidateOmitted": true,
       "observations": 52,
       "priorRowSha256": "1596b2c7479729c7402d424730a03e600b070534c3cec1f26af0ff0261d245af",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-static-position-observation.json",
         "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
@@ -738,7 +738,7 @@
       "candidateOmitted": false,
       "observations": 70,
       "priorRowSha256": "701d1e39fa87de4a2a2410f2249cbc3f27ace221ec5c010a9e995c1744d3628f",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-tab-position-substitution.json",
         "sha256": "7d1707bf870fd4e37597414cfd8d2f33e21475ffc672580bc5626b472491b8de"
@@ -780,7 +780,7 @@
       "candidateOmitted": true,
       "observations": 52,
       "priorRowSha256": "4c51aecce1107fc6a34cd92395e8649130be2d53720a2724e9c1150d4a446fcc",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-static-position-observation.json",
         "sha256": "2bd9895dd20228f3f181fb27801c1121dda48514542495f119b8899e9cb995ad"
@@ -795,7 +795,7 @@
       "candidateOmitted": false,
       "observations": 18,
       "priorRowSha256": "6f6c647b23737ea57c984c41030d3917978395e159d0c9f26d604eafd47a1df9",
-      "status": "classified-integration-pending",
+      "status": "producer-integrated-conservation-pending",
       "source": {
         "file": "docs/material-tooltip-position-composition.json",
         "sha256": "aeccadb5da490df9fdcab1d0354d392e51d2f50c1ea6dbb692ec307167e6e8e6"
@@ -815,7 +815,7 @@
     }
   ],
   "counts": {
-    "classified-integration-pending": {
+    "producer-integrated-conservation-pending": {
       "groups": 14,
       "observations": 768
     },

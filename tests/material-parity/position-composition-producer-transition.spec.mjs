@@ -16,6 +16,10 @@ test('position producer integration preserves every prior byte outside the exact
     current.replace('[positionCompositionAttribution], validatePositionAuditInputs', '[], validatePositionAuditInputs'),
     current.replace('function reviewedButtonPaintInput(', 'function differentPaintInput('),
     current.replace("    'docs/material-position-input-population.json',\n", ''),
+    current.replace('applyPositionFollowupAuditRows(positionReviewedDiscrepancies, positionFollowupAuditInputs)', 'positionReviewedDiscrepancies'),
+    current.replace('    positionFollowupAuditInputs,', '    positionFollowupAuditInputs: {},'),
+    current.replace('[positionFollowupAttribution], validatePositionFollowupAuditInputs', '[], validatePositionFollowupAuditInputs'),
+    current.replace("    'tests/material-parity/position-followup-review.mjs',\n", ''),
   ]) {
     assert.notEqual(mutated, current);
     assert.throws(() => restorePositionProducer(mutated));
