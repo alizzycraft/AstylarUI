@@ -1,5 +1,18 @@
 # Positioning canonical transition
 
+## Followup export gate
+
+The existing comparator also accepts `--followup`, comparing the preserved
+six-group canonical package in
+`artifacts/material-parity/pre-position-followup-509dbf4` against the next export.
+It requires exactly fourteen changed groups / 768 observations, independently
+replays their original-row-bound review, preserves every other complete scalar
+row, and permits only the 48 known producer-receipt changes in control evidence.
+Its source restoration must match the exact pre-followup producer at `e8c7d25`;
+the older six-group mode remains available. The four focused comparator/source
+tests pass, including mutation rejection for both transitions. This prepares
+the gate; it does not claim that the new canonical export has passed it.
+
 ## September 24: completed scalar/control conservation
 
 The v2 export finished; its terminal log retains the expected audit rejection

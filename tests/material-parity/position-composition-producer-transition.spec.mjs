@@ -9,6 +9,9 @@ test('position producer integration preserves every prior byte outside the exact
   const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
   const prior = execFileSync('git', ['show', 'e62e846:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
   assert.equal(restorePositionProducer(current).restoredSource, prior);
+  const beforeFollowup = execFileSync('git', ['show', 'e8c7d25:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restorePositionProducer(current, { followupOnly: true }).restoredSource, beforeFollowup);
+  assert.throws(() => restorePositionProducer(beforeFollowup, { followupOnly: true }));
   for (const mutated of [
     current + '\n// unrelated change\n',
     current.replace('applyPositionAuditRows(visibilityReviewedDiscrepancies, positionAuditInputs)', 'visibilityReviewedDiscrepancies'),

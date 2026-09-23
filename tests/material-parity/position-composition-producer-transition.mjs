@@ -38,7 +38,7 @@ export const positionProducerFiles = [
   "docs/material-flow-position-substitutions.json",
   "docs/material-position-input-population.json"
 ];
-export function restorePositionProducer(source) {
+export function restorePositionProducer(source, { followupOnly = false } = {}) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
   const replaceOnce = (from, to = '') => {
@@ -47,7 +47,9 @@ export function restorePositionProducer(source) {
   };
   // Also accept the subsequent, exact fourteen-group integration. The final
   // pinned predecessor still rejects any unrelated producer modification.
-  if (restored.includes("from './position-followup-audit-source-binding.mjs'")) {
+  const hasFollowup = restored.includes("from './position-followup-audit-source-binding.mjs'");
+  assert.ok(!followupOnly || hasFollowup, 'followup transition requires its production integration');
+  if (hasFollowup) {
     replaceOnce("import { collectPositionFollowupAuditInputs, applyPositionFollowupAuditRows, validatePositionFollowupAuditInputs,\n  validatePositionFollowupAuditClassifications, positionFollowupAttribution } from './position-followup-audit-source-binding.mjs';\n");
     replaceOnce('  const positionReviewedDiscrepancies = applyPositionAuditRows(visibilityReviewedDiscrepancies, positionAuditInputs);\n  const positionFollowupAuditInputs = collectPositionFollowupAuditInputs(parityReport, { root, parityPath: options.parityPath });\n  const discrepancies = applyPositionFollowupAuditRows(positionReviewedDiscrepancies, positionFollowupAuditInputs);',
       '  const discrepancies = applyPositionAuditRows(visibilityReviewedDiscrepancies, positionAuditInputs);');
@@ -55,6 +57,7 @@ export function restorePositionProducer(source) {
     replaceOnce("    ['positionFollowupAuditInputs', [positionFollowupAttribution], validatePositionFollowupAuditInputs, validatePositionFollowupAuditClassifications],\n");
     for (const file of positionFollowupProducerFiles) replaceOnce(`    '${file}',\n`);
   }
+  const beforeFollowup = restored;
   replaceOnce("import { collectPositionAuditInputs, applyPositionAuditRows, validatePositionAuditInputs,\n  validatePositionAuditClassifications, positionCompositionAttribution } from './position-composition-audit-source-binding.mjs';\n");
   replaceOnce('  const visibilityReviewedDiscrepancies = applyVisibilityAuditRows(unreviewedDiscrepancies, visibilityAuditInputs);\n  const positionAuditInputs = collectPositionAuditInputs(parityReport, { root, parityPath: options.parityPath });\n  const discrepancies = applyPositionAuditRows(visibilityReviewedDiscrepancies, positionAuditInputs);',
     '  const discrepancies = applyVisibilityAuditRows(unreviewedDiscrepancies, visibilityAuditInputs);');
@@ -63,6 +66,7 @@ export function restorePositionProducer(source) {
   for (const file of positionProducerFiles) replaceOnce(`    '${file}',\n`);
   assert.equal(hash(restored), '4ac2017e9b2d546de80dfb7cc209cee27b623a1f30f7cb73a024839b096b6213',
     'producer changed beyond exact position integration');
+  if (followupOnly) restored = beforeFollowup;
   return { restoredSource: restored, previousModuleSha256: hash(restored),
     currentModuleSha256: hash(current), wholeModuleConserved: true };
 }
