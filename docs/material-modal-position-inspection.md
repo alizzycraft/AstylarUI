@@ -1,5 +1,44 @@
 # Modal generated-owner position inspection
 
+## Overlay-wrapper follow-up, September 24
+
+The existing inspection suite now reopens and hash-checks all **59** original
+bottom-sheet/snackbar position observations (25/34 respectively), using the
+existing generated-owner resolver. No new capture or duplicate evidence package
+was created. The new test takes about 0.24 seconds; the full three-test modal
+inspection suite passes in 5.66 seconds.
+
+All reference wrappers are absolute flex rows inside a **fixed**
+`.cdk-overlay-container`; their measured width and height equal that parent's.
+All candidate wrappers are fixed flex columns directly below their relative
+demo section. Both use bottom/center alignment, expressed on opposite flex axes.
+Reference wrapper padding is zero. Candidate bottom-sheet wrapper padding is
+zero; candidate snackbar wrapper padding is `0 0 8px` in all 34 states and all
+three captured style stages.
+
+This answers the narrow ownership question: `absolute` versus `fixed` here is
+also a two-wrapper versus one-wrapper comparison. **Those position tokens alone
+do not prove a placement defect.** Flattening the fixed parent and transposing
+the flex axes might preserve some alignment outcomes; it does not establish
+equivalent containing blocks, child sizing, inheritance, clipping or events.
+The added snackbar wrapper padding is a separate authored request, not a
+demonstrated explanation of the missing snackbar.
+
+The recorded scalar inputs and classifications remain unchanged. The next
+decisive evidence is the candidate used CSS box and its containing block, paired
+with the reference wrapper/pane geometry in the same state, followed by paint
+and viewport reachability. Preserve absent candidate used values as unknown;
+do not substitute percentages, projected mesh bounds, or equal screenshots.
+The earlier external-ancestor replay found no reference transform/zoom in these
+states; do not repeat that capture or infer equivalent candidate ancestry.
+
+Verification: `node --test tests/material-parity/modal-position-inspection.spec.mjs`
+passes **3/3**, no skips or failures. The new test preserves all 59 original
+memberships and tree hashes; the two existing owner/negative-control tests
+also pass. This is source inspection, not a fresh rendered-state test.
+
+## Original generated-owner inspection
+
 Nine complete position groups cover 267 observations: three bottom-sheet owners
 in 25 states and six dialog owners in 32 states. Classification remains pending;
 this inspection does not change canonical attribution.
