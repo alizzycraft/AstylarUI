@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { auditReadFileSync as readFileSync, memoizeAuditEvidence } from './audit-evidence-session.mjs';
 import { collectTooltipPositionComposition } from './tooltip-position-composition.mjs';
 import { collectTabPositionSubstitution } from '../../scripts/audit-material-tab-position-substitution.mjs';
 import { collectStepperPositionSubstitution } from '../../scripts/audit-material-stepper-position-substitution.mjs';
@@ -14,6 +14,10 @@ const metadata = ['classification', 'attribution', 'justification', 'recommended
 export const positionFollowupAttribution = 'reviewed-position-followup-batch';
 
 export function collectPositionFollowupReview() {
+  return memoizeAuditEvidence({ id: 'position-followup', entry: import.meta.url, persistent: true }, collectUncached);
+}
+
+function collectUncached() {
   const bytes = readFileSync('docs/material-position-input-population.json');
   assert.equal(hash(bytes), '71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff');
   const population = JSON.parse(bytes);

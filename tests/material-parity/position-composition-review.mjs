@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { auditReadFileSync as readFileSync, memoizeAuditEvidence } from './audit-evidence-session.mjs';
 import { collectGridPositionSubstitution } from '../../scripts/audit-material-grid-position-substitution.mjs';
 import { collectFlowPositionSubstitutions } from '../../scripts/audit-material-flow-position-substitutions.mjs';
 const hash = v => createHash('sha256').update(v).digest('hex');
@@ -10,6 +10,10 @@ const metadata = ['classification', 'attribution', 'justification', 'recommended
 export const positionCompositionAttribution = 'reviewed-position-composition-substitution';
 
 export function collectPositionCompositionReview() {
+  return memoizeAuditEvidence({ id: 'position-composition', entry: import.meta.url, persistent: false }, collectUncached);
+}
+
+function collectUncached() {
   const populationFile = 'docs/material-position-input-population.json';
   const bytes = readFileSync(populationFile);
   assert.equal(hash(bytes), '71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff');

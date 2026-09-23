@@ -13,6 +13,7 @@ import {
   encodeMaterialInputAuditStream,
 } from '../tests/material-parity/input-audit-report-stream.mjs';
 import { materialInputAuditPayloadFile } from '../tests/material-parity/input-audit-report-codec.mjs';
+import { withAuditEvidenceSession } from '../tests/material-parity/audit-evidence-session.mjs';
 
 const root = process.cwd();
 const options = parseMaterialInputAuditArguments(process.argv.slice(2), root);
@@ -23,9 +24,11 @@ const markdownPath = path.resolve(root, 'docs/material-input-equivalence-audit.m
 
 assert.ok(existsSync(parityPath), `Run material parity first; missing ${parityPath}`);
 const parityReport = JSON.parse(readFileSync(parityPath, 'utf8'));
-const audit = buildMaterialInputAudit(parityReport, { ...options, root });
+const { audit, errors } = withAuditEvidenceSession(() => {
+  const audit = buildMaterialInputAudit(parityReport, { ...options, root });
+  return { audit, errors: validateMaterialInputAudit(audit, { requireComplete: !allowPartial }) };
+}, { root, cold: process.env.ASTYLAR_AUDIT_COLD === '1', onMetrics: metrics => console.log(JSON.stringify({ evidenceSession: metrics })) });
 const markdown = renderMaterialInputAuditMarkdown(audit);
-const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial });
 
 if (check) {
   await assertMaterialInputAuditCurrentStream(audit, JSON.parse(readFileSync(jsonPath, 'utf8')), readFileSync(payloadPath));

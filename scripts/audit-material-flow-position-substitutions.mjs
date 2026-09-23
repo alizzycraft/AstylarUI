@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
+import { auditReadFileSync as readFileSync } from '../tests/material-parity/audit-evidence-session.mjs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 const hash = v => createHash('sha256').update(v).digest('hex');

@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { withAuditEvidenceSession } from './audit-evidence-session.mjs';
 import { readFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import ts from 'typescript';
 import { collectStyleDiscrepancies } from './input-equivalence-audit.mjs';
 import { collectPositionCompositionReview, validatePositionCompositionReview, applyPositionCompositionReview,
   validatePositionCompositionRows } from './position-composition-review.mjs';
-test('actual aggregation changes exactly the six complete predecessors and preserves raw rows', () => {
+test('actual aggregation changes exactly the six complete predecessors and preserves raw rows', () => withAuditEvidenceSession(() => {
   const raw = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
   const ast = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true);
@@ -43,4 +44,4 @@ test('actual aggregation changes exactly the six complete predecessors and prese
   }
   console.log(JSON.stringify({ rows: before.length, changedGroups: changed,
     unchangedCompleteRows: before.length - changed, canonicalCoverageProven: false }));
-});
+}));

@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { auditReadFileSync as readFileSync } from './audit-evidence-session.mjs';
 import { createHash } from 'node:crypto';
 import { resolve, relative, isAbsolute } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
