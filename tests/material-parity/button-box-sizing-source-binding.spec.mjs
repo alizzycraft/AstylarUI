@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
+import { withAuditScratch } from './audit-scratch.mjs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { collectButtonBoxSizingInputs, validateButtonBoxSizingInputs } from './button-box-sizing-source-binding.mjs';
@@ -37,14 +38,13 @@ test('button box sizing binds all original trees and measured geometry without u
   assert.deepEqual(validateButtonBoxSizingInputs(evidence), []);
 });
 
-test('button box sizing source binding rejects detached geometry populations and upgraded claims', () => {
+test('button box sizing source binding rejects detached geometry populations and upgraded claims', () => withAuditScratch('button-box-sizing-binding-control-', directory => {
   // Three real capture entries form a separate diagnostic corpus, not reduced
   // coverage of the full-source proof above. Retain files for failure diagnosis.
   const staticButton = raw.results.find(e => e.family === 'button' && e.profile === 'light');
   const interactionButton = raw.interactions.find(e => e.family === 'button' && e.profile === 'light');
   const negative = raw.results.find(e => selectedButtonInputs(e).length === 0);
   const small = { results: [staticButton, negative], interactions: [interactionButton] };
-  const directory = mkdtempSync(path.join('artifacts/material-parity', 'button-box-sizing-binding-control-'));
   const parityPath = path.join(directory, 'capture.json');
   writeFileSync(parityPath, JSON.stringify(small));
   const evidence = collectButtonBoxSizingInputs(small, { parityPath });
@@ -95,5 +95,5 @@ test('button box sizing source binding rejects detached geometry populations and
   assert.equal(collectButtonBoxSizingInputs(small, { parityPath: 'package.json' }).binding.status, 'invalid');
   assert.ok(validateButtonBoxSizingInputs({ binding: { status: 'unbound' } }).length);
   console.log(JSON.stringify({ sourceControls: sourceMutations.length, receiptControls: receiptMutations.length,
-    diagnosticCases: 3, diagnosticOwners: 6, retainedDiagnosticCapture: parityPath }));
-});
+    diagnosticCases: 3, diagnosticOwners: 6, temporaryDiagnosticCapture: parityPath }));
+}));

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
+import { withAuditScratch } from './audit-scratch.mjs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -47,9 +48,8 @@ const interactionKeys = new Set(), interactions = original.interactions.filter(e
 });
 const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
-test('owner gap production integration preserves all scalars prior precedence and unrelated complete rows', () => {
+test('owner gap production integration preserves all scalars prior precedence and unrelated complete rows', () => withAuditScratch('owner-gap-integration-', directory => {
   assert.equal(seen.size, 36); assert.ok(interactions.length > 0);
-  const directory = mkdtempSync(path.resolve('artifacts/material-parity/owner-gap-integration-'));
   const raw = { ...original, results, interactions }, before = hash(raw);
   const file = path.join(directory, 'report.json'); writeFileSync(file, JSON.stringify(raw));
   const options = { root: process.cwd(), parityPath: file, supplementalRoot: directory };
@@ -124,5 +124,5 @@ test('owner gap production integration preserves all scalars prior precedence an
     independentlyVerifiedLaterCaretObservations: audit.ownerCaretInputs.plannedCoverage.reviewedObservations,
     retainedPendingCaretObservations: audit.ownerCaretInputs.plannedCoverage.pendingObservations,
     unchangedCompleteRows: other(audit).length, unchangedCompleteRowsSha256: hash(other(audit)),
-    fullCanonicalConservationVerified: false, inputEquivalent: false, retainedDiagnosticCapture: file }));
-});
+    fullCanonicalConservationVerified: false, inputEquivalent: false, temporaryDiagnosticCapture: file }));
+}));

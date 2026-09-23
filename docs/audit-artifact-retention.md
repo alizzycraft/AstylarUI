@@ -58,9 +58,10 @@ immutable evidence only, not active harness output, dependencies, or source code
   required inputs, state, observations, and provenance remain equivalent.
 - Preserve failed-case evidence and the relevant logs. Keep only the required
   case evidence from superseded runs once reference closure is established.
-- Some legacy audit tests retain scratch captures even on success. These copies
-  were deduplicated, not mistaken for independent findings. Changing those tests
-  to retain on failure only belongs to the upcoming workflow-efficiency pass.
+- The five box-sizing, field-host and owner-gap scratch producers that previously
+  retained every successful capture now remove successful scratch and retain failures.
+  Their historical copies remain deduplicated evidence, not independent findings.
+  See [the audit working procedure](audit-workflow.md) for commands and limits.
 - Before deleting a retained object, check its manifest aliases and all consumers
   across both worktrees. Age alone is not a deletion criterion.
 - Size tools that sum every pathname will overcount hard links. Measure unique

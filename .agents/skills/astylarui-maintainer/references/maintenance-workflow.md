@@ -142,6 +142,12 @@ Run `npm test -- --watch=false`, `npm run build:lib`, `npm run build`,
 `npm run examples:check`, both skill checks, and `npm run parity:check` for final
 release acceptance. Do not run the full expensive matrix after every local edit.
 
+For the Material input audit, follow
+[the incremental audit workflow](../../../../docs/audit-workflow.md): compact
+finding queries, explicit focused/integration/full tiers, dependency-validated
+evidence reuse, cold milestone replay, and scratch retention on failure only.
+Do not substitute this working index for the original evidence or full acceptance.
+
 ## Review before commit
 
 - Inspect `git status`, the complete diff, and `git diff --check`.

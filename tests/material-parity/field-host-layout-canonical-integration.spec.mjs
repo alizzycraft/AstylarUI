@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
+import { withAuditScratch } from './audit-scratch.mjs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -42,8 +43,7 @@ const interactions = original.interactions.filter(e => families.has(e.family));
 const scalar = r => [r.family, r.element, r.property, r.reference, r.astylar, r.occurrences, r.cases, r.states];
 const hash = v => createHash('sha256').update(JSON.stringify(v)).digest('hex');
 
-test('production field-host classification binds all source cases and supersedes only the verified generic rows', () => {
-  const directory = mkdtempSync(path.resolve('artifacts/material-parity/field-host-layout-integration-'));
+test('production field-host classification binds all source cases and supersedes only the verified generic rows', () => withAuditScratch('field-host-layout-integration-', directory => {
   const raw = { ...original, results, interactions }, before = hash(raw);
   assert.equal(negativeFamilies.size, 30); assert.equal(results.length, 102); assert.equal(interactions.length, 505);
   const file = path.join(directory, 'report.json'); writeFileSync(file, JSON.stringify(raw));
@@ -91,5 +91,5 @@ test('production field-host classification binds all source cases and supersedes
     originalHosts: 577, measuredCases: 72, geometryGapCases: 505, attributedGroups: 72, correctedEquivalenceGroups: 6,
     resolvedPreviouslyUnattributedGroups: 48, unchangedScalarRows: audit.discrepancies.length,
     unchangedCompleteRows: other(audit).length, unchangedCompleteRowsSha256: hash(other(audit)),
-    fullCanonicalConservationVerified: false, inputEquivalent: false, retainedDiagnosticCapture: file }));
-});
+    fullCanonicalConservationVerified: false, inputEquivalent: false, temporaryDiagnosticCapture: file }));
+}));

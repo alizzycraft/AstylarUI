@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
+import { withAuditScratch } from './audit-scratch.mjs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -46,8 +47,7 @@ const seen = new Set(), interactions = original.interactions.filter(e => {
 const scalar = r => [r.family, r.element, r.property, r.reference, r.astylar, r.occurrences, r.cases, r.states];
 const hash = v => createHash('sha256').update(JSON.stringify(v)).digest('hex');
 
-test('button box sizing production integration preserves all scalar inputs earlier precedence and measurement gaps', () => {
-  const directory = mkdtempSync(path.resolve('artifacts/material-parity/button-box-sizing-integration-'));
+test('button box sizing production integration preserves all scalar inputs earlier precedence and measurement gaps', () => withAuditScratch('button-box-sizing-integration-', directory => {
   assert.equal(selected.size, 36); assert.ok(interactions.length > 0);
   const raw = { ...original, results, interactions }, before = hash(raw);
   const file = path.join(directory, 'report.json'); writeFileSync(file, JSON.stringify(raw));
@@ -127,5 +127,5 @@ test('button box sizing production integration preserves all scalar inputs earli
     retainedPendingCaretObservations: audit.ownerCaretInputs.plannedCoverage.pendingObservations,
     independentlyVerifiedLaterInputGroups: restored.changes.length, independentlyVerifiedLaterInputObservations: 76,
     unchangedCompleteRows: other(audit).length, unchangedCompleteRowsSha256: hash(other(audit)),
-    fullCanonicalConservationVerified: false, inputEquivalent: false, retainedDiagnosticCapture: file }));
-});
+    fullCanonicalConservationVerified: false, inputEquivalent: false, temporaryDiagnosticCapture: file }));
+}));

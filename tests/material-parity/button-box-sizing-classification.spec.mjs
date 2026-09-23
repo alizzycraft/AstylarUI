@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
+import { withAuditScratch } from './audit-scratch.mjs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { classifyButtonBoxSizingInput as classify, buttonBoxSizingAttribution } from './button-box-sizing-classification.mjs';
@@ -85,14 +86,13 @@ test('button box sizing scalar classification rejects unrelated properties defau
   }
 });
 
-test('button box sizing coverage rejects lost states forged measurements attribution escapes and expanded claims', () => {
+test('button box sizing coverage rejects lost states forged measurements attribution escapes and expanded claims', () => withAuditScratch('button-box-sizing-classification-control-', directory => {
   // Independent original-source replay above is full scope. These mutations
   // use a three-case diagnostic capture to avoid reparsing the 117MB full
   // source for each forged receipt; original tree ownership remains intact.
   const small = { results: [raw.results.find(e => e.family === 'button' && e.profile === 'light'),
     raw.results.find(e => selectedButtonInputs(e).length === 0)],
   interactions: [raw.interactions.find(e => e.family === 'button' && e.profile === 'light')] };
-  const directory = mkdtempSync(path.join('artifacts/material-parity', 'button-box-sizing-classification-control-'));
   const parityPath = path.join(directory, 'capture.json'); writeFileSync(parityPath, JSON.stringify(small));
   const ledger = collectButtonBoxSizingInputs(small, { parityPath }); assert.equal(ledger.binding.status, 'bound');
   const rows = rowsOf(ledger); assert.equal(rows.length, 3);
@@ -121,5 +121,5 @@ test('button box sizing coverage rejects lost states forged measurements attribu
     const v = structuredClone(ledger); mutate(v); assert.ok(validateButtonBoxSizingClassifications(v, rows).length, `ledger control ${i}`);
   }
   console.log(JSON.stringify({ rowControls: mutations.length, ledgerControls: ledgerMutations.length,
-    retainedDiagnosticCapture: parityPath }));
-});
+    temporaryDiagnosticCapture: parityPath }));
+}));

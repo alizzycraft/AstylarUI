@@ -9,7 +9,7 @@ export const auditSuites = {
     focused: ['position-composition-review', 'position-followup-review'],
     integration: ['position-composition-review-integration', 'position-followup-review-integration'],
   },
-  workflow: { focused: ['audit-workflow'], integration: [] },
+  workflow: { focused: ['audit-workflow', 'audit-evidence-session', 'audit-findings-store', 'audit-scratch'], integration: [] },
 };
 export function selectAuditTests(tier, area) {
   assert.ok(['focused', 'integration'].includes(tier), 'Choose focused or integration; full audit and capture are separate commands');
