@@ -1,5 +1,55 @@
 # Material audit: evidence-led implementation priorities
 
+## Current audit checkpoint — September 24
+
+Resume from the existing evidence, using [the incremental workflow](audit-workflow.md).
+The canonical package with decoded SHA-256
+`dd44f6b5597014617876fa21d8d144adf7451a3a17a4438c6f95384da6005d00`
+contains **1,668 unresolved scalar signatures**, not that many confirmed bugs.
+The compact index preserves all 8,483 differences / 389,202 occurrences and
+132 source findings. Static/interaction inventory is 436/436 and 1,875/1,875;
+inventory completeness is not attribution or rendering acceptance.
+
+Prioritize remaining questions by impact and shared ownership, not by creating
+one investigation per scalar property:
+
+1. Overlay boxes/ownership: dialog has 216 unresolved signatures, bottom sheet
+   182, snackbar 77 and tooltip 43. The 59-state wrapper inspection now rules
+   out **position keywords alone** as a sufficient diagnosis: reference absolute
+   wrappers have a fixed parent; candidate fixed wrappers flatten that layer.
+   See [the modal inspection](material-modal-position-inspection.md). Next trace
+   used CSS boxes, containing blocks and reachability without repeating proven
+   external reference-ancestor capture. Shared tooltip/snackbar causality is
+   still a hypothesis.
+2. Control structure/geometry: slider 77, chips 114 and button-toggle 73. Reuse
+   the existing gesture, range-travel and paint reductions; do not reopen those
+   diagnoses or assume they explain every original symptom. Isolate unreviewed
+   owner selection, clipping and sizing inputs.
+3. Remaining typography and paint: line-height 67, tracking 57, font-family 31
+   and color 111 unresolved groups. Reuse explicit ownership/stage proofs and
+   separate missing computed evidence from unequal declarations. These property
+   totals overlap the component populations above.
+
+Position subset: fourteen groups have prepared classifications, seventeen have
+owner inspection, and twenty-one retain open investigations. The six already
+exported groups now pass full scalar/control conservation (8,477 other complete
+rows unchanged); whole-report section reconciliation is recorded separately in
+[the transition record](material-position-canonical-conservation.md). The new
+wrapper inspection narrows two of the twenty-one investigations but does not
+promote their position scalars to resolved classifications.
+
+Source-fingerprint reconciliation remains open: using the producer's LF-normalized
+hash convention, **12 of 424** stored source receipts differ after the workflow
+changes. They concern collection/session imports, test splitting and scratch
+retention. The showcase source and browser harness still match after correct
+line-ending normalization. Do not rewrite historical receipts to claim currency.
+At the next integration milestone reconcile the changed producers and proof
+inventory, perform cold replay, then export/check once for the coherent batch.
+No full current-builder or enforced-browser acceptance is claimed here.
+
+The sections below retain the detailed root-cause evidence and implementation
+order. Renderer/fixture repairs remain outside this audit's authorization.
+
 This is an audit handoff, not authorization to implement fixes and not a claim
 of completed input or output parity. It supplements the detailed
 [62-item implementation inventory](material-input-equivalence-audit.md#root-cause-implementation-order).

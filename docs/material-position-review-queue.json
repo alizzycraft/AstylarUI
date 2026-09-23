@@ -336,7 +336,7 @@
       "candidateOmitted": false,
       "observations": 24,
       "priorRowSha256": "962bd5b2dfee4923a74544cecffa896b06c5023a59803d8ddac21dc9b0aa75be",
-      "status": "producer-integrated-conservation-pending",
+      "status": "historical-export-conserved",
       "source": {
         "file": "docs/material-flow-position-substitutions.json",
         "sha256": "ae18da9453f68f2c5ed68bac464db6bd465cc6b74c3d5a5304f80dd60477403f"
@@ -363,7 +363,7 @@
       "candidateOmitted": true,
       "observations": 52,
       "priorRowSha256": "f62c24536a5eb4eed0a6e195e48f72fa4f737f53e5a336e73308f2ec62271304",
-      "status": "producer-integrated-conservation-pending",
+      "status": "historical-export-conserved",
       "source": {
         "file": "docs/material-grid-position-substitution.json",
         "sha256": "eface143a0232cbdc48eb9160ab0da250bc278f858344844b5fc983a97a2241c"
@@ -378,7 +378,7 @@
       "candidateOmitted": false,
       "observations": 52,
       "priorRowSha256": "712506aa94ef807d373f72165db13c0523625cdcdc0ffd7f904fe0badda6b235",
-      "status": "producer-integrated-conservation-pending",
+      "status": "historical-export-conserved",
       "source": {
         "file": "docs/material-grid-position-substitution.json",
         "sha256": "eface143a0232cbdc48eb9160ab0da250bc278f858344844b5fc983a97a2241c"
@@ -393,7 +393,7 @@
       "candidateOmitted": false,
       "observations": 52,
       "priorRowSha256": "08eb07d3b538fd4ad17ec951437a9c03c4ee70ff9abc7e025efcf9342220b46a",
-      "status": "producer-integrated-conservation-pending",
+      "status": "historical-export-conserved",
       "source": {
         "file": "docs/material-grid-position-substitution.json",
         "sha256": "eface143a0232cbdc48eb9160ab0da250bc278f858344844b5fc983a97a2241c"
@@ -549,7 +549,7 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "9882df5713732581af3cc2952c31cdf61c8dbb73eb1f068300ceb9b238a420ec",
-      "status": "producer-integrated-conservation-pending",
+      "status": "historical-export-conserved",
       "source": {
         "file": "docs/material-flow-position-substitutions.json",
         "sha256": "ae18da9453f68f2c5ed68bac464db6bd465cc6b74c3d5a5304f80dd60477403f"
@@ -564,7 +564,7 @@
       "candidateOmitted": false,
       "observations": 68,
       "priorRowSha256": "0cbf642103ba749b9aceb1e44287c6f9bdbb5b94d6555b4eb3fed1861e8bc03f",
-      "status": "producer-integrated-conservation-pending",
+      "status": "historical-export-conserved",
       "source": {
         "file": "docs/material-flow-position-substitutions.json",
         "sha256": "ae18da9453f68f2c5ed68bac464db6bd465cc6b74c3d5a5304f80dd60477403f"
@@ -827,7 +827,7 @@
       "groups": 21,
       "observations": 1055
     },
-    "producer-integrated-conservation-pending": {
+    "historical-export-conserved": {
       "groups": 6,
       "observations": 316
     }

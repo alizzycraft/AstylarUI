@@ -35,7 +35,7 @@ export function collectPositionQueue() {
   const reviews = [];
   for (const name of ['material-grid-position-substitution', 'material-flow-position-substitutions']) {
     const { data, source } = load(name);
-    reviews.push({ source, status: 'producer-integrated-conservation-pending', groups: data.groups.map(g => ({
+    reviews.push({ source, status: 'historical-export-conserved', groups: data.groups.map(g => ({
       element: g.element, priorRowSha256: g.priorRowSha256, cases: g.reviewedCases ?? g.observations.map(o => o.case) })) });
   }
   for (const [name, element, status] of [

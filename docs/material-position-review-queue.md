@@ -5,13 +5,16 @@ population. It does not claim completion of the larger input-equivalence audit.
 
 | Status | Groups | Observations |
 | --- | ---: | ---: |
-| Producer integrated; canonical conservation pending | 6 | 316 |
+| Historical export conserved; current-source reconciliation pending | 6 | 316 |
 | Classified in standalone proof; integration pending | 14 | 768 |
 | Inspected; classification pending | 17 | 811 |
 | Investigation pending | 21 | 1,055 |
 
 The six producer-integrated groups are grid-list root/tiles, divider and switch
-placement. Their regenerated report must be conserved before acceptance.
+placement. Their historical export now passes scalar/control conservation;
+see [the transition record](material-position-canonical-conservation.md).
+Later workflow edits changed twelve producer/test receipts, so historical
+conservation is not a claim of current-builder freshness or final acceptance.
 The fourteen standalone groups are tooltip, tabs, stepper, radio, three choice-label
 stacking substitutions and seven static-position observation-stage cases.
 Sort focus placement, toolbar composition and three
