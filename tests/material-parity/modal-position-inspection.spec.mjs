@@ -5,6 +5,38 @@ import { createHash } from 'node:crypto';
 import { resolveGeneratedReferenceNode } from './generated-node-mapping-evidence.mjs';
 import { collectModalPositionInspection, proveModalPositionInspection } from './modal-position-inspection.mjs';
 
+test('retained open overlays do not reproduce off-screen projected placement', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const entries = [...capture.results, ...capture.interactions];
+  for (const [family, target, count] of [
+    ['snack-bar', 'snack-bar-surface', 34],
+    ['tooltip', 'tooltip-popup', 18],
+    ['bottom-sheet', 'bottom-sheet-panel', 25],
+  ]) {
+    const cases = entries.filter(e => e.family === family && e.overlayPlacement?.targetId);
+    assert.equal(cases.length, count);
+    let maximumProjectedDelta = 0;
+    for (const entry of cases) {
+      const p = entry.overlayPlacement;
+      assert.equal(p.targetId, target);
+      assert.equal(p.withinCanvas, true);
+      // Check recorded coordinates directly: the historical `matches` flag
+      // does not require all four rectangle values to agree for every family.
+      for (const key of ['x', 'y', 'width', 'height']) {
+        assert.ok(Number.isFinite(p.astylar[key]) && Number.isFinite(p.reference[key]));
+        const delta = Math.abs(p.astylar[key] - p.reference[key]);
+        maximumProjectedDelta = Math.max(maximumProjectedDelta, delta);
+        assert.ok(delta < 0.04, `${family}/${entry.profile}/${entry.viewport.id}/${entry.state}/${key}: ${delta}`);
+      }
+    }
+    console.log(JSON.stringify({ family, retainedOpenStates: count, maximumProjectedDelta,
+      usedCssBoxesProven: false, paintVisibilityProven: false, inputEquivalenceProven: false }));
+  }
+});
+
 test('overlay position tokens belong to different compositions in all 59 original states', () => {
   const readBound = (file, digest) => {
     const bytes = readFileSync(file);

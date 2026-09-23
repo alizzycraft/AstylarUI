@@ -1,5 +1,48 @@
 # Modal generated-owner position inspection
 
+## Retained output applicability, September 24
+
+Question: do the retained open states support the hypothesis that the snackbar
+is below the viewport, possibly sharing the tooltip's displacement? Competing
+explanations include off-screen geometry, clipping/paint loss, or a symptom no
+longer reproduced in this capture. The smallest check was the original recorded
+rectangles, not another render or reconstruction of the historical application.
+
+The existing inspection suite now authenticates the complete capture SHA-256
+`b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a`
+and checks all four rectangle coordinates directly, rather than relying on the
+historical placement `matches` flag:
+
+| Family | Retained open states | Maximum reference/projected candidate delta |
+| --- | ---: | ---: |
+| Snackbar | 34 | 3.64e-12 px |
+| Tooltip | 18 | 0.038330078125 px |
+| Bottom sheet | 25 | 2.67e-11 px |
+
+All 77 observations report canvas containment. This rules out reported projected
+off-screen placement **in these retained observations only**. It does not explain
+the earlier manual failures or establish a shared cause, equal inputs, visible
+paint, unclipped text, hit testing, or current-runtime acceptance.
+
+Measurement-stage evidence: `measure()` in
+`examples/material-showcase/src/app/astylar.component.ts` computes `borderBox`
+from `boundingBox.vectorsWorld`, `Vector3.Project`, and canvas/render scaling.
+It does not capture the core's retained CSS layout boxes. The existing public
+identity-transform reduction likewise measures projected geometry; the focused
+element-dimension test covers fixed viewport sizing but not the complete live
+overlay path. Neither fills that stage gap.
+
+Next decisive check: observe retained CSS layout boxes and projection together
+through the existing repository-only inspection boundary, in an equal-input
+overlay reduction. Keep diagnostic observation separate from authored input;
+do not introduce projection-derived positioning or a new public layout API.
+The previously documented placement-check sensitivity remains relevant; this
+direct coordinate comparison is not a correction to that harness.
+
+Verification: `node --test tests/material-parity/modal-position-inspection.spec.mjs`
+passes **4/4**, no skips, in 6.59 seconds. No recapture, renderer change,
+fixture change, canonical reclassification, or new evidence package was needed.
+
 ## Overlay-wrapper follow-up, September 24
 
 The existing inspection suite now reopens and hash-checks all **59** original

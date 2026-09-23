@@ -21,6 +21,16 @@ one investigation per scalar property:
    used CSS boxes, containing blocks and reachability without repeating proven
    external reference-ancestor capture. Shared tooltip/snackbar causality is
    still a hypothesis.
+   Follow-up: direct rectangle checks across all retained open snackbar (34),
+   tooltip (18), and bottom-sheet (25) observations show reference/projected
+   candidate deltas below 0.04 px. These historical states do not reproduce
+   off-screen placement; they must not be cited as reproductions of the earlier
+   manual reports. The collector's `borderBox` is projected mesh geometry, not
+   retained CSS layout geometry. Next instrument the existing repository-only
+   inspection boundary to pair retained CSS boxes with projection in a minimal
+   equal-input overlay reduction; do not repeat this historical position survey
+   or infer paint visibility/input equivalence from it. See the scoped evidence
+   and limits in [the modal inspection](material-modal-position-inspection.md).
 2. Control structure/geometry: slider 77, chips 114 and button-toggle 73. Reuse
    the existing gesture, range-travel and paint reductions; do not reopen those
    diagnoses or assume they explain every original symptom. Isolate unreviewed
