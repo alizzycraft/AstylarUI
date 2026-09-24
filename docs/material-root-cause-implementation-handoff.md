@@ -134,6 +134,20 @@ complete ancestor/request checks. Reuse root-color ancestry evidence and existin
 membership/precedence validation; do not synthesize candidate inherited colors or
 infer parity from equal visible colors. No color classification changed.
 
+The follow-up read-only ancestry probe reuses all 2,311 root-color proofs,
+existing mapped-owner paths and the precise normalization contract. After
+excluding exactly the 152 reviewed static siblings, all 68 unresolved groups'
+occurrence counts and ordered case samples match the original capture. Forty-six
+whole groups / 1,196 observations have the same proven root color and no
+intervening color/reset/motion request on either side. Twenty-two groups / 446
+observations remain excluded: toolbar title, icon, paginator host/range/size,
+radio labels, tab panel, expansion title, progress bar and spinner (light/dark).
+This is a diagnostic proposal, not canonical attribution, computed candidate
+inheritance or paint equivalence. After the active export terminates, extend the
+existing root-color reader to descendant owners with source-bound membership and
+negative controls for intervening requests, missing ancestry, state changes and
+reviewed-static precedence. Preserve the 22 exclusions; do not add fixture colors.
+
 The retained overlay focus harness gap is now an executable, source-pinned proof:
 `node --test tests/material-parity/retained-overlay-focus.spec.mjs` passes 2/2
 in 2.92 seconds. The original capture SHA `b07ef154...` pins the harness's raw
