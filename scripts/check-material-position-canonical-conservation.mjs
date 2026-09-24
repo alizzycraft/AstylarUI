@@ -13,6 +13,9 @@ import { collectPositionFollowupReview, applyPositionFollowupReview,
   validatePositionFollowupRows, positionFollowupAttribution } from '../tests/material-parity/position-followup-review.mjs';
 import { collectChipPaintProposal, applyChipPaintRows } from '../tests/material-parity/chip-position-inspection.mjs';
 import { collectOverlaySurfaceReview, applyOverlaySurfaceRows } from '../tests/material-parity/overlay-surface-review.mjs';
+import { applyDialogScalarTypography, applyBottomSheetScalarTypography } from '../tests/material-parity/modal-position-inspection.mjs';
+import { collectFullTreeInventory, collectControlTypographyEvidence, collectRetainedTypographyEvidence } from '../tests/material-parity/input-equivalence-audit.mjs';
+import { bindPreciseAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
@@ -20,13 +23,13 @@ const receipt = row => row?.reviewEvidence?.observation?.normalizationReconcilia
 
 // The CLI independently derives expectedRows from authenticated predecessor
 // records and fresh source review. This comparator cannot create that premise.
-export function comparePositionCanonical(previous, current, expectedRows, currentSource, { followupOnly = false, chipOnly = false, overlayOnly = false, previousSource } = {}) {
-  assert.ok([followupOnly, chipOnly, overlayOnly].filter(Boolean).length <= 1);
+export function comparePositionCanonical(previous, current, expectedRows, currentSource, { followupOnly = false, chipOnly = false, overlayOnly = false, modalOnly = false, previousSource } = {}) {
+  assert.ok([followupOnly, chipOnly, overlayOnly, modalOnly].filter(Boolean).length <= 1);
   let transition = restorePositionProducer(currentSource, { followupOnly });
-  if (chipOnly || overlayOnly) {
+  if (chipOnly || overlayOnly || modalOnly) {
     const normalize = source => source.toString('utf8').replaceAll('\r\n', '\n');
     const old = normalize(previousSource), now = normalize(currentSource);
-    const added = overlayOnly ? "from './overlay-surface-audit-source-binding.mjs'" : "from './chip-paint-audit-source-binding.mjs'";
+    const added = modalOnly ? "from './modal-position-inspection.mjs'" : overlayOnly ? "from './overlay-surface-audit-source-binding.mjs'" : "from './chip-paint-audit-source-binding.mjs'";
     assert.ok(!old.includes(added)); assert.ok(now.includes(added));
     assert.ok(old.includes("from './position-followup-audit-source-binding.mjs'"));
     // Both complete modules must reduce to the same authenticated predecessor
@@ -36,10 +39,11 @@ export function comparePositionCanonical(previous, current, expectedRows, curren
     const hash = text => createHash('sha256').update(text).digest('hex');
     transition = { ...transition, previousModuleSha256: hash(old), currentModuleSha256: hash(now) };
   }
-  const attributions = overlayOnly ? ['reviewed-snackbar-surface-input-substitution', 'reviewed-tooltip-sizing-constraint-omission']
+  const attributions = modalOnly ? ['reviewed-dialog-scalar-typography-owner', 'reviewed-bottom-sheet-scalar-typography-owner']
+    : overlayOnly ? ['reviewed-snackbar-surface-input-substitution', 'reviewed-tooltip-sizing-constraint-omission']
     : [chipOnly ? 'reviewed-chip-state-layer-substitution' : followupOnly ? positionFollowupAttribution : positionCompositionAttribution];
-  const expectedGroups = overlayOnly ? 13 : chipOnly ? 10 : followupOnly ? 14 : 6;
-  const expectedOccurrences = overlayOnly ? 344 : chipOnly ? 32 : followupOnly ? 768 : 316;
+  const expectedGroups = modalOnly ? 24 : overlayOnly ? 13 : chipOnly ? 10 : followupOnly ? 14 : 6;
+  const expectedOccurrences = modalOnly ? 588 : overlayOnly ? 344 : chipOnly ? 32 : followupOnly ? 768 : 316;
   same(current.rows, expectedRows, 'canonical rows differ from independently replayed positioning review');
   assert.equal(previous.rows.length, current.rows.length);
   const changed = [];
@@ -48,6 +52,11 @@ export function comparePositionCanonical(previous, current, expectedRows, curren
     if (isDeepStrictEqual(before, after)) continue;
     assert.equal(before.attribution, 'unresolved');
     assert.ok(attributions.includes(after.attribution));
+    if (modalOnly) {
+      const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+      const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+      same(raw(before), raw(after), 'modal classification changed original scalar evidence');
+    }
     changed.push({ family: after.family, element: after.element, occurrences: after.occurrences,
       previousRowSha256: digest(before), currentRowSha256: digest(after) });
   }
@@ -81,19 +90,39 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   const followupOnly = process.argv[2] === '--followup';
   const chipOnly = process.argv[2] === '--chip';
   const overlayOnly = process.argv[2] === '--overlay';
-  assert.equal(process.argv.length, followupOnly || chipOnly || overlayOnly ? 3 : 2);
-  const previous = await readAudit(overlayOnly ? 'artifacts/material-parity/working-audit/d70aa37e4e14a9bfdc6183e0c2a7c383638d83050fc76b2d556a26b510691fa4'
+  const modalOnly = process.argv[2] === '--modal';
+  assert.equal(process.argv.length, followupOnly || chipOnly || overlayOnly || modalOnly ? 3 : 2);
+  const previous = await readAudit(modalOnly ? 'artifacts/material-parity/working-audit/4601de6aeedf0595894e22de28052ee989a163320af4464337a69302c3a04aa2'
+    : overlayOnly ? 'artifacts/material-parity/working-audit/d70aa37e4e14a9bfdc6183e0c2a7c383638d83050fc76b2d556a26b510691fa4'
     : chipOnly ? 'artifacts/material-parity/pre-chip-paint-2a35d34' : followupOnly
     ? 'artifacts/material-parity/pre-position-followup-509dbf4' : 'artifacts/material-parity/pre-position-e62e846');
-  assert.equal(previous.manifest.uncompressedSha256, overlayOnly ? '276bcd838575bcce26f06ab922eeacd880152c3585dee929f4635c778338767e'
+  assert.equal(previous.manifest.uncompressedSha256, modalOnly ? '4ad34a695e2268a96a505d86af93bd396d897a5d996dd6dbf28b67a3199fb291'
+    : overlayOnly ? '276bcd838575bcce26f06ab922eeacd880152c3585dee929f4635c778338767e'
     : chipOnly ? '0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de' : followupOnly
     ? 'dd44f6b5597014617876fa21d8d144adf7451a3a17a4438c6f95384da6005d00'
     : '287ebb396d68ab064dca40a0c372879e8a0c3fd2c7f56498110577615bd430a2');
   const current = await readAudit('docs');
-  const review = overlayOnly ? await collectOverlaySurfaceReview() : chipOnly ? await collectChipPaintProposal() : followupOnly ? collectPositionFollowupReview() : collectPositionCompositionReview();
-  const expected = (overlayOnly ? applyOverlaySurfaceRows : chipOnly ? applyChipPaintRows : followupOnly ? applyPositionFollowupReview : applyPositionCompositionReview)(previous.rows, review);
-  if (!chipOnly && !overlayOnly) (followupOnly ? validatePositionFollowupRows : validatePositionCompositionRows)(current.rows, review);
-  const previousSource = chipOnly || overlayOnly ? execFileSync('git', ['show', `${overlayOnly ? '72f849a' : '2a35d34'}:tests/material-parity/input-equivalence-audit.mjs`], { maxBuffer: 4 * 1024 * 1024 }) : undefined;
+  let expected;
+  if (modalOnly) {
+    const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+    const captured = JSON.parse(bytes);
+    const cases = captured.interactions.filter(c => ['dialog', 'bottom-sheet'].includes(c.family) &&
+      c.styleInputs.some(i => i.id === (c.family === 'dialog' ? 'dialog-copy' : 'bottom-sheet-panel')))
+      .map(c => ({ ...c, kind: 'interaction' }));
+    assert.equal(cases.filter(c => c.family === 'dialog').length, 32);
+    assert.equal(cases.filter(c => c.family === 'bottom-sheet').length, 25);
+    const inventory = collectFullTreeInventory(cases);
+    const control = collectControlTypographyEvidence(cases, inventory);
+    const retained = collectRetainedTypographyEvidence(cases, inventory, control);
+    const normalize = bindPreciseAuditNormalization();
+    expected = applyBottomSheetScalarTypography(applyDialogScalarTypography(previous.rows, cases, inventory, retained, control, normalize), cases, inventory, normalize);
+  } else {
+    const review = overlayOnly ? await collectOverlaySurfaceReview() : chipOnly ? await collectChipPaintProposal() : followupOnly ? collectPositionFollowupReview() : collectPositionCompositionReview();
+    expected = (overlayOnly ? applyOverlaySurfaceRows : chipOnly ? applyChipPaintRows : followupOnly ? applyPositionFollowupReview : applyPositionCompositionReview)(previous.rows, review);
+    if (!chipOnly && !overlayOnly) (followupOnly ? validatePositionFollowupRows : validatePositionCompositionRows)(current.rows, review);
+  }
+  const previousSource = chipOnly || overlayOnly || modalOnly ? execFileSync('git', ['show', `${modalOnly ? '771e0a8' : overlayOnly ? '72f849a' : '2a35d34'}:tests/material-parity/input-equivalence-audit.mjs`], { maxBuffer: 4 * 1024 * 1024 }) : undefined;
   console.log(JSON.stringify(comparePositionCanonical(previous, current, expected,
-    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), { followupOnly, chipOnly, overlayOnly, previousSource }), null, 2));
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), { followupOnly, chipOnly, overlayOnly, modalOnly, previousSource }), null, 2));
 }

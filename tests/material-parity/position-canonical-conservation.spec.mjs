@@ -60,6 +60,34 @@ test('overlay batch conserves thirteen groups and rejects unrelated row or produ
   ]) { const changed = overlaySample(); mutate(changed); assert.throws(() => comparePositionCanonical(...changed)); }
 });
 
+test('modal batch conserves twenty-four groups and independent predecessor receipts', () => {
+  const make = () => {
+    const [previous, current] = sample();
+    const previousSource = execFileSync('git', ['show', '771e0a8:tests/material-parity/input-equivalence-audit.mjs'], { maxBuffer: 4 * 1024 * 1024 });
+    previous.rows = Array.from({ length: 24 }, (_, i) => ({ family: i < 9 ? 'dialog' : 'bottom-sheet',
+      element: `owner-${i}`, occurrences: i < 9 ? 32 : 20, attribution: 'unresolved', reference: 'original' }));
+    current.rows = previous.rows.map((row, i) => ({ ...row, attribution: i < 9
+      ? 'reviewed-dialog-scalar-typography-owner' : 'reviewed-bottom-sheet-scalar-typography-owner' }));
+    const oldHash = createHash('sha256').update(previousSource.toString('utf8').replaceAll('\r\n', '\n')).digest('hex');
+    for (const row of previous.control.differences) row.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = oldHash;
+    return [previous, current, structuredClone(current.rows), currentSource, { modalOnly: true, previousSource }];
+  };
+  const args = make(), before = structuredClone(args.slice(0, 3));
+  const result = comparePositionCanonical(...args);
+  assert.equal(result.changedGroups, 24); assert.equal(result.changedOccurrences, 588);
+  assert.equal(result.controlReceiptTransition.records, 48);
+  assert.deepEqual(args.slice(0, 3), before);
+  for (const mutate of [
+    ([, c]) => c.rows.pop(), ([, c]) => { c.rows[0].reference = 'changed'; },
+    ([, c]) => c.control.gaps.push({ reason: 'unrelated' }),
+    ([, c]) => { c.control.differences[0].reviewEvidence.observation.normalizationReconciliation.value++; },
+    a => { a[4].previousSource = Buffer.from(a[4].previousSource + '\nconst unrelated = true;'); },
+    a => { a[4].previousSource = currentSource; }, a => { a[4].overlayOnly = true; },
+    a => { a[2][0].reference = 'forged expected input'; },
+    a => { a[1].rows[0].reference = a[2][0].reference = 'jointly forged input'; },
+  ]) { const changed = make(); mutate(changed); assert.throws(() => comparePositionCanonical(...changed)); }
+});
+
 test('chip comparison reuses strict row and 48 control-receipt conservation', () => {
   const args = chipSample(), original = structuredClone(args.slice(0, 3));
   const result = comparePositionCanonical(...args);

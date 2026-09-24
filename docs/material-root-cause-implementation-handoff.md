@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 24
 
+Combined dialog/sheet cold export started from `20edff9`: exec session `89157`,
+Node PID `21480`, log
+`artifacts/material-parity/modal-typography-export-20edff9-progress.log`.
+The process was verified live in `build-audit`; no completion is claimed.
+Poll this handle/process before considering another run. Its dependencies must
+remain unchanged during execution. The accepted predecessor payload is already
+retained in compact generation `4601de6aeedf0595894e22de28052ee989a163320af4464337a69302c3a04aa2`;
+its compressed hash was checked and its small manifest copied alongside it for
+streaming conservation, without copying the payload again. The existing position
+conservation comparator now supports `--modal`: after completion run it to replay
+the combined 24-group / 588-occurrence batch independently from the pinned
+original capture and retained predecessor. It checks raw scalar preservation,
+all complete rows, and the 48 permitted control producer receipts. Comparator
+tests pass 6/6; actual canonical conservation is pending export completion.
+The old `--overlay` mode is not the correct gate for this new batch. Only the
+standalone comparator, its test and this ledger changed while the export ran;
+none is an export evidence dependency.
+
 Working source now includes the next dialog typography integration; the accepted
 canonical checkpoint below is `771e0a8`. Its source fingerprints describe that
 checkpoint, not the subsequent integration edits. Source/export reconciliation
