@@ -110,7 +110,7 @@ test('bottom-sheet scalar typography belongs to container tokens rather than inn
   // nor establish output parity or change canonical attribution.
 });
 
-test('seven dialog scalar groups reuse original typography proofs with matching owner and declaration stage', () => {
+test('nine dialog scalar groups reuse original typography proofs with matching owner and declaration stage', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const cases = JSON.parse(bytes).interactions.filter(e => e.family === 'dialog' &&
@@ -123,13 +123,14 @@ test('seven dialog scalar groups reuse original typography proofs with matching 
   const compact = queryFindings('artifacts/material-parity/working-audit', 'dialog', overlaySurfacePredecessor);
   const keys = cases.map(e => `interaction:dialog@${e.profile}/${e.viewport.id}/${e.state}`);
   const join = (element, property, proofRows) => {
+    const title = element === 'dialog-title';
     const scalar = compact.filter(r => r.evidence.section === 'discrepancies' && r.element === element && r.property === property);
     assert.equal(scalar.length, 1); const row = scalar[0];
     assert.equal(row.attribution, 'unresolved'); assert.equal(row.occurrences, 32);
     assert.deepEqual(row.cases, keys.slice(0, 12));
     assert.deepEqual(proofRows.map(r => r.case), keys);
     for (const proof of proofRows) {
-      assert.equal(proof.element, element); assert.equal(proof.property, property);
+      assert.equal(proof.element, title ? 'dialog-title-label' : element); assert.equal(proof.property, property);
       assert.equal(proof.classification, 'application-plugin-authoring-defect');
       assert.equal(proof.inputEquivalent, false);
       assert.equal(proof.values.reference, row.reference);
@@ -137,9 +138,19 @@ test('seven dialog scalar groups reuse original typography proofs with matching 
       const nodes = inventory.variants[entry.variant].nodes.filter(n => n.authored?.id === element);
       assert.equal(nodes.length, 1); const node = nodes[0];
       const normal = inventory.styles[node.normalStyle].value, effective = inventory.styles[node.interactionStyle].value;
-      const referenceOwner = element === 'dialog-copy' ? proof.reviewEvidence.referenceLeaf : proof.reviewEvidence.referenceChain[1];
+      const referenceOwner = element === 'dialog-copy' || title ? proof.reviewEvidence.referenceLeaf : proof.reviewEvidence.referenceChain[1];
       assert.equal(referenceOwner.attributes['data-parity-id'], element);
-      if (element === 'dialog-copy') assert.equal(proof.reviewEvidence.candidateChain[0].node, node.key);
+      if (title) {
+        const [label, owner] = proof.reviewEvidence.candidateChain;
+        assert.equal(label.authored.id, 'dialog-title-label');
+        assert.equal(label.authored.type, 'span');
+        assert.equal(label.authored.textContent, 'Confirm action');
+        assert.equal(label.parent, owner.node);
+        assert.equal(owner.node, node.key); assert.equal(owner.authored.type, 'h2');
+        assert.equal(owner.authored.id, element);
+        assert.equal(node.parent, owner.parent);
+        for (const stage of ['normal', 'effective']) assert.equal(label[stage][property], undefined);
+      } else if (element === 'dialog-copy') assert.equal(proof.reviewEvidence.candidateChain[0].node, node.key);
       else assert.ok(proof.reviewEvidence.structure.candidateActions.some(n => n.key === node.key));
       if (!Object.hasOwn(row, 'astylar')) {
         assert.ok(['fontFamily', 'letterSpacing'].includes(property));
@@ -147,28 +158,34 @@ test('seven dialog scalar groups reuse original typography proofs with matching 
         // Retained/default values are deliberately not substituted for omitted
         // local scalar declarations. The original token omission proves intent.
       } else {
-        assert.equal(proof.values.normal, row.astylar); assert.equal(proof.values.effective, row.astylar);
-        for (const stage of [normal, effective]) assert.equal(stage[property], property === 'color' ? '#49454f' : 'Roboto, Arial, sans-serif');
+        if (title) assert.equal(proof.values.retained, row.astylar);
+        else { assert.equal(proof.values.normal, row.astylar); assert.equal(proof.values.effective, row.astylar); }
+        for (const stage of [normal, effective]) assert.equal(stage[property], property === 'color' ? title ? '#1d1b20' : '#49454f' : 'Roboto, Arial, sans-serif');
       }
     }
   };
   let groups = 0;
   for (const [element, properties] of [['dialog-copy', ['fontFamily', 'letterSpacing', 'color']],
-    ['dialog-cancel', ['fontFamily', 'letterSpacing']], ['dialog-save', ['fontFamily', 'letterSpacing']]]) {
+    ['dialog-cancel', ['fontFamily', 'letterSpacing']], ['dialog-save', ['fontFamily', 'letterSpacing']],
+    ['dialog-title', ['fontFamily', 'color']]]) {
     for (const property of properties) {
-      const attribution = element !== 'dialog-copy' ? 'reviewed-dialog-action-typography-input'
+      const attribution = !['dialog-copy', 'dialog-title'].includes(element) ? 'reviewed-dialog-action-typography-input'
         : property === 'color' ? 'reviewed-dialog-text-ink-input' : 'reviewed-dialog-text-metric-omission';
-      const rows = [...retained.differences, ...control.differences].filter(r => r.element === element && r.property === property && r.attribution === attribution);
+      const rows = [...retained.differences, ...control.differences].filter(r => r.element === (element === 'dialog-title' ? 'dialog-title-label' : element) && r.property === property && r.attribution === attribution);
       join(element, property, rows); groups++;
       for (const mutate of [r => r.pop(), r => r.reverse(), r => { r[0].values.reference = 'forged'; },
         r => { r[0].element = 'dialog-title'; }]) {
         const changed = structuredClone(rows); mutate(changed); assert.throws(() => join(element, property, changed));
       }
+      if (element === 'dialog-title') {
+        const changed = structuredClone(rows); changed[0].reviewEvidence.candidateChain[0].parent = 'unrelated';
+        assert.throws(() => join(element, property, changed));
+      }
     }
   }
-  assert.equal(groups, 7);
-  // Title label-to-owner correspondence is outside this join; no output,
-  // candidate computed default, or canonical classification is accepted here.
+  assert.equal(groups, 9);
+  // Title tracking has no retained difference proof and is not inferred from
+  // this parent/child mapping. No output/default equivalence is accepted here.
 });
 
 test('overlay surface proposal replays 13 complete predecessors and preserves unrelated rows', async () => {

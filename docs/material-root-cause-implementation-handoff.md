@@ -2,6 +2,16 @@
 
 ## Current audit checkpoint — September 24
 
+Dialog title reuse boundary closed for font-family and color: the existing
+typography proof identifies the native heading and the candidate title span's
+direct `h2` parent in all 32 states. Exact scalar values, omitted local font
+declarations, explicit parent color and inherited label values are checked;
+an altered parent link is rejected. The focused `nine dialog scalar` test passes
+(2.474 seconds), extending seven groups / 224 occurrences to nine / 288 without
+new captures or a new collector. Title tracking remains unresolved: there is no
+matching retained difference proof, so the owner mapping alone does not classify
+it. Canonical attribution is unchanged pending a later coherent batch.
+
 Bottom-sheet ownership check: the focused `bottom-sheet scalar typography`
 test authenticates 25 retained states and joins 15 scalar groups / 300 occurrences
 for the panel and two item anchors. Native font, line-height, tracking and color
