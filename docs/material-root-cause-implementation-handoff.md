@@ -49,6 +49,32 @@ does not depend on an unresolved attribution label. All five tests pass again
 (exit 0, 13,502.874 ms); the full-row reads explain the extra runtime. This closes
 the population check for the proposed sizing batch, not its production integration.
 
+Dialog sizing reduction: `overlay-layout-stage.audit.spec.ts` now preserves a
+nested surface/container chain with percentage sizing and inherited constraints,
+using identical three content blocks (40/24/40px) on both sides. At 640x400,
+native panel geometry is 280x104 at (180,148); candidate retained CSS and projected
+geometry is 0x0 at (180,200), at DPR 1 and 2. This confirms divergence before
+projection, not a Babylon coordinate error or a font measurement explanation.
+Paired explicit-constraint controls produce 560x0; replacing percentage heights
+with auto and removing descendant max-height limits does not restore height.
+With auto widths as well, width matches 280 but height remains zero. Thus a
+percentage-height-only diagnosis is insufficient. Next trace intrinsic child
+measurement and constraint resolution in the preserved failing chain, not more
+fixture calibration. These controls change both inputs and are not proposed fixes.
+
+Final diagnostic evidence: `artifacts/material-parity/dialog-sizing-controls-277af68-v2-dpr1`
+and `-dpr2`, result SHA-256 respectively
+`e9d7de8c09da408370e09c5795728efb93a0efac8b65823f2532d835a7ebc679`
+and `ba0e58054d262e84f5437142877af1977e616ab76a3b468f8bc9a2f15558034d`.
+Both have 25 cases, no page errors, exit 1; DPR1 is 11 pass/14 fail, DPR2 is
+10 pass/15 fail, retaining earlier known failures. All six dialog cases fail
+unchanged native geometry expectations. Earlier dialog-only/control captures
+are retained failure evidence. All 104 library-source receipts match the prior
+verified package reduction; the runner also checks emitted/installed equality.
+The initial reduction hit TS2561 because public `StyleRule` lacks `overflowY`.
+The geometry reduction requests `overflow:auto` on both sides instead, explicitly
+excluding vertical-only scrolling parity. No renderer or canonical fixture changed.
+
 Prioritize remaining questions by impact and shared ownership, not by creating
 one investigation per scalar property. Component counts below are refreshed from
 the verified compact index:

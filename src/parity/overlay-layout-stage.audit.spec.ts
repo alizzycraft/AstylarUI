@@ -9,14 +9,17 @@ import { FlexService } from '../app/services/dom/elements/flex.service';
 // Equal-input diagnostic reductions, not replacements for Material fixtures.
 // The private inspection symbol is read-only instrumentation, not authoring.
 describe('overlay CSS layout versus projection audit', () => {
-  for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only',
+  for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'dialog-intrinsic', 'dialog-intrinsic-explicit',
+    'dialog-intrinsic-autoheight', 'dialog-intrinsic-explicit-autoheight', 'dialog-intrinsic-explicit-autoheight-nolimit',
+    'dialog-intrinsic-explicit-autoheight-nolimit-autowidth', 'fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only',
     'chip-intrinsic-unselected', 'chip-intrinsic-selected', 'chip-intrinsic-unselected-long', 'chip-intrinsic-selected-long', 'chip-intrinsic-selected-div',
     'chip-intrinsic-selected-div-auto', 'chip-intrinsic-selected-div-auto-nopadding', 'chip-label-zero', 'chip-label-tracked'] as const) {
     const clipping = composition.endsWith('-clip');
     const rounded = composition.startsWith('rounded-');
     const chip = composition.startsWith('chip-intrinsic-');
     const labels = composition.startsWith('chip-label-');
-    for (const [width, height] of (chip || labels ? [[320, 100]] : rounded ? [[160, 80]] : composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
+    const dialog = composition.startsWith('dialog-intrinsic');
+    for (const [width, height] of (dialog ? [[640, 400]] : chip || labels ? [[320, 100]] : rounded ? [[160, 80]] : composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
       it(`${composition} at ${width} x ${height}`, async () => {
         TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
         const frame = document.createElement('iframe');
@@ -55,6 +58,36 @@ describe('overlay CSS layout versus projection audit', () => {
             ] : [{ selector: '#pane', width: '120px', height: '48px', marginBottom: clipping ? '-20px' : '8px', background: '#302d32' }]),
           ],
         };
+        if (dialog) {
+          // Preserve the reference percentage/inherited-constraint chain. The
+          // content blocks isolate sizing from fonts; never author the measured
+          // dialog surface width or height onto the candidate.
+          site.root.children = [{ type: 'div', id: 'host', children: [
+            { type: 'div', id: 'wrapper', children: [{ type: 'div', id: 'container', children: [
+              { type: 'div', id: 'inner', children: [{ type: 'div', id: 'pane', children: [
+                { type: 'div', id: 'item-a' }, { type: 'div', id: 'item-b' }, { type: 'div', id: 'item-c' },
+              ] }] },
+            ] }] },
+          ] }];
+          site.styles = [
+            { selector: '#host, #wrapper, #container, #inner, #pane, #item-a, #item-b, #item-c',
+              display: 'block', boxSizing: 'border-box', margin: '0', padding: '0', borderWidth: '0', borderStyle: 'none' },
+            { selector: '#host', position: 'fixed', left: '0', top: '0', width: '100%', height: '100%',
+              display: 'flex', alignItems: 'center', justifyContent: 'center' },
+            { selector: '#wrapper', position: 'relative', display: 'flex', minWidth: '280px', maxWidth: '560px', maxHeight: '100%' },
+            { selector: '#container, #inner, #pane', height: composition.includes('-autoheight') ? 'auto' : '100%',
+              ...(composition.includes('-explicit')
+                ? { minWidth: '280px', maxWidth: '560px', minHeight: 'auto', maxHeight: composition.includes('-nolimit') ? 'none' : '100%' }
+                : { minWidth: 'inherit', maxWidth: 'inherit', minHeight: 'inherit', maxHeight: 'inherit' }) },
+            { selector: '#container, #pane', width: composition.endsWith('-autowidth') ? 'auto' : '100%' },
+            { selector: '#inner', display: 'flex', flexDirection: 'row' },
+            // Public StyleRule lacks overflowY. Use the same two-axis request
+            // on both sides to isolate sizing, not to claim axis-scroll parity.
+            { selector: '#pane', display: 'flex', flexDirection: 'column', flexShrink: '0', overflow: 'auto', background: '#302d32' },
+            { selector: '#item-a, #item-c', height: '40px', flexShrink: '0' },
+            { selector: '#item-b', height: '24px', flexShrink: '0' },
+          ];
+        }
         if (rounded) {
           site.root.children = [{ type: 'div', id: 'host', children: [
             { type: 'div', id: 'filler' }, { type: 'div', id: 'pane' },
@@ -138,7 +171,7 @@ describe('overlay CSS layout versus projection audit', () => {
           const engine = surface.scene.getEngine();
           const viewport = surface.scene.activeCamera!.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
           const canvasBox = canvas.getBoundingClientRect();
-          const observations = (labels ? ['host', 'label-a', 'label-b', 'label-long'] : chip ? ['host', 'pane', 'cell', 'action', 'graphic', 'label-block'] : rounded ? ['host', 'filler', 'pane'] : sheet ? ['host', 'overlay', 'wrapper', 'pane', 'list', 'item-a', 'item-b'] :
+          const observations = (dialog ? ['host', 'wrapper', 'container', 'inner', 'pane', 'item-a', 'item-b', 'item-c'] : labels ? ['host', 'label-a', 'label-b', 'label-long'] : chip ? ['host', 'pane', 'cell', 'action', 'graphic', 'label-block'] : rounded ? ['host', 'filler', 'pane'] : sheet ? ['host', 'overlay', 'wrapper', 'pane', 'list', 'item-a', 'item-b'] :
             nested ? ['host', 'overlay', 'wrapper', 'pane'] : ['host', 'overlay', 'pane']).map(id => {
             const reference = doc.getElementById(id)!.getBoundingClientRect();
             const mesh = manager.elementsMap.get(id)!;
