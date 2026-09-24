@@ -16,8 +16,10 @@ the progress/failure log remains `sheet-action-decc53f-progress.log`.
 Focused corner regression passes in 4.39 seconds after failing on the old join;
 all nine canonical-conservation tests pass in 18.06 seconds. Canonical files
 were restored to accepted `1cd2b7e`: 1,578 unresolved scalar
-groups. No failed snapshot was imported. Next: commit the focused pipeline
-correction, then one corrected export and strict reconciliation. Investigation priority
+groups. No failed snapshot was imported. Pipeline correction is committed/pushed
+as `e857030`. Its corrected cold export is live in terminal session 20096,
+Node PID 1340, logging to `sheet-action-e857030-progress.log`; retain that handle
+and reconcile its completed output before integration. Investigation priority
 after reconciliation: dialog text flow, remaining sheet inputs, tabs, then chips.
 
 Next bounded question: do dialog title/content layout differences originate in
@@ -34,9 +36,33 @@ flex and shrink one. Compact baseline lookup identifies nine unresolved groups /
 not a duplicate finding. All 64 candidate owners have no inline style and all
 192 normal/effective/interaction stages preserve the stated padding, flex flow,
 shrink one and omitted maximum-height/overflow constraints. This is retained-input
-evidence, not proof of current browser output or renderer causality; complete
-row binding remains pending. Missing initial/default properties are outside
+evidence, not proof of current browser output or renderer causality. A read-only
+join against the authenticated complete 2,311-case capture verifies all nine
+raw scalar pairs, v2 candidate-style evidence, 32 distinct matching cases per
+group, occurrence totals and the exact first-12 case lists. Persistent replay
+integration remains pending. Missing initial/default properties are outside
 this proposed batch.
+
+Next tab mapping caution: authenticated all 70 `tabs-primary` population tree
+pairs and both direct tab IDs (140 owners). Reference IDs name rule-free nested
+`span` labels, not their role=tab ancestors; candidates name `button` controls.
+Reference label height/line-height are 14px and box-sizing content-box throughout;
+candidate normal styles use 20px line-height and border-box, with heights 48px
+(72 owners), 32px (34), or 40px (34). These are different semantic boxes, not
+evidence of a core height or box-sizing error. Reuse existing
+`fixture-tab-label-typography-flattened` and its text-owner proof; next bind exact
+scalar rows to label/control ancestry before classifying these signatures.
+The generic origin alias helper deliberately refuses direct-ID cases and must
+not be used as evidence that these direct IDs are missing. No canonical change.
+Following each reference label to its actual role=tab ancestor resolves the
+height, box-sizing and flex-shrink comparison: all 140 controls match all 420
+candidate normal/effective/interaction stages on those three resolved values.
+The compact index binds ten currently unresolved groups / 420 occurrences to
+the label-versus-control comparison. This does not prove authored width/layout
+equivalence or paint parity. Keep the two 14px-versus-20px line-height groups
+(140 occurrences) and two density padding groups (34 occurrences) separate;
+they are not excused by matching outer-control sizes. Next add this ancestor
+binding to the existing tab proof and independently replay complete row coverage.
 
 Sheet-action batch integration preparation is complete. The existing canonical
 conservation comparator now supports `--sheet-action`, pinned to accepted
