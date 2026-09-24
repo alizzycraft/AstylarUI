@@ -383,6 +383,31 @@ the verified compact index:
    No canonical export or browser recapture was run for this historical-input
    replay. Live focus/hover/held raster and source-fingerprint integration remain
    open; the 1,654 unresolved canonical signatures are unchanged.
+
+   Chip paint classification is now prepared against complete canonical rows:
+   `node tests/material-parity/chip-position-inspection.mjs --paint-review`
+   uses the existing compact store and authenticated full-row retrieval, binding
+   ten background signatures/32 observations to their exact predecessor hashes
+   and paired trees. The two selected hover/held groups cover eight observations
+   each; eight unselected activation groups cover two each. Each case proves a
+   visible reference state layer and a changed flat candidate owner background.
+   Proposed classification is application/plugin authoring defect, not core
+   color error or rendering equivalence. The deterministic proposal is saved by
+   the existing store as `working-audit/proposals/`
+   `a15ac639b18540b5b18ffaab2b0c51fb481a9d57c346b89ee9cea1707c138150.json`.
+   This is **not canonical integration**. Reuse the existing producer/application
+   and whole-row conservation pattern to integrate it; preserve all unrelated
+   rows and add its source receipts at that milestone. Focus-only missing layers
+   are separate structural findings, not invented background-difference rows.
+
+   Freshness check at `3cea2e8`: authenticated the canonical compressed payload,
+   streamed its source receipt section, and compared all 442 LF-normalized hashes
+   with disk: zero mismatches. New browser diagnostics and chip proposal are
+   supplemental, not silently covered by those receipts. Existing chip suite
+   passes 4/4 in 11.29s, including complete-row authentication; this is not a
+   full canonical check or current-browser acceptance. No export/recapture was
+   justified for proposal preparation. Next canonical batch must incorporate
+   these new proofs explicitly; unresolved canonical total remains 1,654.
 3. Remaining typography and paint: line-height 67, tracking 57, font-family 31
    and color 111 unresolved groups. Reuse explicit ownership/stage proofs and
    separate missing computed evidence from unequal declarations. These property

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { collectChipPositionInspection, proveChipPositionInspection } from './chip-position-inspection.mjs';
+import { collectChipPositionInspection, proveChipPositionInspection, collectChipPaintProposal } from './chip-position-inspection.mjs';
 test('chips retain three complete source-backed owner groups across 76 states', () => {
   assert.deepEqual(collectChipPositionInspection(), JSON.parse(readFileSync('docs/material-chip-position-inspection.json')));
 });
@@ -66,4 +66,16 @@ test('all retained chip states distinguish authored overlay paint from flat back
   assert.ok(source.includes("selector: '.chip.selected:hover', background: mixHex('#eadef7', '#4b4357', .08)"));
   assert.ok(source.includes("selector: '.chip.selected:active', background: mixHex('#eadef7', '#4b4357', .12)"));
   assert.equal(/selector:\s*['"][^'"]*\.chip[^'"]*:focus/.test(source), false);
+});
+
+test('chip paint proposal binds ten complete canonical rows without accepting rendering parity', async () => {
+  const proposal = await collectChipPaintProposal();
+  assert.equal(proposal.groups.length, 10);
+  assert.equal(proposal.canonicalAttributionChanged, false);
+  assert.equal(new Set(proposal.groups.map(g => g.reviewEvidence.originalCompleteRowSha256)).size, 10);
+  for (const group of proposal.groups) {
+    assert.equal(group.reviewedCases.length, group.occurrences);
+    assert.deepEqual(group.reviewEvidence.observations.map(o => o.case), group.reviewedCases);
+    assert.equal(group.reviewEvidence.rendererCauseProven, false);
+  }
 });
