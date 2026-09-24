@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 24
 
+Accepted canonical checkpoint: `ed35a9c` (1,607 unresolved groups). New focused
+evidence, not yet canonically attributed: `proveDialogActionBoxSubstitution` in
+`tests/material-parity/modal-position-inspection.mjs` proves six dialog-actions
+input differences across all 32 original states (192 scalar occurrences).
+Native border-box height 73px with a 1px top border and 16px vertical padding
+places the CSS content interval at [17,57]; candidate 73px with no border and
+16px top / 17px bottom padding implies [16,56]. Both content heights are 40px;
+equal outer height therefore does not establish equivalent content placement.
+Wrapping, shrink and minimum-height differences are recorded separately.
+This is an authored CSS-contract calculation, not measured candidate layout or
+a confirmed core/raster defect. Four mutation controls reject changed native
+border, candidate resolved padding, authored rule padding and inline overrides.
+The focused dialog-box, dialog-typography and sheet-typography tests pass 3/3
+(17.98 seconds). No renderer or fixture edits. History `bc0e449` was rechecked:
+it introduced the asymmetric padding while matching dialog geometry.
+
+Next: integrate these six groups with independent raw-row replay in a coherent
+batch; investigate the remaining dialog sizing/constraint inputs before another
+full export. The helper and its spec now differ from the accepted checkpoint's
+source fingerprints; those are deliberate pending evidence changes, not current
+canonical source reconciliation. Do not rebuild the full export for this proof alone.
+
 Combined dialog/sheet export session `89157` / PID `21480` is terminal: exit 1
 after 1,802.040 seconds. It reached 1,607 unresolved groups but is REJECTED:
 the invocation omitted all four supplemental/line-box options, producing missing
@@ -75,7 +97,7 @@ The old `--overlay` mode is not the correct gate for this new batch. Only the
 standalone comparator, its test and this ledger changed while the export ran;
 none is an export evidence dependency.
 
-Next unresolved modal question narrowed during the export (read-only): the
+Modal question identified during the export (now covered by the focused proof above): the
 `dialog-actions` 17px bottom padding is not an equivalent serialization of the
 native 1px top border. All 32 hash-authenticated owner captures in
 `docs/material-modal-position-inspection.json` agree: native height 73px,
@@ -86,15 +108,14 @@ candidate height 73px, border-box, `padding: 16px 24px 17px`, `borderWidth: 0`,
 nowrap/shrink 1 and omit min-height. Source commit `bc0e449` introduced the
 fixed action geometry and asymmetric padding (`fix(material): match dialog
 content geometry`). This establishes historical unequal authoring, not a core
-cause or output-equivalence claim. Next: reuse the existing owner mapping to
-prove these scalar groups and distinguish border/padding content placement
-from the separate wrapping/shrink behavior; no new capture is needed to classify
-the authored mismatch. Canonical attribution has not changed for these groups.
+cause or output-equivalence claim. Existing owner mappings now prove these
+scalar inputs without new captures. Canonical attribution has not changed for
+these six groups.
 
 Current package hashes: compressed
 `064777d79c6b85219285c85b97fb38edac27d069c8ddec67e0ae2da5b61099e5`;
 decoded `11bfe85672fb9a1a87db562d68b4eb1a2d6adb4349a55dc5ecb92675f230980a`.
-Source/export reconciliation passes for the combined dialog/sheet milestone.
+Source/export reconciliation passed for the combined dialog/sheet milestone at `ed35a9c`.
 Do not rerun the full export for each preparation edit. There remain 1,607
 unresolved groups; full audit acceptance and the final browser gates remain open.
 

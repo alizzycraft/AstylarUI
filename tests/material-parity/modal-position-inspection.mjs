@@ -159,6 +159,54 @@ export function proveDialogScalarTypographyJoin(row, proofs, inventory, caseKeys
     renderingEquivalent: false };
 }
 
+// These are CSS-contract content intervals, not measured candidate layout.
+// Equal outer heights do not make opposite-edge border/padding interchangeable.
+export function proveDialogActionBoxSubstitution(entry, r, a) {
+  assert.equal(entry.family, 'dialog');
+  const { mapping } = proveModalPositionInspection(entry, r, a, 'dialog-actions');
+  const reference = one(r.nodes.filter(n => n.key === mapping.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === mapping.candidateNode));
+  assert.deepEqual(reference.inline, {});
+  assert.equal(candidate.authored.style, undefined);
+  assert.equal(candidate.authored.attributes?.style, undefined);
+  const rule = one(reference.rules.map(i => r.rules[i]).filter(rule => rule.active));
+  assert.equal(rule.selector, '.mat-mdc-dialog-actions');
+  assert.deepEqual(rule.conditions, []);
+  assert.ok(rule.cssText.includes('padding: var(--mat-dialog-actions-padding, 16px 24px);'));
+  for (const [key, value] of Object.entries({ 'border-top-width': '1px', 'border-top-style': 'solid',
+    'border-top-color': 'rgba(0, 0, 0, 0)', 'flex-wrap': 'wrap', 'flex-shrink': '0', 'min-height': '52px' }))
+    assert.deepEqual(rule.declarations[key], { value, important: false });
+  const native = r.styles[reference.style];
+  const expectedNative = { height: '73px', boxSizing: 'border-box', paddingTop: '16px', paddingBottom: '16px',
+    borderTopWidth: '1px', borderBottomWidth: '0px', borderTopStyle: 'solid',
+    borderTopColor: 'rgba(0, 0, 0, 0)', flexWrap: 'wrap', flexShrink: '0', minHeight: '52px' };
+  for (const [key, value] of Object.entries(expectedNative)) assert.equal(native[key], value);
+  const affects = key => /^(padding|border|height|boxSizing|flexWrap|flexShrink|minHeight|all$|animation|transition)/.test(key);
+  const requests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key)).map(([key, value]) => ({ selector: rule.selector, key, value })));
+  assert.deepEqual(requests, [
+    { selector: '.dialog-actions', key: 'height', value: '73px' },
+    { selector: '.dialog-actions', key: 'boxSizing', value: 'border-box' },
+    { selector: '.dialog-actions', key: 'padding', value: '16px 24px 17px' },
+  ]);
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    const style = candidate[stage];
+    for (const [key, value] of Object.entries({ height: '73px', boxSizing: 'border-box', padding: '16px 24px 17px',
+      borderWidth: '0', borderStyle: 'none', flexWrap: 'nowrap', flexShrink: '1' })) assert.equal(style[key], value);
+    assert.equal(style.minHeight, undefined);
+    for (const key of ['paddingTop', 'paddingBottom', 'borderTopWidth', 'borderBottomWidth', 'borderTopStyle'])
+      assert.equal(style[key], undefined);
+  }
+  return { case: caseKey(entry, entry.kind), element: 'dialog-actions',
+    referenceNode: reference.key, astylarNode: candidate.key,
+    cssContract: { reference: { contentTop: 17, contentBottom: 57, contentHeight: 40 },
+      astylar: { contentTop: 16, contentBottom: 56, contentHeight: 40 } },
+    separateConstraintDifferences: { flexWrap: { reference: 'wrap', astylar: 'nowrap' },
+      flexShrink: { reference: '0', astylar: '1' }, minHeight: { reference: '52px' } },
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false,
+    candidateUsedLayoutMeasured: false, renderingEquivalent: false };
+}
+
 export function applyDialogScalarTypography(rows, cases, inventory, retained, control, canonicalStyle) {
   const pairs = new Set(['dialog-copy/fontFamily', 'dialog-copy/letterSpacing', 'dialog-copy/color',
     'dialog-cancel/fontFamily', 'dialog-cancel/letterSpacing', 'dialog-save/fontFamily',

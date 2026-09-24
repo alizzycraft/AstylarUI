@@ -6,7 +6,7 @@ import { PNG } from 'pngjs';
 import { collectModalPositionInspection, proveModalPositionInspection, proveDialogScalarTypographyJoin,
   applyDialogScalarTypography, validateDialogScalarTypography, modalInventoryTrees,
   proveBottomSheetScalarTypography, applyBottomSheetScalarTypography,
-  validateBottomSheetScalarTypography } from './modal-position-inspection.mjs';
+  validateBottomSheetScalarTypography, proveDialogActionBoxSubstitution } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
@@ -15,6 +15,53 @@ import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows,
   validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications } from './overlay-surface-audit-source-binding.mjs';
 import { collectFullTreeInventory, collectControlTypographyEvidence,
   collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
+
+test('dialog action border-to-padding substitution preserves height but changes CSS content placement', () => {
+  const inspection = collectModalPositionInspection();
+  const captured = JSON.parse(readFileSync(inspection.capture.file));
+  const observations = inspection.groups.find(g => g.element === 'dialog-actions').observations;
+  assert.equal(observations.length, 32);
+  const expectedInputs = {
+    borderTopStyle: { reference: 'solid', astylar: 'none' },
+    borderTopWidth: { reference: '1px', astylar: '0' },
+    paddingBottom: { reference: '16px', astylar: '17px' },
+    flexWrap: { reference: 'wrap', astylar: 'nowrap' },
+    flexShrink: { reference: '0', astylar: '1' },
+    minHeight: { reference: '52px' },
+  };
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'dialog').filter(r =>
+    r.evidence.section === 'discrepancies' && r.element === 'dialog-actions' && Object.hasOwn(expectedInputs, r.property));
+  assert.equal(rows.length, 6);
+  for (const row of rows) {
+    assert.equal(row.occurrences, 32);
+    assert.deepEqual(Object.fromEntries(['reference', 'astylar'].filter(k => Object.hasOwn(row, k)).map(k => [k, row[k]])), expectedInputs[row.property]);
+    assert.deepEqual(row.cases, observations.slice(0, 12).map(o => o.case));
+  }
+  for (const observation of observations) {
+    const entry = captured.interactions.find(e => `interaction:${e.family}@${e.profile}/${e.viewport.id}/${e.state}` === observation.case);
+    const trees = ['reference', 'astylar'].map(side => {
+      const bytes = readFileSync(observation.inputTrees[side].file);
+      assert.equal(createHash('sha256').update(bytes).digest('hex'), observation.inputTrees[side].sha256);
+      return JSON.parse(bytes);
+    });
+    const proof = proveDialogActionBoxSubstitution({ ...entry, kind: 'interaction' }, ...trees);
+    assert.equal(proof.cssContract.reference.contentHeight, proof.cssContract.astylar.contentHeight);
+    assert.equal(proof.cssContract.reference.contentTop - proof.cssContract.astylar.contentTop, 1);
+    assert.equal(proof.candidateUsedLayoutMeasured, false);
+    assert.equal(proof.inputEquivalent, false);
+    if (observation === observations[0]) {
+      for (const mutate of [
+        ([r]) => { r.styles[r.nodes.find(n => n.key === proof.referenceNode).style].borderTopWidth = '0px'; },
+        ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.padding = '16px 24px'; },
+        ([, a]) => { a.rules.find(r => r.selector === '.dialog-actions').padding = '17px 24px 16px'; },
+        ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).authored.style = { padding: '16px' }; },
+      ]) {
+        const changed = structuredClone(trees); mutate(changed);
+        assert.throws(() => proveDialogActionBoxSubstitution({ ...entry, kind: 'interaction' }, ...changed));
+      }
+    }
+  }
+});
 
 test('bottom-sheet scalar typography belongs to container tokens rather than inner list-label tokens', () => {
   const inspection = collectModalPositionInspection();
