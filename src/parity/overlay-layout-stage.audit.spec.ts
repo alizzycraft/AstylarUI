@@ -4,12 +4,14 @@ import { Matrix, Vector3 } from '@babylonjs/core';
 import { Astylar, type SiteData } from '../lib/index';
 import { ASTYLAR_INTERNAL_INSPECTION } from '../lib/astylar';
 import { resolveCssViewportRect } from '../app/services/css-layout-geometry';
+import { FlexService } from '../app/services/dom/elements/flex.service';
 
 // Equal-input diagnostic reductions, not replacements for Material fixtures.
 // The private inspection symbol is read-only instrumentation, not authoring.
 describe('overlay CSS layout versus projection audit', () => {
   for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only',
-    'chip-intrinsic-unselected', 'chip-intrinsic-selected', 'chip-intrinsic-unselected-long', 'chip-intrinsic-selected-long', 'chip-intrinsic-selected-div'] as const) {
+    'chip-intrinsic-unselected', 'chip-intrinsic-selected', 'chip-intrinsic-unselected-long', 'chip-intrinsic-selected-long', 'chip-intrinsic-selected-div',
+    'chip-intrinsic-selected-div-auto', 'chip-intrinsic-selected-div-auto-nopadding'] as const) {
     const clipping = composition.endsWith('-clip');
     const rounded = composition.startsWith('rounded-');
     const chip = composition.startsWith('chip-intrinsic-');
@@ -69,7 +71,7 @@ describe('overlay CSS layout versus projection audit', () => {
           // label blocks are diagnostic inputs, never Material fixture edits.
           site.root.children = [{ type: 'div', id: 'host', children: [
             { type: 'div', id: 'pane', children: [{ type: 'span', id: 'cell', children: [
-              { type: composition.endsWith('-div') ? 'div' : 'button', id: 'action', children: [
+              { type: composition.includes('-div') ? 'div' : 'button', id: 'action', children: [
                 { type: 'span', id: 'graphic' }, { type: 'span', id: 'label-block' },
               ] },
             ] }] },
@@ -79,10 +81,10 @@ describe('overlay CSS layout versus projection audit', () => {
               display: 'flex', margin: '0', padding: '0', borderWidth: '0', borderStyle: 'none', alignItems: 'center' },
             { selector: '#host', position: 'absolute', left: '10px', top: '10px', width: '300px', height: '40px' },
             { selector: '#pane', position: 'relative', height: '32px', maxWidth: '100%', background: '#eadef7' },
-            { selector: '#cell', flexBasis: '100%' },
+            { selector: '#cell', flexBasis: composition.includes('-auto') ? 'auto' : '100%' },
             { selector: '#action', height: '32px', padding: '0 12px 0 0', justifyContent: 'center', background: 'transparent' },
             { selector: '#graphic', position: 'relative', width: composition.includes('unselected') ? '0px' : '24px',
-              height: '24px', padding: '0 6px', flexGrow: '1', flexShrink: '0', overflow: 'hidden' },
+              height: '24px', padding: composition.endsWith('-nopadding') ? '0' : '0 6px', flexGrow: '1', flexShrink: '0', overflow: 'hidden' },
             { selector: '#label-block', width: composition.endsWith('-long') ? '100px' : '50px', height: '20px', background: '#302d32' },
           ];
         }
@@ -98,6 +100,12 @@ describe('overlay CSS layout versus projection audit', () => {
         };
         append(site.root.children!, doc.body);
         const authoredBefore = JSON.stringify(site);
+        // Observe original method inputs/returns; callThrough never substitutes
+        // layout results. Installed aliases must resolve to the mounted runtime.
+        const sizingMethods = ['measureIntrinsicFlowChildOuterWidth', 'parseDefiniteIntrinsicFlexBasis', 'calculateIntrinsicWidth'] as const;
+        const sizingSpies = chip ? sizingMethods.map(method => ({ method,
+          spy: spyOn(FlexService.prototype as unknown as Record<typeof sizingMethods[number], (...args: unknown[]) => unknown>, method).and.callThrough(),
+        })) : [];
         let surface: ReturnType<Astylar['mount']> | undefined;
         try {
           const astylar = TestBed.inject(Astylar);
@@ -129,7 +137,19 @@ describe('overlay CSS layout versus projection audit', () => {
               canvasClientWidth: canvas.clientWidth, canvasClientHeight: canvas.clientHeight,
               canvasCssWidth: canvasBox.width, canvasCssHeight: canvasBox.height,
               renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(),
-              headDisplay: frame.contentWindow!.getComputedStyle(doc.head).display }, observations }));
+              headDisplay: frame.contentWindow!.getComputedStyle(doc.head).display }, observations,
+            ...(chip ? { sizingTrace: sizingSpies.map(({ method, spy }) => ({ method,
+              calls: spy.calls.all().map(call => {
+                const first = call.args[0] as { id?: string; type?: string; flexBasis?: string; width?: string; padding?: string } | undefined;
+                return method === 'parseDefiniteIntrinsicFlexBasis'
+                  ? { basis: first?.flexBasis, percentageReference: call.args[1], result: call.returnValue }
+                  : { id: first?.id, type: first?.type, availableWidth: method === 'measureIntrinsicFlowChildOuterWidth' ? call.args[4] : undefined, result: call.returnValue };
+              }),
+            })) } : {}) }));
+          for (const { method, spy } of sizingSpies) {
+            if (method === 'calculateIntrinsicWidth' && composition.includes('-div')) expect(spy).not.toHaveBeenCalled();
+            else expect(spy).toHaveBeenCalled();
+          }
           expect(JSON.stringify(site)).toBe(authoredBefore);
           for (const observation of observations) {
             expect(observation.css).withContext(observation.id).toBeDefined();

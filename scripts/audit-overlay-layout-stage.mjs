@@ -32,6 +32,7 @@ const aliases = new Map([
   ['../lib/index', path.join(packageRoot, 'index.js')],
   ['../lib/astylar', path.join(packageRoot, 'astylar.js')],
   ['../app/services/css-layout-geometry', path.join(packageRoot, '../app/services/css-layout-geometry.js')],
+  ['../app/services/dom/elements/flex.service', path.join(packageRoot, '../app/services/dom/elements/flex.service.js')],
 ]);
 const built = await consumer('esbuild').build({ absWorkingDir: root,
   stdin: { contents: `import '@angular/compiler';
@@ -44,7 +45,7 @@ const built = await consumer('esbuild').build({ absWorkingDir: root,
     jasmine.getEnv().configure({random:false}); jasmine.getEnv().execute();`, resolveDir: root },
   bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true,
   plugins: [{ name: 'installed-audit-package', setup(build) {
-    build.onResolve({ filter: /^\.\.\/(lib\/(index|astylar)|app\/services\/css-layout-geometry)$/ }, args => ({ path: aliases.get(args.path) }));
+    build.onResolve({ filter: /^\.\.\/(lib\/(index|astylar)|app\/services\/(css-layout-geometry|dom\/elements\/flex.service))$/ }, args => ({ path: aliases.get(args.path) }));
     build.onResolve({ filter: /^(@angular\/|@babylonjs\/core)/ }, args => ({ path: consumer.resolve(args.path) }));
   } }],
 });

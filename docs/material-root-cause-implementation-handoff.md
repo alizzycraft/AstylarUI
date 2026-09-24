@@ -286,9 +286,7 @@ the verified compact index:
    same fallback. `measureIntrinsicFlowChildOuterWidth` replaces the recursively
    measured width with a definite percentage flex basis against available width;
    it returns explicit child widths without adding content-box padding. These
-   are candidate causal paths consistent with the controls, not a completed
-   runtime call trace. Next isolate the percentage-basis and padding branches
-   with the same reduction before proposing general core corrections. Font
+   paths are now exercised by the runtime trace below. Font
    measurement, actual labels, hover/focus, and all 76 historical chip states
    remain separate; this geometry-only test is not complete chip parity.
 
@@ -302,6 +300,35 @@ the verified compact index:
    chip case fails unchanged native expectations. No page errors. TypeScript
    exits 0; all 104 source/emitted receipts match the preceding reduction.
    Canonical fixture styles and the 1,654-signature checkpoint remain unchanged.
+
+   Discriminating controls and runtime trace: with a div action, changing only
+   cell basis from `100%` to `auto` reduces candidate chip/cell width 300 to 86px;
+   native remains 98px. Removing only the graphic's 12px side padding then makes
+   every measured owner agree at 86px. Both sides receive each diagnostic change.
+   Call-through spies on the actual installed `FlexService` preserve every return
+   value: `parseDefiniteIntrinsicFlexBasis` receives `100%`, reference 300 and
+   returns 300; the cell outer-width measurement returns 300. With auto basis,
+   `measureIntrinsicFlowChildOuterWidth` returns 24 for the padded graphic,
+   unchanged when padding is removed, and 86 for action/cell. Button cases call
+   `calculateIntrinsicWidth` and receive 58.2578125; div controls never call it.
+   This ties the observed percentage and lost-padding effects to core intrinsic
+   measurement, independently of projection. Do not repair them by changing
+   canonical flex basis, removing graphic padding, or substituting div actions.
+
+   Final controls: `artifacts/material-parity/chip-sizing-trace-6f0b8ab-v2-dpr1`
+   and `-dpr2`, result SHA-256 respectively
+   `d391596710ccd55a33adb2372857d6c2f612c87ac553a00164802c877ae34a3b` and
+   `db7ff2a95635992ebf5a33627dc803a432861c7ca34242f954df943631638d8b`.
+   Seventeen cases each: DPR 1 nine passes/eight failures, DPR 2 eight passes/nine
+   failures, both exit 1 with no page errors. Six chip variants retain failing
+   native geometry expectations; the auto/no-padding control passes both DPRs.
+   Spy-path assertions pass; TypeScript exits 0 (5.29s). The first trace draft
+   incorrectly expected the text-sizing method to run in div controls; its
+   retained failure led to the correct explicit no-call assertion, not a renderer
+   change. All 104 source/emitted receipts match the preceding reduction.
+   Next integrate these bounded findings into the chip ownership/history review
+   and retain actual-label/font and interaction coverage as open obligations;
+   do not repeat the now-settled block-sizing controls.
 3. Remaining typography and paint: line-height 67, tracking 57, font-family 31
    and color 111 unresolved groups. Reuse explicit ownership/stage proofs and
    separate missing computed evidence from unequal declarations. These property
