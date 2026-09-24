@@ -1715,7 +1715,7 @@ export function collectStyleDiscrepancies(cases, originStageEvidence, retainedTy
             ?? classifyReviewedTypographyStage(benchmarkCase, input, property, referenceValue, astylarValue,
               typographyByCaseAndId.get(JSON.stringify([key, input.id])))
             ?? classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
-        if (classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(
+        if (property !== 'appearance' && classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(
           input, property, referenceValue, astylarValue,
           ownerInitialByCaseIdProperty.get(JSON.stringify([key, input.id, property]))) ?? classification;
         if (classification.attribution === 'unresolved') classification = classifyTooltipWrappingInput(
@@ -1778,6 +1778,13 @@ export function collectStyleDiscrepancies(cases, originStageEvidence, retainedTy
         if (classification.attribution === 'unresolved') classification = classifyRootBackgroundInput(
           input, property, referenceValue, astylarValue,
           rootBackgroundByCaseIdProperty.get(JSON.stringify([key, input.id, property]))) ?? classification;
+        // Appearance is newly admitted generic observation-stage evidence.
+        // Preserve specific source-reviewed findings (including mismatched
+        // measurement owners) before considering that fallback. Keep the
+        // historical eight-property precedence unchanged.
+        if (property === 'appearance' && classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(
+          input, property, referenceValue, astylarValue,
+          ownerInitialByCaseIdProperty.get(JSON.stringify([key, input.id, property]))) ?? classification;
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
           classification.classification, classification.attribution ?? null, classification.justification]);
         let entry = grouped.get(signature);

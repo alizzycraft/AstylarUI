@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+Precedence correction is now implemented in the audit producer: generic
+appearance observation-stage attribution is a final unresolved fallback after
+the existing specific classifiers. The historical eight-property position is
+unchanged. A production-chain regression first failed with the displaced
+owner-mismatch finding, then passed after the change; it now covers all 68
+original expansion observations across static/focus/hover/held/activate/
+activate-leave/disabled/open. It verifies unchanged raw input and retained
+owner-mismatch attribution, plus fallback reachability without the competing
+proof. All four focused owner/appearance tests pass in 8.40 seconds.
+
+Independent comparator session 32166 is terminal, exit 1:
+`appearance rows differ from source replay`, confirming rejection of the
+previous export. Do not repeat comparison against that unchanged rejected
+payload. Next: reconcile the comparator's formerly unchanged-producer condition
+and affected producer receipts for this narrowly scoped source transition,
+run the relevant focused preflight, then perform one corrected cold export and
+full independent batch reconciliation. The retained rejected generation and
+accepted compact predecessor remain intact. No canonical acceptance is claimed.
+
 Appearance export `18d4239` is now TERMINAL, exit 1 after 2,155.50 seconds.
 Do not poll/restart session 4759 or PID 3020. The evidence session authenticated
 1,205 files / 89,151,875 bytes with zero invalidations, two collectors and ten

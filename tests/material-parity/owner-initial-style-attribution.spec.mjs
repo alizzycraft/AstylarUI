@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import test, { after } from 'node:test';
 import { readFileSync, writeFileSync, mkdtempSync, unlinkSync, rmdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { buildMaterialInputAudit, validateMaterialInputAudit, collectFullTreeInventory } from './input-equivalence-audit.mjs';
+import { buildMaterialInputAudit, validateMaterialInputAudit, collectFullTreeInventory, collectStyleDiscrepancies } from './input-equivalence-audit.mjs';
+import { projectFollowupInputAuditInputs } from './followup-input-audit-source-binding.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { bindOwnerInitialStyleSource, collectOwnerInitialStyleEvidence, classifyOwnerInitialStyleInput,
   validateOwnerInitialStyleSource, ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
@@ -84,6 +86,44 @@ test('appearance attribution binds original observations and refuses explicit va
   changed.results[0].styleInputs.find(i => i.id === input.id).reference.appearance = 'auto';
   assert.equal(bindOwnerInitialStyleSource(changed, { parityPath: file }).status, 'invalid');
   assert.equal(JSON.stringify(input), before);
+});
+
+test('appearance precedence preserves an existing panel-header owner mismatch in the production chain', () => {
+  const entry = original.results.find(e => e.family === 'expansion');
+  assert.ok(entry);
+  const supplied = { results: original.results.filter(e => e.family === 'expansion'),
+    interactions: original.interactions.filter(e => e.family === 'expansion') };
+  const entries = [...supplied.results.map(e => ({ ...e, kind: 'static' })),
+    ...supplied.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  assert.equal(entries.length, 68);
+  const ownerEvidence = collectOwnerInitialStyleEvidence(supplied, collectFullTreeInventory(entries));
+  const proof = ownerEvidence.observations.find(p => p.element === 'expansion-primary' && p.property === 'appearance');
+  const input = entry.styleInputs.find(i => i.id === 'expansion-primary');
+  assert.equal(classifyOwnerInitialStyleInput(input, 'appearance', 'none', undefined, proof)?.attribution,
+    ownerInitialStyleAttribution, 'the regression must exercise genuinely competing classifiers');
+  const followup = { binding: { status: 'bound' }, ...projectFollowupInputAuditInputs(
+    JSON.parse(readFileSync('docs/material-followup-input-proposal-binding.json')),
+    JSON.parse(readFileSync('docs/material-followup-input-transition-dry-run.json')),
+    supplied, original, bindPreciseAuditNormalization()) };
+  // Supply only the two competing evidence sets to the real production chain.
+  // Earlier collection parameters 3..21 and 25 are arrays; 22..24 are wrappers.
+  const args = [entries, { observations: [] }, { comparisons: [], differences: [] },
+    ...Array.from({ length: 19 }, () => []),
+    { observations: [] }, { observations: [] }, { observations: [] }, [], ownerEvidence];
+  args[42] = followup;
+  const before = JSON.stringify([supplied, ownerEvidence, followup]);
+  const find = rows => rows.find(r => r.element === input.id && r.property === 'appearance');
+  const row = find(collectStyleDiscrepancies(...args));
+  assert.equal(row.attribution, 'reviewed-expansion-panel-header-owner-mismatch');
+  assert.equal(row.reviewEvidence.rendererCauseProven, false);
+  assert.equal(row.occurrences, 68);
+  assert.equal(row.reviewedCases.length, 68);
+  assert.deepEqual(row.states, ['static', 'focus', 'hover', 'held', 'activate', 'activate-leave', 'disabled', 'open']);
+  assert.equal(row.reference, 'none'); assert.equal(row.astylar, undefined);
+  assert.equal(JSON.stringify([supplied, ownerEvidence, followup]), before);
+  args[42] = undefined;
+  assert.equal(find(collectStyleDiscrepancies(...args)).attribution, ownerInitialStyleAttribution,
+    'a remaining unresolved observation must still reach the new fallback');
 });
 
 test('owner initial full-population appearance integration preserves native auto and excluded owners', () => {
