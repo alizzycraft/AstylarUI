@@ -21,24 +21,40 @@ const { check, allowPartial, parityPath } = options;
 const jsonPath = path.resolve(root, 'docs/material-input-equivalence-audit.json');
 const payloadPath = path.resolve(root, 'docs', materialInputAuditPayloadFile);
 const markdownPath = path.resolve(root, 'docs/material-input-equivalence-audit.md');
+const progressStarted = performance.now();
+const progress = phase => {
+  if (process.env.ASTYLAR_AUDIT_PROGRESS !== '1') return;
+  console.error(JSON.stringify({ auditProgress: phase, elapsedMs: performance.now() - progressStarted,
+    memory: process.memoryUsage() }));
+};
 
 assert.ok(existsSync(parityPath), `Run material parity first; missing ${parityPath}`);
+progress('read-reference');
 const parityReport = JSON.parse(readFileSync(parityPath, 'utf8'));
 const { audit, errors } = withAuditEvidenceSession(() => {
+  progress('build-audit');
   const audit = buildMaterialInputAudit(parityReport, { ...options, root });
-  return { audit, errors: validateMaterialInputAudit(audit, { requireComplete: !allowPartial }) };
+  progress('validate-audit');
+  const errors = validateMaterialInputAudit(audit, { requireComplete: !allowPartial });
+  progress('verify-evidence-session');
+  return { audit, errors };
 }, { root, cold: process.env.ASTYLAR_AUDIT_COLD === '1', onMetrics: metrics => console.log(JSON.stringify({ evidenceSession: metrics })) });
+progress('render-markdown');
 const markdown = renderMaterialInputAuditMarkdown(audit);
 
 if (check) {
+  progress('check-canonical');
   await assertMaterialInputAuditCurrentStream(audit, JSON.parse(readFileSync(jsonPath, 'utf8')), readFileSync(payloadPath));
   assert.equal(readFileSync(markdownPath, 'utf8'), markdown, 'checked-in human audit is stale');
 } else {
+  progress('encode-canonical');
   const { manifest, payload } = await encodeMaterialInputAuditStream(audit);
+  progress('write-canonical');
   writeFileSync(payloadPath, payload);
   writeFileSync(jsonPath, `${JSON.stringify(manifest, null, 2)}\n`);
   writeFileSync(markdownPath, markdown);
 }
+progress('complete');
 
 console.log(`# Material input-equivalence audit`);
 console.log(`- Parity evidence: ${path.relative(root, parityPath)}`);

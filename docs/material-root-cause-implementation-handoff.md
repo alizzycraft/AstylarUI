@@ -87,6 +87,19 @@ proof entries resolve, with a missing-target negative control. Workflow/source/
 conservation checks pass 6/6. These are preflight corrections, not a completed
 canonical export or a reason to change original receipts in historical reports.
 
+The subsequent cold export at `ab69de3` also terminated (exit 134), after about
+19 minutes, at the 3 GiB V8 heap limit. Its terminal log is retained as
+`position-followup-cold-export-ab69de3.log`. Repeated mark-compacts reclaimed
+little memory; the exact allocation/retention owner is not yet identified.
+The canonical manifest remains unchanged. Do not repeat this export unchanged
+or describe it as waiting/running; conservation and freshness remain pending.
+The existing runner now supports `ASTYLAR_AUDIT_PROGRESS=1`: eight lightweight
+phase checkpoints report elapsed time and process memory to stderr. The CLI
+transport test proves identical canonical bytes with tracing on/off and retains
+unresolved, stale and malformed failure checks (1/1 passes). It also now copies
+the evidence-session dependency into its isolated workspace. The next export
+attempt must use these diagnostics; no exact allocation owner is proved yet.
+
 Overlay runtime-probe status: the uncommitted draft
 `src/parity/overlay-layout-stage.audit.spec.ts` has not reached browser execution.
 Three focused Angular builds were stopped after build-worker memory growth
@@ -98,6 +111,18 @@ canvas has client size 322 x 201 and the equal-sized iframe's fixed 100% child
 also measures 322 x 201. Thus `clientWidth` rounding alone does not demonstrate
 unequal layout in this reduction. Full paired CSS/projection evidence and the
 Angular build check remain outstanding; no core/fixture repair was attempted.
+
+Build-scope follow-up: the CLI test filter selects one entry point, but the
+original `tsconfig.spec.json` still supplies 359 compiler roots, including 69
+specs. The installed Angular 20.0.6 builder passes that config separately to
+compilation. The uncommitted `tsconfig.overlay-audit.json` limits compiler roots
+to the existing overlay draft while inheriting Jasmine options. Config parsing
+and `tsc --project tsconfig.overlay-audit.json --noEmit --incremental false`
+pass (7.2 seconds, 768 MiB V8 cap). This does not prove the cause of the build's
+memory growth or runtime parity. The narrowed browser-build attempt was
+interrupted when the tool host closed; its process/session are absent and
+`overlay-layout-narrow-build.log` contains only `Building...`. There is no
+captured exit code or browser result. Do not count it as passed or still running.
 
 The sections below retain the detailed root-cause evidence and implementation
 order. Renderer/fixture repairs remain outside this audit's authorization.

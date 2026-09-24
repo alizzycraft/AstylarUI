@@ -14,7 +14,8 @@ test('audit CLI awaits streamed transport and preserves unresolved, stale and ma
   try {
     for (const directory of ['scripts', 'tests/material-parity', 'docs']) mkdirSync(path.join(workspace, directory), { recursive: true });
     for (const file of ['scripts/run-material-input-audit.mjs', 'tests/material-parity/input-audit-report-codec.mjs',
-      'tests/material-parity/input-audit-report-stream.mjs']) copyFileSync(path.join(root, file), path.join(workspace, file));
+      'tests/material-parity/input-audit-report-stream.mjs',
+      'tests/material-parity/audit-evidence-session.mjs']) copyFileSync(path.join(root, file), path.join(workspace, file));
     // Only the expensive collector is replaced. The maintained executable,
     // writer, gzip bytes, manifest and byte checker run unchanged in a child.
     writeFileSync(path.join(workspace, 'tests/material-parity/input-equivalence-audit.mjs'), `
@@ -41,8 +42,9 @@ test('audit CLI awaits streamed transport and preserves unresolved, stale and ma
       elementInventory: { observations: [{ text: 'שלום 🎨', reference: '0px', candidate: 0 }] } };
     writeFileSync(path.join(workspace, 'expected.json'), JSON.stringify(expected));
     writeFileSync(path.join(workspace, 'parity.json'), '{}');
-    const run = (args = []) => spawnSync(process.execPath,
-      ['--import', './guard.mjs', 'scripts/run-material-input-audit.mjs', ...args], { cwd: workspace, encoding: 'utf8' });
+    const run = (args = [], progress = false) => spawnSync(process.execPath,
+      ['--import', './guard.mjs', 'scripts/run-material-input-audit.mjs', ...args], { cwd: workspace, encoding: 'utf8',
+        env: { ...process.env, ASTYLAR_AUDIT_PROGRESS: progress ? '1' : '0' } });
     const generated = run();
     assert.equal(generated.status, 1);
     assert.match(generated.stderr, /ERROR: deliberately unresolved fixture/);
@@ -51,6 +53,15 @@ test('audit CLI awaits streamed transport and preserves unresolved, stale and ma
     const payloadPath = path.join(workspace, 'docs/material-input-equivalence-audit.json.gz');
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')), payload = readFileSync(payloadPath);
     assert.deepEqual(decodeMaterialInputAudit(manifest, payload).report, expected);
+    assert.doesNotMatch(generated.stderr, /auditProgress/);
+    const traced = run([], true);
+    assert.equal(traced.status, 1);
+    const checkpoints = traced.stderr.split('\n').filter(line => line.startsWith('{')).map(line => JSON.parse(line));
+    assert.deepEqual(checkpoints.map(p => p.auditProgress), ['read-reference', 'build-audit', 'validate-audit',
+      'verify-evidence-session', 'render-markdown', 'encode-canonical', 'write-canonical', 'complete']);
+    assert.ok(checkpoints.every(p => p.elapsedMs >= 0 && p.memory.heapUsed > 0));
+    assert.deepEqual(readFileSync(payloadPath), payload, 'Progress instrumentation must not change canonical bytes');
+    assert.deepEqual(JSON.parse(readFileSync(manifestPath)), manifest);
     const checked = run(['--check']);
     assert.equal(checked.status, 1);
     assert.match(checked.stderr, /ERROR: deliberately unresolved fixture/);
