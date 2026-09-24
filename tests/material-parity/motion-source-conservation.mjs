@@ -83,9 +83,18 @@ export function verifyMotionSourceConservation(saved, fresh, historicalSource, c
     if (old.file === moduleFile) {
       assert.equal(old.sha256, historicalModuleHash);
       changes.push({ file: old.file, historicalSha256: old.sha256, currentSha256: current.sha256 });
+    } else if (old.file === 'tests/material-parity/owner-initial-style-survey.mjs' && current.sha256 !== old.sha256) {
+      // c509317 adds an opt-in appearance review. This historical collector
+      // never opts in. The complete evidence equality above must still hold;
+      // this exact source transition does not permit arbitrary reader changes.
+      assert.equal(old.sha256, '77ea9fd39297f31e067f83b262f33a466b6b9a4b501071a178d993be170b731c');
+      assert.equal(current.sha256, '4c6d0bc3e58b444a463821967d21626a00f62232918da556c0534ac4aa43822d',
+        'unreviewed owner survey source change');
+      changes.push({ file: old.file, historicalSha256: old.sha256, currentSha256: current.sha256 });
     } else assert.deepEqual(current, old, 'unreviewed source dependency changed');
   }
-  assert.equal(changes.length, 1);
+  assert.equal(changes.filter(c => c.file === moduleFile).length, 1);
+  assert.ok(changes.length === 1 || changes.length === 2);
   return { schemaVersion: 1, historicalRevision: revision, historicalReport: { file: reportFile, sha256: reportHash },
     currentReportSha256: hash(JSON.stringify(fresh, null, 2) + '\n'), sourceReceiptTransitions: changes,
     unchangedMappingDeclarations: [...before].map(([name, text]) => ({ name, sha256: hash(text) })),

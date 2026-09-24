@@ -18,6 +18,8 @@ test('motion replay conserves every finding and rejects stale or changed mapping
   assert.equal(result.unchangedMappingDeclarations.length, 12);
   assert.equal(result.historicalReceiptsRewritten, false);
   assert.equal(result.inputEquivalent, false);
+  assert.deepEqual(result.sourceReceiptTransitions.map(s => s.file),
+    ['tests/material-parity/owner-initial-style-survey.mjs', file]);
   for (const { name } of result.unchangedMappingDeclarations) {
     const changed = current.replace(`function ${name}(`, `function changed_${name}(`);
     assert.notEqual(changed, current);
@@ -28,4 +30,7 @@ test('motion replay conserves every finding and rejects stale or changed mapping
   assert.throws(() => verify({ ...fresh, sourceFingerprints: saved.sourceFingerprints }), /not current/);
   const receipts = fresh.sourceFingerprints.map((s, i) => i ? s : { ...s, sha256: '0'.repeat(64) });
   assert.throws(() => verify({ ...fresh, sourceFingerprints: receipts }), /not current/);
+  const staleSurvey = fresh.sourceFingerprints.map(s => s.file.endsWith('/owner-initial-style-survey.mjs')
+    ? saved.sourceFingerprints.find(old => old.file === s.file) : s);
+  assert.throws(() => verify({ ...fresh, sourceFingerprints: staleSurvey }), /not current/);
 });

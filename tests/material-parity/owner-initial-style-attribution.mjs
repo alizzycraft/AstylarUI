@@ -12,8 +12,10 @@ const scalar = (p, v) => p === 'wordSpacing' && v === '0px' ? '0' : v;
 // Extend the source-bound attribution, not the historical survey's population.
 // Appearance remains a computed-reference/local-omission observation, never an
 // inferred candidate default or a waiver of native control paint requirements.
-const reviewedInitialValues = Object.freeze({ ...ownerInitialValues, appearance: 'none' });
-const propertiesOf = input => Object.entries(reviewedInitialValues)
+// Read lazily: the survey's reviewed owner mappings import the audit module,
+// which imports this attribution module in turn.
+const reviewedInitialValues = () => ({ ...ownerInitialValues, appearance: 'none' });
+const propertiesOf = input => Object.entries(reviewedInitialValues())
   .filter(([p, v]) => input.reference?.[p] === v && input.astylar?.[p] === undefined).map(([p]) => p);
 const casesOf = report => [['static', report.results ?? []], ['interaction', report.interactions ?? []]]
   .flatMap(([kind, entries]) => entries.map(e => ({ ...e, kind,
@@ -69,9 +71,10 @@ export function collectOwnerInitialStyleEvidence(report, inventory) {
 }
 
 export function classifyOwnerInitialStyleInput(input, property, reference, candidate, proof) {
+  const initialValues = reviewedInitialValues();
   if (!proof || proof.disposition !== 'captured-default-versus-local-omission' || proof.issues?.length !== 0 ||
-      proof.element !== input.id || proof.property !== property || !Object.hasOwn(reviewedInitialValues, property) ||
-      reference !== scalar(property, reviewedInitialValues[property]) || reference !== proof.referenceValue ||
+      proof.element !== input.id || proof.property !== property || !Object.hasOwn(initialValues, property) ||
+      reference !== scalar(property, initialValues[property]) || reference !== proof.referenceValue ||
       candidate !== undefined || input.astylar?.[property] !== undefined ||
       proof.computedCandidateVerified !== false || proof.renderingEquivalent !== false ||
       proof.source !== 'core-style-inspection' || !Number.isInteger(proof.revision) || proof.revision < 0) return;

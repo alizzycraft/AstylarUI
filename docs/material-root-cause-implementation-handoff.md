@@ -79,6 +79,17 @@ The permitted claim remains computed-reference versus local-declaration
 observation stage, not a synthesized candidate default, authored-input waiver,
 or paint equivalence.
 
+Appearance integration preflight exposed an import-order failure when entering
+through the historical motion reader: attribution eagerly read survey constants
+inside the existing audit/survey import cycle. The lookup is now lazy; three
+focused attribution checks pass (4.10 seconds). The existing motion conservation
+check permits only the exact opt-in survey source transition from `77ea9fd3...`
+to `4c6d0bc3...`, after replaying every non-receipt value unchanged. Its test passes
+in 41.70 seconds: all 121 groups / 7,254 observations and 12 mapping declarations
+are preserved, and stale receipts remain rejected. Historical reports were not
+rewritten. This clears the demonstrated preflight dependency failure; it is not
+yet a successful canonical export or acceptance of the appearance batch.
+
 The retained overlay focus harness gap is now an executable, source-pinned proof:
 `node --test tests/material-parity/retained-overlay-focus.spec.mjs` passes 2/2
 in 2.92 seconds. The original capture SHA `b07ef154...` pins the harness's raw
