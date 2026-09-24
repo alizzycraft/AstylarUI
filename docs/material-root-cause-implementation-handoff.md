@@ -83,6 +83,23 @@ occurrences) and one dark-background group (six occurrences). Check native token
 resolution against candidate theme scaling rather than assuming either side's
 theme matches. Existing full final acceptance and all other coverage remain open.
 
+Paint check now authenticates all 25 original panel pairs and exactly joins those
+five groups / 30 occurrences. Native desktop radius remains 28px in every
+profile; its explicit request is `var(--mat-bottom-sheet-container-shape, 28px)`.
+Candidate owner authoring and all three stages use 21px in contrast and 42px in
+custom, with the preserved compact zero-radius override. Native background stays
+rgb(248,242,246), including six dark states, while candidate directly authors
+#211f26 there. The native background var expression is present in captured
+cssText but expanded background-color has an empty CSSOM value; neither that
+empty value nor a capture-root null parent establishes token provenance.
+The focused paint check passes (2.79 seconds) without changing classifications.
+Source inspection places reference theme bindings on `.frame` and the base
+Material theme on `html`; the existing overlay-root-context proof establishes
+why frame-local values cannot simply be assigned to a sibling overlay. Reuse
+retained external-ancestor evidence next to distinguish actual token ancestry
+from a capture limitation. Do not label this a renderer color/radius defect or
+claim that the two sides received the same dark/custom theme inputs.
+
 Current canonical milestone: modal sizing export from `01fab20`, independently
 reconciled against `ed35a9c`: **1,595 unresolved groups**, 8,483 scalar groups /
 389,202 occurrences, 133 source findings. Coverage remains 436/436 static and

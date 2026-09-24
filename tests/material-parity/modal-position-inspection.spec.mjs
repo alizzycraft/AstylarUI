@@ -154,6 +154,64 @@ test('bottom-sheet constraint classifications preserve raw evidence and exclude 
   assert.throws(() => applyBottomSheetPanelConstraints(forged, cases, inventory, normalize));
 });
 
+test('bottom-sheet paint retains token requests and profile-specific candidate literals without inventing token ancestry', () => {
+  const inspection = collectModalPositionInspection();
+  const observations = inspection.groups.find(g => g.element === 'bottom-sheet-panel').observations;
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', modalSizingPredecessor)
+    .filter(r => r.evidence.section === 'discrepancies' && r.element === 'bottom-sheet-panel' && r.attribution === 'unresolved' &&
+      ['backgroundColor', 'borderTopLeftRadius', 'borderTopRightRadius'].includes(r.property));
+  assert.equal(rows.length, 5);
+  const matches = new Map();
+  for (const observation of observations) {
+    const [r, a] = ['reference', 'astylar'].map(side => {
+      const bytes = readFileSync(observation.inputTrees[side].file);
+      assert.equal(createHash('sha256').update(bytes).digest('hex'), observation.inputTrees[side].sha256);
+      return JSON.parse(bytes);
+    });
+    const rn = r.nodes.find(n => n.key === observation.proof.mapping.referenceNode);
+    const an = a.nodes.find(n => n.key === observation.proof.mapping.candidateNode);
+    const rules = rn.rules.map(i => r.rules[i]).filter(rule => rule.active);
+    const base = rules.find(rule => rule.selector === '.mat-bottom-sheet-container');
+    assert.match(base.cssText, /background: var\(--mat-bottom-sheet-container-background-color, var\(--mat-sys-surface-container-low\)\);/);
+    // Empty expanded CSSOM values are retained capture facts, not transparent paint.
+    assert.equal(base.declarations['background-color'].value, '');
+    const profile = observation.case.split('@')[1].split('/')[0];
+    const compact = observation.case.includes('/comparison-pane-');
+    const radius = compact ? '0' : ({ contrast: '21px', custom: '42px' }[profile] ?? '28px');
+    const background = profile === 'dark' ? '#211f26' : '#f8f2f6';
+    const candidateRules = a.rules.filter(rule => rule.selector === '.bottom-sheet-panel');
+    assert.equal(candidateRules.length, 2);
+    assert.equal(candidateRules[0].background, background);
+    const authoredRadius = ({ contrast: '21px', custom: '42px' }[profile] ?? '28px');
+    assert.equal(candidateRules[0].borderRadius, `${authoredRadius} ${authoredRadius} 0 0`);
+    assert.deepEqual(candidateRules[1], { selector: '.bottom-sheet-panel', mediaMaxWidth: '960px', width: '100%', borderRadius: '0' });
+    for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+      assert.equal(an[stage].background, background);
+      assert.equal(an[stage].borderRadius, compact ? '0' : `${radius} ${radius} 0 0`);
+    }
+    assert.equal(r.styles[rn.style].backgroundColor, 'rgb(248, 242, 246)');
+    for (const [css, property] of [['border-top-left-radius', 'borderTopLeftRadius'], ['border-top-right-radius', 'borderTopRightRadius']]) {
+      const requests = rules.filter(rule => Object.hasOwn(rule.declarations, css));
+      assert.equal(requests.length, compact ? 0 : 1);
+      if (!compact) assert.deepEqual(requests[0].declarations[css], { value: 'var(--mat-bottom-sheet-container-shape, 28px)', important: false });
+      assert.equal(r.styles[rn.style][property], compact ? '0px' : '28px');
+    }
+    for (const row of rows) {
+      const differs = row.property === 'backgroundColor' ? profile === 'dark'
+        : !compact && row.astylar === radius;
+      if (!differs) continue;
+      if (!matches.has(row.id)) matches.set(row.id, []);
+      matches.get(row.id).push(observation.case);
+    }
+  }
+  assert.equal(observations.length, 25); assert.equal(matches.size, 5);
+  for (const row of rows) {
+    assert.equal(matches.get(row.id).length, row.occurrences);
+    assert.deepEqual(matches.get(row.id).slice(0, 12), row.cases);
+  }
+  assert.equal([...matches.values()].reduce((n, cases) => n + cases.length, 0), 30);
+});
+
 test('bottom-sheet flow replay composes with constraints without changing raw rows', () => {
   const inspection = collectModalPositionInspection();
   const cases = JSON.parse(readFileSync(inspection.capture.file)).interactions.filter(e =>
