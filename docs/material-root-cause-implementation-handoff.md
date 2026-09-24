@@ -9,9 +9,17 @@ originate at `.mat-bottom-sheet-container`; the anchors inherit them. Earlier
 inner-list-label typography proofs therefore cannot classify these scalar owners
 by value equality alone. Candidate line-height/tracking requests are absent across
 the mapped ancestry, including inline style strings and possibly matching rules.
-Font/color authoring classification and canonical integration remain pending.
+The same proof now checks exact candidate font/color declarations across all
+typed mapped ancestors and all three resolved stages: button fonts come from
+`button, input, select`, panel fonts are locally omitted with a page-level font
+stack, and panel/options explicitly substitute `#1d1b20` (19 states) or
+`#e6e1e5` (six dark states). The native container token resolves to
+`rgb(29, 27, 30)` in these retained states. This establishes unequal color inputs,
+not a renderer color defect. Font fallback equivalence/token dependency and
+canonical integration remain pending; local font omission must not be mistaken
+for absence of an inherited font.
 Command: `node --test --test-name-pattern="bottom-sheet scalar typography" tests/material-parity/modal-position-inspection.spec.mjs`;
-1/1 passes (2.897 seconds test time). No renderer or capture changes. Next: use
+1/1 passes (3.081 seconds test time). No renderer or capture changes. Next: use
 these exact container-token owners when classifying the remaining sheet rows,
 rather than transferring the existing inner-label attribution.
 

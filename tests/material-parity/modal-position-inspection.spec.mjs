@@ -57,6 +57,27 @@ test('bottom-sheet scalar typography belongs to container tokens rather than inn
         const owner = candidatePath[0], stages = ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'].map(s => owner[s]);
         const actual = stages[0][property];
         for (const stage of stages) assert.equal(stage[property], actual);
+        if (property === 'fontFamily' || property === 'color') {
+          const ink = observation.case.includes('@dark/') ? '#e6e1e5' : '#1d1b20';
+          for (const node of candidatePath.filter(n => n.authored.type)) {
+            assert.ok(!Object.keys(node.authored.style ?? {}).some(affects));
+            assert.equal(node.authored.attributes?.style, undefined);
+            const id = node.authored.id;
+            const requests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, node.authored))
+              .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key))
+                .map(([key, value]) => ({ selector: rule.selector, key, value })));
+            const expected = property === 'fontFamily'
+              ? id === 'page' ? [{ selector: '#page', key: property, value: 'Roboto, Arial, sans-serif' }]
+                : node.authored.type === 'button' ? [{ selector: 'button, input, select', key: property, value: 'Roboto, Arial, sans-serif' }] : []
+              : id === 'page' ? [{ selector: '#page', key: property, value: ink }]
+                : id === 'bottom-sheet-panel' ? [{ selector: '.bottom-sheet-panel', key: property, value: ink }]
+                  : node.authored.type === 'button' ? ['.bottom-sheet-option', '.bottom-sheet-option:focus']
+                    .map(selector => ({ selector, key: property, value: ink })) : [];
+            assert.deepEqual(requests, expected);
+            for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'])
+              assert.equal(node[stage]?.[property], expected.length ? expected[0].value : undefined);
+          }
+        }
         if (property === 'lineHeight' || property === 'letterSpacing') {
           for (const node of candidatePath) {
             assert.ok(!Object.keys(node.authored.style ?? {}).some(affects));
