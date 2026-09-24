@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.spec.json",
+  "files": ["src/parity/overlay-layout-stage.audit.spec.ts"],
+  "include": []
+}

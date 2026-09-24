@@ -63,6 +63,47 @@ the verified compact index:
    accessors, but its freshness has not yet been verified. The minimal reduction
    and native-ESM loading drafts remain uncommitted diagnostic work, not acceptance
    evidence. This does not attribute the user's overlay symptoms to a build issue.
+   Package-route result: fresh `ngc -p tsconfig.lib.json --outDir
+   artifacts/material-parity/overlay-source-build-bb5a07c` completes (exit 0).
+   All **104 emitted JavaScript files** exactly match both `dist/lib` and the
+   installed showcase package. The existing public-package browser approach now
+   runs the same Jasmine reduction through `scripts/audit-overlay-layout-stage.mjs`
+   in about three seconds, without Karma. Public authoring uses the package root;
+   private access is read-only retained-layout instrumentation. No renderer edits.
+
+   Current accepted diagnostic evidence (not accepted parity) is
+   `artifacts/material-parity/overlay-package-stage-bb5a07c-v6-dpr1` and `-dpr2`.
+   Chrome 153.0.8010.53, Angular 20.3.31, Babylon 8.56.2, AstylarUI 0.2.0;
+   each run has four cases, two passes, two honest failures, zero page errors.
+   Result SHA-256 values respectively:
+   `9fb8de9ec9fb06c6893e57ba3ead5cd48b0b341a5d19c36e7198e70dd267f54b` and
+   `0cb87e74db5bc88da78507624dbecc26937247483b8f1441323cf6cb3b2788cf`.
+   Provenance retains all bundle-input hashes, runtime asset hashes, source/emitted
+   receipts, and package versions. Recompile the source before reusing the runner's
+   fresh-build directory; matching package versions alone is not source proof.
+
+   **Question answered:** with identical minimal authored inputs, both nested-row
+   and flat-column overlays agree at 320x200. At 321.5x201.25, the reference iframe
+   viewport and retained CSS boxes use 322x201; the canvas CSS rectangle remains
+   321.5x201.25. Projected boxes scale by 321.5/322 horizontally and 201.25/201
+   vertically, at both DPRs. A 120px pane becomes 119.81366459627328px wide.
+   `src/lib/astylar.ts` reads integer `clientWidth/clientHeight` for its viewport;
+   `BabylonCameraService.updateViewport` uses those same values as orthographic
+   bounds. This demonstrates fractional-surface projection distortion, not a
+   layout-wrapper defect. Geometry alone does not prove text blur or paint loss.
+   Do not attribute the earlier large tooltip offset or absent snackbar to this
+   subpixel result: those symptoms remain un reproduced by this reduction.
+   Next trace the actual modal/popup inputs through retained boxes, clipping and
+   paint at their representative surface dimensions; the usable package runner
+   removes the need for another root Karma build attempt.
+
+   Reproduce: `node scripts/audit-overlay-layout-stage.mjs <new-output-dir> <1-or-2>`
+   after the fresh compilation above; exit 1 preserves the demonstrated failures.
+   `tsc -p tsconfig.overlay-audit.json --noEmit` passes. Earlier v1/v2 startup
+   failures omitted Jasmine's HTML boot dependency; v3/v4 accidentally styled
+   the native document head with the shared universal rule. Final v5/v6 scopes
+   the same reset to the four authored IDs on both sides (head stays hidden),
+   retaining the identical geometry result. No canonical fixture was altered.
 2. Control structure/geometry: slider 77, chips 114 and button-toggle 73. Reuse
    the existing gesture, range-travel and paint reductions; do not reopen those
    diagnoses or assume they explain every original symptom. Isolate unreviewed
