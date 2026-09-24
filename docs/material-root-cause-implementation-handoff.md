@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 24
 
+Sheet action-row investigation is now a durable semantic proof and replay in
+`modal-position-inspection.mjs`: `proveBottomSheetActionLayout`,
+`applyBottomSheetActionLayout` and `validateBottomSheetActionLayout`. All 50
+owners / 25 original states bind exactly ten unresolved groups / 250 occurrences
+for display, position, X/Y overflow and box-sizing on Share and Copy link. Native
+anchor list items explicitly request flex, relative, hidden and border-box and
+contain span/div wrappers. Candidate childless value buttons omit these authored
+requests and retain block display. Complete relevant native requests, potentially
+applicable candidate state/unknown-selector rules, inline inputs and all three
+candidate stages are checked. This locates an input-authoring divergence before
+rendering; it does not demonstrate used layout, equivalent interaction semantics,
+or a core defect. Reuse existing source finding
+`fixture-bottom-sheet-list-structure-and-token-substitution`; no duplicate finding.
+
+The replay reuses the existing modal helper and conserves original scalar fields.
+Negative controls reject inline/default substitutions, state and unknown-selector
+resets, changed child structure/native rules, missing or duplicate cases/rows,
+forged prior metadata and invented layout-measurement claims. Three focused
+action/paint/flow tests pass in 13.26 seconds. This ten-group preparation is not
+wired into the canonical producer; accepted unresolved count remains 1,578.
+Store and modal proof/test source changes await the next batched fingerprint
+reconciliation. No renderer/fixture edits, full export or browser recapture.
+Next: wire this replay into existing producer/independent validation guards and
+investigate adjacent action-item sizing/paint inputs before a coherent batch.
+
 Compact family lookup correction: `queryFindings` previously used a suffix match,
 so querying `list` also loaded all `grid-list` shards. The existing store test now
 includes both families in all four supported sections and historical-snapshot

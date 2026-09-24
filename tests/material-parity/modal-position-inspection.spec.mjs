@@ -11,7 +11,8 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   validateDialogPanelConstraints, proveBottomSheetPanelConstraints, proveBottomSheetPanelFlow,
   applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints,
   applyBottomSheetPanelFlow, validateBottomSheetPanelFlow, proveBottomSheetPanelPaint,
-  applyBottomSheetPanelPaint, validateBottomSheetPanelPaint } from './modal-position-inspection.mjs';
+  applyBottomSheetPanelPaint, validateBottomSheetPanelPaint, proveBottomSheetActionLayout,
+  applyBottomSheetActionLayout, validateBottomSheetActionLayout } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
@@ -27,6 +28,73 @@ import { collectFullTreeInventory, collectControlTypographyEvidence,
 const modalSizingPredecessor = Object.freeze({
   generation: '064777d79c6b85219285c85b97fb38edac27d069c8ddec67e0ae2da5b61099e5',
   indexSha256: '7e3141128b5728007cf478b5d37b7820ac6a9cd56d34e0242d4f10842ce4e745',
+});
+
+test('bottom-sheet action layout binds fifty list-item substitutions without inventing candidate defaults', () => {
+  const inspection = collectModalPositionInspection();
+  const captured = JSON.parse(readFileSync(inspection.capture.file));
+  const cases = captured.interactions.filter(c => c.family === 'bottom-sheet' &&
+    c.styleInputs.some(i => i.id === 'bottom-sheet-panel')).map(c => ({ ...c, kind: 'interaction' }));
+  assert.equal(cases.length, 25);
+  const inventory = collectFullTreeInventory(cases);
+  const snapshot = { generation: 'b05e2adcec67d05f5371246d6aa527df4f4528cfb75a2fcc5ed027da86ab9b9d',
+    indexSha256: '7623877cb5b0b5e4fec5edb62f8f8cd433e7e616a68aa36e8c7ff5cf59a2c9c7' };
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', snapshot).filter(r =>
+    r.evidence.section === 'discrepancies' && r.attribution === 'unresolved' &&
+    ['bottom-sheet-copy', 'bottom-sheet-dismiss'].includes(r.element) &&
+    ['display', 'position', 'overflowX', 'overflowY', 'boxSizing'].includes(r.property));
+  assert.equal(rows.length, 10);
+  const matched = new Map(); let first, owners = 0;
+  for (const entry of cases) {
+    const key = `interaction:${entry.family}@${entry.profile}/${entry.viewport.id}/${entry.state}`;
+    const trees = modalInventoryTrees(inventory, key);
+    for (const element of ['bottom-sheet-copy', 'bottom-sheet-dismiss']) {
+      const proof = proveBottomSheetActionLayout(entry, ...trees, element); owners++;
+      first ??= { entry, trees, element, proof };
+      for (const property of proof.attributableProperties) {
+        const matches = rows.filter(r => r.element === element && r.property === property &&
+          r.reference === proof.reference[property] && r.astylar === proof.candidate[property]);
+        assert.equal(matches.length, 1);
+        if (property !== 'display') assert.equal(Object.hasOwn(matches[0], 'astylar'), false);
+        const keys = matched.get(matches[0].id) ?? []; keys.push(key); matched.set(matches[0].id, keys);
+      }
+    }
+  }
+  assert.equal(owners, 50); assert.equal(matched.size, 10);
+  for (const row of rows) {
+    const keys = matched.get(row.id); assert.equal(keys.length, 25);
+    assert.equal(new Set(keys).size, 25); assert.equal(row.occurrences, keys.length);
+    assert.deepEqual(row.cases, keys.slice(0, 12));
+  }
+  const normalize = bindPreciseAuditNormalization(), original = structuredClone(rows);
+  const applied = applyBottomSheetActionLayout(rows, cases, inventory, normalize);
+  assert.deepEqual(rows, original);
+  assert.equal(applied.filter(r => r.attribution === 'reviewed-bottom-sheet-action-layout-substitution').length, 10);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  const validate = values => validateBottomSheetActionLayout(values, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  for (const mutate of [
+    values => values.pop(), values => values.push(structuredClone(values[0])),
+    values => { values[0].reference = 'forged'; },
+    values => { values[0].reviewEvidence.priorMetadata.attribution = 'forged'; },
+    values => { values[0].reviewEvidence.observations[0].candidateUsedLayoutMeasured = true; },
+  ]) { const altered = structuredClone(applied); mutate(altered); assert.equal(validate(altered).length, 1); }
+  assert.throws(() => applyBottomSheetActionLayout(rows, cases.slice(1), inventory, normalize));
+  assert.throws(() => applyBottomSheetActionLayout(rows, [...cases, cases[0]], inventory, normalize));
+  for (const mutate of [
+    (r, a) => { a.nodes.find(n => n.key === first.proof.astylarNode).authored.style = { display: 'flex' }; },
+    (r, a) => { a.nodes.find(n => n.key === first.proof.astylarNode).resolvedStyle.position = 'static'; },
+    (r, a) => { a.nodes.find(n => n.key === first.proof.astylarNode).interactionResolvedStyle.overflow = 'visible'; },
+    (r, a) => { a.rules.push({ selector: '.bottom-sheet-option:focus', boxSizing: 'border-box' }); },
+    (r, a) => { a.rules.push({ selector: ':unknown', all: 'initial' }); },
+    (r, a) => { a.nodes.push({ key: 'new-child', parent: first.proof.astylarNode, authored: { type: 'span' } }); },
+    r => { r.nodes.find(n => n.key === first.proof.referenceChildren[0]).type = 'div'; },
+    r => { r.rules.find(rule => rule.selector === '.mdc-list-item').declarations.display.value = 'block'; },
+    r => { r.rules.find(rule => rule.selector === '.mdc-list-item').declarations.all = { value: 'initial', important: false }; },
+  ]) { const altered = structuredClone(first.trees); mutate(...altered);
+    assert.throws(() => proveBottomSheetActionLayout(first.entry, ...altered, first.element)); }
 });
 
 test('bottom-sheet panel constraints bind explicit responsive and overflow omissions across original states', () => {

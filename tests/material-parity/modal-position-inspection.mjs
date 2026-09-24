@@ -336,6 +336,50 @@ export function proveBottomSheetPanelFlow(entry, r, a) {
     inputEquivalent: false, candidateUsedLayoutMeasured: false, renderingEquivalent: false };
 }
 
+export function proveBottomSheetActionLayout(entry, r, a, element) {
+  assert.equal(entry.family, 'bottom-sheet');
+  assert.ok(['bottom-sheet-copy', 'bottom-sheet-dismiss'].includes(element));
+  const { mapping } = proveModalPositionInspection(entry, r, a, element);
+  const reference = one(r.nodes.filter(n => n.key === mapping.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === mapping.candidateNode));
+  assert.equal(reference.type, 'a'); assert.equal(reference.attributes.href, '#');
+  assert.equal(candidate.authored.type, 'button');
+  assert.equal(candidate.authored.value, element === 'bottom-sheet-copy' ? 'Copy link' : 'Share');
+  assert.deepEqual(reference.inline, {});
+  assert.equal(candidate.authored.style, undefined);
+  assert.equal(candidate.authored.attributes?.style, undefined);
+  const children = r.nodes.filter(n => n.parent === reference.key);
+  assert.deepEqual(children.map(n => n.type), ['span', 'div']);
+  assert.deepEqual(a.nodes.filter(n => n.parent === candidate.key), []);
+  const affects = key => /^(display|position|overflow.*|boxsizing|all)$/.test(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
+  const referenceRequests = reference.rules.map(i => r.rules[i]).filter(rule => rule.active)
+    .flatMap(rule => Object.entries(rule.declarations).filter(([key]) => affects(key))
+      .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value })));
+  const expected = [
+    ['.mdc-list-item', 'display', 'flex'], ['.mdc-list-item', 'position', 'relative'],
+    ['.mdc-list-item', 'overflow-x', 'hidden'], ['.mdc-list-item', 'overflow-y', 'hidden'],
+    ['.mat-mdc-list-item, .mat-mdc-list-option', 'box-sizing', 'border-box'],
+  ].map(([selector, key, value]) => ({ selector, conditions: [], key, value, important: false }));
+  assert.deepEqual(referenceRequests, expected);
+  const candidateRequests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key))
+      .map(([key, value]) => ({ selector: rule.selector, key, value })));
+  assert.deepEqual(candidateRequests, []);
+  const values = { display: 'flex', position: 'relative', overflowX: 'hidden', overflowY: 'hidden', boxSizing: 'border-box' };
+  for (const [key, value] of Object.entries(values)) assert.equal(r.styles[reference.style][key], value);
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(candidate[stage].display, 'block');
+    for (const property of ['position', 'overflow', 'overflowX', 'overflowY', 'overflowInline', 'overflowBlock', 'boxSizing'])
+      assert.equal(Object.hasOwn(candidate[stage], property), false);
+  }
+  return { case: caseKey(entry, entry.kind), element, referenceNode: reference.key, astylarNode: candidate.key,
+    referenceRequests, candidateRequests, reference: values, candidate: { display: 'block' },
+    referenceChildren: children.map(n => n.key), candidateChildren: [],
+    attributableProperties: Object.keys(values), classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, candidateUsedLayoutMeasured: false, renderingEquivalent: false,
+    limitation: 'Native list-item requests are not authored on candidate value buttons. Missing candidate fields stay omitted; no browser defaults, core layout failure or equivalent child rendering is inferred.' };
+}
+
 export function proveBottomSheetPanelPaint(entry, r, a) {
   const { mapping } = proveModalPositionInspection(entry, r, a, 'bottom-sheet-panel');
   assert.equal(entry.family, 'bottom-sheet');
@@ -421,6 +465,26 @@ function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition)
         priorMetadata: Object.fromEntries(metadata.filter(k => Object.hasOwn(row, k)).map(k => [k, structuredClone(row[k])])),
         observations, inputEquivalent: false, renderingEquivalent: false } };
   });
+}
+
+export function applyBottomSheetActionLayout(rows, cases, inventory, canonicalStyle) {
+  return ['bottom-sheet-copy', 'bottom-sheet-dismiss'].reduce((values, element) =>
+    applyModalBoxReview(values, cases, inventory, canonicalStyle, {
+      family: 'bottom-sheet', element,
+      properties: ['display', 'position', 'overflowX', 'overflowY', 'boxSizing'],
+      prove: (entry, r, a) => proveBottomSheetActionLayout(entry, r, a, element),
+      attribution: 'reviewed-bottom-sheet-action-layout-substitution',
+      owner: 'showcase bottom-sheet list-item structure and layout authoring',
+      justification: 'Native anchor list items explicitly request flex, relative positioning, hidden overflow and border-box sizing and contain span/div wrappers. Candidate childless value buttons omit those authored requests and retain block display. Complete original owner populations and all captured candidate stages establish unequal inputs, not defaults, measured candidate layout, equivalent semantics or a renderer failure.',
+    }), rows);
+}
+
+export function validateBottomSheetActionLayout(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-bottom-sheet-action-layout-substitution');
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyBottomSheetActionLayout(originalRows, cases, inventory, canonicalStyle))));
+    return [];
+  } catch (error) { return [`bottom-sheet action layout does not replay from original owner inputs: ${error.message}`]; }
 }
 
 export function applyBottomSheetPanelPaint(rows, cases, inventory, canonicalStyle) {
