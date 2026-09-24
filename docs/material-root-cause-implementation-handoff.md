@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 24
 
+The combined sheet milestone is ready for cold export. The existing canonical
+comparator now has `--sheet-panel`, independently replaying the three proofs
+against accepted `9b0ec36` and its authenticated `78ed94a2...` payload. It requires
+exactly 17 changed groups / 279 occurrences, unchanged raw scalar evidence and
+all unrelated control data, allowing only the 48 existing producer-hash receipts.
+Eight comparator tests pass (13.99 seconds), including invented defaults and
+jointly forged expected/actual evidence. Eight semantic sheet/neighboring dialog
+tests pass (26.24 seconds); the real retained sheet composition produces exactly
+17 groups / 279 occurrences and each independent validator accepts it. The small
+accepted manifest was preserved beside the already retained compact-generation
+payload without duplicating that payload. Next command is one five-input cold
+canonical export, followed by `node scripts/check-material-position-canonical-conservation.mjs --sheet-panel`,
+section/source reconciliation and one compact-index import. No new canonical
+result is accepted yet, and historical output parity is not final acceptance.
+
 Latest preparation: bottom-sheet paint attribution is now wired into the bound
 original-capture producer branch and independently replayed from original rows.
 The unbound guard rejects paint attribution without provenance. Exact source

@@ -229,6 +229,15 @@ test('bottom-sheet paint replay attributes five original populations without rec
   assert.deepEqual(applied.map(raw), rows.map(raw));
   const validate = values => validateBottomSheetPanelPaint(values, rows, cases, inventory, normalize);
   assert.deepEqual(validate(applied), []);
+  const combined = applyBottomSheetPanelConstraints(
+    applyBottomSheetPanelFlow(applied, cases, inventory, normalize), cases, inventory, normalize);
+  const batch = combined.filter((row, i) => row !== rows[i]);
+  assert.equal(batch.length, 17);
+  assert.equal(batch.reduce((n, row) => n + row.occurrences, 0), 279);
+  assert.deepEqual(combined.map(raw), rows.map(raw));
+  assert.deepEqual(validate(combined), []);
+  assert.deepEqual(validateBottomSheetPanelFlow(combined, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateBottomSheetPanelConstraints(combined, rows, cases, inventory, normalize), []);
   const selected = values => values.find(row => row.attribution === 'reviewed-bottom-sheet-panel-paint-inputs');
   for (const mutate of [
     values => values.splice(values.indexOf(selected(values)), 1),
