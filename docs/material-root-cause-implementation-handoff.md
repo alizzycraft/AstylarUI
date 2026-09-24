@@ -2,6 +2,44 @@
 
 ## Current audit checkpoint — September 24
 
+Pending focus-state investigation now has a public-package scheduling reduction.
+`scripts/audit-material-sheet-focus.mjs` drives a real browser click in an Angular
+host using the exported `AstylarSurfaceComponent`. In three independent mounts,
+changing the input signal and immediately awaiting `surface.whenSettled()` calls
+`focus('share')` before Angular submits the changed document: focus returns false
+and the inspected document still contains only `opener`. The trace then records
+the update submission; the settled document contains `opener`, `sheet`, `share`.
+Both controls succeed: focus after Angular stability, and focus after awaiting an
+explicit public `surface.update()`. There are zero browser errors. This confirms
+the ordering failure in the reduction, not a core focus failure after a submitted
+update. No private renderer API or fixture/style compensation is used.
+
+Evidence: `artifacts/material-parity/sheet-focus-probe-repeated/result.json`, SHA
+`8a9ddf86ab0e940113bc9ef05b23434f2815f22fb9bd256037ff5c2eb0b23a93`.
+It retains three traces, 104 compiled-package receipts matched to the existing
+radius diagnostic build, complete bundle input hashes, and the entry source.
+Run `node scripts/audit-material-sheet-focus.mjs <new-evidence-directory>`.
+This is diagnostic failure evidence and remains retained. Its initial exploratory
+result is separate under `sheet-focus-probe`; neither result is a canonical
+classification or proof of Material rendering parity.
+
+Applicability limit: the current showcase still uses this immediate wait/focus
+sequence at lines 274–278 (origin `2f440115`). Its bottom sheet is a `div` with a
+dialog role, not the `type: dialog`, `open`, `modal` branch that owns core modal
+autofocus. The current showcase browser build cannot stand in for the September
+12 capture: only one of its 971 pinned browser files matches, three differ and
+967 are missing. Historical bundle attribution remains unproven. Next obtain
+matching retained application code or instrument a fresh Material reproduction,
+including the focus return value and update boundary. Keep the unconditional
+8% baseline paint, focus-transfer race and harness focus-acceptance gap separate.
+
+The corrected dialog/tab export remains live on session 80004 / PID 1920;
+its inputs have not been changed. This new standalone reduction and ledger entry
+are outside that export's explicit source inventory. Reconcile that export before
+incorporating any later focus classification. Largest remaining accepted-index
+populations are dialog (195), bottom sheet (132), tabs (114), chips (104); totals
+remain 1,560 unresolved until export reconciliation succeeds.
+
 Dialog/tab cold export at `99bea34` is terminal: session 26516 completed in
 2,070.83 seconds with exit 1. Coverage and raw totals remain 436/436 static,
 1,875/1,875 interaction, 8,483 groups / 389,202 occurrences, 134 source findings.
