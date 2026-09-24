@@ -113,6 +113,17 @@ integration remains pending; do not rebuild or modify the running producer just
 for this batch. The historical 34-state geometry match does not establish input
 equivalence, paint visibility, or current browser acceptance. This test reuses
 the pinned position population and original tree receipts; no new capture/report.
+History closure: reuse the existing `fixture-snackbar-fixed-width` source finding
+and `material-input-audit-investigation.md` snackbar section rather than opening
+another sizing investigation. `2f44011` already authored #322f35/white and
+space-between (original mismatch, not a later paint compensation). `0d67d46`
+changed 360px/min-height48 to fixed294x41 and added translate(0,159px) on the
+wrapper; `f3c8254` removed that transform in favor of full-height column flow;
+`899c741` changed to fixed344x48 and added a unit assertion for those literals.
+That assertion verifies candidate authoring, not intrinsic input equivalence.
+Do not attribute the old missing-snackbar report to the removed 159px transform
+without a matching historical runtime reproduction. No new capture is needed
+to restate the already-established fixed-width mismatch.
 
 Next tooltip sizing batch: a read-only replay using
 `collectTooltipPositionAncestry` and `inspectOverlayOwnerDeclarations` authenticated
