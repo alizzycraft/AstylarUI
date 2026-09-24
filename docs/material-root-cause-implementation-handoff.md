@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 24
 
+The eight-group contrast-corner replay is integrated into the bound producer,
+independent original-row validation, unbound-attribution rejection and exact
+source-restoration guards. All six producer/alignment tests pass in 14.15 seconds;
+the first run caught missing additions to the two import allowlists, corrected
+before the passing run. No canonical export or accepted-count change yet.
+
+Retained geometry closes part of the remaining corner-equality evidence gap:
+the hash-authenticated original capture contains `overlayPlacement.astylarRows`
+and `referenceRows` for all 25 sheet states / 50 owners. Desktop DPR1/2 rows are
+480x48 CSS pixels; comparison-pane rows are 868x48. Maximum paired width/height
+difference is 4.44e-11px. Current collector source at
+`tests/material-parity/run-material-parity.mjs` maps candidate rows in explicit
+Share/Copy-link ID order, native rows by the first two list items. Before using
+this mapping to classify historical rows, bind its historical applicability and
+the captured native owner order. Next: reuse this retained geometry in the
+existing corner proof and trace the relevant candidate corner-paint normalization;
+do not treat matching boxes alone as proof of identical paint or all-profile
+token semantics. No new capture is needed just to obtain these dimensions.
+
 Corner investigation now has a focused semantic proof in the existing modal
 module: `proveBottomSheetActionCorners` binds all 50 original action owners,
 their ordered native token requests (including preserved empty CSSOM expansions),
