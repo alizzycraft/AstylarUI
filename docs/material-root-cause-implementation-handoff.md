@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 25
 
+Overlay focus inventory now accounts for all 199 retained interactions (menu
+82, sheet 51, dialog 66). In addition to the 73 opening and 30 dismissal records
+below, the remaining 96 comprise 24 explicit-focus records with matching opener
+identities, 24 hover and 8 disabled records with both identities omitted,
+24 held records measured after release, and 16 open-hover-content records with
+reference identity omitted (candidate menu opener / dialog Cancel). Unknown
+identities are not evidence of no focus. The capture-pinned harness AST confirms
+that measurements and screenshots precede held release, whereas both focus
+reads follow it: those scalar values cannot establish held-state focus.
+Next instrumentation must sample focus at the same action boundary as the tree
+and raster, retaining raw and mapped identities. Open-hover-content reference
+focus can still be recovered from retained selectors before any recapture.
+The existing retained-overlay-focus suite passes all five tests in 6.69 seconds;
+no renderer, fixture, capture or active-export dependency changed.
+
 Retained focus evidence narrowed without recapture: all 25 bottom-sheet and
 24 menu open/activate/activate-leave records have one reference action matched
 by an exact non-pseudo single `:focus` selector (`.mdc-list-item:focus` on Share,

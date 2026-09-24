@@ -21,6 +21,56 @@ const visit = n => { if (ts.isVariableDeclaration(n) && n.name.getText(ast) === 
 visit(ast); assert.deepEqual(gates, ["state !== 'focus' || referenceFocus === astylarFocus"]);
 const gate = new Function('state', 'referenceFocus', 'astylarFocus', `return ${gates[0]}`);
 
+test('remaining overlay focus coverage preserves unknown identities and held capture timing', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = JSON.parse(bytes);
+  const capture = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'captureInteractionCase');
+  const statements = capture.body.statements.find(ts.isTryStatement).tryBlock.statements;
+  const position = fragment => {
+    const matches = [...statements].map((n, i) => [n.getText(ast), i]).filter(([text]) => text.includes(fragment));
+    assert.equal(matches.length, 1, fragment);
+    return matches[0][1];
+  };
+  const release = position('for (const release of heldReleases)');
+  assert.ok(position('const referenceMeasurement =') < release);
+  assert.ok(position('const astylarMeasurement =') < release);
+  assert.ok(position('captureInteractionImage(reference.page') < release);
+  assert.ok(position('const referenceFocus =') > release);
+  assert.ok(position('const astylarFocus =') > release);
+  let accounted = 0;
+  for (const [family, total] of [['menu', 82], ['bottom-sheet', 51], ['dialog', 66]]) {
+    const rows = report.interactions.filter(r => r.family === family);
+    assert.equal(rows.length, total);
+    const remaining = rows.filter(r => !['open', 'activate', 'activate-leave',
+      'open-dismiss', 'open-dismiss-outside', 'open-dismiss-canvas'].includes(r.state));
+    const expected = { focus: 8, hover: 8, held: 8,
+      ...(family !== 'bottom-sheet' ? { 'open-hover-content': 8 } : {}),
+      ...(family === 'menu' ? { disabled: 8 } : {}) };
+    assert.deepEqual(Object.fromEntries(Object.entries(Object.groupBy(remaining, r => r.state))
+      .map(([state, cases]) => [state, cases.length])), expected);
+    for (const row of remaining) {
+      assert.equal(row.focus.matches, true);
+      if (row.state === 'focus') {
+        assert.equal(row.focus.reference, `${family}-primary`);
+        assert.equal(row.focus.astylar, `${family}-primary`);
+      } else {
+        assert.equal(Object.hasOwn(row.focus, 'reference'), false);
+        if (['hover', 'disabled'].includes(row.state))
+          assert.equal(Object.hasOwn(row.focus, 'astylar'), false);
+        else assert.equal(row.focus.astylar,
+          row.state === 'open-hover-content' && family === 'dialog' ? 'dialog-cancel' : `${family}-primary`);
+        assert.equal(gate(row.state, 'reference-owner', 'wrong-owner'), true);
+      }
+    }
+    accounted += remaining.length;
+  }
+  assert.equal(accounted, 96);
+  // Alongside the 73 opening and 30 dismissal records covered below, this
+  // accounts for all 199 overlay interactions. Missing identity is unknown,
+  // not proof of no focus; post-release focus is not held-state focus.
+});
+
 test('retained focus measurement loses parity IDs and generated action identity; open gate ignores mismatch', async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {
