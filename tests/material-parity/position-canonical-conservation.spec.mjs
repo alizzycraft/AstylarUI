@@ -22,6 +22,34 @@ function sample(followupOnly = false) {
   return [previous, current, structuredClone(current.rows), currentSource, { followupOnly }];
 }
 
+test('dialog/tab batch permits exactly nineteen reviews and rejects joint raw-input forgery', () => {
+  const make = () => {
+    const [previous, current] = sample();
+    const previousSource = execFileSync('git', ['show', 'c53bd80:tests/material-parity/input-equivalence-audit.mjs'], { maxBuffer: 4 * 1024 * 1024 });
+    previous.rows = Array.from({ length: 19 }, (_, i) => ({ family: i < 9 ? 'dialog' : 'tabs',
+      element: `owner-${i}`, occurrences: i < 9 ? 32 : 42, attribution: 'unresolved', reference: 'original' }));
+    current.rows = previous.rows.map((row, i) => ({ ...row, attribution: i < 9
+      ? 'reviewed-dialog-text-flow-inputs' : 'reviewed-tab-control-stage' }));
+    const oldHash = createHash('sha256').update(previousSource.toString('utf8').replaceAll('\r\n', '\n')).digest('hex');
+    for (const row of previous.control.differences) row.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = oldHash;
+    return [previous, current, structuredClone(current.rows), currentSource, { dialogTabOnly: true, previousSource }];
+  };
+  const args = make(), before = structuredClone(args.slice(0, 3));
+  const result = comparePositionCanonical(...args);
+  assert.equal(result.changedGroups, 19); assert.equal(result.changedOccurrences, 708);
+  assert.equal(result.controlReceiptTransition.records, 48);
+  assert.deepEqual(args.slice(0, 3), before);
+  for (const mutate of [
+    ([, c]) => c.rows.pop(),
+    a => { a[1].rows[0].reference = a[2][0].reference = 'jointly forged'; },
+    a => { a[1].rows[0].astylar = a[2][0].astylar = 'invented default'; },
+    ([, c]) => c.control.gaps.push({ reason: 'unrelated' }),
+    ([, c]) => { c.control.differences[0].reviewEvidence.observation.normalizationReconciliation.value++; },
+    a => { a[4].previousSource = currentSource; },
+    a => { a[4].sheetActionOnly = true; },
+  ]) { const changed = make(); mutate(changed); assert.throws(() => comparePositionCanonical(...changed)); }
+});
+
 function chipSample() {
   const args = sample(), [previous, current] = args;
   const previousSource = execFileSync('git', ['show', '2a35d34:tests/material-parity/input-equivalence-audit.mjs'], { maxBuffer: 4 * 1024 * 1024 });

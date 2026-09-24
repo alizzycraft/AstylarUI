@@ -50,9 +50,14 @@ aggregation, independently replayed validation and the exact predecessor guard.
 Ten checks pass in 19.00 seconds: the combined binding uses the complete original
 2,311-case inventory, covers exactly 19 groups / 708 occurrences, preserves raw
 values and unrelated typography rows, and rejects changed source boundaries.
-Next extend the existing canonical comparator for this batch, preserving the
-accepted `c53bd80` snapshot, then cold-export once and reconcile all changed
-sections. The expected unresolved count is 1,541 only if full reconciliation
+The existing canonical comparator now has `--dialog-tab`, pinned to accepted
+`c53bd80` / decoded `185b07a93db39edb341e39af31476333e5facb3b0fba3a00df393f645352ef9c`.
+All ten comparator tests pass in 22.19 seconds, including jointly forged raw
+inputs, invented defaults, receipt changes and mixed-batch rejection. The small
+accepted manifest is preserved beside its already-retained `ed33d97...` payload;
+the payload hash was rechecked, with no new payload copy. Next cold-export once
+and run `node scripts/check-material-position-canonical-conservation.mjs --dialog-tab`,
+then reconcile all changed report sections. The expected unresolved count is 1,541 only if full reconciliation
 succeeds; the accepted canonical count remains 1,560. No browser recapture or
 renderer/fixture implementation was performed for this metadata integration.
 
