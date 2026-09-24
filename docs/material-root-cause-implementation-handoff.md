@@ -90,6 +90,38 @@ passes 6/6 (65.12 seconds), including full predecessor restoration, original
 producer transition. This clears the mutable-index regression prerequisite,
 not the outstanding full canonical export/conservation milestone.
 
+Integration export checkpoint: launched the cold export at `73e0d58` with the
+same five explicit input paths documented above, `--max-old-space-size=4096`,
+`ASTYLAR_AUDIT_COLD=1` and `ASTYLAR_AUDIT_PROGRESS=1`. Log:
+`artifacts/material-parity/chip-paint-export-73e0d58-progress.log`.
+Execution session 84439 / Node PID 7952 was verified live in `build-audit`.
+Poll that handle or inspect the actual process before deciding whether to
+resume or restart; this checkpoint is not itself proof the process is still
+alive. Do not mutate collector dependencies while running. Preflight verified
+both canonical and preserved pre-chip gzip hashes against the baseline above,
+9,885,916 KiB physical / 15,544,624 KiB virtual memory free and 5,401,718,784
+bytes free on D:. Acceptance still requires terminal output, exact ten-row
+conservation, source receipts and all unaffected section comparisons; expected
+remaining unresolved signatures are 1,644, not zero or audit completion.
+
+Snackbar retained-raster gap closed independently of the running export:
+`node --test --test-name-pattern="all 34 retained snackbar rasters" tests/material-parity/modal-position-inspection.spec.mjs`
+passes 1/1 (4.25 seconds). All 34 captured open-surface states across light,
+dark, contrast and custom profiles have the candidate's exact opaque
+`#322f35` surface paint across more than 98% of a text-free, in-viewport lower
+interior strip. Screenshot dimensions agree with viewport/DPR; blank raster
+controls fail the same paint measurement despite unchanged coordinates.
+The ordered file/hash receipts are pinned by SHA-256
+`52f3cf2cd4c63a1e352cb8445f2654b66a99d633072c9e3700492264179574f5`;
+the original capture is independently authenticated. Desktop/light/open was
+also visually inspected: the message and action are visible near the bottom.
+This closes actual surface-paint presence for these retained states, not text
+sharpness, input equivalence, complete clipping correctness or the older manual
+failure. Do not keep investigating total snackbar absence using these captures:
+they do not reproduce it. A historical cause claim requires matching earlier
+runtime/input evidence or a new reproduction of that symptom. No new capture,
+renderer edit, fixture edit or running-export dependency change was needed.
+
 Dialog width follow-up (separate from the height clamp): the existing reduction
 now observes `measureIntrinsicFlowChildOuterWidth` and
 `calculateIntrinsicContainerWidth` through call-through spies. In

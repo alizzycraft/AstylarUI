@@ -2,8 +2,43 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
+import { PNG } from 'pngjs';
 import { resolveGeneratedReferenceNode } from './generated-node-mapping-evidence.mjs';
 import { collectModalPositionInspection, proveModalPositionInspection } from './modal-position-inspection.mjs';
+
+test('all 34 retained snackbar rasters contain the surface inside the viewport', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const cases = JSON.parse(bytes).interactions.filter(e => e.family === 'snack-bar' && e.overlayPlacement?.targetId);
+  assert.equal(cases.length, 34);
+  const receipts = [];
+  for (const entry of cases) {
+    const file = entry.inputTrees.astylar.file.replace('astylar-input-tree.json', 'astylar.png');
+    const image = readFileSync(file), png = PNG.sync.read(image);
+    receipts.push({ file, sha256: hash(image) });
+    const dpr = entry.viewport.deviceScaleFactor, box = entry.overlayPlacement.astylar;
+    assert.equal(png.width, entry.viewport.width * dpr);
+    assert.equal(png.height, entry.viewport.height * dpr);
+    // A text-free interior strip proves actual surface paint, not just an
+    // existing semantic owner or a projected rectangle. No text/parity claim.
+    const left = Math.ceil((box.x + 8) * dpr), right = Math.floor((box.x + box.width - 8) * dpr);
+    const top = Math.ceil((box.y + box.height - 8) * dpr), bottom = Math.floor((box.y + box.height - 4) * dpr);
+    assert.ok(left >= 0 && right <= png.width && top >= 0 && bottom <= png.height);
+    assert.ok(right > left && bottom > top);
+    const paintedFraction = pixels => {
+      let painted = 0, total = 0;
+      for (let y = top; y < bottom; y++) for (let x = left; x < right; x++) {
+        const i = (y * png.width + x) * 4; total++;
+        if ([50, 47, 53, 255].every((v, channel) => pixels[i + channel] === v)) painted++;
+      }
+      return painted / total;
+    };
+    assert.ok(paintedFraction(png.data) > .98, file);
+    assert.equal(paintedFraction(Buffer.alloc(png.data.length, 255)), 0, 'blank paint must fail despite unchanged geometry');
+  }
+  assert.equal(hash(JSON.stringify(receipts)), '52f3cf2cd4c63a1e352cb8445f2654b66a99d633072c9e3700492264179574f5');
+});
 
 test('retained open overlays do not reproduce off-screen projected placement', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
