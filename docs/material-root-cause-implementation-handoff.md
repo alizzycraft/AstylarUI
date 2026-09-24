@@ -41,6 +41,34 @@ After conservation, keep the chip proposal regression tied to its preserved
 pre-classification evidence: its current working-index query expects ten
 unresolved rows and cannot be reused unchanged after refreshing that index.
 
+Dialog width follow-up (separate from the height clamp): the existing reduction
+now observes `measureIntrinsicFlowChildOuterWidth` and
+`calculateIntrinsicContainerWidth` through call-through spies. In
+`dialog-intrinsic-explicit-autoheight-nolimit`, container `width:100%` is resolved
+against available width 640, then clamped to max-width 560; wrapper intrinsic
+width returns 560. Native wrapper/pane width is 280. In the paired auto-width
+control the same available width produces intrinsic container/wrapper width 280,
+matching native width. `FlexService.measureIntrinsicFlowChildOuterWidth` takes
+the authored percentage branch before recursive intrinsic child measurement
+(flex.service.ts around lines 593-637). This locates the over-width contribution
+in intrinsic percentage resolution, not a later projection or font operation.
+The existing `none` height clamp remains independently failing; auto-width is a
+diagnostic change to BOTH inputs, not a proposed fixture compensation.
+
+Evidence: `dialog-width-trace-66af77e-dpr1/result.json` SHA-256
+`ba1dc0c26b15a831dd2e15396011fd91736251692b75e9edc9439c4a7fdcbfda`, and
+`dialog-width-trace-66af77e-dpr2/result.json` SHA-256
+`cec8297fa51defc8ff9a9944287319b74444dba56c335891364426990adaa644`, under
+`artifacts/material-parity`. All 104 library source receipts match the earlier
+validated build; installed/dist/compiled equality is checked by the runner.
+TypeScript no-emit check passes. Both browser runs terminate exit 1 with the
+honest existing failures: 12 pass/14 fail at DPR 1, 11 pass/15 fail at DPR 2,
+no page errors. Exact comparison confirms all 26 cases' geometry is unchanged
+from the preceding height trace. Width/available-width assertions pass at both
+DPRs. No producer dependency or canonical fixture changed during the live export.
+Remaining uncertainty: this reduction proves the intrinsic-sizing rule failure,
+not its full contribution to every Material dialog signature or all popup types.
+
 Next tooltip sizing batch: a read-only replay using
 `collectTooltipPositionAncestry` and `inspectOverlayOwnerDeclarations` authenticated
 all 18 paired open-state trees. All 72 property observations retain active native

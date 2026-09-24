@@ -160,7 +160,8 @@ describe('overlay CSS layout versus projection audit', () => {
         // Observe original method inputs/returns; callThrough never substitutes
         // layout results. Installed aliases must resolve to the mounted runtime.
         const sizingMethods = dialog
-          ? ['measureIntrinsicFlowChild', 'parseIntrinsicPixelLength', 'calculateIntrinsicContainerHeight'] as const
+          ? ['measureIntrinsicFlowChild', 'parseIntrinsicPixelLength', 'calculateIntrinsicContainerHeight',
+            'measureIntrinsicFlowChildOuterWidth', 'calculateIntrinsicContainerWidth'] as const
           : ['measureIntrinsicFlowChildOuterWidth', 'parseDefiniteIntrinsicFlexBasis', 'calculateIntrinsicWidth'] as const;
         const sizingSpies = chip || dialog ? sizingMethods.map(method => ({ method,
           spy: spyOn(FlexService.prototype as unknown as Record<typeof sizingMethods[number], (...args: unknown[]) => unknown>, method).and.callThrough(),
@@ -206,7 +207,7 @@ describe('overlay CSS layout versus projection audit', () => {
                 if (method === 'measureIntrinsicFlowChild') return {
                   id: first?.id, contentWidth: call.args[4], result: call.returnValue,
                 };
-                if (method === 'calculateIntrinsicContainerHeight') {
+                if (method === 'calculateIntrinsicContainerHeight' || method === 'calculateIntrinsicContainerWidth') {
                   const style = call.args[1] as Record<string, unknown> | undefined;
                   return { id: first?.id, contentWidth: call.args[5],
                     style: Object.fromEntries(['width', 'height', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight'].map(key => [key, style?.[key] ?? '<omitted>'])),
