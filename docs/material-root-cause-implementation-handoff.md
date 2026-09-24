@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 25
 
+Appearance cold integration launched from `18d4239`: session **4759**, Node PID
+**3020**, log `artifacts/material-parity/appearance-18d4239-progress.log`.
+The tool handle and process were confirmed live after launch; last emitted phase
+was `build-audit`. Revalidate this handle/process before acting: this entry is not
+permanent proof of liveness. Do not start another export or alter its source
+dependencies while it runs. The accepted baseline remains the dialog/tab export
+below until the new result is terminal and independently reconciled. Expected
+appearance scope is 34 groups / 2,195 observations, with all earlier rows/raw
+inputs preserved. Compare against retained compact generation `0a6c0f6d...` and
+reuse the predecessor section-digest receipt; do not re-expand that baseline just
+to recover already recorded digests.
+
 The corrected dialog/tab cold export from `7c7beef` is terminal: session 80004
 finished in 2,057.03 seconds, exit 1 solely for **1,541 unresolved groups**.
 Coverage remains 436/436 static and 1,875/1,875 interaction; all 8,483 groups /
