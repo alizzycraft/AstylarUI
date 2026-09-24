@@ -261,6 +261,47 @@ the verified compact index:
    the still-unreviewed hover/pressed paint-owner inputs or intrinsic chip
    sizing; integrate this core finding with the existing toggle history without
    claiming it explains all 73 unresolved signatures or changing canonical input.
+
+   Chip intrinsic-layout reduction: preserved the nested chip/cell/button/graphic
+   structure in a diagnostic with identical public inputs on both sides. The
+   cell requests `flex-basis:100%`; the graphic retains 6px side padding and
+   0px/24px selected-state content width. Label blocks are 50px/100px to isolate
+   sizing from fonts; no measured Material width is authored onto the chip.
+   Native chip widths are 74/98/124/148px. Candidate chip and cell widths remain
+   300px (the available host width) in all four cases. Candidate button width
+   remains 58.2578125px regardless of label width; child labels shrink to
+   34.2578125px unchecked or 22.2578125px selected. All discrepancies are already
+   present in retained CSS geometry; projection agrees with that wrong geometry.
+
+   A fifth diagnostic changes the action from button to div on **both** sides:
+   native selected width stays 98px, candidate action becomes 86px and label
+   retains 50px, while outer chip/cell remain 300px. The graphic border box is
+   still 24px instead of native 36px. This isolates control-specific sizing from
+   additional nested-flex/content-box failures; replacing the canonical button
+   with a div would not be an equivalent fix.
+
+   Source trace: `FlexService` routes buttons through `calculateIntrinsicWidth`
+   ahead of recursive child measurement; that method measures literal fallback
+   `Button` when direct text/value is absent. `ElementDimensionService` has the
+   same fallback. `measureIntrinsicFlowChildOuterWidth` replaces the recursively
+   measured width with a definite percentage flex basis against available width;
+   it returns explicit child widths without adding content-box padding. These
+   are candidate causal paths consistent with the controls, not a completed
+   runtime call trace. Next isolate the percentage-basis and padding branches
+   with the same reduction before proposing general core corrections. Font
+   measurement, actual labels, hover/focus, and all 76 historical chip states
+   remain separate; this geometry-only test is not complete chip parity.
+
+   Evidence: `artifacts/material-parity/chip-intrinsic-5f10bda-dpr1` (four chip
+   cases, result SHA-256
+   `2a640fd147982b8f17f9aa9363c0367527ba0e948f0d1e6b6204c65d7f1b070d`)
+   and `chip-intrinsic-5f10bda-v2-dpr2` (adds the div control, result SHA-256
+   `fb268ad9a8a60a8cace7e66ae587aba935e04759dc7e657693e14f805c5cabf3`).
+   Both exit 1: DPR 1 eight passes/six failures, DPR 2 seven passes/eight failures;
+   existing fractional-projection and DPR 2 border failures remain, every new
+   chip case fails unchanged native expectations. No page errors. TypeScript
+   exits 0; all 104 source/emitted receipts match the preceding reduction.
+   Canonical fixture styles and the 1,654-signature checkpoint remain unchanged.
 3. Remaining typography and paint: line-height 67, tracking 57, font-family 31
    and color 111 unresolved groups. Reuse explicit ownership/stage proofs and
    separate missing computed evidence from unequal declarations. These property
