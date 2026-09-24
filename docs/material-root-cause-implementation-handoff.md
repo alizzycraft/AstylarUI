@@ -51,6 +51,23 @@ The current index retains display, flex-direction, padding-top and padding-botto
 groups across 25 states each. Trace their explicit owner/child requests before
 deciding attribution; do not infer flow equivalence from matching outer height.
 
+That flow question is now proved across all 25 original paired owners:
+`proveBottomSheetPanelFlow` verifies a native block container with 8px vertical
+padding, a single block `mat-nav-list` child with another 8px vertical padding,
+and two href="#" anchor children. Candidate has 16px panel padding and a
+column-flex owner with two direct value buttons. All three captured candidate
+style stages agree. This explains the relocation of spacing while preserving
+the unequal owner/child requests; it is not proof of actual candidate layout,
+scrolling or semantic equivalence. Native computed flex-direction:row is inactive
+on the block owner, not evidence of a horizontal native arrangement. Four
+unresolved scalar groups / 100 occurrences are joined exactly (display,
+flex-direction and vertical padding). Five negative controls reject altered
+list padding, child ownership/type, candidate longhand overrides and flex-flow.
+The flow proof, constraint proof and constraint replay pass 3/3 in 11.66 seconds.
+Flow attribution is not wired yet; batch export and source reconciliation remain
+pending. Reuse `fixture-bottom-sheet-list-structure-and-token-substitution`, not
+a duplicate source finding. No renderer or fixture changed.
+
 Current canonical milestone: modal sizing export from `01fab20`, independently
 reconciled against `ed35a9c`: **1,595 unresolved groups**, 8,483 scalar groups /
 389,202 occurrences, 133 source findings. Coverage remains 436/436 static and

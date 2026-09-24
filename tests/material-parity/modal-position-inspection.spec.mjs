@@ -8,7 +8,7 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   proveBottomSheetScalarTypography, applyBottomSheetScalarTypography,
   validateBottomSheetScalarTypography, proveDialogActionBoxSubstitution,
   applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints,
-  validateDialogPanelConstraints, proveBottomSheetPanelConstraints,
+  validateDialogPanelConstraints, proveBottomSheetPanelConstraints, proveBottomSheetPanelFlow,
   applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
@@ -72,6 +72,44 @@ test('bottom-sheet panel constraints bind explicit responsive and overflow omiss
     const [r, a] = structuredClone(first.trees);
     mutate(r, a, a.nodes.find(n => n.key === first.proof.astylarNode));
     assert.throws(() => proveBottomSheetPanelConstraints(first.input, r, a));
+  }
+});
+
+test('bottom-sheet panel flow moves list padding into a structurally different flex owner', () => {
+  const inspection = collectModalPositionInspection();
+  const captured = JSON.parse(readFileSync(inspection.capture.file));
+  const observations = inspection.groups.find(g => g.element === 'bottom-sheet-panel').observations;
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', modalSizingPredecessor).filter(r =>
+    r.evidence.section === 'discrepancies' && r.element === 'bottom-sheet-panel' &&
+    ['display', 'flexDirection', 'paddingTop', 'paddingBottom'].includes(r.property));
+  assert.equal(rows.length, 4); assert.equal(observations.length, 25);
+  for (const row of rows) {
+    assert.equal(row.attribution, 'unresolved'); assert.equal(row.occurrences, 25);
+    assert.deepEqual(row.cases, observations.slice(0, 12).map(o => o.case));
+    assert.deepEqual([row.reference, row.astylar], row.property === 'display' ? ['block', 'flex']
+      : row.property === 'flexDirection' ? ['row', 'column'] : ['8px', '16px']);
+  }
+  let first;
+  for (const observation of observations) {
+    const entry = captured.interactions.find(e => `interaction:${e.family}@${e.profile}/${e.viewport.id}/${e.state}` === observation.case);
+    const trees = ['reference', 'astylar'].map(side => {
+      const bytes = readFileSync(observation.inputTrees[side].file);
+      assert.equal(createHash('sha256').update(bytes).digest('hex'), observation.inputTrees[side].sha256);
+      return JSON.parse(bytes);
+    });
+    const input = { ...entry, kind: 'interaction' }, proof = proveBottomSheetPanelFlow(input, ...trees);
+    assert.equal(proof.nativeFlexDirectionIsInactive, true);
+    first ??= { input, trees, proof };
+  }
+  for (const mutate of [
+    (r, a, n) => { n.resolvedStyle.paddingBottom = '8px'; },
+    r => { r.rules.find(rule => rule.selector === '.mdc-list').declarations['padding-top'].value = '0px'; },
+    r => { r.nodes.find(n => n.key === first.proof.referenceListNode).type = 'div'; },
+    (r, a) => { a.nodes.find(n => n.authored?.id === 'bottom-sheet-copy').parent = 'other'; },
+    (r, a) => { a.rules.find(rule => rule.selector === '.bottom-sheet-panel').flexFlow = 'row'; },
+  ]) {
+    const [r, a] = structuredClone(first.trees); mutate(r, a, a.nodes.find(n => n.key === first.proof.astylarNode));
+    assert.throws(() => proveBottomSheetPanelFlow(first.input, r, a));
   }
 });
 

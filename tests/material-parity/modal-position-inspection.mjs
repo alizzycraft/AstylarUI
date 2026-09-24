@@ -290,6 +290,52 @@ export function proveBottomSheetPanelConstraints(entry, r, a) {
     candidateUsedLayoutMeasured: false, renderingEquivalent: false };
 }
 
+export function proveBottomSheetPanelFlow(entry, r, a) {
+  const constraints = proveBottomSheetPanelConstraints(entry, r, a);
+  const reference = one(r.nodes.filter(n => n.key === constraints.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === constraints.astylarNode));
+  const list = one(r.nodes.filter(n => n.parent === reference.key));
+  assert.equal(list.type, 'mat-nav-list'); assert.deepEqual(list.inline, {});
+  const anchors = r.nodes.filter(n => n.parent === list.key);
+  assert.deepEqual(anchors.map(n => [n.type, n.attributes.href]), [['a', '#'], ['a', '#']]);
+  const buttons = a.nodes.filter(n => n.parent === candidate.key);
+  assert.deepEqual(buttons.map(n => [n.authored.type, n.authored.id, n.authored.value]),
+    [['button', 'bottom-sheet-dismiss', 'Share'], ['button', 'bottom-sheet-copy', 'Copy link']]);
+  const affects = key => /^(padding.*|display|flex(?:direction|flow)?|all)$/.test(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
+  const requests = node => node.rules.map(i => r.rules[i]).filter(rule => rule.active)
+    .flatMap(rule => Object.entries(rule.declarations).filter(([key]) => affects(key))
+      .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value })));
+  const declaration = (selector, key, value) => ({ selector, conditions: [], key, value, important: false });
+  const padding = (selector, horizontal) => ['top', 'right', 'bottom', 'left'].map((side, index) =>
+    declaration(selector, 'padding-' + side, index % 2 ? horizontal : '8px'));
+  const referenceRequests = requests(reference), listRequests = requests(list);
+  assert.deepEqual(referenceRequests, [...padding('.mat-bottom-sheet-container', '16px'), declaration('.mat-bottom-sheet-container', 'display', 'block')]);
+  assert.deepEqual(listRequests, [...padding('.mdc-list', '0px'), declaration('.mat-mdc-list-base', 'display', 'block')]);
+  const candidateRequests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key)).map(([key, value]) => ({ selector: rule.selector, key, value })));
+  assert.deepEqual(candidateRequests, [
+    { selector: '.bottom-sheet-panel', key: 'padding', value: '16px' },
+    { selector: '.bottom-sheet-panel', key: 'display', value: 'flex' },
+    { selector: '.bottom-sheet-panel', key: 'flexDirection', value: 'column' },
+  ]);
+  for (const node of [reference, list]) {
+    const style = r.styles[node.style];
+    assert.equal(style.display, 'block'); assert.equal(style.flexDirection, 'row');
+    assert.equal(style.paddingTop, '8px'); assert.equal(style.paddingBottom, '8px');
+  }
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(candidate[stage].display, 'flex'); assert.equal(candidate[stage].flexDirection, 'column');
+    assert.equal(candidate[stage].padding, '16px');
+    for (const key of ['paddingTop', 'paddingBottom', 'paddingBlock', 'paddingBlockStart', 'paddingBlockEnd'])
+      assert.equal(Object.hasOwn(candidate[stage], key), false);
+  }
+  return { case: constraints.case, element: constraints.element, referenceNode: reference.key, astylarNode: candidate.key,
+    referenceListNode: list.key, referenceRequests, listRequests, candidateRequests,
+    referenceChildren: anchors.map(n => n.key), candidateChildren: buttons.map(n => n.key),
+    nativeFlexDirectionIsInactive: true, classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, candidateUsedLayoutMeasured: false, renderingEquivalent: false };
+}
+
 function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition) {
   const properties = new Set(definition.properties);
   const proofs = new Map();
