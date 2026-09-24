@@ -2,12 +2,26 @@
 
 ## Current audit checkpoint — September 24
 
-Combined dialog/sheet cold export started from `20edff9`: exec session `89157`,
-Node PID `21480`, log
-`artifacts/material-parity/modal-typography-export-20edff9-progress.log`.
-The process was verified live in `build-audit`; no completion is claimed.
-Poll this handle/process before considering another run. Its dependencies must
-remain unchanged during execution. The accepted predecessor payload is already
+Combined dialog/sheet export session `89157` / PID `21480` is terminal: exit 1
+after 1,802.040 seconds. It reached 1,607 unresolved groups but is REJECTED:
+the invocation omitted all four supplemental/line-box options, producing missing
+coverage and 791 unattributed control differences. This was an invocation error,
+not lost source evidence. Failed JSON/gzip/Markdown are retained under
+`artifacts/material-parity/modal-typography-export-20edff9-missing-options`;
+the original progress log remains. The accepted canonical files were restored.
+
+Corrected cold export is live as exec session `24111`, log
+`artifacts/material-parity/modal-typography-export-20edff9-complete-inputs.log`.
+All five required paths were checked before launch. Poll this same handle before
+considering another run; keep export dependencies unchanged. Exact command:
+
+```powershell
+$env:ASTYLAR_AUDIT_COLD='1'
+$env:ASTYLAR_AUDIT_PROGRESS='1'
+node --max-old-space-size=8192 scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+```
+
+These are required explicit inputs, not CLI defaults. The predecessor payload is already
 retained in compact generation `4601de6aeedf0595894e22de28052ee989a163320af4464337a69302c3a04aa2`;
 its compressed hash was checked and its small manifest copied alongside it for
 streaming conservation, without copying the payload again. The existing position
