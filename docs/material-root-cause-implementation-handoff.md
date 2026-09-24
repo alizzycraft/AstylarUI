@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 24
 
+The ten-group / 250-occurrence sheet action-layout replay is now wired into the
+bound-original producer branch and independent original-row validator. The
+unbound guard rejects its attribution without provenance, and exact source
+restoration admits only the added integration. Mutation controls reject bypassing
+the classifier or validating against its own output. All six producer/alignment
+checks pass in 13.83 seconds. Canonical integration and source reconciliation
+remain pending; accepted count is still 1,578 (1,568 is only a projection).
+No full export was run for this wiring step.
+
+Adjacent read-only radius check: Copy link has native 48px height and 9999px
+computed corners across 25 states; candidate height is also 48px, with radii
+24px in light/dark, 18px in contrast and 36px in custom. Native owner rules retain
+empty expanded radius CSSOM values, so preserve and inspect their original
+shorthand/token expressions. Do not classify all unequal radius numbers as
+unequal rendering: overlap normalization and actual candidate box dimensions
+require separate proof. Next: examine both action owners' complete corner-token
+requests and distinguish input substitution from any bounded used-shape equality.
+
 Sheet action-row investigation is now a durable semantic proof and replay in
 `modal-position-inspection.mjs`: `proveBottomSheetActionLayout`,
 `applyBottomSheetActionLayout` and `validateBottomSheetActionLayout`. All 50
