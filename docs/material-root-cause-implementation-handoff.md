@@ -13,33 +13,37 @@ that measurements and screenshots precede held release, whereas both focus
 reads follow it: those scalar values cannot establish held-state focus.
 Next instrumentation must sample focus at the same action boundary as the tree
 and raster, retaining raw and mapped identities. Open-hover-content reference
-focus can still be recovered from retained selectors before any recapture.
-The existing retained-overlay-focus suite passes all five tests in 6.69 seconds;
+focus is now recovered through the same authenticated exact selectors: eight
+menu cases focus Rename while candidate focus remains on the opener; eight
+dialog cases focus Cancel on both sides. This extends the recovered population
+to 89 records: 57 sheet/menu discrepancies and 32 matching dialog observations.
+It does not establish the current-runtime cause. No additional capture was needed.
+The existing retained-overlay-focus suite passes all five tests in 6.41 seconds;
 no renderer, fixture, capture or active-export dependency changed.
 
 Retained focus evidence narrowed without recapture: all 25 bottom-sheet and
-24 menu open/activate/activate-leave records have one reference action matched
+32 menu open/activate/activate-leave/open-hover-content records have one reference action matched
 by an exact non-pseudo single `:focus` selector (`.mdc-list-item:focus` on Share,
 `.mat-mdc-menu-item:focus` on Rename). Original capture and each tree SHA are
 authenticated; the actual tree-reader bytes match the captured reader receipt
 `06197eda...` and record these rules only after `element.matches(selector)`.
 The same records report candidate opener focus and incorrectly `matches: true`.
-This recovers reference focus at tree-capture time: it strengthens 49 historical
+This recovers reference focus at tree-capture time: it strengthens 57 historical
 observations beyond merely missing scalar identities, but is not an event
 timeline or proof of the current runtime cause. Dialog has now been checked
-separately: all 24 records match the exact focus-indicator selector list whose
+separately: all 32 records match the exact focus-indicator selector list whose
 five branches each require a focused direct parent button. That parent's
 `data-parity-id` is `dialog-cancel`, matching the recorded candidate identity.
 Do not use the other ripple selector list containing `cdk-program-focused`
 classes as proof: those branches do not all require actual focus. Thus the 73
-missing reference scalar identities comprise 49 sheet/menu discrepancies and
-24 dialogs with matching captured focus, not 73 behavioral failures.
-The existing retained-overlay-focus test covers all of this recovery (three
-tests pass in 3.92 seconds, including reader-byte authentication). No active-export
+missing opening reference scalar identities, plus 16 open-hover-content records,
+comprise 57 sheet/menu discrepancies and 32 dialogs with matching captured focus,
+not 89 behavioral failures. The existing retained-overlay-focus test covers all
+of this recovery, including reader-byte authentication. No active-export
 dependency or capture changed; the test is outside its source fingerprint list.
 Next focused capture must distinguish retained-runtime mismatch from current
 signal/update settlement behavior; do not recapture simply to rediscover these
-49 historical reference focus owners.
+57 historical reference focus owners.
 
 Dismissal focus coverage is separately inventoried: two menu and two sheet
 `open-dismiss` records identify the opener on both sides. Twenty-six records

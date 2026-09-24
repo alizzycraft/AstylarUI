@@ -124,9 +124,9 @@ test('retained focus selectors distinguish sheet/menu mismatches from matching d
     'matched-rule interpretation requires the capture-pinned reader');
   for (const [family, selector, label, count] of [
     ['bottom-sheet', '.mdc-list-item:focus', 'Share', 25],
-    ['menu', '.mat-mdc-menu-item:focus', 'Rename', 24],
+    ['menu', '.mat-mdc-menu-item:focus', 'Rename', 32],
   ]) {
-    const rows = report.interactions.filter(r => r.family === family && ['open', 'activate', 'activate-leave'].includes(r.state));
+    const rows = report.interactions.filter(r => r.family === family && ['open', 'activate', 'activate-leave', 'open-hover-content'].includes(r.state));
     assert.equal(rows.length, count);
     for (const row of rows) {
       const descriptor = row.inputTrees.reference, treeBytes = readFileSync(descriptor.file);
@@ -150,8 +150,8 @@ test('retained focus selectors distinguish sheet/menu mismatches from matching d
   const selector = ['mat-mdc-button', 'mat-mdc-unelevated-button', 'mat-mdc-raised-button',
     'mat-mdc-outlined-button', 'mat-tonal-button']
     .map(c => `.${c}:focus > .mat-focus-indicator::before`).join(', ');
-  const dialogs = report.interactions.filter(r => r.family === 'dialog' && ['open', 'activate', 'activate-leave'].includes(r.state));
-  assert.equal(dialogs.length, 24);
+  const dialogs = report.interactions.filter(r => r.family === 'dialog' && ['open', 'activate', 'activate-leave', 'open-hover-content'].includes(r.state));
+  assert.equal(dialogs.length, 32);
   for (const row of dialogs) {
     const descriptor = row.inputTrees.reference, bytes = readFileSync(descriptor.file);
     assert.equal(hash(bytes), descriptor.sha256);
