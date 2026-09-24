@@ -34,10 +34,21 @@ native role=tab ancestor in all 420 candidate stages. The measurement IDs name
 native text labels but candidate controls. The existing tab suite passes all
 three tests in 0.91 seconds, including changed-stage and ancestry negative cases.
 This narrowly resolves the box-owner question, not typography or rendering
-equivalence. Next bind the ten scalar groups / 420 occurrences to this proof
-using existing review infrastructure, leaving line-height and padding differences
-separate, then integrate with dialog flow. Both additions require source/export
-reconciliation at that batch milestone; neither changes canonical counts yet.
+equivalence. Exact-row binding now uses the existing owner-review implementation:
+ten scalar groups / 420 occurrences are bound to the tab proof, with all raw
+values preserved and four line-height/padding groups left untouched. Missing or
+duplicate cases, forged values and unsupported renderer-cause metadata fail replay.
+All four tab tests pass in 3.96 seconds; the shared helper's default dialog
+classification remains covered by its passing 5.19-second focused check.
+The position-focused suite initially rejected a new untracked reader dependency
+when the row binding imported the shared modal helper into the cached collector.
+Binding now lives beside that helper instead, leaving the collector graph intact;
+all three position-focused tests pass in 5.01 seconds and four tab tests in 3.97
+seconds. No cache guard was weakened and no new report was generated.
+Next integrate tab control-stage and dialog flow together into production
+aggregation and its exact predecessor guard, then reconcile the batch export.
+Both additions require source/export reconciliation at that milestone; neither
+changes canonical counts yet.
 
 ### Prior export recovery and pending investigation evidence
 

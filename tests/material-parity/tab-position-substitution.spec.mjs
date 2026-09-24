@@ -1,7 +1,54 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { createHash } from 'node:crypto';
 import { collectTabPositionSubstitution, proveTabPositionSubstitution, proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
+import { applyTabControlStage, validateTabControlStage } from './modal-position-inspection.mjs';
+import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+
+test('tab stage review preserves raw findings and does not classify typography or unrelated rows', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const captured = JSON.parse(bytes);
+  const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
+    ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))].filter(c => c.family === 'tabs');
+  assert.equal(cases.length, 70);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const snapshot = { generation: 'ed33d97cd19daa01bdfa984abfaac85e5a5f1dafc6e31fa739400e58b14835e7',
+    indexSha256: '626379adeb7777aff365bab1e9a4c9594ad927a2bcbeecf1e8fb08b91907a958' };
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'tabs', snapshot)
+    .filter(r => r.evidence.section === 'discrepancies' && r.attribution === 'unresolved' &&
+      ['tab-overview', 'tab-activity'].includes(r.element) &&
+      ['height', 'boxSizing', 'flexShrink', 'lineHeight', 'paddingTop'].includes(r.property))
+    .map(({ id, evidence, ...row }) => row);
+  const untouched = rows.filter(r => ['lineHeight', 'paddingTop'].includes(r.property));
+  assert.equal(untouched.length, 4);
+  assert.equal(rows.length, 14);
+  const original = structuredClone(rows);
+  const applied = applyTabControlStage(rows, cases, inventory, normalize);
+  assert.deepEqual(rows, original);
+  const changed = applied.filter(r => r.attribution === 'reviewed-tab-control-stage');
+  assert.equal(changed.length, 10);
+  assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 420);
+  assert.ok(changed.every(r => r.classification === 'harness-instrumentation-defect'));
+  for (const row of untouched) assert.ok(applied.includes(row));
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  assert.deepEqual(validateTabControlStage(applied, rows, cases, inventory, normalize), []);
+  assert.throws(() => applyTabControlStage(rows, cases.slice(1), inventory, normalize));
+  assert.throws(() => applyTabControlStage(rows, [...cases, cases[0]], inventory, normalize));
+  for (const mutate of [
+    values => { values.splice(values.findIndex(r => r.attribution === 'reviewed-tab-control-stage'), 1); },
+    values => { values.find(r => r.attribution === 'reviewed-tab-control-stage').reference = 'forged'; },
+    values => { values.find(r => r.attribution === 'reviewed-tab-control-stage').reviewEvidence.observations[0].rendererCauseProven = true; },
+  ]) {
+    const values = structuredClone(applied); mutate(values);
+    assert.equal(validateTabControlStage(values, rows, cases, inventory, normalize).length, 1);
+  }
+});
 
 test('all 140 tab labels compare a different box while three control stages agree', () => {
   const observations = collectTabPositionSubstitution().observations;

@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const ids = ['bottom-sheet-copy', 'bottom-sheet-dismiss', 'bottom-sheet-panel', 'dialog-actions',
   'dialog-cancel', 'dialog-copy', 'dialog-panel', 'dialog-save', 'dialog-title'];
@@ -570,12 +571,34 @@ function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition)
       return result.proof;
     });
     const metadata = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'];
-    return { ...row, classification: 'application-plugin-authoring-defect', attribution: definition.attribution,
+    return { ...row, classification: definition.classification ?? 'application-plugin-authoring-defect', attribution: definition.attribution,
       recommendedOwner: definition.owner, justification: definition.justification,
       reviewedCases: keys, reviewEvidence: { originalRowSha256: hash(JSON.stringify(row)),
         priorMetadata: Object.fromEntries(metadata.filter(k => Object.hasOwn(row, k)).map(k => [k, structuredClone(row[k])])),
         observations, inputEquivalent: false, renderingEquivalent: false } };
   });
+}
+
+export function applyTabControlStage(rows, cases, inventory, canonicalStyle) {
+  return ['tab-overview', 'tab-activity'].reduce((values, element) => applyModalBoxReview(values,
+    cases, inventory, canonicalStyle, {
+      family: 'tabs', element, properties: ['height', 'boxSizing', 'flexShrink'],
+      prove: (entry, r, a) => {
+        const proof = proveTabControlStage(r, a, element);
+        return { ...proof, referenceNode: proof.referenceLabel, astylarNode: proof.candidateControl };
+      },
+      classification: 'harness-instrumentation-defect', attribution: 'reviewed-tab-control-stage',
+      owner: 'comparison measurement owner mapping; separate fixture text-owner flattening',
+      justification: 'Original direct measurement IDs identify a native nested text label but an AstylarUI tab control. Height, box-sizing and flex-shrink differ for those boxes; the native role=tab ancestor matches all three candidate control style stages. Preserve the original scalar values, and do not extend this ownership diagnosis to typography, padding, structural equivalence or renderer correctness.',
+    }), rows);
+}
+
+export function validateTabControlStage(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(row => row.attribution === 'reviewed-tab-control-stage');
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyTabControlStage(originalRows, cases, inventory, canonicalStyle))));
+    return [];
+  } catch (error) { return [`tab control-stage review does not replay from original owners: ${error.message}`]; }
 }
 
 export function applyDialogTextFlow(rows, cases, inventory, canonicalStyle) {
