@@ -210,9 +210,8 @@ the verified compact index:
    `OverflowClipService.apply` uses `resolveCssViewportRect` (the retained border
    box) and the outer `astylarBorderRadiusWorld` for descendant clipping, without
    border-width insets or an inner-radius calculation. Thus its clip permits
-   child paint in the rounded border band. The smallest next discriminating
-   check is the same reduction with transparent children/border-only paint, to
-   separate clipping overpaint from any independent border-mesh defect. Do not
+   child paint in the rounded border band. The transparent-child control below
+   separates measured child overpaint from an absent border mesh. Do not
    restore child-radius workarounds; a future general correction belongs to
    core overflow/paint ownership. Hover/pressed layers and all historical toggle
    observations remain separate obligations, not automatically classified here.
@@ -238,6 +237,30 @@ the verified compact index:
    TypeScript passes (5.74s command including source inspection). The canonical
    classification checkpoint is unchanged; these new diagnostic proofs still
    require integration and final canonical/browser acceptance.
+
+   Border-only control (same CSS except both child backgrounds are transparent):
+   all 176/952 solid native border pixels match at DPR 1/2, with no dark child
+   paint. At DPR 2 the opaque case still loses exactly 176 of those same 952
+   pixels to the child colors. Thus the measured border loss is child overpaint,
+   not missing border geometry. This does not certify antialiasing, every border
+   width/radius, or border paint outside the exact-solid reference samples.
+   Geometry assertions now run before raster capture, so a paint failure cannot
+   prevent their execution; all three rounded-case boxes match in both variants.
+   No renderer mutation was used to reach this conclusion.
+
+   Evidence: `artifacts/material-parity/toggle-border-control-a5d3420-v2-dpr1`
+   and `-dpr2`, result SHA-256 respectively
+   `372bde9ddde2776af94a018c8160db85115f703017f4457fb335da9e3e4c3432` and
+   `2bd85db7a531147edacf607a30dba3ddbd3a6858b69dc851dafa667829ced1c4`.
+   Ten cases each: DPR 1 eight passes/two known projection failures; DPR 2 seven
+   passes/two projection failures/one opaque-border failure. Both exit 1, no
+   page errors. Transparent-border assertions pass at both DPRs; diagnostic
+   TypeScript exits 0. All 104 source/compiled receipts remain identical to the
+   previous rounded run. Full-image mismatch remains recorded, including the
+   unrelated root background. Stop repeating this settled control. Next audit
+   the still-unreviewed hover/pressed paint-owner inputs or intrinsic chip
+   sizing; integrate this core finding with the existing toggle history without
+   claiming it explains all 73 unresolved signatures or changing canonical input.
 3. Remaining typography and paint: line-height 67, tracking 57, font-family 31
    and color 111 unresolved groups. Reuse explicit ownership/stage proofs and
    separate missing computed evidence from unequal declarations. These property

@@ -8,9 +8,9 @@ import { resolveCssViewportRect } from '../app/services/css-layout-geometry';
 // Equal-input diagnostic reductions, not replacements for Material fixtures.
 // The private inspection symbol is read-only instrumentation, not authoring.
 describe('overlay CSS layout versus projection audit', () => {
-  for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'fixed-clip', 'absolute-clip', 'rounded-toggle'] as const) {
+  for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only'] as const) {
     const clipping = composition.endsWith('-clip');
-    const rounded = composition === 'rounded-toggle';
+    const rounded = composition.startsWith('rounded-');
     for (const [width, height] of (rounded ? [[160, 80]] : composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
       it(`${composition} at ${width} x ${height}`, async () => {
         TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
@@ -58,8 +58,8 @@ describe('overlay CSS layout versus projection audit', () => {
             { selector: '#host, #filler, #pane', boxSizing: 'border-box', margin: '0', padding: '0' },
             { selector: '#host', position: 'absolute', left: '10px', top: '10px', width: '130px', height: '42px',
               display: 'flex', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: '28px', overflow: 'hidden' },
-            { selector: '#filler', width: '48px', height: '40px', background: '#ffffff', flexShrink: '0' },
-            { selector: '#pane', width: '80px', height: '40px', background: '#302d32', flexShrink: '0' },
+            { selector: '#filler', width: '48px', height: '40px', background: composition === 'rounded-border-only' ? 'transparent' : '#ffffff', flexShrink: '0' },
+            { selector: '#pane', width: '80px', height: '40px', background: composition === 'rounded-border-only' ? 'transparent' : '#302d32', flexShrink: '0' },
           ];
         }
         const css = doc.createElement('style');
@@ -106,10 +106,6 @@ describe('overlay CSS layout versus projection audit', () => {
               canvasCssWidth: canvasBox.width, canvasCssHeight: canvasBox.height,
               renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(),
               headDisplay: frame.contentWindow!.getComputedStyle(doc.head).display }, observations }));
-          if (clipping || rounded) {
-            const capture = (window as Window & { auditCapture?: (info: { composition: string; width: number; height: number }) => Promise<void> }).auditCapture;
-            await capture?.({ composition, width, height });
-          }
           expect(JSON.stringify(site)).toBe(authoredBefore);
           for (const observation of observations) {
             expect(observation.css).withContext(observation.id).toBeDefined();
@@ -117,6 +113,10 @@ describe('overlay CSS layout versus projection audit', () => {
               expect(observation.css![key]).withContext(`${observation.id} CSS ${key}`).toBeCloseTo(observation.reference[key], 1);
               expect(observation.projected[key]).withContext(`${observation.id} projection ${key}`).toBeCloseTo(observation.css![key], 1);
             }
+          }
+          if (clipping || rounded) {
+            const capture = (window as Window & { auditCapture?: (info: { composition: string; width: number; height: number }) => Promise<void> }).auditCapture;
+            await capture?.({ composition, width, height });
           }
         } finally {
           surface?.dispose(); frame.remove(); canvas.remove();

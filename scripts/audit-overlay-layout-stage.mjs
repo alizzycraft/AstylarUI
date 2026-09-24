@@ -76,7 +76,7 @@ try {
   const observations = [], errors = [];
   const screenshots = [];
   await page.exposeFunction('auditCapture', async ({ composition, width, height }) => {
-    assert.ok(['fixed-clip', 'absolute-clip', 'rounded-toggle'].includes(composition));
+    assert.ok(['fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only'].includes(composition));
     const captures = {};
     const rasters = {};
     for (const [side, selector] of [['reference', 'iframe'], ['astylar', 'canvas']]) {
@@ -102,20 +102,21 @@ try {
     screenshots.push({ composition, captures, paint });
     // Fixed pane extends 20px beyond viewport; absolute pane extends 20px
     // beyond its clipping host. Both leave exactly 28px of the 48px pane.
-    if (composition !== 'rounded-toggle') {
+    if (!composition.startsWith('rounded-')) {
       assert.equal(referencePanePixels, 120 * 28 * dpr * dpr);
       assert.equal(paneMaskDifferences, 0, 'Pane clipping differs from native paint');
     } else {
-      assert.ok(referencePanePixels > 0);
+      assert.ok(composition === 'rounded-border-only' ? referencePanePixels === 0 : referencePanePixels > 0);
       // Record curved-edge differences without pretending exact solid-pixel
       // masks establish equivalent antialiasing or complete border paint.
-      let referenceSolidBorderPixels = 0, borderPixelsCoveredByChildren = 0;
+      let referenceSolidBorderPixels = 0, borderPixelsCoveredByChildren = 0, solidBorderMismatches = 0;
       const coveredSamples = [];
       for (let offset = 0; offset < reference.data.length; offset += 4) {
         const ref = reference.data.subarray(offset, offset + 4);
         const actual = candidate.data.subarray(offset, offset + 4);
         if (ref[0] !== 121 || ref[1] !== 116 || ref[2] !== 126 || ref[3] !== 255) continue;
         referenceSolidBorderPixels++;
+        solidBorderMismatches += Number(!ref.equals(actual));
         const whiteChild = actual[0] === 255 && actual[1] === 255 && actual[2] === 255 && actual[3] === 255;
         if (!whiteChild && !isPane(candidate.data, offset)) continue;
         borderPixelsCoveredByChildren++;
@@ -124,8 +125,12 @@ try {
           reference: [...ref], candidate: [...actual],
         });
       }
-      Object.assign(paint, { referenceSolidBorderPixels, borderPixelsCoveredByChildren, coveredSamples });
+      Object.assign(paint, { referenceSolidBorderPixels, solidBorderMismatches, borderPixelsCoveredByChildren, coveredSamples });
       assert.ok(referenceSolidBorderPixels > 0, 'Native border control must be visible');
+      if (composition === 'rounded-border-only') {
+        assert.equal(candidatePanePixels, 0, 'Transparent children must not paint dark fill');
+        assert.equal(solidBorderMismatches, 0, 'Border-only control differs at solid native border pixels');
+      }
       assert.equal(borderPixelsCoveredByChildren, 0, 'Solid native border pixels are replaced by child fill');
     }
   });
