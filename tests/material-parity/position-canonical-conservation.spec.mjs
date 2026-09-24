@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { comparePositionCanonical } from '../../scripts/check-material-position-canonical-conservation.mjs';
 import { restorePositionProducer } from './position-composition-producer-transition.mjs';
 import { positionCompositionAttribution } from './position-composition-review.mjs';
@@ -19,6 +21,34 @@ function sample(followupOnly = false) {
   for (const row of current.control.differences) row.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = proof.currentModuleSha256;
   return [previous, current, structuredClone(current.rows), currentSource, { followupOnly }];
 }
+
+function chipSample() {
+  const args = sample(), [previous, current] = args;
+  const previousSource = execFileSync('git', ['show', '2a35d34:tests/material-parity/input-equivalence-audit.mjs'], { maxBuffer: 4 * 1024 * 1024 });
+  previous.rows = Array.from({ length: 10 }, (_, i) => ({ family: 'chips', element: `chip-${i}`,
+    occurrences: i === 0 ? 5 : 3, attribution: 'unresolved', reference: 'rgba(0,0,0,0)' }));
+  current.rows = previous.rows.map(row => ({ ...row, attribution: 'reviewed-chip-state-layer-substitution' }));
+  const oldHash = createHash('sha256').update(previousSource.toString('utf8').replaceAll('\r\n', '\n')).digest('hex');
+  for (const row of previous.control.differences) row.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = oldHash;
+  return [previous, current, structuredClone(current.rows), currentSource, { chipOnly: true, previousSource }];
+}
+
+test('chip comparison reuses strict row and 48 control-receipt conservation', () => {
+  const args = chipSample(), original = structuredClone(args.slice(0, 3));
+  const result = comparePositionCanonical(...args);
+  assert.equal(result.changedGroups, 10); assert.equal(result.changedOccurrences, 32);
+  assert.equal(result.controlReceiptTransition.records, 48);
+  assert.deepEqual(args.slice(0, 3), original);
+  for (const mutate of [
+    ([, c]) => c.rows.pop(),
+    ([, c]) => { c.rows[0].reference = 'changed'; },
+    ([, c]) => c.control.gaps.push({ reason: 'unrelated' }),
+    ([, c]) => { c.control.differences[0].reviewEvidence.observation.normalizationReconciliation.value++; },
+    a => { a[4].previousSource = Buffer.from(a[4].previousSource + '\nconst unreviewed = true;'); },
+    a => { a[4].previousSource = currentSource; },
+    a => { a[4].followupOnly = true; },
+  ]) { const changed = chipSample(); mutate(changed); assert.throws(() => comparePositionCanonical(...changed)); }
+});
 
 test('followup comparison isolates fourteen classifications against the six-group predecessor', () => {
   const args = sample(true), before = structuredClone(args.slice(0, 3));

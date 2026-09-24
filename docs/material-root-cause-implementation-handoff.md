@@ -122,6 +122,22 @@ they do not reproduce it. A historical cause claim requires matching earlier
 runtime/input evidence or a new reproduction of that symptom. No new capture,
 renderer edit, fixture edit or running-export dependency change was needed.
 
+Conservation preparation while that export runs: the existing
+`scripts/check-material-position-canonical-conservation.mjs` now accepts
+`--chip`. It authenticates the preserved full predecessor through the existing
+stream reader, independently replays the pinned chip proposal, and requires
+exact full-row equality with that application: ten groups / 32 observations,
+all other scalar rows unchanged. It also requires exactly 48 control producer
+receipt changes, with every other control field conserved. Current and previous
+producer modules must both reduce through the existing exact-fragment restorer
+to the same pinned predecessor; no mapping or normalization exclusion was added.
+`node --test tests/material-parity/position-canonical-conservation.spec.mjs`
+passes 4/4 (4.22 seconds), including prior six/fourteen-group cases and chip
+negative controls for row loss, value changes, unrelated control changes and
+forged producer transitions. This is checker verification only: run
+`node scripts/check-material-position-canonical-conservation.mjs --chip` after
+the export is terminal, then verify all section/source changes separately.
+
 Dialog width follow-up (separate from the height clamp): the existing reduction
 now observes `measureIntrinsicFlowChildOuterWidth` and
 `calculateIntrinsicContainerWidth` through call-through spies. In
