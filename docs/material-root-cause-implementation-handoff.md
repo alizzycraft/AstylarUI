@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 24
 
+Bottom-sheet ownership check: the focused `bottom-sheet scalar typography`
+test authenticates 25 retained states and joins 15 scalar groups / 300 occurrences
+for the panel and two item anchors. Native font, line-height, tracking and color
+originate at `.mat-bottom-sheet-container`; the anchors inherit them. Earlier
+inner-list-label typography proofs therefore cannot classify these scalar owners
+by value equality alone. Candidate line-height/tracking requests are absent across
+the mapped ancestry, including inline style strings and possibly matching rules.
+Font/color authoring classification and canonical integration remain pending.
+Command: `node --test --test-name-pattern="bottom-sheet scalar typography" tests/material-parity/modal-position-inspection.spec.mjs`;
+1/1 passes (2.897 seconds test time). No renderer or capture changes. Next: use
+these exact container-token owners when classifying the remaining sheet rows,
+rather than transferring the existing inner-label attribution.
+
+The overlay export started at `55d9945` remains live (session 6688, PID 15056)
+and has reached `validate-audit`; latest observed progress was 821.335 seconds.
+Its result is not yet accepted. Continue polling this handle before conservation
+and compact-index refresh; do not launch another export.
+
 Resume from the existing evidence, using [the incremental workflow](audit-workflow.md).
 The canonical package with decoded SHA-256
 `276bcd838575bcce26f06ab922eeacd880152c3585dee929f4635c778338767e`

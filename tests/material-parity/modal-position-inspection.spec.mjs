@@ -11,6 +11,83 @@ import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows,
   validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications } from './overlay-surface-audit-source-binding.mjs';
 import { collectFullTreeInventory, collectControlTypographyEvidence,
   collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
+import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+
+test('bottom-sheet scalar typography belongs to container tokens rather than inner list-label tokens', () => {
+  const inspection = collectModalPositionInspection();
+  const compact = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', overlaySurfacePredecessor);
+  const tokens = {
+    fontFamily: ['font-family', 'var(--mat-bottom-sheet-container-text-font, var(--mat-sys-body-large-font))', 'Roboto'],
+    lineHeight: ['line-height', 'var(--mat-bottom-sheet-container-text-line-height, var(--mat-sys-body-large-line-height))', '24px'],
+    letterSpacing: ['letter-spacing', 'var(--mat-bottom-sheet-container-text-tracking, var(--mat-sys-body-large-tracking))', '0.496px'],
+    color: ['color', 'var(--mat-bottom-sheet-container-text-color, var(--mat-sys-on-surface))', 'rgb(29, 27, 30)'],
+  };
+  const normalized = value => ({ Roboto: 'roboto', 'Roboto, Arial, sans-serif': 'roboto,arial,sans-serif',
+    'rgb(29, 27, 30)': 'rgba(29,27,30,1)', '#1d1b20': 'rgba(29,27,32,1)', '#e6e1e5': 'rgba(230,225,229,1)' }[value] ?? value);
+  const trees = new Map(), matched = new Map();
+  for (const element of ['bottom-sheet-panel', 'bottom-sheet-copy', 'bottom-sheet-dismiss']) {
+    const group = inspection.groups.find(g => g.element === element);
+    assert.equal(group.observations.length, 25);
+    for (const observation of group.observations) {
+      if (!trees.has(observation.case)) trees.set(observation.case, ['reference', 'astylar'].map(side => {
+        const receipt = observation.inputTrees[side], bytes = readFileSync(receipt.file);
+        assert.equal(createHash('sha256').update(bytes).digest('hex'), receipt.sha256);
+        return JSON.parse(bytes);
+      }));
+      const [r, a] = trees.get(observation.case), mapping = observation.proof.mapping;
+      const referencePath = mapping.referencePath.map(key => r.nodes.find(n => n.key === key));
+      const candidatePath = mapping.candidatePath.map(key => a.nodes.find(n => n.key === key));
+      const depth = element === 'bottom-sheet-panel' ? 0 : 2;
+      assert.deepEqual(referencePath.slice(0, depth + 1).map(n => n.type), depth
+        ? ['a', 'mat-nav-list', 'mat-bottom-sheet-container'] : ['mat-bottom-sheet-container']);
+      assert.equal(candidatePath[0].authored.id, element);
+      for (const [property, [css, token, computed]] of Object.entries(tokens)) {
+        const affects = key => [property.toLowerCase(), 'all', ...(property === 'color' ? ['webkittextfillcolor'] : ['font'])]
+          .includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
+        for (let index = 0; index <= depth; index++) {
+          const node = referencePath[index];
+          assert.equal(r.styles[node.style][property], computed);
+          assert.ok(!Object.keys(node.inline ?? {}).some(affects));
+          const requests = node.rules.map(i => r.rules[i]).filter(rule => rule.active)
+            .flatMap(rule => Object.entries(rule.declarations).filter(([key]) => affects(key) && !/^(animation|transition)/i.test(key))
+              .map(([key, value]) => ({ selector: rule.selector, key, value: value.value })));
+          assert.deepEqual(requests, index === depth ? [{ selector: '.mat-bottom-sheet-container', key: css, value: token }]
+            : property === 'color' && index === 0 ? [{ selector: 'a.mdc-list-item', key: css, value: 'inherit' }] : []);
+        }
+        const owner = candidatePath[0], stages = ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'].map(s => owner[s]);
+        const actual = stages[0][property];
+        for (const stage of stages) assert.equal(stage[property], actual);
+        if (property === 'lineHeight' || property === 'letterSpacing') {
+          for (const node of candidatePath) {
+            assert.ok(!Object.keys(node.authored.style ?? {}).some(affects));
+            const inlineText = node.authored.attributes?.style;
+            assert.ok(inlineText === undefined || typeof inlineText === 'string' && !inlineText.includes('\\') &&
+              !/(?:^|;)\s*(?:font(?:-[\w-]+)?|line-height|letter-spacing|all|animation[^:]*|transition[^:]*)\s*:/i.test(inlineText));
+            for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'])
+              assert.ok(!Object.keys(node[stage] ?? {}).some(affects));
+            assert.ok(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, node.authored))
+              .every(rule => !Object.keys(rule).some(affects)));
+          }
+        }
+        const rows = compact.filter(row => row.evidence.section === 'discrepancies' && row.element === element && row.property === property &&
+          row.reference === normalized(computed) && row.astylar === normalized(actual));
+        assert.equal(rows.length, 1); const row = rows[0];
+        assert.equal(Object.hasOwn(row, 'astylar'), actual !== undefined);
+        assert.equal(row.attribution, 'unresolved');
+        if (!matched.has(row.id)) matched.set(row.id, { row, cases: [] });
+        matched.get(row.id).cases.push(observation.case);
+      }
+    }
+  }
+  assert.equal(matched.size, 15);
+  assert.equal([...matched.values()].reduce((n, g) => n + g.cases.length, 0), 300);
+  for (const { row, cases } of matched.values()) {
+    assert.equal(row.occurrences, cases.length); assert.deepEqual(row.cases, cases.slice(0, 12));
+  }
+  // The container scope differs from the direct inner-label token scope.
+  // This join does not reuse the label's font/color authoring classification,
+  // nor establish output parity or change canonical attribution.
+});
 
 test('seven dialog scalar groups reuse original typography proofs with matching owner and declaration stage', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
