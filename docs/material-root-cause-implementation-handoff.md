@@ -4,17 +4,18 @@
 
 Resume from the existing evidence, using [the incremental workflow](audit-workflow.md).
 The canonical package with decoded SHA-256
-`dd44f6b5597014617876fa21d8d144adf7451a3a17a4438c6f95384da6005d00`
-contains **1,668 unresolved scalar signatures**, not that many confirmed bugs.
+`0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de`
+contains **1,654 unresolved scalar signatures**, not that many confirmed bugs.
 The compact index preserves all 8,483 differences / 389,202 occurrences and
 132 source findings. Static/interaction inventory is 436/436 and 1,875/1,875;
 inventory completeness is not attribution or rendering acceptance.
 
 Prioritize remaining questions by impact and shared ownership, not by creating
-one investigation per scalar property:
+one investigation per scalar property. Component counts below are refreshed from
+the verified compact index:
 
 1. Overlay boxes/ownership: dialog has 216 unresolved signatures, bottom sheet
-   182, snackbar 77 and tooltip 43. The 59-state wrapper inspection now rules
+   182, snackbar 77 and tooltip 42. The 59-state wrapper inspection now rules
    out **position keywords alone** as a sufficient diagnosis: reference absolute
    wrappers have a fixed parent; candidate fixed wrappers flatten that layer.
    See [the modal inspection](material-modal-position-inspection.md). Next trace
@@ -46,7 +47,7 @@ fingerprints registered. Cold focused integration preserves all 8,362 raw rows,
 changes exactly fourteen classifications and leaves 8,348 complete rows unchanged.
 The source-transition test restores the exact pinned pre-position producer and
 rejects dropped collection, validation, evidence or fingerprint fragments.
-Export/conservation is still pending: the canonical count above is unchanged.
+Export/scalar conservation now passes; whole-report reconciliation is below.
 Seven groups are authoring defects and seven are measurement/harness defects;
 none is promoted to equivalent rendering or a confirmed renderer cause.
 Verification: source adapter checks 2/2; final cold transition/integration 2/2
@@ -148,10 +149,63 @@ under memory pressure. The subsequent direct collect-and-validate replay used
 `collectReviewedInputAuditInputs` / `validateReviewedInputAuditInputs` against
 `current-ancestry-audit/latest-report.json`: **134 groups / 3,325 observations**
 bound, independent validation returned no errors, process exit 0.
-All five previously rejected bindings now have successful direct replay. Canonical
-files remain unchanged. Next perform the coherent cold export and full predecessor
-conservation (including source metadata), not another unchanged binding replay.
-Full canonical and enforced browser acceptance remain pending.
+All five previously rejected bindings have successful direct replay. The following
+cold export and conservation checks supersede that binding-only checkpoint.
+
+Cold export at `5c5d5e6` completed in 1,963.978 seconds (32.73 minutes).
+Construction took 771.225 seconds; validation ended at 1,835.180 seconds.
+The evidence session reverified 1,205 files / 89,149,474 bytes, with two collectors,
+ten session hits and no invalidations. Exit 1 reports only **1,654 unattributed
+resolved-style differences**; all five stale-binding errors are gone. Log:
+`artifacts/material-parity/position-followup-export-5c5d5e6-progress.log`.
+The generated package's decoded SHA-256 is
+`0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de`;
+it is a conserved historical-evidence classification checkpoint, **not full audit
+acceptance or current-browser evidence**.
+`node --max-old-space-size=1536 scripts/check-material-position-canonical-conservation.mjs --followup`
+passes: exactly 14 groups / 768 observations change, all other 8,469 complete
+scalar rows remain identical, unresolved falls from 1,668 to 1,654, and control
+evidence changes only in 48 authenticated producer receipts. Ordered scalar-row
+SHA-256: `4398fb757eb9e5aa44bdf8fba4d0676391e13195e3294d336a3820637bbc78c2`.
+Whole-report section reconciliation completed, reusing the saved predecessor
+section hashes: one addition, nine changed sections, none removed. Complete
+field-level comparison accounts for every remaining change:
+
+- `sourceFingerprints`: 424 to 442 entries (17 followup dependencies and the
+  moved slider integration proof), no removed entries, retained order unchanged.
+  All 442 current LF-normalized hashes independently match disk. The 24 refreshed
+  old receipts cover the reviewed followup producer/projection, evidence-session
+  readers and bindings, progress instrumentation, test split and scratch retention.
+- `controlLineBoxes`: only the same 48 producer-hash transitions already proved
+  in control typography; every other field is unchanged.
+- `summary`: authoring classifications +7, harness classifications -7, unresolved
+  -14; no other summary fields change.
+- `ownerCaretInputs`: only two current source hashes (mapping reader and producer)
+  and the explicit mapping-import verification label change.
+- `reviewedSourceBatchInputs`: only the producer hash and its derived motion
+  report digest change. All observations remain identical; the full cold validator
+  independently replays this binding. New report digest:
+  `7c2cfbb0de3c8b4e4bc52c7b2752f3a2207bae1afc16e76e61556f5e77093d7b`.
+- `focusedProofs`: one line advances 50 to 51; the slider integration proof moves
+  from its old mixed suite at line 168 to the split integration suite at line 9.
+  No proof text or membership changes.
+- `environment`: installed consumer Angular changes **20.3.29 to 20.3.31**,
+  independently confirmed on disk. This is the collector's installed environment,
+  not a recapture: original browser assets remain hash-bound historical evidence.
+  Current-browser acceptance requires fresh capture; do not infer it from this
+  metadata update. Other environment fields are unchanged.
+- Added `positionFollowupAuditInputs`: independently extracted and replayed with
+  dependency-validated reuse (the full export above used cold collection);
+  all 768 observations and the complete section match (no validation errors).
+
+The authenticated section and field diffs are retained under
+`artifacts/material-parity/position-followup-sections-5c5d5e6.json` and
+`position-followup-metadata-5c5d5e6.json`. Together with the scalar/control check,
+they account for the entire package; no raw captured inputs change. Compact index
+import and verification pass: 8,483 scalar records, 132 source findings, 39,904
+control/typography records, 389,202 occurrences, 1,654 unresolved; 69,653,983 bytes.
+Full current `--check` and enforced browser acceptance remain
+required at final acceptance; this still contains 1,654 unresolved signatures.
 
 Small live samples are retained as `position-followup-validation-cpu-sample.log`
 and `position-followup-validation-allocation-sample.log`; no heap dump was taken.
