@@ -11,6 +11,20 @@ const moduleFile = survey.productionNormalization.module;
 const source = readFileSync(moduleFile, 'utf8');
 const sha = text => createHash('sha256').update(text).digest('hex');
 
+test('mapping read-adapter reconciliation conserves the entire historical mapping implementation', () => {
+  const file = 'tests/material-parity/generated-node-mapping-evidence.mjs';
+  const descriptor = survey.sourceFingerprints.find(s => s.file === file);
+  assert.ok(descriptor);
+  const current = readFileSync(file, 'utf8');
+  const before = execFileSync('git', ['show', 'd617a75^:' + file], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+  assert.equal(readGapSurveySource(descriptor).replaceAll('\r\n', '\n'), before);
+  for (const changed of [current + '\n// unrelated change\n', current.replace('mappingTargets =', 'differentTargets ='),
+    current.replace('auditReadFileSync as readFileSync', 'differentReader as readFileSync')]) {
+    assert.notEqual(changed, current);
+    assert.throws(() => readGapSurveySource(descriptor, { current: () => changed }));
+  }
+});
+
 test('historical dependency reading is explicit and still rejects changed or substituted sources', () => {
   const descriptor = survey.sourceFingerprints.find(s => s.file === moduleFile);
   const historical = readGapSurveySource(descriptor);

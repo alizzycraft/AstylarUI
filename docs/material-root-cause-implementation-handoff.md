@@ -61,7 +61,8 @@ promote their position scalars to resolved classifications.
 Source-fingerprint reconciliation remains open: at the preceding checkpoint,
 using the producer's LF-normalized hash convention, **12 of 424** stored source
 receipts differed after the workflow changes. The new followup integration also
-changes the producer/transition proof and registers seventeen additional receipts;
+changes the producer/transition proof and registers eighteen additional receipts
+(seventeen followup files and the moved slider integration proof);
 do not reuse that earlier difference count as a current measurement. The prior
 twelve concerned collection/session imports, test splitting and scratch
 retention. The showcase source and browser harness still match after correct
@@ -69,6 +70,22 @@ line-ending normalization. Do not rewrite historical receipts to claim currency.
 At the next integration milestone reconcile the changed producers and proof
 inventory, perform cold replay, then export/check once for the coherent batch.
 No full current-builder or enforced-browser acceptance is claimed here.
+
+Export preflight follow-up: the first cold run exceeded its 1.5 GiB V8 heap cap;
+the 3 GiB retry reached a real stale dependency and was stopped before export.
+Both logs are retained as `position-followup-cold-export.log` and
+`position-followup-cold-export-3gb.log` under `artifacts/material-parity`.
+The old canonical package is unchanged and preserved in
+`pre-position-followup-509dbf4`; its authenticated section baseline is complete.
+The gap-survey dependency failure is now reconciled by undoing exactly the
+mapping module's read-adapter import and requiring its entire remaining source
+to retain the old hash. Mapping mutations still fail. Gap/session checks pass
+7/7; both failed collectors now replay unchanged (16 composition groups / 1,032
+observations and 38 membership groups / 1,902 observations). Separately, the
+slider proof pointer now follows its moved integration test; all 106 canonical
+proof entries resolve, with a missing-target negative control. Workflow/source/
+conservation checks pass 6/6. These are preflight corrections, not a completed
+canonical export or a reason to change original receipts in historical reports.
 
 Overlay runtime-probe status: the uncommitted draft
 `src/parity/overlay-layout-stage.audit.spec.ts` has not reached browser execution.

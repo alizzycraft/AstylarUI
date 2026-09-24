@@ -45,6 +45,12 @@ export function restorePositionProducer(source, { followupOnly = false } = {}) {
     assert.equal(restored.split(from).length, 2, 'missing or repeated position integration fragment');
     restored = restored.replace(from, to);
   };
+  // The focused/integration split moved this test without changing its claim.
+  const movedSliderProof = "    proof(root, 'tests/material-parity/slider-input-box-integration.spec.mjs',";
+  if (restored.includes(movedSliderProof)) {
+    replaceOnce(movedSliderProof, "    proof(root, 'tests/material-parity/slider-input-box-source-binding.spec.mjs',");
+    replaceOnce("    'tests/material-parity/slider-input-box-integration.spec.mjs',\n");
+  }
   // Also accept the subsequent, exact fourteen-group integration. The final
   // pinned predecessor still rejects any unrelated producer modification.
   const hasFollowup = restored.includes("from './position-followup-audit-source-binding.mjs'");

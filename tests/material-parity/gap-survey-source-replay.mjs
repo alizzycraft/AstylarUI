@@ -11,13 +11,20 @@ const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 
 // The survey is historical evidence, not a demand that the live normalizer
 // retain its old color-rounding bug. Only that dependency is read historically;
-// every other source still has to match the original survey's exact digest.
+// The mapping module's later read adapter can be restored only by its exact
+// import substitution; its entire remaining source must retain the old digest.
+// No mapping rules or unrelated dependencies are accepted historically.
 export function readGapSurveySource(descriptor, readers = {}) {
   const readCurrent = readers.current ?? (file => readFileSync(file, 'utf8'));
   const readHistorical = readers.historical ?? ((revision, file) => execFileSync('git',
     ['show', `${revision}:${file}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }));
-  const source = descriptor.file === moduleFile
+  let source = descriptor.file === moduleFile
     ? readHistorical(gapSurveyNormalizationRevision, descriptor.file) : readCurrent(descriptor.file);
+  if (descriptor.file === 'tests/material-parity/generated-node-mapping-evidence.mjs' && hash(source) !== descriptor.sha256) {
+    const adapter = "import { auditReadFileSync as readFileSync } from './audit-evidence-session.mjs';";
+    assert.equal(source.split(adapter).length, 2, 'mapping read-adapter transition must occur exactly once');
+    source = source.replace(adapter, "import { readFileSync } from 'node:fs';");
+  }
   assert.equal(hash(source), descriptor.sha256, `gap survey dependency changed: ${descriptor.file}`);
   return source;
 }
