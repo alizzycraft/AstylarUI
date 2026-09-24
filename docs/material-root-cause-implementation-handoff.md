@@ -2,6 +2,15 @@
 
 ## Current audit checkpoint — September 25
 
+Corrected cold export is running from `b8c58ae`, session **95217**, log
+`artifacts/material-parity/appearance-b8c58ae-progress.log`. It reached
+`build-audit` after 0.97 seconds. Revalidate the handle/process before acting;
+do not launch another export or modify its source dependencies while it runs.
+The terminal rejected run below is historical, not this active process.
+After completion, use `--appearance` comparison against accepted `0a6c0f6d...`,
+then reconcile sections/source receipts (including the 48 control producer
+receipts). The accepted count remains 1,541 until that reconciliation succeeds.
+
 Corrected-export preflight passes: the existing producer-transition helper now
 removes only the exact appearance fallback relocation and authenticates the
 complete predecessor module SHA (`1a88cf50...`). The appearance comparator uses
