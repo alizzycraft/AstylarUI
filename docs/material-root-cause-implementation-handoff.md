@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 25
 
+Current overlay authoring is now distinguished by executing the actual
+`handleClick`, `familyElements`, and outside-dismiss methods with a mocked public
+surface (source SHA `2c2979adc26453138e25dffeaeed18d3669514994eea662236ca8649ea00a863`).
+Menu only patches open state: no focus request or autofocus node. Sheet authors
+an autofocus Share button in a role=dialog div and requests its valid ID through
+`whenSettled()` immediately after state mutation. Dialog instead requests the
+nonexistent `dialog-dismiss`, while its actual modal dialog authors autofocus
+on `dialog-cancel`. Core `buildActiveModalDialog` selects autofocus descendants
+only for open modal `type: dialog` owners. These are separate authoring paths,
+not evidence of one shared core focus failure. The source-execution check proves
+requests and target existence, not current browser timing; the existing public
+signal/update reduction remains the timing evidence, without historical bundle
+attribution. Six focus tests pass in 6.63 seconds. Next current-runtime capture
+must bind the served build and record focus before/after Angular update delivery;
+do not repeat the already-established historical identity inventory. No authoring
+or renderer correction was made.
+
 Overlay focus inventory now accounts for all 199 retained interactions (menu
 82, sheet 51, dialog 66). In addition to the 73 opening and 30 dismissal records
 below, the remaining 96 comprise 24 explicit-focus records with matching opener

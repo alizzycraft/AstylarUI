@@ -21,6 +21,58 @@ const visit = n => { if (ts.isVariableDeclaration(n) && n.name.getText(ast) === 
 visit(ast); assert.deepEqual(gates, ["state !== 'focus' || referenceFocus === astylarFocus"]);
 const gate = new Function('state', 'referenceFocus', 'astylarFocus', `return ${gates[0]}`);
 
+test('current overlay authoring has distinct menu, sheet and dialog focus requests', async t => {
+  // Execute the actual authoring methods with a minimal surface boundary.
+  // This diagnoses authored requests, not browser scheduling or core behavior.
+  const bytes = readFileSync('examples/material-showcase/src/app/astylar.component.ts');
+  const tree = ts.createSourceFile('current.ts', bytes.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const owner = tree.statements.find(n => ts.isClassDeclaration(n) && n.name?.text === 'AstylarShowcaseComponent');
+  const names = ['handleClick', 'familyElements', 'dismissPopupForOutsideTarget'];
+  const methods = names.map(name => {
+    const matches = owner.members.filter(n => ts.isMethodDeclaration(n) && n.name.getText(tree) === name);
+    assert.equal(matches.length, 1);
+    return matches[0].getText(tree);
+  });
+  const emitted = ts.transpileModule(`class Probe { ${methods.join('\n')} }`, {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.None },
+  }).outputText;
+  const Probe = new Function(`${emitted}; return Probe;`)();
+  const flatten = nodes => nodes.flatMap(n => [n, ...flatten(n.children ?? [])]);
+  for (const family of ['menu', 'bottom-sheet', 'dialog']) {
+    let state = { open: false, disabled: false };
+    const requests = [], trace = [], probe = new Probe();
+    Object.assign(probe, {
+      store: { state: () => state, tokens: () => ({}), patchState: patch => {
+        state = { ...state, ...patch }; trace.push('authored-state');
+      } },
+      family: () => family, status: { set() {} },
+      surface: { whenSettled: () => { trace.push('settlement-request'); return Promise.resolve(); },
+        focus: id => { requests.push(id); trace.push('focus-request'); return false; } },
+    });
+    probe.handleClick(`${family}-primary`, { targetId: `${family}-primary` });
+    await Promise.resolve();
+    assert.equal(state.open, true);
+    const nodes = flatten(probe.familyElements(family));
+    if (family === 'menu') {
+      assert.deepEqual(requests, []);
+      assert.deepEqual(nodes.filter(n => n.autofocus), []);
+      assert.equal(nodes.find(n => n.id === 'menu-popup').role, 'menu');
+    } else {
+      assert.deepEqual(trace, ['authored-state', 'settlement-request', 'focus-request']);
+      assert.deepEqual(requests, [`${family}-dismiss`]);
+      if (family === 'dialog') {
+        assert.equal(nodes.some(n => n.id === requests[0]), false);
+        assert.equal(nodes.find(n => n.autofocus).id, 'dialog-cancel');
+        assert.equal(nodes.find(n => n.id === 'dialog-overlay').modal, true);
+      } else {
+        assert.equal(nodes.find(n => n.autofocus).id, requests[0]);
+        assert.equal(nodes.find(n => n.id === 'bottom-sheet-overlay').type, 'div');
+      }
+    }
+  }
+  t.diagnostic(`Current authoring source SHA-256 ${hash(bytes)}; mocked surface, no current-browser attribution`);
+});
+
 test('remaining overlay focus coverage preserves unknown identities and held capture timing', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
