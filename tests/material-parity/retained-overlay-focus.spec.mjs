@@ -63,7 +63,7 @@ test('original overlay records expose missing identities without proving focus e
   }
 });
 
-test('retained exact focus selectors identify sheet and menu actions despite missing scalar identities', () => {
+test('retained focus selectors distinguish sheet/menu mismatches from matching dialog focus', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const report = JSON.parse(bytes);
@@ -94,7 +94,27 @@ test('retained exact focus selectors identify sheet and menu actions despite mis
       assert.equal(row.focus.matches, true);
     }
   }
+  // Every branch in this exact captured list requires the indicator's direct
+  // parent to be focused. Unlike the ripple's cdk-program-focused class list,
+  // there is no branch that can match merely because a class remains present.
+  const selector = ['mat-mdc-button', 'mat-mdc-unelevated-button', 'mat-mdc-raised-button',
+    'mat-mdc-outlined-button', 'mat-tonal-button']
+    .map(c => `.${c}:focus > .mat-focus-indicator::before`).join(', ');
+  const dialogs = report.interactions.filter(r => r.family === 'dialog' && ['open', 'activate', 'activate-leave'].includes(r.state));
+  assert.equal(dialogs.length, 24);
+  for (const row of dialogs) {
+    const descriptor = row.inputTrees.reference, bytes = readFileSync(descriptor.file);
+    assert.equal(hash(bytes), descriptor.sha256);
+    const tree = JSON.parse(bytes);
+    const indicators = tree.nodes.filter(n => n.pseudoElements?.some(p => p.pseudo === '::before' &&
+      p.rules.some(i => tree.rules[i].selector === selector && tree.rules[i].active === true)));
+    assert.equal(indicators.length, 1);
+    const parent = tree.nodes.find(n => n.key === indicators[0].parent);
+    assert.equal(parent.type, 'button');
+    assert.equal(parent.attributes['data-parity-id'], 'dialog-cancel');
+    assert.equal(row.focus.astylar, 'dialog-cancel');
+    assert.equal(Object.hasOwn(row.focus, 'reference'), false);
+  }
   // This recovers reference focus at tree-capture time, not an event timeline
-  // or a diagnosis of the current candidate runtime. Dialog lists need their
-  // own proof; do not infer focus from an arbitrary matching selector branch.
+  // or a diagnosis of the current candidate runtime.
 });

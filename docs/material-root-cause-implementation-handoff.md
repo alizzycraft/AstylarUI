@@ -11,10 +11,16 @@ authenticated; the actual tree-reader bytes match the captured reader receipt
 The same records report candidate opener focus and incorrectly `matches: true`.
 This recovers reference focus at tree-capture time: it strengthens 49 historical
 observations beyond merely missing scalar identities, but is not an event
-timeline or proof of the current runtime cause. Dialog remains separate: its
-selector-list branches cannot be treated as exact focused-owner evidence.
-The existing retained-overlay-focus test now covers this recovery (three tests,
-4.30 seconds before the additional reader-byte assertion). No active-export
+timeline or proof of the current runtime cause. Dialog has now been checked
+separately: all 24 records match the exact focus-indicator selector list whose
+five branches each require a focused direct parent button. That parent's
+`data-parity-id` is `dialog-cancel`, matching the recorded candidate identity.
+Do not use the other ripple selector list containing `cdk-program-focused`
+classes as proof: those branches do not all require actual focus. Thus the 73
+missing reference scalar identities comprise 49 sheet/menu discrepancies and
+24 dialogs with matching captured focus, not 73 behavioral failures.
+The existing retained-overlay-focus test covers all of this recovery (three
+tests pass in 3.92 seconds, including reader-byte authentication). No active-export
 dependency or capture changed; the test is outside its source fingerprint list.
 Next focused capture must distinguish retained-runtime mismatch from current
 signal/update settlement behavior; do not recapture simply to rediscover these
