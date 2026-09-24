@@ -72,6 +72,20 @@ Combined modal sizing cold export is now live: exec session `43247`, Node PID
 It uses the exact five-input command below, with both COLD and PROGRESS enabled.
 The process and command line were checked; log reached build-audit. Keep export
 dependencies frozen and poll this handle rather than starting another run.
+Read-only next-question check during the export: all 25 original bottom-sheet
+panel tree pairs were hash-authenticated (24 desktop states, one comparison-pane
+state). Native `max-height:80vh` computes to 800px/640px; native min-width is
+512px/900px and max-width 1184px/none respectively. Native overflow X/Y is auto
+and box-sizing border-box. Candidate normal/resolved/interaction stages retain
+height 128px and width 512px/100%, with min/max width, max-height, box-sizing and
+all overflow keys omitted. The active desktop `.mat-bottom-sheet-container-large`
+rule supplies `min-width:512px; max-width:calc(-256px + 100vw)`; the compact
+reference retains the base `min-width:100vw`. This identifies the next responsive
+constraint/scroll authoring question, not a new core diagnosis or canonical
+classification. Reuse the existing equivalent-input sheet intrinsic-size proof;
+do not recapture it merely to establish these omitted declarations. No export
+dependency changed for this read-only check. Export PID 20816 remained live with
+CPU increasing from 84.98 to 126.64 seconds during inspection.
 This milestone covers 12 groups / 384 occurrences plus one new source finding.
 The predecessor package hash was verified and its small manifest copied alongside
 the retained compact payload; no duplicate payload was created. Start from accepted
