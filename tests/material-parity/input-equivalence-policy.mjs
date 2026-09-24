@@ -750,6 +750,15 @@ export const sourceAuditDefinitions = Object.freeze([
     justification: 'Material authors direct heading text beside a generated 40px inline baseline spacer and a mat-dialog-content owner. Candidate authors a nested span inside a fixed-height flex-end heading plus a fixed-height flex paragraph; later padding tweaks move the text without preserving original constraints. The original labelled dialog and focus-trap/backdrop owners also differ from the candidate modal overlay labelled Open dialog. Preserve text identity and all structure independently, then reproduce original layout/semantics through core APIs before attributing residual defects to core.',
   }),
   Object.freeze({
+    id: 'fixture-dialog-sampled-panel-and-action-geometry',
+    introducedBy: 'bc0e449 fixes panel dimensions and replaces action top-border space with bottom padding',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`selector: '\.dialog-(?:panel|actions)'[^\n]*height: '(?:161|73)px'`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase dialog surface sizing, inherited constraints and action box authoring',
+    justification: 'Across all 32 original open dialog states, equal 280px/161px sampled surface dimensions conceal native width/height 100% with inherited min/max constraints versus literal candidate dimensions and omitted constraints. The action row also replaces a transparent 1px top border plus 16px vertical padding with no border and 16px top/17px bottom padding: both imply 40px content height, but CSS-contract content intervals differ by 1px. Candidate wrap, shrink and minimum-height inputs differ separately. Focused modal inspection proves original owner mappings, declarations, all candidate stages and complete six-group/192-occurrence action population. This does not measure candidate used layout or prove renderer causality. Reuse the existing public percentage-intrinsic-sizing and explicit-inheritance reductions; correct those general rules before restoring reference sizing and removing sampled dimensions, not by further fixture retuning.',
+  }),
+  Object.freeze({
     id: 'fixture-dialog-text-metric-tokens-omitted',
     introducedBy: '2f44011 initial dialog typography omits component family and tracking',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

@@ -45,8 +45,18 @@ forged content intervals and prior metadata. Modal focused checks pass 3/3
 reject bypassed action classification and self-validating replay. No full export
 was run for this wiring change, and canonical unresolved count remains 1,607.
 
-Next: retain the panel authored-versus-used distinction in existing source
-findings and complete the related modal sizing batch before the next export.
+The existing source-finding registry now includes
+`fixture-dialog-sampled-panel-and-action-geometry`, matching the two actual
+`.dialog-panel` / `.dialog-actions` authored rules and identifying `bc0e449`.
+It records the equal-scalar/unequal-request panel case and the action-box
+substitution without declaring candidate used layout or core causality proven.
+The existing focused panel test verifies both current source locations alongside
+all 32 authenticated original owner captures. The three modal sizing/action
+checks pass (8.55 seconds). This adds one source finding to the next export;
+the accepted canonical package still contains 132 source findings.
+
+Next: finish related panel constraint attribution and prepare one combined
+modal sizing export/conservation milestone, not an export for each small edit.
 The helper, producer and narrow source guards now differ from the accepted checkpoint's
 source fingerprints; those are deliberate pending evidence changes, not current
 canonical source reconciliation. Do not rebuild the full export for this proof alone.

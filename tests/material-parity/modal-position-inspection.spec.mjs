@@ -9,6 +9,7 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   validateBottomSheetScalarTypography, proveDialogActionBoxSubstitution,
   applyDialogActionBox, validateDialogActionBox } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
   overlaySurfacePredecessor } from './overlay-surface-review.mjs';
@@ -95,6 +96,15 @@ test('dialog action box classifications replay six complete populations without 
 });
 
 test('dialog panel equal captured dimensions conceal percentage and inherited constraint substitutions', () => {
+  const findings = sourceAuditDefinitions.filter(f => f.id === 'fixture-dialog-sampled-panel-and-action-geometry');
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].classification, 'application-plugin-authoring-defect');
+  assert.match(findings[0].introducedBy, /^bc0e449 /);
+  const source = readFileSync(findings[0].file, 'utf8');
+  const locations = [...source.matchAll(new RegExp(findings[0].pattern, 'g'))];
+  assert.equal(locations.length, 2);
+  assert.match(locations[0][0], /dialog-panel.*height: '161px'/);
+  assert.match(locations[1][0], /dialog-actions.*height: '73px'/);
   const inspection = collectModalPositionInspection();
   const observations = inspection.groups.find(g => g.element === 'dialog-panel').observations;
   assert.equal(observations.length, 32);
