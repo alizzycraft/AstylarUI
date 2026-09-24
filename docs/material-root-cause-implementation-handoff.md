@@ -124,6 +124,21 @@ original five paint groups to their explicit differing requests while retaining
 this supplemental-only provenance limit and the distinction between component
 tokens, general tokens and actual scheme selection. Canonical count is unchanged.
 
+The five original paint groups / 30 observations now have a reusable semantic
+proof and attribution replay in the existing modal module. It checks all possibly
+applicable candidate paint rules, native owner declarations and cssText, empty
+expanded CSSOM values, profile-specific literals and all three candidate stages.
+`applyBottomSheetPanelPaint` / `validateBottomSheetPanelPaint` preserve raw rows
+and independently reconstruct the classification from original owner inputs.
+Negative controls reject changed var expressions, invented native/candidate
+resolved colors, candidate literal substitutions, missing/duplicate cases or
+rows, forged prior metadata and claims to have reconstructed original token
+ancestry. Both paint checks pass in 7.07 seconds. Supplemental ancestry is not
+fed into this original-state proof. These are benchmark theme/token authoring
+differences, not confirmed renderer paint faults. Producer wiring remains next;
+combined preparation is 17 sheet groups / 279 occurrences, while canonical
+unresolved stays 1,595 until a verified batch export.
+
 Current canonical milestone: modal sizing export from `01fab20`, independently
 reconciled against `ed35a9c`: **1,595 unresolved groups**, 8,483 scalar groups /
 389,202 occurrences, 133 source findings. Coverage remains 436/436 static and

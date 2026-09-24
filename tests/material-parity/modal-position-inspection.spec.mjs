@@ -10,7 +10,8 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints,
   validateDialogPanelConstraints, proveBottomSheetPanelConstraints, proveBottomSheetPanelFlow,
   applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints,
-  applyBottomSheetPanelFlow, validateBottomSheetPanelFlow } from './modal-position-inspection.mjs';
+  applyBottomSheetPanelFlow, validateBottomSheetPanelFlow, proveBottomSheetPanelPaint,
+  applyBottomSheetPanelPaint, validateBottomSheetPanelPaint } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
@@ -210,6 +211,43 @@ test('bottom-sheet paint retains token requests and profile-specific candidate l
     assert.deepEqual(matches.get(row.id).slice(0, 12), row.cases);
   }
   assert.equal([...matches.values()].reduce((n, cases) => n + cases.length, 0), 30);
+});
+
+test('bottom-sheet paint replay attributes five original populations without reconstructing token ancestry', () => {
+  const inspection = collectModalPositionInspection();
+  const cases = JSON.parse(readFileSync(inspection.capture.file)).interactions.filter(e =>
+    e.family === 'bottom-sheet' && e.styleInputs.some(i => i.id === 'bottom-sheet-panel')).map(e => ({ ...e, kind: 'interaction' }));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', modalSizingPredecessor)
+    .filter(r => r.evidence.section === 'discrepancies');
+  const original = structuredClone(rows), applied = applyBottomSheetPanelPaint(rows, cases, inventory, normalize);
+  const changed = applied.filter((row, i) => row !== rows[i]);
+  assert.equal(changed.length, 5); assert.equal(changed.reduce((n, row) => n + row.occurrences, 0), 30);
+  assert.deepEqual(rows, original);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  const validate = values => validateBottomSheetPanelPaint(values, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  const selected = values => values.find(row => row.attribution === 'reviewed-bottom-sheet-panel-paint-inputs');
+  for (const mutate of [
+    values => values.splice(values.indexOf(selected(values)), 1),
+    values => values.push(structuredClone(selected(values))),
+    values => { selected(values).reference = 'transparent'; },
+    values => { selected(values).reviewEvidence.observations[0].tokenAncestryReconstructed = true; },
+    values => { selected(values).reviewEvidence.priorMetadata.attribution = 'forged'; },
+  ]) { const altered = structuredClone(applied); mutate(altered); assert.equal(validate(altered).length, 1); }
+  const entry = cases.find(c => c.profile === 'dark'), key = `interaction:${entry.family}@${entry.profile}/${entry.viewport.id}/${entry.state}`;
+  const trees = modalInventoryTrees(inventory, key);
+  const proof = proveBottomSheetPanelPaint(entry, ...trees);
+  for (const mutate of [
+    (r, a) => { a.nodes.find(n => n.key === proof.astylarNode).resolvedStyle.backgroundColor = 'transparent'; },
+    (r, a) => { a.rules.find(rule => rule.selector === '.bottom-sheet-panel').background = '#1d1b1e'; },
+    r => { r.rules.find(rule => rule.selector === '.mat-bottom-sheet-container').declarations['background-color'].value = 'transparent'; },
+    r => { r.rules.find(rule => rule.selector === '.mat-bottom-sheet-container').cssText = 'background: transparent;'; },
+  ]) { const altered = structuredClone(trees); mutate(...altered); assert.throws(() => proveBottomSheetPanelPaint(entry, ...altered)); }
+  assert.throws(() => applyBottomSheetPanelPaint(rows, cases.filter(c => c !== entry), inventory, normalize));
+  assert.throws(() => applyBottomSheetPanelPaint(rows, [...cases, entry], inventory, normalize));
 });
 
 test('bottom-sheet flow replay composes with constraints without changing raw rows', () => {

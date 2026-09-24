@@ -336,6 +336,57 @@ export function proveBottomSheetPanelFlow(entry, r, a) {
     inputEquivalent: false, candidateUsedLayoutMeasured: false, renderingEquivalent: false };
 }
 
+export function proveBottomSheetPanelPaint(entry, r, a) {
+  const { mapping } = proveModalPositionInspection(entry, r, a, 'bottom-sheet-panel');
+  assert.equal(entry.family, 'bottom-sheet');
+  assert.ok(['light', 'dark', 'contrast', 'custom'].includes(entry.profile));
+  const reference = one(r.nodes.filter(n => n.key === mapping.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === mapping.candidateNode));
+  assert.deepEqual(reference.inline, {});
+  assert.equal(candidate.authored.style, undefined); assert.equal(candidate.authored.attributes?.style, undefined);
+  const compact = entry.viewport.id === 'comparison-pane-dpr1';
+  const affects = key => /^(background.*|border.*radius|all|animation.*|transition.*)$/.test(key.replaceAll('-', '').toLowerCase());
+  const rules = reference.rules.map(i => r.rules[i]).filter(rule => rule.active);
+  const base = one(rules.filter(rule => rule.selector === '.mat-bottom-sheet-container'));
+  const backgroundToken = 'var(--mat-bottom-sheet-container-background-color, var(--mat-sys-surface-container-low))';
+  assert.ok(base.cssText.includes('background: ' + backgroundToken + ';'));
+  const requests = rules.flatMap(rule => Object.entries(rule.declarations).filter(([key]) => affects(key))
+    .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value })));
+  const backgrounds = requests.filter(request => request.key.startsWith('background-'));
+  assert.equal(backgrounds.length, 9);
+  for (const request of backgrounds) {
+    assert.equal(request.selector, '.mat-bottom-sheet-container'); assert.deepEqual(request.conditions, []);
+    assert.equal(request.value, ''); assert.equal(request.important, false);
+  }
+  const shapeSelector = '.mat-bottom-sheet-container-xlarge, .mat-bottom-sheet-container-large, .mat-bottom-sheet-container-medium';
+  assert.deepEqual(requests.filter(request => !request.key.startsWith('background-')), compact ? [] :
+    ['border-top-left-radius', 'border-top-right-radius'].map(key => ({ selector: shapeSelector, conditions: [], key,
+      value: 'var(--mat-bottom-sheet-container-shape, 28px)', important: false })));
+  const radius = ({ contrast: '21px', custom: '42px' }[entry.profile] ?? '28px');
+  const background = entry.profile === 'dark' ? '#211f26' : '#f8f2f6';
+  const candidateRequests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key)).map(([key, value]) =>
+      ({ selector: rule.selector, ...(rule.mediaMaxWidth === undefined ? {} : { mediaMaxWidth: rule.mediaMaxWidth }), key, value })));
+  assert.deepEqual(candidateRequests, [
+    { selector: '.bottom-sheet-panel', key: 'borderRadius', value: `${radius} ${radius} 0 0` },
+    { selector: '.bottom-sheet-panel', key: 'background', value: background },
+    { selector: '.bottom-sheet-panel', mediaMaxWidth: '960px', key: 'borderRadius', value: '0' },
+  ]);
+  const native = r.styles[reference.style];
+  assert.equal(native.backgroundColor, 'rgb(248, 242, 246)');
+  for (const key of ['borderTopLeftRadius', 'borderTopRightRadius']) assert.equal(native[key], compact ? '0px' : '28px');
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(candidate[stage].background, background);
+    assert.equal(candidate[stage].borderRadius, compact ? '0' : `${radius} ${radius} 0 0`);
+    for (const key of ['backgroundColor', 'borderTopLeftRadius', 'borderTopRightRadius']) assert.equal(Object.hasOwn(candidate[stage], key), false);
+  }
+  return { case: caseKey(entry, entry.kind), element: 'bottom-sheet-panel', referenceNode: reference.key, astylarNode: candidate.key,
+    referenceRequests: requests, backgroundTokenFromCssText: backgroundToken, candidateRequests,
+    tokenAncestryReconstructed: false, classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, renderingEquivalent: false,
+    limitation: 'Original owner requests and observed styles only. Supplemental ancestor captures are not substituted for original interaction context. Empty CSSOM expansions are not resolved token values; no renderer paint cause is inferred.' };
+}
+
 function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition) {
   const properties = new Set(definition.properties);
   const proofs = new Map();
@@ -370,6 +421,24 @@ function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition)
         priorMetadata: Object.fromEntries(metadata.filter(k => Object.hasOwn(row, k)).map(k => [k, structuredClone(row[k])])),
         observations, inputEquivalent: false, renderingEquivalent: false } };
   });
+}
+
+export function applyBottomSheetPanelPaint(rows, cases, inventory, canonicalStyle) {
+  return applyModalBoxReview(rows, cases, inventory, canonicalStyle, {
+    family: 'bottom-sheet', element: 'bottom-sheet-panel',
+    properties: ['backgroundColor', 'borderTopLeftRadius', 'borderTopRightRadius'],
+    prove: proveBottomSheetPanelPaint, attribution: 'reviewed-bottom-sheet-panel-paint-inputs',
+    owner: 'reference and candidate bottom-sheet theme/token authoring contract',
+    justification: 'Native component paint tokens and observed values differ from candidate theme-scaled corner radii and literal dark background. Original owner requests and all candidate stages bind the complete differing population. Empty expanded background CSSOM is preserved alongside its var expression; neither token ancestry nor a renderer paint fault is inferred. Restore equivalent component tokens and theme scope before evaluating rendering.',
+  });
+}
+
+export function validateBottomSheetPanelPaint(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-bottom-sheet-panel-paint-inputs');
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyBottomSheetPanelPaint(originalRows, cases, inventory, canonicalStyle))));
+    return [];
+  } catch (error) { return [`bottom-sheet panel paint does not replay from original owner inputs: ${error.message}`]; }
 }
 
 export function applyBottomSheetPanelFlow(rows, cases, inventory, canonicalStyle) {
