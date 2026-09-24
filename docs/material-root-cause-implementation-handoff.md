@@ -52,6 +52,22 @@ proofs; do not repeat total-absence or large-displacement investigations against
 captures that already disprove those symptoms. Tabs (114), chips (104), and
 slider (77) remain explicit subsequent coverage, not waived by overlay priority.
 
+Overlay batch preparation: snackbar surface declaration evidence now joins all
+eight complete canonical rows (272 occurrences) to the 34 authenticated paired
+states. The join checks exact scalar values, omitted-value presence, counts,
+representative ordering and all state names. Candidate inline declarations,
+possibly matching competing rules, shorthand/reset and motion requests are
+excluded before attributing the `.snack-surface` substitution. The focused test
+passes in 14.074 seconds. This closes the row-membership gap; it does not change
+canonical classifications or establish renderer correctness. Together with the
+existing five tooltip constraint rows (72 occurrences), this defines a pending
+13-group / 344-occurrence authoring batch. Reuse these tests for integration;
+no new browser capture or full export is justified for this proof-only change.
+Combined verification: `node --test tests/material-parity/modal-position-inspection.spec.mjs tests/material-parity/tooltip-position-composition.spec.mjs`
+passes all 13 checks in 25.641 seconds, including existing mapping/constraint
+negative controls and retained raster evidence. Canonical unresolved count stays
+1,644 until the pending classification batch is integrated and conserved.
+
 Historical integration checkpoint: the chip batch at `3a4b350` required cold export
 and complete conservation. The first invocation mistakenly selected the default
 `latest-report.json`; it terminated after 226.339 seconds with missing-source

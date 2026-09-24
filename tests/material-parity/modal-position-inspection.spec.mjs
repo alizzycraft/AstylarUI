@@ -5,6 +5,8 @@ import { createHash } from 'node:crypto';
 import { PNG } from 'pngjs';
 import { resolveGeneratedReferenceNode } from './generated-node-mapping-evidence.mjs';
 import { collectModalPositionInspection, proveModalPositionInspection } from './modal-position-inspection.mjs';
+import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
+import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 
 test('all 34 retained snackbar rasters contain the surface inside the viewport', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -126,7 +128,7 @@ test('modal inspection authenticates all nine generated owner groups', () => {
   assert.deepEqual(collectModalPositionInspection(), JSON.parse(readFileSync('docs/material-modal-position-inspection.json')));
 });
 
-test('all 34 retained snackbars substitute surface sizing and paint requests', () => {
+test('all 34 retained snackbars substitute surface sizing and paint requests', async () => {
   const readBound = receipt => {
     const bytes = readFileSync(receipt.file);
     assert.equal(createHash('sha256').update(bytes).digest('hex'), receipt.sha256);
@@ -159,11 +161,45 @@ test('all 34 retained snackbars substitute surface sizing and paint requests', (
     assert.equal(owners.length, 1);
     const rule = a.rules.find(rule => rule.selector === '.snack-surface');
     assert.ok(rule);
+    const relevant = key => /^(all|background.*|color|minwidth|maxwidth|padding.*|justifycontent|boxshadow|animation.*|transition.*)$/.test(key.replaceAll('-', '').toLowerCase());
+    assert.ok(!Object.keys(owners[0].authored.style ?? {}).some(relevant), 'inline request competes with snack-surface');
+    assert.doesNotMatch(owners[0].authored.attributes?.style ?? '', /(?:all|background[^:]*|color|min-width|max-width|padding[^:]*|justify-content|box-shadow|animation[^:]*|transition[^:]*)\s*:/i);
+    for (const other of a.rules.filter(r => r !== rule && rootInitialSelectorCanApply(r.selector, owners[0].authored))) {
+      assert.ok(!Object.keys(other).some(relevant), `competing candidate declaration: ${other.selector}`);
+    }
     for (const candidate of [rule, ...['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'].map(stage => owners[0][stage])]) {
       assert.deepEqual(['width', 'height', 'padding', 'justifyContent', 'background', 'color'].map(key => candidate[key]),
         ['344px', '48px', '0 18px', 'space-between', '#322f35', '#ffffff']);
       for (const key of ['minWidth', 'maxWidth', 'boxShadow']) assert.equal(Object.hasOwn(candidate, key), false);
     }
+  }
+  // Join authenticated complete rows, not just their representative first 12
+  // cases. Full membership is independently supplied by the 34 paired trees.
+  const directory = 'artifacts/material-parity/working-audit';
+  const snapshot = JSON.parse(readFileSync(`${directory}/current.json`));
+  assert.equal(snapshot.generation, JSON.parse(readFileSync('docs/material-input-equivalence-audit.json')).compressedSha256);
+  const expected = {
+    backgroundColor: ['rgba(50,48,51,1)', 'rgba(50,47,53,1)'],
+    color: ['rgba(245,239,244,1)', 'rgba(255,255,255,1)'],
+    minWidth: ['344px'], maxWidth: ['672px'],
+    paddingLeft: ['0', '18px'], paddingRight: ['8px', '18px'],
+    justifyContent: ['flex-start', 'space-between'],
+    boxShadow: ['rgba(0,0,0,0.2) 0 3px 5px -1px,rgba(0,0,0,0.14) 0 6px 10px 0,rgba(0,0,0,0.12) 0 1px 18px 0'],
+  };
+  const rows = queryFindings(directory, 'snack-bar', snapshot).filter(row =>
+    row.evidence.section === 'discrepancies' && row.element === 'snack-bar-surface' && Object.hasOwn(expected, row.property));
+  assert.equal(rows.length, 8);
+  assert.equal(new Set(rows.map(row => row.property)).size, 8);
+  const cases = group.observations.map(o => o.case);
+  for (const compact of rows) {
+    const row = await loadFindingEvidence(directory, 'snack-bar', compact.id, snapshot);
+    const values = expected[row.property];
+    assert.equal(row.reference, values[0]);
+    assert.equal(Object.hasOwn(row, 'astylar'), values.length === 2, 'preserve candidate omission');
+    if (values.length === 2) assert.equal(row.astylar, values[1]);
+    assert.equal(row.occurrences, cases.length);
+    assert.deepEqual(row.cases, cases.slice(0, 12));
+    assert.deepEqual(row.states, [...new Set(cases.map(key => key.split('/').at(-1)))]);
   }
   // Historical input substitutions, not a proof of missing paint or current
   // runtime acceptance. Do not infer that equal short-content geometry excuses them.
