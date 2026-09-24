@@ -10,6 +10,22 @@ The compact index preserves all 8,483 differences / 389,202 occurrences and
 132 source findings. Static/interaction inventory is 436/436 and 1,875/1,875;
 inventory completeness is not attribution or rendering acceptance.
 
+Current integration wait: the chip batch at `3a4b350` still requires cold export
+and complete conservation. The first invocation mistakenly selected the default
+`latest-report.json`; it terminated after 226.339 seconds with missing-source
+binding errors. Its generated files are retained in
+`artifacts/material-parity/chip-paint-export-3a4b350-wrong-input`, with log
+`chip-paint-export-3a4b350-progress.log`. The canonical baseline was restored and
+its compressed SHA-256 verified as
+`7793336da954e94fd2f03ff48a92a1d3a174f545532f631baf00df805b80216e`.
+The corrected invocation explicitly selects `current-ancestry-audit`, the
+normal/control-v3/supplemental line-box reports and supplemental ancestry root;
+its log is `chip-paint-export-3a4b350-bound-progress.log`. Do not accept the first
+run or restart the corrected run solely because a polling interval expires.
+After conservation, keep the chip proposal regression tied to its preserved
+pre-classification evidence: its current working-index query expects ten
+unresolved rows and cannot be reused unchanged after refreshing that index.
+
 Prioritize remaining questions by impact and shared ownership, not by creating
 one investigation per scalar property. Component counts below are refreshed from
 the verified compact index:
