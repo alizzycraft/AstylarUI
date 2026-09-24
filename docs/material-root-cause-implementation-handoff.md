@@ -26,6 +26,19 @@ After conservation, keep the chip proposal regression tied to its preserved
 pre-classification evidence: its current working-index query expects ten
 unresolved rows and cannot be reused unchanged after refreshing that index.
 
+Next tooltip sizing batch: a read-only replay using
+`collectTooltipPositionAncestry` and `inspectOverlayOwnerDeclarations` authenticated
+all 18 paired open-state trees. All 72 property observations retain active native
+`.mat-mdc-tooltip-surface` requests for `min-width:40px`, `max-width:200px`,
+`min-height:24px`, and `max-height:40vh`. The candidate popup omits each constraint
+in inline input, possible matching rules and all three retained local stages.
+These are unequal sizing inputs, not evidence that the limits explain the
+short-label offset or blur: native captured width is 106.812px and height 24px.
+Next add this bounded assertion to an existing tooltip proof, with altered-rule
+and candidate-request controls, then classify the five signatures / 72
+observations in a coherent later batch. Do not re-investigate established local
+flow placement or wrapping substitutions. No classification changed here.
+
 Prioritize remaining questions by impact and shared ownership, not by creating
 one investigation per scalar property. Component counts below are refreshed from
 the verified compact index:
