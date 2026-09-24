@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { PNG } from 'pngjs';
-import { collectModalPositionInspection, proveModalPositionInspection } from './modal-position-inspection.mjs';
+import { collectModalPositionInspection, proveModalPositionInspection, proveDialogScalarTypographyJoin } from './modal-position-inspection.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
   overlaySurfacePredecessor } from './overlay-surface-review.mjs';
@@ -123,46 +123,11 @@ test('nine dialog scalar groups reuse original typography proofs with matching o
   const compact = queryFindings('artifacts/material-parity/working-audit', 'dialog', overlaySurfacePredecessor);
   const keys = cases.map(e => `interaction:dialog@${e.profile}/${e.viewport.id}/${e.state}`);
   const join = (element, property, proofRows) => {
-    const title = element === 'dialog-title';
     const scalar = compact.filter(r => r.evidence.section === 'discrepancies' && r.element === element && r.property === property);
     assert.equal(scalar.length, 1); const row = scalar[0];
-    assert.equal(row.attribution, 'unresolved'); assert.equal(row.occurrences, 32);
-    assert.deepEqual(row.cases, keys.slice(0, 12));
-    assert.deepEqual(proofRows.map(r => r.case), keys);
-    for (const proof of proofRows) {
-      assert.equal(proof.element, title ? 'dialog-title-label' : element); assert.equal(proof.property, property);
-      assert.equal(proof.classification, 'application-plugin-authoring-defect');
-      assert.equal(proof.inputEquivalent, false);
-      assert.equal(proof.values.reference, row.reference);
-      const entry = inventory.cases.find(c => c.case === proof.case && c.side === 'astylar');
-      const nodes = inventory.variants[entry.variant].nodes.filter(n => n.authored?.id === element);
-      assert.equal(nodes.length, 1); const node = nodes[0];
-      const normal = inventory.styles[node.normalStyle].value, effective = inventory.styles[node.interactionStyle].value;
-      const referenceOwner = element === 'dialog-copy' || title ? proof.reviewEvidence.referenceLeaf : proof.reviewEvidence.referenceChain[1];
-      assert.equal(referenceOwner.attributes['data-parity-id'], element);
-      if (title) {
-        const [label, owner] = proof.reviewEvidence.candidateChain;
-        assert.equal(label.authored.id, 'dialog-title-label');
-        assert.equal(label.authored.type, 'span');
-        assert.equal(label.authored.textContent, 'Confirm action');
-        assert.equal(label.parent, owner.node);
-        assert.equal(owner.node, node.key); assert.equal(owner.authored.type, 'h2');
-        assert.equal(owner.authored.id, element);
-        assert.equal(node.parent, owner.parent);
-        for (const stage of ['normal', 'effective']) assert.equal(label[stage][property], undefined);
-      } else if (element === 'dialog-copy') assert.equal(proof.reviewEvidence.candidateChain[0].node, node.key);
-      else assert.ok(proof.reviewEvidence.structure.candidateActions.some(n => n.key === node.key));
-      if (!Object.hasOwn(row, 'astylar')) {
-        assert.ok(['fontFamily', 'letterSpacing'].includes(property));
-        for (const stage of [normal, effective]) assert.equal(Object.hasOwn(stage, property), false);
-        // Retained/default values are deliberately not substituted for omitted
-        // local scalar declarations. The original token omission proves intent.
-      } else {
-        if (title) assert.equal(proof.values.retained, row.astylar);
-        else { assert.equal(proof.values.normal, row.astylar); assert.equal(proof.values.effective, row.astylar); }
-        for (const stage of [normal, effective]) assert.equal(stage[property], property === 'color' ? title ? '#1d1b20' : '#49454f' : 'Roboto, Arial, sans-serif');
-      }
-    }
+    const result = proveDialogScalarTypographyJoin(row, proofRows, inventory, keys);
+    assert.equal(result.cases.length, 32); assert.equal(result.inputEquivalent, false);
+    assert.equal(result.renderingEquivalent, false);
   };
   let groups = 0;
   for (const [element, properties] of [['dialog-copy', ['fontFamily', 'letterSpacing', 'color']],
@@ -174,7 +139,7 @@ test('nine dialog scalar groups reuse original typography proofs with matching o
       const rows = [...retained.differences, ...control.differences].filter(r => r.element === (element === 'dialog-title' ? 'dialog-title-label' : element) && r.property === property && r.attribution === attribution);
       join(element, property, rows); groups++;
       for (const mutate of [r => r.pop(), r => r.reverse(), r => { r[0].values.reference = 'forged'; },
-        r => { r[0].element = 'dialog-title'; }]) {
+        r => { r[0].element = 'dialog-title'; }, r => { r[0].attribution = 'unresolved'; }]) {
         const changed = structuredClone(rows); mutate(changed); assert.throws(() => join(element, property, changed));
       }
       if (element === 'dialog-title') {

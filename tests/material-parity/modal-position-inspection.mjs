@@ -9,6 +9,59 @@ const ids = ['bottom-sheet-copy', 'bottom-sheet-dismiss', 'bottom-sheet-panel', 
   'dialog-cancel', 'dialog-copy', 'dialog-panel', 'dialog-save', 'dialog-title'];
 const one = ns => { assert.equal(ns.length, 1); return ns[0]; };
 const caseKey = (e, kind) => `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+// Pure semantic join over evidence already collected by the audit. The caller
+// owns capture authentication and complete scalar population selection.
+// This does not reread trees, normalize omitted values, or accept raster parity.
+export function proveDialogScalarTypographyJoin(row, proofs, inventory, caseKeys) {
+  const allowed = {
+    'dialog-copy': ['fontFamily', 'letterSpacing', 'color'],
+    'dialog-cancel': ['fontFamily', 'letterSpacing'],
+    'dialog-save': ['fontFamily', 'letterSpacing'],
+    'dialog-title': ['fontFamily', 'color'],
+  };
+  const { element, property } = row, title = element === 'dialog-title';
+  assert.equal(row.family, 'dialog'); assert.ok(allowed[element]?.includes(property));
+  assert.equal(row.attribution, 'unresolved');
+  assert.ok(caseKeys.length > 0); assert.equal(new Set(caseKeys).size, caseKeys.length);
+  assert.equal(row.occurrences, caseKeys.length); assert.deepEqual(row.cases, caseKeys.slice(0, 12));
+  assert.deepEqual(proofs.map(p => p.case), caseKeys);
+  const attribution = !['dialog-copy', 'dialog-title'].includes(element) ? 'reviewed-dialog-action-typography-input'
+    : property === 'color' ? 'reviewed-dialog-text-ink-input' : 'reviewed-dialog-text-metric-omission';
+  for (const proof of proofs) {
+    assert.equal(proof.family, 'dialog'); assert.equal(proof.attribution, attribution);
+    assert.equal(proof.element, title ? 'dialog-title-label' : element); assert.equal(proof.property, property);
+    assert.equal(proof.classification, 'application-plugin-authoring-defect');
+    assert.equal(proof.inputEquivalent, false); assert.equal(proof.values.reference, row.reference);
+    const entry = one(inventory.cases.filter(c => c.case === proof.case && c.side === 'astylar'));
+    const node = one(inventory.variants[entry.variant].nodes.filter(n => n.authored?.id === element));
+    const normal = inventory.styles[node.normalStyle].value, effective = inventory.styles[node.interactionStyle].value;
+    const referenceOwner = element === 'dialog-copy' || title ? proof.reviewEvidence.referenceLeaf : proof.reviewEvidence.referenceChain[1];
+    assert.equal(referenceOwner.attributes['data-parity-id'], element);
+    if (title) {
+      const [label, owner] = proof.reviewEvidence.candidateChain;
+      assert.equal(label.authored.id, 'dialog-title-label'); assert.equal(label.authored.type, 'span');
+      assert.equal(label.authored.textContent, 'Confirm action'); assert.equal(label.parent, owner.node);
+      assert.equal(owner.node, node.key); assert.equal(owner.authored.type, 'h2');
+      assert.equal(owner.authored.id, element); assert.equal(node.parent, owner.parent);
+      for (const stage of ['normal', 'effective']) assert.equal(label[stage][property], undefined);
+    } else if (element === 'dialog-copy') assert.equal(proof.reviewEvidence.candidateChain[0].node, node.key);
+    else assert.ok(proof.reviewEvidence.structure.candidateActions.some(n => n.key === node.key));
+    if (!Object.hasOwn(row, 'astylar')) {
+      assert.ok(['fontFamily', 'letterSpacing'].includes(property));
+      for (const stage of [normal, effective]) assert.equal(Object.hasOwn(stage, property), false);
+    } else {
+      if (title) assert.equal(proof.values.retained, row.astylar);
+      else { assert.equal(proof.values.normal, row.astylar); assert.equal(proof.values.effective, row.astylar); }
+      for (const stage of [normal, effective]) assert.equal(stage[property], property === 'color'
+        ? title ? '#1d1b20' : '#49454f' : 'Roboto, Arial, sans-serif');
+    }
+  }
+  return { element, property, sourceAttribution: attribution, cases: [...caseKeys],
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false,
+    renderingEquivalent: false };
+}
+
 export function proveModalPositionInspection(entry, r, a, id) {
   assert.ok(ids.includes(id));
   const input = one(entry.styleInputs.filter(i => i.id === id));

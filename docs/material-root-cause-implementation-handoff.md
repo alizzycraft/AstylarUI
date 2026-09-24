@@ -53,6 +53,16 @@ with title-label parent checks. Equal retained tracking is not proof of token
 input equivalence or raster output. Canonical attribution is unchanged pending
 a later coherent batch.
 
+Integration preparation: `proveDialogScalarTypographyJoin` now lives in the
+existing `modal-position-inspection.mjs`, moved out of the test's local join.
+It consumes already-collected inventory/control/retained evidence; it performs
+no file reads or normalization and restricts reuse to the nine proven pairs.
+The build already has these inputs before scalar attribution, so no new capture
+collector or report/binding layer is required for that join. The original
+negative checks plus forged-attribution rejection pass. Combined dialog/sheet
+focused checks pass 2/2 in 5.600 seconds. Canonical classifications are unchanged;
+production application and validation of this later batch remain pending.
+
 Bottom-sheet ownership check: the focused `bottom-sheet scalar typography`
 test authenticates 25 retained states and joins 15 scalar groups / 300 occurrences
 for the panel and two item anchors. Native font, line-height, tracking and color
