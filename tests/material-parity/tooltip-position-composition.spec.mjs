@@ -4,6 +4,70 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { collectTooltipPositionComposition, proveTooltipPositionComposition } from './tooltip-position-composition.mjs';
+import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
+
+// Size constraints are independent of the already-proven flow substitution.
+// This checks authored requests, not whether the short captured label hits them.
+function proveTooltipSizingRequests(observation, reference, candidate) {
+  const identity = { inputEquivalent: false, status: 'mapped',
+    referenceNode: observation.paths.reference[0].key,
+    candidateNode: observation.paths.astylar[0].key,
+    referencePath: observation.paths.reference.map(n => n.key),
+    candidatePath: observation.paths.astylar.map(n => n.key),
+    missingRules: [], extraRules: [] };
+  const expected = { minWidth: '40px', maxWidth: '200px', minHeight: '24px', maxHeight: '40vh' };
+  for (const [property, value] of Object.entries(expected)) {
+    const trace = inspectOverlayOwnerDeclarations(property, identity, reference, candidate);
+    const css = property.replace(/[A-Z]/g, c => '-' + c.toLowerCase());
+    const native = trace.referencePath[0], owner = trace.candidatePath[0];
+    assert.equal(owner.authored.id, 'tooltip-popup');
+    assert.ok(native.attributes.class.split(/\s+/).includes('mat-mdc-tooltip-surface'));
+    assert.deepEqual(native.inline, {});
+    const active = native.rules.filter(rule => rule.active && Object.hasOwn(rule.declarations, css));
+    assert.equal(active.length, 1);
+    assert.equal(active[0].selector, '.mat-mdc-tooltip-surface');
+    assert.equal(active[0].declarations[css].value, value);
+    if (property !== 'maxHeight') assert.equal(native.computed, value);
+    else assert.ok(['400px', '337.6px'].includes(native.computed));
+    assert.deepEqual(Object.values(owner.localValues), ['<omitted>', '<omitted>', '<omitted>']);
+    assert.deepEqual(owner.inline, {});
+    const relevant = key => [property.toLowerCase(), 'all'].includes(key.replaceAll('-', '').toLowerCase());
+    assert.ok(owner.possibleRules.every(rule => !Object.keys(rule.declarations).some(relevant)));
+    assert.doesNotMatch(owner.authored.attributes?.style ?? '', /(?:min|max)-(?:width|height)|\ball\s*:/i);
+  }
+  return Object.keys(expected);
+}
+
+test('all 18 tooltip owners omit the four active reference sizing constraints', () => {
+  const report = collectTooltipPositionComposition(); // authenticates each original paired tree
+  let observations = 0;
+  for (const observation of report.observations) {
+    const trees = ['reference', 'astylar'].map(side => JSON.parse(readFileSync(observation.inputTrees[side].file)));
+    observations += proveTooltipSizingRequests(observation, ...trees).length;
+  }
+  assert.equal(observations, 72);
+});
+
+test('tooltip sizing proof rejects changed reference rules and candidate constraint requests', () => {
+  const observation = collectTooltipPositionComposition().observations[0];
+  const original = ['reference', 'astylar'].map(side => JSON.parse(readFileSync(observation.inputTrees[side].file)));
+  for (const property of ['minWidth', 'maxWidth', 'minHeight', 'maxHeight']) {
+    const css = property.replace(/[A-Z]/g, c => '-' + c.toLowerCase());
+    const candidateOwner = a => a.nodes.find(n => n.authored?.id === 'tooltip-popup');
+    const referenceRule = r => r.rules.find(rule => rule.active && rule.selector === '.mat-mdc-tooltip-surface' && rule.declarations[css]);
+    for (const mutate of [
+      ([r]) => { referenceRule(r).declarations[css].value = '999px'; },
+      ([r]) => { referenceRule(r).active = false; },
+      ([, a]) => { candidateOwner(a).authored.style = { [property]: '40px' }; },
+      ([, a]) => { a.rules.push({ selector: '#tooltip-popup', [property]: '40px' }); },
+      ...['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'].map(stage =>
+        ([, a]) => { candidateOwner(a)[stage][property] = '40px'; }),
+    ]) {
+      const changed = structuredClone(original); mutate(changed);
+      assert.throws(() => proveTooltipSizingRequests(observation, ...changed));
+    }
+  }
+});
 
 test('all 18 tooltip cases demonstrate overlay-to-local-flow input substitution', () => {
   const report = collectTooltipPositionComposition();

@@ -34,10 +34,13 @@ all 18 paired open-state trees. All 72 property observations retain active nativ
 in inline input, possible matching rules and all three retained local stages.
 These are unequal sizing inputs, not evidence that the limits explain the
 short-label offset or blur: native captured width is 106.812px and height 24px.
-Next add this bounded assertion to an existing tooltip proof, with altered-rule
-and candidate-request controls, then classify the five signatures / 72
-observations in a coherent later batch. Do not re-investigate established local
-flow placement or wrapping substitutions. No classification changed here.
+The existing `tooltip-position-composition.spec.mjs` now checks this population
+and 28 altered-reference/candidate-request controls. Its five tests pass (exit 0,
+1,289.1075 ms), including the prior placement and public-contract assertions.
+This test file is not a producer dependency of the running chip export; no
+export input was changed. Next classify the five signatures / 72 observations
+in a coherent later batch. Do not re-investigate established local flow
+placement or wrapping substitutions. No classification changed here.
 
 Prioritize remaining questions by impact and shared ownership, not by creating
 one investigation per scalar property. Component counts below are refreshed from
