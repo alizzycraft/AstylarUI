@@ -106,14 +106,20 @@ Read-only follow-up while that export runs: admitting appearance to the unchange
 motion reader in memory (reader SHA `c0bc61f1...`, authenticated original trees and
 the retained appearance proposal) distinguishes the eight motion-only exclusions.
 Badge count 52/52, progress bar 20/20 and spinner 20/20 have disjoint named targets.
-The tab labels are mixed: activity 52/70 and overview 18/70 pass; their remaining
-cases lack a proven transition target in the specific rule. Never classify either
-whole tab group from its positive cases. Both chips (76 each) remain unproven for
+The first-pass tab labels are mixed: activity 52/70 and overview 18/70 pass; their
+remaining cases lack a transition target in the delay-only rule. Both chips (76 each) remain unproven for
 transition targets and animation names; tab panel (70) retains unresolved motion
 values/targets. This is diagnostic evidence only, not production reader support
-or canonical attribution. Next reuse the existing delay-target review for the
-tab rule gap, and preserve explicit source/occurrence binding before integrating
-the three wholly disjoint groups. Do not modify the active export to include them.
+or canonical attribution. A second read-only pass reuses the unchanged delay
+reader (SHA `5004f99e...`) with appearance admitted only in memory: all 70 activity
+and 70 overview cases have explicit same-node disjoint targets. Delay witnesses
+occur in 18 activity and 52 overview cases; 70 mutations replacing the target
+with `appearance` are rejected. This resolves the specific delay-rule uncertainty
+without asserting a cascade winner, inactive motion or rendering equivalence.
+Next preserve source/occurrence binding while extending the existing motion
+attribution for five whole groups / 232 observations (the three above plus both
+tab labels). Chips and tab panel remain excluded. Do not modify the active export
+to include this follow-up batch.
 
 The retained overlay focus harness gap is now an executable, source-pinned proof:
 `node --test tests/material-parity/retained-overlay-focus.spec.mjs` passes 2/2
