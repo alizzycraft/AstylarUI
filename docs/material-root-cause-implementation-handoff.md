@@ -2,10 +2,31 @@
 
 ## Current audit checkpoint — September 25
 
+Resumption coverage triage: authenticated compact generation `0a6c0f6d...`
+still contains 1,541 unresolved scalar groups. Largest families are dialog
+(186), bottom-sheet (132), chips/tabs (104 each), card (96), slider (77),
+button-toggle (73), snack-bar (69), and tooltip (37). These are unresolved
+input-classification counts, not counts of rendering defects or proof that
+families with few unresolved scalars have correct interactions.
+
+Priority order remains: (1) finish/reconcile the active appearance export;
+(2) close the overlay focus measurement/source-applicability gap without
+attributing historical captures to a different runtime bundle; (3) integrate
+the already investigated inherited-color and disjoint-motion populations using
+existing readers and focused negative controls; (4) continue remaining
+geometry/typography/paint and state coverage from compact finding IDs.
+Color is the largest property population (96 groups / 2,346 observations),
+followed by background color (66 / 512), line height (61 / 3,240), and transform
+origin (59 / 1,368). Counts guide batching, not automatic shared-cause claims.
+The full browser matrix and source/ownership/reproduction deliverables remain
+required even after scalar classification. Do not repeat the existing color
+ancestry or motion census merely to rediscover these candidate populations.
+
 Appearance cold integration launched from `18d4239`: session **4759**, Node PID
 **3020**, log `artifacts/material-parity/appearance-18d4239-progress.log`.
 The tool handle and process were confirmed live after launch; last emitted phase
-was `build-audit`. Revalidate this handle/process before acting: this entry is not
+was `validate-audit`; the process was revalidated live with increasing CPU time
+during resumption. Revalidate this handle/process before acting: this entry is not
 permanent proof of liveness. Do not start another export or alter its source
 dependencies while it runs. The accepted baseline remains the dialog/tab export
 below until the new result is terminal and independently reconciled. Expected
