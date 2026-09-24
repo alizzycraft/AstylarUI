@@ -45,6 +45,16 @@ export function restorePositionProducer(source, { followupOnly = false } = {}) {
     assert.equal(restored.split(from).length, 2, 'missing or repeated position integration fragment');
     restored = restored.replace(from, to);
   };
+  // Admit only the exact thirteen-group overlay metadata integration.
+  if (restored.includes("from './overlay-surface-audit-source-binding.mjs'")) {
+    replaceOnce("import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, validateOverlaySurfaceAuditInputs,\n  validateOverlaySurfaceAuditClassifications, overlaySurfaceAttributions } from './overlay-surface-audit-source-binding.mjs';\n");
+    replaceOnce('  const chipPaintDiscrepancies = applyChipPaintAuditRows(positionFollowupDiscrepancies, chipPaintAuditInputs);\n  const overlaySurfaceAuditInputs = collectOverlaySurfaceAuditInputs(parityReport, { root, parityPath: options.parityPath });\n  const discrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);',
+      '  const discrepancies = applyChipPaintAuditRows(positionFollowupDiscrepancies, chipPaintAuditInputs);');
+    replaceOnce('    overlaySurfaceAuditInputs,\n');
+    replaceOnce("    ['overlaySurfaceAuditInputs', overlaySurfaceAttributions, validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications],\n");
+    for (const file of ['tests/material-parity/overlay-surface-audit-source-binding.mjs',
+      'tests/material-parity/overlay-surface-review.mjs', 'docs/material-overlay-surface-review.json']) replaceOnce(`    '${file}',\n`);
+  }
   // Preserve the pinned pre-position producer while admitting only the exact
   // subsequent ten-row chip integration, not arbitrary producer edits.
   if (restored.includes("from './chip-paint-audit-source-binding.mjs'")) {

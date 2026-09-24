@@ -1,4 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, validateOverlaySurfaceAuditInputs,
+  validateOverlaySurfaceAuditClassifications, overlaySurfaceAttributions } from './overlay-surface-audit-source-binding.mjs';
 import { collectChipPaintAuditInputs, applyChipPaintAuditRows, validateChipPaintAuditInputs,
   validateChipPaintAuditClassifications, chipPaintAttribution } from './chip-paint-audit-source-binding.mjs';
 import { collectPositionFollowupAuditInputs, applyPositionFollowupAuditRows, validatePositionFollowupAuditInputs,
@@ -262,7 +264,9 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const positionFollowupAuditInputs = collectPositionFollowupAuditInputs(parityReport, { root, parityPath: options.parityPath });
   const positionFollowupDiscrepancies = applyPositionFollowupAuditRows(positionReviewedDiscrepancies, positionFollowupAuditInputs);
   const chipPaintAuditInputs = collectChipPaintAuditInputs(parityReport, { root, parityPath: options.parityPath });
-  const discrepancies = applyChipPaintAuditRows(positionFollowupDiscrepancies, chipPaintAuditInputs);
+  const chipPaintDiscrepancies = applyChipPaintAuditRows(positionFollowupDiscrepancies, chipPaintAuditInputs);
+  const overlaySurfaceAuditInputs = collectOverlaySurfaceAuditInputs(parityReport, { root, parityPath: options.parityPath });
+  const discrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -368,6 +372,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     positionAuditInputs,
     positionFollowupAuditInputs,
     chipPaintAuditInputs,
+    overlaySurfaceAuditInputs,
     sliderInputBoxes,
     sliderBorderDefaults,
     rootHeightInputs,
@@ -394,6 +399,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
   for (const [key, attributions, validateSource, validateRows] of [
+    ['overlaySurfaceAuditInputs', overlaySurfaceAttributions, validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications],
     ['chipPaintAuditInputs', [chipPaintAttribution], validateChipPaintAuditInputs, validateChipPaintAuditClassifications],
     ['positionFollowupAuditInputs', [positionFollowupAttribution], validatePositionFollowupAuditInputs, validatePositionFollowupAuditClassifications],
     ['positionAuditInputs', [positionCompositionAttribution], validatePositionAuditInputs, validatePositionAuditClassifications],
@@ -8481,6 +8487,9 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/overlay-surface-audit-source-binding.mjs',
+    'tests/material-parity/overlay-surface-review.mjs',
+    'docs/material-overlay-surface-review.json',
     'tests/material-parity/chip-paint-audit-source-binding.mjs',
     'tests/material-parity/chip-position-inspection.mjs',
     'tests/material-parity/chip-position-inspection.spec.mjs',

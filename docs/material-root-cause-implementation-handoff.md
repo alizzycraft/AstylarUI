@@ -86,6 +86,27 @@ to the production capture and apply its metadata after the chip transition,
 reconcile exact producer/source guards, then perform one conserved batch export.
 Canonical files remain unchanged; do not count these 13 groups as integrated yet.
 
+Production integration is wired after the chip transition through
+`overlay-surface-audit-source-binding.mjs`. The adapter authenticates the pinned
+capture/proposal/source receipts, independently replays all 52 paired states,
+and verifies group membership before application. Focused replay/binding passes
+in 65.118 seconds, including foreign/incomplete capture and forged review
+rejection. Exact producer/import guards pass (six tests in 19.350 seconds;
+historical mapping guard in 9.389 seconds). The existing conservation CLI now
+supports `--overlay`: 13 reviewed rows / 344 occurrences plus exactly 48 producer
+receipt updates, every other row/control field unchanged. Its five synthetic
+positive/negative tests pass in 6.920 seconds. The predecessor is the existing
+compact generation `d70aa37e4e14a9bfdc6183e0c2a7c383638d83050fc76b2d556a26b510691fa4`;
+only a small manifest was added beside its already-authenticated package.
+No canonical export or acceptance is implied by these preparation checks.
+Direct preflight collectors all bind successfully to the original capture:
+alignment-font 72 groups / 4,016 observations (31.842 s), text-align 49 / 2,677
+(31.585 s), LTR 4 / 178 (30.323 s), reviewed-source batch 146 / 6,295 (51.426 s).
+The next required milestone is a cold export with the five explicit pinned
+inputs and a 4096 MiB Node heap, followed by `--overlay` conservation and section/
+source checks. Do not rerun the completed chip integration or overwrite its
+predecessor. Full renderer/browser acceptance remains pending until audit completion.
+
 Historical integration checkpoint: the chip batch at `3a4b350` required cold export
 and complete conservation. The first invocation mistakenly selected the default
 `latest-report.json`; it terminated after 226.339 seconds with missing-source

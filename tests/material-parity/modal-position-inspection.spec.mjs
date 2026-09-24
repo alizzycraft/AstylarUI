@@ -7,6 +7,8 @@ import { collectModalPositionInspection, proveModalPositionInspection } from './
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
   overlaySurfacePredecessor } from './overlay-surface-review.mjs';
+import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows,
+  validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications } from './overlay-surface-audit-source-binding.mjs';
 
 test('overlay surface proposal replays 13 complete predecessors and preserves unrelated rows', async () => {
   const review = await collectOverlaySurfaceReview();
@@ -21,6 +23,16 @@ test('overlay surface proposal replays 13 complete predecessors and preserves un
   const unrelated = { family: 'unrelated', property: 'untouched', custom: { raw: true } };
   rows.splice(3, 0, unrelated);
   const before = structuredClone(rows), output = applyOverlaySurfaceRows(rows, review);
+  const parityPath = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
+  const evidence = collectOverlaySurfaceAuditInputs(JSON.parse(readFileSync(parityPath)), { parityPath });
+  assert.equal(evidence.binding.status, 'bound', evidence.binding.error);
+  assert.deepEqual(applyOverlaySurfaceAuditRows(rows, evidence), output);
+  assert.deepEqual(validateOverlaySurfaceAuditClassifications(evidence, output), []);
+  assert.equal(collectOverlaySurfaceAuditInputs({ results: [], interactions: [] }, { parityPath }).binding.status, 'invalid');
+  assert.equal(collectOverlaySurfaceAuditInputs({}, {}).binding.status, 'unbound');
+  const forged = structuredClone(evidence); forged.review.groups[0].reviewedCases.pop();
+  assert.ok(validateOverlaySurfaceAuditInputs(forged).length);
+  assert.throws(() => applyOverlaySurfaceAuditRows(rows, forged));
   assert.deepEqual(rows, before); assert.equal(output.length, rows.length);
   assert.equal(output[3], unrelated);
   for (let index = 0; index < output.length; index++) {

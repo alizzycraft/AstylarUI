@@ -33,6 +33,33 @@ function chipSample() {
   return [previous, current, structuredClone(current.rows), currentSource, { chipOnly: true, previousSource }];
 }
 
+function overlaySample() {
+  const [previous, current] = sample();
+  const previousSource = execFileSync('git', ['show', '72f849a:tests/material-parity/input-equivalence-audit.mjs'], { maxBuffer: 4 * 1024 * 1024 });
+  previous.rows = Array.from({ length: 13 }, (_, i) => ({ family: i < 8 ? 'snack-bar' : 'tooltip', element: `surface-${i}`,
+    occurrences: i < 8 ? 34 : [16, 2, 18, 18, 18][i - 8], attribution: 'unresolved', reference: 'original' }));
+  current.rows = previous.rows.map((row, i) => ({ ...row, attribution: i < 8
+    ? 'reviewed-snackbar-surface-input-substitution' : 'reviewed-tooltip-sizing-constraint-omission' }));
+  const oldHash = createHash('sha256').update(previousSource.toString('utf8').replaceAll('\r\n', '\n')).digest('hex');
+  for (const row of previous.control.differences) row.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = oldHash;
+  return [previous, current, structuredClone(current.rows), currentSource, { overlayOnly: true, previousSource }];
+}
+
+test('overlay batch conserves thirteen groups and rejects unrelated row or producer changes', () => {
+  const args = overlaySample(), before = structuredClone(args.slice(0, 3));
+  const result = comparePositionCanonical(...args);
+  assert.equal(result.changedGroups, 13); assert.equal(result.changedOccurrences, 344);
+  assert.equal(result.controlReceiptTransition.records, 48);
+  assert.deepEqual(args.slice(0, 3), before);
+  for (const mutate of [
+    ([, c]) => c.rows.pop(), ([, c]) => { c.rows[0].reference = 'changed'; },
+    ([, c]) => c.control.gaps.push({ reason: 'unrelated' }),
+    ([, c]) => { c.control.differences[0].reviewEvidence.observation.normalizationReconciliation.value++; },
+    a => { a[4].previousSource = Buffer.from(a[4].previousSource + '\nconst unrelated = true;'); },
+    a => { a[4].previousSource = currentSource; }, a => { a[4].chipOnly = true; },
+  ]) { const changed = overlaySample(); mutate(changed); assert.throws(() => comparePositionCanonical(...changed)); }
+});
+
 test('chip comparison reuses strict row and 48 control-receipt conservation', () => {
   const args = chipSample(), original = structuredClone(args.slice(0, 3));
   const result = comparePositionCanonical(...args);

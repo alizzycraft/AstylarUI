@@ -12,6 +12,7 @@ import { restorePositionProducer } from '../tests/material-parity/position-compo
 import { collectPositionFollowupReview, applyPositionFollowupReview,
   validatePositionFollowupRows, positionFollowupAttribution } from '../tests/material-parity/position-followup-review.mjs';
 import { collectChipPaintProposal, applyChipPaintRows } from '../tests/material-parity/chip-position-inspection.mjs';
+import { collectOverlaySurfaceReview, applyOverlaySurfaceRows } from '../tests/material-parity/overlay-surface-review.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
@@ -19,24 +20,26 @@ const receipt = row => row?.reviewEvidence?.observation?.normalizationReconcilia
 
 // The CLI independently derives expectedRows from authenticated predecessor
 // records and fresh source review. This comparator cannot create that premise.
-export function comparePositionCanonical(previous, current, expectedRows, currentSource, { followupOnly = false, chipOnly = false, previousSource } = {}) {
-  assert.ok(!(followupOnly && chipOnly));
+export function comparePositionCanonical(previous, current, expectedRows, currentSource, { followupOnly = false, chipOnly = false, overlayOnly = false, previousSource } = {}) {
+  assert.ok([followupOnly, chipOnly, overlayOnly].filter(Boolean).length <= 1);
   let transition = restorePositionProducer(currentSource, { followupOnly });
-  if (chipOnly) {
+  if (chipOnly || overlayOnly) {
     const normalize = source => source.toString('utf8').replaceAll('\r\n', '\n');
     const old = normalize(previousSource), now = normalize(currentSource);
-    assert.ok(!old.includes("from './chip-paint-audit-source-binding.mjs'"));
-    assert.ok(now.includes("from './chip-paint-audit-source-binding.mjs'"));
+    const added = overlayOnly ? "from './overlay-surface-audit-source-binding.mjs'" : "from './chip-paint-audit-source-binding.mjs'";
+    assert.ok(!old.includes(added)); assert.ok(now.includes(added));
     assert.ok(old.includes("from './position-followup-audit-source-binding.mjs'"));
     // Both complete modules must reduce to the same authenticated predecessor
     // through the existing exact-fragment transition, not a broad AST exclusion.
     const before = restorePositionProducer(old);
-    same(transition.restoredSource, before.restoredSource, 'chip producer changed unrelated source');
+    same(transition.restoredSource, before.restoredSource, 'producer changed unrelated source');
     const hash = text => createHash('sha256').update(text).digest('hex');
     transition = { ...transition, previousModuleSha256: hash(old), currentModuleSha256: hash(now) };
   }
-  const attribution = chipOnly ? 'reviewed-chip-state-layer-substitution' : followupOnly ? positionFollowupAttribution : positionCompositionAttribution;
-  const expectedGroups = chipOnly ? 10 : followupOnly ? 14 : 6, expectedOccurrences = chipOnly ? 32 : followupOnly ? 768 : 316;
+  const attributions = overlayOnly ? ['reviewed-snackbar-surface-input-substitution', 'reviewed-tooltip-sizing-constraint-omission']
+    : [chipOnly ? 'reviewed-chip-state-layer-substitution' : followupOnly ? positionFollowupAttribution : positionCompositionAttribution];
+  const expectedGroups = overlayOnly ? 13 : chipOnly ? 10 : followupOnly ? 14 : 6;
+  const expectedOccurrences = overlayOnly ? 344 : chipOnly ? 32 : followupOnly ? 768 : 316;
   same(current.rows, expectedRows, 'canonical rows differ from independently replayed positioning review');
   assert.equal(previous.rows.length, current.rows.length);
   const changed = [];
@@ -44,7 +47,7 @@ export function comparePositionCanonical(previous, current, expectedRows, curren
     const before = previous.rows[i], after = current.rows[i];
     if (isDeepStrictEqual(before, after)) continue;
     assert.equal(before.attribution, 'unresolved');
-    assert.equal(after.attribution, attribution);
+    assert.ok(attributions.includes(after.attribution));
     changed.push({ family: after.family, element: after.element, occurrences: after.occurrences,
       previousRowSha256: digest(before), currentRowSha256: digest(after) });
   }
@@ -77,17 +80,20 @@ export function comparePositionCanonical(previous, current, expectedRows, curren
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   const followupOnly = process.argv[2] === '--followup';
   const chipOnly = process.argv[2] === '--chip';
-  assert.equal(process.argv.length, followupOnly || chipOnly ? 3 : 2);
-  const previous = await readAudit(chipOnly ? 'artifacts/material-parity/pre-chip-paint-2a35d34' : followupOnly
+  const overlayOnly = process.argv[2] === '--overlay';
+  assert.equal(process.argv.length, followupOnly || chipOnly || overlayOnly ? 3 : 2);
+  const previous = await readAudit(overlayOnly ? 'artifacts/material-parity/working-audit/d70aa37e4e14a9bfdc6183e0c2a7c383638d83050fc76b2d556a26b510691fa4'
+    : chipOnly ? 'artifacts/material-parity/pre-chip-paint-2a35d34' : followupOnly
     ? 'artifacts/material-parity/pre-position-followup-509dbf4' : 'artifacts/material-parity/pre-position-e62e846');
-  assert.equal(previous.manifest.uncompressedSha256, chipOnly ? '0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de' : followupOnly
+  assert.equal(previous.manifest.uncompressedSha256, overlayOnly ? '276bcd838575bcce26f06ab922eeacd880152c3585dee929f4635c778338767e'
+    : chipOnly ? '0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de' : followupOnly
     ? 'dd44f6b5597014617876fa21d8d144adf7451a3a17a4438c6f95384da6005d00'
     : '287ebb396d68ab064dca40a0c372879e8a0c3fd2c7f56498110577615bd430a2');
   const current = await readAudit('docs');
-  const review = chipOnly ? await collectChipPaintProposal() : followupOnly ? collectPositionFollowupReview() : collectPositionCompositionReview();
-  const expected = (chipOnly ? applyChipPaintRows : followupOnly ? applyPositionFollowupReview : applyPositionCompositionReview)(previous.rows, review);
-  if (!chipOnly) (followupOnly ? validatePositionFollowupRows : validatePositionCompositionRows)(current.rows, review);
-  const previousSource = chipOnly ? execFileSync('git', ['show', '2a35d34:tests/material-parity/input-equivalence-audit.mjs'], { maxBuffer: 4 * 1024 * 1024 }) : undefined;
+  const review = overlayOnly ? await collectOverlaySurfaceReview() : chipOnly ? await collectChipPaintProposal() : followupOnly ? collectPositionFollowupReview() : collectPositionCompositionReview();
+  const expected = (overlayOnly ? applyOverlaySurfaceRows : chipOnly ? applyChipPaintRows : followupOnly ? applyPositionFollowupReview : applyPositionCompositionReview)(previous.rows, review);
+  if (!chipOnly && !overlayOnly) (followupOnly ? validatePositionFollowupRows : validatePositionCompositionRows)(current.rows, review);
+  const previousSource = chipOnly || overlayOnly ? execFileSync('git', ['show', `${overlayOnly ? '72f849a' : '2a35d34'}:tests/material-parity/input-equivalence-audit.mjs`], { maxBuffer: 4 * 1024 * 1024 }) : undefined;
   console.log(JSON.stringify(comparePositionCanonical(previous, current, expected,
-    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), { followupOnly, chipOnly, previousSource }), null, 2));
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), { followupOnly, chipOnly, overlayOnly, previousSource }), null, 2));
 }

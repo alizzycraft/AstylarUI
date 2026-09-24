@@ -26,6 +26,9 @@ test('position producer integration preserves every prior byte outside the exact
     current.replace('applyChipPaintAuditRows(positionFollowupDiscrepancies, chipPaintAuditInputs)', 'positionFollowupDiscrepancies'),
     current.replace('    chipPaintAuditInputs,', '    chipPaintAuditInputs: {},'),
     current.replace("    'docs/material-chip-paint-review.json',\n", ''),
+    current.replace('applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs)', 'chipPaintDiscrepancies'),
+    current.replace('    overlaySurfaceAuditInputs,', '    overlaySurfaceAuditInputs: {},'),
+    current.replace("    'docs/material-overlay-surface-review.json',\n", ''),
   ]) {
     assert.notEqual(mutated, current);
     assert.throws(() => restorePositionProducer(mutated));
