@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { collectChipPositionInspection, proveChipPositionInspection, collectChipPaintProposal, applyChipPaintProposal } from './chip-position-inspection.mjs';
+import { collectChipPositionInspection, proveChipPositionInspection, collectChipPaintProposal, applyChipPaintProposal, chipPaintPredecessor } from './chip-position-inspection.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { collectChipPaintAuditInputs, validateChipPaintAuditInputs, validateChipPaintAuditClassifications, applyChipPaintAuditRows } from './chip-paint-audit-source-binding.mjs';
 test('chips retain three complete source-backed owner groups across 76 states', () => {
@@ -81,14 +81,15 @@ test('chip paint proposal binds ten complete canonical rows without accepting re
     assert.equal(group.reviewEvidence.rendererCauseProven, false);
   }
   const directory = 'artifacts/material-parity/working-audit';
-  const compact = queryFindings(directory, 'chips');
+  const compact = queryFindings(directory, 'chips', chipPaintPredecessor);
+  assert.throws(() => queryFindings(directory, 'chips', { ...chipPaintPredecessor, indexSha256: '0'.repeat(64) }), /Working index changed/);
   const original = [];
   for (const group of proposal.groups) {
     const finding = compact.find(row => row.evidence.completeRowSha256 === group.reviewEvidence.originalCompleteRowSha256);
-    original.push(await loadFindingEvidence(directory, 'chips', finding.id));
+    original.push(await loadFindingEvidence(directory, 'chips', finding.id, chipPaintPredecessor));
   }
   const unrelatedFinding = compact.find(row => row.property === 'appearance');
-  const unrelated = await loadFindingEvidence(directory, 'chips', unrelatedFinding.id);
+  const unrelated = await loadFindingEvidence(directory, 'chips', unrelatedFinding.id, chipPaintPredecessor);
   original.splice(4, 0, unrelated);
   const before = structuredClone(original);
   const result = await applyChipPaintProposal(original, proposal);

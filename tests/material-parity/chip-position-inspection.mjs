@@ -61,12 +61,16 @@ export function collectChipPositionInspection() {
     groups: groups.map(g => ({ element: g.element, priorRowSha256: g.priorRowSha256, cases })), observations,
     counts: { groups: 3, observations: 228, distinctCases: 76 }, canonicalAttributionChanged: false };
 }
+// This transition reviews a fixed predecessor, not whichever classifications
+// happen to be in the mutable working index after integration.
+export const chipPaintPredecessor = Object.freeze({
+  generation: '7793336da954e94fd2f03ff48a92a1d3a174f545532f631baf00df805b80216e',
+  indexSha256: '97be6b2aa7342f017d3284b1410b1065189af854e5d0873af67eb7b858ddcc7c',
+});
 export async function collectChipPaintProposal() {
   const directory = 'artifacts/material-parity/working-audit';
-  const manifest = JSON.parse(readFileSync('docs/material-input-equivalence-audit.json'));
-  assert.equal(JSON.parse(readFileSync(`${directory}/current.json`)).generation, manifest.compressedSha256);
   const inspection = collectChipPositionInspection();
-  const rows = queryFindings(directory, 'chips').filter(r => r.attribution === 'unresolved' && r.property === 'backgroundColor');
+  const rows = queryFindings(directory, 'chips', chipPaintPredecessor).filter(r => r.attribution === 'unresolved' && r.property === 'backgroundColor');
   assert.equal(rows.length, 10);
   const normalize = value => {
     if (value === 'transparent') return 'rgba(0,0,0,0)';
@@ -77,7 +81,7 @@ export async function collectChipPaintProposal() {
   };
   const groups = [];
   for (const row of rows) {
-    const original = await loadFindingEvidence(directory, 'chips', row.id);
+    const original = await loadFindingEvidence(directory, 'chips', row.id, chipPaintPredecessor);
     assert.equal(original.occurrences, row.cases.length);
     const observations = row.cases.map(caseId => {
       const inspected = inspection.observations.find(o => o.case === caseId); assert.ok(inspected);

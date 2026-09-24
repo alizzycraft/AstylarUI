@@ -844,7 +844,7 @@
   "sources": [
     {
       "file": "tests/material-parity/chip-position-inspection.mjs",
-      "sha256": "d4cb37bee16c5d50daef92e7bec3aa9e2f20c1f28b40899488a3f2d4d36d3194"
+      "sha256": "82921a30e0851fbd935f3998d587956f8d65d341c27be4431785dd35643838d6"
     },
     {
       "file": "examples/material-showcase/src/app/astylar.component.ts",

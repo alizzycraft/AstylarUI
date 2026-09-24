@@ -10,7 +10,7 @@ const hash = value => createHash('sha256').update(value).digest('hex');
 const capture = { file: 'artifacts/material-parity/current-ancestry-audit/latest-report.json',
   sha256: 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a' };
 const reviewSource = { file: 'docs/material-chip-paint-review.json',
-  sha256: '6f0e944909cae42864a67d886b9420e8c17b3127caec4d25a3c24e9b731ac2cb' };
+  sha256: 'a942d0d83df0a19efdd84f88f691f5a35cdc0f6123597024242020d14671d3ef' };
 
 function prepare(report) {
   const bytes = readFileSync(capture.file); assert.equal(hash(bytes), capture.sha256);

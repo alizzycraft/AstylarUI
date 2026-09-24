@@ -107,9 +107,9 @@ export function verifyFindings(generation, expectedIndexSha256) {
   assert.deepEqual(counts, index.counts);
   return index;
 }
-export function queryFindings(destination, family) {
+export function queryFindings(destination, family, snapshot) {
   assert.match(family, /^[a-zA-Z0-9_-]+$/);
-  const pointer = JSON.parse(fs.readFileSync(path.join(destination, 'current.json')));
+  const pointer = snapshot ?? JSON.parse(fs.readFileSync(path.join(destination, 'current.json')));
   assert.match(pointer.generation, /^[a-f0-9]{64}$/);
   const generation = path.join(destination, pointer.generation), indexBytes = fs.readFileSync(path.join(generation, 'index.json'));
   assert.equal(hash(indexBytes), pointer.indexSha256, 'Working index changed; re-import canonical evidence');
@@ -129,9 +129,9 @@ export function saveReviewProposal(destination, review) {
   if (!fs.existsSync(file)) atomicJson(file, { status: 'proposal-not-canonical', sha256, review });
   return { file, sha256, groups: review.groups.length };
 }
-export async function loadFindingEvidence(destination, family, id) {
-  const finding = queryFindings(destination, family).find(row => row.id === id); assert.ok(finding, 'Unknown finding');
-  const pointer = JSON.parse(fs.readFileSync(path.join(destination, 'current.json')));
+export async function loadFindingEvidence(destination, family, id, snapshot) {
+  const pointer = snapshot ?? JSON.parse(fs.readFileSync(path.join(destination, 'current.json')));
+  const finding = queryFindings(destination, family, pointer).find(row => row.id === id); assert.ok(finding, 'Unknown finding');
   const generation = path.join(destination, pointer.generation), index = JSON.parse(fs.readFileSync(path.join(generation, 'index.json')));
   assert.equal(index.manifest.payload, 'material-input-equivalence-audit.json.gz');
   const payload = path.join(generation, index.manifest.payload);

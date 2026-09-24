@@ -70,6 +70,26 @@ conservation. Before export, address the chip proposal regression's dependency
 on the mutable unresolved working index noted above. Full canonical conservation
 and final browser gates remain outstanding; no renderer or fixture changed.
 
+The chip proposal now pins its pre-classification working generation
+`7793336da954e94fd2f03ff48a92a1d3a174f545532f631baf00df805b80216e` and index receipt
+`97be6b2aa7342f017d3284b1410b1065189af854e5d0873af67eb7b858ddcc7c`.
+Retain that generation (including its authenticated payload and chip shards)
+after advancing `working-audit/current.json`: it is referenced transition
+evidence, not stale disposable scratch. No extra package or index was copied.
+The existing findings-store API accepts an explicit snapshot for historical
+retrieval while current queries retain their default behavior. Its regression
+advances a synthetic current generation, verifies old full-row retrieval is
+unchanged, and rejects forged index receipts and traversal generations.
+Regenerated chip review data differs only in the collector-source receipt;
+all ten groups / 32 observations are exactly unchanged. Its new file SHA-256 is
+`a942d0d83df0a19efdd84f88f691f5a35cdc0f6123597024242020d14671d3ef`.
+Verification: `node --test tests/material-parity/audit-findings-store.spec.mjs`
+passes 1/1 (0.16 seconds); `node --test tests/material-parity/chip-position-inspection.spec.mjs tests/material-parity/position-composition-producer-transition.spec.mjs`
+passes 6/6 (65.12 seconds), including full predecessor restoration, original
+76-state inspection, foreign/incomplete/forged evidence rejection and exact
+producer transition. This clears the mutable-index regression prerequisite,
+not the outstanding full canonical export/conservation milestone.
+
 Dialog width follow-up (separate from the height clamp): the existing reduction
 now observes `measureIntrinsicFlowChildOuterWidth` and
 `calculateIntrinsicContainerWidth` through call-through spies. In
