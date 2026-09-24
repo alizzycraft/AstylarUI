@@ -207,6 +207,70 @@ export function proveDialogActionBoxSubstitution(entry, r, a) {
     candidateUsedLayoutMeasured: false, renderingEquivalent: false };
 }
 
+export function proveDialogTextFlow(entry, r, a, element) {
+  assert.equal(entry.family, 'dialog');
+  assert.ok(['dialog-title', 'dialog-copy'].includes(element));
+  const title = element === 'dialog-title';
+  const { mapping } = proveModalPositionInspection(entry, r, a, element);
+  const reference = one(r.nodes.filter(n => n.key === mapping.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === mapping.candidateNode));
+  assert.equal(reference.type, title ? 'h2' : 'mat-dialog-content');
+  assert.equal(candidate.authored.type, title ? 'h2' : 'p');
+  assert.deepEqual(reference.inline, {});
+  assert.equal(candidate.authored.style, undefined);
+  assert.equal(candidate.authored.attributes?.style, undefined);
+  const rules = reference.rules.map(i => r.rules[i]).filter(rule => rule.active);
+  const affectsNative = key => /^(display$|padding($|-)|overflow($|-)|max-height$|flex-shrink$|flex$|all$|animation|transition)/.test(key);
+  const requests = rules.flatMap(rule => {
+    assert.deepEqual(rule.conditions, []);
+    return Object.entries(rule.declarations).filter(([key]) => affectsNative(key))
+      .map(([key, value]) => ({ selector: rule.selector, key, ...value }));
+  });
+  const declaration = (selector, key, value) => ({ selector, key, value, important: false });
+  const padding = selector => ['top', 'right', 'bottom', 'left']
+    .map(edge => declaration(selector, `padding-${edge}`, ''));
+  const expected = title ? [declaration('.mat-mdc-dialog-title', 'display', 'block'),
+    declaration('.mat-mdc-dialog-title', 'flex-shrink', '0'), ...padding('.mat-mdc-dialog-title')]
+    : [declaration('.mat-mdc-dialog-content', 'display', 'block'),
+      declaration('.mat-mdc-dialog-content', 'overflow-x', 'auto'),
+      declaration('.mat-mdc-dialog-content', 'overflow-y', 'auto'),
+      declaration('.mat-mdc-dialog-content', 'max-height', '65vh'),
+      ...padding('.mat-mdc-dialog-container .mat-mdc-dialog-content'),
+      ...padding('.mat-mdc-dialog-container-with-actions .mat-mdc-dialog-content'),
+      declaration('.mat-mdc-dialog-container .mat-mdc-dialog-title + .mat-mdc-dialog-content', 'padding-top', '0px')];
+  assert.deepEqual(requests, expected);
+  // CSSOM leaves var()-based expanded padding empty. Preserve its authored
+  // shorthand separately; do not interpret the empty expansion as zero.
+  const paddingTokens = rules.filter(rule => rule.cssText.includes('padding:'))
+    .map(rule => ({ selector: rule.selector, declaration: rule.cssText.match(/padding: [^;]+;/)?.[0] }));
+  assert.deepEqual(paddingTokens, title
+    ? [{ selector: '.mat-mdc-dialog-title', declaration: 'padding: var(--mat-dialog-headline-padding, 6px 24px 13px);' }]
+    : [{ selector: '.mat-mdc-dialog-container .mat-mdc-dialog-content', declaration: 'padding: var(--mat-dialog-content-padding, 20px 24px);' },
+      { selector: '.mat-mdc-dialog-container-with-actions .mat-mdc-dialog-content', declaration: 'padding: var(--mat-dialog-with-actions-content-padding, 20px 24px 0);' }]);
+  const expectedNative = title
+    ? { display: 'block', flexShrink: '0', paddingTop: '6px', paddingBottom: '13px' }
+    : { display: 'block', maxHeight: '650px', overflowX: 'auto', overflowY: 'auto', paddingTop: '0px' };
+  for (const [key, value] of Object.entries(expectedNative)) assert.equal(r.styles[reference.style][key], value);
+  const affects = key => /^(display$|padding|overflow|maxHeight$|flexShrink$|flex$|all$|animation|transition)/.test(key);
+  const candidateRequests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key)).map(([key, value]) => ({ selector: rule.selector, key, value })));
+  const candidatePadding = title ? '7px 24px 12px' : '2px 24px 0';
+  assert.deepEqual(candidateRequests, [{ selector: `.${element}`, key: 'padding', value: candidatePadding },
+    { selector: `.${element}`, key: 'display', value: 'flex' }]);
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(candidate[stage].display, 'flex');
+    assert.equal(candidate[stage].padding, candidatePadding);
+    assert.equal(candidate[stage].flexShrink, '1');
+    for (const key of ['maxHeight', 'overflow', 'overflowX', 'overflowY', 'paddingTop', 'paddingBottom'])
+      assert.equal(Object.hasOwn(candidate[stage], key), false);
+  }
+  return { case: caseKey(entry, entry.kind), element, referenceNode: reference.key, astylarNode: candidate.key,
+    referenceRequests: requests, paddingTokens, candidateRequests,
+    attributableProperties: Object.keys(expectedNative), sourceFinding: 'fixture-dialog-text-flow-substitution',
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false,
+    candidateUsedLayoutMeasured: false, rendererCauseProven: false, renderingEquivalent: false };
+}
+
 export function proveDialogPanelConstraints(entry, r, a) {
   assert.equal(entry.family, 'dialog');
   const { mapping } = proveModalPositionInspection(entry, r, a, 'dialog-panel');
@@ -512,6 +576,24 @@ function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition)
         priorMetadata: Object.fromEntries(metadata.filter(k => Object.hasOwn(row, k)).map(k => [k, structuredClone(row[k])])),
         observations, inputEquivalent: false, renderingEquivalent: false } };
   });
+}
+
+export function applyDialogTextFlow(rows, cases, inventory, canonicalStyle) {
+  return ['dialog-title', 'dialog-copy'].reduce((values, element) => applyModalBoxReview(values, cases, inventory, canonicalStyle, {
+    element, properties: element === 'dialog-title' ? ['display', 'flexShrink', 'paddingTop', 'paddingBottom']
+      : ['display', 'maxHeight', 'overflowX', 'overflowY', 'paddingTop'],
+    prove: (entry, r, a) => proveDialogTextFlow(entry, r, a, element),
+    attribution: 'reviewed-dialog-text-flow-inputs', owner: 'showcase dialog title/content flow and padding authoring',
+    justification: 'Original Material owners declare block flow, title shrink zero, token-based padding and content overflow/max-height constraints. Candidate owners substitute flex flow and retuned padding while omitting those constraints. Exact original rules, observed values, candidate stages and complete case population bind the existing fixture-dialog-text-flow-substitution finding. Empty expanded CSSOM padding remains separate from its authored token. This proves input inequality, not a renderer layout cause or an offset-based remedy.',
+  }), rows);
+}
+
+export function validateDialogTextFlow(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-dialog-text-flow-inputs');
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyDialogTextFlow(originalRows, cases, inventory, canonicalStyle))));
+    return [];
+  } catch (error) { return [`dialog text flow does not replay from original owner inputs: ${error.message}`]; }
 }
 
 export function applyBottomSheetActionLayout(rows, cases, inventory, canonicalStyle) {

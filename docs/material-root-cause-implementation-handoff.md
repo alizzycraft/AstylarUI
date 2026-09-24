@@ -18,8 +18,15 @@ Compact import completed: 8,483 scalar groups, 134 source findings, 39,904 contr
 differences, 389,202 occurrences and 1,560 unresolved groups; 69,762,238 compact
 bytes. This accepts only the bounded evidence transition, not full input
 equivalence or final browser gates.
-Next substantive batch: the nine dialog flow groups already investigated below;
-then the tab label/control stage comparison. Do not repeat those surveys.
+Next canonical batch: dialog flow plus tab label/control stage comparison.
+The existing modal module now proves/applies/replays the nine dialog groups /
+288 occurrences against all 64 original owners and all three candidate stages.
+It preserves empty CSSOM expansions beside the authored padding tokens, binds
+the existing compensation finding, and leaves unrelated/default rows unchanged.
+The focused ID-less-row, raw-conservation and mutation checks pass in 5.51 seconds.
+This proof is not wired into production aggregation yet; canonical counts remain
+1,560 unresolved. Batch integration/export with the tab proof, rather than
+exporting for nine rows alone. Do not repeat the completed surveys below.
 
 ### Prior export recovery and pending investigation evidence
 

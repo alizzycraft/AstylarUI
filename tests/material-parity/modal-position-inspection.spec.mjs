@@ -16,7 +16,8 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   applyBottomSheetPanelFlow, validateBottomSheetPanelFlow, proveBottomSheetPanelPaint,
   applyBottomSheetPanelPaint, validateBottomSheetPanelPaint, proveBottomSheetActionLayout,
   applyBottomSheetActionLayout, validateBottomSheetActionLayout, proveBottomSheetActionCorners,
-  applyBottomSheetContrastCorners, validateBottomSheetContrastCorners } from './modal-position-inspection.mjs';
+  applyBottomSheetContrastCorners, validateBottomSheetContrastCorners,
+  proveDialogTextFlow, applyDialogTextFlow, validateDialogTextFlow } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
@@ -118,6 +119,71 @@ test('current rounded rectangle kernel undersamples oversized full-round radii d
   }
   t.diagnostic(JSON.stringify({ source: file, sha256: createHash('sha256').update(source).digest('hex'),
     observations, scope: 'current source-extracted geometry kernel only; no original bundle, public API or framebuffer claim' }));
+});
+
+test('dialog text flow binds nine original input groups without changing unrelated canonical rows', () => {
+  const inspection = collectModalPositionInspection();
+  const captured = JSON.parse(readFileSync(inspection.capture.file));
+  const cases = captured.interactions.filter(c => c.family === 'dialog' &&
+    c.styleInputs.some(i => i.id === 'dialog-copy')).map(c => ({ ...c, kind: 'interaction' }));
+  assert.equal(cases.length, 32);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const snapshot = { generation: 'ed33d97cd19daa01bdfa984abfaac85e5a5f1dafc6e31fa739400e58b14835e7',
+    indexSha256: '626379adeb7777aff365bab1e9a4c9594ad927a2bcbeecf1e8fb08b91907a958' };
+  const properties = { 'dialog-title': ['display', 'flexShrink', 'paddingTop', 'paddingBottom'],
+    'dialog-copy': ['display', 'maxHeight', 'overflowX', 'overflowY', 'paddingTop'] };
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'dialog', snapshot).filter(r =>
+    r.evidence.section === 'discrepancies' && r.attribution === 'unresolved' && properties[r.element]?.includes(r.property))
+    .map(({ id, evidence, ...row }) => row);
+  assert.equal(rows.length, 9);
+  assert.equal(rows.reduce((n, row) => n + row.occurrences, 0), 288);
+  const unrelated = { family: 'dialog', element: 'dialog-copy', property: 'minHeight',
+    reference: 'auto', attribution: 'unresolved', occurrences: 32 };
+  rows.push(unrelated);
+  const original = structuredClone(rows);
+  let owners = 0, first, firstCopy;
+  for (const entry of cases) {
+    const key = `interaction:${entry.family}@${entry.profile}/${entry.viewport.id}/${entry.state}`;
+    const trees = modalInventoryTrees(inventory, key);
+    for (const element of Object.keys(properties)) {
+      const proof = proveDialogTextFlow(entry, ...trees, element); owners++;
+      assert.deepEqual(proof.attributableProperties, properties[element]);
+      assert.equal(proof.sourceFinding, 'fixture-dialog-text-flow-substitution');
+      assert.equal(proof.rendererCauseProven, false);
+      first ??= { entry, trees, element };
+      if (element === 'dialog-copy') firstCopy ??= { entry, trees, element };
+    }
+  }
+  assert.equal(owners, 64);
+  const applied = applyDialogTextFlow(rows, cases, inventory, normalize);
+  assert.deepEqual(rows, original);
+  assert.equal(applied.at(-1), unrelated);
+  assert.equal(applied.filter(r => r.attribution === 'reviewed-dialog-text-flow-inputs').length, 9);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  assert.deepEqual(validateDialogTextFlow(applied, rows, cases, inventory, normalize), []);
+  for (const mutate of [
+    values => { values.shift(); },
+    values => { values[0].reference = 'forged'; },
+    values => { values[0].reviewEvidence.observations[0].rendererCauseProven = true; },
+  ]) { const changed = structuredClone(applied); mutate(changed);
+    assert.equal(validateDialogTextFlow(changed, rows, cases, inventory, normalize).length, 1); }
+  assert.throws(() => applyDialogTextFlow(rows, cases.slice(1), inventory, normalize));
+  assert.throws(() => applyDialogTextFlow(rows, [...cases, cases[0]], inventory, normalize));
+  for (const mutate of [
+    (r, a) => { a.rules.find(rule => rule.selector === '.dialog-title').padding = '6px 24px 13px'; },
+    (r, a) => { a.rules.push({ selector: ':unknown', all: 'initial' }); },
+    (r, a) => { a.nodes.find(n => n.authored?.id === 'dialog-title').interactionResolvedStyle.display = 'block'; },
+    r => { r.rules.find(rule => rule.selector === '.mat-mdc-dialog-title').cssText = 'padding: 0;'; },
+    r => { r.rules.find(rule => rule.selector === '.mat-mdc-dialog-title').declarations['padding-top'].value = '0px'; },
+  ]) { const trees = structuredClone(first.trees); mutate(...trees);
+    assert.throws(() => proveDialogTextFlow(first.entry, ...trees, first.element)); }
+  for (const mutate of [
+    r => { r.rules.find(rule => rule.selector === '.mat-mdc-dialog-content').declarations['max-height'].value = 'none'; },
+    (r, a) => { a.nodes.find(n => n.authored?.id === 'dialog-copy').normalResolvedStyle.overflowY = 'auto'; },
+  ]) { const trees = structuredClone(firstCopy.trees); mutate(...trees);
+    assert.throws(() => proveDialogTextFlow(firstCopy.entry, ...trees, firstCopy.element)); }
 });
 
 test('bottom-sheet action corners distinguish full-round normalization from contrast input substitution', () => {
