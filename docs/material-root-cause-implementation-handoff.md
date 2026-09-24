@@ -138,6 +138,23 @@ forged producer transitions. This is checker verification only: run
 `node scripts/check-material-position-canonical-conservation.mjs --chip` after
 the export is terminal, then verify all section/source changes separately.
 
+Tooltip retained-ink follow-up (no fresh capture): all 18 paired hover/held
+rasters were measured with the existing `measureTextInkCenter` metric and
+authenticated with ordered file/hash digest
+`249d82e2152cf05fd58742674310332210862725f26a05ea8e56c165f64abc6c`.
+Four contrast/custom DPR-2 cases retain vertical ink-center differences of
+0.509991 and 0.486896 CSS px respectively; the other fourteen are below 0.03 px.
+This metric samples the popup interior. It is not a full clipping, horizontal
+centering or sharpness proof, and these diagnostic bounds are not acceptance
+threshold changes. The earlier large downward displacement is not reproduced
+in these paired samples; the smaller DPR-dependent residual remains explicit.
+Do not classify it as a core defect before proving equivalent typography and
+tracing paint placement. The separate candidate-only `open` screenshots match
+the already-classified benchmark state defect and are not paired hover evidence.
+`node --test --test-name-pattern="paired tooltip rasters" tests/material-parity/tooltip-position-composition.spec.mjs`
+passes 1/1 (3.96 seconds), preserving the four nonzero residuals rather than
+asserting rendering equivalence. No running-export dependency was modified.
+
 Dialog width follow-up (separate from the height clamp): the existing reduction
 now observes `measureIntrinsicFlowChildOuterWidth` and
 `calculateIntrinsicContainerWidth` through call-through spies. In

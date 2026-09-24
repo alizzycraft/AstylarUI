@@ -3,9 +3,44 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
+import { PNG } from 'pngjs';
+import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 import { collectTooltipPositionComposition, proveTooltipPositionComposition } from './tooltip-position-composition.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
+
+test('paired tooltip rasters retain small DPR-dependent ink offsets, not the earlier large displacement', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const source = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(hash(source), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const entries = JSON.parse(source).interactions.filter(e => e.family === 'tooltip' && e.overlayPlacement?.targetId);
+  assert.equal(entries.length, 18);
+  const receipts = [], residuals = [];
+  for (const entry of entries) {
+    assert.ok(['hover', 'held'].includes(entry.state)); // Unpaired `open` is a separate known defect.
+    const ink = {};
+    for (const side of ['reference', 'astylar']) {
+      const file = entry.inputTrees[side].file.replace(`${side}-input-tree.json`, `${side}.png`);
+      const bytes = readFileSync(file), image = PNG.sync.read(bytes), p = entry.overlayPlacement[side];
+      receipts.push({ file, sha256: hash(bytes) });
+      const dpr = entry.viewport.deviceScaleFactor;
+      assert.equal(image.width, entry.viewport.width * dpr); assert.equal(image.height, entry.viewport.height * dpr);
+      ink[side] = measureTextInkCenter(image, { left: p.x, top: p.y, right: p.x + p.width,
+        bottom: p.y + p.height, width: p.width, height: p.height }, dpr);
+      assert.ok(ink[side]);
+    }
+    const delta = textCenterOffsetError(ink.reference, ink.astylar);
+    if (entry.viewport.deviceScaleFactor === 2 && ['contrast', 'custom'].includes(entry.profile)) {
+      const expected = entry.profile === 'contrast' ? .5099912457409914 : .486895961290827;
+      assert.ok(Math.abs(delta - expected) < 1e-6);
+      residuals.push(`${entry.profile}/${entry.viewport.id}/${entry.state}`);
+    } else assert.ok(delta < .03);
+  }
+  assert.equal(residuals.length, 4);
+  assert.equal(hash(JSON.stringify(receipts)), '249d82e2152cf05fd58742674310332210862725f26a05ea8e56c165f64abc6c');
+  // These are immutable diagnostic observations, not a widened acceptance
+  // threshold or a claim about horizontal centering, sharpness or equal inputs.
+});
 
 // Size constraints are independent of the already-proven flow substitution.
 // This checks authored requests, not whether the short captured label hits them.
