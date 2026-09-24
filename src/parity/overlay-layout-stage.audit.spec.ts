@@ -8,9 +8,10 @@ import { resolveCssViewportRect } from '../app/services/css-layout-geometry';
 // Equal-input diagnostic reductions, not replacements for Material fixtures.
 // The private inspection symbol is read-only instrumentation, not authoring.
 describe('overlay CSS layout versus projection audit', () => {
-  for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'fixed-clip', 'absolute-clip'] as const) {
+  for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'fixed-clip', 'absolute-clip', 'rounded-toggle'] as const) {
     const clipping = composition.endsWith('-clip');
-    for (const [width, height] of (composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
+    const rounded = composition === 'rounded-toggle';
+    for (const [width, height] of (rounded ? [[160, 80]] : composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
       it(`${composition} at ${width} x ${height}`, async () => {
         TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
         const frame = document.createElement('iframe');
@@ -49,6 +50,18 @@ describe('overlay CSS layout versus projection audit', () => {
             ] : [{ selector: '#pane', width: '120px', height: '48px', marginBottom: clipping ? '-20px' : '8px', background: '#302d32' }]),
           ],
         };
+        if (rounded) {
+          site.root.children = [{ type: 'div', id: 'host', children: [
+            { type: 'div', id: 'filler' }, { type: 'div', id: 'pane' },
+          ] }];
+          site.styles = [
+            { selector: '#host, #filler, #pane', boxSizing: 'border-box', margin: '0', padding: '0' },
+            { selector: '#host', position: 'absolute', left: '10px', top: '10px', width: '130px', height: '42px',
+              display: 'flex', borderWidth: '1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: '28px', overflow: 'hidden' },
+            { selector: '#filler', width: '48px', height: '40px', background: '#ffffff', flexShrink: '0' },
+            { selector: '#pane', width: '80px', height: '40px', background: '#302d32', flexShrink: '0' },
+          ];
+        }
         const css = doc.createElement('style');
         css.textContent = site.styles.map(({ selector, ...values }) => `${selector}{${Object.entries(values)
           .map(([key, value]) => `${key.replace(/[A-Z]/g, c => '-' + c.toLowerCase())}:${value}`).join(';')}}`).join('\n');
@@ -71,7 +84,7 @@ describe('overlay CSS layout versus projection audit', () => {
           const engine = surface.scene.getEngine();
           const viewport = surface.scene.activeCamera!.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
           const canvasBox = canvas.getBoundingClientRect();
-          const observations = (sheet ? ['host', 'overlay', 'wrapper', 'pane', 'list', 'item-a', 'item-b'] :
+          const observations = (rounded ? ['host', 'filler', 'pane'] : sheet ? ['host', 'overlay', 'wrapper', 'pane', 'list', 'item-a', 'item-b'] :
             nested ? ['host', 'overlay', 'wrapper', 'pane'] : ['host', 'overlay', 'pane']).map(id => {
             const reference = doc.getElementById(id)!.getBoundingClientRect();
             const mesh = manager.elementsMap.get(id)!;
@@ -93,9 +106,9 @@ describe('overlay CSS layout versus projection audit', () => {
               canvasCssWidth: canvasBox.width, canvasCssHeight: canvasBox.height,
               renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(),
               headDisplay: frame.contentWindow!.getComputedStyle(doc.head).display }, observations }));
-          if (clipping) {
-            const capture = (window as Window & { auditCapture?: (info: { composition: string }) => Promise<void> }).auditCapture;
-            await capture?.({ composition });
+          if (clipping || rounded) {
+            const capture = (window as Window & { auditCapture?: (info: { composition: string; width: number; height: number }) => Promise<void> }).auditCapture;
+            await capture?.({ composition, width, height });
           }
           expect(JSON.stringify(site)).toBe(authoredBefore);
           for (const observation of observations) {

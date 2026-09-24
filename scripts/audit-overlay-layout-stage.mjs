@@ -75,8 +75,8 @@ try {
   const page = await browser.newPage({ viewport: { width: 900, height: 800 }, deviceScaleFactor: dpr });
   const observations = [], errors = [];
   const screenshots = [];
-  await page.exposeFunction('auditCapture', async ({ composition }) => {
-    assert.ok(['fixed-clip', 'absolute-clip'].includes(composition));
+  await page.exposeFunction('auditCapture', async ({ composition, width, height }) => {
+    assert.ok(['fixed-clip', 'absolute-clip', 'rounded-toggle'].includes(composition));
     const captures = {};
     const rasters = {};
     for (const [side, selector] of [['reference', 'iframe'], ['astylar', 'canvas']]) {
@@ -86,8 +86,8 @@ try {
       rasters[side] = PNG.sync.read(bytes);
     }
     const reference = rasters.reference, candidate = rasters.astylar;
-    assert.equal(reference.width, 320 * dpr);
-    assert.equal(reference.height, 200 * dpr);
+    assert.equal(reference.width, width * dpr);
+    assert.equal(reference.height, height * dpr);
     assert.equal(candidate.width, reference.width);
     assert.equal(candidate.height, reference.height);
     const isPane = (pixels, offset) => pixels[offset] === 48 && pixels[offset + 1] === 45 && pixels[offset + 2] === 50 && pixels[offset + 3] === 255;
@@ -102,8 +102,32 @@ try {
     screenshots.push({ composition, captures, paint });
     // Fixed pane extends 20px beyond viewport; absolute pane extends 20px
     // beyond its clipping host. Both leave exactly 28px of the 48px pane.
-    assert.equal(referencePanePixels, 120 * 28 * dpr * dpr);
-    assert.equal(paneMaskDifferences, 0, 'Pane clipping differs from native paint');
+    if (composition !== 'rounded-toggle') {
+      assert.equal(referencePanePixels, 120 * 28 * dpr * dpr);
+      assert.equal(paneMaskDifferences, 0, 'Pane clipping differs from native paint');
+    } else {
+      assert.ok(referencePanePixels > 0);
+      // Record curved-edge differences without pretending exact solid-pixel
+      // masks establish equivalent antialiasing or complete border paint.
+      let referenceSolidBorderPixels = 0, borderPixelsCoveredByChildren = 0;
+      const coveredSamples = [];
+      for (let offset = 0; offset < reference.data.length; offset += 4) {
+        const ref = reference.data.subarray(offset, offset + 4);
+        const actual = candidate.data.subarray(offset, offset + 4);
+        if (ref[0] !== 121 || ref[1] !== 116 || ref[2] !== 126 || ref[3] !== 255) continue;
+        referenceSolidBorderPixels++;
+        const whiteChild = actual[0] === 255 && actual[1] === 255 && actual[2] === 255 && actual[3] === 255;
+        if (!whiteChild && !isPane(candidate.data, offset)) continue;
+        borderPixelsCoveredByChildren++;
+        if (coveredSamples.length < 8) coveredSamples.push({
+          x: (offset / 4) % reference.width, y: Math.floor(offset / 4 / reference.width),
+          reference: [...ref], candidate: [...actual],
+        });
+      }
+      Object.assign(paint, { referenceSolidBorderPixels, borderPixelsCoveredByChildren, coveredSamples });
+      assert.ok(referenceSolidBorderPixels > 0, 'Native border control must be visible');
+      assert.equal(borderPixelsCoveredByChildren, 0, 'Solid native border pixels are replaced by child fill');
+    }
   });
   page.on('pageerror', error => errors.push(String(error)));
   page.on('console', message => { if (message.text().startsWith('OVERLAY_LAYOUT_STAGE ')) observations.push(JSON.parse(message.text().slice(21))); });

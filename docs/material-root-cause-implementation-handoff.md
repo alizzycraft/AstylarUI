@@ -193,6 +193,51 @@ the verified compact index:
    the existing gesture, range-travel and paint reductions; do not reopen those
    diagnoses or assume they explain every original symptom. Isolate unreviewed
    owner selection, clipping and sizing inputs.
+
+   Rounded-toggle follow-up: the existing package browser reduction now tests
+   identical authored CSS: a 130x42 border-box flex parent at (10,10), 1px solid
+   `#79747e` border, 28px radius, hidden overflow, and square white/dark children
+   of 48x40 and 80x40. No child corner compensation or Material fixture change.
+   Native, retained CSS and projected bounds match for all three owners at DPR
+   1 and 2 (the initial nine-case run's geometry assertions pass). Raster does
+   not: the candidate loses the curved border beneath child fill. At DPR 2,
+   **176 of 952 exact solid native border pixels become exact white/dark child
+   pixels**. For example device pixel (247,22) changes from [121,116,126,255] to
+   [48,45,50,255]. This is a confirmed equal-input core paint/clipping defect,
+   not a used-size or fractional-surface projection error in this reduction.
+
+   The source trace identifies the leading mechanism:
+   `OverflowClipService.apply` uses `resolveCssViewportRect` (the retained border
+   box) and the outer `astylarBorderRadiusWorld` for descendant clipping, without
+   border-width insets or an inner-radius calculation. Thus its clip permits
+   child paint in the rounded border band. The smallest next discriminating
+   check is the same reduction with transparent children/border-only paint, to
+   separate clipping overpaint from any independent border-mesh defect. Do not
+   restore child-radius workarounds; a future general correction belongs to
+   core overflow/paint ownership. Hover/pressed layers and all historical toggle
+   observations remain separate obligations, not automatically classified here.
+
+   The DPR 1 exact-solid-border control finds no overwritten pixels (176/176
+   match), but dark fill masks differ by 86 pixels; it is not full raster parity.
+   DPR 2 dark masks differ by 268 pixels. Whole-image differences include the
+   separately known red candidate root versus white native root; those are not
+   normalized away. The new border assertion intentionally fails at DPR 2 and
+   retains sampled pixels and screenshot hashes in the existing result format.
+   This assertion detects solid-border replacement, not every antialiasing error.
+
+   Evidence: `artifacts/material-parity/toggle-round-deb3f15-v2-dpr1` and `-dpr2`.
+   Result SHA-256 respectively
+   `6ef448cdad77901853a7137cbd87bc6fe9b9aff2ad9b4e7eff1f3bb566a22dd0` and
+   `afcc6b47cad6fad3bb6ebfdcde809514437f087f99f6ac708abae4bb14a52205`.
+   Both runs exit 1: DPR 1 has seven passes/two known fractional-projection
+   failures; DPR 2 has six passes/those two failures plus the new border failure.
+   No page errors. The prior `toggle-round-deb3f15-dpr1`/`-dpr2` captures retain
+   the successful geometry assertions independently of the new paint failure.
+   All 104 compiled/source receipts exactly match the earlier clipping run;
+   current installed/local/fresh-build emitted code also matches. Diagnostic
+   TypeScript passes (5.74s command including source inspection). The canonical
+   classification checkpoint is unchanged; these new diagnostic proofs still
+   require integration and final canonical/browser acceptance.
 3. Remaining typography and paint: line-height 67, tracking 57, font-family 31
    and color 111 unresolved groups. Reuse explicit ownership/stage proofs and
    separate missing computed evidence from unequal declarations. These property
