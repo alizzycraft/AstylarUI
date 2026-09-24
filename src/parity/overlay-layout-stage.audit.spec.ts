@@ -8,8 +8,8 @@ import { resolveCssViewportRect } from '../app/services/css-layout-geometry';
 // Equal-input diagnostic reductions, not replacements for Material fixtures.
 // The private inspection symbol is read-only instrumentation, not authoring.
 describe('overlay CSS layout versus projection audit', () => {
-  for (const composition of ['nested-row', 'flat-column'] as const) {
-    for (const [width, height] of [[320, 200], [321.5, 201.25]]) {
+  for (const composition of ['nested-row', 'flat-column', 'sheet-auto'] as const) {
+    for (const [width, height] of (composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : [[320, 200], [321.5, 201.25]])) {
       it(`${composition} at ${width} x ${height}`, async () => {
         TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
         const frame = document.createElement('iframe');
@@ -19,21 +19,32 @@ describe('overlay CSS layout versus projection audit', () => {
         document.body.append(frame, canvas);
         const doc = frame.contentDocument!;
         doc.body.style.margin = '0';
-        const nested = composition === 'nested-row';
-        const pane = { type: 'div', id: 'pane' };
+        const nested = composition !== 'flat-column';
+        const sheet = composition === 'sheet-auto';
+        const pane = { type: 'div', id: 'pane', ...(sheet ? { children: [{ type: 'div', id: 'list', children: [
+          { type: 'div', id: 'item-a' }, { type: 'div', id: 'item-b' },
+        ] }] } : {}) };
         const site: SiteData = {
           root: { children: [{ type: 'div', id: 'host', children: [
             { type: 'div', id: 'overlay', children: nested
               ? [{ type: 'div', id: 'wrapper', children: [pane] }] : [pane] },
           ] }] },
           styles: [
-            { selector: '#host, #overlay, #wrapper, #pane', display: 'block', boxSizing: 'border-box', margin: '0', padding: '0', borderWidth: '0', borderStyle: 'none' },
+            { selector: '#host, #overlay, #wrapper, #pane, #list, #item-a, #item-b', display: 'block', boxSizing: 'border-box', margin: '0', padding: '0', borderWidth: '0', borderStyle: 'none' },
             { selector: '#host', position: 'absolute', left: '40px', top: '30px', width: '180px', height: '90px' },
             { selector: '#overlay', position: 'fixed', left: '0', top: '0', width: '100%', height: '100%',
               ...(nested ? {} : { display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center' }) },
             { selector: '#wrapper', position: 'absolute', left: '0', top: '0', width: '100%', height: '100%',
               display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end' },
-            { selector: '#pane', width: '120px', height: '48px', marginBottom: '8px', background: '#302d32' },
+            ...(sheet ? [
+              // Geometry-only reduction of captured Material sheet/list rules:
+              // no copied computed panel width/height or candidate compensation.
+              { selector: '#pane', position: 'relative', minWidth: width > 960 ? '512px' : '100vw',
+                ...(width > 960 ? { maxWidth: 'calc(100vw - 256px)' } : {}),
+                maxHeight: '80vh', padding: '8px 16px', overflow: 'auto', background: '#302d32' },
+              { selector: '#list', boxSizing: 'content-box', padding: '8px 0' },
+              { selector: '#item-a, #item-b', height: '48px' },
+            ] : [{ selector: '#pane', width: '120px', height: '48px', marginBottom: '8px', background: '#302d32' }]),
           ],
         };
         const css = doc.createElement('style');
@@ -58,7 +69,8 @@ describe('overlay CSS layout versus projection audit', () => {
           const engine = surface.scene.getEngine();
           const viewport = surface.scene.activeCamera!.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
           const canvasBox = canvas.getBoundingClientRect();
-          const observations = (nested ? ['host', 'overlay', 'wrapper', 'pane'] : ['host', 'overlay', 'pane']).map(id => {
+          const observations = (sheet ? ['host', 'overlay', 'wrapper', 'pane', 'list', 'item-a', 'item-b'] :
+            nested ? ['host', 'overlay', 'wrapper', 'pane'] : ['host', 'overlay', 'pane']).map(id => {
             const reference = doc.getElementById(id)!.getBoundingClientRect();
             const mesh = manager.elementsMap.get(id)!;
             mesh.computeWorldMatrix(true);

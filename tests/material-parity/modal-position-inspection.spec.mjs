@@ -90,6 +90,41 @@ test('overlay position tokens belong to different compositions in all 59 origina
 test('modal inspection authenticates all nine generated owner groups', () => {
   assert.deepEqual(collectModalPositionInspection(), JSON.parse(readFileSync('docs/material-modal-position-inspection.json')));
 });
+
+test('all retained sheets substitute fixed candidate height for intrinsic reference list sizing', () => {
+  const report = JSON.parse(readFileSync('docs/material-modal-position-inspection.json'));
+  const group = report.groups.find(g => g.element === 'bottom-sheet-panel');
+  assert.equal(group.observations.length, 25);
+  let compact = 0;
+  for (const observation of group.observations) {
+    const receipt = observation.inputTrees.reference, bytes = readFileSync(receipt.file);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), receipt.sha256);
+    const tree = JSON.parse(bytes);
+    const panel = tree.nodes.find(n => n.key === observation.proof.mapping.referenceNode);
+    assert.equal(panel.type, 'mat-bottom-sheet-container');
+    const active = panel.rules.map(i => tree.rules[i]).filter(rule => rule.active);
+    assert.ok(active.length > 0);
+    for (const declarations of [...active.map(rule => rule.declarations), panel.inline]) {
+      assert.equal(Object.hasOwn(declarations, 'width'), false);
+      assert.equal(Object.hasOwn(declarations, 'height'), false);
+    }
+    const declarations = Object.assign({}, ...active.map(rule => rule.declarations));
+    assert.equal(declarations['box-sizing'].value, 'border-box');
+    assert.equal(declarations['padding-top'].value, '8px');
+    assert.equal(declarations['padding-bottom'].value, '8px');
+    assert.equal(declarations['max-height'].value, '80vh');
+    if (declarations['min-width'].value === '100vw') compact++;
+    else {
+      assert.equal(declarations['min-width'].value, '512px');
+      assert.equal(declarations['max-width'].value, 'calc(-256px + 100vw)');
+    }
+    const lists = tree.nodes.filter(n => n.parent === panel.key && n.type === 'mat-nav-list');
+    assert.equal(lists.length, 1);
+    assert.equal(tree.styles[lists[0].style].padding, '8px 0px');
+    assert.deepEqual(observation.proof.candidate.style.height, { present: true, value: '128px' });
+  }
+  assert.equal(compact, 1);
+});
 test('modal inspection refuses inconsistent scalar, style-stage, alias and owner data', () => {
   const report = JSON.parse(readFileSync('docs/material-modal-position-inspection.json'));
   const group = report.groups.find(g => g.element === 'dialog-panel'), o = group.observations[0];

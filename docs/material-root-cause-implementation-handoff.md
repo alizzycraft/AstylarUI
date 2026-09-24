@@ -104,6 +104,35 @@ the verified compact index:
    the native document head with the shared universal rule. Final v5/v6 scopes
    the same reset to the four authored IDs on both sides (head stays hidden),
    retaining the identical geometry result. No canonical fixture was altered.
+
+   Sheet auto-sizing follow-up: the existing modal inspection now checks the
+   active authored rules and inline declarations in all 25 authenticated sheet
+   states. None authors panel width/height; 24 use min-width 512px/max-width
+   `calc(-256px + 100vw)`, one uses min-width 100vw. All retain border-box,
+   8px vertical panel padding, max-height 80vh and a separate nav-list with
+   8px vertical padding. The candidate instead requests height 128px. This is
+   an intrinsic-to-fixed sizing substitution, not equivalent authored intent.
+   The unchanged 128px computed reference height was not an authored constraint.
+
+   The same browser reduction now preserves that geometry contract: absolute
+   bottom-aligned wrapper, auto-sized relative sheet, padded list, and two 48px
+   block items. Both reference and candidate produce pane (464,872,512,128) at
+   1440x1000 and (0,572,900,128) at 900x700; all seven owner boxes match in retained
+   CSS and projection at DPR 1 and 2. No fixed panel width/height is supplied.
+   This rules out needing the candidate's fixed height for this reduced sizing
+   contract, not every original text/paint/interaction path. Controls are reduced
+   to geometric blocks; clipping, visible text and pointer ownership are unproven.
+   Source provenance is unchanged from the 104-file verified package above.
+   Evidence directories: `artifacts/material-parity/overlay-sheet-auto-e7b1b5f-dpr1`
+   and `-dpr2`; result SHA-256 respectively
+   `965b990c12cb24049c98ae41738161ffad5feb366c76c4fa58ed2f9523e471b1` and
+   `aa0a89be787be59ddb418ec5eb9ca82920d7b8b7cdc9e6ce4292bec36432ce24`.
+   Each full diagnostic run has four passes/two retained fractional-projection
+   failures, exit 1 and zero page errors. Modal inspection passes 5/5 (5.55s),
+   and the diagnostic TypeScript check passes. Canonical classifications/counts
+   are unchanged; this is a bounded authoring/sizing proof, not acceptance.
+   Next investigate the remaining modal paint/clipping or connected-tooltip
+   placement contract; do not repeat these settled auto-sizing cases unchanged.
 2. Control structure/geometry: slider 77, chips 114 and button-toggle 73. Reuse
    the existing gesture, range-travel and paint reductions; do not reopen those
    diagnoses or assume they explain every original symptom. Isolate unreviewed
