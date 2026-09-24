@@ -107,6 +107,31 @@ inputs and a 4096 MiB Node heap, followed by `--overlay` conservation and sectio
 source checks. Do not rerun the completed chip integration or overwrite its
 predecessor. Full renderer/browser acceptance remains pending until audit completion.
 
+That export was started at `55d9945`: session 6688, Node PID 15056, log
+`artifacts/material-parity/overlay-surface-export-55d9945-progress.log`. The same
+handle/process was confirmed live during follow-up, still in `build-audit`.
+Poll this run, do not restart it because a poll produces no new output. Its
+producer and capture dependencies remain unchanged. Terminal result and full
+conservation are still required before accepting the 13 classifications.
+
+Read-only next-question triage found existing reviewed typography evidence for
+seven still-unresolved dialog scalar groups: `dialog-copy` fontFamily,
+letterSpacing and color; `dialog-cancel` and `dialog-save` fontFamily and
+letterSpacing. All seven match the same 32 ordered cases in the hash-bound
+position population and the compact retained/control evidence (224 observations).
+The ordered join of scalar-row and reviewed-observation hashes is
+`5316ab015696ed9b38fc4e954e2709ae3ad0b77fd52a1b1517505693b316d88c`
+against compact generation `d70aa37e4e14a9bfdc6183e0c2a7c383638d83050fc76b2d556a26b510691fa4`.
+This establishes population correspondence only. Next inspect/reuse the existing
+`reviewedDialogTextMetric`, `reviewedDialogTextInk` and
+`reviewedDialogActionPaintInput` proofs to bind scalar declaration values without
+re-investigating token omissions. Title evidence uses `dialog-title-label`, not
+the scalar `dialog-title` owner, so those rows require an explicit parent/child
+mapping proof and must not be swept into this join. No classifications changed.
+An unnecessary repeated full-payload sample reader was stopped (PID 21748);
+compact joins answered this triage question without serially parsing the 2 GB
+payload three times. Do not restart that reader. Export PID 15056 was untouched.
+
 Historical integration checkpoint: the chip batch at `3a4b350` required cold export
 and complete conservation. The first invocation mistakenly selected the default
 `latest-report.json`; it terminated after 226.339 seconds with missing-source
