@@ -45,6 +45,24 @@ the verified compact index:
    modules to the browser instead of bundling their full graph, retaining the
    same renderer source, public authoring and test assertions. No substitution
    of NullEngine evidence for browser geometry is acceptable.
+   Native-ESM follow-up: the same four-case draft reduction was attempted with
+   `--external-dependencies=@babylonjs/core --karma-config=karma.overlay-audit.cjs`
+   and the same single-worker/heap settings. The configuration parses successfully;
+   its import map points to the installed root Babylon **8.15.1**, not the
+   historical consumer's 8.56.2. No package version or renderer source was changed.
+   esbuild initially stayed small but reached 2,943,475,712 working-set bytes
+   (Node 532,410,368 bytes) without leaving `Building...`. Owned Node 5152 and
+   child 5984 were identity-checked and stopped; session 11098 is terminal,
+   exit 1. Log: `artifacts/material-parity/overlay-layout-native-esm-build.log`.
+   **Externalizing Babylon alone is insufficient** to make this build usable;
+   neither browser loading nor any geometry assertion executed. Do not repeat
+   either build unchanged or treat the draft configuration as browser-verified.
+   Next use the existing package/consumer diagnostic path, first establishing
+   compiled-source provenance and inspection availability, instead of another
+   root Karma bundle attempt. `dist/lib` already contains retained CSS layout
+   accessors, but its freshness has not yet been verified. The minimal reduction
+   and native-ESM loading drafts remain uncommitted diagnostic work, not acceptance
+   evidence. This does not attribute the user's overlay symptoms to a build issue.
 2. Control structure/geometry: slider 77, chips 114 and button-toggle 73. Reuse
    the existing gesture, range-travel and paint reductions; do not reopen those
    diagnoses or assume they explain every original symptom. Isolate unreviewed
