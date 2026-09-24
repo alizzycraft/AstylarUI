@@ -128,7 +128,15 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       .map(c => ({ ...c, kind: 'interaction' }));
     assert.equal(cases.filter(c => c.family === 'dialog').length, 32);
     assert.equal(cases.filter(c => c.family === 'bottom-sheet').length, 25);
-    const inventory = collectFullTreeInventory(cases);
+    // Proofs retain indexed node/style/rule receipts. Preserve the production
+    // inventory's original ordering even when replaying only modal semantics;
+    // constructing a modal-only inventory renumbers otherwise identical proof
+    // nodes and changes proofRowsSha256. Supplemental cases are appended after
+    // this original population and cannot renumber its existing entries.
+    const inventory = collectFullTreeInventory([
+      ...captured.results.map(c => ({ ...c, kind: 'static' })),
+      ...captured.interactions.map(c => ({ ...c, kind: 'interaction' })),
+    ]);
     const control = collectControlTypographyEvidence(cases, inventory);
     const retained = collectRetainedTypographyEvidence(cases, inventory, control);
     const normalize = bindPreciseAuditNormalization();

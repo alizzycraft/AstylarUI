@@ -27,13 +27,26 @@ current scalar preservation remains direct and strict. All six focused tests
 pass, including rejection of null, zero, empty-string and default substitutions
 for omission. The diagnostic failure is retained in
 `artifacts/material-parity/modal-typography-conservation-20edff9-error.log`.
-The corrected replay session `50286` writes `modal-typography-conservation-20edff9-json-boundary.json`
-and its corresponding error log under `artifacts/material-parity`; the batch
-remains unaccepted pending that replay and section/source reconciliation.
-Section reconciliation is live as session `22121`, writing
-`artifacts/material-parity/modal-typography-sections-20edff9.json`, reusing the
-authenticated predecessor section receipts. Poll these handles before duplicating
-work. Do not accept the unresolved-count reduction alone. All five export input paths were
+Replay `50286` then identified a dialog-cancel/fontFamily proof-hash mismatch.
+Decisive check: collecting the original 2,311-case inventory rather than only
+modal cases reproduces the exported hash exactly
+(`da5a4f15f601c4197b3f8c9d243a4902b2740555a4ab36f07683b413a9bc1304`,
+32 proofs, no inventory errors). Proof nodes retain global style/rule indices;
+the subset inventory renumbered them. The comparator now preserves original
+inventory ordering while replaying only modal semantics. Six focused tests pass.
+Full corrected replay is live as session `81663`, writing
+`artifacts/material-parity/modal-typography-conservation-20edff9-full-inventory.json`
+and its corresponding error log. Earlier diagnostic logs remain retained.
+Section reconciliation `22121` and metadata/source reconciliation `56207` pass:
+72/79 sections unchanged, none added/removed; all 452 source fingerprints match
+disk (two added dependencies, five changed, none removed). The remaining metadata
+changes are three classification summary counts, 48 line-box producer receipts,
+and three source-binding receipts. The motion-report hash is reconstructed by
+changing only its producer receipt. Evidence: `modal-typography-sections-20edff9.json`,
+`modal-typography-metadata-sources-20edff9.json`, and
+`modal-typography-receipts-20edff9.json` under `artifacts/material-parity`.
+The batch remains unaccepted pending full row conservation. Poll `81663` before
+duplicating work. Do not accept the unresolved-count reduction alone. All five export input paths were
 checked before launch. Exact export command:
 
 ```powershell
