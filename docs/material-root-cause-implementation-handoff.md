@@ -408,6 +408,25 @@ the verified compact index:
    full canonical check or current-browser acceptance. No export/recapture was
    justified for proposal preparation. Next canonical batch must incorporate
    these new proofs explicitly; unresolved canonical total remains 1,654.
+
+   Application preparation: `applyChipPaintProposal` replays the authenticated
+   proposal before applying its ten decisions. It requires each complete original
+   row hash, rejects missing/duplicate predecessors, replaces only the six review
+   metadata fields, and retains their previous presence/values. Reconstruction
+   must equal the complete original row. The existing focused suite verifies
+   all ten real canonical predecessors plus an unrelated canonical appearance
+   row, preserving that row's identity and leaving inputs unmodified. Suite:
+   4/4 passed, 34.03s; syntax and scoped whitespace checks pass. The longer check
+   explicitly authenticates full rows for collection and application, so reserve
+   it for integration changes rather than prose updates.
+
+   Production remains synchronous and unchanged: next provide its source-bound
+   collection/validation adapter using this prepared review, then test the
+   complete canonical population and whole-report conservation. The tested
+   eleven-row application is not evidence that all 8,483 canonical rows are
+   conserved. The preceding stored proposal is historical (its collector-source
+   receipt predates this application helper); regenerate it before integration,
+   rather than accepting the old receipt. No canonical export was run here.
 3. Remaining typography and paint: line-height 67, tracking 57, font-family 31
    and color 111 unresolved groups. Reuse explicit ownership/stage proofs and
    separate missing computed evidence from unequal declarations. These property

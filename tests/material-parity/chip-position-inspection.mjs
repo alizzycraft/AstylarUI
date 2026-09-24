@@ -107,6 +107,36 @@ export async function collectChipPaintProposal() {
       file, sha256: hash(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')),
     })), canonicalAttributionChanged: false };
 }
+
+// Preparation boundary only: production collection remains unchanged until
+// the source-binding and full canonical conservation milestone is integrated.
+export async function applyChipPaintProposal(rows, proposal) {
+  assert.deepEqual(proposal, await collectChipPaintProposal(), 'chip proposal must replay current authenticated evidence');
+  const fields = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewedCases', 'reviewEvidence'];
+  const signature = row => JSON.stringify([row.family, row.element, row.property, row.reference, row.astylar]);
+  const decisions = new Map(proposal.groups.map(group => [signature(group), group]));
+  assert.equal(decisions.size, 10);
+  const seen = new Set();
+  const output = rows.map(row => {
+    const key = signature(row), decision = decisions.get(key);
+    if (!decision) return row;
+    assert.ok(!seen.has(key), 'duplicate chip predecessor'); seen.add(key);
+    assert.equal(row.attribution, 'unresolved');
+    assert.equal(hash(JSON.stringify(row)), decision.reviewEvidence.originalCompleteRowSha256, 'complete chip predecessor changed');
+    const priorMetadata = fields.map(field => ({ field, present: Object.hasOwn(row, field),
+      ...(Object.hasOwn(row, field) ? { value: structuredClone(row[field]) } : {}) }));
+    const changed = { ...row, ...Object.fromEntries(fields.map(field => [field, structuredClone(decision[field])])),
+      reviewEvidence: { ...structuredClone(decision.reviewEvidence), priorMetadata } };
+    const restored = structuredClone(changed);
+    for (const prior of priorMetadata) {
+      if (prior.present) restored[prior.field] = prior.value; else delete restored[prior.field];
+    }
+    assert.deepEqual(restored, row, 'chip classification must conserve complete predecessor');
+    return changed;
+  });
+  assert.equal(seen.size, 10, 'chip predecessor population incomplete');
+  return output;
+}
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   if (process.argv[2] === '--paint-review') {
     console.log(JSON.stringify(saveReviewProposal('artifacts/material-parity/working-audit', await collectChipPaintProposal())));

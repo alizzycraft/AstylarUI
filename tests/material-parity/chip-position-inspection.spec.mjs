@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { collectChipPositionInspection, proveChipPositionInspection, collectChipPaintProposal } from './chip-position-inspection.mjs';
+import { collectChipPositionInspection, proveChipPositionInspection, collectChipPaintProposal, applyChipPaintProposal } from './chip-position-inspection.mjs';
+import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 test('chips retain three complete source-backed owner groups across 76 states', () => {
   assert.deepEqual(collectChipPositionInspection(), JSON.parse(readFileSync('docs/material-chip-position-inspection.json')));
 });
@@ -77,5 +78,28 @@ test('chip paint proposal binds ten complete canonical rows without accepting re
     assert.equal(group.reviewedCases.length, group.occurrences);
     assert.deepEqual(group.reviewEvidence.observations.map(o => o.case), group.reviewedCases);
     assert.equal(group.reviewEvidence.rendererCauseProven, false);
+  }
+  const directory = 'artifacts/material-parity/working-audit';
+  const compact = queryFindings(directory, 'chips');
+  const original = [];
+  for (const group of proposal.groups) {
+    const finding = compact.find(row => row.evidence.completeRowSha256 === group.reviewEvidence.originalCompleteRowSha256);
+    original.push(await loadFindingEvidence(directory, 'chips', finding.id));
+  }
+  const unrelatedFinding = compact.find(row => row.property === 'appearance');
+  const unrelated = await loadFindingEvidence(directory, 'chips', unrelatedFinding.id);
+  original.splice(4, 0, unrelated);
+  const before = structuredClone(original);
+  const result = await applyChipPaintProposal(original, proposal);
+  assert.deepEqual(original, before, 'application mutated its input');
+  assert.equal(result.length, original.length);
+  assert.equal(result[4], unrelated, 'unrelated row must be passed through untouched');
+  assert.equal(result.filter(row => row.attribution === 'reviewed-chip-state-layer-substitution').length, 10);
+  for (const row of result.filter(row => row !== unrelated)) {
+    const restored = structuredClone(row);
+    for (const prior of row.reviewEvidence.priorMetadata) {
+      if (prior.present) restored[prior.field] = prior.value; else delete restored[prior.field];
+    }
+    assert.deepEqual(restored, before.find(item => item.element === row.element && item.property === row.property && item.reference === row.reference && item.astylar === row.astylar));
   }
 });
