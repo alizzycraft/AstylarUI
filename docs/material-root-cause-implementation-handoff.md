@@ -67,14 +67,29 @@ inherit requests and candidate authored constraints. No omission becomes null
 or a default. Four modal focused tests pass (10.97 seconds); six existing
 producer/alignment conservation tests pass (14.46 seconds).
 
-Next: prepare one combined modal sizing export/conservation milestone for
-12 groups / 384 occurrences plus the one new source finding. Start from accepted
+Combined modal sizing cold export is now live: exec session `43247`, Node PID
+`20816`, log `artifacts/material-parity/modal-sizing-01fab20-progress.log`.
+It uses the exact five-input command below, with both COLD and PROGRESS enabled.
+The process and command line were checked; log reached build-audit. Keep export
+dependencies frozen and poll this handle rather than starting another run.
+This milestone covers 12 groups / 384 occurrences plus one new source finding.
+The predecessor package hash was verified and its small manifest copied alongside
+the retained compact payload; no duplicate payload was created. Start from accepted
 `ed35a9c` and compact generation `064777d79c6b85219285c85b97fb38edac27d069c8ddec67e0ae2da5b61099e5`.
 Expected unresolved count is 1,595 only if full replay and conservation pass;
 accepted count remains 1,607. Reuse full original inventory order and JSON
 persistence-boundary comparison learned in the preceding milestone. Preserve
 the five required export inputs above; do not rerun the obsolete 24-group
-`--modal` gate as if it were the new 12-group batch.
+`--modal` gate as if it were the new 12-group batch. The existing comparator now
+supports `node scripts/check-material-position-canonical-conservation.mjs --modal-box`:
+it independently replays the 12 groups from the retained predecessor/original
+capture, checks all raw scalar inputs and complete rows, and permits only 48
+control producer receipts. All seven comparator tests pass (11.50 seconds).
+After export completion run that gate, reconcile section/source/source-finding
+changes (one deliberate new source finding, no lost prior findings), import and
+verify the compact index, then commit the canonical increment. Current accepted
+counts are not updated until those checks pass. Only the standalone comparator,
+its test and this ledger changed during the export; they are not export dependencies.
 The helper, producer and narrow source guards now differ from the accepted checkpoint's
 source fingerprints; those are deliberate pending evidence changes, not current
 canonical source reconciliation. Do not rebuild the full export for this proof alone.

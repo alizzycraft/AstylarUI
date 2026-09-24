@@ -97,6 +97,30 @@ test('modal batch conserves twenty-four groups and independent predecessor recei
   ]) { const changed = make(); mutate(changed); assert.throws(() => comparePositionCanonical(...changed)); }
 });
 
+test('modal box batch conserves twelve groups and rejects raw or unrelated mutations', () => {
+  const make = () => {
+    const [previous, current] = sample();
+    const previousSource = execFileSync('git', ['show', 'ed35a9c:tests/material-parity/input-equivalence-audit.mjs'], { maxBuffer: 4 * 1024 * 1024 });
+    previous.rows = Array.from({ length: 12 }, (_, i) => ({ family: 'dialog', element: i < 6 ? 'dialog-actions' : 'dialog-panel',
+      property: `property-${i}`, reference: 'original', occurrences: 32, attribution: 'unresolved' }));
+    current.rows = previous.rows.map((row, i) => ({ ...row, attribution: i < 6
+      ? 'reviewed-dialog-action-box-substitution' : 'reviewed-dialog-panel-constraint-omission' }));
+    const oldHash = createHash('sha256').update(previousSource.toString('utf8').replaceAll('\r\n', '\n')).digest('hex');
+    for (const row of previous.control.differences) row.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = oldHash;
+    return [previous, current, structuredClone(current.rows), currentSource, { modalBoxOnly: true, previousSource }];
+  };
+  const args = make(), before = structuredClone(args.slice(0, 3));
+  const result = comparePositionCanonical(...args);
+  assert.equal(result.changedGroups, 12); assert.equal(result.changedOccurrences, 384);
+  assert.equal(result.controlReceiptTransition.records, 48); assert.deepEqual(args.slice(0, 3), before);
+  for (const mutate of [
+    ([, c]) => c.rows.pop(), ([, c]) => { c.rows[0].reference = 'changed'; },
+    a => { a[1].rows[0].reference = a[2][0].reference = 'jointly forged'; },
+    ([, c]) => c.control.gaps.push({ reason: 'unrelated' }),
+    a => { a[4].modalOnly = true; }, a => { a[4].previousSource = currentSource; },
+  ]) { const altered = make(); mutate(altered); assert.throws(() => comparePositionCanonical(...altered)); }
+});
+
 test('chip comparison reuses strict row and 48 control-receipt conservation', () => {
   const args = chipSample(), original = structuredClone(args.slice(0, 3));
   const result = comparePositionCanonical(...args);
