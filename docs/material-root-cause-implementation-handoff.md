@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 24
 
+Next shared-property batch candidate: all 54 unresolved `appearance` groups were
+joined to the original scalar capture with exact occurrence counts. Two groups
+are native range `input` auto values (156 observations); keep those separate.
+The other 52 are native `none` versus candidate omission (2,931 observations).
+No direct authored appearance declaration appears in their scalar author lists.
+This alone is not equivalence or sufficient classification.
+An in-memory trial extended only `ownerInitialValues` with `appearance: 'none'`
+and replayed the existing full-tree owner-initial survey, leaving disk sources
+and the running export unchanged. All 2,931 observations were accounted for;
+34 whole groups / 2,195 observations pass its existing conservative mapping,
+three-stage, ancestry and declaration checks. Eighteen groups / 736 observations
+remain blocked by motion requests, overlay ancestry or owner mapping. Next extend
+the existing machinery with focused vendor-alias/reset negative checks (including
+`-webkit-appearance`) and preserve those exclusions; do not build another survey
+framework or promote this trial into canonical acceptance. The permitted claim
+is computed-reference versus local-declaration observation stage, not a synthesized
+candidate default, authored-input waiver, or paint equivalence. Integrate it in a
+larger coherent follow-up batch after dialog/tab export reconciliation.
+
 The retained overlay focus harness gap is now an executable, source-pinned proof:
 `node --test tests/material-parity/retained-overlay-focus.spec.mjs` passes 2/2
 in 2.92 seconds. The original capture SHA `b07ef154...` pins the harness's raw
