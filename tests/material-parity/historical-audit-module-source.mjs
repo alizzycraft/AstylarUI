@@ -6,6 +6,7 @@ import path from 'node:path';
 import ts from 'typescript';
 import { isDeepStrictEqual } from 'node:util';
 import { conserveDisabledInkGuard } from './disabled-ink-source-transition.mjs';
+import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
 
 // The 91-state capture predates tooltip wrapping classification. Its source
 // receipt describes the producer then, not a promise that today's audit module
@@ -26,6 +27,8 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
   const excluded = new Set(['buildMaterialInputAudit', 'validateMaterialInputAudit', 'renderMaterialInputAuditMarkdown',
     'collectStyleDiscrepancies', 'sourceFingerprints', 'focusedProofInventory']);
   const additions = new Map([
+    ['./position-followup-audit-source-binding.mjs', ['collectPositionFollowupAuditInputs', 'applyPositionFollowupAuditRows',
+      'validatePositionFollowupAuditInputs', 'validatePositionFollowupAuditClassifications', 'positionFollowupAttribution']],
     ['./position-composition-audit-source-binding.mjs', ['collectPositionAuditInputs', 'applyPositionAuditRows', 'validatePositionAuditInputs',
       'validatePositionAuditClassifications', 'positionCompositionAttribution']],
     ['./visibility-audit-source-binding.mjs', ['collectVisibilityAuditInputs', 'applyVisibilityAuditRows', 'validateVisibilityAuditInputs',
@@ -141,6 +144,9 @@ export function verifyHistoricalOverlayMappingSource(recorded, currentBytes, { r
     if (source.file === originalOverlayAuditSourceFile && hash(sourceBytes.toString('utf8').replaceAll('\r\n', '\n')) !== source.sha256) {
       const anchor = execFileSync('git', ['show', `${mappingAuditRevision}:${source.file}`], { cwd: root, maxBuffer: 4 * 1024 * 1024 });
       currentSourceChecks.push(verifyOverlayMappingAuditProjection(source, sourceBytes, anchor));
+    } else if (source.file === 'tests/material-parity/generated-node-mapping-evidence.mjs' &&
+      hash(sourceBytes.toString('utf8').replaceAll('\r\n', '\n')) !== source.sha256) {
+      currentSourceChecks.push(mappingReaderProof(source, sourceBytes));
     } else assert.equal(hash(sourceBytes.toString('utf8').replaceAll('\r\n', '\n')), source.sha256,
       `Current mapping source changed: ${source.file}`);
   }
@@ -156,6 +162,13 @@ export function verifyHistoricalOverlayMappingSource(recorded, currentBytes, { r
   } };
 }
 
+function mappingReaderProof(source, bytes) {
+  restoreMappingReadAdapterSource(source, bytes);
+  return { file: source.file, recordedSha256: source.sha256,
+    currentSha256: hash(bytes.toString('utf8').replaceAll('\r\n', '\n')),
+    verification: 'exact-reader-import-transition-with-complete-mapping-source-conserved' };
+}
+
 // Replay today's context first, then preserve the historical proof's lineage
 // receipt only if ALL observations and every non-current-source field agree.
 // The returned object is explicitly the original snapshot, not a current hash.
@@ -168,15 +181,18 @@ export function conserveOriginalOverlayContextSnapshot(context, { root = process
   const sourceChanged = projected.historicalAuditSource.currentSha256 !== original.historicalAuditSource.currentSha256;
   projected.historicalAuditSource.currentSha256 = original.historicalAuditSource.currentSha256;
   const checks = projected.historicalMappingSource.currentSourceChecks;
-  if (sourceChanged) assert.equal(checks?.length, 1, 'changed current source requires the exact mapping projection proof');
-  if (checks) {
-    assert.equal(checks.length, 1);
-    const source = JSON.parse(readFileSync(path.resolve(root, originalOverlayMappingSourceFile))).sourceFingerprints.find(s => s.file === originalOverlayAuditSourceFile);
+  const expectedChecks = [];
+  for (const source of JSON.parse(readFileSync(path.resolve(root, originalOverlayMappingSourceFile))).sourceFingerprints) {
     const current = readFileSync(path.resolve(root, source.file));
-    const anchor = execFileSync('git', ['show', `${mappingAuditRevision}:${source.file}`], { cwd: root, maxBuffer: 4 * 1024 * 1024 });
-    assert.deepEqual(checks[0], verifyOverlayMappingAuditProjection(source, current, anchor));
-    delete projected.historicalMappingSource.currentSourceChecks;
+    if (hash(current.toString('utf8').replaceAll('\r\n', '\n')) === source.sha256) continue;
+    if (source.file === originalOverlayAuditSourceFile) {
+      const anchor = execFileSync('git', ['show', `${mappingAuditRevision}:${source.file}`], { cwd: root, maxBuffer: 4 * 1024 * 1024 });
+      expectedChecks.push(verifyOverlayMappingAuditProjection(source, current, anchor));
+    } else expectedChecks.push(mappingReaderProof(source, current));
   }
+  if (sourceChanged) assert.ok(expectedChecks.some(s => s.file === originalOverlayAuditSourceFile));
+  assert.deepEqual(checks ?? [], expectedChecks, 'changed sources require the exact independently replayed proofs');
+  delete projected.historicalMappingSource.currentSourceChecks;
   assert.deepEqual(projected, original, 'original overlay context data or non-current receipt changed');
   return original;
 }
@@ -188,8 +204,12 @@ export function conserveOriginalOverlayContextSnapshot(context, { root = process
 export function verifyOverlayFontSnapshot(live, historicalBytes, currentReaderBytes) {
   assert.equal(hash(historicalBytes), '3f06636fd36443605c6a5df9667ab159d2abc0a87672bd1546d5aabbfabfa759',
     'historical overlay font snapshot changed');
-  const currentSha = hash(currentReaderBytes.toString('utf8').replaceAll('\r\n', '\n'));
-  assert.equal(currentSha, 'e94b253c1c51105c785ee361863fc1d58d5b8b7b406911d6853d7b3c5b56016f',
+  const reader = currentReaderBytes.toString('utf8').replaceAll('\r\n', '\n');
+  const currentSha = hash(reader);
+  const restored = reader.replace("import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';\n", '')
+    .replace("    if (source && item.file === 'tests/material-parity/generated-node-mapping-evidence.mjs') {\n" +
+      "      restoreMappingReadAdapterSource(item, bytes); return bytes;\n    }\n", '');
+  assert.equal(hash(restored), 'e94b253c1c51105c785ee361863fc1d58d5b8b7b406911d6853d7b3c5b56016f',
     'overlay reader differs from the reviewed shared-dependency correction');
   const original = JSON.parse(historicalBytes), projected = structuredClone(live);
   const file = 'tests/material-parity/original-overlay-context-survey.mjs';

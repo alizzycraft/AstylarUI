@@ -36,6 +36,11 @@ test('overlay font snapshot retains its historical receipt only after complete d
   }
   assert.throws(() => verifyOverlayFontSnapshot(live, Buffer.concat([historical, Buffer.from('\n')]), reader));
   assert.throws(() => verifyOverlayFontSnapshot(live, historical, Buffer.concat([reader, Buffer.from('\n')])));
+  for (const altered of [reader.toString().replace('restoreMappingReadAdapterSource(item, bytes)', 'restoreMappingReadAdapterSource(item, bytes); return bytes'),
+    reader.toString().replace('if (source && item.file', 'if (item.file')]) {
+    assert.notEqual(altered, reader.toString());
+    assert.throws(() => verifyOverlayFontSnapshot(live, historical, Buffer.from(altered)));
+  }
 });
 
 test('recorded TypeScript source permits a shared package root, not arbitrary source or artifact escapes', () => {
@@ -195,6 +200,7 @@ test('mapping projection rejects changed retained functions imports and links in
     s => s.replace("from './benchmark.config.mjs'", "from './changed-benchmark.mjs'"),
     s => s.replace('classifyReviewedInput, validateReviewedInputClassifications', 'classifyReviewedInput, unexpectedAlias'),
     s => s.replace('classifyFollowupInput, validateFollowupInputClassifications', 'classifyFollowupInput, unexpectedAlias'),
+    s => s.replace('collectPositionFollowupAuditInputs, applyPositionFollowupAuditRows', 'collectPositionFollowupAuditInputs as alias, applyPositionFollowupAuditRows'),
     s => s.replace('import { followupInputAttributions }', 'import { followupInputAttributions as otherAttributions }'),
     s => s.replace('import { followupInputAttributions }', 'import defaultAttributions, { followupInputAttributions }'),
     s => s + "\nimport { followupInputAttributions } from './followup-input-proposal-transition.mjs';\n",
@@ -218,6 +224,9 @@ test('original context snapshot preserves all observations and rejects receipt l
     r => { r.historicalAuditSource.currentSha256 = '0'.repeat(64); },
     r => { r.historicalAuditSource.recordedSha256 = '0'.repeat(64); },
     r => { r.historicalMappingSource.currentSourceChecks = [{ retainedStatements: -1 }]; },
+    r => { r.historicalMappingSource.currentSourceChecks.pop(); },
+    r => { r.historicalMappingSource.currentSourceChecks.push(r.historicalMappingSource.currentSourceChecks[0]); },
+    r => { r.historicalMappingSource.currentSourceChecks.at(-1).currentSha256 = '0'.repeat(64); },
     r => { r.historicalMappingSource.currentSha256 = '0'.repeat(64); },
     r => { r.historicalMappingSource.exactMappingDataMatch = false; },
     r => { r.renderingEquivalent = true; },

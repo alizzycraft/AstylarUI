@@ -3,6 +3,7 @@ import { readFileSync, realpathSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import ts from 'typescript';
+import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
 import { originalCaseKey } from './owner-initial-style-membership.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { originalOverlayAuditSourceFile, verifyHistoricalAuditModuleSource,
@@ -32,6 +33,9 @@ export function collectOriginalOverlayContextSurvey(reportFile, { root = process
   };
   const hashed = (item, source = false) => {
     assert.match(item?.sha256 ?? '', /^[a-f0-9]{64}$/); const bytes = read(item.file, source);
+    if (source && item.file === 'tests/material-parity/generated-node-mapping-evidence.mjs') {
+      restoreMappingReadAdapterSource(item, bytes); return bytes;
+    }
     assert.equal(hash(bytes), item.sha256, `Changed evidence: ${item.file}`); return bytes;
   };
   const bytes = read(reportFile), raw = JSON.parse(bytes), manifest = JSON.parse(hashed(raw.capture.checkpointManifest));

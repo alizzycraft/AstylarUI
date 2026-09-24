@@ -130,9 +130,28 @@ alignment/gap tests pass 10/10. Full caret source replay passes all 4,050
 observations (118 reviewed groups / 3,154 observations, 896 retained) and 13
 negative controls, with canonical files unchanged. Direct collect-and-validate
 replays now bind alignment/font 72 groups / 4,016 observations, text alignment
-49 / 2,677, and LTR alignment 4 / 178. The remaining `reviewedInputs` overlay
-dependency reconciliation is not done; do not run the full export until that
-binding and its historical snapshot conservation have been verified too.
+49 / 2,677, and LTR alignment 4 / 178.
+
+The final `reviewedInputs` overlay dependency is now reconciled too. The reader
+accepts only the pinned complete mapping source with the reviewed reader import
+reversed; mapping receipts record actual current hashes separately. Historical
+context conservation independently reconstructs both changed-source proofs and
+rejects missing, duplicate or forged checks. Font snapshot conservation reverses
+only the exact added reader branch/import, then requires the previous full-source
+hash and unchanged complete observations. The exact followup orchestration import
+is allowed; import aliases and unrelated retained-source changes still fail.
+`node --test tests/material-parity/original-overlay-context-survey.spec.mjs tests/material-parity/disabled-ink-source-transition.spec.mjs`
+passes 13/13, including all 91 original states / 200 owners and negative controls.
+It took 171 seconds; a concurrent PowerShell process could not initialize CoreCLR
+under memory pressure. The subsequent direct collect-and-validate replay used
+`node --max-old-space-size=1536 --input-type=module` with
+`collectReviewedInputAuditInputs` / `validateReviewedInputAuditInputs` against
+`current-ancestry-audit/latest-report.json`: **134 groups / 3,325 observations**
+bound, independent validation returned no errors, process exit 0.
+All five previously rejected bindings now have successful direct replay. Canonical
+files remain unchanged. Next perform the coherent cold export and full predecessor
+conservation (including source metadata), not another unchanged binding replay.
+Full canonical and enforced browser acceptance remain pending.
 
 Small live samples are retained as `position-followup-validation-cpu-sample.log`
 and `position-followup-validation-allocation-sample.log`; no heap dump was taken.
