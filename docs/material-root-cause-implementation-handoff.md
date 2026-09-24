@@ -32,6 +32,19 @@ the verified compact index:
    equal-input overlay reduction; do not repeat this historical position survey
    or infer paint visibility/input equivalence from it. See the scoped evidence
    and limits in [the modal inspection](material-modal-position-inspection.md).
+   Build follow-up: the narrow `tsconfig.overlay-audit.json` test build with
+   `NG_BUILD_MAX_WORKERS=1`, `NG_BUILD_PARALLEL_TS=0`, `GOMEMLIMIT=768MiB`,
+   `GOGC=50`, Node heap 1536 MiB and sourcemaps disabled still did not reach a
+   browser. Node stabilized near 0.6 GB, but its owned esbuild child exceeded
+   6 GB after about nine minutes, leaving roughly 1 GB physical memory free.
+   Both owned processes were explicitly stopped; session exited -1. Retained log:
+   `artifacts/material-parity/overlay-layout-single-worker-build.log`.
+   This is no rendering result. Do not repeat this build unchanged. Installed
+   Angular Karma builder source confirms optimization is forced off and supports
+   `externalDependencies`; next evaluate serving the exact installed Babylon ESM
+   modules to the browser instead of bundling their full graph, retaining the
+   same renderer source, public authoring and test assertions. No substitution
+   of NullEngine evidence for browser geometry is acceptable.
 2. Control structure/geometry: slider 77, chips 114 and button-toggle 73. Reuse
    the existing gesture, range-travel and paint reductions; do not reopen those
    diagnoses or assume they explain every original symptom. Isolate unreviewed
