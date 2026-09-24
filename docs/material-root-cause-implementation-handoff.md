@@ -160,6 +160,35 @@ the verified compact index:
    hashes are retained in each result. Diagnostic TypeScript passes (5.33s).
    Next prioritize the actual connected-tooltip placement/state input contract,
    rather than another unchanged generic overlay-position/clipping reduction.
+
+   Connected-tooltip ownership check: Material 20.0.5's installed directive
+   constructs a flexible connected strategy, supplies main/fallback position
+   pairs, disables flexible sizing, sets a viewport margin, registers scrollable
+   ancestors and hides when that strategy reports clipping. Its module
+   `module-CWxMD37a.mjs` SHA-256 is
+   `75d4207bc0b6e97105c0ff88f80c5017e4df00af13f92b5bdaa19a80bcb81a2a`.
+   The 18-case tooltip composition/history proofs already establish that the
+   candidate substitutes a local 138x72 flex wrapper; do not reinvestigate that.
+   Current source and installed declarations expose only the current element's
+   dimensions/projection in `AstylarPluginRenderContext` and lifetime/invalidation
+   facilities in `AstylarPluginSurfaceContext`, not a cross-element connected
+   placement contract. `inspectResolvedStyles` is declarations, not used boxes.
+   Existing CSS-space anchor/viewport and above/below logic is private to
+   `SelectManager` (`positionDropdown`, `shouldPlacePopupAbove`,
+   `choosePopupDirection`); it is not exported from the package root.
+
+   Implementation boundary recommendation: review/generalize the core-owned
+   CSS-space placement primitive and its lifetime/scroll invalidation before
+   restoring the tooltip's original connected behavior. Do not deep-import the
+   select manager, reconstruct anchors from Babylon meshes, or add a second
+   plugin positioning engine. This identifies a reusable-contract gap relative
+   to the comparison's needs, **not a demonstrated CSS layout defect** or a final
+   API design. Actual edge fallback, scroll dismissal and focus behavior need
+   browser verification; the existing state audit remains authoritative for its
+   already-proven benchmark and click-release input mismatches.
+   Existing composition/history suites pass 4/4 in 0.66s, including the added
+   source/declaration ownership check. No browser recapture or canonical rewrite
+   was needed for this source-contract question.
 2. Control structure/geometry: slider 77, chips 114 and button-toggle 73. Reuse
    the existing gesture, range-travel and paint reductions; do not reopen those
    diagnoses or assume they explain every original symptom. Isolate unreviewed
