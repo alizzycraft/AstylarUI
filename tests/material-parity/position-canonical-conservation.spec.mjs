@@ -3,11 +3,40 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { comparePositionCanonical } from '../../scripts/check-material-position-canonical-conservation.mjs';
+import { comparePositionCanonical, compareAppearanceCanonical } from '../../scripts/check-material-position-canonical-conservation.mjs';
 import { restorePositionProducer } from './position-composition-producer-transition.mjs';
 import { positionCompositionAttribution } from './position-composition-review.mjs';
 import { positionFollowupAttribution } from './position-followup-review.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
+test('appearance batch conserves raw inputs, exclusions and controls independently of expected metadata', () => {
+  const make = () => {
+    const rows = Array.from({ length: 34 }, (_, i) => {
+      const occurrences = i === 0 ? 83 : 64;
+      return { family: 'fixture', element: `owner-${i}`, property: 'appearance', reference: 'none',
+        occurrences, cases: Array.from({ length: 12 }, (_, j) => `case-${j}`), attribution: 'unresolved' };
+    });
+    rows.push({ family: 'slider', element: 'range', property: 'appearance', reference: 'auto', occurrences: 156, attribution: 'unresolved' });
+    const previous = { rows, control: { differences: [], gaps: [] } };
+    const current = structuredClone(previous);
+    current.rows = current.rows.map((r, i) => i === 34 ? r : { ...r,
+      attribution: 'reviewed-owner-initial-style-observation-stage', classification: 'parity-harness-defect',
+      reviewEvidence: { computedCandidateVerified: false, renderingEquivalent: false },
+      reviewedCases: Array.from({ length: r.occurrences }, (_, j) => `case-${j}`) });
+    return [previous, current, structuredClone(current.rows), currentSource];
+  };
+  const args = make();
+  assert.equal(compareAppearanceCanonical(...args).changedGroups, 34);
+  for (const mutate of [
+    a => { a[1].rows[0].reference = a[2][0].reference = 'jointly forged'; },
+    a => { a[1].rows[0].astylar = a[2][0].astylar = 'none'; },
+    a => { a[1].rows.pop(); a[2].pop(); },
+    a => { a[1].rows[34].attribution = a[2][34].attribution = 'reviewed-owner-initial-style-observation-stage'; },
+    a => { a[1].rows[0].reviewedCases.pop(); a[2][0].reviewedCases.pop(); },
+    a => { a[1].control.gaps.push('unrelated'); },
+    a => { a[3] = Buffer.from(a[3] + '\nconst unrelated = true;'); },
+    a => { a[1].rows[0].reviewEvidence.renderingEquivalent = a[2][0].reviewEvidence.renderingEquivalent = true; },
+  ]) { const changed = make(); mutate(changed); assert.throws(() => compareAppearanceCanonical(...changed)); }
+});
 function sample(followupOnly = false) {
   const proof = restorePositionProducer(currentSource, { followupOnly });
   const previous = { rows: Array.from({ length: followupOnly ? 14 : 6 }, (_, i) => ({ family: 'fixture', element: `owner-${i}`,

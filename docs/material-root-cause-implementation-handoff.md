@@ -14,6 +14,16 @@ inputs preserved. Compare against retained compact generation `0a6c0f6d...` and
 reuse the predecessor section-digest receipt; do not re-expand that baseline just
 to recover already recorded digests.
 
+The existing canonical comparator now has an `--appearance` mode, prepared
+outside the active export's explicit source/dependency list. After the export
+is terminal, run `node scripts/check-material-position-canonical-conservation.mjs --appearance`.
+It authenticates the retained predecessor and new payload, replays original
+appearance owner proofs, and requires exactly 34 groups / 2,195 observations,
+unchanged raw inputs, unchanged control evidence and the unchanged audit producer.
+All 11 comparator tests pass in 26.95 seconds, including eight appearance mutation
+checks. The actual new-payload comparison and section/receipt reconciliation have
+not run yet; passing checker tests is not acceptance of the exported batch.
+
 The corrected dialog/tab cold export from `7c7beef` is terminal: session 80004
 finished in 2,057.03 seconds, exit 1 solely for **1,541 unresolved groups**.
 Coverage remains 436/436 static and 1,875/1,875 interaction; all 8,483 groups /
