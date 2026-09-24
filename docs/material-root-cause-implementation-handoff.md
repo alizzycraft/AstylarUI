@@ -44,10 +44,18 @@ storage adapter, reusing one tree view per case. All 300 typography observations
 and ancestry checks; all 75 owner mappings match the authenticated original-tree
 position proof. Invalid inventory diagnostics, forged style-side ownership, and
 changed panel width are rejected. Combined sheet/dialog focused tests pass 2/2
-in 8.671 seconds. This closes the inventory-reuse prerequisite, not production
-sheet classification: extract the existing semantic checks into the shared
-module next, then wire the sheet classification into independent scalar replay.
-No capture, canonical classification, renderer, or reference input changed.
+in 8.671 seconds. The semantic checks now live in the existing shared module;
+production classification and independent original-case replay are wired under
+the original-capture binding. Focused replay changes exactly 15 sheet groups /
+300 occurrences, preserving raw values and unrelated rows. Missing/duplicate
+classifications, forged observations/prior metadata, and altered case populations
+are rejected. Sheet/dialog focused tests pass 2/2 in 15.105 seconds; five
+alignment preservation checks pass, and the exact producer-boundary check passes
+after updating its source-binding negative control for the combined call.
+Together with dialog this prepares 24 groups / 588 occurrences. Canonical
+classification remains at the accepted checkpoint until the combined export
+and conservation checks; 1,607 unresolved is an expectation, not a verified
+canonical count. No capture, renderer, or reference input changed.
 Remaining high-impact families include dialog (216), bottom-sheet (182), tabs
 (114), chips (104), slider (77), snackbar (69) and tooltip (37). Counts describe
 unresolved signatures, not independent bugs. Final complete canonical and browser

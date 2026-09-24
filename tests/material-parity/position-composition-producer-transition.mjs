@@ -47,11 +47,11 @@ export function restorePositionProducer(source, { followupOnly = false } = {}) {
   };
   // Reuse the existing original-case replay for the nine dialog owner joins.
   if (restored.includes("from './modal-position-inspection.mjs'")) {
-    replaceOnce("import { applyDialogScalarTypography, validateDialogScalarTypography } from './modal-position-inspection.mjs';\n");
-    replaceOnce("  const overlaySurfaceDiscrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);\n  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyDialogScalarTypography(overlaySurfaceDiscrepancies, cases, elementInventory, retainedTypography, controlTypography, canonicalStyle)\n    : overlaySurfaceDiscrepancies;",
+    replaceOnce("import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography } from './modal-position-inspection.mjs';\n");
+    replaceOnce("  const overlaySurfaceDiscrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);\n  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyBottomSheetScalarTypography(applyDialogScalarTypography(overlaySurfaceDiscrepancies, cases, elementInventory, retainedTypography, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)\n    : overlaySurfaceDiscrepancies;",
       '  const discrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);');
-    replaceOnce('      errors.push(...validateDialogScalarTypography(report.discrepancies, replayedRows, cases,\n        report.elementInventory, report.retainedTypography, report.controlTypography, canonicalStyle));\n');
-    replaceOnce("      report.discrepancies?.some(d => [ownerInitialStyleAttribution, 'reviewed-dialog-scalar-typography-owner'].includes(d.attribution))) {",
+    replaceOnce('      errors.push(...validateDialogScalarTypography(report.discrepancies, replayedRows, cases,\n        report.elementInventory, report.retainedTypography, report.controlTypography, canonicalStyle));\n      errors.push(...validateBottomSheetScalarTypography(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n');
+    replaceOnce("      report.discrepancies?.some(d => [ownerInitialStyleAttribution, 'reviewed-dialog-scalar-typography-owner', 'reviewed-bottom-sheet-scalar-typography-owner'].includes(d.attribution))) {",
       '      report.discrepancies?.some(d => d.attribution === ownerInitialStyleAttribution)) {');
     for (const file of ['tests/material-parity/modal-position-inspection.mjs', 'tests/material-parity/modal-position-inspection.spec.mjs'])
       replaceOnce(`    '${file}',\n`);

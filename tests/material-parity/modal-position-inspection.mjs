@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const ids = ['bottom-sheet-copy', 'bottom-sheet-dismiss', 'bottom-sheet-panel', 'dialog-actions',
   'dialog-cancel', 'dialog-copy', 'dialog-panel', 'dialog-save', 'dialog-title'];
@@ -35,6 +36,80 @@ export function modalInventoryTrees(inventory, key) {
 // Pure semantic join over evidence already collected by the audit. The caller
 // owns capture authentication and complete scalar population selection.
 // This does not reread trees, normalize omitted values, or accept raster parity.
+export function proveBottomSheetScalarTypography(entry, r, a, element, property) {
+  assert.equal(entry.family, 'bottom-sheet');
+  assert.ok(['bottom-sheet-panel', 'bottom-sheet-copy', 'bottom-sheet-dismiss'].includes(element));
+  const tokens = {
+    fontFamily: ['font-family', 'var(--mat-bottom-sheet-container-text-font, var(--mat-sys-body-large-font))', 'Roboto'],
+    lineHeight: ['line-height', 'var(--mat-bottom-sheet-container-text-line-height, var(--mat-sys-body-large-line-height))', '24px'],
+    letterSpacing: ['letter-spacing', 'var(--mat-bottom-sheet-container-text-tracking, var(--mat-sys-body-large-tracking))', '0.496px'],
+    color: ['color', 'var(--mat-bottom-sheet-container-text-color, var(--mat-sys-on-surface))', 'rgb(29, 27, 30)'],
+  };
+  assert.ok(Object.hasOwn(tokens, property));
+  const [css, token, computed] = tokens[property];
+  const key = caseKey(entry, entry.kind);
+  const { mapping } = proveModalPositionInspection(entry, r, a, element);
+  const referencePath = mapping.referencePath.map(key => r.nodes.find(n => n.key === key));
+  const candidatePath = mapping.candidatePath.map(key => a.nodes.find(n => n.key === key));
+  const depth = element === 'bottom-sheet-panel' ? 0 : 2;
+  assert.deepEqual(referencePath.slice(0, depth + 1).map(n => n.type), depth
+    ? ['a', 'mat-nav-list', 'mat-bottom-sheet-container'] : ['mat-bottom-sheet-container']);
+  assert.equal(candidatePath[0].authored.id, element);
+  const affects = key => [property.toLowerCase(), 'all', ...(property === 'color' ? ['webkittextfillcolor'] : ['font'])]
+    .includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
+  for (let index = 0; index <= depth; index++) {
+    const node = referencePath[index];
+    assert.equal(r.styles[node.style][property], computed);
+    assert.ok(!Object.keys(node.inline ?? {}).some(affects));
+    const requests = node.rules.map(i => r.rules[i]).filter(rule => rule.active)
+      .flatMap(rule => Object.entries(rule.declarations).filter(([key]) => affects(key) && !/^(animation|transition)/i.test(key))
+        .map(([key, value]) => ({ selector: rule.selector, key, value: value.value })));
+    assert.deepEqual(requests, index === depth ? [{ selector: '.mat-bottom-sheet-container', key: css, value: token }]
+      : property === 'color' && index === 0 ? [{ selector: 'a.mdc-list-item', key: css, value: 'inherit' }] : []);
+  }
+  const owner = candidatePath[0], stages = ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'].map(s => owner[s]);
+  const actual = stages[0][property];
+  for (const stage of stages) assert.equal(stage[property], actual);
+  if (property === 'fontFamily' || property === 'color') {
+    const ink = key.includes('@dark/') ? '#e6e1e5' : '#1d1b20';
+    for (const node of candidatePath.filter(n => n.authored.type)) {
+      assert.ok(!Object.keys(node.authored.style ?? {}).some(affects));
+      assert.equal(node.authored.attributes?.style, undefined);
+      const id = node.authored.id;
+      const requests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, node.authored))
+        .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key))
+          .map(([key, value]) => ({ selector: rule.selector, key, value })));
+      const expected = property === 'fontFamily'
+        ? id === 'page' ? [{ selector: '#page', key: property, value: 'Roboto, Arial, sans-serif' }]
+          : node.authored.type === 'button' ? [{ selector: 'button, input, select', key: property, value: 'Roboto, Arial, sans-serif' }] : []
+        : id === 'page' ? [{ selector: '#page', key: property, value: ink }]
+          : id === 'bottom-sheet-panel' ? [{ selector: '.bottom-sheet-panel', key: property, value: ink }]
+            : node.authored.type === 'button' ? ['.bottom-sheet-option', '.bottom-sheet-option:focus']
+              .map(selector => ({ selector, key: property, value: ink })) : [];
+      assert.deepEqual(requests, expected);
+      for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'])
+        assert.equal(node[stage]?.[property], expected.length ? expected[0].value : undefined);
+    }
+  }
+  if (property === 'lineHeight' || property === 'letterSpacing') {
+    for (const node of candidatePath) {
+      assert.ok(!Object.keys(node.authored.style ?? {}).some(affects));
+      const inlineText = node.authored.attributes?.style;
+      assert.ok(inlineText === undefined || typeof inlineText === 'string' && !inlineText.includes('\\') &&
+        !/(?:^|;)\s*(?:font(?:-[\w-]+)?|line-height|letter-spacing|all|animation[^:]*|transition[^:]*)\s*:/i.test(inlineText));
+      for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'])
+        assert.ok(!Object.keys(node[stage] ?? {}).some(affects));
+      assert.ok(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, node.authored))
+        .every(rule => !Object.keys(rule).some(affects)));
+    }
+  }
+  return { case: key, element, property, reference: computed, astylar: actual,
+    referenceNode: referencePath[0].key, astylarNode: candidatePath[0].key,
+    tokenOwner: referencePath[depth].key, token,
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false,
+    renderingEquivalent: false };
+}
+
 export function proveDialogScalarTypographyJoin(row, proofs, inventory, caseKeys) {
   const allowed = {
     'dialog-copy': ['fontFamily', 'letterSpacing', 'color'],
@@ -110,6 +185,47 @@ export function applyDialogScalarTypography(rows, cases, inventory, retained, co
           referenceNode: p.referenceNode, astylarNode: p.astylarNode })),
         inputEquivalent: false, renderingEquivalent: false } };
   });
+}
+
+export function applyBottomSheetScalarTypography(rows, cases, inventory, canonicalStyle) {
+  const trees = new Map();
+  return rows.map(row => {
+    if (row.family !== 'bottom-sheet' || row.attribution !== 'unresolved' ||
+      !['bottom-sheet-panel', 'bottom-sheet-copy', 'bottom-sheet-dismiss'].includes(row.element) ||
+      !['fontFamily', 'lineHeight', 'letterSpacing', 'color'].includes(row.property)) return row;
+    const matching = cases.filter(c => c.family === row.family).flatMap(c => (c.styleInputs ?? [])
+      .filter(i => i.id === row.element && canonicalStyle(i.reference ?? {})[row.property] === row.reference &&
+        canonicalStyle(i.astylar ?? {})[row.property] === row.astylar)
+      .map(i => { assert.equal(i.astylarResolvedStyleEvidenceVersion, 2); return c; }));
+    const keys = matching.map(c => caseKey(c, c.kind));
+    assert.ok(keys.length > 0); assert.equal(new Set(keys).size, keys.length);
+    assert.equal(row.occurrences, keys.length); assert.deepEqual(row.cases, keys.slice(0, 12));
+    const proofs = matching.map((c, index) => {
+      if (!trees.has(keys[index])) trees.set(keys[index], modalInventoryTrees(inventory, keys[index]));
+      const proof = proveBottomSheetScalarTypography(c, ...trees.get(keys[index]), row.element, row.property);
+      assert.equal(canonicalStyle({ [row.property]: proof.reference })[row.property], row.reference);
+      assert.equal(canonicalStyle(proof.astylar === undefined ? {} : { [row.property]: proof.astylar })[row.property], row.astylar);
+      return proof;
+    });
+    const metadata = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'];
+    return { ...row, classification: 'application-plugin-authoring-defect',
+      attribution: 'reviewed-bottom-sheet-scalar-typography-owner',
+      recommendedOwner: 'showcase bottom-sheet container and option typography inputs',
+      justification: 'Native container typography tokens propagate to item anchors, while candidate declarations omit metrics or substitute font/ink inputs. The complete scalar population is checked at its actual owner, not the inner list-label token scope. Missing declarations remain missing; rendering equivalence is not inferred.',
+      reviewedCases: keys,
+      reviewEvidence: { originalRowSha256: hash(JSON.stringify(row)),
+        priorMetadata: Object.fromEntries(metadata.filter(k => Object.hasOwn(row, k)).map(k => [k, structuredClone(row[k])])),
+        observations: proofs, inputEquivalent: false, renderingEquivalent: false } };
+  });
+}
+
+export function validateBottomSheetScalarTypography(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-bottom-sheet-scalar-typography-owner');
+    const expected = select(applyBottomSheetScalarTypography(originalRows, cases, inventory, canonicalStyle));
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(expected));
+    return [];
+  } catch (error) { return [`bottom-sheet scalar typography does not replay from original cases and owner declarations: ${error.message}`]; }
 }
 
 export function validateDialogScalarTypography(rows, originalRows, cases, inventory, retained, control, canonicalStyle) {

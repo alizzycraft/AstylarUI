@@ -4,7 +4,9 @@ import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { PNG } from 'pngjs';
 import { collectModalPositionInspection, proveModalPositionInspection, proveDialogScalarTypographyJoin,
-  applyDialogScalarTypography, validateDialogScalarTypography, modalInventoryTrees } from './modal-position-inspection.mjs';
+  applyDialogScalarTypography, validateDialogScalarTypography, modalInventoryTrees,
+  proveBottomSheetScalarTypography, applyBottomSheetScalarTypography,
+  validateBottomSheetScalarTypography } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
@@ -13,7 +15,6 @@ import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows,
   validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications } from './overlay-surface-audit-source-binding.mjs';
 import { collectFullTreeInventory, collectControlTypographyEvidence,
   collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
-import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 
 test('bottom-sheet scalar typography belongs to container tokens rather than inner list-label tokens', () => {
   const inspection = collectModalPositionInspection();
@@ -22,12 +23,6 @@ test('bottom-sheet scalar typography belongs to container tokens rather than inn
     e.styleInputs.some(i => i.id === 'bottom-sheet-panel')).map(e => ({ ...e, kind: 'interaction' }));
   const inventory = collectFullTreeInventory(cases);
   const compact = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', overlaySurfacePredecessor);
-  const tokens = {
-    fontFamily: ['font-family', 'var(--mat-bottom-sheet-container-text-font, var(--mat-sys-body-large-font))', 'Roboto'],
-    lineHeight: ['line-height', 'var(--mat-bottom-sheet-container-text-line-height, var(--mat-sys-body-large-line-height))', '24px'],
-    letterSpacing: ['letter-spacing', 'var(--mat-bottom-sheet-container-text-tracking, var(--mat-sys-body-large-tracking))', '0.496px'],
-    color: ['color', 'var(--mat-bottom-sheet-container-text-color, var(--mat-sys-on-surface))', 'rgb(29, 27, 30)'],
-  };
   const normalized = value => ({ Roboto: 'roboto', 'Roboto, Arial, sans-serif': 'roboto,arial,sans-serif',
     'rgb(29, 27, 30)': 'rgba(29,27,30,1)', '#1d1b20': 'rgba(29,27,32,1)', '#e6e1e5': 'rgba(230,225,229,1)' }[value] ?? value);
   const trees = new Map(), matched = new Map();
@@ -40,61 +35,9 @@ test('bottom-sheet scalar typography belongs to container tokens rather than inn
       const indexedTrees = trees.get(observation.case);
       assert.deepEqual(proveModalPositionInspection(entry, ...indexedTrees, element), observation.proof);
       const [r, a] = indexedTrees, mapping = observation.proof.mapping;
-      const referencePath = mapping.referencePath.map(key => r.nodes.find(n => n.key === key));
-      const candidatePath = mapping.candidatePath.map(key => a.nodes.find(n => n.key === key));
-      const depth = element === 'bottom-sheet-panel' ? 0 : 2;
-      assert.deepEqual(referencePath.slice(0, depth + 1).map(n => n.type), depth
-        ? ['a', 'mat-nav-list', 'mat-bottom-sheet-container'] : ['mat-bottom-sheet-container']);
-      assert.equal(candidatePath[0].authored.id, element);
-      for (const [property, [css, token, computed]] of Object.entries(tokens)) {
-        const affects = key => [property.toLowerCase(), 'all', ...(property === 'color' ? ['webkittextfillcolor'] : ['font'])]
-          .includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
-        for (let index = 0; index <= depth; index++) {
-          const node = referencePath[index];
-          assert.equal(r.styles[node.style][property], computed);
-          assert.ok(!Object.keys(node.inline ?? {}).some(affects));
-          const requests = node.rules.map(i => r.rules[i]).filter(rule => rule.active)
-            .flatMap(rule => Object.entries(rule.declarations).filter(([key]) => affects(key) && !/^(animation|transition)/i.test(key))
-              .map(([key, value]) => ({ selector: rule.selector, key, value: value.value })));
-          assert.deepEqual(requests, index === depth ? [{ selector: '.mat-bottom-sheet-container', key: css, value: token }]
-            : property === 'color' && index === 0 ? [{ selector: 'a.mdc-list-item', key: css, value: 'inherit' }] : []);
-        }
-        const owner = candidatePath[0], stages = ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'].map(s => owner[s]);
-        const actual = stages[0][property];
-        for (const stage of stages) assert.equal(stage[property], actual);
-        if (property === 'fontFamily' || property === 'color') {
-          const ink = observation.case.includes('@dark/') ? '#e6e1e5' : '#1d1b20';
-          for (const node of candidatePath.filter(n => n.authored.type)) {
-            assert.ok(!Object.keys(node.authored.style ?? {}).some(affects));
-            assert.equal(node.authored.attributes?.style, undefined);
-            const id = node.authored.id;
-            const requests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, node.authored))
-              .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key))
-                .map(([key, value]) => ({ selector: rule.selector, key, value })));
-            const expected = property === 'fontFamily'
-              ? id === 'page' ? [{ selector: '#page', key: property, value: 'Roboto, Arial, sans-serif' }]
-                : node.authored.type === 'button' ? [{ selector: 'button, input, select', key: property, value: 'Roboto, Arial, sans-serif' }] : []
-              : id === 'page' ? [{ selector: '#page', key: property, value: ink }]
-                : id === 'bottom-sheet-panel' ? [{ selector: '.bottom-sheet-panel', key: property, value: ink }]
-                  : node.authored.type === 'button' ? ['.bottom-sheet-option', '.bottom-sheet-option:focus']
-                    .map(selector => ({ selector, key: property, value: ink })) : [];
-            assert.deepEqual(requests, expected);
-            for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'])
-              assert.equal(node[stage]?.[property], expected.length ? expected[0].value : undefined);
-          }
-        }
-        if (property === 'lineHeight' || property === 'letterSpacing') {
-          for (const node of candidatePath) {
-            assert.ok(!Object.keys(node.authored.style ?? {}).some(affects));
-            const inlineText = node.authored.attributes?.style;
-            assert.ok(inlineText === undefined || typeof inlineText === 'string' && !inlineText.includes('\\') &&
-              !/(?:^|;)\s*(?:font(?:-[\w-]+)?|line-height|letter-spacing|all|animation[^:]*|transition[^:]*)\s*:/i.test(inlineText));
-            for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'])
-              assert.ok(!Object.keys(node[stage] ?? {}).some(affects));
-            assert.ok(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, node.authored))
-              .every(rule => !Object.keys(rule).some(affects)));
-          }
-        }
+      for (const property of ['fontFamily', 'lineHeight', 'letterSpacing', 'color']) {
+        const proof = proveBottomSheetScalarTypography(entry, r, a, element, property);
+        const computed = proof.reference, actual = proof.astylar;
         const rows = compact.filter(row => row.evidence.section === 'discrepancies' && row.element === element && row.property === property &&
           row.reference === normalized(computed) && row.astylar === normalized(actual));
         assert.equal(rows.length, 1); const row = rows[0];
@@ -107,6 +50,34 @@ test('bottom-sheet scalar typography belongs to container tokens rather than inn
   }
   assert.equal(matched.size, 15);
   assert.equal([...matched.values()].reduce((n, g) => n + g.cases.length, 0), 300);
+  const scalarRows = compact.filter(r => r.evidence.section === 'discrepancies');
+  const before = structuredClone(scalarRows), normalize = bindPreciseAuditNormalization();
+  const applied = applyBottomSheetScalarTypography(scalarRows, cases, inventory, normalize);
+  const changed = applied.filter((r, i) => r !== scalarRows[i]);
+  assert.equal(changed.length, 15);
+  assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 300);
+  assert.deepEqual(scalarRows, before);
+  const validate = rs => validateBottomSheetScalarTypography(rs, scalarRows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  assert.deepEqual(validate(JSON.parse(JSON.stringify(applied))), []);
+  for (const mutate of [rs => rs.splice(rs.indexOf(rs.find(r => r.attribution === 'reviewed-bottom-sheet-scalar-typography-owner')), 1),
+    rs => rs.push(rs.find(r => r.attribution === 'reviewed-bottom-sheet-scalar-typography-owner')),
+    rs => { rs.find(r => r.attribution === 'reviewed-bottom-sheet-scalar-typography-owner').reviewEvidence.observations[0].token = 'forged'; },
+    rs => { rs.find(r => r.attribution === 'reviewed-bottom-sheet-scalar-typography-owner').reviewEvidence.priorMetadata.justification = 'forged'; }]) {
+    const altered = structuredClone(applied); mutate(altered); assert.ok(validate(altered).length);
+  }
+  for (const row of changed) {
+    const restored = { ...row };
+    for (const key of ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']) delete restored[key];
+    Object.assign(restored, row.reviewEvidence.priorMetadata);
+    assert.deepEqual(restored, scalarRows.find(r => r.id === row.id));
+  }
+  for (const mutate of [cs => cs.pop(), cs => cs.push(cs[0]), cs => {
+    cs[0].styleInputs.find(i => i.id === 'bottom-sheet-panel').astylar.fontFamily = 'serif';
+  }]) {
+    const altered = structuredClone(cases); mutate(altered);
+    assert.throws(() => applyBottomSheetScalarTypography(scalarRows, altered, inventory, normalize));
+  }
   const first = inspection.groups.find(g => g.element === 'bottom-sheet-panel').observations[0];
   const firstEntry = cases.find(e => `interaction:${e.family}@${e.profile}/${e.viewport.id}/${e.state}` === first.case);
   for (const mutate of [data => data.errors.push({ case: first.case, reason: 'invalid capture' }), data => {
