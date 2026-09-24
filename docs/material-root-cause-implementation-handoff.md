@@ -18,9 +18,24 @@ The focused dialog-box, dialog-typography and sheet-typography tests pass 3/3
 (17.98 seconds). No renderer or fixture edits. History `bc0e449` was rechecked:
 it introduced the asymmetric padding while matching dialog geometry.
 
-Next: integrate these six groups with independent raw-row replay in a coherent
-batch; investigate the remaining dialog sizing/constraint inputs before another
-full export. The helper and its spec now differ from the accepted checkpoint's
+Dialog panel follow-up now proves a hidden equal-scalar input mismatch across
+all 32 original states: native computed width/height are 280px/161px, but the
+surface requests 100%/100% and explicit `inherit` for all four min/max size
+constraints. Candidate `.dialog-panel` directly authors 280px/161px and omits
+those constraints in all three captured style stages. Native min/max width and
+max-height resolve to 280px/560px/100%. The focused `dialog panel equal captured`
+test passes (2.98 seconds); hashes and existing owner mapping authenticate each
+paired tree. Matching width/height scalar values therefore conceal unequal
+authoring and must not be counted as input-equivalence evidence. This adds no
+new renderer diagnosis. Reuse the existing intrinsic-percentage and explicit-
+inheritance public reductions documented below; their applicability is the
+same requested mechanisms, not proof of their contribution to every modal pixel.
+Implementation order remains: fix those general core rules, then restore the
+reference constraints and remove sampled dimensions; do not tune fixture sizes.
+
+Next: integrate the six action-box groups with independent raw-row replay and
+retain this panel authored-versus-used distinction in the existing source
+findings, as one coherent batch before another full export. The helper and its spec now differ from the accepted checkpoint's
 source fingerprints; those are deliberate pending evidence changes, not current
 canonical source reconciliation. Do not rebuild the full export for this proof alone.
 

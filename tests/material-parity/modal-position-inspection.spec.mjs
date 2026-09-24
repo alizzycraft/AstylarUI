@@ -63,6 +63,46 @@ test('dialog action border-to-padding substitution preserves height but changes 
   }
 });
 
+test('dialog panel equal captured dimensions conceal percentage and inherited constraint substitutions', () => {
+  const inspection = collectModalPositionInspection();
+  const observations = inspection.groups.find(g => g.element === 'dialog-panel').observations;
+  assert.equal(observations.length, 32);
+  for (const observation of observations) {
+    const [r, a] = ['reference', 'astylar'].map(side => {
+      const bytes = readFileSync(observation.inputTrees[side].file);
+      assert.equal(createHash('sha256').update(bytes).digest('hex'), observation.inputTrees[side].sha256);
+      return JSON.parse(bytes);
+    });
+    const rn = r.nodes.find(n => n.key === observation.proof.mapping.referenceNode);
+    const an = a.nodes.find(n => n.key === observation.proof.mapping.candidateNode);
+    const reference = r.styles[rn.style];
+    const rules = rn.rules.map(i => r.rules[i]).filter(rule => rule.active && rule.selector === '.mat-mdc-dialog-surface');
+    assert.equal(rules.length, 1);
+    assert.deepEqual(rn.inline, {});
+    const declarations = rules[0].declarations;
+    for (const property of ['width', 'height']) assert.deepEqual(declarations[property], { value: '100%', important: false });
+    for (const property of ['min-width', 'max-width', 'min-height', 'max-height'])
+      assert.deepEqual(declarations[property], { value: 'inherit', important: false });
+    assert.deepEqual([reference.width, reference.height, reference.minWidth, reference.maxWidth, reference.maxHeight],
+      ['280px', '161px', '280px', '560px', '100%']);
+    assert.equal(an.authored.style, undefined);
+    const candidateRules = a.rules.filter(rule => rule.selector === '.dialog-panel');
+    assert.equal(candidateRules.length, 1);
+    assert.deepEqual([candidateRules[0].width, candidateRules[0].height], ['280px', '161px']);
+    for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+      assert.deepEqual([an[stage].width, an[stage].height], [reference.width, reference.height]);
+      for (const property of ['minWidth', 'maxWidth', 'minHeight', 'maxHeight']) {
+        assert.equal(Object.hasOwn(an[stage], property), false);
+        assert.equal(Object.hasOwn(candidateRules[0], property), false);
+      }
+    }
+    // Equality of these sampled scalar values cannot establish equality of
+    // authored sizing rules, responsiveness, content changes or rendered output.
+    assert.notEqual(declarations.width.value, candidateRules[0].width);
+    assert.notEqual(declarations.height.value, candidateRules[0].height);
+  }
+});
+
 test('bottom-sheet scalar typography belongs to container tokens rather than inner list-label tokens', () => {
   const inspection = collectModalPositionInspection();
   const captured = JSON.parse(readFileSync(inspection.capture.file));
