@@ -8,7 +8,8 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   proveBottomSheetScalarTypography, applyBottomSheetScalarTypography,
   validateBottomSheetScalarTypography, proveDialogActionBoxSubstitution,
   applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints,
-  validateDialogPanelConstraints, proveBottomSheetPanelConstraints } from './modal-position-inspection.mjs';
+  validateDialogPanelConstraints, proveBottomSheetPanelConstraints,
+  applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
@@ -72,6 +73,46 @@ test('bottom-sheet panel constraints bind explicit responsive and overflow omiss
     mutate(r, a, a.nodes.find(n => n.key === first.proof.astylarNode));
     assert.throws(() => proveBottomSheetPanelConstraints(first.input, r, a));
   }
+});
+
+test('bottom-sheet constraint classifications preserve raw evidence and exclude initial-value assumptions', () => {
+  const inspection = collectModalPositionInspection();
+  const cases = JSON.parse(readFileSync(inspection.capture.file)).interactions.filter(e =>
+    e.family === 'bottom-sheet' && e.styleInputs.some(i => i.id === 'bottom-sheet-panel')).map(e => ({ ...e, kind: 'interaction' }));
+  assert.equal(cases.length, 25);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', modalSizingPredecessor)
+    .filter(r => r.evidence.section === 'discrepancies');
+  const before = structuredClone(rows), applied = applyBottomSheetPanelConstraints(rows, cases, inventory, normalize);
+  const changed = applied.filter((row, i) => row !== rows[i]);
+  assert.equal(changed.length, 8);
+  assert.equal(changed.reduce((n, row) => n + row.occurrences, 0), 149);
+  assert.deepEqual(rows, before);
+  const initial = rows.findIndex(row => row.element === 'bottom-sheet-panel' && row.property === 'maxWidth' && row.reference === 'none');
+  assert.ok(initial >= 0); assert.equal(applied[initial], rows[initial]);
+  const metadata = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'];
+  for (const row of changed) {
+    const original = rows.find(r => r.id === row.id), restored = { ...row };
+    assert.equal(Object.hasOwn(row, 'astylar'), false);
+    for (const key of metadata) delete restored[key];
+    Object.assign(restored, row.reviewEvidence.priorMetadata);
+    assert.deepEqual(restored, original);
+  }
+  const validate = values => validateBottomSheetPanelConstraints(values, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  assert.deepEqual(validate(JSON.parse(JSON.stringify(applied))), []);
+  const selected = values => values.find(row => row.attribution === 'reviewed-bottom-sheet-panel-constraint-omission');
+  for (const mutate of [
+    values => values.splice(values.indexOf(selected(values)), 1),
+    values => values.push(structuredClone(selected(values))),
+    values => { selected(values).astylar = 'auto'; },
+    values => { selected(values).reviewEvidence.observations[0].referenceRequests[0].value = '512px'; },
+    values => { selected(values).reviewEvidence.priorMetadata.attribution = 'forged'; },
+  ]) { const altered = structuredClone(applied); mutate(altered); assert.equal(validate(altered).length, 1); }
+  assert.throws(() => applyBottomSheetPanelConstraints(rows, cases.slice(1), inventory, normalize));
+  assert.throws(() => applyBottomSheetPanelConstraints(rows, [...cases, cases[0]], inventory, normalize));
+  const forged = structuredClone(rows); forged[initial].attribution = 'unresolved';
+  assert.throws(() => applyBottomSheetPanelConstraints(forged, cases, inventory, normalize));
 });
 
 test('dialog action border-to-padding substitution preserves height but changes CSS content placement', () => {

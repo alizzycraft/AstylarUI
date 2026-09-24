@@ -26,6 +26,17 @@ predecessor, preserving all original assertions and mutation controls. The five
 focused sheet/action/panel tests pass in 14.81 seconds with no skips. This is a
 test-input provenance correction, not a classification waiver.
 
+Bottom-sheet classification preparation now reuses `applyModalBoxReview` rather
+than adding another review pipeline. `applyBottomSheetPanelConstraints` binds
+the eight groups / 149 occurrences; `validateBottomSheetPanelConstraints`
+independently replays from the original rows and owner inputs. Tests conserve
+raw fields and missing candidate values, leave compact max-width:none untouched,
+and reject removed/duplicate rows or cases, invented defaults, forged native
+requests and prior metadata. Promoting the compact initial-value row to the
+explicit-request population is rejected too. Six focused sheet/dialog checks
+pass in 18.56 seconds. Producer wiring and batched canonical reconciliation are
+still pending; no export or browser recapture was launched for this preparation.
+
 Current canonical milestone: modal sizing export from `01fab20`, independently
 reconciled against `ed35a9c`: **1,595 unresolved groups**, 8,483 scalar groups /
 389,202 occurrences, 133 source findings. Coverage remains 436/436 static and

@@ -294,7 +294,7 @@ function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition)
   const properties = new Set(definition.properties);
   const proofs = new Map();
   return rows.map(row => {
-    if (row.family !== 'dialog' || row.element !== definition.element || row.attribution !== 'unresolved' || !properties.has(row.property)) return row;
+    if (row.family !== (definition.family ?? 'dialog') || row.element !== definition.element || row.attribution !== 'unresolved' || !properties.has(row.property)) return row;
     const matching = cases.filter(c => c.family === row.family).flatMap(c => (c.styleInputs ?? [])
       .filter(i => i.id === row.element && canonicalStyle(i.reference ?? {})[row.property] === row.reference &&
         canonicalStyle(i.astylar ?? {})[row.property] === row.astylar)
@@ -312,6 +312,7 @@ function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition)
           astylar: canonicalStyle(candidate.normalResolvedStyle) });
       }
       const result = proofs.get(keys[index]);
+      if (result.proof.attributableProperties) assert.ok(result.proof.attributableProperties.includes(row.property));
       assert.equal(result.reference[row.property], row.reference);
       assert.equal(result.astylar[row.property], row.astylar);
       return result.proof;
@@ -323,6 +324,24 @@ function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition)
         priorMetadata: Object.fromEntries(metadata.filter(k => Object.hasOwn(row, k)).map(k => [k, structuredClone(row[k])])),
         observations, inputEquivalent: false, renderingEquivalent: false } };
   });
+}
+
+export function applyBottomSheetPanelConstraints(rows, cases, inventory, canonicalStyle) {
+  return applyModalBoxReview(rows, cases, inventory, canonicalStyle, {
+    family: 'bottom-sheet', element: 'bottom-sheet-panel',
+    properties: ['minWidth', 'maxWidth', 'maxHeight', 'boxSizing', 'overflowX', 'overflowY'],
+    prove: proveBottomSheetPanelConstraints, attribution: 'reviewed-bottom-sheet-panel-constraint-omission',
+    owner: 'showcase bottom-sheet responsive constraints and scrolling authoring',
+    justification: 'Original native owner rules explicitly request responsive width constraints, 80vh max-height, border-box and automatic overflow. Candidate authoring substitutes fixed dimensions with a width-only breakpoint and omits those requests in all captured stages. Full population replay distinguishes these input omissions from renderer failure; it does not prove used layout or functional scrolling, and does not classify the compact initial max-width value.',
+  });
+}
+
+export function validateBottomSheetPanelConstraints(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-bottom-sheet-panel-constraint-omission');
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyBottomSheetPanelConstraints(originalRows, cases, inventory, canonicalStyle))));
+    return [];
+  } catch (error) { return [`bottom-sheet panel constraints do not replay from original owner inputs: ${error.message}`]; }
 }
 
 export function applyDialogActionBox(rows, cases, inventory, canonicalStyle) {
