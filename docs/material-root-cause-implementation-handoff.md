@@ -2,7 +2,48 @@
 
 ## Current audit checkpoint — September 24
 
-Accepted canonical checkpoint: `ed35a9c` (1,607 unresolved groups). New focused
+Current canonical milestone: modal sizing export from `01fab20`, independently
+reconciled against `ed35a9c`: **1,595 unresolved groups**, 8,483 scalar groups /
+389,202 occurrences, 133 source findings. Coverage remains 436/436 static and
+1,875/1,875 interactive captures. This is attribution progress, not equal-input
+or rendered-parity acceptance. Renderer and comparison fixtures are unchanged.
+
+The cold export completed in 1,870.156 seconds, exit 1 solely for the 1,595
+unresolved groups. Its session reverified 1,205 files / 89,149,474 bytes with no
+invalidated dependencies. Export session 43247 / PID 20816 is now terminal.
+Independent `--modal-box` conservation passes: precisely 12 groups / 384
+occurrences change, all raw scalar evidence and 8,471 other complete rows stay
+unchanged; only 48 control producer receipts change. Section reconciliation
+preserves 71 of 79 sections, with no additions/removals. The eight changed
+sections are source fingerprints, summary, discrepancies, source findings,
+control typography, control line boxes and the two producer-binding sections.
+All 452 source fingerprints match disk; eight expected source hashes update,
+none are added/removed. All 132 prior source findings remain identical and in
+order, with only `fixture-dialog-sampled-panel-and-action-geometry` inserted.
+The 55 remaining metadata leaf changes are four summary counts, three binding
+receipts and 48 line-box producer receipts; the motion report hash was
+independently reconstructed from its preserved source plus the producer receipt.
+
+Evidence under `artifacts/material-parity/`: `modal-sizing-01fab20-progress.log`,
+`modal-sizing-conservation-01fab20.json`, `modal-sizing-sections-01fab20.json`,
+`modal-sizing-metadata-sources-01fab20.json`, and `modal-sizing-receipts-01fab20.json`.
+Canonical compressed SHA-256 is
+`78ed94a2e6c8ff322a344cfdd583f3aa65a94cf94d3c2f944b1de0c0a6807161`;
+decoded SHA-256 is
+`70918584660365c90dc8de69532c56304423283090175e3849b55c5224a19e4a`.
+Compact import and verification both pass: 8,483 discrepancies, 133 source
+findings, 39,904 control differences, 389,202 occurrences and 1,595 unresolved
+groups. Compact shards total 69,724,909 bytes. No second import or full browser
+recapture was needed for this metadata-only integration.
+Next: bind the remaining
+bottom-sheet responsive constraint and overflow rows to the existing fixed-size
+source finding and original 25 owner captures. History `8505c3b` is reconfirmed;
+do not duplicate the existing source finding or rerun its intrinsic-size proof.
+Other families and full final canonical/browser acceptance remain outstanding.
+
+The following preparation entries describe the predecessor milestone and are
+historical, including their live-process and pending-export statements.
+Predecessor canonical checkpoint: `ed35a9c` (1,607 unresolved groups). New focused
 evidence, not yet canonically attributed: `proveDialogActionBoxSubstitution` in
 `tests/material-parity/modal-position-inspection.mjs` proves six dialog-actions
 input differences across all 32 original states (192 scalar occurrences).

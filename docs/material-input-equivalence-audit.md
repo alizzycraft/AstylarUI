@@ -27,7 +27,7 @@ Explicit gap composition: 1032 original observations support 16 unequal applicat
 
 Visual parity is green, but input equivalence is **not established**. The audit found 8483 unique normalized input differences across 389202 occurrences.
 
-1607 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
+1595 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
 
 Border initial-color evidence: 3580 uniquely paired node observations prove omitted author/inline color inputs with browser currentColor versus core transparent defaults. Attribution rejects possibly applicable state/media/reset rules and unknown selectors, and is not an equivalence waiver. Alpha paint, contextual-color paint, structure and final raster require separate evidence.
 
@@ -154,10 +154,10 @@ This means the existing screenshot score cannot be used as evidence that the ren
 
 | Classification | Unique signatures |
 | --- | ---: |
-| application-plugin-authoring-defect | 1194 |
+| application-plugin-authoring-defect | 1206 |
 | equivalent-representation | 2086 |
 | intentional-documented-limitation | 336 |
-| parity-harness-defect | 4867 |
+| parity-harness-defect | 4855 |
 
 ## Source-level compensation findings
 
@@ -229,6 +229,7 @@ This means the existing screenshot score cannot be used as evidence that the ren
 | fixture-expansion-flow-and-collapse-substitution | application-plugin-authoring-defect | 6e1c156 replaces expansion flow with absolute content; a0f3328 adds a -1px nested text offset | examples/material-showcase/src/app/astylar.component.ts:667 | showcase expansion content flow, collapse structure, and typography translation |
 | fixture-field-error-subscript-substitution | application-plugin-authoring-defect | 87bc351 fix(renderer): align Material filled field text | examples/material-showcase/src/app/astylar.component.ts:640 | showcase form-field subscript flow, generated error description and live-region composition |
 | fixture-dialog-text-flow-substitution | application-plugin-authoring-defect | d102828 adds flex-aligned title span; 5b02171 retunes title/content padding | examples/material-showcase/src/app/astylar.component.ts:1013 | showcase dialog title pseudo-spacer, content flow and labelled overlay composition |
+| fixture-dialog-sampled-panel-and-action-geometry | application-plugin-authoring-defect | bc0e449 fixes panel dimensions and replaces action top-border space with bottom padding | examples/material-showcase/src/app/astylar.component.ts:789, examples/material-showcase/src/app/astylar.component.ts:792 | showcase dialog surface sizing, inherited constraints and action box authoring |
 | fixture-dialog-text-metric-tokens-omitted | application-plugin-authoring-defect | 2f44011 initial dialog typography omits component family and tracking | examples/material-showcase/src/app/astylar.component.ts:791 | showcase dialog title/content font-family and tracking-token translation |
 | fixture-dialog-text-ink-substitution | application-plugin-authoring-defect | bc0e449 fix(material): match dialog content geometry | examples/material-showcase/src/app/astylar.component.ts:790, examples/material-showcase/src/app/astylar.component.ts:791 | showcase dialog title/content color-token translation |
 | fixture-dialog-fixed-content-boxes | application-plugin-authoring-defect | bc0e449 fix(material): match dialog content geometry | examples/material-showcase/src/app/astylar.component.ts:789, examples/material-showcase/src/app/astylar.component.ts:790, examples/material-showcase/src/app/astylar.component.ts:791, examples/material-showcase/src/app/astylar.component.ts:792 | showcase dialog flow, generated title spacer, and action wrapping |
