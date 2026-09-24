@@ -118,3 +118,33 @@ test('retained focus selectors distinguish sheet/menu mismatches from matching d
   // This recovers reference focus at tree-capture time, not an event timeline
   // or a diagnosis of the current candidate runtime.
 });
+
+test('retained dismissal focus has four matching identities and twenty-six unmeasured candidate identities', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = JSON.parse(bytes);
+  let matched = 0, unknown = 0;
+  for (const [family, state, count, candidateKnown] of [
+    ['menu', 'open-dismiss', 2, true],
+    ['bottom-sheet', 'open-dismiss', 2, true],
+    ['dialog', 'open-dismiss', 2, false],
+    ['menu', 'open-dismiss-outside', 8, false],
+    ['menu', 'open-dismiss-canvas', 8, false],
+    ['dialog', 'open-dismiss-outside', 8, false],
+  ]) {
+    const rows = report.interactions.filter(r => r.family === family && r.state === state);
+    assert.equal(rows.length, count);
+    for (const row of rows) {
+      assert.equal(row.focus.reference, `${family}-primary`);
+      assert.equal(row.focus.matches, true);
+      assert.equal(Object.hasOwn(row.focus, 'astylar'), candidateKnown);
+      if (candidateKnown) { assert.equal(row.focus.astylar, row.focus.reference); matched++; }
+      else unknown++;
+      // The retained gate skips these states, even for a demonstrably wrong
+      // identity. An omitted identity cannot distinguish body focus from an
+      // unidentified element; preserve uncertainty rather than call it parity.
+      assert.equal(gate(state, row.focus.reference, 'wrong-owner'), true);
+    }
+  }
+  assert.equal(matched, 4); assert.equal(unknown, 26);
+});

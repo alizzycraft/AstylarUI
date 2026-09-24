@@ -26,6 +26,18 @@ Next focused capture must distinguish retained-runtime mismatch from current
 signal/update settlement behavior; do not recapture simply to rediscover these
 49 historical reference focus owners.
 
+Dismissal focus coverage is separately inventoried: two menu and two sheet
+`open-dismiss` records identify the opener on both sides. Twenty-six records
+identify the reference opener but omit the candidate identity: menu outside
+(8), menu canvas (8), dialog outside (8), dialog `open-dismiss` (2). The retained
+gate skips these states, accepting even an explicitly wrong candidate identity.
+Do not label omission as body focus or proven focus loss: the old measurement
+cannot distinguish body from an unidentified active element. Corrected capture
+must record both raw active-element identity and mapped identity immediately
+after dismissal, with explicit unknown/missing status rather than `undefined`
+equality. Four retained-overlay-focus tests now pass in 5.56 seconds. This closes
+the inventory question for those 30 records, not their current-runtime cause.
+
 Corrected cold export is running from `b8c58ae`, session **95217**, log
 `artifacts/material-parity/appearance-b8c58ae-progress.log`. It reached
 `build-audit` after 0.97 seconds. Revalidate the handle/process before acting;
