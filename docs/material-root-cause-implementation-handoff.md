@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — September 25
 
+Appearance export `18d4239` is now TERMINAL, exit 1 after 2,155.50 seconds.
+Do not poll/restart session 4759 or PID 3020. The evidence session authenticated
+1,205 files / 89,151,875 bytes with zero invalidations, two collectors and ten
+memory hits. Coverage is still 436/436 static and 1,875/1,875 interaction;
+8,483 groups, 389,202 observations and 134 source findings remain.
+**This export is rejected**, not the new accepted baseline: besides 1,507
+unresolved groups it reports `followup group count changed: 65 !== 66`.
+
+Root cause localized: newly enabled generic appearance attribution runs at
+`collectStyleDiscrepancies` before the existing followup classifier. The retained
+`expansion-primary` appearance row already has
+`reviewed-expansion-panel-header-owner-mismatch` (68 observations): the reference
+panel and candidate header are different owners. The generic collector accepts
+their ID-to-tree bindings but must not supersede that specific mismatch proof.
+Fix classification precedence for the newly admitted property, preserving the
+existing eight-property behavior and all earlier reviews. Add a focused test
+through the actual production classification chain, not only the new leaf
+classifier; the previous 54-unresolved-group test missed already reviewed rows.
+Do not weaken the 66-group validator or alter fixtures to make this pass.
+
+Rejected files are retained in
+`artifacts/material-parity/appearance-18d4239-rejected/`;
+compressed SHA `94668481c2452eea7fa8b153a70b3894da440b2d673bfdb0d85b38cb15ddbbca`,
+decoded SHA `681fbc382f7468a36c3b016b0fc48c88f8880a80fa16cf6483eca958d4f34f73`.
+The working `docs` export currently contains this rejected generation; do not
+import it or describe it as accepted. Compact pointer `0a6c0f6d...` remains the
+accepted predecessor. Independent comparator session **32166** is still running
+against these files; verify its terminal result before overwriting them. Output
+path is `artifacts/material-parity/appearance-18d4239-conservation.json` (not a
+passing receipt until the command succeeds). Source changes to fix precedence
+will also require explicitly reconciling producer-hash receipts at integration.
+
 Resumption coverage triage: authenticated compact generation `0a6c0f6d...`
 still contains 1,541 unresolved scalar groups. Largest families are dialog
 (186), bottom-sheet (132), chips/tabs (104 each), card (96), slider (77),
@@ -22,6 +54,7 @@ The full browser matrix and source/ownership/reproduction deliverables remain
 required even after scalar classification. Do not repeat the existing color
 ancestry or motion census merely to rediscover these candidate populations.
 
+Historical launch details (superseded by the terminal outcome above):
 Appearance cold integration launched from `18d4239`: session **4759**, Node PID
 **3020**, log `artifacts/material-parity/appearance-18d4239-progress.log`.
 The tool handle and process were confirmed live after launch; last emitted phase
