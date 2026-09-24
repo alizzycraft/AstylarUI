@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 24
 
+Action-layout producer wiring is committed and pushed as `55d7bcd`.
+Read-only corner-token inspection now covers both actions in all 25 original
+sheet states (50 owners), using the authenticated modal capture and existing
+inventory adapter. Every native owner retains two ordered radius requests:
+`.mdc-list-item` uses `var(--mat-list-list-item-container-shape,
+var(--mat-sys-corner-none))`; the later `.mat-mdc-nav-list .mat-mdc-list-item`
+uses `var(--mat-list-active-indicator-shape, var(--mat-sys-corner-full))` and
+the same expression for its focus-indicator radius. Native computed radius is
+9999px throughout; candidate resolved radius is 24px light/dark, 18px contrast,
+36px custom. The original cssText therefore supplies the token expressions
+missing from expanded CSSOM values; no new browser capture is needed to recover
+them. This check took 4.2 seconds. It does not prove candidate used corner shape,
+complete competing/reset requests, or rendering equivalence. Next decisive check:
+extend the existing semantic proof to bind all relevant candidate radius requests
+and stages, preserving empty native expansions, then distinguish input-token
+substitution from geometry-dependent radius normalization. No new classifications
+or accepted-count changes are claimed by this inspection.
+
 The ten-group / 250-occurrence sheet action-layout replay is now wired into the
 bound-original producer branch and independent original-row validator. The
 unbound guard rejects its attribution without provenance, and exact source
