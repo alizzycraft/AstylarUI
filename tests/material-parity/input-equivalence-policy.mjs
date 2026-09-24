@@ -108,6 +108,16 @@ export const reviewedValueNormalizations = Object.freeze([
 
 export const sourceAuditDefinitions = Object.freeze([
   Object.freeze({
+    id: 'core-rounded-radius-sampling-uses-unclamped-request',
+    introducedBy: 'current source and installed-package browser proof; no first-bad revision or original-capture runtime attribution',
+    file: 'src/app/services/babylon-mesh.service.ts',
+    pattern: String.raw`const segmentLength = Math\.max\(0\.001, radius / 10\);`,
+    classification: 'confirmed-core-renderer-defect',
+    owner: 'core rounded geometry normalization and curve sampling before final projection',
+    justification: 'Public-package div and button reductions at DPR1 and DPR2 preserve equal 480x48px boxes and radius9999px declarations but render square-ended four-vertex rectangles instead of native capsules; 24px and 36px controls pass the bounded shape-mask check. The polygon library normalizes all three requests to24px arcs, while core derives segment length from the unnormalized request, producing68/44/4 vertices. Source-extracted methods reproduce the same counts at scale1 and0.01. Normalize used corner geometry before choosing sampling density; do not substitute a fixture-specific small radius to hide this defect. Evidence is current public rendering and the owning kernel, not original capture-bundle behavior, historical compensation intent, complete antialiasing parity or all shape types.',
+    focusedProof: 'src/parity/rounded-radius.audit.spec.ts; tests/material-parity/modal-position-inspection.spec.mjs: current rounded rectangle kernel',
+  }),
+  Object.freeze({
     id: 'fixture-dialog-action-font-tracking-tokens-omitted',
     introducedBy: '2f44011 introduces independent dialog-action controls without Material font/tracking tokens; af04845 subsequently supplies the document control font reset',
     file: 'examples/material-showcase/src/app/astylar.component.ts',

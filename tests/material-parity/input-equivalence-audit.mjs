@@ -8511,6 +8511,8 @@ function sourceFingerprints(root) {
   const files = [
     'tests/material-parity/modal-position-inspection.mjs',
     'tests/material-parity/modal-position-inspection.spec.mjs',
+    'src/parity/rounded-radius.audit.spec.ts',
+    'scripts/audit-overlay-layout-stage.mjs',
     'tests/material-parity/overlay-surface-audit-source-binding.mjs',
     'tests/material-parity/overlay-surface-review.mjs',
     'docs/material-overlay-surface-review.json',
@@ -8968,6 +8970,8 @@ function sourceFingerprints(root) {
 
 function focusedProofInventory(root) {
   return [
+    proof(root, 'src/parity/rounded-radius.audit.spec.ts', /describe\('public rounded radius audit'/,
+      'public equal-input oversized corner radius rendering', 'Current installed-package div and button surfaces preserve 9999px radius inputs but render four-vertex rectangles; native capsules and 24px/36px candidate controls distinguish the shape defect at DPR1/2. Source-extracted kernel proof traces sampling density to the unnormalized radius. Retained failures are diagnostic evidence, not historical-bundle attribution or complete antialiasing parity.'),
     proof(root, 'tests/material-parity/prepared-alignment-canonical-integration.spec.mjs', /test\('canonical prepared alignment matches/,
       'complete original-source alignment classification conservation', 'Independently replays 125 groups / 6,871 observations against the authenticated pre-integration payload. Every current row must match; all raw observations and 8,214 unrelated complete rows remain unchanged. Source-only lineage conservation requires exact mapping/collector projection and unchanged observations. Terminal execution and CLI freshness remain separate evidence; this is not renderer parity.'),
     proof(root, 'tests/material-parity/followup-input-canonical-integration.spec.mjs', /test\('canonical followup findings match/,

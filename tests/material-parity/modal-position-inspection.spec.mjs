@@ -34,6 +34,52 @@ const modalSizingPredecessor = Object.freeze({
   indexSha256: '7e3141128b5728007cf478b5d37b7820ac6a9cd56d34e0242d4f10842ce4e745',
 });
 
+test('oversized radius source finding binds current public-package failures and bounded controls', () => {
+  const findings = sourceAuditDefinitions.filter(f => f.id === 'core-rounded-radius-sampling-uses-unclamped-request');
+  assert.equal(findings.length, 1);
+  assert.equal(findings[0].classification, 'confirmed-core-renderer-defect');
+  assert.match(readFileSync(findings[0].file, 'utf8'), new RegExp(findings[0].pattern));
+  const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+  for (const dpr of [1, 2]) {
+    const directory = `artifacts/material-parity/radius-public-f95a265-dpr${dpr}`;
+    const report = JSON.parse(readFileSync(`${directory}/result.json`));
+    const provenance = JSON.parse(readFileSync(`${directory}/provenance.json`));
+    assert.equal(sha(readFileSync(`${directory}/audit.js`)), provenance.bundleSha256);
+    assert.equal(provenance.compiledReceipts.length, 104);
+    for (const receipt of provenance.compiledReceipts) assert.equal(sha(readFileSync(receipt.source)), receipt.sourceSha256);
+    for (const file of ['src/parity/rounded-radius.audit.spec.ts', 'src/app/services/babylon-mesh.service.ts']) {
+      const receipt = provenance.inputs.find(r => r.file === file) ?? provenance.compiledReceipts.find(r => r.source === file);
+      assert.ok(receipt); assert.equal(sha(readFileSync(file)), receipt.sha256 ?? receipt.sourceSha256);
+    }
+    assert.deepEqual(report.errors, []); assert.equal(report.result.status, 'failed');
+    assert.equal(report.result.results.length, 6); assert.equal(report.screenshots.length, 6);
+    assert.equal(report.observations.length, 6);
+    for (const type of ['div', 'button']) for (const radius of [24, 36, 9999]) {
+      const composition = `radius-${type}-${radius}`;
+      const observation = report.observations.find(r => r.composition === composition);
+      assert.equal(observation.dpr, dpr); assert.equal(observation.radius, radius);
+      assert.equal(observation.meshes.find(m => m.name === 'pane').vertices, ({ 24: 68, 36: 44, 9999: 4 })[radius]);
+      const image = report.screenshots.find(r => r.composition === composition);
+      const pixels = ['reference', 'astylar'].map(side => {
+        const bytes = readFileSync(`${directory}/${image.captures[side].file}`);
+        assert.equal(sha(bytes), image.captures[side].sha256);
+        const png = PNG.sync.read(bytes); assert.equal(png.width, 520 * dpr); assert.equal(png.height, 88 * dpr);
+        return png.data;
+      });
+      let native = 0, difference = 0;
+      const solid = (p, i) => p[i] === 48 && p[i + 1] === 45 && p[i + 2] === 50 && p[i + 3] === 255;
+      for (let i = 0; i < pixels[0].length; i += 4) {
+        const a = solid(pixels[0], i), b = solid(pixels[1], i); native += Number(a); difference += Number(a !== b);
+      }
+      assert.equal(native, image.paint.referencePanePixels); assert.equal(difference, image.paint.paneMaskDifferences);
+      assert.equal(difference / native < .01, radius !== 9999);
+      const result = report.result.results.find(r => r.description === `public rounded radius audit ${type} radius ${radius}`);
+      assert.equal(result.status, radius === 9999 ? 'failed' : 'passed');
+      if (radius === 9999) assert.match(result.failures[0], /solid-mask disagreement exceeds 1%/);
+    }
+  }
+});
+
 test('current rounded rectangle kernel undersamples oversized full-round radii despite equal normalized arcs', t => {
   // Execute the current production methods, not a copied implementation. This
   // isolates geometry generation; it is not a historical runtime/raster claim.

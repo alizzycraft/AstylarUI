@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 24
 
+Radius root cause is now in the existing `sourceAuditDefinitions` inventory as
+`core-rounded-radius-sampling-uses-unclamped-request`, with source location,
+owning subsystem, public proof and explicit historical limits. Producer proof
+inventory and source fingerprints include the diagnostic and existing runner.
+The existing exact producer-transition guard admits only these additions.
+Focused replay authenticates the retained bundle, 104 source receipts, both
+diagnostic source files, all 12 case outcomes, observed mesh counts and each PNG;
+it independently recomputes solid shape-mask differences rather than trusting
+the saved pass/fail text. Two radius tests pass in 2.41 seconds, and all six
+producer/alignment guards pass in 18.46 seconds. No browser rerun was needed.
+Canonical source finding count remains 133 until reconciliation (134 proposed);
+unresolved count remains 1,578 (18 additional classified groups proposed).
+
+Application-build session 17662 is now terminal, exit 1 after the verified Node
+13708 and owned esbuild 12580 were stopped. At 21:23 local the child used about
+4.86GB working set and only 1.6GB physical memory remained. It never left
+Building; this repeats the known broad-bundle resource issue, not a test result.
+Do not restart it unchanged. Successful fresh library compilation, standalone
+test typecheck and installed-package browser evidence remain separate valid
+checks. No active build handle remains. Next coherent milestone: extend the
+existing canonical conservation comparator for the 18-group / 298-occurrence
+sheet-action batch and the one new source finding, then perform one cold export
+and full source/section reconciliation. Full audit coverage and final gates are
+still incomplete; no renderer changes or parity acceptance are claimed.
+
 Public-package/browser proof now confirms the oversized-radius failure on both
 `div` and `button`. New isolated diagnostic
 `src/parity/rounded-radius.audit.spec.ts` imports only the `astylarui` package root
