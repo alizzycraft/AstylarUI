@@ -2,6 +2,41 @@
 
 ## Current audit checkpoint — September 24
 
+The overlay batch is integrated and conserved. Cold export at `55d9945`
+completed in 2,088.454 seconds; exit 1 reports only **1,631 unresolved scalar
+groups** (previously 1,644), not a source-binding failure. All 8,483 differences,
+389,202 occurrences, 132 source findings, 39,904 control differences and
+436/436 static / 1,875/1,875 interaction inventory entries remain accounted for.
+This is bounded classification progress, not complete input or output acceptance.
+
+- `node scripts/check-material-position-canonical-conservation.mjs --overlay`
+  passes: exactly 13 groups / 344 occurrences change; 8,470 complete rows and
+  all other control evidence are unchanged except 48 authenticated producer receipts.
+- Of 78 predecessor sections, 71 are unchanged, seven change, and one overlay
+  binding section is added. The other metadata changes are exactly 48 line-box
+  producer receipts, three summary counts and three source-conservation receipts.
+  The motion report hash is independently reconstructed by replacing only its
+  producer receipt. No original capture or reference input changed.
+- All 450 current source fingerprints match disk: three added dependencies,
+  seven reviewed producer/guard changes, no removed or reordered prior entries.
+- Compressed package SHA-256:
+  `4601de6aeedf0595894e22de28052ee989a163320af4464337a69302c3a04aa2`;
+  decoded SHA-256:
+  `4ad34a695e2268a96a505d86af93bd396d897a5d996dd6dbf28b67a3199fb291`.
+  Compact import and `node scripts/audit-findings-store.mjs verify` pass;
+  index SHA-256 `028f8a938c925bf868926e43253d46199ad0d66c82e7bf60bc1222a6cfa13cde`.
+- Evidence under `artifacts/material-parity/`: `overlay-surface-export-55d9945-progress.log`,
+  `overlay-surface-conservation-55d9945.json`, `overlay-surface-sections-55d9945.json`,
+  `overlay-surface-sources-55d9945.json`, `overlay-surface-metadata-55d9945.json`,
+  and `overlay-surface-receipts-55d9945.json`. All associated jobs are terminal.
+
+Next: integrate the independently established dialog/sheet typography evidence
+as a coherent later batch, preserving the owner/stage distinctions below.
+Remaining high-impact families include dialog (216), bottom-sheet (182), tabs
+(114), chips (104), slider (77), snackbar (69) and tooltip (37). Counts describe
+unresolved signatures, not independent bugs. Final complete canonical and browser
+acceptance remain pending; no browser recapture was needed for metadata integration.
+
 Dialog title reuse boundary closed for font-family and color: the existing
 typography proof identifies the native heading and the candidate title span's
 direct `h2` parent in all 32 states. Exact scalar values, omitted local font
@@ -39,10 +74,7 @@ Command: `node --test --test-name-pattern="bottom-sheet scalar typography" tests
 these exact container-token owners when classifying the remaining sheet rows,
 rather than transferring the existing inner-label attribution.
 
-The overlay export started at `55d9945` remains live (session 6688, PID 15056)
-and has reached `validate-audit`; latest observed progress was 821.335 seconds.
-Its result is not yet accepted. Continue polling this handle before conservation
-and compact-index refresh; do not launch another export.
+## Prior integration history (superseded by the current checkpoint above)
 
 Resume from the existing evidence, using [the incremental workflow](audit-workflow.md).
 The canonical package with decoded SHA-256
