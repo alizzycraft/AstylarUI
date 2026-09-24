@@ -100,6 +100,32 @@ unresolved, stale and malformed failure checks (1/1 passes). It also now copies
 the evidence-session dependency into its isolated workspace. The next export
 attempt must use these diagnostics; no exact allocation owner is proved yet.
 
+Instrumented follow-up at `2e21c57` finished under a 4 GiB heap cap (exit 1):
+construction 808 s, validation/evidence verification through 1,763 s, complete
+export at 1,895 s. The session rehashed all 1,205 files / 89,148,435 bytes it read;
+only two collectors were memoized, with ten memory hits. The resulting package
+was **rejected**, not integrated: five bindings failed and unresolved groups rose
+to 2,031. It is preserved in `failed-position-followup-2e21c57`, compressed SHA
+`d99a9830b506dfb55d97aa6aadb7e8f24b87b5dd0b231dbff43a92a4951479e5`.
+The three canonical files were restored from the authenticated predecessor;
+the count at the top of this ledger remains 1,668.
+
+All five invalid bindings (`ownerCaretInputs`, `reviewedInputs`,
+`alignmentFontInputs`, `textAlignInputs`, `ltrAlignmentInputs`) reject the same
+mapping-reader import change: recorded hash `c21d439f...`, current `51f017cc...`.
+The earlier gap-specific reconciliation did not cover these consumers. Next
+extend the existing exact import-only/full-source conservation proof to these
+bindings, retaining historical receipts and rejecting any mapping-body change.
+Replay the affected collectors before another full export. Do not rerun the
+canonical export unchanged or accept the failed package as new evidence.
+
+Small live samples are retained as `position-followup-validation-cpu-sample.log`
+and `position-followup-validation-allocation-sample.log`; no heap dump was taken.
+Selector exclusion checks were prominent in the CPU sample (GC 1,180/6,603
+samples); the allocation sample observed inherited-font validation and heap
+falling from 3.20 to 2.86 GiB. These are scoped performance observations, not a
+proof of a leak or the exact owner of the preceding 3 GiB OOM.
+
 Overlay runtime-probe status: the uncommitted draft
 `src/parity/overlay-layout-stage.audit.spec.ts` has not reached browser execution.
 Three focused Angular builds were stopped after build-worker memory growth
