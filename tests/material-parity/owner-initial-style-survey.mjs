@@ -9,6 +9,7 @@ const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const normalize = k => k.replaceAll('-', '').toLowerCase();
 const one = xs => xs.length === 1 ? xs[0] : undefined;
 const aliases = { fontStyle: ['font'], overflowWrap: ['wordwrap'],
+  appearance: ['webkitappearance', 'mozappearance'],
   whiteSpace: ['whitespacecollapse', 'textwrap', 'textwrapmode', 'textwrapstyle'] };
 
 function pathToRoot(tree, owner) {
@@ -28,13 +29,17 @@ function pathToRoot(tree, owner) {
 // Unknown selectors and animation/transition declarations remain review blockers.
 // Root paths stop at the captured surface: document-external inheritance remains
 // unverified even when every captured node computes the same initial keyword.
-export function inspectOwnerInitialStyle(input, property, reference, candidate, { family, reviewedGeneratedOwners = false } = {}) {
+export function inspectOwnerInitialStyle(input, property, reference, candidate,
+  { family, reviewedGeneratedOwners = false, reviewedAppearance = false } = {}) {
+  // Opt in separately: the historical survey and attribution population must
+  // not expand merely because a new property is being investigated.
+  const initialValues = reviewedAppearance ? { ...ownerInitialValues, appearance: 'none' } : ownerInitialValues;
   const issues = [];
   const issue = (reason, detail = {}) => issues.push({ reason, ...detail });
   const finish = extra => ({ property, element: input?.id, issues,
     disposition: issues.length ? 'requires-specific-review' : 'captured-default-versus-local-omission',
     computedCandidateVerified: false, renderingEquivalent: false, ...extra });
-  if (!Object.hasOwn(ownerInitialValues, property) || !object(input) ||
+  if (!Object.hasOwn(initialValues, property) || !object(input) ||
       ![reference, candidate].every(t => object(t) && t.schemaVersion === 1 &&
         Array.isArray(t.nodes) && Array.isArray(t.rules) && Array.isArray(t.errors) && !t.errors.length) ||
       candidate.resolvedStyleEvidenceVersion !== 2 || candidate.resolvedStyleSource !== 'core-style-inspection' ||
@@ -108,7 +113,7 @@ export function inspectOwnerInitialStyle(input, property, reference, candidate, 
     }
   };
   for (const n of rp) {
-    if (reference.styles[n.style]?.[property] !== ownerInitialValues[property])
+    if (reference.styles[n.style]?.[property] !== initialValues[property])
       issue('reference-noninitial-value', { node: n.key, value: reference.styles[n.style]?.[property] });
     declarations(n.inline, 'reference', n.key, 'inline');
     attribute(n.attributes?.style, 'reference', n.key);

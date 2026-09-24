@@ -3,7 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { inspectOwnerInitialStyle } from './owner-initial-style-survey.mjs';
+import { inspectOwnerInitialStyle, ownerInitialValues } from './owner-initial-style-survey.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const reportFile = 'docs/material-owner-initial-style-survey.json';
@@ -25,6 +25,43 @@ test('owner survey keeps raw declaration omission and captured ancestry distinct
   assert.equal(proof.computedCandidateVerified, false); assert.equal(proof.renderingEquivalent, false);
   assert.equal(proof.referencePath[0], 'frame'); assert.equal(proof.candidatePath[0], 'root');
   assert.equal(JSON.stringify(original), before);
+});
+
+test('appearance review is opt-in and preserves omission without claiming computed or rendering equivalence', () => {
+  const before = JSON.stringify(original);
+  assert.equal(Object.hasOwn(ownerInitialValues, 'appearance'), false);
+  assert.equal(inspect(original, 'appearance').disposition, 'requires-specific-review');
+  const proof = inspectOwnerInitialStyle(original.input, 'appearance', original.reference, original.candidate,
+    { reviewedAppearance: true });
+  assert.equal(proof.disposition, 'captured-default-versus-local-omission');
+  assert.equal(proof.referenceComputed, 'none');
+  assert.equal(proof.candidateLocalDeclaration, '<omitted>');
+  assert.equal(proof.computedCandidateVerified, false);
+  assert.equal(proof.renderingEquivalent, false);
+  assert.equal(JSON.stringify(original), before);
+});
+
+test('appearance review rejects vendor aliases, resets, explicit defaults and native auto', () => {
+  for (const property of ['appearance', '-webkit-appearance', 'WebkitAppearance', '-moz-appearance', 'MozAppearance', 'all']) {
+    for (const location of ['reference-inline', 'reference-attribute', 'candidate-inline', 'candidate-attribute', 'candidate-rule']) {
+      const value = structuredClone(original);
+      if (location === 'reference-inline') value.reference.nodes[0].inline[property] = { value: 'none', important: false };
+      if (location === 'reference-attribute') value.reference.nodes[0].attributes.style = `${property}: none`;
+      if (location === 'candidate-inline') value.candidate.nodes[1].authored.style = { [property]: 'none' };
+      if (location === 'candidate-attribute') value.candidate.nodes[1].authored.attributes = { style: `${property}: none` };
+      if (location === 'candidate-rule') value.candidate.rules.push({ selector: '#page', [property]: 'none' });
+      const proof = inspectOwnerInitialStyle(value.input, 'appearance', value.reference, value.candidate,
+        { reviewedAppearance: true });
+      assert.equal(proof.disposition, 'requires-specific-review', `${property}/${location}`);
+      assert.ok(proof.issues.some(i => ['explicit-relevant-request', 'inline-style-request'].includes(i.reason)));
+    }
+  }
+  const value = structuredClone(original);
+  value.input.reference.appearance = 'auto';
+  for (const style of value.reference.styles) style.appearance = 'auto';
+  const proof = inspectOwnerInitialStyle(value.input, 'appearance', value.reference, value.candidate,
+    { reviewedAppearance: true });
+  assert.ok(proof.issues.some(i => i.reason === 'reference-noninitial-value'));
 });
 
 test('owner survey rejects incomplete ancestry, competing requests, unknown selectors, motion and mismatched stages', () => {

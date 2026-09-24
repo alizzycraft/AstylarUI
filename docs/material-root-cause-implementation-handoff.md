@@ -30,24 +30,37 @@ or current browser acceptance. Final enforced gates remain required.
 
 ### Follow-up investigations outside the accepted classification batch
 
-Next shared-property batch candidate: all 54 unresolved `appearance` groups were
-joined to the original scalar capture with exact occurrence counts. Two groups
-are native range `input` auto values (156 observations); keep those separate.
-The other 52 are native `none` versus candidate omission (2,931 observations).
-No direct authored appearance declaration appears in their scalar author lists.
-This alone is not equivalence or sufficient classification.
-An in-memory trial extended only `ownerInitialValues` with `appearance: 'none'`
-and replayed the existing full-tree owner-initial survey, leaving disk sources
-and the running export unchanged. All 2,931 observations were accounted for;
-34 whole groups / 2,195 observations pass its existing conservative mapping,
-three-stage, ancestry and declaration checks. Eighteen groups / 736 observations
-remain blocked by motion requests, overlay ancestry or owner mapping. Next extend
-the existing machinery with focused vendor-alias/reset negative checks (including
-`-webkit-appearance`) and preserve those exclusions; do not build another survey
-framework or promote this trial into canonical acceptance. The permitted claim
-is computed-reference versus local-declaration observation stage, not a synthesized
-candidate default, authored-input waiver, or paint equivalence. Integrate it in a
-larger coherent follow-up batch after dialog/tab export reconciliation.
+Appearance declaration question answered (September 25): the existing owner
+survey now supports an explicit `reviewedAppearance` opt-in, without extending
+the historical property list or production attribution population. Vendor
+aliases (`-webkit-appearance`, `-moz-appearance`, camel-case forms), explicit
+defaults and `all` resets are rejected on captured ancestry; native `auto`
+remains excluded. Five focused tests pass in 2.23 seconds, including the
+historical 600-group membership check and 30 alias/location negative controls.
+Command: `node --test --test-name-pattern='appearance review|owner survey keeps|owner survey rejects|retains all raw' tests/material-parity/owner-initial-style-survey.spec.mjs`.
+
+The full 2,311-case inventory and authenticated original capture reproduce
+52 `none` groups / 2,931 observations with exact per-group occurrence counts:
+34 groups / 2,195 observations eligible, 18 / 736 still excluded for the same
+motion, ancestry or mapping reasons. No additional vendor declaration changed
+that population. The existing proposal store retains all positive and negative
+observations at `artifacts/material-parity/working-audit/proposals/2bcc18a4e94fb54c6389010ee25ce78d07b6d925bf493f791ddb04de994b5300.json`.
+This is a proposal, not canonical attribution or a dependency-complete reusable
+cache; replay from authenticated inputs when integrating. No renderer, fixture,
+canonical classification or historical report was changed.
+
+Next: integrate these eligible observations through the existing source-bound
+attribution machinery with exact group-membership validation in a coherent batch.
+The two native range `auto` groups (156 observations) remain separate. The survey
+source fingerprint has changed: the historical survey `--check` and canonical
+source receipts require explicit reconciliation at that batch boundary; neither
+is claimed current or passing after this extension. Do not regenerate the large
+canonical package solely for this opt-in diagnostic change.
+
+This replaces the earlier in-memory trial with an executable opt-in check.
+The permitted claim remains computed-reference versus local-declaration
+observation stage, not a synthesized candidate default, authored-input waiver,
+or paint equivalence.
 
 The retained overlay focus harness gap is now an executable, source-pinned proof:
 `node --test tests/material-parity/retained-overlay-focus.spec.mjs` passes 2/2
