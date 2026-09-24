@@ -10,7 +10,7 @@ The compact index preserves all 8,483 differences / 389,202 occurrences and
 132 source findings. Static/interaction inventory is 436/436 and 1,875/1,875;
 inventory completeness is not attribution or rendering acceptance.
 
-Current integration wait: the chip batch at `3a4b350` still requires cold export
+Current integration checkpoint: the chip batch at `3a4b350` still requires cold export
 and complete conservation. The first invocation mistakenly selected the default
 `latest-report.json`; it terminated after 226.339 seconds with missing-source
 binding errors. Its generated files are retained in
@@ -21,7 +21,22 @@ its compressed SHA-256 verified as
 The corrected invocation explicitly selects `current-ancestry-audit`, the
 normal/control-v3/supplemental line-box reports and supplemental ancestry root;
 its log is `chip-paint-export-3a4b350-bound-progress.log`. Do not accept the first
-run or restart the corrected run solely because a polling interval expires.
+run or restart a live run solely because a polling interval expires.
+The corrected run is now terminal: PID 7576 exhausted its 3 GiB heap during
+validation at approximately 1,454 seconds, before encoding/writing. Its log
+records 2,317,022,008 heap bytes at validation entry and about 3,024 MiB after
+the final unsuccessful collection. The canonical gzip still authenticates to
+the baseline hash above; no audit Node process remained when checked.
+The prior successful `position-followup-export-5c5d5e6-progress.log` recorded
+3,613,119,064 heap bytes after validation, already above this failed cap.
+The earlier ledger also records a completed export with a 4 GiB cap. Therefore
+retry with 4096 MiB, not 3072, using the same explicitly pinned inputs and a new
+`chip-paint-export-3a4b350-bound-4gb-progress.log`. At preflight the machine had
+6,969,848 KiB physical and 14,708,296 KiB virtual memory free. This corrects an
+undersized runtime limit; it does not establish the allocation/retention owner
+or prove that repeated full-capture parsing in the chip adapter caused the OOM.
+Do not change collector dependencies while that retry is live. Acceptance still
+requires terminal results, exact conservation and source-fingerprint checks.
 After conservation, keep the chip proposal regression tied to its preserved
 pre-classification evidence: its current working-index query expects ten
 unresolved rows and cannot be reused unchanged after refreshing that index.
