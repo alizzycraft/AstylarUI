@@ -9,6 +9,69 @@ import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlay
   overlaySurfacePredecessor } from './overlay-surface-review.mjs';
 import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows,
   validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications } from './overlay-surface-audit-source-binding.mjs';
+import { collectFullTreeInventory, collectControlTypographyEvidence,
+  collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
+
+test('seven dialog scalar groups reuse original typography proofs with matching owner and declaration stage', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const cases = JSON.parse(bytes).interactions.filter(e => e.family === 'dialog' &&
+    e.styleInputs.some(i => i.id === 'dialog-copy')).map(e => ({ ...e, kind: 'interaction' }));
+  assert.equal(cases.length, 32);
+  const inventory = collectFullTreeInventory(cases);
+  assert.deepEqual(inventory.errors, []);
+  const control = collectControlTypographyEvidence(cases, inventory);
+  const retained = collectRetainedTypographyEvidence(cases, inventory, control);
+  const compact = queryFindings('artifacts/material-parity/working-audit', 'dialog', overlaySurfacePredecessor);
+  const keys = cases.map(e => `interaction:dialog@${e.profile}/${e.viewport.id}/${e.state}`);
+  const join = (element, property, proofRows) => {
+    const scalar = compact.filter(r => r.evidence.section === 'discrepancies' && r.element === element && r.property === property);
+    assert.equal(scalar.length, 1); const row = scalar[0];
+    assert.equal(row.attribution, 'unresolved'); assert.equal(row.occurrences, 32);
+    assert.deepEqual(row.cases, keys.slice(0, 12));
+    assert.deepEqual(proofRows.map(r => r.case), keys);
+    for (const proof of proofRows) {
+      assert.equal(proof.element, element); assert.equal(proof.property, property);
+      assert.equal(proof.classification, 'application-plugin-authoring-defect');
+      assert.equal(proof.inputEquivalent, false);
+      assert.equal(proof.values.reference, row.reference);
+      const entry = inventory.cases.find(c => c.case === proof.case && c.side === 'astylar');
+      const nodes = inventory.variants[entry.variant].nodes.filter(n => n.authored?.id === element);
+      assert.equal(nodes.length, 1); const node = nodes[0];
+      const normal = inventory.styles[node.normalStyle].value, effective = inventory.styles[node.interactionStyle].value;
+      const referenceOwner = element === 'dialog-copy' ? proof.reviewEvidence.referenceLeaf : proof.reviewEvidence.referenceChain[1];
+      assert.equal(referenceOwner.attributes['data-parity-id'], element);
+      if (element === 'dialog-copy') assert.equal(proof.reviewEvidence.candidateChain[0].node, node.key);
+      else assert.ok(proof.reviewEvidence.structure.candidateActions.some(n => n.key === node.key));
+      if (!Object.hasOwn(row, 'astylar')) {
+        assert.ok(['fontFamily', 'letterSpacing'].includes(property));
+        for (const stage of [normal, effective]) assert.equal(Object.hasOwn(stage, property), false);
+        // Retained/default values are deliberately not substituted for omitted
+        // local scalar declarations. The original token omission proves intent.
+      } else {
+        assert.equal(proof.values.normal, row.astylar); assert.equal(proof.values.effective, row.astylar);
+        for (const stage of [normal, effective]) assert.equal(stage[property], property === 'color' ? '#49454f' : 'Roboto, Arial, sans-serif');
+      }
+    }
+  };
+  let groups = 0;
+  for (const [element, properties] of [['dialog-copy', ['fontFamily', 'letterSpacing', 'color']],
+    ['dialog-cancel', ['fontFamily', 'letterSpacing']], ['dialog-save', ['fontFamily', 'letterSpacing']]]) {
+    for (const property of properties) {
+      const attribution = element !== 'dialog-copy' ? 'reviewed-dialog-action-typography-input'
+        : property === 'color' ? 'reviewed-dialog-text-ink-input' : 'reviewed-dialog-text-metric-omission';
+      const rows = [...retained.differences, ...control.differences].filter(r => r.element === element && r.property === property && r.attribution === attribution);
+      join(element, property, rows); groups++;
+      for (const mutate of [r => r.pop(), r => r.reverse(), r => { r[0].values.reference = 'forged'; },
+        r => { r[0].element = 'dialog-title'; }]) {
+        const changed = structuredClone(rows); mutate(changed); assert.throws(() => join(element, property, changed));
+      }
+    }
+  }
+  assert.equal(groups, 7);
+  // Title label-to-owner correspondence is outside this join; no output,
+  // candidate computed default, or canonical classification is accepted here.
+});
 
 test('overlay surface proposal replays 13 complete predecessors and preserves unrelated rows', async () => {
   const review = await collectOverlaySurfaceReview();

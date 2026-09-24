@@ -132,6 +132,23 @@ An unnecessary repeated full-payload sample reader was stopped (PID 21748);
 compact joins answered this triage question without serially parsing the 2 GB
 payload three times. Do not restart that reader. Export PID 15056 was untouched.
 
+The seven-group dialog join now has focused executable proof in
+`modal-position-inspection.spec.mjs` (`seven dialog scalar groups`). It reuses
+`collectFullTreeInventory`, `collectControlTypographyEvidence` and
+`collectRetainedTypographyEvidence` on only the original 32 open dialog states:
+all original token/ink proofs replay, then exact reference owner, candidate node,
+scalar value and normal/effective declaration stages are joined. Missing local
+font/tracking declarations stay missing; retained defaults are not substituted.
+All seven groups / 224 observations pass; 28 negative joins reject lost/reordered
+cases, forged reference values and wrong owners. Command:
+`node --test --test-name-pattern="seven dialog scalar groups" tests/material-parity/modal-position-inspection.spec.mjs`
+passes in 2.188 seconds (3.355 seconds process elapsed). This proves reuse is
+applicable to these scalar authoring discrepancies, not typography output parity.
+Title-label/owner rows remain excluded. Keep the seven groups for a later coherent
+batch; do not restart the live overlay export or trigger a separate full rebuild
+for this test-only increment. The changed test is not an exporter source/input
+dependency; producer, binding, proposal and capture files remain untouched.
+
 Historical integration checkpoint: the chip batch at `3a4b350` required cold export
 and complete conservation. The first invocation mistakenly selected the default
 `latest-report.json`; it terminated after 226.339 seconds with missing-source
