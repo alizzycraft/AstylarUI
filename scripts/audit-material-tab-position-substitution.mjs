@@ -39,6 +39,49 @@ export function proveTabPositionSubstitution(r, a) {
   firstDivergence: 'authored border/indicator ownership before layout',
   rendererCauseProven: false, inputEquivalent: false, renderingEquivalent: false };
 }
+// Scope this comparison to control geometry. Flattening the native text owner
+// still leaves typography/structure differences; matching these three fields
+// does not establish equivalent inputs or equivalent rendering.
+export function proveTabControlStage(r, a, id) {
+  assert.ok(['tab-overview', 'tab-activity'].includes(id));
+  for (const tree of [r, a]) {
+    assert.deepEqual(tree.errors, []);
+    assert.equal(new Set(tree.nodes.map(n => n.key)).size, tree.nodes.length);
+  }
+  const label = one(r.nodes.filter(n => n.attributes?.id === id));
+  const candidate = one(a.nodes.filter(n => n.authored?.id === id));
+  assert.equal(label.type, 'span');
+  assert.equal(candidate.authored.type, 'button');
+  assert.equal(candidate.authored.role, 'tab');
+  const ancestry = [label.key];
+  let control = label;
+  while (control.attributes?.role !== 'tab') {
+    control = one(r.nodes.filter(n => n.key === control.parent));
+    assert.ok(!ancestry.includes(control.key), 'cyclic reference ancestry');
+    ancestry.push(control.key);
+  }
+  assert.ok(ancestry.length > 1);
+  const fields = ['height', 'boxSizing', 'flexShrink'];
+  const pick = style => Object.fromEntries(fields.map(key => {
+    assert.equal(typeof style[key], 'string'); return [key, style[key]];
+  }));
+  const labelValues = pick(r.styles[label.style]);
+  const controlValues = pick(r.styles[control.style]);
+  assert.deepEqual(labelValues, { height: '14px', boxSizing: 'content-box', flexShrink: '1' });
+  assert.ok(['32px', '40px', '48px'].includes(controlValues.height));
+  assert.equal(controlValues.boxSizing, 'border-box');
+  assert.equal(controlValues.flexShrink, '0');
+  const candidateStages = Object.fromEntries(['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']
+    .map(stage => [stage, pick(candidate[stage])]));
+  for (const values of Object.values(candidateStages)) assert.deepEqual(values, controlValues);
+  return { element: id, referenceLabel: label.key, referenceControl: control.key,
+    candidateControl: candidate.key, ancestry, labelValues, controlValues, candidateStages,
+    attributableProperties: fields, classification: 'harness-instrumentation-defect',
+    sourceFinding: 'fixture-tab-label-typography-flattened',
+    firstDivergence: 'measurement IDs identify native text labels versus candidate controls',
+    inputEquivalent: false, rendererCauseProven: false, renderingEquivalent: false };
+}
+
 export function collectTabPositionSubstitution() {
   const file = 'docs/material-position-input-population.json', bytes = readFileSync(file);
   assert.equal(hash(bytes), '71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff');

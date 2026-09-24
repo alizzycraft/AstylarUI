@@ -27,6 +27,17 @@ The focused ID-less-row, raw-conservation and mutation checks pass in 5.51 secon
 This proof is not wired into production aggregation yet; canonical counts remain
 1,560 unresolved. Batch integration/export with the tab proof, rather than
 exporting for nine rows alone. Do not repeat the completed surveys below.
+Dialog proof is committed/pushed as `5d2bbcd`; a fresh focused replay passes
+in 5.20 seconds. Tab control-stage proof now covers all 140 owners across 70
+authenticated retained cases: height, box-sizing and shrink agree with the
+native role=tab ancestor in all 420 candidate stages. The measurement IDs name
+native text labels but candidate controls. The existing tab suite passes all
+three tests in 0.91 seconds, including changed-stage and ancestry negative cases.
+This narrowly resolves the box-owner question, not typography or rendering
+equivalence. Next bind the ten scalar groups / 420 occurrences to this proof
+using existing review infrastructure, leaving line-height and padding differences
+separate, then integrate with dialog flow. Both additions require source/export
+reconciliation at that batch milestone; neither changes canonical counts yet.
 
 ### Prior export recovery and pending investigation evidence
 
@@ -45,10 +56,9 @@ Focused corner regression passes in 4.39 seconds after failing on the old join;
 all nine canonical-conservation tests pass in 18.06 seconds. Canonical files
 were restored to accepted `1cd2b7e`: 1,578 unresolved scalar
 groups. No failed snapshot was imported. Pipeline correction is committed/pushed
-as `e857030`. Its corrected cold export is live in terminal session 20096,
-Node PID 1340, logging to `sheet-action-e857030-progress.log`; retain that handle
-and reconcile its completed output before integration. Investigation priority
-after reconciliation: dialog text flow, remaining sheet inputs, tabs, then chips.
+as `e857030`. Its corrected cold export subsequently completed and was reconciled
+and accepted in `c53bd80`, as recorded above; session 20096 / PID 1340 are historical,
+not live handles. The log remains `sheet-action-e857030-progress.log`.
 
 Next bounded question: do dialog title/content layout differences originate in
 authored inputs or renderer placement? Read-only replay authenticated both input
