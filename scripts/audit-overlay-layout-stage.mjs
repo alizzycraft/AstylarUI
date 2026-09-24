@@ -13,6 +13,8 @@ import { PNG } from 'pngjs';
 const root = process.cwd();
 const output = path.resolve(process.argv[2] ?? '');
 const dpr = Number(process.argv[3] ?? 1);
+const spec = process.argv[5] ?? 'src/parity/overlay-layout-stage.audit.spec.ts';
+assert.ok(['src/parity/overlay-layout-stage.audit.spec.ts', 'src/parity/rounded-radius.audit.spec.ts'].includes(spec));
 assert.ok(dpr === 1 || dpr === 2, 'DPR must be 1 or 2');
 assert.ok(process.argv[2] && !existsSync(output), 'Supply a new evidence directory');
 const consumer = createRequire(path.join(root, 'examples/material-showcase/package.json'));
@@ -39,12 +41,13 @@ const built = await consumer('esbuild').build({ absWorkingDir: root,
     import {getTestBed} from '@angular/core/testing';
     import {BrowserTestingModule,platformBrowserTesting} from '@angular/platform-browser/testing';
     getTestBed().initTestEnvironment(BrowserTestingModule,platformBrowserTesting());
-    await import('./src/parity/overlay-layout-stage.audit.spec.ts');
+    await import('./${spec}');
     const results=[];
     jasmine.getEnv().addReporter({specDone:r=>results.push({description:r.fullName,status:r.status,failures:r.failedExpectations.map(e=>e.message)}),jasmineDone:r=>window.auditDone={status:r.overallStatus,results}});
     jasmine.getEnv().configure({random:false}); jasmine.getEnv().execute();`, resolveDir: root },
   bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true,
   plugins: [{ name: 'installed-audit-package', setup(build) {
+    build.onResolve({ filter: /^astylarui$/ }, () => ({ path: consumer.resolve('astylarui') }));
     build.onResolve({ filter: /^\.\.\/(lib\/(index|astylar)|app\/services\/(css-layout-geometry|dom\/elements\/flex.service))$/ }, args => ({ path: aliases.get(args.path) }));
     build.onResolve({ filter: /^(@angular\/|@babylonjs\/core)/ }, args => ({ path: consumer.resolve(args.path) }));
   } }],
@@ -78,7 +81,8 @@ try {
   const observations = [], errors = [];
   const screenshots = [];
   await page.exposeFunction('auditCapture', async ({ composition, width, height }) => {
-    assert.ok(['fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only'].includes(composition));
+    const radiusDiagnostic = /^radius-(div|button)-(24|36|9999)$/.test(composition);
+    assert.ok(radiusDiagnostic || ['fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only'].includes(composition));
     const captures = {};
     const rasters = {};
     for (const [side, selector] of [['reference', 'iframe'], ['astylar', 'canvas']]) {
@@ -102,6 +106,15 @@ try {
     }
     const paint = { referencePanePixels, candidatePanePixels, paneMaskDifferences, allPixelDifferences };
     screenshots.push({ composition, captures, paint });
+    if (radiusDiagnostic) {
+      assert.ok(referencePanePixels > 20000 * dpr * dpr, 'Native capsule must be present');
+      assert.ok(candidatePanePixels > 0, 'Candidate capsule must be present');
+      // Bounded shape diagnostic, not full antialiasing equivalence. Preserve
+      // failing pixels rather than allowing a grossly under-sampled outline.
+      assert.ok(paneMaskDifferences / referencePanePixels < .01,
+        `Rounded shape solid-mask disagreement exceeds 1%: ${JSON.stringify(paint)}`);
+      return;
+    }
     // Fixed pane extends 20px beyond viewport; absolute pane extends 20px
     // beyond its clipping host. Both leave exactly 28px of the 48px pane.
     if (!composition.startsWith('rounded-')) {

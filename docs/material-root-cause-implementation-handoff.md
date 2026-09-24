@@ -2,6 +2,44 @@
 
 ## Current audit checkpoint — September 24
 
+Public-package/browser proof now confirms the oversized-radius failure on both
+`div` and `button`. New isolated diagnostic
+`src/parity/rounded-radius.audit.spec.ts` imports only the `astylarui` package root
+for authoring and renders equal 480x48px, 24/36/9999px-radius inputs beside native
+HTML. The existing package runner accepts this spec as optional fifth argument;
+its old default and assertions remain unchanged. No canonical fixture edits.
+
+Fresh `ngc -p tsconfig.lib.json --outDir artifacts/material-parity/radius-source-build-f95a265`
+passes, and the runner verifies all 104 emitted JS files against both installed
+showcase package and local dist. Runs retained at
+`artifacts/material-parity/radius-public-f95a265-dpr1` and `-dpr2` contain six
+cases each, four passes and two expected diagnostic failures, zero page errors.
+Chrome 153.0.8010.53 / Angular 20.3.31 / Babylon 8.56.2 / AstylarUI 0.2.0.
+At both DPRs, 9999px produces a square-ended four-vertex rectangle versus a native
+capsule. Solid shape-mask differences are 588 pixels at DPR1 and 2,136 at DPR2;
+24/36px controls differ by only 44/36 and 40/20 pixels respectively. The observed
+68/44/4 vertex counts agree with the source-derived kernel proof. Native and
+candidate surface backgrounds differ (white/default red), so whole-image pixel
+differences are explicitly not a parity metric here; the diagnostic compares
+only the opaque #302d32 shape mask. The 1% mask criterion is a local shape
+diagnostic, not complete antialiasing equivalence. Failure screenshots were viewed.
+
+Reproduce with `node scripts/audit-overlay-layout-stage.mjs <new-output> <1-or-2>
+artifacts/material-parity/radius-source-build-f95a265 src/parity/rounded-radius.audit.spec.ts`.
+Standalone TypeScript check passes with `--noEmit --module preserve
+--moduleResolution bundler --target es2022 --skipLibCheck --experimentalDecorators
+--types jasmine`. Renderer remains unchanged. This demonstrates the current
+public rendering defect, not historical author motivation or original-bundle
+behavior. Next: include it in the existing machine-readable root-cause inventory
+and batch reconciliation; preserve the sixteen unclassified historical radius
+groups until their input-contract classification is independently justified.
+
+Angular application build required by the Angular testing workflow is running:
+session 17662, Node PID 13708, command `node node_modules/@angular/cli/bin/ng.js
+build --output-path artifacts/material-parity/radius-app-build-f95a265`.
+Last check confirmed the process live at Building; no build success is claimed.
+Poll this same handle before restarting or claiming completion.
+
 New owning-kernel evidence: current `BabylonMeshService.createPolygonVertexData`
 routes rounded rectangles to `createRoundedRectangleVertexData`; round-polygon
 normalizes requested 24/36/9999 radii to 24 for a 480x48 box, but the renderer
