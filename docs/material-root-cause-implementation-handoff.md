@@ -121,6 +121,19 @@ attribution for five whole groups / 232 observations (the three above plus both
 tab labels). Chips and tab panel remain excluded. Do not modify the active export
 to include this follow-up batch.
 
+Next shared color investigation (read-only census during export): the accepted
+compact index has 96 unresolved color groups. Of these, 68 / 1,642 observations
+are the light/dark on-surface color versus local omission. Original scalar lookup
+finds 1,794 matching occurrences: the extra 152 belong to 24 already-reviewed
+static `reviewed-stage-mismatch` siblings, confirmed in the same compact index.
+Preserve that partition rather than reclassifying all raw matches. Six groups
+(icon, paginator host and expansion title, each light/dark) contain explicit
+reference variable-based color declarations, so matching computed theme colors
+do not establish absence of authored color. The remaining groups still need
+complete ancestor/request checks. Reuse root-color ancestry evidence and existing
+membership/precedence validation; do not synthesize candidate inherited colors or
+infer parity from equal visible colors. No color classification changed.
+
 The retained overlay focus harness gap is now an executable, source-pinned proof:
 `node --test tests/material-parity/retained-overlay-focus.spec.mjs` passes 2/2
 in 2.92 seconds. The original capture SHA `b07ef154...` pins the harness's raw
