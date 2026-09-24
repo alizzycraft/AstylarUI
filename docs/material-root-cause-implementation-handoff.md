@@ -129,7 +129,12 @@ the verified compact index:
    `aa0a89be787be59ddb418ec5eb9ca82920d7b8b7cdc9e6ce4292bec36432ce24`.
    Each full diagnostic run has four passes/two retained fractional-projection
    failures, exit 1 and zero page errors. Modal inspection passes 5/5 (5.55s),
-   and the diagnostic TypeScript check passes. Canonical classifications/counts
+   The initial TypeScript check caught widened string inference in
+   the conditional diagnostic styles; preserve the constrained literal types
+   (`position`, `overflow`, `boxSizing`) with `as const`. The corrected
+   `tsc -p tsconfig.overlay-audit.json --noEmit` passes, exit 0 (5.23s).
+   This is a test-authoring correction and does not change browser input values.
+   Canonical classifications/counts
    are unchanged; this is a bounded authoring/sizing proof, not acceptance.
    Next investigate the remaining modal paint/clipping or connected-tooltip
    placement contract; do not repeat these settled auto-sizing cases unchanged.

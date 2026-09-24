@@ -39,10 +39,10 @@ describe('overlay CSS layout versus projection audit', () => {
             ...(sheet ? [
               // Geometry-only reduction of captured Material sheet/list rules:
               // no copied computed panel width/height or candidate compensation.
-              { selector: '#pane', position: 'relative', minWidth: width > 960 ? '512px' : '100vw',
+              { selector: '#pane', position: 'relative' as const, minWidth: width > 960 ? '512px' : '100vw',
                 ...(width > 960 ? { maxWidth: 'calc(100vw - 256px)' } : {}),
-                maxHeight: '80vh', padding: '8px 16px', overflow: 'auto', background: '#302d32' },
-              { selector: '#list', boxSizing: 'content-box', padding: '8px 0' },
+                maxHeight: '80vh', padding: '8px 16px', overflow: 'auto' as const, background: '#302d32' },
+              { selector: '#list', boxSizing: 'content-box' as const, padding: '8px 0' },
               { selector: '#item-a, #item-b', height: '48px' },
             ] : [{ selector: '#pane', width: '120px', height: '48px', marginBottom: '8px', background: '#302d32' }]),
           ],
