@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 24
 
+Corner investigation now has a focused semantic proof in the existing modal
+module: `proveBottomSheetActionCorners` binds all 50 original action owners,
+their ordered native token requests (including preserved empty CSSOM expansions),
+candidate radius requests and three resolved stages. All 24 unresolved corner
+groups / 200 occurrences are joined to their original cases. Only the eight
+contrast groups / 48 occurrences are proposed as authoring substitutions by
+`applyBottomSheetContrastCorners` and its independent original-row validator:
+18px is not full-round on an equal 48px-high wide box. The sixteen 24px/36px
+groups remain unchanged because CSS radius normalization can make their shapes
+equivalent; candidate used-box and paint equivalence are still unproved.
+The proof makes no renderer defect or measured candidate geometry claim.
+
+Focused command: `node --test --test-name-pattern="bottom-sheet action (corners|layout)"
+tests/material-parity/modal-position-inspection.spec.mjs`; both tests pass in
+8.39 seconds. Negative controls cover token/declaration changes, competing state
+and unknown-selector requests, stage overrides, missing cases, duplicate/deleted
+classified rows and fabricated measured-layout claims. Reuses the existing modal
+replay helper; no new survey/report framework, fixture change or browser capture.
+Next: integrate the eight-group replay into the producer guards, then resolve
+remaining radius-equivalence evidence in the adjacent sheet action sizing batch.
+Canonical count stays 1,578; these eight groups and the prior ten action-layout
+groups await batched export/reconciliation. Modal proof/test fingerprints changed.
+
 Action-layout producer wiring is committed and pushed as `55d7bcd`.
 Read-only corner-token inspection now covers both actions in all 25 original
 sheet states (50 owners), using the authenticated modal capture and existing

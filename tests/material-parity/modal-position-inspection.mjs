@@ -380,6 +380,53 @@ export function proveBottomSheetActionLayout(entry, r, a, element) {
     limitation: 'Native list-item requests are not authored on candidate value buttons. Missing candidate fields stay omitted; no browser defaults, core layout failure or equivalent child rendering is inferred.' };
 }
 
+export function proveBottomSheetActionCorners(entry, r, a, element) {
+  assert.ok(['light', 'dark', 'contrast', 'custom'].includes(entry.profile));
+  const layout = proveBottomSheetActionLayout(entry, r, a, element);
+  const reference = one(r.nodes.filter(n => n.key === layout.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === layout.astylarNode));
+  const affects = key => /^(border.*radius|all|animation.*|transition.*)$/.test(key.replaceAll('-', '').toLowerCase());
+  const rules = reference.rules.map(i => r.rules[i]).filter(rule => rule.active);
+  const tokens = [
+    ['.mdc-list-item', 'var(--mat-list-list-item-container-shape, var(--mat-sys-corner-none))'],
+    ['.mat-mdc-nav-list .mat-mdc-list-item', 'var(--mat-list-active-indicator-shape, var(--mat-sys-corner-full))'],
+  ];
+  const cssCorners = ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-right-radius', 'border-bottom-left-radius'];
+  const corners = ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius'];
+  const referenceRequests = rules.flatMap(rule => Object.entries(rule.declarations).filter(([key]) => affects(key))
+    .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value })));
+  assert.deepEqual(referenceRequests, tokens.flatMap(([selector]) => cssCorners.map(key =>
+    ({ selector, conditions: [], key, value: '', important: false }))));
+  for (const [selector, token] of tokens) {
+    const rule = one(rules.filter(rule => rule.selector === selector));
+    assert.deepEqual(rule.cssText.split(';').map(s => s.trim()).filter(s => /^border.*radius\s*:/.test(s)),
+      [`border-radius: ${token}`]);
+  }
+  const radius = ({ contrast: '18px', custom: '36px' }[entry.profile] ?? '24px');
+  const candidateRequests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key)).map(([key, value]) =>
+      ({ selector: rule.selector, ...(rule.mediaMaxWidth === undefined ? {} : { mediaMaxWidth: rule.mediaMaxWidth }), key, value })));
+  assert.deepEqual(candidateRequests, [{ selector: '.bottom-sheet-option', key: 'borderRadius', value: radius }]);
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(candidate[stage].borderRadius, radius);
+    assert.equal(candidate[stage].height, '48px');
+    for (const key of corners) assert.equal(Object.hasOwn(candidate[stage], key), false);
+  }
+  const native = r.styles[reference.style];
+  assert.equal(native.height, '48px');
+  assert.equal(native.width, entry.viewport.id === 'comparison-pane-dpr1' ? '868px' : '480px');
+  for (const key of corners) assert.equal(native[key], '9999px');
+  return { case: layout.case, element, referenceNode: reference.key, astylarNode: candidate.key,
+    referenceRequests, radiusTokensFromCssText: tokens, candidateRequests,
+    reference: Object.fromEntries(corners.map(key => [key, '9999px'])),
+    candidate: Object.fromEntries(corners.map(key => [key, radius])),
+    candidateUsedLayoutMeasured: false, renderingEquivalent: null,
+    // This is a conditional CSS geometry statement, not a candidate layout measurement.
+    sameShapeOnEqual48pxHighWideBoxes: radius !== '18px',
+    attributableProperties: radius === '18px' ? corners : [],
+    limitation: 'Full-round token versus scaled literal. Only contrast has an inequivalent corner request on equal 48px-high wide boxes. The 24px/36px cases require used-box and paint proof before equivalence is claimed; empty native CSSOM expansions are preserved, not interpreted as defaults.' };
+}
+
 export function proveBottomSheetPanelPaint(entry, r, a) {
   const { mapping } = proveModalPositionInspection(entry, r, a, 'bottom-sheet-panel');
   assert.equal(entry.family, 'bottom-sheet');
@@ -477,6 +524,33 @@ export function applyBottomSheetActionLayout(rows, cases, inventory, canonicalSt
       owner: 'showcase bottom-sheet list-item structure and layout authoring',
       justification: 'Native anchor list items explicitly request flex, relative positioning, hidden overflow and border-box sizing and contain span/div wrappers. Candidate childless value buttons omit those authored requests and retain block display. Complete original owner populations and all captured candidate stages establish unequal inputs, not defaults, measured candidate layout, equivalent semantics or a renderer failure.',
     }), rows);
+}
+
+export function applyBottomSheetContrastCorners(rows, cases, inventory, canonicalStyle) {
+  // The other radii may be technically equivalent once normalized. Do not
+  // classify them as authoring defects solely because their scalar values differ.
+  const selected = rows.filter(row => row.family === 'bottom-sheet' && row.astylar === '18px' &&
+    row.attribution === 'unresolved' && ['bottom-sheet-copy', 'bottom-sheet-dismiss'].includes(row.element) &&
+    ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius'].includes(row.property));
+  const reviewed = ['bottom-sheet-copy', 'bottom-sheet-dismiss'].reduce((values, element) =>
+    applyModalBoxReview(values, cases, inventory, canonicalStyle, {
+      family: 'bottom-sheet', element,
+      properties: ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius'],
+      prove: (entry, r, a) => proveBottomSheetActionCorners(entry, r, a, element),
+      attribution: 'reviewed-bottom-sheet-contrast-corner-substitution',
+      owner: 'showcase bottom-sheet action shape-token authoring',
+      justification: 'Native actions request the full-round component token and compute 9999px corners at 48px height; contrast candidates author and retain 18px corners at that requested height. Even on equal 48px-high wide boxes these corner requests are not equivalent. Original owner requests and candidate stages establish input substitution, not measured candidate geometry or a renderer paint defect. Other profile radii are deliberately not classified by this proof.',
+    }), selected);
+  const byId = new Map(reviewed.map(row => [row.id, row]));
+  return rows.map(row => byId.get(row.id) ?? row);
+}
+
+export function validateBottomSheetContrastCorners(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-bottom-sheet-contrast-corner-substitution');
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyBottomSheetContrastCorners(originalRows, cases, inventory, canonicalStyle))));
+    return [];
+  } catch (error) { return [`bottom-sheet contrast corners do not replay from original owner inputs: ${error.message}`]; }
 }
 
 export function validateBottomSheetActionLayout(rows, originalRows, cases, inventory, canonicalStyle) {

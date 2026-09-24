@@ -12,7 +12,8 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints,
   applyBottomSheetPanelFlow, validateBottomSheetPanelFlow, proveBottomSheetPanelPaint,
   applyBottomSheetPanelPaint, validateBottomSheetPanelPaint, proveBottomSheetActionLayout,
-  applyBottomSheetActionLayout, validateBottomSheetActionLayout } from './modal-position-inspection.mjs';
+  applyBottomSheetActionLayout, validateBottomSheetActionLayout, proveBottomSheetActionCorners,
+  applyBottomSheetContrastCorners, validateBottomSheetContrastCorners } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
@@ -28,6 +29,76 @@ import { collectFullTreeInventory, collectControlTypographyEvidence,
 const modalSizingPredecessor = Object.freeze({
   generation: '064777d79c6b85219285c85b97fb38edac27d069c8ddec67e0ae2da5b61099e5',
   indexSha256: '7e3141128b5728007cf478b5d37b7820ac6a9cd56d34e0242d4f10842ce4e745',
+});
+
+test('bottom-sheet action corners distinguish full-round normalization from contrast input substitution', () => {
+  const inspection = collectModalPositionInspection();
+  const captured = JSON.parse(readFileSync(inspection.capture.file));
+  const cases = captured.interactions.filter(c => c.family === 'bottom-sheet' &&
+    c.styleInputs.some(i => i.id === 'bottom-sheet-panel')).map(c => ({ ...c, kind: 'interaction' }));
+  assert.equal(cases.length, 25);
+  const inventory = collectFullTreeInventory(cases);
+  const snapshot = { generation: 'b05e2adcec67d05f5371246d6aa527df4f4528cfb75a2fcc5ed027da86ab9b9d',
+    indexSha256: '7623877cb5b0b5e4fec5edb62f8f8cd433e7e616a68aa36e8c7ff5cf59a2c9c7' };
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', snapshot).filter(r =>
+    r.evidence.section === 'discrepancies' && r.attribution === 'unresolved' &&
+    ['bottom-sheet-copy', 'bottom-sheet-dismiss'].includes(r.element) && /Radius$/.test(r.property));
+  assert.equal(rows.length, 24);
+  const matched = new Map(); let first, owners = 0, contrastOwners = 0;
+  for (const entry of cases) {
+    const key = `interaction:${entry.family}@${entry.profile}/${entry.viewport.id}/${entry.state}`;
+    const trees = modalInventoryTrees(inventory, key);
+    for (const element of ['bottom-sheet-copy', 'bottom-sheet-dismiss']) {
+      const proof = proveBottomSheetActionCorners(entry, ...trees, element); owners++;
+      first ??= { entry, trees, element, proof };
+      assert.equal(proof.candidateUsedLayoutMeasured, false);
+      assert.equal(proof.renderingEquivalent, null);
+      assert.equal(proof.sameShapeOnEqual48pxHighWideBoxes, entry.profile !== 'contrast');
+      assert.equal(proof.attributableProperties.length, entry.profile === 'contrast' ? 4 : 0);
+      if (entry.profile === 'contrast') contrastOwners++;
+      for (const property of Object.keys(proof.reference)) {
+        const matches = rows.filter(r => r.element === element && r.property === property &&
+          r.reference === proof.reference[property] && r.astylar === proof.candidate[property]);
+        assert.equal(matches.length, 1);
+        const keys = matched.get(matches[0].id) ?? []; keys.push(key); matched.set(matches[0].id, keys);
+      }
+    }
+  }
+  assert.equal(owners, 50); assert.equal(contrastOwners, 12); assert.equal(matched.size, 24);
+  for (const row of rows) {
+    const keys = matched.get(row.id);
+    assert.equal(row.occurrences, keys.length); assert.equal(new Set(keys).size, keys.length);
+    assert.deepEqual(row.cases, keys.slice(0, 12));
+  }
+  const normalize = bindPreciseAuditNormalization(), original = structuredClone(rows);
+  const applied = applyBottomSheetContrastCorners(rows, cases, inventory, normalize);
+  assert.deepEqual(rows, original);
+  assert.equal(applied.filter(r => r.attribution === 'reviewed-bottom-sheet-contrast-corner-substitution').length, 8);
+  assert.deepEqual(applied.filter(r => r.astylar !== '18px'), rows.filter(r => r.astylar !== '18px'));
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  const validate = values => validateBottomSheetContrastCorners(values, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  for (const mutate of [
+    values => { values.splice(values.findIndex(r => r.astylar === '18px'), 1); },
+    values => { values.push(structuredClone(values.find(r => r.astylar === '18px'))); },
+    values => { values.find(r => r.astylar === '18px').reference = 'forged'; },
+    values => { values.find(r => r.astylar === '18px').reviewEvidence.observations[0].candidateUsedLayoutMeasured = true; },
+  ]) { const altered = structuredClone(applied); mutate(altered); assert.equal(validate(altered).length, 1); }
+  assert.throws(() => applyBottomSheetContrastCorners(rows, cases.filter(c => c.profile !== 'contrast'), inventory, normalize));
+  for (const mutate of [
+    (r, a) => { a.rules.find(rule => rule.selector === '.bottom-sheet-option').borderRadius = '9999px'; },
+    (r, a) => { a.rules.push({ selector: '.bottom-sheet-option:focus', borderRadius: '18px' }); },
+    (r, a) => { a.rules.push({ selector: ':unknown', all: 'initial' }); },
+    (r, a) => { a.nodes.find(n => n.key === first.proof.astylarNode).normalResolvedStyle.borderTopLeftRadius = '24px'; },
+    (r, a) => { a.nodes.find(n => n.key === first.proof.astylarNode).interactionResolvedStyle.borderRadius = '18px'; },
+    (r, a) => { a.nodes.find(n => n.key === first.proof.astylarNode).resolvedStyle.height = '36px'; },
+    r => { r.rules.find(rule => rule.selector === '.mat-mdc-nav-list .mat-mdc-list-item').cssText = 'border-radius: 18px;'; },
+    r => { r.rules.find(rule => rule.selector === '.mdc-list-item').declarations['border-top-left-radius'].value = '9999px'; },
+    r => { r.styles[r.nodes.find(n => n.key === first.proof.referenceNode).style].borderTopLeftRadius = '18px'; },
+  ]) { const altered = structuredClone(first.trees); mutate(...altered);
+    assert.throws(() => proveBottomSheetActionCorners(first.entry, ...altered, first.element)); }
 });
 
 test('bottom-sheet action layout binds fifty list-item substitutions without inventing candidate defaults', () => {
