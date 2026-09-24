@@ -100,6 +100,30 @@ retained external-ancestor evidence next to distinguish actual token ancestry
 from a capture limitation. Do not label this a renderer color/radius defect or
 claim that the two sides received the same dark/custom theme inputs.
 
+Retained supplemental ancestry is applicable and authenticated by the existing
+`collectOverlayAncestorContextSurvey`: all 48 static case records / 96 samples,
+capture source hashes and frozen served assets replay successfully. Its 12
+bottom-sheet real-click samples cover four profiles at desktop/tablet/mobile.
+Overlay ancestry is div/body/html, outside the frame. All three ancestors retain
+`--mat-sys-surface-container-low:light-dark(#f8f2f6, #1d1b1e)`, color-scheme:normal,
+and the general extra-large corner token 28px. Contrast/custom frame tokens alone
+are 21px/42px. Component-specific sheet shape/background tokens are not enumerated
+in these computed snapshots; that absence is preserved rather than assigned a
+guessed value. Five ancestry tests pass in 1.46 seconds, including stale-source,
+changed-runtime, missing-coverage and altered-ancestry rejection. No recapture.
+
+Keep the two input mismatches distinct: native sheet radius references its own
+component shape token with literal 28px fallback, not the general corner token
+scaled by candidate authoring. Native retained surface token's dark branch is
+#1d1b1e, whereas candidate directly authors #211f26. Moving reference theme scope
+alone therefore would not make these requests equivalent. This supports a
+benchmark authoring/theme-contract investigation, not a renderer paint defect.
+Supplemental activation is not original interaction replay; do not generalize its
+complete ancestry to every original DPR/state. Next attribution should bind the
+original five paint groups to their explicit differing requests while retaining
+this supplemental-only provenance limit and the distinction between component
+tokens, general tokens and actual scheme selection. Canonical count is unchanged.
+
 Current canonical milestone: modal sizing export from `01fab20`, independently
 reconciled against `ed35a9c`: **1,595 unresolved groups**, 8,483 scalar groups /
 389,202 occurrences, 133 source findings. Coverage remains 436/436 static and

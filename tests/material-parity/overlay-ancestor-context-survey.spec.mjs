@@ -32,6 +32,38 @@ test('survey reopens all 48 original records, runtime assets and 96 ancestor sam
   assert.equal(report.renderingEquivalent, false);
 });
 
+test('bottom-sheet supplemental ancestors retain base theme outside the profile frame', () => {
+  const report = collectOverlayAncestorContextSurvey(file);
+  assert.equal(report.cases, 48); assert.equal(report.originalOverlayCauseEstablished, false);
+  const profiles = new Map();
+  for (const item of baseline.results) {
+    const bytes = readFileSync(item.file); assert.equal(hash(bytes), item.sha256);
+    const result = JSON.parse(bytes);
+    if (result.family !== 'bottom-sheet') continue;
+    assert.equal(result.samples[1].state, 'supplemental-real-click');
+    const context = result.samples[1].context;
+    const overlay = context.roots.find(r => r.captureKey === 'overlay:0');
+    const frame = context.nodes.find(n => n.key === context.roots.find(r => r.captureKey === 'frame').node);
+    const chain = overlay.ancestry.map(key => context.nodes.find(n => n.key === key));
+    assert.deepEqual(chain.map(n => n.type), ['div', 'body', 'html']);
+    assert.ok(!overlay.ancestry.includes(frame.key));
+    for (const node of chain) {
+      assert.equal(node.computed['--mat-sys-surface-container-low'], 'light-dark(#f8f2f6, #1d1b1e)');
+      assert.equal(node.computed['color-scheme'], 'normal');
+      assert.equal(node.computed['--mat-sys-corner-extra-large'], '28px');
+      // Absence in enumeration is not substituted with a guessed token value.
+      assert.equal(Object.hasOwn(node.computed, '--mat-bottom-sheet-container-shape'), false);
+      assert.equal(Object.hasOwn(node.computed, '--mat-bottom-sheet-container-background-color'), false);
+    }
+    assert.equal(frame.computed['--mat-sys-corner-extra-large'],
+      ({ contrast: '21px', custom: '42px' }[result.profile] ?? '28px'));
+    if (!profiles.has(result.profile)) profiles.set(result.profile, []);
+    profiles.get(result.profile).push(result.viewport.id);
+  }
+  assert.deepEqual([...profiles.keys()].sort(), ['contrast', 'custom', 'dark', 'light']);
+  for (const viewports of profiles.values()) assert.deepEqual(viewports.sort(), ['desktop', 'mobile', 'tablet']);
+});
+
 test('survey rejects missing, duplicated and substituted state coverage', () => {
   assert.throws(() => probe(({ raw }) => { raw.results.pop(); raw.originalStaticCases--; raw.samples -= 2; }));
   assert.throws(() => probe(({ raw }) => { raw.results[1] = structuredClone(raw.results[0]); }));
