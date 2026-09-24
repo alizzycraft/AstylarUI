@@ -2,6 +2,44 @@
 
 ## Current audit checkpoint — September 24
 
+The sheet-panel cold export at `7e71c96` is independently reconciled against
+accepted `9b0ec36`: **1,578 unresolved groups**, 8,483 scalar groups / 389,202
+occurrences, 133 source findings and 39,904 control differences. Coverage remains
+436/436 static and 1875/1875 interaction. The export took 1,867.168 seconds;
+exit 1 reports only the still-unattributed groups, not full audit acceptance.
+Its evidence session reverified 1,205 files / 89,149,474 bytes, with two collectors,
+10 memory hits, no disk hits and zero invalidations. Export session 62436 is
+terminal; do not restart it. Log: `artifacts/material-parity/sheet-panel-7e71c96-progress.log`.
+
+Independent `--sheet-panel` conservation passed: exactly 17 groups / 279
+occurrences changed, 8,466 complete rows are identical, raw scalar inputs remain
+unchanged, and all control evidence is conserved except 48 producer-hash receipts.
+Section reconciliation authenticates all 79 sections: 72 unchanged, seven changed,
+none added or removed. All 452 ordered source fingerprints match disk; seven
+expected audit-source hashes changed, with no source inventory changes. All 133
+source findings are byte-structurally unchanged. The 54 metadata leaf changes
+are three counts, three binding receipts and 48 line-box producer hashes. The
+motion-review hash was independently reconstructed using only the producer
+fingerprint change: `67373385b1149e123598660da59312e40f0fcf6317f8738ba04773549669e187`.
+Evidence: `artifacts/material-parity/sheet-panel-{conservation,sections,metadata-sources,receipts}-7e71c96.json`.
+Canonical compressed SHA: `b05e2adcec67d05f5371246d6aa527df4f4528cfb75a2fcc5ed027da86ab9b9d`;
+decoded SHA: `b1a7073b5c52fe2453580704afa678c1994c9201e01334031474148836c94ccc`.
+Compact import and verification pass with the same counts; shards occupy
+69,742,490 bytes. The current generation is the compressed SHA above and its
+index SHA is `7623877cb5b0b5e4fec5edb62f8f8cd433e7e616a68aa36e8c7ff5cf59a2c9c7`.
+
+Next bounded questions: correct the compact-query family suffix collision
+(`list` also returns `grid-list`; exact-family filtering confirmed the previous
+1,595 total, so stored findings are not corrupt), then formalize sheet action-row
+input evidence. A read-only check of all 50 action owners / 25 original states
+found native flex/relative/hidden-overflow/border-box requests with span/div
+children, versus childless candidate block buttons omitting position, overflow
+and box-sizing in all three captured stages. This needs a durable complete-rule
+semantic proof before attribution; it is not a renderer or visual-equivalence
+claim. Continue broader overlay, typography/control and interaction coverage;
+all final full canonical/browser acceptance gates remain open. Earlier notes
+below retain chronological preparation history, not current running-job status.
+
 The combined sheet milestone is ready for cold export. The existing canonical
 comparator now has `--sheet-panel`, independently replaying the three proofs
 against accepted `9b0ec36` and its authenticated `78ed94a2...` payload. It requires
