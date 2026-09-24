@@ -38,6 +38,7 @@ test('audit projection rejects retained behavior changes, import aliases and orc
     s => s.replace('materialInputAuditSchemaVersion = 3', 'materialInputAuditSchemaVersion = 99'),
     s => s.replace('collectAlignmentFontAuditInputs, validateAlignmentFontAuditInputs', 'collectAlignmentFontAuditInputs as unexpected, validateAlignmentFontAuditInputs'),
     s => s.replace('collectAlignmentFontAuditInputs, validateAlignmentFontAuditInputs', 'collectAlignmentFontAuditInputs, unexpectedMember, validateAlignmentFontAuditInputs'),
+    s => s.replace('collectPositionFollowupAuditInputs, applyPositionFollowupAuditRows', 'collectPositionFollowupAuditInputs as unexpected, applyPositionFollowupAuditRows'),
     s => s + '\nconst hiddenCoupling = buildMaterialInputAudit;\n',
     s => s + "\nimport { classifyAlignmentFontInput } from './alignment-font-audit-source-binding.mjs';\n",
     s => s.replace('function sourceFingerprints(root)', 'function renamedSourceFingerprints(root)'),
@@ -92,4 +93,21 @@ test('receipt conservation retains historical hashes only after proving all curr
       f.current.sourceFingerprints[1].sha256 = hash(f.sources.get(source)); },
   ];
   for (const mutate of mutations) { const f = fixture(); mutate(f); assert.throws(() => verifyAlignmentSurveyConservation(report, f.current, f.options)); }
+});
+
+test('mapping reader receipt changes require exact whole-source import conservation', () => {
+  const f = fixture(), mapping = 'tests/material-parity/generated-node-mapping-evidence.mjs';
+  const before = execFileSync('git', ['show', 'd617a75^:' + mapping], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+  const after = read(mapping);
+  f.originals.set(mapping, before); f.sources.set(mapping, after);
+  f.initial.sourceFingerprints.push({ file: mapping, sha256: hash(before) });
+  f.current.sourceFingerprints.push({ file: mapping, sha256: hash(after) });
+  f.originals.set(report, JSON.stringify(f.initial)); f.sources.set(report, JSON.stringify(f.initial));
+  const result = verifyAlignmentSurveyConservation(report, f.current, f.options);
+  assert.deepEqual(result.report, f.initial);
+  assert.deepEqual(result.evidence.sourceChanges.at(-1).proof,
+    { exactReaderImportTransition: true, completeMappingSourceConserved: true });
+  f.sources.set(mapping, after + '\n// unrelated change');
+  f.current.sourceFingerprints.at(-1).sha256 = hash(f.sources.get(mapping));
+  assert.throws(() => verifyAlignmentSurveyConservation(report, f.current, f.options), /mapping implementation changed/);
 });

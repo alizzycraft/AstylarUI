@@ -7,6 +7,22 @@ import { fileURLToPath } from 'node:url';
 
 const active = new AsyncLocalStorage();
 const hash = value => createHash('sha256').update(value).digest('hex');
+
+// Authenticate the one reviewed reader-import transition, not arbitrary source
+// drift. Callers retain both actual and historical receipts where they report
+// provenance; this returns historical text only after whole-source equality.
+export function restoreMappingReadAdapterSource(descriptor, bytes) {
+  assert.equal(descriptor.file, 'tests/material-parity/generated-node-mapping-evidence.mjs');
+  assert.equal(descriptor.sha256, 'c21d439f33323e576d19153db104bd6e2245a9d216dc3a157d4187c116c7aa41');
+  let source = bytes.toString('utf8').replaceAll('\r\n', '\n');
+  if (hash(source) !== descriptor.sha256) {
+    const adapter = "import { auditReadFileSync as readFileSync } from './audit-evidence-session.mjs';";
+    assert.equal(source.split(adapter).length, 2, 'mapping read-adapter transition must occur exactly once');
+    source = source.replace(adapter, "import { readFileSync } from 'node:fs';");
+  }
+  assert.equal(hash(source), descriptor.sha256, 'mapping implementation changed beyond the reader import');
+  return source;
+}
 const freeze = value => {
   if (value && typeof value === 'object' && !Object.isFrozen(value)) {
     Object.values(value).forEach(freeze); Object.freeze(value);

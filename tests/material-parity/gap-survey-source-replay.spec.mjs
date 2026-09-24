@@ -5,6 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { isDeepStrictEqual } from 'node:util';
 import test from 'node:test';
 import { readGapSurveySource, bindGapSurveyNormalizer, gapSurveyNormalizationRevision } from './gap-survey-source-replay.mjs';
+import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
 
 const survey = JSON.parse(readFileSync('docs/material-owner-gap-input-survey.json'));
 const moduleFile = survey.productionNormalization.module;
@@ -18,6 +19,9 @@ test('mapping read-adapter reconciliation conserves the entire historical mappin
   const current = readFileSync(file, 'utf8');
   const before = execFileSync('git', ['show', 'd617a75^:' + file], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
   assert.equal(readGapSurveySource(descriptor).replaceAll('\r\n', '\n'), before);
+  assert.equal(restoreMappingReadAdapterSource(descriptor, before), before);
+  assert.throws(() => restoreMappingReadAdapterSource({ ...descriptor, file: 'other.mjs' }, current));
+  assert.throws(() => restoreMappingReadAdapterSource({ ...descriptor, sha256: '0'.repeat(64) }, current));
   for (const changed of [current + '\n// unrelated change\n', current.replace('mappingTargets =', 'differentTargets ='),
     current.replace('auditReadFileSync as readFileSync', 'differentReader as readFileSync')]) {
     assert.notEqual(changed, current);

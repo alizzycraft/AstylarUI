@@ -6,6 +6,7 @@ import ts from 'typescript';
 import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
 import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { conserveDisabledInkGuard } from './disabled-ink-source-transition.mjs';
+import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
 
 export const alignmentSurveyBaseline = '67db724e5f258c84cfdc70e9da2ccb6ee6353ad0';
 const auditFile = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -20,6 +21,8 @@ const definitions = {
   'docs/material-remaining-text-alignment.json': ['scripts/audit-remaining-text-alignment.mjs', 'collectRemainingTextAlignment', 'sourceFingerprints'],
 };
 export const alignmentAuditImports = new Map([
+  ['./position-followup-audit-source-binding.mjs', ['collectPositionFollowupAuditInputs', 'applyPositionFollowupAuditRows',
+    'validatePositionFollowupAuditInputs', 'validatePositionFollowupAuditClassifications', 'positionFollowupAttribution']],
   ['./position-composition-audit-source-binding.mjs', ['collectPositionAuditInputs', 'applyPositionAuditRows', 'validatePositionAuditInputs',
     'validatePositionAuditClassifications', 'positionCompositionAttribution']],
   ['./visibility-audit-source-binding.mjs', ['collectVisibilityAuditInputs', 'applyVisibilityAuditRows', 'validateVisibilityAuditInputs',
@@ -138,6 +141,10 @@ export function verifyAlignmentSurveyConservation(reportFile, current, {
     const oldBytes = readBaseline(receipt.file); assert.equal(hash(normalized(oldBytes)), old.sha256);
     let proof;
     if (receipt.file === auditFile) proof = verifyAlignmentAuditProjection(oldBytes, currentBytes);
+    else if (receipt.file === 'tests/material-parity/generated-node-mapping-evidence.mjs') {
+      assert.equal(restoreMappingReadAdapterSource(old, currentBytes), normalized(oldBytes));
+      proof = { exactReaderImportTransition: true, completeMappingSourceConserved: true };
+    }
     else {
       const sourceReport = Object.keys(definitions).find(key => definitions[key][0] === receipt.file);
       assert.ok(sourceReport, `unreviewed changed source: ${receipt.file}`);

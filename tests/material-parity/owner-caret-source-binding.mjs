@@ -8,6 +8,7 @@ import ts from 'typescript';
 import { inspectOwnerCaretInput } from './owner-caret-input-evidence.mjs';
 import { classifyOwnerCaretInput } from './owner-caret-classification.mjs';
 import { expectedOwnerCaretAttributionRows } from './owner-caret-attribution-coverage.mjs';
+import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
 
 const proofFile = 'docs/material-owner-caret-attribution.json';
 const proofRevision = '0c96500aebc010f8ba1209f1dda46c83ea01549e';
@@ -58,11 +59,14 @@ function loadProof(root) {
   const sourceChecks = new Map();
   for (const s of [...parent.sourceFingerprints, ...proof.sourceFingerprints]) {
     if (sourceChecks.has(s.file)) assert.equal(sourceChecks.get(s.file).recorded, s.sha256);
-    const current = hash(read(s.file).toString('utf8').replaceAll('\r\n', '\n'));
-    if (s.file !== parent.productionNormalization.module) assert.equal(current, s.sha256, `caret dependency changed: ${s.file}`);
+    const currentBytes = read(s.file), current = hash(currentBytes.toString('utf8').replaceAll('\r\n', '\n'));
+    const mappingAdapter = s.file === 'tests/material-parity/generated-node-mapping-evidence.mjs' && current !== s.sha256;
+    if (mappingAdapter) restoreMappingReadAdapterSource(s, currentBytes);
+    else if (s.file !== parent.productionNormalization.module) assert.equal(current, s.sha256, `caret dependency changed: ${s.file}`);
     else assert.equal(historicalSha256, s.sha256, 'historical caret module changed');
     sourceChecks.set(s.file, { file: s.file, recorded: s.sha256, current,
-      verification: s.file === moduleFile ? 'historical-replay-and-current-value-revalidation' : 'complete-source' });
+      verification: s.file === moduleFile ? 'historical-replay-and-current-value-revalidation'
+        : mappingAdapter ? 'exact-reader-import-transition-with-complete-mapping-source-conserved' : 'complete-source' });
   }
   const historicalNormalize = bindOwnerCaretNormalization(historicalSource, parent.productionNormalization);
   // This is the reviewed precision-preserving normalizer, not a replacement hash

@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
 
 const hash = text => createHash('sha256').update(text.replaceAll('\r\n', '\n')).digest('hex');
 export const gapSurveyNormalizationRevision = '4650791a7208b841dd29f1ced015f98234949623';
@@ -21,9 +22,7 @@ export function readGapSurveySource(descriptor, readers = {}) {
   let source = descriptor.file === moduleFile
     ? readHistorical(gapSurveyNormalizationRevision, descriptor.file) : readCurrent(descriptor.file);
   if (descriptor.file === 'tests/material-parity/generated-node-mapping-evidence.mjs' && hash(source) !== descriptor.sha256) {
-    const adapter = "import { auditReadFileSync as readFileSync } from './audit-evidence-session.mjs';";
-    assert.equal(source.split(adapter).length, 2, 'mapping read-adapter transition must occur exactly once');
-    source = source.replace(adapter, "import { readFileSync } from 'node:fs';");
+    source = restoreMappingReadAdapterSource(descriptor, source);
   }
   assert.equal(hash(source), descriptor.sha256, `gap survey dependency changed: ${descriptor.file}`);
   return source;

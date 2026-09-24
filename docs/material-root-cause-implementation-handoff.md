@@ -119,6 +119,21 @@ bindings, retaining historical receipts and rejecting any mapping-body change.
 Replay the affected collectors before another full export. Do not rerun the
 canonical export unchanged or accept the failed package as new evidence.
 
+Binding reconciliation progress: the exact mapping-reader import transition is
+now shared with caret and alignment validation. It requires the pinned historical
+mapping hash and complete source equality after reversing only that import;
+wrong files/hashes, mapping-body edits and unrelated additions still fail.
+Caret records the actual current hash separately from its historical receipt.
+The alignment projection also recognizes the exact already-integrated followup
+import; alias/member mutations remain rejected. Cache/gap tests pass 7/7 and
+alignment/gap tests pass 10/10. Full caret source replay passes all 4,050
+observations (118 reviewed groups / 3,154 observations, 896 retained) and 13
+negative controls, with canonical files unchanged. Direct collect-and-validate
+replays now bind alignment/font 72 groups / 4,016 observations, text alignment
+49 / 2,677, and LTR alignment 4 / 178. The remaining `reviewedInputs` overlay
+dependency reconciliation is not done; do not run the full export until that
+binding and its historical snapshot conservation have been verified too.
+
 Small live samples are retained as `position-followup-validation-cpu-sample.log`
 and `position-followup-validation-allocation-sample.log`; no heap dump was taken.
 Selector exclusion checks were prominent in the CPU sample (GC 1,180/6,603
