@@ -7,7 +7,8 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   applyDialogScalarTypography, validateDialogScalarTypography, modalInventoryTrees,
   proveBottomSheetScalarTypography, applyBottomSheetScalarTypography,
   validateBottomSheetScalarTypography, proveDialogActionBoxSubstitution,
-  applyDialogActionBox, validateDialogActionBox } from './modal-position-inspection.mjs';
+  applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints,
+  validateDialogPanelConstraints } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
@@ -93,6 +94,33 @@ test('dialog action box classifications replay six complete populations without 
   ]) { const altered = structuredClone(applied); mutate(altered); assert.equal(validate(altered).length, 1); }
   assert.throws(() => applyDialogActionBox(rows, cases.slice(1), inventory, normalize));
   assert.throws(() => applyDialogActionBox(rows, [...cases, cases[0]], inventory, normalize));
+});
+
+test('dialog panel constraints replay six omitted or substituted inputs without assigning defaults', () => {
+  const inspection = collectModalPositionInspection();
+  const cases = JSON.parse(readFileSync(inspection.capture.file)).interactions.filter(e =>
+    e.family === 'dialog' && e.styleInputs.some(i => i.id === 'dialog-panel')).map(e => ({ ...e, kind: 'interaction' }));
+  assert.equal(cases.length, 32);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'dialog').filter(r => r.evidence.section === 'discrepancies');
+  const original = structuredClone(rows), applied = applyDialogPanelConstraints(rows, cases, inventory, normalize);
+  assert.deepEqual(rows, original);
+  const changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 6); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 192);
+  assert.equal(changed.filter(r => !Object.hasOwn(r, 'astylar')).length, 5);
+  const validate = rs => validateDialogPanelConstraints(rs, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  for (const mutate of [
+    rs => rs.splice(rs.findIndex(r => r.attribution === 'reviewed-dialog-panel-constraint-omission'), 1),
+    rs => rs.push(structuredClone(rs.find(r => r.attribution === 'reviewed-dialog-panel-constraint-omission'))),
+    rs => { rs.find(r => r.attribution === 'reviewed-dialog-panel-constraint-omission').astylar = 'auto'; },
+    rs => { rs.find(r => r.attribution === 'reviewed-dialog-panel-constraint-omission').reviewEvidence.observations[0].referenceRequests['min-width'] = '280px'; },
+  ]) { const altered = structuredClone(applied); mutate(altered); assert.equal(validate(altered).length, 1); }
+  const forged = structuredClone(inventory);
+  forged.variants.find(v => v.side === 'astylar').rules.forEach(index => {
+    if (forged.rules[index].value.selector === '.dialog-panel') forged.rules[index].value.minWidth = '280px';
+  });
+  assert.throws(() => applyDialogPanelConstraints(rows, cases, forged, normalize));
 });
 
 test('dialog panel equal captured dimensions conceal percentage and inherited constraint substitutions', () => {

@@ -55,8 +55,26 @@ all 32 authenticated original owner captures. The three modal sizing/action
 checks pass (8.55 seconds). This adds one source finding to the next export;
 the accepted canonical package still contains 132 source findings.
 
-Next: finish related panel constraint attribution and prepare one combined
-modal sizing export/conservation milestone, not an export for each small edit.
+Panel constraint attribution is now wired too: four explicit native inherited
+min/max constraints, explicit border-box, and zero flex shrink differ from the
+candidate's five omissions and default shrink one. All 32 states are proved,
+six additional groups / 192 occurrences. `applyModalBoxReview` shares complete
+population selection, owner-tree adaptation, scalar matching and original-row
+receipts between action and panel checks; semantic proofs remain separate.
+`validateDialogPanelConstraints` independently reconstructs expected rows and
+rejects missing/duplicate classifications, substituted defaults, forged native
+inherit requests and candidate authored constraints. No omission becomes null
+or a default. Four modal focused tests pass (10.97 seconds); six existing
+producer/alignment conservation tests pass (14.46 seconds).
+
+Next: prepare one combined modal sizing export/conservation milestone for
+12 groups / 384 occurrences plus the one new source finding. Start from accepted
+`ed35a9c` and compact generation `064777d79c6b85219285c85b97fb38edac27d069c8ddec67e0ae2da5b61099e5`.
+Expected unresolved count is 1,595 only if full replay and conservation pass;
+accepted count remains 1,607. Reuse full original inventory order and JSON
+persistence-boundary comparison learned in the preceding milestone. Preserve
+the five required export inputs above; do not rerun the obsolete 24-group
+`--modal` gate as if it were the new 12-group batch.
 The helper, producer and narrow source guards now differ from the accepted checkpoint's
 source fingerprints; those are deliberate pending evidence changes, not current
 canonical source reconciliation. Do not rebuild the full export for this proof alone.

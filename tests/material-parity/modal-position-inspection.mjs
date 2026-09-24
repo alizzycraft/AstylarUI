@@ -207,11 +207,49 @@ export function proveDialogActionBoxSubstitution(entry, r, a) {
     candidateUsedLayoutMeasured: false, renderingEquivalent: false };
 }
 
-export function applyDialogActionBox(rows, cases, inventory, canonicalStyle) {
-  const properties = new Set(['borderTopStyle', 'borderTopWidth', 'paddingBottom', 'flexWrap', 'flexShrink', 'minHeight']);
+export function proveDialogPanelConstraints(entry, r, a) {
+  assert.equal(entry.family, 'dialog');
+  const { mapping } = proveModalPositionInspection(entry, r, a, 'dialog-panel');
+  const reference = one(r.nodes.filter(n => n.key === mapping.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === mapping.candidateNode));
+  assert.deepEqual(reference.inline, {});
+  assert.equal(candidate.authored.style, undefined);
+  assert.equal(candidate.authored.attributes?.style, undefined);
+  const rules = reference.rules.map(i => r.rules[i]).filter(rule => rule.active);
+  const rule = one(rules.filter(rule => rule.selector === '.mat-mdc-dialog-surface'));
+  const expectedDeclarations = { width: '100%', height: '100%', 'min-width': 'inherit', 'max-width': 'inherit',
+    'min-height': 'inherit', 'max-height': 'inherit', 'box-sizing': 'border-box', 'flex-shrink': '0' };
+  for (const [key, value] of Object.entries(expectedDeclarations)) {
+    const declarations = rules.filter(rule => Object.hasOwn(rule.declarations, key));
+    assert.deepEqual(declarations, [rule]);
+    assert.deepEqual(rule.declarations[key], { value, important: false });
+  }
+  assert.deepEqual(rule.conditions, []);
+  const native = r.styles[reference.style];
+  for (const [key, value] of Object.entries({ width: '280px', height: '161px', minWidth: '280px', maxWidth: '560px',
+    minHeight: 'auto', maxHeight: '100%', boxSizing: 'border-box', flexShrink: '0' })) assert.equal(native[key], value);
+  const affects = key => /^(width|height|minWidth|maxWidth|minHeight|maxHeight|boxSizing|flexShrink|flex$|all$|animation|transition)/.test(key);
+  const requests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key)).map(([key, value]) => ({ selector: rule.selector, key, value })));
+  assert.deepEqual(requests, [{ selector: '.dialog-panel', key: 'width', value: '280px' },
+    { selector: '.dialog-panel', key: 'height', value: '161px' }]);
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(candidate[stage].width, native.width); assert.equal(candidate[stage].height, native.height);
+    assert.equal(candidate[stage].flexShrink, '1');
+    for (const key of ['minWidth', 'maxWidth', 'minHeight', 'maxHeight', 'boxSizing'])
+      assert.equal(Object.hasOwn(candidate[stage], key), false);
+  }
+  return { case: caseKey(entry, entry.kind), element: 'dialog-panel', referenceNode: reference.key, astylarNode: candidate.key,
+    referenceRequests: expectedDeclarations, candidateRequests: { width: '280px', height: '161px' },
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false,
+    candidateUsedLayoutMeasured: false, renderingEquivalent: false };
+}
+
+function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition) {
+  const properties = new Set(definition.properties);
   const proofs = new Map();
   return rows.map(row => {
-    if (row.family !== 'dialog' || row.element !== 'dialog-actions' || row.attribution !== 'unresolved' || !properties.has(row.property)) return row;
+    if (row.family !== 'dialog' || row.element !== definition.element || row.attribution !== 'unresolved' || !properties.has(row.property)) return row;
     const matching = cases.filter(c => c.family === row.family).flatMap(c => (c.styleInputs ?? [])
       .filter(i => i.id === row.element && canonicalStyle(i.reference ?? {})[row.property] === row.reference &&
         canonicalStyle(i.astylar ?? {})[row.property] === row.astylar)
@@ -222,7 +260,7 @@ export function applyDialogActionBox(rows, cases, inventory, canonicalStyle) {
     const observations = matching.map((c, index) => {
       if (!proofs.has(keys[index])) {
         const trees = modalInventoryTrees(inventory, keys[index]);
-        const proof = proveDialogActionBoxSubstitution(c, ...trees);
+        const proof = definition.prove(c, ...trees);
         const native = trees[0].nodes.find(n => n.key === proof.referenceNode);
         const candidate = trees[1].nodes.find(n => n.key === proof.astylarNode);
         proofs.set(keys[index], { proof, reference: canonicalStyle(trees[0].styles[native.style]),
@@ -234,13 +272,38 @@ export function applyDialogActionBox(rows, cases, inventory, canonicalStyle) {
       return result.proof;
     });
     const metadata = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'];
-    return { ...row, classification: 'application-plugin-authoring-defect', attribution: 'reviewed-dialog-action-box-substitution',
-      recommendedOwner: 'showcase dialog action box and flex constraints',
-      justification: 'The original top border is replaced with bottom padding, preserving sampled height but shifting the CSS-contract content interval. Wrapping, shrink and minimum-height requests are also omitted. Original owner declarations and all captured candidate stages are checked; candidate used layout and renderer causality are not inferred.',
+    return { ...row, classification: 'application-plugin-authoring-defect', attribution: definition.attribution,
+      recommendedOwner: definition.owner, justification: definition.justification,
       reviewedCases: keys, reviewEvidence: { originalRowSha256: hash(JSON.stringify(row)),
         priorMetadata: Object.fromEntries(metadata.filter(k => Object.hasOwn(row, k)).map(k => [k, structuredClone(row[k])])),
         observations, inputEquivalent: false, renderingEquivalent: false } };
   });
+}
+
+export function applyDialogActionBox(rows, cases, inventory, canonicalStyle) {
+  return applyModalBoxReview(rows, cases, inventory, canonicalStyle, {
+    element: 'dialog-actions', properties: ['borderTopStyle', 'borderTopWidth', 'paddingBottom', 'flexWrap', 'flexShrink', 'minHeight'],
+    prove: proveDialogActionBoxSubstitution, attribution: 'reviewed-dialog-action-box-substitution',
+    owner: 'showcase dialog action box and flex constraints',
+    justification: 'The original top border is replaced with bottom padding, preserving sampled height but shifting the CSS-contract content interval. Wrapping, shrink and minimum-height requests are also omitted. Original owner declarations and all captured candidate stages are checked; candidate used layout and renderer causality are not inferred.',
+  });
+}
+
+export function applyDialogPanelConstraints(rows, cases, inventory, canonicalStyle) {
+  return applyModalBoxReview(rows, cases, inventory, canonicalStyle, {
+    element: 'dialog-panel', properties: ['minWidth', 'maxWidth', 'minHeight', 'maxHeight', 'boxSizing', 'flexShrink'],
+    prove: proveDialogPanelConstraints, attribution: 'reviewed-dialog-panel-constraint-omission',
+    owner: 'showcase dialog surface percentage sizing and inherited constraints',
+    justification: 'The native surface explicitly inherits all four size constraints and requests border-box and zero shrink. Candidate authoring replaces percentage sizing with sampled dimensions, omits those constraints and retains default shrink one. Complete owner declarations and captured stages prove unequal requests; equal sampled dimensions do not establish responsive or rendered equivalence.',
+  });
+}
+
+export function validateDialogPanelConstraints(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-dialog-panel-constraint-omission');
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyDialogPanelConstraints(originalRows, cases, inventory, canonicalStyle))));
+    return [];
+  } catch (error) { return [`dialog panel constraints do not replay from original owner inputs: ${error.message}`]; }
 }
 
 export function validateDialogActionBox(rows, originalRows, cases, inventory, canonicalStyle) {

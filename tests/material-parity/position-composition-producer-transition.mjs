@@ -47,6 +47,13 @@ export function restorePositionProducer(source, { followupOnly = false } = {}) {
   };
   // Reuse the existing original-case replay for the nine dialog owner joins.
   if (restored.includes("from './modal-position-inspection.mjs'")) {
+    if (restored.includes('applyDialogPanelConstraints')) {
+      replaceOnce("import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints } from './modal-position-inspection.mjs';",
+        "import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox } from './modal-position-inspection.mjs';");
+      replaceOnce('applyDialogPanelConstraints(overlaySurfaceDiscrepancies, cases, elementInventory, canonicalStyle)', 'overlaySurfaceDiscrepancies');
+      replaceOnce('      errors.push(...validateDialogPanelConstraints(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n');
+      replaceOnce("'reviewed-dialog-action-box-substitution', 'reviewed-dialog-panel-constraint-omission'", "'reviewed-dialog-action-box-substitution'");
+    }
     if (restored.includes('applyDialogActionBox')) {
       replaceOnce("import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox } from './modal-position-inspection.mjs';",
         "import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography } from './modal-position-inspection.mjs';");
