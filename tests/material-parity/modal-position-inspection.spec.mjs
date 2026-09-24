@@ -167,6 +167,18 @@ test('bottom-sheet action corners distinguish full-round normalization from cont
   const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
   const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
   assert.deepEqual(applied.map(raw), rows.map(raw));
+  // Compact index records have IDs; canonical discrepancy rows do not. Joining
+  // on that derived ID must never replace unrelated canonical rows.
+  const canonical = rows.map(({ id, evidence, ...row }) => row);
+  const unrelated = { family: 'dialog', element: 'dialog-copy', property: 'display',
+    reference: 'block', astylar: 'flex', occurrences: 32, attribution: 'unresolved' };
+  canonical.push(unrelated);
+  const canonicalBefore = structuredClone(canonical);
+  const canonicalApplied = applyBottomSheetContrastCorners(canonical, cases, inventory, normalize);
+  assert.deepEqual(canonical, canonicalBefore);
+  assert.deepEqual(canonicalApplied.map(raw), canonical.map(raw));
+  assert.equal(canonicalApplied.at(-1), unrelated);
+  assert.equal(canonicalApplied.filter(r => r.attribution === 'reviewed-bottom-sheet-contrast-corner-substitution').length, 8);
   const validate = values => validateBottomSheetContrastCorners(values, rows, cases, inventory, normalize);
   assert.deepEqual(validate(applied), []);
   for (const mutate of [

@@ -2,6 +2,42 @@
 
 ## Current audit checkpoint — September 24
 
+Cold export at `decc53f` finished in 1,873.05 seconds, exit 1, with widespread
+coverage replay failures. It is rejected, not an accepted snapshot. The corner
+review joined replacements by compact-store `id`, absent from canonical rows;
+all 8,483 rows consequently became the final six-occurrence contrast row.
+A focused regression using ID-less canonical-shaped rows plus an unrelated
+dialog row reproduced the failure, then passed after joining by selected input
+object identity. The original 24 radius groups and raw-row conservation remain
+checked. Failed manifest, payload and markdown are retained in
+`artifacts/material-parity/sheet-action-decc53f-failed-export` (payload SHA
+`cf75902c6e147240da64134a8811c74ade208c1106a3f82a71306742a57118bd`);
+the progress/failure log remains `sheet-action-decc53f-progress.log`.
+Focused corner regression passes in 4.39 seconds after failing on the old join;
+all nine canonical-conservation tests pass in 18.06 seconds. Canonical files
+were restored to accepted `1cd2b7e`: 1,578 unresolved scalar
+groups. No failed snapshot was imported. Next: commit the focused pipeline
+correction, then one corrected export and strict reconciliation. Investigation priority
+after reconciliation: dialog text flow, remaining sheet inputs, tabs, then chips.
+
+Next bounded question: do dialog title/content layout differences originate in
+authored inputs or renderer placement? Read-only replay authenticated both input
+trees in all 32 retained dialog observations from
+`docs/material-position-input-population.json`. One identical rule/value signature
+per owner proves native title padding `6px 24px 13px` versus candidate
+`7px 24px 12px`, and an explicit native adjacent-title content `padding-top: 0px`
+versus candidate `2px 24px 0`. Native content also declares block flow,
+`overflow: auto` and `max-height: 65vh`; candidate uses flex and omits those
+constraints. Native title declares block flow and shrink zero versus candidate
+flex and shrink one. Compact baseline lookup identifies nine unresolved groups /
+288 occurrences. Bind these to existing `fixture-dialog-text-flow-substitution`,
+not a duplicate finding. All 64 candidate owners have no inline style and all
+192 normal/effective/interaction stages preserve the stated padding, flex flow,
+shrink one and omitted maximum-height/overflow constraints. This is retained-input
+evidence, not proof of current browser output or renderer causality; complete
+row binding remains pending. Missing initial/default properties are outside
+this proposed batch.
+
 Sheet-action batch integration preparation is complete. The existing canonical
 conservation comparator now supports `--sheet-action`, pinned to accepted
 `1cd2b7e` and decoded predecessor SHA

@@ -541,8 +541,12 @@ export function applyBottomSheetContrastCorners(rows, cases, inventory, canonica
       owner: 'showcase bottom-sheet action shape-token authoring',
       justification: 'Native actions request the full-round component token and compute 9999px corners at 48px height; contrast candidates author and retain 18px corners at that requested height. Even on equal 48px-high wide boxes these corner requests are not equivalent. Original owner requests and candidate stages establish input substitution, not measured candidate geometry or a renderer paint defect. Other profile radii are deliberately not classified by this proof.',
     }), selected);
-  const byId = new Map(reviewed.map(row => [row.id, row]));
-  return rows.map(row => byId.get(row.id) ?? row);
+  // The compact store adds IDs, but canonical discrepancy rows have none.
+  // Both review passes preserve order, so bind replacements to the exact input
+  // objects selected above, without assuming a derived storage identifier.
+  assert.equal(reviewed.length, selected.length);
+  const replacements = new Map(selected.map((row, index) => [row, reviewed[index]]));
+  return rows.map(row => replacements.get(row) ?? row);
 }
 
 export function validateBottomSheetContrastCorners(rows, originalRows, cases, inventory, canonicalStyle) {
