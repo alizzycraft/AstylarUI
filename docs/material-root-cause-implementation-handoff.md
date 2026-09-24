@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 25
 
+Corrected-export preflight passes: the existing producer-transition helper now
+removes only the exact appearance fallback relocation and authenticates the
+complete predecessor module SHA (`1a88cf50...`). The appearance comparator uses
+that transition and requires exactly 48 control records to change only their
+producer receipt, with all other control data unchanged. Mutation tests cover
+forged receipts, changed values, lost records, changed raw inputs and unrelated
+producer edits. All 12 comparator/source-transition tests pass in 23.19 seconds.
+Independent historical motion replay passes in 37.25 seconds with unchanged
+findings; its current producer receipt changes, not historical evidence.
+A broad fragment-detection condition initially rejected older producer sources;
+the final helper detects the exact new condition and all historical comparisons
+pass. No failed preflight is claimed as passing.
+
 Precedence correction is now implemented in the audit producer: generic
 appearance observation-stage attribution is a final unresolved fallback after
 the existing specific classifiers. The historical eight-property position is

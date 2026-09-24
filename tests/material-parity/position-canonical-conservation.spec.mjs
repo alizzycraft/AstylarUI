@@ -4,7 +4,7 @@ import test from 'node:test';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { comparePositionCanonical, compareAppearanceCanonical } from '../../scripts/check-material-position-canonical-conservation.mjs';
-import { restorePositionProducer } from './position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreAppearancePrecedence } from './position-composition-producer-transition.mjs';
 import { positionCompositionAttribution } from './position-composition-review.mjs';
 import { positionFollowupAttribution } from './position-followup-review.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
@@ -16,8 +16,15 @@ test('appearance batch conserves raw inputs, exclusions and controls independent
         occurrences, cases: Array.from({ length: 12 }, (_, j) => `case-${j}`), attribution: 'unresolved' };
     });
     rows.push({ family: 'slider', element: 'range', property: 'appearance', reference: 'auto', occurrences: 156, attribution: 'unresolved' });
-    const previous = { rows, control: { differences: [], gaps: [] } };
+    const transition = restoreAppearancePrecedence(currentSource);
+    const previous = { rows, control: { differences: Array.from({ length: 48 }, (_, i) => ({
+      case: `case-${i}`, attribution: 'reviewed-interactive-normal-line-box-stage-comparison',
+      reviewEvidence: { observation: { normalizationReconciliation: {
+        currentModuleSha256: transition.previousModuleSha256, value: 19 } } },
+    })), gaps: [] } };
     const current = structuredClone(previous);
+    for (const row of current.control.differences)
+      row.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
     current.rows = current.rows.map((r, i) => i === 34 ? r : { ...r,
       attribution: 'reviewed-owner-initial-style-observation-stage', classification: 'parity-harness-defect',
       reviewEvidence: { computedCandidateVerified: false, renderingEquivalent: false },
@@ -33,6 +40,9 @@ test('appearance batch conserves raw inputs, exclusions and controls independent
     a => { a[1].rows[34].attribution = a[2][34].attribution = 'reviewed-owner-initial-style-observation-stage'; },
     a => { a[1].rows[0].reviewedCases.pop(); a[2][0].reviewedCases.pop(); },
     a => { a[1].control.gaps.push('unrelated'); },
+    a => { a[1].control.differences[0].reviewEvidence.observation.normalizationReconciliation.value++; },
+    a => { a[1].control.differences[0].reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = 'forged'; },
+    a => { a[1].control.differences.pop(); },
     a => { a[3] = Buffer.from(a[3] + '\nconst unrelated = true;'); },
     a => { a[1].rows[0].reviewEvidence.renderingEquivalent = a[2][0].reviewEvidence.renderingEquivalent = true; },
   ]) { const changed = make(); mutate(changed); assert.throws(() => compareAppearanceCanonical(...changed)); }

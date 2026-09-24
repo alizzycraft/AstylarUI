@@ -38,9 +38,24 @@ export const positionProducerFiles = [
   "docs/material-flow-position-substitutions.json",
   "docs/material-position-input-population.json"
 ];
+// Remove only the reviewed appearance fallback relocation. The complete
+// predecessor hash rejects any accompanying unreviewed producer change.
+export function restoreAppearancePrecedence(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  const early = "        if (property !== 'appearance' && classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(";
+  const late = "        // Appearance is newly admitted generic observation-stage evidence.\n        // Preserve specific source-reviewed findings (including mismatched\n        // measurement owners) before considering that fallback. Keep the\n        // historical eight-property precedence unchanged.\n        if (property === 'appearance' && classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(\n          input, property, referenceValue, astylarValue,\n          ownerInitialByCaseIdProperty.get(JSON.stringify([key, input.id, property]))) ?? classification;\n";
+  assert.equal(current.split(early).length, 2);
+  assert.equal(current.split(late).length, 2);
+  const restored = current.replace(early, "        if (classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(").replace(late, '');
+  assert.equal(hash(restored), '1a88cf50442a5833624978871bcce34e475f150acb9bad5fa134cd8356b4db91',
+    'producer changed beyond appearance fallback precedence');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+
 export function restorePositionProducer(source, { followupOnly = false } = {}) {
   const current = source.toString().replaceAll('\r\n', '\n');
-  let restored = current;
+  let restored = current.includes("if (property !== 'appearance' && classification.attribution === 'unresolved')")
+    ? restoreAppearancePrecedence(current).restoredSource : current;
   const replaceOnce = (from, to = '') => {
     assert.equal(restored.split(from).length, 2, 'missing or repeated position integration fragment');
     restored = restored.replace(from, to);

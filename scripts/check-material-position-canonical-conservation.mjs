@@ -8,7 +8,7 @@ import { execFileSync } from 'node:child_process';
 import { readAudit } from './check-material-disabled-ink-canonical-conservation.mjs';
 import { collectPositionCompositionReview, applyPositionCompositionReview,
   validatePositionCompositionRows, positionCompositionAttribution } from '../tests/material-parity/position-composition-review.mjs';
-import { restorePositionProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreAppearancePrecedence } from '../tests/material-parity/position-composition-producer-transition.mjs';
 import { collectPositionFollowupReview, applyPositionFollowupReview,
   validatePositionFollowupRows, positionFollowupAttribution } from '../tests/material-parity/position-followup-review.mjs';
 import { collectChipPaintProposal, applyChipPaintRows } from '../tests/material-parity/chip-position-inspection.mjs';
@@ -109,14 +109,25 @@ export function comparePositionCanonical(previous, current, expectedRows, curren
 }
 
 // Reuse the canonical reader/comparison boundary for the appearance batch.
-// This producer is unchanged; unlike earlier position batches no control receipt
-// transition is allowed. Expected rows must come from independent source replay.
+// Expected rows come from independent source replay. Only the exact fallback
+// relocation may change the producer receipt; control values remain identical.
 export function compareAppearanceCanonical(previous, current, expectedRows, currentSource) {
-  assert.equal(createHash('sha256').update(currentSource.toString('utf8').replaceAll('\r\n', '\n')).digest('hex'),
-    '1a88cf50442a5833624978871bcce34e475f150acb9bad5fa134cd8356b4db91', 'appearance batch changed the audit producer');
+  const transition = restoreAppearancePrecedence(currentSource);
   same(current.rows, JSON.parse(JSON.stringify(expectedRows)), 'appearance rows differ from source replay');
   assert.equal(current.rows.length, previous.rows.length);
-  same(current.control, previous.control, 'appearance batch changed unrelated control evidence');
+  const control = structuredClone(current.control), receiptCases = [];
+  assert.equal(control.differences.length, previous.control.differences.length);
+  for (let i = 0; i < previous.control.differences.length; i++) {
+    const before = previous.control.differences[i], after = control.differences[i];
+    if (before.attribution !== 'reviewed-interactive-normal-line-box-stage-comparison' ||
+        receipt(before)?.currentModuleSha256 !== transition.previousModuleSha256) continue;
+    assert.equal(receipt(after)?.currentModuleSha256, transition.currentModuleSha256);
+    receipt(after).currentModuleSha256 = transition.previousModuleSha256;
+    same(after, before, 'appearance changed control data beyond the producer receipt');
+    receiptCases.push(before.case);
+  }
+  assert.equal(receiptCases.length, 48); assert.equal(new Set(receiptCases).size, 48);
+  same(control, previous.control, 'appearance batch changed unrelated control evidence');
   const metadata = new Set(['classification', 'attribution', 'recommendedOwner', 'justification', 'reviewEvidence', 'reviewedCases']);
   const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
   const changes = [];
@@ -143,7 +154,9 @@ export function compareAppearanceCanonical(previous, current, expectedRows, curr
     changedOccurrences: 2195, unchangedCompleteRows: current.rows.length - changes.length, changes,
     previousUnresolved: previous.rows.filter(r => r.attribution === 'unresolved').length,
     currentUnresolved: current.rows.filter(r => r.attribution === 'unresolved').length,
-    allRawInputsConserved: true, allControlEvidenceConserved: true,
+    allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
+    controlReceiptTransition: { previousModuleSha256: transition.previousModuleSha256,
+      currentModuleSha256: transition.currentModuleSha256, records: receiptCases.length, cases: receiptCases },
     orderedCurrentRowsSha256: digest(current.rows), inputEquivalent: false, renderingEquivalent: false };
 }
 
