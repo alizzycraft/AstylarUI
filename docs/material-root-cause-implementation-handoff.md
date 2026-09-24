@@ -102,6 +102,19 @@ are preserved, and stale receipts remain rejected. Historical reports were not
 rewritten. This clears the demonstrated preflight dependency failure; it is not
 yet a successful canonical export or acceptance of the appearance batch.
 
+Read-only follow-up while that export runs: admitting appearance to the unchanged
+motion reader in memory (reader SHA `c0bc61f1...`, authenticated original trees and
+the retained appearance proposal) distinguishes the eight motion-only exclusions.
+Badge count 52/52, progress bar 20/20 and spinner 20/20 have disjoint named targets.
+The tab labels are mixed: activity 52/70 and overview 18/70 pass; their remaining
+cases lack a proven transition target in the specific rule. Never classify either
+whole tab group from its positive cases. Both chips (76 each) remain unproven for
+transition targets and animation names; tab panel (70) retains unresolved motion
+values/targets. This is diagnostic evidence only, not production reader support
+or canonical attribution. Next reuse the existing delay-target review for the
+tab rule gap, and preserve explicit source/occurrence binding before integrating
+the three wholly disjoint groups. Do not modify the active export to include them.
+
 The retained overlay focus harness gap is now an executable, source-pinned proof:
 `node --test tests/material-parity/retained-overlay-focus.spec.mjs` passes 2/2
 in 2.92 seconds. The original capture SHA `b07ef154...` pins the harness's raw
