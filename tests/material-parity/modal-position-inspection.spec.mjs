@@ -91,6 +91,49 @@ test('modal inspection authenticates all nine generated owner groups', () => {
   assert.deepEqual(collectModalPositionInspection(), JSON.parse(readFileSync('docs/material-modal-position-inspection.json')));
 });
 
+test('all 34 retained snackbars substitute surface sizing and paint requests', () => {
+  const readBound = receipt => {
+    const bytes = readFileSync(receipt.file);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), receipt.sha256);
+    return JSON.parse(bytes);
+  };
+  const population = readBound({ file: 'docs/material-position-input-population.json',
+    sha256: '71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff' });
+  const group = population.groups.find(g => g.element === 'snack-bar-overlay');
+  assert.equal(group.observations.length, 34);
+  assert.equal(new Set(group.observations.map(o => o.case)).size, 34);
+  for (const observation of group.observations) {
+    const r = readBound(observation.inputTrees.reference), a = readBound(observation.inputTrees.astylar);
+    const mapping = resolveGeneratedReferenceNode(r, 'snack-bar-surface', 'snack-bar');
+    assert.equal(mapping.status, 'mapped');
+    const style = r.styles[mapping.styleIndex];
+    assert.deepEqual(['backgroundColor', 'color', 'minWidth', 'maxWidth', 'paddingLeft', 'paddingRight', 'justifyContent']
+      .map(key => style[key]), ['rgb(50, 48, 51)', 'rgb(245, 239, 244)', '344px', '672px', '0px', '8px', 'flex-start']);
+    const active = mapping.ruleIndices.map(i => r.rules[i]).filter(rule => rule.active);
+    const declarations = Object.assign({}, ...active.map(rule => rule.declarations));
+    for (const [key, value] of Object.entries({ 'min-width': '344px', 'max-width': '672px',
+      'padding-left': '0px', 'padding-right': '8px', 'justify-content': 'flex-start' }))
+      assert.equal(declarations[key]?.value, value);
+    assert.equal(declarations['background-color']?.value,
+      'var(--mat-snack-bar-container-color, var(--mat-sys-inverse-surface))');
+    assert.equal(declarations.color?.value,
+      'var(--mat-snack-bar-supporting-text-color, var(--mat-sys-inverse-on-surface))');
+    assert.equal(declarations['box-shadow']?.value, style.boxShadow);
+    assert.notEqual(style.boxShadow, 'none');
+    const owners = a.nodes.filter(n => n.authored.id === 'snack-bar-surface');
+    assert.equal(owners.length, 1);
+    const rule = a.rules.find(rule => rule.selector === '.snack-surface');
+    assert.ok(rule);
+    for (const candidate of [rule, ...['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'].map(stage => owners[0][stage])]) {
+      assert.deepEqual(['width', 'height', 'padding', 'justifyContent', 'background', 'color'].map(key => candidate[key]),
+        ['344px', '48px', '0 18px', 'space-between', '#322f35', '#ffffff']);
+      for (const key of ['minWidth', 'maxWidth', 'boxShadow']) assert.equal(Object.hasOwn(candidate, key), false);
+    }
+  }
+  // Historical input substitutions, not a proof of missing paint or current
+  // runtime acceptance. Do not infer that equal short-content geometry excuses them.
+});
+
 test('all retained sheets substitute fixed candidate height for intrinsic reference list sizing', () => {
   const report = JSON.parse(readFileSync('docs/material-modal-position-inspection.json'));
   const group = report.groups.find(g => g.element === 'bottom-sheet-panel');

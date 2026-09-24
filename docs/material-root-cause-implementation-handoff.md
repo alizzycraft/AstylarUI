@@ -92,6 +92,28 @@ Only DPR 1 was needed for this style-token assertion; earlier width/height
 geometry remains independently reproduced at both DPRs. Do not generalize this
 result to every CSS-wide keyword/property or claim all dialog rows classified.
 
+Snackbar surface request batch: the existing modal inspection test authenticates
+all 34 original open-state paired trees and generated surface mappings. Native
+active rules request min-width 344px/max-width 672px, padding-left 0px/right 8px,
+justify-content flex-start and a three-layer shadow. Native theme-variable paint
+resolves to background rgb(50,48,51), text rgb(245,239,244). Candidate's captured
+`.snack-surface` rule and all three local style stages instead use width 344px,
+height 48px, padding 0 18px, space-between, background #322f35 and white text,
+with no min/max-width or shadow. The current source rule at
+`examples/material-showcase/src/app/astylar.component.ts:806` retains those
+substitutions. These are application/plugin authoring differences, not proof
+of a core paint failure or the earlier missing-snackbar symptom.
+
+Focused command `node --test --test-name-pattern='all 34 retained snackbars'
+tests/material-parity/modal-position-inspection.spec.mjs` passes 1/1 (1.06s).
+The generation-checked compact lookup and authenticated full-row retrieval find
+eight still-unresolved canonical signatures / 272 occurrences for background,
+color, min/max-width, left/right padding, justification and shadow. Classification
+integration remains pending; do not rebuild or modify the running producer just
+for this batch. The historical 34-state geometry match does not establish input
+equivalence, paint visibility, or current browser acceptance. This test reuses
+the pinned position population and original tree receipts; no new capture/report.
+
 Next tooltip sizing batch: a read-only replay using
 `collectTooltipPositionAncestry` and `inspectOverlayOwnerDeclarations` authenticated
 all 18 paired open-state trees. All 72 property observations retain active native
