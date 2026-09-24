@@ -3,6 +3,9 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { PNG } from 'pngjs';
+import ts from 'typescript';
+import roundPolygon, { getSegments } from 'round-polygon';
+import { VertexData } from '@babylonjs/core/Meshes/mesh.vertexData.js';
 import { collectModalPositionInspection, proveModalPositionInspection, proveDialogScalarTypographyJoin,
   applyDialogScalarTypography, validateDialogScalarTypography, modalInventoryTrees,
   proveBottomSheetScalarTypography, applyBottomSheetScalarTypography,
@@ -29,6 +32,46 @@ import { collectFullTreeInventory, collectControlTypographyEvidence,
 const modalSizingPredecessor = Object.freeze({
   generation: '064777d79c6b85219285c85b97fb38edac27d069c8ddec67e0ae2da5b61099e5',
   indexSha256: '7e3141128b5728007cf478b5d37b7820ac6a9cd56d34e0242d4f10842ce4e745',
+});
+
+test('current rounded rectangle kernel undersamples oversized full-round radii despite equal normalized arcs', t => {
+  // Execute the current production methods, not a copied implementation. This
+  // isolates geometry generation; it is not a historical runtime/raster claim.
+  const file = 'src/app/services/babylon-mesh.service.ts';
+  const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const parsed = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  assert.equal(parsed.parseDiagnostics.length, 0);
+  const classes = parsed.statements.filter(n => ts.isClassDeclaration(n) && n.name?.text === 'BabylonMeshService');
+  assert.equal(classes.length, 1);
+  const methods = ['createPolygonVertexData', 'createRoundedRectangleVertexData', 'earClipTriangulation'].map(name => {
+    const found = classes[0].members.filter(n => ts.isMethodDeclaration(n) && n.name.getText(parsed) === name);
+    assert.equal(found.length, 1); return found[0].getText(parsed);
+  });
+  const compiled = ts.transpileModule(`class Kernel { ${methods.join('\n')} }`,
+    { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const Kernel = new Function('roundPolygon', 'getSegments', 'VertexData', compiled + '\nreturn Kernel;')(
+    roundPolygon, getSegments, VertexData);
+  const kernel = new Kernel(), observations = [];
+  for (const scale of [1, 0.01]) {
+    const width = 480 * scale, height = 48 * scale;
+    const points = [{ x: -width / 2, y: height / 2 }, { x: width / 2, y: height / 2 },
+      { x: width / 2, y: -height / 2 }, { x: -width / 2, y: -height / 2 }];
+    const counts = [];
+    for (const requested of [24, 36, 9999]) {
+      const arcs = roundPolygon(points, requested * scale).map(p => p.arc.radius / scale);
+      for (const radius of arcs) assert.ok(Math.abs(radius - 24) < 1e-6);
+      const mesh = kernel.createPolygonVertexData('rectangle', width, height, requested * scale);
+      assert.ok(mesh.positions.every(Number.isFinite));
+      const count = mesh.positions.length / 3; counts.push(count);
+      observations.push({ scale, requested, normalizedArcs: arcs, vertices: count, triangles: mesh.indices.length / 3 });
+    }
+    assert.deepEqual(counts, [68, 44, 4]);
+    // A full capsule needs curved boundaries; four outline vertices cannot
+    // express the same curve as the normalized-radius control at this size.
+    assert.ok(counts[2] < counts[0] / 10);
+  }
+  t.diagnostic(JSON.stringify({ source: file, sha256: createHash('sha256').update(source).digest('hex'),
+    observations, scope: 'current source-extracted geometry kernel only; no original bundle, public API or framebuffer claim' }));
 });
 
 test('bottom-sheet action corners distinguish full-round normalization from contrast input substitution', () => {

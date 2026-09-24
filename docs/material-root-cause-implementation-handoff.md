@@ -2,6 +2,36 @@
 
 ## Current audit checkpoint — September 24
 
+New owning-kernel evidence: current `BabylonMeshService.createPolygonVertexData`
+routes rounded rectangles to `createRoundedRectangleVertexData`; round-polygon
+normalizes requested 24/36/9999 radii to 24 for a 480x48 box, but the renderer
+chooses segment length from the original radius (`max(0.001, radius / 10)`).
+Executing these production methods extracted through TypeScript, with the actual
+installed round-polygon and Babylon VertexData, produces respectively 68/44/4
+outline vertices and 66/42/2 triangles. The same result holds at scale 1 and .01.
+Thus normalized arcs do not imply equivalent candidate polygon boundaries; an
+oversized full-round request degenerates to a four-vertex outline. This is a
+demonstrated current geometry-kernel defect, not yet a public-API/framebuffer
+reproduction or a diagnosis of the original captured bundle. No renderer fix.
+Source SHA-256: `a1a1adab9ffdc0e9edbc43a6d4c835ee7b2f6094b9cbd3a13484ccd0923f0a2c`.
+
+Existing modal spec now contains the source-extracted kernel proof. Focused
+command `node --test --test-name-pattern="current rounded rectangle kernel|bottom-sheet action corners"
+tests/material-parity/modal-position-inspection.spec.mjs` passes both tests in
+5.45 seconds. Next decisive proof is a minimal public-API rounded control with
+equal 9999px inputs, compared with the browser and a bounded-radius diagnostic;
+do not change canonical authoring to hide the sampling defect.
+
+Historical row-mapping limitation: original capture pins harness hash
+`b2477a124293aec6bba3a2413ff58d41f409288dcf0cb53a54ed17d162b9fa97`;
+current harness hashes to `c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10`.
+No matching whole-source hash was found among the last 60 committed revisions of
+that file. Therefore current collector order is not silently certified as the
+historical mapping. Reuse preserved source snapshots if available; otherwise
+document the gap and use fresh bounded evidence for runtime claims. Do not repeat
+that same revision scan. Accepted count remains 1,578, with batched reconciliation
+and broader coverage/final gates still outstanding.
+
 The eight-group contrast-corner replay is integrated into the bound producer,
 independent original-row validation, unbound-attribution rejection and exact
 source-restoration guards. All six producer/alignment tests pass in 14.15 seconds;
