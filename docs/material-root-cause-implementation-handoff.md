@@ -49,13 +49,30 @@ This is a proposal, not canonical attribution or a dependency-complete reusable
 cache; replay from authenticated inputs when integrating. No renderer, fixture,
 canonical classification or historical report was changed.
 
-Next: integrate these eligible observations through the existing source-bound
-attribution machinery with exact group-membership validation in a coherent batch.
-The two native range `auto` groups (156 observations) remain separate. The survey
-source fingerprint has changed: the historical survey `--check` and canonical
-source receipts require explicit reconciliation at that batch boundary; neither
-is claimed current or passing after this extension. Do not regenerate the large
-canonical package solely for this opt-in diagnostic change.
+The existing source-bound attribution now includes appearance without changing
+the historical survey property list. Its original-capture binding and independent
+source replay reject removed appearance observations, changed reference values,
+explicit candidate values, vendor declarations and false equivalence claims.
+Three focused attribution checks pass in 3.28 seconds. A separate full-population
+integration check rebuilds the complete original inventory and production owner
+evidence, then verifies all 54 predecessor groups' occurrence counts, ordered case
+samples and state lists. It confirms exactly 34 / 2,195 eligible, 18 / 736 excluded
+and two native range `auto` groups / 156 observations unclassified. The four-check
+run passed in 124.34 seconds; do not repeat the full-population check for prose or
+unrelated edits. Focused command: `node --test --test-name-pattern='owner initial attribution|appearance attribution' tests/material-parity/owner-initial-style-attribution.spec.mjs`.
+Explicit population command: `node --test --test-name-pattern='full-population appearance integration' tests/material-parity/owner-initial-style-attribution.spec.mjs`.
+The population test pins the retained `0a6c0f6d...` compact predecessor and its
+authenticated original capture; preserve that generation while this test uses it.
+
+Next: batch canonical classification/export integration and verify earlier rows
+are unchanged. The survey and attribution source fingerprints have changed:
+historical survey `--check`, canonical evidence and source receipts require
+explicit reconciliation at that boundary; none is claimed current after this
+extension. The accepted canonical unresolved count remains 1,541 until then.
+The two native range `auto` groups stay separate. The existing motion reader can
+review disjoint targets but currently permits only the original eight properties;
+it cannot yet clear the appearance motion exclusions. No renderer or fixture
+changes, new survey framework or full browser run were introduced.
 
 This replaces the earlier in-memory trial with an executable opt-in check.
 The permitted claim remains computed-reference versus local-declaration

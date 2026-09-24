@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import { buildMaterialInputAudit, validateMaterialInputAudit, collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { bindOwnerInitialStyleSource, collectOwnerInitialStyleEvidence, classifyOwnerInitialStyleInput,
   validateOwnerInitialStyleSource, ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
+import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 
 const index = JSON.parse(readFileSync('docs/material-owner-initial-style-membership.json'));
 const bytes = readFileSync(index.capture.file);
@@ -59,6 +60,75 @@ test('owner initial attribution rejects altered sources, observations and false 
     { source: 'guessed' }, { revision: -1 }, { element: 'foreign' }, { issues: [{ reason: 'explicit-relevant-request' }] }])
     assert.equal(classifyOwnerInitialStyleInput(input, 'fontStyle', 'normal', undefined, { ...proof, ...patch }), undefined);
   assert.equal(classifyOwnerInitialStyleInput(input, 'fontStyle', 'normal', 'normal', proof), undefined);
+});
+
+test('appearance attribution binds original observations and refuses explicit values, auto and missing coverage', () => {
+  const proof = evidence.observations.find(p => p.property === 'appearance' && p.issues.length === 0);
+  assert.ok(proof, 'the real captured stepper must supply a positive appearance observation');
+  const entry = cases.find(e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === proof.case);
+  const input = entry.styleInputs.find(i => i.id === proof.element);
+  const before = JSON.stringify(input);
+  assert.equal(classifyOwnerInitialStyleInput(input, 'appearance', 'none', undefined, proof)?.attribution,
+    ownerInitialStyleAttribution);
+  assert.equal(classifyOwnerInitialStyleInput(input, 'appearance', 'auto', undefined, proof), undefined);
+  assert.equal(classifyOwnerInitialStyleInput(input, 'appearance', 'none', 'none', proof), undefined);
+  assert.equal(classifyOwnerInitialStyleInput(input, 'appearance', 'none', undefined,
+    { ...proof, issues: [{ reason: 'explicit-relevant-request', key: '-webkit-appearance' }] }), undefined);
+  for (const patch of [{ renderingEquivalent: true }, { computedCandidateVerified: true }, { referenceValue: 'auto' }])
+    assert.equal(classifyOwnerInitialStyleInput(input, 'appearance', 'none', undefined, { ...proof, ...patch }), undefined);
+  const missing = structuredClone(evidence);
+  missing.observations = missing.observations.filter(p => p.property !== 'appearance');
+  assert.ok(validateOwnerInitialStyleSource(binding, missing).length,
+    'source replay must reject omission of the newly reviewed property');
+  const changed = structuredClone(raw);
+  changed.results[0].styleInputs.find(i => i.id === input.id).reference.appearance = 'auto';
+  assert.equal(bindOwnerInitialStyleSource(changed, { parityPath: file }).status, 'invalid');
+  assert.equal(JSON.stringify(input), before);
+});
+
+test('owner initial full-population appearance integration preserves native auto and excluded owners', () => {
+  // Immutable predecessor, not whichever snapshot happens to be current later.
+  const snapshot = { generation: '0a6c0f6defafd4e27f0b93f3d4e732621a8f8a7d4807fc516f09c21270091296',
+    indexSha256: 'ed6ddb547a1f61c6c7fecb37a1efaf8df602d504e8927b16b0ac2fee6809bea0' };
+  const entries = [...original.results.map(e => ({ ...e, kind: 'static' })),
+    ...original.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+  const rows = [...new Set(entries.map(e => e.family))]
+    .flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, snapshot))
+    .filter(r => r.attribution === 'unresolved' && r.property === 'appearance');
+  assert.equal(rows.length, 54);
+  const fullBinding = bindOwnerInitialStyleSource(original, { parityPath: index.capture.file });
+  assert.equal(fullBinding.status, 'bound');
+  const fullInventory = collectFullTreeInventory(entries);
+  const fullEvidence = collectOwnerInitialStyleEvidence(original, fullInventory);
+  const byOwner = new Map(fullEvidence.observations.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
+  assert.equal(byOwner.size, fullEvidence.observations.length);
+  let eligibleGroups = 0, eligibleOccurrences = 0, excludedGroups = 0, excludedOccurrences = 0, autoOccurrences = 0;
+  for (const row of rows) {
+    const matching = entries.filter(e => e.family === row.family).flatMap(e => e.styleInputs
+      .filter(i => i.id === row.element && i.reference?.appearance === row.reference && i.astylar?.appearance === row.astylar)
+      .map(input => ({ entry: e, input, case: keyOf(e) })));
+    assert.equal(matching.length, row.occurrences);
+    assert.deepEqual(matching.slice(0, 12).map(o => o.case), row.cases);
+    assert.deepEqual([...new Set(matching.map(o => o.entry.state ?? 'static'))], row.states);
+    const dispositions = matching.map(o => {
+      const proof = byOwner.get(JSON.stringify([o.case, row.element, 'appearance']));
+      const classification = classifyOwnerInitialStyleInput(o.input, 'appearance', row.reference, row.astylar, proof);
+      if (classification) {
+        assert.equal(classification.classification, 'parity-harness-defect');
+        assert.equal(classification.reviewEvidence.computedCandidateVerified, false);
+        assert.equal(classification.reviewEvidence.renderingEquivalent, false);
+      }
+      return !!classification;
+    });
+    assert.equal(new Set(dispositions).size, 1, 'do not silently split a mixed-eligibility group');
+    if (row.reference === 'auto') {
+      assert.equal(dispositions[0], false); autoOccurrences += matching.length;
+    } else if (dispositions[0]) { eligibleGroups++; eligibleOccurrences += matching.length; }
+    else { excludedGroups++; excludedOccurrences += matching.length; }
+  }
+  assert.deepEqual({ eligibleGroups, eligibleOccurrences, excludedGroups, excludedOccurrences, autoOccurrences },
+    { eligibleGroups: 34, eligibleOccurrences: 2195, excludedGroups: 18, excludedOccurrences: 736, autoOccurrences: 156 });
 });
 
 test('owner initial canonical integration preserves earlier classifications and enforces exact new attribution coverage', () => {

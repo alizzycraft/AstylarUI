@@ -9,7 +9,11 @@ export const ownerInitialStyleAttribution = 'reviewed-owner-initial-style-observ
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 const scalar = (p, v) => p === 'wordSpacing' && v === '0px' ? '0' : v;
-const propertiesOf = input => Object.entries(ownerInitialValues)
+// Extend the source-bound attribution, not the historical survey's population.
+// Appearance remains a computed-reference/local-omission observation, never an
+// inferred candidate default or a waiver of native control paint requirements.
+const reviewedInitialValues = Object.freeze({ ...ownerInitialValues, appearance: 'none' });
+const propertiesOf = input => Object.entries(reviewedInitialValues)
   .filter(([p, v]) => input.reference?.[p] === v && input.astylar?.[p] === undefined).map(([p]) => p);
 const casesOf = report => [['static', report.results ?? []], ['interaction', report.interactions ?? []]]
   .flatMap(([kind, entries]) => entries.map(e => ({ ...e, kind,
@@ -48,7 +52,7 @@ function inspect(entry, trees) {
   const observations = [];
   for (const input of entry.styleInputs) for (const property of propertiesOf(input)) {
     const proof = trees ? inspectOwnerInitialStyle(input, property, trees.reference, trees.candidate,
-      { family: entry.family, reviewedGeneratedOwners: true }) : {
+      { family: entry.family, reviewedGeneratedOwners: true, reviewedAppearance: true }) : {
       property, element: input.id, issues: [{ reason: 'missing-paired-inventory-evidence' }],
       disposition: 'requires-specific-review', computedCandidateVerified: false, renderingEquivalent: false };
     observations.push({ case: keyOf(entry), family: entry.family, element: input.id, property,
@@ -66,8 +70,8 @@ export function collectOwnerInitialStyleEvidence(report, inventory) {
 
 export function classifyOwnerInitialStyleInput(input, property, reference, candidate, proof) {
   if (!proof || proof.disposition !== 'captured-default-versus-local-omission' || proof.issues?.length !== 0 ||
-      proof.element !== input.id || proof.property !== property || !Object.hasOwn(ownerInitialValues, property) ||
-      reference !== scalar(property, ownerInitialValues[property]) || reference !== proof.referenceValue ||
+      proof.element !== input.id || proof.property !== property || !Object.hasOwn(reviewedInitialValues, property) ||
+      reference !== scalar(property, reviewedInitialValues[property]) || reference !== proof.referenceValue ||
       candidate !== undefined || input.astylar?.[property] !== undefined ||
       proof.computedCandidateVerified !== false || proof.renderingEquivalent !== false ||
       proof.source !== 'core-style-inspection' || !Number.isInteger(proof.revision) || proof.revision < 0) return;
