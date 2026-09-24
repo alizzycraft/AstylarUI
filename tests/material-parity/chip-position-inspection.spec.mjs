@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { collectChipPositionInspection, proveChipPositionInspection, collectChipPaintProposal, applyChipPaintProposal } from './chip-position-inspection.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
+import { collectChipPaintAuditInputs, validateChipPaintAuditInputs, validateChipPaintAuditClassifications, applyChipPaintAuditRows } from './chip-paint-audit-source-binding.mjs';
 test('chips retain three complete source-backed owner groups across 76 states', () => {
   assert.deepEqual(collectChipPositionInspection(), JSON.parse(readFileSync('docs/material-chip-position-inspection.json')));
 });
@@ -91,6 +92,15 @@ test('chip paint proposal binds ten complete canonical rows without accepting re
   original.splice(4, 0, unrelated);
   const before = structuredClone(original);
   const result = await applyChipPaintProposal(original, proposal);
+  const parityPath = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
+  const evidence = collectChipPaintAuditInputs(JSON.parse(readFileSync(parityPath)), { parityPath });
+  assert.equal(evidence.binding.status, 'bound', evidence.binding.error);
+  assert.deepEqual(applyChipPaintAuditRows(original, evidence), result);
+  assert.deepEqual(validateChipPaintAuditClassifications(evidence, result), []);
+  for (const mutate of [rows => rows.pop(), rows => rows.push(rows[0]), rows => { rows[0].occurrences++; }]) {
+    const changed = structuredClone(original); mutate(changed);
+    assert.throws(() => applyChipPaintAuditRows(changed, evidence));
+  }
   assert.deepEqual(original, before, 'application mutated its input');
   assert.equal(result.length, original.length);
   assert.equal(result[4], unrelated, 'unrelated row must be passed through untouched');
@@ -102,4 +112,23 @@ test('chip paint proposal binds ten complete canonical rows without accepting re
     }
     assert.deepEqual(restored, before.find(item => item.element === row.element && item.property === row.property && item.reference === row.reference && item.astylar === row.astylar));
   }
+});
+
+test('chip production binding rejects incomplete, foreign and forged evidence', () => {
+  const parityPath = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
+  const original = JSON.parse(readFileSync(parityPath));
+  const evidence = collectChipPaintAuditInputs(original, { parityPath });
+  assert.equal(evidence.binding.status, 'bound', evidence.binding.error);
+  assert.equal(evidence.observations.length, 32);
+  assert.deepEqual(validateChipPaintAuditInputs(evidence), []);
+  for (const mutate of [e => e.observations.pop(), e => { e.review.groups[0].classification = 'equivalent-representation'; },
+    e => { e.binding.reviewSource.sha256 = 'forged'; }, e => { e.inputEquivalent = true; }]) {
+    const changed = structuredClone(evidence); mutate(changed);
+    assert.ok(validateChipPaintAuditInputs(changed).length);
+  }
+  assert.equal(collectChipPaintAuditInputs({ ...original, results: original.results.slice(1) }, { parityPath }).binding.status, 'invalid');
+  assert.equal(collectChipPaintAuditInputs(original, { parityPath: 'docs/material-chip-paint-review.json' }).binding.status, 'invalid');
+  const unbound = collectChipPaintAuditInputs({});
+  assert.equal(unbound.binding.status, 'unbound');
+  assert.throws(() => applyChipPaintAuditRows([{ attribution: 'reviewed-chip-state-layer-substitution' }], unbound));
 });

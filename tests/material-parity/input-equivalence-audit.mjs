@@ -1,4 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { collectChipPaintAuditInputs, applyChipPaintAuditRows, validateChipPaintAuditInputs,
+  validateChipPaintAuditClassifications, chipPaintAttribution } from './chip-paint-audit-source-binding.mjs';
 import { collectPositionFollowupAuditInputs, applyPositionFollowupAuditRows, validatePositionFollowupAuditInputs,
   validatePositionFollowupAuditClassifications, positionFollowupAttribution } from './position-followup-audit-source-binding.mjs';
 import { collectPositionAuditInputs, applyPositionAuditRows, validatePositionAuditInputs,
@@ -258,7 +260,9 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const positionAuditInputs = collectPositionAuditInputs(parityReport, { root, parityPath: options.parityPath });
   const positionReviewedDiscrepancies = applyPositionAuditRows(visibilityReviewedDiscrepancies, positionAuditInputs);
   const positionFollowupAuditInputs = collectPositionFollowupAuditInputs(parityReport, { root, parityPath: options.parityPath });
-  const discrepancies = applyPositionFollowupAuditRows(positionReviewedDiscrepancies, positionFollowupAuditInputs);
+  const positionFollowupDiscrepancies = applyPositionFollowupAuditRows(positionReviewedDiscrepancies, positionFollowupAuditInputs);
+  const chipPaintAuditInputs = collectChipPaintAuditInputs(parityReport, { root, parityPath: options.parityPath });
+  const discrepancies = applyChipPaintAuditRows(positionFollowupDiscrepancies, chipPaintAuditInputs);
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -363,6 +367,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     visibilityAuditInputs,
     positionAuditInputs,
     positionFollowupAuditInputs,
+    chipPaintAuditInputs,
     sliderInputBoxes,
     sliderBorderDefaults,
     rootHeightInputs,
@@ -389,6 +394,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
 export function validateMaterialInputAudit(report, { requireComplete = true, root = process.cwd() } = {}) {
   const errors = [];
   for (const [key, attributions, validateSource, validateRows] of [
+    ['chipPaintAuditInputs', [chipPaintAttribution], validateChipPaintAuditInputs, validateChipPaintAuditClassifications],
     ['positionFollowupAuditInputs', [positionFollowupAttribution], validatePositionFollowupAuditInputs, validatePositionFollowupAuditClassifications],
     ['positionAuditInputs', [positionCompositionAttribution], validatePositionAuditInputs, validatePositionAuditClassifications],
     ['visibilityAuditInputs', [visibilityObservationAttribution], validateVisibilityAuditInputs, validateVisibilityAuditClassifications],
@@ -8475,6 +8481,11 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/chip-paint-audit-source-binding.mjs',
+    'tests/material-parity/chip-position-inspection.mjs',
+    'tests/material-parity/chip-position-inspection.spec.mjs',
+    'scripts/audit-findings-store.mjs',
+    'docs/material-chip-paint-review.json',
     'tests/material-parity/position-followup-audit-source-binding.mjs',
     'tests/material-parity/position-followup-audit-source-binding.spec.mjs',
     'tests/material-parity/position-followup-review.mjs',

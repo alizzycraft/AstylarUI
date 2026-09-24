@@ -427,6 +427,29 @@ the verified compact index:
    conserved. The preceding stored proposal is historical (its collector-source
    receipt predates this application helper); regenerate it before integration,
    rather than accepting the old receipt. No canonical export was run here.
+
+   Production integration now present (following `2a35d34`): the synchronous
+   chip adapter uses checked-in `docs/material-chip-paint-review.json`, SHA-256
+   `6f0e944909cae42864a67d886b9420e8c17b3127caec4d25a3c24e9b731ac2cb`, not
+   the mutable working-index pointer. It authenticates the original capture,
+   current review-source receipts and all paired layer observations before
+   applying classifications. Collection, output section, validation and five
+   source-inventory entries are wired into the existing producer. Historical
+   producer restoration strips only these exact additions before checking its
+   original pinned hash; three chip-specific mutation controls are included.
+
+   Six focused tests pass (72.04s while the full-row read ran concurrently),
+   including malformed predecessors, incomplete/foreign captures, forged review
+   metadata and source restoration. The final transition suite also passes
+   independently (0.52s). A separately authenticated full canonical read and
+   in-memory application verifies **8,483 rows: exactly 10 changed, 8,473 passed
+   through unchanged, 32 reviewed observations; unresolved 1,654 -> 1,644**.
+   This did not write the canonical export. Snapshot baseline is preserved at
+   `artifacts/material-parity/pre-chip-paint-2a35d34` for exact post-export
+   conservation. Next run cold canonical export/check at this integration
+   milestone, reconcile all changed sections/source receipts, then refresh the
+   compact index. Until that succeeds the canonical checkpoint above remains
+   1,654, not 1,644. Full browser acceptance and the rest of the audit stay open.
 3. Remaining typography and paint: line-height 67, tracking 57, font-family 31
    and color 111 unresolved groups. Reuse explicit ownership/stage proofs and
    separate missing computed evidence from unequal declarations. These property

@@ -1,0 +1,855 @@
+{
+  "schemaVersion": 1,
+  "kind": "chip-paint-review-proposal",
+  "groups": [
+    {
+      "family": "chips",
+      "element": "chip-0",
+      "property": "backgroundColor",
+      "reference": "rgba(234,222,247,1)",
+      "astylar": "rgba(221,210,234,1)",
+      "occurrences": 8,
+      "classification": "application-plugin-authoring-defect",
+      "attribution": "reviewed-chip-state-layer-substitution",
+      "justification": "Reference retains a separate absolute opacity state layer; candidate substitutes its owner background. The mapped base-background scalar does not represent equivalent paint-owner inputs or prove a core color defect.",
+      "recommendedOwner": "showcase chip state-layer authoring; prove general core layer support before restoring equivalent inputs",
+      "reviewedCases": [
+        "interaction:chips@light/desktop-dpr1/hover",
+        "interaction:chips@light/desktop-dpr2/hover",
+        "interaction:chips@dark/desktop-dpr1/hover",
+        "interaction:chips@dark/desktop-dpr2/hover",
+        "interaction:chips@contrast/desktop-dpr1/hover",
+        "interaction:chips@contrast/desktop-dpr2/hover",
+        "interaction:chips@custom/desktop-dpr1/hover",
+        "interaction:chips@custom/desktop-dpr2/hover"
+      ],
+      "reviewEvidence": {
+        "originalCompleteRowSha256": "9bf8d7d5497a1530c764f51f4e60ecaf07f69301fb899bf1c678504285419cfe",
+        "sourceSha256": "0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de",
+        "observations": [
+          {
+            "case": "interaction:chips@light/desktop-dpr1/hover",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/hover/reference-input-tree.json",
+                "sha256": "03d56ada59907064405277b29fcef45cfe543933c3f4697472337bc9b419ddc8"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/hover/astylar-input-tree.json",
+                "sha256": "a4667a4b3785b11d8444401f6677e74ca274063961201b265f2b71fc4172d4c2"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.08",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#ddd2ea"
+          },
+          {
+            "case": "interaction:chips@light/desktop-dpr2/hover",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/hover/reference-input-tree.json",
+                "sha256": "03d56ada59907064405277b29fcef45cfe543933c3f4697472337bc9b419ddc8"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/hover/astylar-input-tree.json",
+                "sha256": "a4667a4b3785b11d8444401f6677e74ca274063961201b265f2b71fc4172d4c2"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.08",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#ddd2ea"
+          },
+          {
+            "case": "interaction:chips@dark/desktop-dpr1/hover",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/hover/reference-input-tree.json",
+                "sha256": "2e9d1fb3085192d84976304385d317e5f26a2be0b04601ccb110f95856d9ab17"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/hover/astylar-input-tree.json",
+                "sha256": "ab2b90d82dc9e4ab2208d44b49c280eee9de3b22cf6e709c2fec0063ab0141d7"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.08",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#ddd2ea"
+          },
+          {
+            "case": "interaction:chips@dark/desktop-dpr2/hover",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/hover/reference-input-tree.json",
+                "sha256": "2e9d1fb3085192d84976304385d317e5f26a2be0b04601ccb110f95856d9ab17"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/hover/astylar-input-tree.json",
+                "sha256": "ab2b90d82dc9e4ab2208d44b49c280eee9de3b22cf6e709c2fec0063ab0141d7"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.08",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#ddd2ea"
+          },
+          {
+            "case": "interaction:chips@contrast/desktop-dpr1/hover",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/hover/reference-input-tree.json",
+                "sha256": "8aaffbc943ad90e6e4a7d891220d24527c0284e0059f1b1d4e75904c61660d1b"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/hover/astylar-input-tree.json",
+                "sha256": "663d9400500f429a6eb52a5b6ee2cf8d3bbe0ebad17f31860357ef74fe5fa776"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.08",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#ddd2ea"
+          },
+          {
+            "case": "interaction:chips@contrast/desktop-dpr2/hover",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/hover/reference-input-tree.json",
+                "sha256": "8aaffbc943ad90e6e4a7d891220d24527c0284e0059f1b1d4e75904c61660d1b"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/hover/astylar-input-tree.json",
+                "sha256": "be99fb044c63b7e680133076a0b4c36f98a708f77888ce269485f5eea1be3a60"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.08",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#ddd2ea"
+          },
+          {
+            "case": "interaction:chips@custom/desktop-dpr1/hover",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/hover/reference-input-tree.json",
+                "sha256": "98b26b5c6746d0a7b0b56e510118f3f8de4238d04dda6c034b49e4b84c12e01d"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/hover/astylar-input-tree.json",
+                "sha256": "4df684d6a34eeb392a01d76042894aff49ca3f967b7d2b93cc6b39764de677fc"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.08",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#ddd2ea"
+          },
+          {
+            "case": "interaction:chips@custom/desktop-dpr2/hover",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/hover/reference-input-tree.json",
+                "sha256": "98b26b5c6746d0a7b0b56e510118f3f8de4238d04dda6c034b49e4b84c12e01d"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/hover/astylar-input-tree.json",
+                "sha256": "b0f4199b01ff585600d33e9c1857b345909467ea76721d72dc48b6a8383e7cf5"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.08",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#ddd2ea"
+          }
+        ],
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false
+      }
+    },
+    {
+      "family": "chips",
+      "element": "chip-0",
+      "property": "backgroundColor",
+      "reference": "rgba(234,222,247,1)",
+      "astylar": "rgba(215,203,228,1)",
+      "occurrences": 8,
+      "classification": "application-plugin-authoring-defect",
+      "attribution": "reviewed-chip-state-layer-substitution",
+      "justification": "Reference retains a separate absolute opacity state layer; candidate substitutes its owner background. The mapped base-background scalar does not represent equivalent paint-owner inputs or prove a core color defect.",
+      "recommendedOwner": "showcase chip state-layer authoring; prove general core layer support before restoring equivalent inputs",
+      "reviewedCases": [
+        "interaction:chips@light/desktop-dpr1/held",
+        "interaction:chips@light/desktop-dpr2/held",
+        "interaction:chips@dark/desktop-dpr1/held",
+        "interaction:chips@dark/desktop-dpr2/held",
+        "interaction:chips@contrast/desktop-dpr1/held",
+        "interaction:chips@contrast/desktop-dpr2/held",
+        "interaction:chips@custom/desktop-dpr1/held",
+        "interaction:chips@custom/desktop-dpr2/held"
+      ],
+      "reviewEvidence": {
+        "originalCompleteRowSha256": "a11a986768bc7ccd99eab601ad1bdd71a947563d3ba6595e9c9e59236efe360e",
+        "sourceSha256": "0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de",
+        "observations": [
+          {
+            "case": "interaction:chips@light/desktop-dpr1/held",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/held/reference-input-tree.json",
+                "sha256": "caae61daecfe20d1e22ad268affd11a8b7bd57baa0a0739f494003e59b5efb40"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/held/astylar-input-tree.json",
+                "sha256": "9126bab0d94c84514ecc45f89e0e96b83b195e519f0bcbb7a67175aaf8009f2b"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(75, 67, 87)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#d7cbe4"
+          },
+          {
+            "case": "interaction:chips@light/desktop-dpr2/held",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/held/reference-input-tree.json",
+                "sha256": "caae61daecfe20d1e22ad268affd11a8b7bd57baa0a0739f494003e59b5efb40"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/held/astylar-input-tree.json",
+                "sha256": "9126bab0d94c84514ecc45f89e0e96b83b195e519f0bcbb7a67175aaf8009f2b"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(75, 67, 87)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#d7cbe4"
+          },
+          {
+            "case": "interaction:chips@dark/desktop-dpr1/held",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/held/reference-input-tree.json",
+                "sha256": "91cb7f7d7f3c2a8cb6198b0c13c329420d06d4dc8ceeda437a6a4068403fd1cd"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/held/astylar-input-tree.json",
+                "sha256": "9c4244b94f6eacda96a070703385e06f46d6670a5c88cadd155765dec86d6d25"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(75, 67, 87)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#d7cbe4"
+          },
+          {
+            "case": "interaction:chips@dark/desktop-dpr2/held",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/held/reference-input-tree.json",
+                "sha256": "91cb7f7d7f3c2a8cb6198b0c13c329420d06d4dc8ceeda437a6a4068403fd1cd"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/held/astylar-input-tree.json",
+                "sha256": "9c4244b94f6eacda96a070703385e06f46d6670a5c88cadd155765dec86d6d25"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(75, 67, 87)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#d7cbe4"
+          },
+          {
+            "case": "interaction:chips@contrast/desktop-dpr1/held",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/held/reference-input-tree.json",
+                "sha256": "d5fe7b01baf99d5b70c934a2b7289a06a34158118dc6a24ab651478f2fbb1e08"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/held/astylar-input-tree.json",
+                "sha256": "bd67f78f52e11f09f585bf6a18c93d357b3f55dbd4b347d2e5ef9c5dd058d31d"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(75, 67, 87)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#d7cbe4"
+          },
+          {
+            "case": "interaction:chips@contrast/desktop-dpr2/held",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/held/reference-input-tree.json",
+                "sha256": "d5fe7b01baf99d5b70c934a2b7289a06a34158118dc6a24ab651478f2fbb1e08"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/held/astylar-input-tree.json",
+                "sha256": "a1a49d1a519f61b1d260b2c4a77f26b875d516821699888561fe99d3e13116d3"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(75, 67, 87)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#d7cbe4"
+          },
+          {
+            "case": "interaction:chips@custom/desktop-dpr1/held",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/held/reference-input-tree.json",
+                "sha256": "7b4d5da7d142887ce92ff4df5bd214bfe756d4b280c3cbeca9aa130043d0493b"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/held/astylar-input-tree.json",
+                "sha256": "675eba60224ad791bc54407e20a45c1e1ca899aa0c1781caddc2115c2797b671"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(75, 67, 87)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#d7cbe4"
+          },
+          {
+            "case": "interaction:chips@custom/desktop-dpr2/held",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/held/reference-input-tree.json",
+                "sha256": "7b4d5da7d142887ce92ff4df5bd214bfe756d4b280c3cbeca9aa130043d0493b"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/held/astylar-input-tree.json",
+                "sha256": "f575f476d449d02a7dfa5a9ddc029de9e25fd55671958061ad39471645594027"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(75, 67, 87)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "#eadef7",
+            "candidateInteractiveBackground": "#d7cbe4"
+          }
+        ],
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false
+      }
+    },
+    {
+      "family": "chips",
+      "element": "chip-0",
+      "property": "backgroundColor",
+      "reference": "rgba(0,0,0,0)",
+      "astylar": "rgba(229,224,232,1)",
+      "occurrences": 2,
+      "classification": "application-plugin-authoring-defect",
+      "attribution": "reviewed-chip-state-layer-substitution",
+      "justification": "Reference retains a separate absolute opacity state layer; candidate substitutes its owner background. The mapped base-background scalar does not represent equivalent paint-owner inputs or prove a core color defect.",
+      "recommendedOwner": "showcase chip state-layer authoring; prove general core layer support before restoring equivalent inputs",
+      "reviewedCases": [
+        "interaction:chips@light/desktop-dpr1/activate",
+        "interaction:chips@light/desktop-dpr2/activate"
+      ],
+      "reviewEvidence": {
+        "originalCompleteRowSha256": "6bc9a7072dbf2bc611e971147999fe0ef270c5cb595595ae0279f48b586a7be4",
+        "sourceSha256": "0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de",
+        "observations": [
+          {
+            "case": "interaction:chips@light/desktop-dpr1/activate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/activate/reference-input-tree.json",
+                "sha256": "b87b30df3e99f3180adad647beedefc732eb71d08023700a480b842ef020f441"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/activate/astylar-input-tree.json",
+                "sha256": "1f7bca7dbe5f3f5798b708884722f54a6cebdab7cbe724052d3bfa512a001cdb"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#e5e0e8"
+          },
+          {
+            "case": "interaction:chips@light/desktop-dpr2/activate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/activate/reference-input-tree.json",
+                "sha256": "b87b30df3e99f3180adad647beedefc732eb71d08023700a480b842ef020f441"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/activate/astylar-input-tree.json",
+                "sha256": "1f7bca7dbe5f3f5798b708884722f54a6cebdab7cbe724052d3bfa512a001cdb"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#e5e0e8"
+          }
+        ],
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false
+      }
+    },
+    {
+      "family": "chips",
+      "element": "chip-0",
+      "property": "backgroundColor",
+      "reference": "rgba(0,0,0,0)",
+      "astylar": "rgba(54,52,59,1)",
+      "occurrences": 2,
+      "classification": "application-plugin-authoring-defect",
+      "attribution": "reviewed-chip-state-layer-substitution",
+      "justification": "Reference retains a separate absolute opacity state layer; candidate substitutes its owner background. The mapped base-background scalar does not represent equivalent paint-owner inputs or prove a core color defect.",
+      "recommendedOwner": "showcase chip state-layer authoring; prove general core layer support before restoring equivalent inputs",
+      "reviewedCases": [
+        "interaction:chips@dark/desktop-dpr1/activate",
+        "interaction:chips@dark/desktop-dpr2/activate"
+      ],
+      "reviewEvidence": {
+        "originalCompleteRowSha256": "74ad98bd37abae2dd6b2ae8b6f03dd923f6a6750cb46e5f44da59424d7c8a6ce",
+        "sourceSha256": "0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de",
+        "observations": [
+          {
+            "case": "interaction:chips@dark/desktop-dpr1/activate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/activate/reference-input-tree.json",
+                "sha256": "a935c7a6b3df4e8d307827d6b1fd7b03d2d244db30663b26d5b2a12e69d533be"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/activate/astylar-input-tree.json",
+                "sha256": "a6367e800a1a0fe0ab1b11a57f7af560549cffb985ca789cadbe5665ddf2f707"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#36343b"
+          },
+          {
+            "case": "interaction:chips@dark/desktop-dpr2/activate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/activate/reference-input-tree.json",
+                "sha256": "a935c7a6b3df4e8d307827d6b1fd7b03d2d244db30663b26d5b2a12e69d533be"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/activate/astylar-input-tree.json",
+                "sha256": "a6367e800a1a0fe0ab1b11a57f7af560549cffb985ca789cadbe5665ddf2f707"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#36343b"
+          }
+        ],
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false
+      }
+    },
+    {
+      "family": "chips",
+      "element": "chip-0",
+      "property": "backgroundColor",
+      "reference": "rgba(0,0,0,0)",
+      "astylar": "rgba(223,223,223,1)",
+      "occurrences": 2,
+      "classification": "application-plugin-authoring-defect",
+      "attribution": "reviewed-chip-state-layer-substitution",
+      "justification": "Reference retains a separate absolute opacity state layer; candidate substitutes its owner background. The mapped base-background scalar does not represent equivalent paint-owner inputs or prove a core color defect.",
+      "recommendedOwner": "showcase chip state-layer authoring; prove general core layer support before restoring equivalent inputs",
+      "reviewedCases": [
+        "interaction:chips@contrast/desktop-dpr1/activate",
+        "interaction:chips@contrast/desktop-dpr2/activate"
+      ],
+      "reviewEvidence": {
+        "originalCompleteRowSha256": "5601e0af7896754a03a6b5bdc9284436b360c9ae12ff3675b7a345276419976c",
+        "sourceSha256": "0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de",
+        "observations": [
+          {
+            "case": "interaction:chips@contrast/desktop-dpr1/activate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/activate/reference-input-tree.json",
+                "sha256": "1cfe5e447fd0c09ea9e8823b0a4b53e03ff020606520555ed463882c3ea688bb"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/activate/astylar-input-tree.json",
+                "sha256": "ba4c7d6edfcc1c42c8e6d8b032d0caab8421602436e25afef249da8e06f1f85e"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#dfdfdf"
+          },
+          {
+            "case": "interaction:chips@contrast/desktop-dpr2/activate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/activate/reference-input-tree.json",
+                "sha256": "1cfe5e447fd0c09ea9e8823b0a4b53e03ff020606520555ed463882c3ea688bb"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/activate/astylar-input-tree.json",
+                "sha256": "7c59c9b9ada75825ed325af4d70aa98740050093eb693863adb14be933e9aa2f"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#dfdfdf"
+          }
+        ],
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false
+      }
+    },
+    {
+      "family": "chips",
+      "element": "chip-0",
+      "property": "backgroundColor",
+      "reference": "rgba(0,0,0,0)",
+      "astylar": "rgba(213,225,224,1)",
+      "occurrences": 2,
+      "classification": "application-plugin-authoring-defect",
+      "attribution": "reviewed-chip-state-layer-substitution",
+      "justification": "Reference retains a separate absolute opacity state layer; candidate substitutes its owner background. The mapped base-background scalar does not represent equivalent paint-owner inputs or prove a core color defect.",
+      "recommendedOwner": "showcase chip state-layer authoring; prove general core layer support before restoring equivalent inputs",
+      "reviewedCases": [
+        "interaction:chips@custom/desktop-dpr1/activate",
+        "interaction:chips@custom/desktop-dpr2/activate"
+      ],
+      "reviewEvidence": {
+        "originalCompleteRowSha256": "03d879cc3b2d7291b65264572562daec62ca1df755669ce16bd9c6f04fce3001",
+        "sourceSha256": "0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de",
+        "observations": [
+          {
+            "case": "interaction:chips@custom/desktop-dpr1/activate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/activate/reference-input-tree.json",
+                "sha256": "42a1a3a1a48b27f3954bc138071e2a4de9ca9c5f2a5a3519849230f68f702f42"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/activate/astylar-input-tree.json",
+                "sha256": "14d46291cea7cbb41b943932b672349adab491906d726b330cfa58c9b656460e"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#d5e1e0"
+          },
+          {
+            "case": "interaction:chips@custom/desktop-dpr2/activate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/activate/reference-input-tree.json",
+                "sha256": "42a1a3a1a48b27f3954bc138071e2a4de9ca9c5f2a5a3519849230f68f702f42"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/activate/astylar-input-tree.json",
+                "sha256": "e6401411c5bf38d64cac81bad47c7698435319682fed22c85f61a74b94619e81"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/0/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#d5e1e0"
+          }
+        ],
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false
+      }
+    },
+    {
+      "family": "chips",
+      "element": "chip-1",
+      "property": "backgroundColor",
+      "reference": "rgba(0,0,0,0)",
+      "astylar": "rgba(229,224,232,1)",
+      "occurrences": 2,
+      "classification": "application-plugin-authoring-defect",
+      "attribution": "reviewed-chip-state-layer-substitution",
+      "justification": "Reference retains a separate absolute opacity state layer; candidate substitutes its owner background. The mapped base-background scalar does not represent equivalent paint-owner inputs or prove a core color defect.",
+      "recommendedOwner": "showcase chip state-layer authoring; prove general core layer support before restoring equivalent inputs",
+      "reviewedCases": [
+        "interaction:chips@light/desktop-dpr1/activate-alternate",
+        "interaction:chips@light/desktop-dpr2/activate-alternate"
+      ],
+      "reviewEvidence": {
+        "originalCompleteRowSha256": "7fb9745a93cf4af21412d8a2552ff4027ab365309aa487636e8bde45d715856b",
+        "sourceSha256": "0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de",
+        "observations": [
+          {
+            "case": "interaction:chips@light/desktop-dpr1/activate-alternate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/activate-alternate/reference-input-tree.json",
+                "sha256": "dff2162665b031796b2c50ea9eff6ef54e738470a48ff3e2a325d521466af23d"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr1/activate-alternate/astylar-input-tree.json",
+                "sha256": "e2d364e9eed76f24751413d61a438b146e49c8c307fa8da1f5858abf862915b0"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/1/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#e5e0e8"
+          },
+          {
+            "case": "interaction:chips@light/desktop-dpr2/activate-alternate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/activate-alternate/reference-input-tree.json",
+                "sha256": "dff2162665b031796b2c50ea9eff6ef54e738470a48ff3e2a325d521466af23d"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/light/desktop-dpr2/activate-alternate/astylar-input-tree.json",
+                "sha256": "e2d364e9eed76f24751413d61a438b146e49c8c307fa8da1f5858abf862915b0"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/1/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#e5e0e8"
+          }
+        ],
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false
+      }
+    },
+    {
+      "family": "chips",
+      "element": "chip-1",
+      "property": "backgroundColor",
+      "reference": "rgba(0,0,0,0)",
+      "astylar": "rgba(54,52,59,1)",
+      "occurrences": 2,
+      "classification": "application-plugin-authoring-defect",
+      "attribution": "reviewed-chip-state-layer-substitution",
+      "justification": "Reference retains a separate absolute opacity state layer; candidate substitutes its owner background. The mapped base-background scalar does not represent equivalent paint-owner inputs or prove a core color defect.",
+      "recommendedOwner": "showcase chip state-layer authoring; prove general core layer support before restoring equivalent inputs",
+      "reviewedCases": [
+        "interaction:chips@dark/desktop-dpr1/activate-alternate",
+        "interaction:chips@dark/desktop-dpr2/activate-alternate"
+      ],
+      "reviewEvidence": {
+        "originalCompleteRowSha256": "939b91bf7670dc7527106bfa7eb1352bf022b7bb1fa24f5ba7c0aff8383687e6",
+        "sourceSha256": "0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de",
+        "observations": [
+          {
+            "case": "interaction:chips@dark/desktop-dpr1/activate-alternate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/activate-alternate/reference-input-tree.json",
+                "sha256": "b2eb2b25c05d341426e1a8e9f5b8d39251436e5bab716dcce18c1bf84102c873"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr1/activate-alternate/astylar-input-tree.json",
+                "sha256": "9d2b52e3648bbec97aa9844b40da8e018d7cb0aec14280a8ddd2fe1197ab5e1f"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/1/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#36343b"
+          },
+          {
+            "case": "interaction:chips@dark/desktop-dpr2/activate-alternate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/activate-alternate/reference-input-tree.json",
+                "sha256": "b2eb2b25c05d341426e1a8e9f5b8d39251436e5bab716dcce18c1bf84102c873"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/dark/desktop-dpr2/activate-alternate/astylar-input-tree.json",
+                "sha256": "9d2b52e3648bbec97aa9844b40da8e018d7cb0aec14280a8ddd2fe1197ab5e1f"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/1/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#36343b"
+          }
+        ],
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false
+      }
+    },
+    {
+      "family": "chips",
+      "element": "chip-1",
+      "property": "backgroundColor",
+      "reference": "rgba(0,0,0,0)",
+      "astylar": "rgba(223,223,223,1)",
+      "occurrences": 2,
+      "classification": "application-plugin-authoring-defect",
+      "attribution": "reviewed-chip-state-layer-substitution",
+      "justification": "Reference retains a separate absolute opacity state layer; candidate substitutes its owner background. The mapped base-background scalar does not represent equivalent paint-owner inputs or prove a core color defect.",
+      "recommendedOwner": "showcase chip state-layer authoring; prove general core layer support before restoring equivalent inputs",
+      "reviewedCases": [
+        "interaction:chips@contrast/desktop-dpr1/activate-alternate",
+        "interaction:chips@contrast/desktop-dpr2/activate-alternate"
+      ],
+      "reviewEvidence": {
+        "originalCompleteRowSha256": "f457d2ad42a497fe800afb5da63f0d3a76cf162e1171b3ed519cd1cb05b06542",
+        "sourceSha256": "0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de",
+        "observations": [
+          {
+            "case": "interaction:chips@contrast/desktop-dpr1/activate-alternate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/activate-alternate/reference-input-tree.json",
+                "sha256": "b15496d4b37c0381d7a79dd9fa0101c412a7e708f0e97dee8aaa1a7edeb5d2a7"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr1/activate-alternate/astylar-input-tree.json",
+                "sha256": "267849c8ad041e53c052a187cc20ffd1ce34180c2a4342e1f8f26a30630b35c4"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/1/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#dfdfdf"
+          },
+          {
+            "case": "interaction:chips@contrast/desktop-dpr2/activate-alternate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/activate-alternate/reference-input-tree.json",
+                "sha256": "b15496d4b37c0381d7a79dd9fa0101c412a7e708f0e97dee8aaa1a7edeb5d2a7"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/contrast/desktop-dpr2/activate-alternate/astylar-input-tree.json",
+                "sha256": "691caa4ce01a70669a66ea1f52d00cfea7b5d6cfd095cbf4930585da920130c1"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/1/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#dfdfdf"
+          }
+        ],
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false
+      }
+    },
+    {
+      "family": "chips",
+      "element": "chip-1",
+      "property": "backgroundColor",
+      "reference": "rgba(0,0,0,0)",
+      "astylar": "rgba(213,225,224,1)",
+      "occurrences": 2,
+      "classification": "application-plugin-authoring-defect",
+      "attribution": "reviewed-chip-state-layer-substitution",
+      "justification": "Reference retains a separate absolute opacity state layer; candidate substitutes its owner background. The mapped base-background scalar does not represent equivalent paint-owner inputs or prove a core color defect.",
+      "recommendedOwner": "showcase chip state-layer authoring; prove general core layer support before restoring equivalent inputs",
+      "reviewedCases": [
+        "interaction:chips@custom/desktop-dpr1/activate-alternate",
+        "interaction:chips@custom/desktop-dpr2/activate-alternate"
+      ],
+      "reviewEvidence": {
+        "originalCompleteRowSha256": "c4962b1e4e3b1ce0fe90558b2ccb479230cc43b74189317b1c19200e702c94fa",
+        "sourceSha256": "0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de",
+        "observations": [
+          {
+            "case": "interaction:chips@custom/desktop-dpr1/activate-alternate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/activate-alternate/reference-input-tree.json",
+                "sha256": "a0fde16e1d6f619ee4a88115beae8f5b7c8eb78761248a329a11cb33fb27a2c6"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr1/activate-alternate/astylar-input-tree.json",
+                "sha256": "da90a1f9afc8b31eef97409ac21e03146b7ba820234b01d7cbfb4831b7ad8697"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/1/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#d5e1e0"
+          },
+          {
+            "case": "interaction:chips@custom/desktop-dpr2/activate-alternate",
+            "inputTrees": {
+              "reference": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/activate-alternate/reference-input-tree.json",
+                "sha256": "a0fde16e1d6f619ee4a88115beae8f5b7c8eb78761248a329a11cb33fb27a2c6"
+              },
+              "astylar": {
+                "file": "artifacts/material-parity/current-ancestry-audit/interactions/chips/custom/desktop-dpr2/activate-alternate/astylar-input-tree.json",
+                "sha256": "729597d07af329395b2c6844848e9af47220311c702aff76f3314615d0f361dc"
+              }
+            },
+            "referenceLayer": "frame/2/0/0/1/0",
+            "layerInk": "rgb(73, 69, 78)",
+            "layerOpacity": "0.12",
+            "candidateNormalBackground": "transparent",
+            "candidateInteractiveBackground": "#d5e1e0"
+          }
+        ],
+        "inputEquivalent": false,
+        "renderingEquivalent": false,
+        "rendererCauseProven": false
+      }
+    }
+  ],
+  "sources": [
+    {
+      "file": "tests/material-parity/chip-position-inspection.mjs",
+      "sha256": "d4cb37bee16c5d50daef92e7bec3aa9e2f20c1f28b40899488a3f2d4d36d3194"
+    },
+    {
+      "file": "examples/material-showcase/src/app/astylar.component.ts",
+      "sha256": "b7957cd9e651efdf85bcbb70d7b9dd4fd8fbddb18c1b616ab6c9d54d3937ff90"
+    }
+  ],
+  "canonicalAttributionChanged": false
+}

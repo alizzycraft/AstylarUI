@@ -23,6 +23,9 @@ test('position producer integration preserves every prior byte outside the exact
     current.replace('    positionFollowupAuditInputs,', '    positionFollowupAuditInputs: {},'),
     current.replace('[positionFollowupAttribution], validatePositionFollowupAuditInputs', '[], validatePositionFollowupAuditInputs'),
     current.replace("    'tests/material-parity/position-followup-review.mjs',\n", ''),
+    current.replace('applyChipPaintAuditRows(positionFollowupDiscrepancies, chipPaintAuditInputs)', 'positionFollowupDiscrepancies'),
+    current.replace('    chipPaintAuditInputs,', '    chipPaintAuditInputs: {},'),
+    current.replace("    'docs/material-chip-paint-review.json',\n", ''),
   ]) {
     assert.notEqual(mutated, current);
     assert.throws(() => restorePositionProducer(mutated));

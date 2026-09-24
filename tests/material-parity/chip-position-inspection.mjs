@@ -112,6 +112,9 @@ export async function collectChipPaintProposal() {
 // the source-binding and full canonical conservation milestone is integrated.
 export async function applyChipPaintProposal(rows, proposal) {
   assert.deepEqual(proposal, await collectChipPaintProposal(), 'chip proposal must replay current authenticated evidence');
+  return applyChipPaintRows(rows, proposal);
+}
+export function applyChipPaintRows(rows, proposal) {
   const fields = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewedCases', 'reviewEvidence'];
   const signature = row => JSON.stringify([row.family, row.element, row.property, row.reference, row.astylar]);
   const decisions = new Map(proposal.groups.map(group => [signature(group), group]));
@@ -138,7 +141,11 @@ export async function applyChipPaintProposal(rows, proposal) {
   return output;
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  if (process.argv[2] === '--paint-review') {
+  if (process.argv[2] === '--paint-export') {
+    const proposal = await collectChipPaintProposal();
+    writeFileSync('docs/material-chip-paint-review.json', JSON.stringify(proposal, null, 2) + '\n');
+    console.log(hash(readFileSync('docs/material-chip-paint-review.json')));
+  } else if (process.argv[2] === '--paint-review') {
     console.log(JSON.stringify(saveReviewProposal('artifacts/material-parity/working-audit', await collectChipPaintProposal())));
   } else {
     const report = collectChipPositionInspection();

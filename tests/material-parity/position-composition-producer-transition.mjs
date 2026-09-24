@@ -45,6 +45,17 @@ export function restorePositionProducer(source, { followupOnly = false } = {}) {
     assert.equal(restored.split(from).length, 2, 'missing or repeated position integration fragment');
     restored = restored.replace(from, to);
   };
+  // Preserve the pinned pre-position producer while admitting only the exact
+  // subsequent ten-row chip integration, not arbitrary producer edits.
+  if (restored.includes("from './chip-paint-audit-source-binding.mjs'")) {
+    replaceOnce("import { collectChipPaintAuditInputs, applyChipPaintAuditRows, validateChipPaintAuditInputs,\n  validateChipPaintAuditClassifications, chipPaintAttribution } from './chip-paint-audit-source-binding.mjs';\n");
+    replaceOnce('  const positionFollowupDiscrepancies = applyPositionFollowupAuditRows(positionReviewedDiscrepancies, positionFollowupAuditInputs);\n  const chipPaintAuditInputs = collectChipPaintAuditInputs(parityReport, { root, parityPath: options.parityPath });\n  const discrepancies = applyChipPaintAuditRows(positionFollowupDiscrepancies, chipPaintAuditInputs);',
+      '  const discrepancies = applyPositionFollowupAuditRows(positionReviewedDiscrepancies, positionFollowupAuditInputs);');
+    replaceOnce('    chipPaintAuditInputs,\n');
+    replaceOnce("    ['chipPaintAuditInputs', [chipPaintAttribution], validateChipPaintAuditInputs, validateChipPaintAuditClassifications],\n");
+    for (const file of ['tests/material-parity/chip-paint-audit-source-binding.mjs', 'tests/material-parity/chip-position-inspection.mjs',
+      'tests/material-parity/chip-position-inspection.spec.mjs', 'scripts/audit-findings-store.mjs', 'docs/material-chip-paint-review.json']) replaceOnce(`    '${file}',\n`);
+  }
   // The focused/integration split moved this test without changing its claim.
   const movedSliderProof = "    proof(root, 'tests/material-parity/slider-input-box-integration.spec.mjs',";
   if (restored.includes(movedSliderProof)) {
