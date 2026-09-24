@@ -33,9 +33,21 @@ same requested mechanisms, not proof of their contribution to every modal pixel.
 Implementation order remains: fix those general core rules, then restore the
 reference constraints and remove sampled dimensions; do not tune fixture sizes.
 
-Next: integrate the six action-box groups with independent raw-row replay and
-retain this panel authored-versus-used distinction in the existing source
-findings, as one coherent batch before another full export. The helper and its spec now differ from the accepted checkpoint's
+The six action-box groups are now wired into the existing producer under its
+bound-original-capture gate. `applyDialogActionBox` matches complete scalar
+populations and checks owner proofs; `validateDialogActionBox` replays from
+independently reconstructed original rows, never from saved prior metadata.
+Focused tests prove six groups / 192 occurrences, unchanged raw fields and
+unrelated row identity, and reject removed/duplicate cases or classifications,
+forged content intervals and prior metadata. Modal focused checks pass 3/3
+(7.37 seconds), existing alignment/source conservation checks pass 5/5
+(13.63 seconds), and exact producer-transition checks pass 1/1. The latter
+reject bypassed action classification and self-validating replay. No full export
+was run for this wiring change, and canonical unresolved count remains 1,607.
+
+Next: retain the panel authored-versus-used distinction in existing source
+findings and complete the related modal sizing batch before the next export.
+The helper, producer and narrow source guards now differ from the accepted checkpoint's
 source fingerprints; those are deliberate pending evidence changes, not current
 canonical source reconciliation. Do not rebuild the full export for this proof alone.
 

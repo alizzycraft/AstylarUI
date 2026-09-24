@@ -207,6 +207,50 @@ export function proveDialogActionBoxSubstitution(entry, r, a) {
     candidateUsedLayoutMeasured: false, renderingEquivalent: false };
 }
 
+export function applyDialogActionBox(rows, cases, inventory, canonicalStyle) {
+  const properties = new Set(['borderTopStyle', 'borderTopWidth', 'paddingBottom', 'flexWrap', 'flexShrink', 'minHeight']);
+  const proofs = new Map();
+  return rows.map(row => {
+    if (row.family !== 'dialog' || row.element !== 'dialog-actions' || row.attribution !== 'unresolved' || !properties.has(row.property)) return row;
+    const matching = cases.filter(c => c.family === row.family).flatMap(c => (c.styleInputs ?? [])
+      .filter(i => i.id === row.element && canonicalStyle(i.reference ?? {})[row.property] === row.reference &&
+        canonicalStyle(i.astylar ?? {})[row.property] === row.astylar)
+      .map(i => { assert.equal(i.astylarResolvedStyleEvidenceVersion, 2); return c; }));
+    const keys = matching.map(c => caseKey(c, c.kind));
+    assert.ok(keys.length > 0); assert.equal(new Set(keys).size, keys.length);
+    assert.equal(row.occurrences, keys.length); assert.deepEqual(row.cases, keys.slice(0, 12));
+    const observations = matching.map((c, index) => {
+      if (!proofs.has(keys[index])) {
+        const trees = modalInventoryTrees(inventory, keys[index]);
+        const proof = proveDialogActionBoxSubstitution(c, ...trees);
+        const native = trees[0].nodes.find(n => n.key === proof.referenceNode);
+        const candidate = trees[1].nodes.find(n => n.key === proof.astylarNode);
+        proofs.set(keys[index], { proof, reference: canonicalStyle(trees[0].styles[native.style]),
+          astylar: canonicalStyle(candidate.normalResolvedStyle) });
+      }
+      const result = proofs.get(keys[index]);
+      assert.equal(result.reference[row.property], row.reference);
+      assert.equal(result.astylar[row.property], row.astylar);
+      return result.proof;
+    });
+    const metadata = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'];
+    return { ...row, classification: 'application-plugin-authoring-defect', attribution: 'reviewed-dialog-action-box-substitution',
+      recommendedOwner: 'showcase dialog action box and flex constraints',
+      justification: 'The original top border is replaced with bottom padding, preserving sampled height but shifting the CSS-contract content interval. Wrapping, shrink and minimum-height requests are also omitted. Original owner declarations and all captured candidate stages are checked; candidate used layout and renderer causality are not inferred.',
+      reviewedCases: keys, reviewEvidence: { originalRowSha256: hash(JSON.stringify(row)),
+        priorMetadata: Object.fromEntries(metadata.filter(k => Object.hasOwn(row, k)).map(k => [k, structuredClone(row[k])])),
+        observations, inputEquivalent: false, renderingEquivalent: false } };
+  });
+}
+
+export function validateDialogActionBox(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-dialog-action-box-substitution');
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyDialogActionBox(originalRows, cases, inventory, canonicalStyle))));
+    return [];
+  } catch (error) { return [`dialog action box does not replay from original owner inputs: ${error.message}`]; }
+}
+
 export function applyDialogScalarTypography(rows, cases, inventory, retained, control, canonicalStyle) {
   const pairs = new Set(['dialog-copy/fontFamily', 'dialog-copy/letterSpacing', 'dialog-copy/color',
     'dialog-cancel/fontFamily', 'dialog-cancel/letterSpacing', 'dialog-save/fontFamily',

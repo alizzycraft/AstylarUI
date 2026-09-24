@@ -47,6 +47,13 @@ export function restorePositionProducer(source, { followupOnly = false } = {}) {
   };
   // Reuse the existing original-case replay for the nine dialog owner joins.
   if (restored.includes("from './modal-position-inspection.mjs'")) {
+    if (restored.includes('applyDialogActionBox')) {
+      replaceOnce("import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox } from './modal-position-inspection.mjs';",
+        "import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography } from './modal-position-inspection.mjs';");
+      replaceOnce('applyDialogActionBox(overlaySurfaceDiscrepancies, cases, elementInventory, canonicalStyle)', 'overlaySurfaceDiscrepancies');
+      replaceOnce('      errors.push(...validateDialogActionBox(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n');
+      replaceOnce("'reviewed-bottom-sheet-scalar-typography-owner', 'reviewed-dialog-action-box-substitution'", "'reviewed-bottom-sheet-scalar-typography-owner'");
+    }
     replaceOnce("import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography } from './modal-position-inspection.mjs';\n");
     replaceOnce("  const overlaySurfaceDiscrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);\n  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyBottomSheetScalarTypography(applyDialogScalarTypography(overlaySurfaceDiscrepancies, cases, elementInventory, retainedTypography, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)\n    : overlaySurfaceDiscrepancies;",
       '  const discrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);');

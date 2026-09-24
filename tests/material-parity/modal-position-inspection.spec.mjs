@@ -6,7 +6,8 @@ import { PNG } from 'pngjs';
 import { collectModalPositionInspection, proveModalPositionInspection, proveDialogScalarTypographyJoin,
   applyDialogScalarTypography, validateDialogScalarTypography, modalInventoryTrees,
   proveBottomSheetScalarTypography, applyBottomSheetScalarTypography,
-  validateBottomSheetScalarTypography, proveDialogActionBoxSubstitution } from './modal-position-inspection.mjs';
+  validateBottomSheetScalarTypography, proveDialogActionBoxSubstitution,
+  applyDialogActionBox, validateDialogActionBox } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
@@ -61,6 +62,36 @@ test('dialog action border-to-padding substitution preserves height but changes 
       }
     }
   }
+});
+
+test('dialog action box classifications replay six complete populations without altering scalar inputs', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const cases = JSON.parse(bytes).interactions.filter(e => e.family === 'dialog' && e.styleInputs.some(i => i.id === 'dialog-actions'))
+    .map(e => ({ ...e, kind: 'interaction' }));
+  assert.equal(cases.length, 32);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'dialog').filter(r => r.evidence.section === 'discrepancies');
+  const before = structuredClone(rows), applied = applyDialogActionBox(rows, cases, inventory, normalize);
+  assert.deepEqual(rows, before);
+  const changed = applied.filter((row, i) => row !== rows[i]);
+  assert.equal(changed.length, 6);
+  assert.equal(changed.reduce((sum, row) => sum + row.occurrences, 0), 192);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  for (let i = 0; i < rows.length; i++) {
+    const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+    assert.deepEqual(raw(applied[i]), raw(rows[i]));
+  }
+  const validate = result => validateDialogActionBox(result, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  for (const mutate of [
+    rs => rs.splice(rs.findIndex(r => r.attribution === 'reviewed-dialog-action-box-substitution'), 1),
+    rs => rs.push(structuredClone(rs.find(r => r.attribution === 'reviewed-dialog-action-box-substitution'))),
+    rs => { rs.find(r => r.attribution === 'reviewed-dialog-action-box-substitution').reviewEvidence.observations[0].cssContract.astylar.contentTop = 17; },
+    rs => { rs.find(r => r.attribution === 'reviewed-dialog-action-box-substitution').reviewEvidence.priorMetadata.attribution = 'forged'; },
+  ]) { const altered = structuredClone(applied); mutate(altered); assert.equal(validate(altered).length, 1); }
+  assert.throws(() => applyDialogActionBox(rows, cases.slice(1), inventory, normalize));
+  assert.throws(() => applyDialogActionBox(rows, [...cases, cases[0]], inventory, normalize));
 });
 
 test('dialog panel equal captured dimensions conceal percentage and inherited constraint substitutions', () => {
