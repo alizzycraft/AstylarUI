@@ -58,6 +58,7 @@ const assets = new Map([
   ['/jasmine.js', readFileSync(path.join(jasmineRoot, 'jasmine.js'))],
   ['/jasmine-html.js', readFileSync(path.join(jasmineRoot, 'jasmine-html.js'))],
   ['/boot0.js', readFileSync(path.join(jasmineRoot, 'boot0.js'))],
+  ['/audit-roboto.woff2', readFileSync('examples/material-showcase/node_modules/@fontsource/roboto/files/roboto-latin-500-normal.woff2')],
 ]);
 const html = '<!doctype html><html><body><script src="/jasmine.js"></script><script src="/jasmine-html.js"></script><script src="/boot0.js"></script><script type="module" src="/audit.js"></script></body></html>';
 const provenance = { commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
@@ -68,7 +69,7 @@ const provenance = { commit: execFileSync('git', ['rev-parse', 'HEAD'], { encodi
     JSON.parse(readFileSync(`examples/material-showcase/node_modules/${name}/package.json`)).version])),
   bundleSha256: hash(bundle), inputs: Object.keys(built.metafile.inputs).filter(f => f !== '<stdin>').sort().map(file => ({ file, sha256: hash(readFileSync(file)) })) };
 writeFileSync(path.join(output, 'provenance.json'), JSON.stringify(provenance, null, 2));
-const server = createServer((req, res) => { res.setHeader('content-type', assets.has(req.url) ? 'text/javascript' : 'text/html'); res.end(assets.get(req.url) ?? html); });
+const server = createServer((req, res) => { res.setHeader('content-type', req.url === '/audit-roboto.woff2' ? 'font/woff2' : assets.has(req.url) ? 'text/javascript' : 'text/html'); res.end(assets.get(req.url) ?? html); });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 let browser;
 try {

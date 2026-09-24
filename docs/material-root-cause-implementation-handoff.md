@@ -329,6 +329,31 @@ the verified compact index:
    Next integrate these bounded findings into the chip ownership/history review
    and retain actual-label/font and interaction coverage as open obligations;
    do not repeat the now-settled block-sizing controls.
+
+   Actual-label measurement control: `Angular`, `Astylar`, and `Angular Material`
+   are intrinsic span flex items with equal Roboto 500/14px, 20px line height,
+   nowrap and either zero or 0.096px tracking. The same local font bytes load and
+   pass `FontFaceSet.check` in both realms before mounting; runtime asset SHA-256
+   is `5bcc3aa180e7f26f643cd5b2621cd7c2de193d0661d913a94afd3d4881a7a34b`.
+   All label and host CSS/projected rectangles agree within 0.02px at DPR 1/2.
+   Tracked native widths are 49.421875, 44.75 and 105.34375px; candidate widths
+   are 49.41218566894531, 44.74324035644531 and 105.339599609375px. Both sides
+   retain exact 20px height and y=16. This reproduces the historical chip-label
+   width scale without a several-pixel measurement error; it does not prove
+   raster sharpness or correct placement inside the unequally authored chip.
+   Keep fixed chip widths and nested layout faults separate from label metrics.
+
+   Evidence: `artifacts/material-parity/chip-label-6c335dc-dpr1` and `-dpr2`,
+   result SHA-256 respectively
+   `8f8ebf22aff18b0acf27273fabef4107deba90f51deaae7bf793c271c2d1f582` and
+   `a57f96d7ca365826254558960e1baadf673a799af4f50de84e74e1b01d28e4c5`.
+   The two new label cases pass both DPRs; the full diagnostic remains failing
+   on its preserved defects (DPR 1: 11 passes/8 failures; DPR 2: 10/9; no page
+   errors, exit 1). TypeScript passes, 5.69s. Source/emitted receipts remain
+   identical. The existing runner now serves and hashes the pinned font asset;
+   no new harness or canonical fixture changes. Next address interaction-layer
+   input ownership and integrate these chip findings; do not rerun unchanged
+   label measurement as a substitute for the outstanding paint/state evidence.
 3. Remaining typography and paint: line-height 67, tracking 57, font-family 31
    and color 111 unresolved groups. Reuse explicit ownership/stage proofs and
    separate missing computed evidence from unequal declarations. These property

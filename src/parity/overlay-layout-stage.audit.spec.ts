@@ -11,11 +11,12 @@ import { FlexService } from '../app/services/dom/elements/flex.service';
 describe('overlay CSS layout versus projection audit', () => {
   for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only',
     'chip-intrinsic-unselected', 'chip-intrinsic-selected', 'chip-intrinsic-unselected-long', 'chip-intrinsic-selected-long', 'chip-intrinsic-selected-div',
-    'chip-intrinsic-selected-div-auto', 'chip-intrinsic-selected-div-auto-nopadding'] as const) {
+    'chip-intrinsic-selected-div-auto', 'chip-intrinsic-selected-div-auto-nopadding', 'chip-label-zero', 'chip-label-tracked'] as const) {
     const clipping = composition.endsWith('-clip');
     const rounded = composition.startsWith('rounded-');
     const chip = composition.startsWith('chip-intrinsic-');
-    for (const [width, height] of (chip ? [[320, 100]] : rounded ? [[160, 80]] : composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
+    const labels = composition.startsWith('chip-label-');
+    for (const [width, height] of (chip || labels ? [[320, 100]] : rounded ? [[160, 80]] : composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
       it(`${composition} at ${width} x ${height}`, async () => {
         TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
         const frame = document.createElement('iframe');
@@ -88,6 +89,26 @@ describe('overlay CSS layout versus projection audit', () => {
             { selector: '#label-block', width: composition.endsWith('-long') ? '100px' : '50px', height: '20px', background: '#302d32' },
           ];
         }
+        if (labels) {
+          // Same pinned font bytes in both realms; no OS fallback measurement.
+          for (const fonts of [document.fonts, doc.fonts]) {
+            const face = await new FontFace('Roboto', 'url(/audit-roboto.woff2)', { weight: '500' }).load();
+            fonts.add(face);
+            await fonts.load('500 14px Roboto');
+            expect(fonts.check('500 14px Roboto')).toBeTrue();
+          }
+          site.root.children = [{ type: 'div', id: 'host', children: [
+            { type: 'span', id: 'label-a', textContent: 'Angular' },
+            { type: 'span', id: 'label-b', textContent: 'Astylar' },
+            { type: 'span', id: 'label-long', textContent: 'Angular Material' },
+          ] }];
+          site.styles = [
+            { selector: '#host, #label-a, #label-b, #label-long', boxSizing: 'content-box', margin: '0', padding: '0', borderWidth: '0', borderStyle: 'none' },
+            { selector: '#host', position: 'absolute', left: '10px', top: '10px', width: '300px', height: '32px', display: 'flex', alignItems: 'center', gap: '8px' },
+            { selector: '#label-a, #label-b, #label-long', display: 'block', fontFamily: 'Roboto', fontSize: '14px', fontWeight: '500',
+              lineHeight: '20px', whiteSpace: 'nowrap', letterSpacing: composition === 'chip-label-zero' ? '0px' : '0.096px' },
+          ];
+        }
         const css = doc.createElement('style');
         css.textContent = site.styles.map(({ selector, ...values }) => `${selector}{${Object.entries(values)
           .map(([key, value]) => `${key.replace(/[A-Z]/g, c => '-' + c.toLowerCase())}:${value}`).join(';')}}`).join('\n');
@@ -95,6 +116,7 @@ describe('overlay CSS layout versus projection audit', () => {
         const append = (nodes: NonNullable<SiteData['root']['children']>, parent: HTMLElement) => {
           for (const node of nodes) {
             const element = doc.createElement(node.type); element.id = node.id!; parent.append(element);
+            if (node.textContent) element.textContent = node.textContent;
             if (node.children) append(node.children, element);
           }
         };
@@ -116,7 +138,7 @@ describe('overlay CSS layout versus projection audit', () => {
           const engine = surface.scene.getEngine();
           const viewport = surface.scene.activeCamera!.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
           const canvasBox = canvas.getBoundingClientRect();
-          const observations = (chip ? ['host', 'pane', 'cell', 'action', 'graphic', 'label-block'] : rounded ? ['host', 'filler', 'pane'] : sheet ? ['host', 'overlay', 'wrapper', 'pane', 'list', 'item-a', 'item-b'] :
+          const observations = (labels ? ['host', 'label-a', 'label-b', 'label-long'] : chip ? ['host', 'pane', 'cell', 'action', 'graphic', 'label-block'] : rounded ? ['host', 'filler', 'pane'] : sheet ? ['host', 'overlay', 'wrapper', 'pane', 'list', 'item-a', 'item-b'] :
             nested ? ['host', 'overlay', 'wrapper', 'pane'] : ['host', 'overlay', 'pane']).map(id => {
             const reference = doc.getElementById(id)!.getBoundingClientRect();
             const mesh = manager.elementsMap.get(id)!;
