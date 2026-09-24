@@ -9,7 +9,7 @@ import { FlexService } from '../app/services/dom/elements/flex.service';
 // Equal-input diagnostic reductions, not replacements for Material fixtures.
 // The private inspection symbol is read-only instrumentation, not authoring.
 describe('overlay CSS layout versus projection audit', () => {
-  for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'dialog-intrinsic', 'dialog-intrinsic-explicit',
+  for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'snack-intrinsic-short', 'snack-intrinsic-long', 'snack-intrinsic-short-auto', 'dialog-intrinsic', 'dialog-intrinsic-explicit',
     'dialog-intrinsic-autoheight', 'dialog-intrinsic-explicit-autoheight', 'dialog-intrinsic-explicit-autoheight-nolimit',
     'dialog-intrinsic-explicit-autoheight-nolimit-autowidth', 'dialog-intrinsic-explicit-autoheight-omitlimit-autowidth',
     'fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only',
@@ -20,7 +20,8 @@ describe('overlay CSS layout versus projection audit', () => {
     const chip = composition.startsWith('chip-intrinsic-');
     const labels = composition.startsWith('chip-label-');
     const dialog = composition.startsWith('dialog-intrinsic');
-    for (const [width, height] of (dialog ? [[640, 400]] : chip || labels ? [[320, 100]] : rounded ? [[160, 80]] : composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
+    const snack = composition.startsWith('snack-intrinsic');
+    for (const [width, height] of (snack ? [[800, 400]] : dialog ? [[640, 400]] : chip || labels ? [[320, 100]] : rounded ? [[160, 80]] : composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
       it(`${composition} at ${width} x ${height}`, async () => {
         TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
         const frame = document.createElement('iframe');
@@ -124,7 +125,7 @@ describe('overlay CSS layout versus projection audit', () => {
             { selector: '#label-block', width: composition.endsWith('-long') ? '100px' : '50px', height: '20px', background: '#302d32' },
           ];
         }
-        if (labels) {
+        if (labels || snack) {
           // Same pinned font bytes in both realms; no OS fallback measurement.
           for (const fonts of [document.fonts, doc.fonts]) {
             const face = await new FontFace('Roboto', 'url(/audit-roboto.woff2)', { weight: '500' }).load();
@@ -132,6 +133,8 @@ describe('overlay CSS layout versus projection audit', () => {
             await fonts.load('500 14px Roboto');
             expect(fonts.check('500 14px Roboto')).toBeTrue();
           }
+        }
+        if (labels) {
           site.root.children = [{ type: 'div', id: 'host', children: [
             { type: 'span', id: 'label-a', textContent: 'Angular' },
             { type: 'span', id: 'label-b', textContent: 'Astylar' },
@@ -142,6 +145,29 @@ describe('overlay CSS layout versus projection audit', () => {
             { selector: '#host', position: 'absolute', left: '10px', top: '10px', width: '300px', height: '32px', display: 'flex', alignItems: 'center', gap: '8px' },
             { selector: '#label-a, #label-b, #label-long', display: 'block', fontFamily: 'Roboto', fontSize: '14px', fontWeight: '500',
               lineHeight: '20px', whiteSpace: 'nowrap', letterSpacing: composition === 'chip-label-zero' ? '0px' : '0.096px' },
+          ];
+        }
+        if (snack) {
+          // Intrinsic surface/label reduction. The action is a shared fixed
+          // block and font weight is pinned to the existing diagnostic asset;
+          // this isolates sizing, not full Material button or typography parity.
+          site.root.children = [{ type: 'div', id: 'host', children: [
+            { type: 'div', id: 'pane', children: [
+              { type: 'div', id: 'label', textContent: composition.endsWith('-long') ?
+                'Project saved with additional details. '.repeat(8) : 'Project saved' },
+              { type: 'div', id: 'action' },
+            ] },
+          ] }];
+          site.styles = [
+            { selector: '#host, #pane, #label, #action', display: 'block', boxSizing: 'border-box',
+              margin: '0', padding: '0', borderWidth: '0', borderStyle: 'none' },
+            { selector: '#host', position: 'fixed', left: '0', top: '0', width: '100%', height: '100%',
+              display: 'flex', justifyContent: 'center', alignItems: 'flex-end' },
+            { selector: '#pane', display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
+              minWidth: '344px', maxWidth: '672px', padding: '0 8px 0 0', background: '#323033' },
+            { selector: '#label', width: composition.endsWith('-auto') ? 'auto' : '100%', flex: '1 1 auto', padding: '14px 8px 14px 16px',
+              fontFamily: 'Roboto', fontSize: '14px', fontWeight: '500', lineHeight: '20px', color: '#f5eff4', whiteSpace: 'normal' },
+            { selector: '#action', width: '64px', height: '36px', flexShrink: '0', background: '#6750a4' },
           ];
         }
         const css = doc.createElement('style');
@@ -159,11 +185,11 @@ describe('overlay CSS layout versus projection audit', () => {
         const authoredBefore = JSON.stringify(site);
         // Observe original method inputs/returns; callThrough never substitutes
         // layout results. Installed aliases must resolve to the mounted runtime.
-        const sizingMethods = dialog
+        const sizingMethods = dialog || snack
           ? ['measureIntrinsicFlowChild', 'parseIntrinsicPixelLength', 'calculateIntrinsicContainerHeight',
             'measureIntrinsicFlowChildOuterWidth', 'calculateIntrinsicContainerWidth'] as const
           : ['measureIntrinsicFlowChildOuterWidth', 'parseDefiniteIntrinsicFlexBasis', 'calculateIntrinsicWidth'] as const;
-        const sizingSpies = chip || dialog ? sizingMethods.map(method => ({ method,
+        const sizingSpies = chip || dialog || snack ? sizingMethods.map(method => ({ method,
           spy: spyOn(FlexService.prototype as unknown as Record<typeof sizingMethods[number], (...args: unknown[]) => unknown>, method).and.callThrough(),
         })) : [];
         let surface: ReturnType<Astylar['mount']> | undefined;
@@ -176,7 +202,7 @@ describe('overlay CSS layout versus projection audit', () => {
           const engine = surface.scene.getEngine();
           const viewport = surface.scene.activeCamera!.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
           const canvasBox = canvas.getBoundingClientRect();
-          const observations = (dialog ? ['host', 'wrapper', 'container', 'inner', 'pane', 'item-a', 'item-b', 'item-c'] : labels ? ['host', 'label-a', 'label-b', 'label-long'] : chip ? ['host', 'pane', 'cell', 'action', 'graphic', 'label-block'] : rounded ? ['host', 'filler', 'pane'] : sheet ? ['host', 'overlay', 'wrapper', 'pane', 'list', 'item-a', 'item-b'] :
+          const observations = (snack ? ['host', 'pane', 'label', 'action'] : dialog ? ['host', 'wrapper', 'container', 'inner', 'pane', 'item-a', 'item-b', 'item-c'] : labels ? ['host', 'label-a', 'label-b', 'label-long'] : chip ? ['host', 'pane', 'cell', 'action', 'graphic', 'label-block'] : rounded ? ['host', 'filler', 'pane'] : sheet ? ['host', 'overlay', 'wrapper', 'pane', 'list', 'item-a', 'item-b'] :
             nested ? ['host', 'overlay', 'wrapper', 'pane'] : ['host', 'overlay', 'pane']).map(id => {
             const reference = doc.getElementById(id)!.getBoundingClientRect();
             const mesh = manager.elementsMap.get(id)!;
@@ -205,7 +231,7 @@ describe('overlay CSS layout versus projection audit', () => {
               canvasCssWidth: canvasBox.width, canvasCssHeight: canvasBox.height,
               renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(),
               headDisplay: frame.contentWindow!.getComputedStyle(doc.head).display }, observations,
-            ...(chip || dialog ? { sizingTrace: sizingSpies.map(({ method, spy }) => ({ method,
+            ...(chip || dialog || snack ? { sizingTrace: sizingSpies.map(({ method, spy }) => ({ method,
               calls: spy.calls.all().map(call => {
                 const first = call.args[0] as { id?: string; type?: string; flexBasis?: string; width?: string; padding?: string } | undefined;
                 if (method === 'parseIntrinsicPixelLength') return {

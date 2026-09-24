@@ -125,6 +125,33 @@ Do not attribute the old missing-snackbar report to the removed 159px transform
 without a matching historical runtime reproduction. No new capture is needed
 to restate the already-established fixed-width mismatch.
 
+Equal-input snackbar sizing reduction now exposes a shared intrinsic-percentage
+failure without the fixture's fixed surface width/height. At 800x400, paired
+min-width344/max-width672 flex surfaces with a width100% label produce short
+native content 344x48 at (228,352), candidate 672x48 at (64,352). Long wrapping
+content matches 672x108 at (64,292). Call-through trace locates the same core
+`measureIntrinsicFlowChildOuterWidth` branch as the dialog: the label receives
+792px available width and returns 792 for width100%, before adding the 64px
+action and 8px surface padding and clamping the surface maximum. A paired
+width:auto control measures the label at 109.0048828125px and both surfaces
+return 344x48. The auto control is NOT an authorized fixture workaround.
+
+This reduction deliberately uses the same pinned Roboto500 diagnostic asset
+and a fixed 64x36 action block on both sides to isolate intrinsic sizing; it
+does not claim full Material font/button/tree parity, or explain missing paint.
+It demonstrates why replacing the fixed344 fixture rule with equal intrinsic
+inputs requires a general core sizing correction, not another calibrated width.
+The short percentage case fails and both controls pass at DPR1 and DPR2.
+Evidence under `artifacts/material-parity`:
+`snack-intrinsic-control-ea138b0-dpr1/result.json` SHA-256
+`acbbc783c476b4450b9bf2b3b3dd08789c7185e68c6f04f46b538ddb08274649`;
+`snack-intrinsic-control-ea138b0-dpr2/result.json` SHA-256
+`fbd32cfda7a4db8f1cd38cf70573384d241a5e47daa025a3f0b174e923d56dac`.
+TypeScript no-emit passes. Both runner invocations exit1 honestly (DPR1 14 pass/
+15 fail, DPR2 13 pass/16 fail), no page errors, earlier 26 geometry cases exactly
+unchanged. Initial failure retained in `snack-intrinsic-ea138b0-dpr1`. No renderer,
+canonical fixture, or running-export dependency was changed.
+
 Next tooltip sizing batch: a read-only replay using
 `collectTooltipPositionAncestry` and `inspectOverlayOwnerDeclarations` authenticated
 all 18 paired open-state trees. All 72 property observations retain active native
