@@ -37,6 +37,20 @@ explicit-request population is rejected too. Six focused sheet/dialog checks
 pass in 18.56 seconds. Producer wiring and batched canonical reconciliation are
 still pending; no export or browser recapture was launched for this preparation.
 
+The eight-group sheet replay is now wired into the producer's bound-original-
+capture branch and independent original-row validator. The unbound guard rejects
+its attribution without capture provenance. Existing exact producer restoration
+and import guards admit only this addition; negative controls reject bypassing
+the classifier or replaying against its own output. Six producer/alignment checks
+pass in 14.52 seconds, and three sheet/dialog classification checks pass in 9.55
+seconds. Canonical integration is still pending (expected eight fewer unresolved
+groups only after full conservation); no full export was run for wiring alone.
+Next coherent panel question: native block/list flow with 8px vertical padding
+versus candidate column-flex/direct-button flow with 16px vertical padding.
+The current index retains display, flex-direction, padding-top and padding-bottom
+groups across 25 states each. Trace their explicit owner/child requests before
+deciding attribution; do not infer flow equivalence from matching outer height.
+
 Current canonical milestone: modal sizing export from `01fab20`, independently
 reconciled against `ed35a9c`: **1,595 unresolved groups**, 8,483 scalar groups /
 389,202 occurrences, 133 source findings. Coverage remains 436/436 static and

@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints } from './modal-position-inspection.mjs';
+import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints, applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints } from './modal-position-inspection.mjs';
 import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, validateOverlaySurfaceAuditInputs,
   validateOverlaySurfaceAuditClassifications, overlaySurfaceAttributions } from './overlay-surface-audit-source-binding.mjs';
 import { collectChipPaintAuditInputs, applyChipPaintAuditRows, validateChipPaintAuditInputs,
@@ -269,7 +269,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const overlaySurfaceAuditInputs = collectOverlaySurfaceAuditInputs(parityReport, { root, parityPath: options.parityPath });
   const overlaySurfaceDiscrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);
   const discrepancies = ownerInitialStyleBinding.status === 'bound'
-    ? applyBottomSheetScalarTypography(applyDialogScalarTypography(applyDialogActionBox(applyDialogPanelConstraints(overlaySurfaceDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, retainedTypography, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)
+    ? applyBottomSheetScalarTypography(applyDialogScalarTypography(applyDialogActionBox(applyDialogPanelConstraints(applyBottomSheetPanelConstraints(overlaySurfaceDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, retainedTypography, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)
     : overlaySurfaceDiscrepancies;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
@@ -599,12 +599,14 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.elementInventory, canonicalStyle));
       errors.push(...validateDialogPanelConstraints(report.discrepancies, replayedRows, cases,
         report.elementInventory, canonicalStyle));
+      errors.push(...validateBottomSheetPanelConstraints(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
       if (JSON.stringify(selected(replayedRows)) !== JSON.stringify(selected(report.discrepancies)))
         errors.push('owner initial-style attributions lack replayed original precedence, values and exact case coverage');
     } catch (error) { errors.push(`owner initial-style replay failed: ${error}`); }
   } else if (requireComplete || report.ownerInitialStyleBinding?.status === 'invalid' ||
       report.ownerInitialStyleEvidence?.observations?.length ||
-      report.discrepancies?.some(d => [ownerInitialStyleAttribution, 'reviewed-dialog-scalar-typography-owner', 'reviewed-bottom-sheet-scalar-typography-owner', 'reviewed-dialog-action-box-substitution', 'reviewed-dialog-panel-constraint-omission'].includes(d.attribution))) {
+      report.discrepancies?.some(d => [ownerInitialStyleAttribution, 'reviewed-dialog-scalar-typography-owner', 'reviewed-bottom-sheet-scalar-typography-owner', 'reviewed-dialog-action-box-substitution', 'reviewed-dialog-panel-constraint-omission', 'reviewed-bottom-sheet-panel-constraint-omission'].includes(d.attribution))) {
     errors.push('owner initial-style attribution lacks independently bound original capture evidence');
   }
   if (report.sliderBorderDefaults?.binding?.status === 'bound') {

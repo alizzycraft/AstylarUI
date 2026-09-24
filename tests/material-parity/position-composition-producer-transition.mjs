@@ -47,6 +47,13 @@ export function restorePositionProducer(source, { followupOnly = false } = {}) {
   };
   // Reuse the existing original-case replay for the nine dialog owner joins.
   if (restored.includes("from './modal-position-inspection.mjs'")) {
+    if (restored.includes('applyBottomSheetPanelConstraints')) {
+      replaceOnce("import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints, applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints } from './modal-position-inspection.mjs';",
+        "import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints } from './modal-position-inspection.mjs';");
+      replaceOnce('applyBottomSheetPanelConstraints(overlaySurfaceDiscrepancies, cases, elementInventory, canonicalStyle)', 'overlaySurfaceDiscrepancies');
+      replaceOnce('      errors.push(...validateBottomSheetPanelConstraints(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n');
+      replaceOnce("'reviewed-dialog-panel-constraint-omission', 'reviewed-bottom-sheet-panel-constraint-omission'", "'reviewed-dialog-panel-constraint-omission'");
+    }
     if (restored.includes('applyDialogPanelConstraints')) {
       replaceOnce("import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints } from './modal-position-inspection.mjs';",
         "import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox } from './modal-position-inspection.mjs';");
