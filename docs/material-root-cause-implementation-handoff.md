@@ -10,7 +10,13 @@ an altered parent link is rejected. The focused `nine dialog scalar` test passes
 (2.474 seconds), extending seven groups / 224 occurrences to nine / 288 without
 new captures or a new collector. Title tracking remains unresolved: there is no
 matching retained difference proof, so the owner mapping alone does not classify
-it. Canonical attribution is unchanged pending a later coherent batch.
+it. Follow-up now explains that absence across all 32 states: scalar tracking
+compares normalized native computed `0` with an omitted candidate local value;
+retained tracking has reference/retained `0` with both normal/effective fields
+undefined. The exact fields are preserved in the test (2.525 seconds), together
+with title-label parent checks. Equal retained tracking is not proof of token
+input equivalence or raster output. Canonical attribution is unchanged pending
+a later coherent batch.
 
 Bottom-sheet ownership check: the focused `bottom-sheet scalar typography`
 test authenticates 25 retained states and joins 15 scalar groups / 300 occurrences

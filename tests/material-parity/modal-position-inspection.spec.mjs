@@ -184,8 +184,25 @@ test('nine dialog scalar groups reuse original typography proofs with matching o
     }
   }
   assert.equal(groups, 9);
-  // Title tracking has no retained difference proof and is not inferred from
-  // this parent/child mapping. No output/default equivalence is accepted here.
+  const tracking = compact.filter(r => r.evidence.section === 'discrepancies' &&
+    r.element === 'dialog-title' && r.property === 'letterSpacing');
+  assert.equal(tracking.length, 1); assert.equal(tracking[0].reference, '0');
+  assert.equal(Object.hasOwn(tracking[0], 'astylar'), false);
+  const titleComparisons = retained.comparisons.filter(r => r.element === 'dialog-title-label');
+  assert.deepEqual(titleComparisons.map(r => r.case), keys);
+  for (const comparison of titleComparisons) {
+    assert.deepEqual(comparison.properties.letterSpacing, { reference: '0', normal: undefined, effective: undefined, retained: '0' });
+    const entry = inventory.cases.find(c => c.case === comparison.case && c.side === 'astylar');
+    const nodes = inventory.variants[entry.variant].nodes;
+    const label = nodes.find(n => n.key === comparison.astylarNode);
+    const owner = nodes.find(n => n.key === label.parent);
+    assert.equal(owner.authored.id, 'dialog-title');
+    for (const node of [label, owner]) for (const stage of ['normalStyle', 'interactionStyle'])
+      assert.equal(Object.hasOwn(inventory.styles[node[stage]].value, 'letterSpacing'), false);
+  }
+  // Scalar tracking compares a normalized native computed value with omitted
+  // local declarations; retained tracking compares two resolved zero values.
+  // This explains the inventory difference, not token-input or raster parity.
 });
 
 test('overlay surface proposal replays 13 complete predecessors and preserves unrelated rows', async () => {
