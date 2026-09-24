@@ -27,7 +27,7 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
   const excluded = new Set(['buildMaterialInputAudit', 'validateMaterialInputAudit', 'renderMaterialInputAuditMarkdown',
     'collectStyleDiscrepancies', 'sourceFingerprints', 'focusedProofInventory']);
   const additions = new Map([
-    ['./modal-position-inspection.mjs', ['applyDialogScalarTypography', 'validateDialogScalarTypography', 'applyBottomSheetScalarTypography', 'validateBottomSheetScalarTypography', 'applyDialogActionBox', 'validateDialogActionBox', 'applyDialogPanelConstraints', 'validateDialogPanelConstraints', 'applyBottomSheetPanelConstraints', 'validateBottomSheetPanelConstraints']],
+    ['./modal-position-inspection.mjs', ['applyDialogScalarTypography', 'validateDialogScalarTypography', 'applyBottomSheetScalarTypography', 'validateBottomSheetScalarTypography', 'applyDialogActionBox', 'validateDialogActionBox', 'applyDialogPanelConstraints', 'validateDialogPanelConstraints', 'applyBottomSheetPanelConstraints', 'validateBottomSheetPanelConstraints', 'applyBottomSheetPanelFlow', 'validateBottomSheetPanelFlow']],
     ['./overlay-surface-audit-source-binding.mjs', ['collectOverlaySurfaceAuditInputs', 'applyOverlaySurfaceAuditRows',
       'validateOverlaySurfaceAuditInputs', 'validateOverlaySurfaceAuditClassifications', 'overlaySurfaceAttributions']],
     ['./chip-paint-audit-source-binding.mjs', ['collectChipPaintAuditInputs', 'applyChipPaintAuditRows',

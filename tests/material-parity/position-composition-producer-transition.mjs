@@ -47,6 +47,13 @@ export function restorePositionProducer(source, { followupOnly = false } = {}) {
   };
   // Reuse the existing original-case replay for the nine dialog owner joins.
   if (restored.includes("from './modal-position-inspection.mjs'")) {
+    if (restored.includes('applyBottomSheetPanelFlow')) {
+      replaceOnce("import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints, applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints, applyBottomSheetPanelFlow, validateBottomSheetPanelFlow } from './modal-position-inspection.mjs';",
+        "import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints, applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints } from './modal-position-inspection.mjs';");
+      replaceOnce('applyBottomSheetPanelFlow(overlaySurfaceDiscrepancies, cases, elementInventory, canonicalStyle)', 'overlaySurfaceDiscrepancies');
+      replaceOnce('      errors.push(...validateBottomSheetPanelFlow(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n');
+      replaceOnce("'reviewed-bottom-sheet-panel-constraint-omission', 'reviewed-bottom-sheet-panel-flow-substitution'", "'reviewed-bottom-sheet-panel-constraint-omission'");
+    }
     if (restored.includes('applyBottomSheetPanelConstraints')) {
       replaceOnce("import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints, applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints } from './modal-position-inspection.mjs';",
         "import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints } from './modal-position-inspection.mjs';");

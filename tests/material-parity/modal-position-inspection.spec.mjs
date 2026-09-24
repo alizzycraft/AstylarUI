@@ -9,7 +9,8 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   validateBottomSheetScalarTypography, proveDialogActionBoxSubstitution,
   applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints,
   validateDialogPanelConstraints, proveBottomSheetPanelConstraints, proveBottomSheetPanelFlow,
-  applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints } from './modal-position-inspection.mjs';
+  applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints,
+  applyBottomSheetPanelFlow, validateBottomSheetPanelFlow } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
@@ -151,6 +152,37 @@ test('bottom-sheet constraint classifications preserve raw evidence and exclude 
   assert.throws(() => applyBottomSheetPanelConstraints(rows, [...cases, cases[0]], inventory, normalize));
   const forged = structuredClone(rows); forged[initial].attribution = 'unresolved';
   assert.throws(() => applyBottomSheetPanelConstraints(forged, cases, inventory, normalize));
+});
+
+test('bottom-sheet flow replay composes with constraints without changing raw rows', () => {
+  const inspection = collectModalPositionInspection();
+  const cases = JSON.parse(readFileSync(inspection.capture.file)).interactions.filter(e =>
+    e.family === 'bottom-sheet' && e.styleInputs.some(i => i.id === 'bottom-sheet-panel')).map(e => ({ ...e, kind: 'interaction' }));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', modalSizingPredecessor)
+    .filter(r => r.evidence.section === 'discrepancies');
+  const before = structuredClone(rows), flow = applyBottomSheetPanelFlow(rows, cases, inventory, normalize);
+  const changed = flow.filter((row, i) => row !== rows[i]);
+  assert.equal(changed.length, 4); assert.equal(changed.reduce((n, row) => n + row.occurrences, 0), 100);
+  const both = applyBottomSheetPanelConstraints(flow, cases, inventory, normalize);
+  assert.equal(both.filter((row, i) => row !== rows[i]).length, 12);
+  assert.deepEqual(rows, before);
+  const validate = values => validateBottomSheetPanelFlow(values, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(both), []);
+  assert.deepEqual(validateBottomSheetPanelConstraints(both, rows, cases, inventory, normalize), []);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(both.map(raw), rows.map(raw));
+  const selected = values => values.find(row => row.attribution === 'reviewed-bottom-sheet-panel-flow-substitution');
+  for (const mutate of [
+    values => values.splice(values.indexOf(selected(values)), 1),
+    values => values.push(structuredClone(selected(values))),
+    values => { selected(values).astylar = 'block'; },
+    values => { selected(values).reviewEvidence.observations[0].referenceChildren.reverse(); },
+    values => { selected(values).reviewEvidence.priorMetadata.attribution = 'forged'; },
+  ]) { const altered = structuredClone(both); mutate(altered); assert.equal(validate(altered).length, 1); }
+  assert.throws(() => applyBottomSheetPanelFlow(rows, cases.slice(1), inventory, normalize));
+  assert.throws(() => applyBottomSheetPanelFlow(rows, [...cases, cases[0]], inventory, normalize));
 });
 
 test('dialog action border-to-padding substitution preserves height but changes CSS content placement', () => {

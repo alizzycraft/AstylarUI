@@ -68,6 +68,21 @@ Flow attribution is not wired yet; batch export and source reconciliation remain
 pending. Reuse `fixture-bottom-sheet-list-structure-and-token-substitution`, not
 a duplicate source finding. No renderer or fixture changed.
 
+Flow attribution is now wired into the same bound-original producer branch and
+independent replay, using the existing modal classification helper. Combined
+sheet preparation covers **12 groups / 249 occurrences** (eight constraint groups
+plus four flow groups), with unchanged raw rows and separate attributions. Six
+sheet/dialog semantic and composition checks pass in 19.74 seconds; six existing
+source-transition/alignment checks pass in 16.39 seconds. Source guards reject
+bypassed flow classification and self-validating replay. The current canonical
+count is still 1,595; 1,583 is only the projected count if this batch integrates
+without other changes. No full export was run for this wiring increment.
+Continue gathering the adjacent panel paint/theme evidence before the next
+expensive export: the compact index retains four top-corner radius groups (24
+occurrences) and one dark-background group (six occurrences). Check native token
+resolution against candidate theme scaling rather than assuming either side's
+theme matches. Existing full final acceptance and all other coverage remain open.
+
 Current canonical milestone: modal sizing export from `01fab20`, independently
 reconciled against `ed35a9c`: **1,595 unresolved groups**, 8,483 scalar groups /
 389,202 occurrences, 133 source findings. Coverage remains 436/436 static and

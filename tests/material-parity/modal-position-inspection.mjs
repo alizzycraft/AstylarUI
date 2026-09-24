@@ -372,6 +372,24 @@ function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition)
   });
 }
 
+export function applyBottomSheetPanelFlow(rows, cases, inventory, canonicalStyle) {
+  return applyModalBoxReview(rows, cases, inventory, canonicalStyle, {
+    family: 'bottom-sheet', element: 'bottom-sheet-panel',
+    properties: ['display', 'flexDirection', 'paddingTop', 'paddingBottom'],
+    prove: proveBottomSheetPanelFlow, attribution: 'reviewed-bottom-sheet-panel-flow-substitution',
+    owner: 'showcase bottom-sheet list structure and padding ownership',
+    justification: 'Native block panel and nested block navigation list each request 8px vertical padding; candidate column-flex panel requests 16px and directly contains two buttons instead of the list and anchor children. Native computed row direction is inactive, not a horizontal layout. Original declarations, child ownership and captured stages prove unequal inputs without certifying used placement, scrolling or semantic equivalence.',
+  });
+}
+
+export function validateBottomSheetPanelFlow(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-bottom-sheet-panel-flow-substitution');
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(select(applyBottomSheetPanelFlow(originalRows, cases, inventory, canonicalStyle))));
+    return [];
+  } catch (error) { return [`bottom-sheet panel flow does not replay from original owner inputs: ${error.message}`]; }
+}
+
 export function applyBottomSheetPanelConstraints(rows, cases, inventory, canonicalStyle) {
   return applyModalBoxReview(rows, cases, inventory, canonicalStyle, {
     family: 'bottom-sheet', element: 'bottom-sheet-panel',
