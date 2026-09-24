@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 24
 
+Corrected `e857030` cold export is terminal (1,853.48 seconds, exit 1 solely
+for 1,560 unresolved groups). Strict canonical reconciliation passes: 8,483
+groups / 389,202 occurrences, exactly 18 changed groups / 298 occurrences,
+8,465 unrelated complete rows preserved, all raw inputs preserved. Of 79 report
+sections, 70 are unchanged; the other nine are fully reconciled. All 454 source
+fingerprints match disk, prior 133 source findings and 106 ordered proof entries
+are preserved, with one radius finding/proof added. Forty-eight control receipts
+and the independently reconstructed motion receipt change only producer hashes.
+Evidence: `artifacts/material-parity/sheet-action-e857030-{conservation,sections,metadata,receipts}.json`.
+Candidate compressed SHA is
+`ed33d97cd19daa01bdfa984abfaac85e5a5f1dafc6e31fa739400e58b14835e7`;
+decoded SHA is `185b07a93db39edb341e39af31476333e5facb3b0fba3a00df393f645352ef9c`.
+Compact import completed: 8,483 scalar groups, 134 source findings, 39,904 control
+differences, 389,202 occurrences and 1,560 unresolved groups; 69,762,238 compact
+bytes. This accepts only the bounded evidence transition, not full input
+equivalence or final browser gates.
+Next substantive batch: the nine dialog flow groups already investigated below;
+then the tab label/control stage comparison. Do not repeat those surveys.
+
+### Prior export recovery and pending investigation evidence
+
 Cold export at `decc53f` finished in 1,873.05 seconds, exit 1, with widespread
 coverage replay failures. It is rejected, not an accepted snapshot. The corner
 review joined replacements by compact-store `id`, absent from canonical rows;

@@ -27,7 +27,7 @@ Explicit gap composition: 1032 original observations support 16 unequal applicat
 
 Visual parity is green, but input equivalence is **not established**. The audit found 8483 unique normalized input differences across 389202 occurrences.
 
-1578 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
+1560 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
 
 Border initial-color evidence: 3580 uniquely paired node observations prove omitted author/inline color inputs with browser currentColor versus core transparent defaults. Attribution rejects possibly applicable state/media/reset rules and unknown selectors, and is not an equivalence waiver. Alpha paint, contextual-color paint, structure and final raster require separate evidence.
 
@@ -154,15 +154,16 @@ This means the existing screenshot score cannot be used as evidence that the ren
 
 | Classification | Unique signatures |
 | --- | ---: |
-| application-plugin-authoring-defect | 1223 |
+| application-plugin-authoring-defect | 1241 |
 | equivalent-representation | 2086 |
 | intentional-documented-limitation | 336 |
-| parity-harness-defect | 4838 |
+| parity-harness-defect | 4820 |
 
 ## Source-level compensation findings
 
 | Finding | Classification | Introduced by | Evidence | Owner |
 | --- | --- | --- | --- | --- |
+| core-rounded-radius-sampling-uses-unclamped-request | confirmed-core-renderer-defect | current source and installed-package browser proof; no first-bad revision or original-capture runtime attribution | src/app/services/babylon-mesh.service.ts:305 | core rounded geometry normalization and curve sampling before final projection |
 | fixture-dialog-action-font-tracking-tokens-omitted | application-plugin-authoring-defect | 2f44011 introduces independent dialog-action controls without Material font/tracking tokens; af04845 subsequently supplies the document control font reset | examples/material-showcase/src/app/astylar.component.ts:793 | showcase dialog action Material button token translation |
 | fixture-outlined-button-literal-replaces-outline-token | application-plugin-authoring-defect | 2f44011 authors the outlined button border as #79747e; the literal persists | examples/material-showcase/src/app/astylar.component.ts:538 | showcase Material outlined-button color-token input translation |
 | fixture-toggle-group-literal-replaces-divider-token | application-plugin-authoring-defect | c47d589 adds the toggle group border with literal #79747e | examples/material-showcase/src/app/astylar.component.ts:512 | showcase Material toggle-group border token input translation |
@@ -370,6 +371,7 @@ The Material-specific state layers, ripples, progress/range visuals, checkmark, 
 
 ## Focused evidence
 
+- public equal-input oversized corner radius rendering: Current installed-package div and button surfaces preserve 9999px radius inputs but render four-vertex rectangles; native capsules and 24px/36px candidate controls distinguish the shape defect at DPR1/2. Source-extracted kernel proof traces sampling density to the unnormalized radius. Retained failures are diagnostic evidence, not historical-bundle attribution or complete antialiasing parity. (src/parity/rounded-radius.audit.spec.ts:6)
 - complete original-source alignment classification conservation: Independently replays 125 groups / 6,871 observations against the authenticated pre-integration payload. Every current row must match; all raw observations and 8,214 unrelated complete rows remain unchanged. Source-only lineage conservation requires exact mapping/collector projection and unchanged observations. Terminal execution and CLI freshness remain separate evidence; this is not renderer parity. (tests/material-parity/prepared-alignment-canonical-integration.spec.mjs:8)
 - complete original-source follow-up classification conservation: Independently replays the 66-group / 2,640-observation transition and the subsequent 125-group / 6,871-observation alignment transition. Every complete current row must match: 191 changed groups / 9,511 observations and 8,148 untouched rows. All raw inputs survive. This is classification conservation, not input or rendering equivalence; terminal execution and CLI freshness remain separate checks. (tests/material-parity/followup-input-canonical-integration.spec.mjs:16)
 - complete original-source reviewed-input classification conservation: Authenticates entire current and frozen canonical payloads, independently replays the 134-group / 3,325-observation transition, the 66-group / 2,640-observation follow-up, and the 125-group / 6,871-observation alignment transition. Every complete current row must match: 325 changed groups / 12,836 observations and 8,014 untouched rows. All raw inputs survive. Terminal execution, builder freshness and full rendering acceptance remain separate checks. (tests/material-parity/reviewed-input-canonical-integration.spec.mjs:19)
