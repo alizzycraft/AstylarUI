@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 24
 
+Accepted canonical commit: `9b0ec36`, pushed to
+`codex/material-audit-alignment-integration`. New focused bottom-sheet proof
+`proveBottomSheetPanelConstraints` authenticates all 25 original owner captures
+and binds eight unresolved groups / 149 occurrences. Native responsive min/max
+width, 80vh max-height, border-box and automatic X/Y overflow are explicit
+requests; candidate owner rules replace sizing with fixed width/height plus a
+max-960px width override and omit those six properties in all captured stages.
+The compact native max-width:none case is deliberately excluded from attribution
+because it is an initial value, not an explicit request. Minimum-height is also
+outside this proof. Six negative controls reject candidate resolved/default
+substitution, inline or rule constraints, native overrides and breakpoint drift.
+The focused check passes (4.01 seconds). This is authoring evidence, not measured
+candidate used layout, functional scrolling proof or a new core diagnosis.
+Canonical unresolved count remains 1,595; this proof is not wired into the
+producer yet. Its two source fingerprints must be reconciled at the next batched
+export, not treated as matching the accepted package after this preparation edit.
+Neighboring transition checks exposed a moving-index assumption after the last
+integration: the panel test found zero unresolved rows rather than its expected
+six because those rows had already been attributed. Dialog transition tests and
+the new sheet population check now use the authenticated `ed35a9c` compact
+predecessor, preserving all original assertions and mutation controls. The five
+focused sheet/action/panel tests pass in 14.81 seconds with no skips. This is a
+test-input provenance correction, not a classification waiver.
+
 Current canonical milestone: modal sizing export from `01fab20`, independently
 reconciled against `ed35a9c`: **1,595 unresolved groups**, 8,483 scalar groups /
 389,202 occurrences, 133 source findings. Coverage remains 436/436 static and

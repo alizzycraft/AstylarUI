@@ -8,7 +8,7 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   proveBottomSheetScalarTypography, applyBottomSheetScalarTypography,
   validateBottomSheetScalarTypography, proveDialogActionBoxSubstitution,
   applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints,
-  validateDialogPanelConstraints } from './modal-position-inspection.mjs';
+  validateDialogPanelConstraints, proveBottomSheetPanelConstraints } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
@@ -18,6 +18,61 @@ import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows,
   validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications } from './overlay-surface-audit-source-binding.mjs';
 import { collectFullTreeInventory, collectControlTypographyEvidence,
   collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
+
+// Transition tests need original unresolved inputs, not a moving current index
+// in which the same classifications may already have been accepted.
+const modalSizingPredecessor = Object.freeze({
+  generation: '064777d79c6b85219285c85b97fb38edac27d069c8ddec67e0ae2da5b61099e5',
+  indexSha256: '7e3141128b5728007cf478b5d37b7820ac6a9cd56d34e0242d4f10842ce4e745',
+});
+
+test('bottom-sheet panel constraints bind explicit responsive and overflow omissions across original states', () => {
+  const inspection = collectModalPositionInspection();
+  const captured = JSON.parse(readFileSync(inspection.capture.file));
+  const observations = inspection.groups.find(g => g.element === 'bottom-sheet-panel').observations;
+  assert.equal(observations.length, 25);
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', modalSizingPredecessor).filter(r =>
+    r.evidence.section === 'discrepancies' && r.element === 'bottom-sheet-panel' && r.attribution === 'unresolved' &&
+    ['minWidth', 'maxWidth', 'maxHeight', 'boxSizing', 'overflowX', 'overflowY'].includes(r.property));
+  assert.equal(rows.length, 8);
+  const matched = new Map();
+  let first;
+  for (const observation of observations) {
+    const entry = captured.interactions.find(e => `interaction:${e.family}@${e.profile}/${e.viewport.id}/${e.state}` === observation.case);
+    const trees = ['reference', 'astylar'].map(side => {
+      const bytes = readFileSync(observation.inputTrees[side].file);
+      assert.equal(createHash('sha256').update(bytes).digest('hex'), observation.inputTrees[side].sha256);
+      return JSON.parse(bytes);
+    });
+    const input = { ...entry, kind: 'interaction' };
+    const proof = proveBottomSheetPanelConstraints(input, ...trees);
+    first ??= { input, trees, proof };
+    for (const property of proof.attributableProperties) {
+      const row = rows.filter(r => r.property === property && r.reference === proof.reference[property]);
+      assert.equal(row.length, 1); assert.equal(Object.hasOwn(row[0], 'astylar'), false);
+      if (!matched.has(row[0].id)) matched.set(row[0].id, []);
+      matched.get(row[0].id).push(observation.case);
+    }
+  }
+  assert.equal(matched.size, 8);
+  assert.equal([...matched.values()].reduce((n, cases) => n + cases.length, 0), 149);
+  for (const row of rows) {
+    assert.equal(matched.get(row.id).length, row.occurrences);
+    assert.deepEqual(matched.get(row.id).slice(0, 12), row.cases);
+  }
+  for (const mutate of [
+    (r, a, n) => { n.normalResolvedStyle.overflowX = 'auto'; },
+    (r, a, n) => { n.authored.style = { maxHeight: '80vh' }; },
+    (r, a) => { a.rules.find(rule => rule.selector === '.bottom-sheet-panel').overflow = 'auto'; },
+    r => { r.rules.find(rule => rule.selector === '.mat-bottom-sheet-container').declarations['max-height'].value = '128px'; },
+    r => { r.nodes.find(n => n.key === first.proof.referenceNode).inline = { 'max-height': '128px' }; },
+    (r, a) => { a.rules.find(rule => rule.mediaMaxWidth === '960px').mediaMaxWidth = '1000px'; },
+  ]) {
+    const [r, a] = structuredClone(first.trees);
+    mutate(r, a, a.nodes.find(n => n.key === first.proof.astylarNode));
+    assert.throws(() => proveBottomSheetPanelConstraints(first.input, r, a));
+  }
+});
 
 test('dialog action border-to-padding substitution preserves height but changes CSS content placement', () => {
   const inspection = collectModalPositionInspection();
@@ -32,7 +87,7 @@ test('dialog action border-to-padding substitution preserves height but changes 
     flexShrink: { reference: '0', astylar: '1' },
     minHeight: { reference: '52px' },
   };
-  const rows = queryFindings('artifacts/material-parity/working-audit', 'dialog').filter(r =>
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'dialog', modalSizingPredecessor).filter(r =>
     r.evidence.section === 'discrepancies' && r.element === 'dialog-actions' && Object.hasOwn(expectedInputs, r.property));
   assert.equal(rows.length, 6);
   for (const row of rows) {
@@ -73,7 +128,7 @@ test('dialog action box classifications replay six complete populations without 
     .map(e => ({ ...e, kind: 'interaction' }));
   assert.equal(cases.length, 32);
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
-  const rows = queryFindings('artifacts/material-parity/working-audit', 'dialog').filter(r => r.evidence.section === 'discrepancies');
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'dialog', modalSizingPredecessor).filter(r => r.evidence.section === 'discrepancies');
   const before = structuredClone(rows), applied = applyDialogActionBox(rows, cases, inventory, normalize);
   assert.deepEqual(rows, before);
   const changed = applied.filter((row, i) => row !== rows[i]);
@@ -102,7 +157,7 @@ test('dialog panel constraints replay six omitted or substituted inputs without 
     e.family === 'dialog' && e.styleInputs.some(i => i.id === 'dialog-panel')).map(e => ({ ...e, kind: 'interaction' }));
   assert.equal(cases.length, 32);
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
-  const rows = queryFindings('artifacts/material-parity/working-audit', 'dialog').filter(r => r.evidence.section === 'discrepancies');
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'dialog', modalSizingPredecessor).filter(r => r.evidence.section === 'discrepancies');
   const original = structuredClone(rows), applied = applyDialogPanelConstraints(rows, cases, inventory, normalize);
   assert.deepEqual(rows, original);
   const changed = applied.filter((r, i) => r !== rows[i]);

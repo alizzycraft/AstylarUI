@@ -245,6 +245,51 @@ export function proveDialogPanelConstraints(entry, r, a) {
     candidateUsedLayoutMeasured: false, renderingEquivalent: false };
 }
 
+export function proveBottomSheetPanelConstraints(entry, r, a) {
+  assert.equal(entry.family, 'bottom-sheet');
+  const { mapping } = proveModalPositionInspection(entry, r, a, 'bottom-sheet-panel');
+  const reference = one(r.nodes.filter(n => n.key === mapping.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === mapping.candidateNode));
+  assert.deepEqual(reference.inline, {});
+  assert.equal(candidate.authored.style, undefined);
+  assert.equal(candidate.authored.attributes?.style, undefined);
+  const compact = entry.viewport.id === 'comparison-pane-dpr1';
+  assert.ok(compact || /^desktop-dpr[12]$/.test(entry.viewport.id));
+  const affects = key => /^(?:width|height|minwidth|maxwidth|minheight|maxheight|boxsizing|overflow(?:x|y)?|all)$/.test(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
+  const rules = reference.rules.map(i => r.rules[i]).filter(rule => rule.active);
+  const requests = rules.flatMap(rule => Object.entries(rule.declarations).filter(([key]) => affects(key))
+    .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value })));
+  const base = { 'min-width': '100vw', 'box-sizing': 'border-box', 'max-height': '80vh', 'overflow-x': 'auto', 'overflow-y': 'auto' };
+  const large = { 'min-width': '512px', 'max-width': 'calc(-256px + 100vw)' };
+  const declarations = (selector, values) => Object.entries(values).map(([key, value]) => ({ selector, conditions: [], key, value, important: false }));
+  assert.deepEqual(requests, [...declarations('.mat-bottom-sheet-container', base),
+    ...(compact ? [] : declarations('.mat-bottom-sheet-container-large', large))]);
+  const candidateRequests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key))
+      .map(([key, value]) => ({ selector: rule.selector, ...(rule.mediaMaxWidth === undefined ? {} : { mediaMaxWidth: rule.mediaMaxWidth }), key, value })));
+  assert.deepEqual(candidateRequests, [
+    { selector: '.bottom-sheet-panel', key: 'width', value: '512px' },
+    { selector: '.bottom-sheet-panel', key: 'height', value: '128px' },
+    { selector: '.bottom-sheet-panel', mediaMaxWidth: '960px', key: 'width', value: '100%' },
+  ]);
+  const native = r.styles[reference.style];
+  const values = { minWidth: compact ? '900px' : '512px', maxWidth: compact ? 'none' : '1184px',
+    maxHeight: compact ? '640px' : '800px', boxSizing: 'border-box', overflowX: 'auto', overflowY: 'auto' };
+  for (const [key, value] of Object.entries(values)) assert.equal(native[key], value);
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(candidate[stage].width, compact ? '100%' : '512px');
+    assert.equal(candidate[stage].height, '128px');
+    for (const key of [...Object.keys(values), 'overflow']) assert.equal(Object.hasOwn(candidate[stage], key), false);
+  }
+  return { case: caseKey(entry, entry.kind), element: 'bottom-sheet-panel', referenceNode: reference.key, astylarNode: candidate.key,
+    referenceRequests: requests, candidateRequests, reference: values,
+    omittedCandidateProperties: Object.keys(values),
+    // The compact native max-width is an initial value, not an omitted explicit request.
+    attributableProperties: Object.keys(values).filter(key => !compact || key !== 'maxWidth'),
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false,
+    candidateUsedLayoutMeasured: false, renderingEquivalent: false };
+}
+
 function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition) {
   const properties = new Set(definition.properties);
   const proofs = new Map();
