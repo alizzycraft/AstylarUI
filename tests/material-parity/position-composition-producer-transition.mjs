@@ -46,6 +46,13 @@ export function restorePositionProducer(source, { followupOnly = false } = {}) {
     restored = restored.replace(from, to);
   };
   // Reuse the existing original-case replay for the nine dialog owner joins.
+  if (restored.includes('applyDialogTextFlow')) {
+    replaceOnce('validateBottomSheetContrastCorners, applyDialogTextFlow, validateDialogTextFlow, applyTabControlStage, validateTabControlStage }', 'validateBottomSheetContrastCorners }');
+    replaceOnce("  const modalDiscrepancies = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'");
+    replaceOnce("  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyTabControlStage(applyDialogTextFlow(modalDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)\n    : modalDiscrepancies;\n");
+    replaceOnce('      errors.push(...validateDialogTextFlow(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n      errors.push(...validateTabControlStage(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n');
+    replaceOnce("'reviewed-bottom-sheet-contrast-corner-substitution', 'reviewed-dialog-text-flow-inputs', 'reviewed-tab-control-stage'", "'reviewed-bottom-sheet-contrast-corner-substitution'");
+  }
   if (restored.includes("from './modal-position-inspection.mjs'")) {
     if (restored.includes("    'src/parity/rounded-radius.audit.spec.ts',")) {
       replaceOnce("    'src/parity/rounded-radius.audit.spec.ts',\n    'scripts/audit-overlay-layout-stage.mjs',\n");

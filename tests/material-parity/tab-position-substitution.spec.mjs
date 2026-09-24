@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { collectTabPositionSubstitution, proveTabPositionSubstitution, proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
-import { applyTabControlStage, validateTabControlStage } from './modal-position-inspection.mjs';
+import { applyTabControlStage, validateTabControlStage, applyDialogTextFlow, validateDialogTextFlow } from './modal-position-inspection.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
@@ -12,10 +12,12 @@ test('tab stage review preserves raw findings and does not classify typography o
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const captured = JSON.parse(bytes);
-  const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
-    ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))].filter(c => c.family === 'tabs');
+  const allCases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
+    ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))];
+  const cases = allCases.filter(c => c.family === 'tabs');
   assert.equal(cases.length, 70);
-  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.equal(allCases.length, 2311);
+  const inventory = collectFullTreeInventory(allCases), normalize = bindPreciseAuditNormalization();
   const snapshot = { generation: 'ed33d97cd19daa01bdfa984abfaac85e5a5f1dafc6e31fa739400e58b14835e7',
     indexSha256: '626379adeb7777aff365bab1e9a4c9594ad927a2bcbeecf1e8fb08b91907a958' };
   const rows = queryFindings('artifacts/material-parity/working-audit', 'tabs', snapshot)
@@ -38,6 +40,20 @@ test('tab stage review preserves raw findings and does not classify typography o
   const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
   assert.deepEqual(applied.map(raw), rows.map(raw));
   assert.deepEqual(validateTabControlStage(applied, rows, cases, inventory, normalize), []);
+  const dialogProperties = { 'dialog-title': ['display', 'flexShrink', 'paddingTop', 'paddingBottom'],
+    'dialog-copy': ['display', 'maxHeight', 'overflowX', 'overflowY', 'paddingTop'] };
+  const dialogRows = queryFindings('artifacts/material-parity/working-audit', 'dialog', snapshot)
+    .filter(r => r.evidence.section === 'discrepancies' && r.attribution === 'unresolved' && dialogProperties[r.element]?.includes(r.property))
+    .map(({ id, evidence, ...row }) => row);
+  assert.equal(dialogRows.length, 9);
+  const batch = [...rows, ...dialogRows];
+  const reviewed = applyTabControlStage(applyDialogTextFlow(batch, allCases, inventory, normalize), allCases, inventory, normalize);
+  const reviews = reviewed.filter(r => ['reviewed-tab-control-stage', 'reviewed-dialog-text-flow-inputs'].includes(r.attribution));
+  assert.equal(reviews.length, 19);
+  assert.equal(reviews.reduce((n, r) => n + r.occurrences, 0), 708);
+  assert.deepEqual(reviewed.map(raw), batch.map(raw));
+  assert.deepEqual(validateDialogTextFlow(reviewed, batch, allCases, inventory, normalize), []);
+  assert.deepEqual(validateTabControlStage(reviewed, batch, allCases, inventory, normalize), []);
   assert.throws(() => applyTabControlStage(rows, cases.slice(1), inventory, normalize));
   assert.throws(() => applyTabControlStage(rows, [...cases, cases[0]], inventory, normalize));
   for (const mutate of [

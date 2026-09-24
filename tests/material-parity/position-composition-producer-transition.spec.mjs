@@ -13,6 +13,9 @@ test('position producer integration preserves every prior byte outside the exact
   assert.equal(restorePositionProducer(current, { followupOnly: true }).restoredSource, beforeFollowup);
   assert.throws(() => restorePositionProducer(beforeFollowup, { followupOnly: true }));
   for (const mutated of [
+    current.replace('applyTabControlStage(applyDialogTextFlow(modalDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)', 'modalDiscrepancies'),
+    current.replace('validateDialogTextFlow(report.discrepancies, replayedRows, cases,', 'validateDialogTextFlow(report.discrepancies, report.discrepancies, cases,'),
+    current.replace('validateTabControlStage(report.discrepancies, replayedRows, cases,', 'validateTabControlStage(report.discrepancies, report.discrepancies, cases,'),
     current + '\n// unrelated change\n',
     current.replace('applyPositionAuditRows(visibilityReviewedDiscrepancies, positionAuditInputs)', 'visibilityReviewedDiscrepancies'),
     current.replace('    positionAuditInputs,', '    positionAuditInputs: {},'),

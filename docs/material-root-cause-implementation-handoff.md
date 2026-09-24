@@ -45,10 +45,16 @@ when the row binding imported the shared modal helper into the cached collector.
 Binding now lives beside that helper instead, leaving the collector graph intact;
 all three position-focused tests pass in 5.01 seconds and four tab tests in 3.97
 seconds. No cache guard was weakened and no new report was generated.
-Next integrate tab control-stage and dialog flow together into production
-aggregation and its exact predecessor guard, then reconcile the batch export.
-Both additions require source/export reconciliation at that milestone; neither
-changes canonical counts yet.
+Tab control-stage and dialog flow are now integrated together into production
+aggregation, independently replayed validation and the exact predecessor guard.
+Ten checks pass in 19.00 seconds: the combined binding uses the complete original
+2,311-case inventory, covers exactly 19 groups / 708 occurrences, preserves raw
+values and unrelated typography rows, and rejects changed source boundaries.
+Next extend the existing canonical comparator for this batch, preserving the
+accepted `c53bd80` snapshot, then cold-export once and reconcile all changed
+sections. The expected unresolved count is 1,541 only if full reconciliation
+succeeds; the accepted canonical count remains 1,560. No browser recapture or
+renderer/fixture implementation was performed for this metadata integration.
 
 ### Prior export recovery and pending investigation evidence
 
