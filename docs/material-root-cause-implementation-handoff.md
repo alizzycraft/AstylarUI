@@ -75,6 +75,30 @@ The initial reduction hit TS2561 because public `StyleRule` lacks `overflowY`.
 The geometry reduction requests `overflow:auto` on both sides instead, explicitly
 excluding vertical-only scrolling parity. No renderer or canonical fixture changed.
 
+Dialog runtime trace now identifies a concrete first-divergence path in
+`FlexService.measureIntrinsicFlowChild` / `parseIntrinsicPixelLength`:
+`inherit` reaches the numeric parser unresolved and becomes zero; percentage
+height uses a zero percentage reference. In auto-height controls,
+`calculateIntrinsicContainerHeight(pane)` correctly returns 104, but the following
+max-height clamp reduces it to zero. Even explicit `max-height:none` becomes zero
+through `parseFloat(value) || 0`. A paired control omitting max-height entirely
+matches native 280x104 geometry, CSS position and projection at both DPRs; its
+otherwise identical explicit-none counterpart remains 280x0. This confirms the
+keyword/clamp defect independently of percentage height. Explicit width controls
+also retain a separate 560-versus-280 intrinsic-width mismatch; do not claim that
+fixing max-height alone restores the original chain or Material dialog parity.
+Fix general CSS keyword resolution and indefinite-size constraint semantics at
+the owning core boundaries; never replace fixture `none`/`inherit` with omissions
+to hide these defects. The call-through spies only observe the installed runtime.
+
+Final trace: `artifacts/material-parity/dialog-sizing-trace-80efa42-v2-dpr1`
+and `-dpr2`, SHA-256
+`9d543522ec810326a21a70f2380927e89004bdeaa76b1e39bb0e16e524384aaf`
+and `328717504126767c10146f819650f6de4afb905db948a80003b1b87a385dd058`.
+Each has 26 cases and no page errors; DPR1 has 12 passes/14 failures, DPR2
+11 passes/15 failures. Both exit 1 with the original six dialog failures intact
+and the omitted-limit control passing. Earlier diagnostic failures remain retained.
+
 Prioritize remaining questions by impact and shared ownership, not by creating
 one investigation per scalar property. Component counts below are refreshed from
 the verified compact index:

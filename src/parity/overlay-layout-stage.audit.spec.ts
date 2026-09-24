@@ -11,7 +11,8 @@ import { FlexService } from '../app/services/dom/elements/flex.service';
 describe('overlay CSS layout versus projection audit', () => {
   for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'dialog-intrinsic', 'dialog-intrinsic-explicit',
     'dialog-intrinsic-autoheight', 'dialog-intrinsic-explicit-autoheight', 'dialog-intrinsic-explicit-autoheight-nolimit',
-    'dialog-intrinsic-explicit-autoheight-nolimit-autowidth', 'fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only',
+    'dialog-intrinsic-explicit-autoheight-nolimit-autowidth', 'dialog-intrinsic-explicit-autoheight-omitlimit-autowidth',
+    'fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only',
     'chip-intrinsic-unselected', 'chip-intrinsic-selected', 'chip-intrinsic-unselected-long', 'chip-intrinsic-selected-long', 'chip-intrinsic-selected-div',
     'chip-intrinsic-selected-div-auto', 'chip-intrinsic-selected-div-auto-nopadding', 'chip-label-zero', 'chip-label-tracked'] as const) {
     const clipping = composition.endsWith('-clip');
@@ -77,7 +78,8 @@ describe('overlay CSS layout versus projection audit', () => {
             { selector: '#wrapper', position: 'relative', display: 'flex', minWidth: '280px', maxWidth: '560px', maxHeight: '100%' },
             { selector: '#container, #inner, #pane', height: composition.includes('-autoheight') ? 'auto' : '100%',
               ...(composition.includes('-explicit')
-                ? { minWidth: '280px', maxWidth: '560px', minHeight: 'auto', maxHeight: composition.includes('-nolimit') ? 'none' : '100%' }
+                ? { minWidth: '280px', maxWidth: '560px', minHeight: 'auto',
+                  ...(composition.includes('-omitlimit') ? {} : { maxHeight: composition.includes('-nolimit') ? 'none' : '100%' }) }
                 : { minWidth: 'inherit', maxWidth: 'inherit', minHeight: 'inherit', maxHeight: 'inherit' }) },
             { selector: '#container, #pane', width: composition.endsWith('-autowidth') ? 'auto' : '100%' },
             { selector: '#inner', display: 'flex', flexDirection: 'row' },
@@ -157,8 +159,10 @@ describe('overlay CSS layout versus projection audit', () => {
         const authoredBefore = JSON.stringify(site);
         // Observe original method inputs/returns; callThrough never substitutes
         // layout results. Installed aliases must resolve to the mounted runtime.
-        const sizingMethods = ['measureIntrinsicFlowChildOuterWidth', 'parseDefiniteIntrinsicFlexBasis', 'calculateIntrinsicWidth'] as const;
-        const sizingSpies = chip ? sizingMethods.map(method => ({ method,
+        const sizingMethods = dialog
+          ? ['measureIntrinsicFlowChild', 'parseIntrinsicPixelLength', 'calculateIntrinsicContainerHeight'] as const
+          : ['measureIntrinsicFlowChildOuterWidth', 'parseDefiniteIntrinsicFlexBasis', 'calculateIntrinsicWidth'] as const;
+        const sizingSpies = chip || dialog ? sizingMethods.map(method => ({ method,
           spy: spyOn(FlexService.prototype as unknown as Record<typeof sizingMethods[number], (...args: unknown[]) => unknown>, method).and.callThrough(),
         })) : [];
         let surface: ReturnType<Astylar['mount']> | undefined;
@@ -193,9 +197,21 @@ describe('overlay CSS layout versus projection audit', () => {
               canvasCssWidth: canvasBox.width, canvasCssHeight: canvasBox.height,
               renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(),
               headDisplay: frame.contentWindow!.getComputedStyle(doc.head).display }, observations,
-            ...(chip ? { sizingTrace: sizingSpies.map(({ method, spy }) => ({ method,
+            ...(chip || dialog ? { sizingTrace: sizingSpies.map(({ method, spy }) => ({ method,
               calls: spy.calls.all().map(call => {
                 const first = call.args[0] as { id?: string; type?: string; flexBasis?: string; width?: string; padding?: string } | undefined;
+                if (method === 'parseIntrinsicPixelLength') return {
+                  value: call.args[0], percentageReference: call.args[1], result: call.returnValue,
+                };
+                if (method === 'measureIntrinsicFlowChild') return {
+                  id: first?.id, contentWidth: call.args[4], result: call.returnValue,
+                };
+                if (method === 'calculateIntrinsicContainerHeight') {
+                  const style = call.args[1] as Record<string, unknown> | undefined;
+                  return { id: first?.id, contentWidth: call.args[5],
+                    style: Object.fromEntries(['width', 'height', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight'].map(key => [key, style?.[key] ?? '<omitted>'])),
+                    result: call.returnValue };
+                }
                 return method === 'parseDefiniteIntrinsicFlexBasis'
                   ? { basis: first?.flexBasis, percentageReference: call.args[1], result: call.returnValue }
                   : { id: first?.id, type: first?.type, availableWidth: method === 'measureIntrinsicFlowChildOuterWidth' ? call.args[4] : undefined, result: call.returnValue };
