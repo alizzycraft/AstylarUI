@@ -42,6 +42,13 @@ export input was changed. Next classify the five signatures / 72 observations
 in a coherent later batch. Do not re-investigate established local flow
 placement or wrapping substitutions. No classification changed here.
 
+The same test now authenticates the five full canonical rows through the compact
+store and joins their values, occurrence counts, retained case lists and states
+to all 72 original observations. It preserves the absent candidate values and
+does not depend on an unresolved attribution label. All five tests pass again
+(exit 0, 13,502.874 ms); the full-row reads explain the extra runtime. This closes
+the population check for the proposed sizing batch, not its production integration.
+
 Prioritize remaining questions by impact and shared ownership, not by creating
 one investigation per scalar property. Component counts below are refreshed from
 the verified compact index:

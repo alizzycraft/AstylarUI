@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { collectTooltipPositionComposition, proveTooltipPositionComposition } from './tooltip-position-composition.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
+import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 
 // Size constraints are independent of the already-proven flow substitution.
 // This checks authored requests, not whether the short captured label hits them.
@@ -38,14 +39,39 @@ function proveTooltipSizingRequests(observation, reference, candidate) {
   return Object.keys(expected);
 }
 
-test('all 18 tooltip owners omit the four active reference sizing constraints', () => {
+test('all 18 tooltip owners omit the four active reference sizing constraints', async () => {
   const report = collectTooltipPositionComposition(); // authenticates each original paired tree
   let observations = 0;
+  const expected = new Map();
   for (const observation of report.observations) {
     const trees = ['reference', 'astylar'].map(side => JSON.parse(readFileSync(observation.inputTrees[side].file)));
-    observations += proveTooltipSizingRequests(observation, ...trees).length;
+    const properties = proveTooltipSizingRequests(observation, ...trees);
+    observations += properties.length;
+    const node = trees[0].nodes.find(n => n.key === observation.paths.reference[0].key);
+    for (const property of properties) {
+      const signature = JSON.stringify([property, trees[0].styles[node.style][property]]);
+      if (!expected.has(signature)) expected.set(signature, []);
+      expected.get(signature).push(observation.case);
+    }
   }
   assert.equal(observations, 72);
+  const directory = 'artifacts/material-parity/working-audit';
+  assert.equal(JSON.parse(readFileSync(`${directory}/current.json`)).generation,
+    JSON.parse(readFileSync('docs/material-input-equivalence-audit.json')).compressedSha256);
+  const rows = queryFindings(directory, 'tooltip').filter(row => row.element === 'tooltip-popup' &&
+    ['minWidth', 'maxWidth', 'minHeight', 'maxHeight'].includes(row.property));
+  assert.equal(rows.length, 5);
+  const seen = new Set();
+  for (const compact of rows) {
+    const row = await loadFindingEvidence(directory, 'tooltip', compact.id);
+    const signature = JSON.stringify([row.property, row.reference]), cases = expected.get(signature);
+    assert.ok(cases); assert.ok(!seen.has(signature)); seen.add(signature);
+    assert.equal(Object.hasOwn(row, 'astylar'), false, 'preserve omitted candidate value');
+    assert.equal(row.occurrences, cases.length);
+    assert.deepEqual(row.cases, cases.slice(0, 12));
+    assert.deepEqual(row.states, [...new Set(cases.map(key => key.split('/').at(-1)))]);
+  }
+  assert.equal(seen.size, expected.size);
 });
 
 test('tooltip sizing proof rejects changed reference rules and candidate constraint requests', () => {
