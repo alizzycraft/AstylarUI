@@ -4,7 +4,7 @@ import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { PNG } from 'pngjs';
 import { collectModalPositionInspection, proveModalPositionInspection, proveDialogScalarTypographyJoin,
-  applyDialogScalarTypography, validateDialogScalarTypography } from './modal-position-inspection.mjs';
+  applyDialogScalarTypography, validateDialogScalarTypography, modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
@@ -17,6 +17,10 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 
 test('bottom-sheet scalar typography belongs to container tokens rather than inner list-label tokens', () => {
   const inspection = collectModalPositionInspection();
+  const captured = JSON.parse(readFileSync(inspection.capture.file));
+  const cases = captured.interactions.filter(e => e.family === 'bottom-sheet' &&
+    e.styleInputs.some(i => i.id === 'bottom-sheet-panel')).map(e => ({ ...e, kind: 'interaction' }));
+  const inventory = collectFullTreeInventory(cases);
   const compact = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', overlaySurfacePredecessor);
   const tokens = {
     fontFamily: ['font-family', 'var(--mat-bottom-sheet-container-text-font, var(--mat-sys-body-large-font))', 'Roboto'],
@@ -31,12 +35,11 @@ test('bottom-sheet scalar typography belongs to container tokens rather than inn
     const group = inspection.groups.find(g => g.element === element);
     assert.equal(group.observations.length, 25);
     for (const observation of group.observations) {
-      if (!trees.has(observation.case)) trees.set(observation.case, ['reference', 'astylar'].map(side => {
-        const receipt = observation.inputTrees[side], bytes = readFileSync(receipt.file);
-        assert.equal(createHash('sha256').update(bytes).digest('hex'), receipt.sha256);
-        return JSON.parse(bytes);
-      }));
-      const [r, a] = trees.get(observation.case), mapping = observation.proof.mapping;
+      const entry = cases.find(e => `interaction:${e.family}@${e.profile}/${e.viewport.id}/${e.state}` === observation.case);
+      if (!trees.has(observation.case)) trees.set(observation.case, modalInventoryTrees(inventory, observation.case));
+      const indexedTrees = trees.get(observation.case);
+      assert.deepEqual(proveModalPositionInspection(entry, ...indexedTrees, element), observation.proof);
+      const [r, a] = indexedTrees, mapping = observation.proof.mapping;
       const referencePath = mapping.referencePath.map(key => r.nodes.find(n => n.key === key));
       const candidatePath = mapping.candidatePath.map(key => a.nodes.find(n => n.key === key));
       const depth = element === 'bottom-sheet-panel' ? 0 : 2;
@@ -104,6 +107,18 @@ test('bottom-sheet scalar typography belongs to container tokens rather than inn
   }
   assert.equal(matched.size, 15);
   assert.equal([...matched.values()].reduce((n, g) => n + g.cases.length, 0), 300);
+  const first = inspection.groups.find(g => g.element === 'bottom-sheet-panel').observations[0];
+  const firstEntry = cases.find(e => `interaction:${e.family}@${e.profile}/${e.viewport.id}/${e.state}` === first.case);
+  for (const mutate of [data => data.errors.push({ case: first.case, reason: 'invalid capture' }), data => {
+    const c = data.cases.find(c => c.case === first.case && c.side === 'astylar');
+    data.styles[data.variants[c.variant].nodes.find(n => n.authored?.id === 'bottom-sheet-panel').style].side = 'reference';
+  }, data => {
+    const c = data.cases.find(c => c.case === first.case && c.side === 'astylar');
+    data.styles[data.variants[c.variant].nodes.find(n => n.authored?.id === 'bottom-sheet-panel').style].value.width = '999px';
+  }]) {
+    const altered = structuredClone(inventory); mutate(altered);
+    assert.throws(() => proveModalPositionInspection(firstEntry, ...modalInventoryTrees(altered, first.case), 'bottom-sheet-panel'));
+  }
   for (const { row, cases } of matched.values()) {
     assert.equal(row.occurrences, cases.length); assert.deepEqual(row.cases, cases.slice(0, 12));
   }

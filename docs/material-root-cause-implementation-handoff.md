@@ -38,6 +38,16 @@ This is bounded classification progress, not complete input or output acceptance
 
 Next: integrate the independently established dialog/sheet typography evidence
 as a coherent later batch, preserving the owner/stage distinctions below.
+The sheet proof now consumes the existing indexed inventory through a pure
+storage adapter, reusing one tree view per case. All 300 typography observations
+(15 scalar groups across 25 states) retain the exact container/anchor declaration
+and ancestry checks; all 75 owner mappings match the authenticated original-tree
+position proof. Invalid inventory diagnostics, forged style-side ownership, and
+changed panel width are rejected. Combined sheet/dialog focused tests pass 2/2
+in 8.671 seconds. This closes the inventory-reuse prerequisite, not production
+sheet classification: extract the existing semantic checks into the shared
+module next, then wire the sheet classification into independent scalar replay.
+No capture, canonical classification, renderer, or reference input changed.
 Remaining high-impact families include dialog (216), bottom-sheet (182), tabs
 (114), chips (104), slider (77), snackbar (69) and tooltip (37). Counts describe
 unresolved signatures, not independent bugs. Final complete canonical and browser

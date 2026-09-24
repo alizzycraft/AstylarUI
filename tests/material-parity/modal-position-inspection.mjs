@@ -10,6 +10,28 @@ const ids = ['bottom-sheet-copy', 'bottom-sheet-dismiss', 'bottom-sheet-panel', 
 const one = ns => { assert.equal(ns.length, 1); return ns[0]; };
 const caseKey = (e, kind) => `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 
+// Adapt only the inventory's indexed storage, preserving captured values and
+// rule order. No defaults or inferred style values are introduced.
+export function modalInventoryTrees(inventory, key) {
+  assert.deepEqual(inventory.errors, []);
+  return ['reference', 'astylar'].map(side => {
+    const entry = one(inventory.cases.filter(c => c.case === key && c.side === side));
+    const variant = inventory.variants[entry.variant]; assert.equal(variant.side, side);
+    const style = index => {
+      assert.equal(inventory.styles[index].side, side); return inventory.styles[index].value;
+    };
+    return { ...variant, schemaVersion: 1, errors: [], resolvedStyleRevision: entry.resolvedStyleRevision,
+      styles: inventory.styles.map(s => s.value),
+      rules: side === 'reference' ? inventory.rules.map(r => r.value) : variant.rules.map(index => {
+        assert.equal(inventory.rules[index].side, side); return inventory.rules[index].value;
+      }),
+      nodes: variant.nodes.map(n => side === 'reference' ? n : { ...n,
+        resolvedStyle: n.style === undefined ? undefined : style(n.style),
+        normalResolvedStyle: n.normalStyle === undefined ? undefined : style(n.normalStyle),
+        interactionResolvedStyle: n.interactionStyle === undefined ? undefined : style(n.interactionStyle) }) };
+  });
+}
+
 // Pure semantic join over evidence already collected by the audit. The caller
 // owns capture authentication and complete scalar population selection.
 // This does not reread trees, normalize omitted values, or accept raster parity.
