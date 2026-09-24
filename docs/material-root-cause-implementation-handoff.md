@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 24
 
+Sheet-action batch integration preparation is complete. The existing canonical
+conservation comparator now supports `--sheet-action`, pinned to accepted
+`1cd2b7e` and decoded predecessor SHA
+`b1a7073b5c52fe2453580704afa678c1994c9201e01334031474148836c94ccc`.
+It independently replays ten layout and eight contrast-corner groups from the
+original complete tree inventory and requires exactly 18 changed groups / 298
+occurrences, unchanged raw inputs and all other complete rows, plus only the
+48 known producer-hash receipts in control evidence. All nine comparator tests
+pass in 18.40 seconds, including lost/forged input, unjustified radius closure,
+unrelated control and producer mutation controls. The small accepted manifest
+is preserved beside the already retained compressed predecessor; no 55MB payload
+copy was made. Next is one cold full export using all five original input paths,
+then strict row/control conservation, all-section comparison, exact source finding
+addition/fingerprint reconciliation and compact-store import. Expected counts
+remain projections: 1,560 unresolved and 134 source findings, not acceptance.
+
 Radius root cause is now in the existing `sourceAuditDefinitions` inventory as
 `core-rounded-radius-sampling-uses-unclamped-request`, with source location,
 owning subsystem, public proof and explicit historical limits. Producer proof
