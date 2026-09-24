@@ -44,7 +44,23 @@ export function comparePositionCanonical(previous, current, expectedRows, curren
     : [chipOnly ? 'reviewed-chip-state-layer-substitution' : followupOnly ? positionFollowupAttribution : positionCompositionAttribution];
   const expectedGroups = modalOnly ? 24 : overlayOnly ? 13 : chipOnly ? 10 : followupOnly ? 14 : 6;
   const expectedOccurrences = modalOnly ? 588 : overlayOnly ? 344 : chipOnly ? 32 : followupOnly ? 768 : 316;
-  same(current.rows, expectedRows, 'canonical rows differ from independently replayed positioning review');
+  // Modal owner proofs have optional undefined fields in memory. Compare their
+  // persisted JSON representation with the decoded canonical file, as the
+  // production replay validator does. Omission stays omission, never a default.
+  // Original scalar preservation below still compares predecessor/current raw
+  // records directly, independently of this expected-proof serialization.
+  if (modalOnly) expectedRows = JSON.parse(JSON.stringify(expectedRows));
+  if (!isDeepStrictEqual(current.rows, expectedRows)) {
+    const index = current.rows.findIndex((row, i) => !isDeepStrictEqual(row, expectedRows[i]));
+    const actual = current.rows[index], expected = expectedRows[index];
+    const fields = [...new Set([...Object.keys(actual ?? {}), ...Object.keys(expected ?? {})])]
+      .filter(key => !isDeepStrictEqual(actual?.[key], expected?.[key]));
+    assert.fail(`canonical rows differ from independently replayed positioning review: ${JSON.stringify({
+      index, family: actual?.family, element: actual?.element, property: actual?.property,
+      fields, serializedEqual: JSON.stringify(actual) === JSON.stringify(expected),
+      actual: Object.fromEntries(fields.map(key => [key, actual?.[key]])),
+      expected: Object.fromEntries(fields.map(key => [key, expected?.[key]])) })}`);
+  }
   assert.equal(previous.rows.length, current.rows.length);
   const changed = [];
   for (let i = 0; i < previous.rows.length; i++) {

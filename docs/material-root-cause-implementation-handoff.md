@@ -10,10 +10,31 @@ not lost source evidence. Failed JSON/gzip/Markdown are retained under
 `artifacts/material-parity/modal-typography-export-20edff9-missing-options`;
 the original progress log remains. The accepted canonical files were restored.
 
-Corrected cold export is live as exec session `24111`, log
+Corrected cold export session `24111` / PID `11708` is terminal: exit 1,
+reporting only 1,607 unresolved scalar groups. Coverage remains 436/436 static
+and 1,875/1,875 interaction entries, with 8,483 differences / 389,202 occurrences
+and 132 source findings. Log:
 `artifacts/material-parity/modal-typography-export-20edff9-complete-inputs.log`.
-All five required paths were checked before launch. Poll this same handle before
-considering another run; keep export dependencies unchanged. Exact command:
+Evidence-session completion verified 1,205 reads / 89,149,474 bytes with no
+invalidations. This output is pending conservation, not accepted completion.
+The independent `--modal` conservation check session `66976` failed exact
+expected-row equality; diagnostic replay `4560` identified row 473,
+bottom-sheet-copy/letterSpacing, reviewEvidence only, with identical serialized
+contents. In-memory proofs carry `astylar: undefined`; decoded JSON omits it.
+The comparator now serializes the independently replayed modal expectations at
+this persistence boundary, matching the production validator. Raw predecessor /
+current scalar preservation remains direct and strict. All six focused tests
+pass, including rejection of null, zero, empty-string and default substitutions
+for omission. The diagnostic failure is retained in
+`artifacts/material-parity/modal-typography-conservation-20edff9-error.log`.
+The corrected replay session `50286` writes `modal-typography-conservation-20edff9-json-boundary.json`
+and its corresponding error log under `artifacts/material-parity`; the batch
+remains unaccepted pending that replay and section/source reconciliation.
+Section reconciliation is live as session `22121`, writing
+`artifacts/material-parity/modal-typography-sections-20edff9.json`, reusing the
+authenticated predecessor section receipts. Poll these handles before duplicating
+work. Do not accept the unresolved-count reduction alone. All five export input paths were
+checked before launch. Exact export command:
 
 ```powershell
 $env:ASTYLAR_AUDIT_COLD='1'

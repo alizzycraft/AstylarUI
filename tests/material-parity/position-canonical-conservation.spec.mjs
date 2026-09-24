@@ -77,6 +77,15 @@ test('modal batch conserves twenty-four groups and independent predecessor recei
   assert.equal(result.changedGroups, 24); assert.equal(result.changedOccurrences, 588);
   assert.equal(result.controlReceiptTransition.records, 48);
   assert.deepEqual(args.slice(0, 3), before);
+  const omitted = make();
+  omitted[1].rows[0].reviewEvidence = { observations: [{ reference: 'original' }] };
+  omitted[2][0].reviewEvidence = { observations: [{ reference: 'original', astylar: undefined }] };
+  assert.equal(comparePositionCanonical(...omitted).changedGroups, 24);
+  assert.ok(Object.hasOwn(omitted[2][0].reviewEvidence.observations[0], 'astylar'));
+  for (const value of [null, 0, '', 'default']) {
+    omitted[2][0].reviewEvidence.observations[0].astylar = value;
+    assert.throws(() => comparePositionCanonical(...omitted));
+  }
   for (const mutate of [
     ([, c]) => c.rows.pop(), ([, c]) => { c.rows[0].reference = 'changed'; },
     ([, c]) => c.control.gaps.push({ reason: 'unrelated' }),
