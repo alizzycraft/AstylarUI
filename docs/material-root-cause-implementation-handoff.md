@@ -1,6 +1,34 @@
 # Material audit: evidence-led implementation priorities
 
-## Current audit checkpoint — September 24
+## Current audit checkpoint — September 25
+
+The corrected dialog/tab cold export from `7c7beef` is terminal: session 80004
+finished in 2,057.03 seconds, exit 1 solely for **1,541 unresolved groups**.
+Coverage remains 436/436 static and 1,875/1,875 interaction; all 8,483 groups /
+389,202 observations and 134 source findings remain. The evidence session verified
+1,205 files / 89,151,875 bytes, zero invalidations, two collectors and ten memory
+hits. Do not restart this completed export.
+
+Independent reconciliation passes: exactly 19 groups / 708 observations changed
+(nine dialog-flow and ten tab measurement-owner groups); 8,464 unrelated complete
+rows and all raw inputs are preserved. Of 79 sections, 72 are unchanged. The seven
+changes are fully accounted for: 454 source fingerprints match disk, all 134
+source findings and 107 ordered proofs are unchanged, and 48 control receipts
+change only the producer hash. The motion receipt was independently reconstructed
+as `36eabe2a79977c89379f59458bb49b92716caccddee74af6273113b049792495`.
+Receipts: `artifacts/material-parity/dialog-tab-7c7beef-{conservation,sections,metadata,receipts}.json`.
+Canonical compressed SHA is
+`0a6c0f6defafd4e27f0b93f3d4e732621a8f8a7d4807fc516f09c21270091296`;
+decoded SHA is `185cecca3e2dbd07000dcb8a952639fe4df39811b4e0833f9330ec91355ea18c`.
+Compact import and integrity verification pass: 8,483 scalar groups, 134 source
+findings, 39,904 control differences, 389,202 observations and 1,541 unresolved;
+compact shards total 69,797,762 bytes. Index SHA is
+`ed6ddb547a1f61c6c7fecb37a1efaf8df602d504e8927b16b0ac2fee6809bea0`.
+The small manifest is preserved beside the indexed payload for the next bounded
+transition. This accepts only this audit increment, not complete input equivalence
+or current browser acceptance. Final enforced gates remain required.
+
+### Follow-up investigations outside the accepted classification batch
 
 Next shared-property batch candidate: all 54 unresolved `appearance` groups were
 joined to the original scalar capture with exact occurrence counts. Two groups
@@ -76,12 +104,12 @@ matching retained application code or instrument a fresh Material reproduction,
 including the focus return value and update boundary. Keep the unconditional
 8% baseline paint, focus-transfer race and harness focus-acceptance gap separate.
 
-The corrected dialog/tab export remains live on session 80004 / PID 1920;
-its inputs have not been changed. This new standalone reduction and ledger entry
-are outside that export's explicit source inventory. Reconcile that export before
-incorporating any later focus classification. Largest remaining accepted-index
-populations are dialog (195), bottom sheet (132), tabs (114), chips (104); totals
-remain 1,560 unresolved until export reconciliation succeeds.
+The standalone focus reduction and retained-harness proof were developed without
+changing the export's dependencies and are outside its explicit source inventory.
+Their later canonical classification remains pending. Remaining high-population
+families include dialog (186), bottom sheet (132), tabs (104) and chips (104).
+
+### Earlier batch history — retained provenance, not current status
 
 Dialog/tab cold export at `99bea34` is terminal: session 26516 completed in
 2,070.83 seconds with exit 1. Coverage and raw totals remain 436/436 static,
