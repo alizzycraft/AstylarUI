@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 24
 
+The retained overlay focus harness gap is now an executable, source-pinned proof:
+`node --test tests/material-parity/retained-overlay-focus.spec.mjs` passes 2/2
+in 2.92 seconds. The original capture SHA `b07ef154...` pins the harness's raw
+SHA `b2477a12...`; its current bytes match that receipt and match Git `58ce15f`
+after CRLF normalization (Git blob SHA-256 `c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10`).
+The test extracts the actual historical measurement and acceptance expression,
+then exercises native browser focus. An authored `id` is identified correctly;
+an actually focused `data-parity-id="dialog-cancel"` or generated Share anchor
+returns no reference identity. Open/activate/activate-leave states still accept
+unequal identities, and even state `focus` accepts two undefined identities.
+The authenticated capture contains 73 affected open/activate/activate-leave
+records: sheet 25 (candidate opener), menu 24 (candidate opener), dialog 24
+(candidate cancel). All omit reference identity and report a match. This proves
+an instrumentation/acceptance gap, not 73 actual focus defects; dialog's candidate
+cancel may be the correct target. No historical report was rewritten.
+
+Next instrumentation correction should reuse the reference measurement's existing
+target aliases and parity IDs, record identifiable actual focus at relevant action
+boundaries, and require meaningful target comparison for overlay opening/dismissal.
+Do not simply compare undefined values or assume that every missing reference ID
+means focus remained outside the overlay. Keep this correction separate from any
+application focus scheduling fix. Production harness changes and fresh paired
+capture remain pending until the live export's reconciliation boundary.
+
 Pending focus-state investigation now has a public-package scheduling reduction.
 `scripts/audit-material-sheet-focus.mjs` drives a real browser click in an Angular
 host using the exported `AstylarSurfaceComponent`. In three independent mounts,
