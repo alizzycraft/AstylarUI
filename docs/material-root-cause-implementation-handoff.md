@@ -68,6 +68,24 @@ passes all 13 checks in 25.641 seconds, including existing mapping/constraint
 negative controls and retained raster evidence. Canonical unresolved count stays
 1,644 until the pending classification batch is integrated and conserved.
 
+The combined proposal is now saved in `docs/material-overlay-surface-review.json`.
+`tests/material-parity/overlay-surface-review.mjs` reuses the exact snackbar and
+tooltip semantic checks moved from their existing test files; it pins the
+post-chip predecessor/index and authenticates every paired tree and selected
+complete row. No new capture or alternative reference is used. Eight snackbar
+surface substitutions and five tooltip constraint omissions are proposed as
+application/plugin authoring defects, explicitly not confirmed rendering causes.
+`node tests/material-parity/overlay-surface-review.mjs --export` produces 13 groups
+/ 344 observations. The existing two suites still pass all 13 prior checks after
+extraction (25.731 seconds). The added `overlay surface proposal replays` check
+passes in 46.489 seconds: saved proposal equals fresh source replay, all selected
+rows restore exactly, unrelated row identity survives, and missing/duplicate/
+changed predecessors, double application, competing inline/state rules and
+unknown-selector resets are rejected. Next integration step: bind this proposal
+to the production capture and apply its metadata after the chip transition,
+reconcile exact producer/source guards, then perform one conserved batch export.
+Canonical files remain unchanged; do not count these 13 groups as integrated yet.
+
 Historical integration checkpoint: the chip batch at `3a4b350` required cold export
 and complete conservation. The first invocation mistakenly selected the default
 `latest-report.json`; it terminated after 226.339 seconds with missing-source

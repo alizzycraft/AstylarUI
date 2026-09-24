@@ -3,10 +3,51 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { PNG } from 'pngjs';
-import { resolveGeneratedReferenceNode } from './generated-node-mapping-evidence.mjs';
 import { collectModalPositionInspection, proveModalPositionInspection } from './modal-position-inspection.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
-import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
+  overlaySurfacePredecessor } from './overlay-surface-review.mjs';
+
+test('overlay surface proposal replays 13 complete predecessors and preserves unrelated rows', async () => {
+  const review = await collectOverlaySurfaceReview();
+  assert.deepEqual(review, JSON.parse(readFileSync('docs/material-overlay-surface-review.json')));
+  const directory = 'artifacts/material-parity/working-audit', rows = [];
+  for (const group of review.groups) {
+    const compact = queryFindings(directory, group.family, overlaySurfacePredecessor)
+      .find(r => r.evidence.completeRowSha256 === group.reviewEvidence.originalCompleteRowSha256);
+    assert.ok(compact);
+    rows.push(await loadFindingEvidence(directory, group.family, compact.id, overlaySurfacePredecessor));
+  }
+  const unrelated = { family: 'unrelated', property: 'untouched', custom: { raw: true } };
+  rows.splice(3, 0, unrelated);
+  const before = structuredClone(rows), output = applyOverlaySurfaceRows(rows, review);
+  assert.deepEqual(rows, before); assert.equal(output.length, rows.length);
+  assert.equal(output[3], unrelated);
+  for (let index = 0; index < output.length; index++) {
+    if (index === 3) continue;
+    const restored = structuredClone(output[index]);
+    for (const p of restored.reviewEvidence.priorMetadata) {
+      if (p.present) restored[p.field] = p.value; else delete restored[p.field];
+    }
+    assert.deepEqual(restored, before[index]);
+  }
+  for (const mutate of [r => r.pop(), r => r.push(r[0]), r => { r[0].occurrences++; },
+    r => { r[0].unreviewedRawField = true; }]) {
+    const changed = structuredClone(rows); mutate(changed);
+    assert.throws(() => applyOverlaySurfaceRows(changed, review));
+  }
+  assert.throws(() => applyOverlaySurfaceRows(output, review), 'cannot apply twice');
+  const receipt = review.groups.find(g => g.family === 'snack-bar').reviewEvidence.observations[0].inputTrees;
+  const originals = ['reference', 'astylar'].map(side => JSON.parse(readFileSync(receipt[side].file)));
+  for (const mutate of [
+    a => { a.nodes.find(n => n.authored?.id === 'snack-bar-surface').authored.style = { minWidth: '344px' }; },
+    a => { a.rules.push({ selector: '#snack-bar-surface:hover', background: '#ffffff' }); },
+    a => { a.rules.push({ selector: ':unknown()', all: 'initial' }); },
+  ]) {
+    const changed = structuredClone(originals); mutate(changed[1]);
+    assert.throws(() => proveSnackbarSurfaceRequests(...changed));
+  }
+});
 
 test('all 34 retained snackbar rasters contain the surface inside the viewport', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -141,37 +182,7 @@ test('all 34 retained snackbars substitute surface sizing and paint requests', a
   assert.equal(new Set(group.observations.map(o => o.case)).size, 34);
   for (const observation of group.observations) {
     const r = readBound(observation.inputTrees.reference), a = readBound(observation.inputTrees.astylar);
-    const mapping = resolveGeneratedReferenceNode(r, 'snack-bar-surface', 'snack-bar');
-    assert.equal(mapping.status, 'mapped');
-    const style = r.styles[mapping.styleIndex];
-    assert.deepEqual(['backgroundColor', 'color', 'minWidth', 'maxWidth', 'paddingLeft', 'paddingRight', 'justifyContent']
-      .map(key => style[key]), ['rgb(50, 48, 51)', 'rgb(245, 239, 244)', '344px', '672px', '0px', '8px', 'flex-start']);
-    const active = mapping.ruleIndices.map(i => r.rules[i]).filter(rule => rule.active);
-    const declarations = Object.assign({}, ...active.map(rule => rule.declarations));
-    for (const [key, value] of Object.entries({ 'min-width': '344px', 'max-width': '672px',
-      'padding-left': '0px', 'padding-right': '8px', 'justify-content': 'flex-start' }))
-      assert.equal(declarations[key]?.value, value);
-    assert.equal(declarations['background-color']?.value,
-      'var(--mat-snack-bar-container-color, var(--mat-sys-inverse-surface))');
-    assert.equal(declarations.color?.value,
-      'var(--mat-snack-bar-supporting-text-color, var(--mat-sys-inverse-on-surface))');
-    assert.equal(declarations['box-shadow']?.value, style.boxShadow);
-    assert.notEqual(style.boxShadow, 'none');
-    const owners = a.nodes.filter(n => n.authored.id === 'snack-bar-surface');
-    assert.equal(owners.length, 1);
-    const rule = a.rules.find(rule => rule.selector === '.snack-surface');
-    assert.ok(rule);
-    const relevant = key => /^(all|background.*|color|minwidth|maxwidth|padding.*|justifycontent|boxshadow|animation.*|transition.*)$/.test(key.replaceAll('-', '').toLowerCase());
-    assert.ok(!Object.keys(owners[0].authored.style ?? {}).some(relevant), 'inline request competes with snack-surface');
-    assert.doesNotMatch(owners[0].authored.attributes?.style ?? '', /(?:all|background[^:]*|color|min-width|max-width|padding[^:]*|justify-content|box-shadow|animation[^:]*|transition[^:]*)\s*:/i);
-    for (const other of a.rules.filter(r => r !== rule && rootInitialSelectorCanApply(r.selector, owners[0].authored))) {
-      assert.ok(!Object.keys(other).some(relevant), `competing candidate declaration: ${other.selector}`);
-    }
-    for (const candidate of [rule, ...['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'].map(stage => owners[0][stage])]) {
-      assert.deepEqual(['width', 'height', 'padding', 'justifyContent', 'background', 'color'].map(key => candidate[key]),
-        ['344px', '48px', '0 18px', 'space-between', '#322f35', '#ffffff']);
-      for (const key of ['minWidth', 'maxWidth', 'boxShadow']) assert.equal(Object.hasOwn(candidate, key), false);
-    }
+    proveSnackbarSurfaceRequests(r, a);
   }
   // Join authenticated complete rows, not just their representative first 12
   // cases. Full membership is independently supplied by the 34 paired trees.

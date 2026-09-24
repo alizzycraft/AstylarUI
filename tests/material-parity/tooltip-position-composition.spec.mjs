@@ -6,7 +6,7 @@ import ts from 'typescript';
 import { PNG } from 'pngjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
 import { collectTooltipPositionComposition, proveTooltipPositionComposition } from './tooltip-position-composition.mjs';
-import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
+import { proveTooltipSizingRequests } from './overlay-surface-review.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 
 test('paired tooltip rasters retain small DPR-dependent ink offsets, not the earlier large displacement', () => {
@@ -44,35 +44,6 @@ test('paired tooltip rasters retain small DPR-dependent ink offsets, not the ear
 
 // Size constraints are independent of the already-proven flow substitution.
 // This checks authored requests, not whether the short captured label hits them.
-function proveTooltipSizingRequests(observation, reference, candidate) {
-  const identity = { inputEquivalent: false, status: 'mapped',
-    referenceNode: observation.paths.reference[0].key,
-    candidateNode: observation.paths.astylar[0].key,
-    referencePath: observation.paths.reference.map(n => n.key),
-    candidatePath: observation.paths.astylar.map(n => n.key),
-    missingRules: [], extraRules: [] };
-  const expected = { minWidth: '40px', maxWidth: '200px', minHeight: '24px', maxHeight: '40vh' };
-  for (const [property, value] of Object.entries(expected)) {
-    const trace = inspectOverlayOwnerDeclarations(property, identity, reference, candidate);
-    const css = property.replace(/[A-Z]/g, c => '-' + c.toLowerCase());
-    const native = trace.referencePath[0], owner = trace.candidatePath[0];
-    assert.equal(owner.authored.id, 'tooltip-popup');
-    assert.ok(native.attributes.class.split(/\s+/).includes('mat-mdc-tooltip-surface'));
-    assert.deepEqual(native.inline, {});
-    const active = native.rules.filter(rule => rule.active && Object.hasOwn(rule.declarations, css));
-    assert.equal(active.length, 1);
-    assert.equal(active[0].selector, '.mat-mdc-tooltip-surface');
-    assert.equal(active[0].declarations[css].value, value);
-    if (property !== 'maxHeight') assert.equal(native.computed, value);
-    else assert.ok(['400px', '337.6px'].includes(native.computed));
-    assert.deepEqual(Object.values(owner.localValues), ['<omitted>', '<omitted>', '<omitted>']);
-    assert.deepEqual(owner.inline, {});
-    const relevant = key => [property.toLowerCase(), 'all'].includes(key.replaceAll('-', '').toLowerCase());
-    assert.ok(owner.possibleRules.every(rule => !Object.keys(rule.declarations).some(relevant)));
-    assert.doesNotMatch(owner.authored.attributes?.style ?? '', /(?:min|max)-(?:width|height)|\ball\s*:/i);
-  }
-  return Object.keys(expected);
-}
 
 test('all 18 tooltip owners omit the four active reference sizing constraints', async () => {
   const report = collectTooltipPositionComposition(); // authenticates each original paired tree
