@@ -2,6 +2,12 @@
 
 ## Current audit checkpoint — September 24
 
+Working source now includes the next dialog typography integration; the accepted
+canonical checkpoint below is `771e0a8`. Its source fingerprints describe that
+checkpoint, not the subsequent integration edits. Source/export reconciliation
+is explicitly pending the combined dialog/sheet milestone; do not rerun the
+full export for each preparation edit.
+
 The overlay batch is integrated and conserved. Cold export at `55d9945`
 completed in 2,088.454 seconds; exit 1 reports only **1,631 unresolved scalar
 groups** (previously 1,644), not a source-binding failure. All 8,483 differences,
@@ -71,8 +77,17 @@ and restores every changed row from recorded prior metadata. Missing/duplicate
 states and changed candidate font input are rejected. In-memory `astylar:
 undefined` and JSON's omitted key both represent omission, not a computed default;
 both forms are tested. The focused test passes in 2.662 seconds. This helper is
-not yet wired into the production builder/validator, so the canonical unresolved
-count remains 1,631. No additional report, collector, capture or full export ran.
+now wired into the production builder only when original-case binding is valid.
+Validation reuses the existing independently loaded original cases and scalar
+replay, not saved prior metadata; missing/duplicate classifications and forged
+proof/prior-metadata receipts are rejected. The canonical unresolved count remains
+1,631 until the next export. No additional report, collector or capture was added.
+Focused proof passes (3.092 seconds); six source-preservation checks pass
+(14.350 seconds). Additional exact-integration negative controls pass (0.615 s)
+and the historical mapping projection passes (6.533 s). Retained functions and
+normalization remain unchanged. Next: finish the sheet portion, then run one
+combined canonical conservation milestone rather than exporting this nine-row
+portion separately.
 
 Bottom-sheet ownership check: the focused `bottom-sheet scalar typography`
 test authenticates 25 retained states and joins 15 scalar groups / 300 occurrences

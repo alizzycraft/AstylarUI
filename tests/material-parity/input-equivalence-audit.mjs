@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { applyDialogScalarTypography, validateDialogScalarTypography } from './modal-position-inspection.mjs';
 import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, validateOverlaySurfaceAuditInputs,
   validateOverlaySurfaceAuditClassifications, overlaySurfaceAttributions } from './overlay-surface-audit-source-binding.mjs';
 import { collectChipPaintAuditInputs, applyChipPaintAuditRows, validateChipPaintAuditInputs,
@@ -266,7 +267,10 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const chipPaintAuditInputs = collectChipPaintAuditInputs(parityReport, { root, parityPath: options.parityPath });
   const chipPaintDiscrepancies = applyChipPaintAuditRows(positionFollowupDiscrepancies, chipPaintAuditInputs);
   const overlaySurfaceAuditInputs = collectOverlaySurfaceAuditInputs(parityReport, { root, parityPath: options.parityPath });
-  const discrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);
+  const overlaySurfaceDiscrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyDialogScalarTypography(overlaySurfaceDiscrepancies, cases, elementInventory, retainedTypography, controlTypography, canonicalStyle)
+    : overlaySurfaceDiscrepancies;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -587,12 +591,14 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.rootFlowHeightInputs, report.buttonPillRadiusInputs, report.buttonFlexInputs, report.buttonHostRequestInputs,
         report.buttonFixedWidthInputs, report.ownerGridInitialInputs, report.buttonBoxSizingInputs, report.fieldHostLayoutInputs, report.ownerGapInputs, report.explicitGapInputs, report.gapReviewInputs, report.ownerCaretInputs, report.reviewedInputs, report.followupInputs, report.alignmentFontInputs, report.textAlignInputs, report.ltrAlignmentInputs, report.reviewedSourceBatchInputs, report.rootBackgroundInputs);
       const selected = rows => rows.filter(r => r.attribution === ownerInitialStyleAttribution);
+      errors.push(...validateDialogScalarTypography(report.discrepancies, replayedRows, cases,
+        report.elementInventory, report.retainedTypography, report.controlTypography, canonicalStyle));
       if (JSON.stringify(selected(replayedRows)) !== JSON.stringify(selected(report.discrepancies)))
         errors.push('owner initial-style attributions lack replayed original precedence, values and exact case coverage');
     } catch (error) { errors.push(`owner initial-style replay failed: ${error}`); }
   } else if (requireComplete || report.ownerInitialStyleBinding?.status === 'invalid' ||
       report.ownerInitialStyleEvidence?.observations?.length ||
-      report.discrepancies?.some(d => d.attribution === ownerInitialStyleAttribution)) {
+      report.discrepancies?.some(d => [ownerInitialStyleAttribution, 'reviewed-dialog-scalar-typography-owner'].includes(d.attribution))) {
     errors.push('owner initial-style attribution lacks independently bound original capture evidence');
   }
   if (report.sliderBorderDefaults?.binding?.status === 'bound') {
@@ -8487,6 +8493,8 @@ function auditEnvironment(root) {
 
 function sourceFingerprints(root) {
   const files = [
+    'tests/material-parity/modal-position-inspection.mjs',
+    'tests/material-parity/modal-position-inspection.spec.mjs',
     'tests/material-parity/overlay-surface-audit-source-binding.mjs',
     'tests/material-parity/overlay-surface-review.mjs',
     'docs/material-overlay-surface-review.json',

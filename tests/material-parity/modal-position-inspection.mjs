@@ -90,6 +90,17 @@ export function applyDialogScalarTypography(rows, cases, inventory, retained, co
   });
 }
 
+export function validateDialogScalarTypography(rows, originalRows, cases, inventory, retained, control, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-dialog-scalar-typography-owner');
+    const expected = select(applyDialogScalarTypography(originalRows, cases, inventory, retained, control, canonicalStyle));
+    // Original rows come from independent scalar replay, never from the saved
+    // row's own priorMetadata. JSON comparison preserves omission on disk.
+    assert.equal(JSON.stringify(select(rows)), JSON.stringify(expected));
+    return [];
+  } catch (error) { return [`dialog scalar typography does not replay from original cases and existing owner proofs: ${error.message}`]; }
+}
+
 export function proveModalPositionInspection(entry, r, a, id) {
   assert.ok(ids.includes(id));
   const input = one(entry.styleInputs.filter(i => i.id === id));

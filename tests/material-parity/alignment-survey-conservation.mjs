@@ -21,6 +21,7 @@ const definitions = {
   'docs/material-remaining-text-alignment.json': ['scripts/audit-remaining-text-alignment.mjs', 'collectRemainingTextAlignment', 'sourceFingerprints'],
 };
 export const alignmentAuditImports = new Map([
+  ['./modal-position-inspection.mjs', ['applyDialogScalarTypography', 'validateDialogScalarTypography']],
   ['./overlay-surface-audit-source-binding.mjs', ['collectOverlaySurfaceAuditInputs', 'applyOverlaySurfaceAuditRows',
     'validateOverlaySurfaceAuditInputs', 'validateOverlaySurfaceAuditClassifications', 'overlaySurfaceAttributions']],
   ['./chip-paint-audit-source-binding.mjs', ['collectChipPaintAuditInputs', 'applyChipPaintAuditRows',

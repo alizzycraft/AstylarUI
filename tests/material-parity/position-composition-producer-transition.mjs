@@ -45,6 +45,17 @@ export function restorePositionProducer(source, { followupOnly = false } = {}) {
     assert.equal(restored.split(from).length, 2, 'missing or repeated position integration fragment');
     restored = restored.replace(from, to);
   };
+  // Reuse the existing original-case replay for the nine dialog owner joins.
+  if (restored.includes("from './modal-position-inspection.mjs'")) {
+    replaceOnce("import { applyDialogScalarTypography, validateDialogScalarTypography } from './modal-position-inspection.mjs';\n");
+    replaceOnce("  const overlaySurfaceDiscrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);\n  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyDialogScalarTypography(overlaySurfaceDiscrepancies, cases, elementInventory, retainedTypography, controlTypography, canonicalStyle)\n    : overlaySurfaceDiscrepancies;",
+      '  const discrepancies = applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs);');
+    replaceOnce('      errors.push(...validateDialogScalarTypography(report.discrepancies, replayedRows, cases,\n        report.elementInventory, report.retainedTypography, report.controlTypography, canonicalStyle));\n');
+    replaceOnce("      report.discrepancies?.some(d => [ownerInitialStyleAttribution, 'reviewed-dialog-scalar-typography-owner'].includes(d.attribution))) {",
+      '      report.discrepancies?.some(d => d.attribution === ownerInitialStyleAttribution)) {');
+    for (const file of ['tests/material-parity/modal-position-inspection.mjs', 'tests/material-parity/modal-position-inspection.spec.mjs'])
+      replaceOnce(`    '${file}',\n`);
+  }
   // Admit only the exact thirteen-group overlay metadata integration.
   if (restored.includes("from './overlay-surface-audit-source-binding.mjs'")) {
     replaceOnce("import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, validateOverlaySurfaceAuditInputs,\n  validateOverlaySurfaceAuditClassifications, overlaySurfaceAttributions } from './overlay-surface-audit-source-binding.mjs';\n");

@@ -4,7 +4,7 @@ import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { PNG } from 'pngjs';
 import { collectModalPositionInspection, proveModalPositionInspection, proveDialogScalarTypographyJoin,
-  applyDialogScalarTypography } from './modal-position-inspection.mjs';
+  applyDialogScalarTypography, validateDialogScalarTypography } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
@@ -156,6 +156,15 @@ test('nine dialog scalar groups reuse original typography proofs with matching o
   const applied = applyDialogScalarTypography(scalarRows, cases, inventory, retained, control, normalize);
   const changed = applied.filter((r, i) => r !== scalarRows[i]);
   assert.equal(changed.length, 9); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 288);
+  const validate = rows => validateDialogScalarTypography(rows, scalarRows, cases, inventory, retained, control, normalize);
+  assert.deepEqual(validate(applied), []);
+  assert.deepEqual(validate(JSON.parse(JSON.stringify(applied))), []);
+  for (const mutate of [rs => rs.splice(rs.indexOf(rs.find(r => r.attribution === 'reviewed-dialog-scalar-typography-owner')), 1),
+    rs => rs.push(rs.find(r => r.attribution === 'reviewed-dialog-scalar-typography-owner')),
+    rs => { rs.find(r => r.attribution === 'reviewed-dialog-scalar-typography-owner').reviewEvidence.proofRowsSha256 = 'forged'; },
+    rs => { rs.find(r => r.attribution === 'reviewed-dialog-scalar-typography-owner').reviewEvidence.priorMetadata.justification = 'forged'; }]) {
+    const altered = structuredClone(applied); mutate(altered); assert.ok(validate(altered).length);
+  }
   assert.deepEqual(scalarRows, before);
   for (let i = 0; i < applied.length; i++) {
     if (applied[i] === scalarRows[i]) continue;

@@ -29,6 +29,10 @@ test('position producer integration preserves every prior byte outside the exact
     current.replace('applyOverlaySurfaceAuditRows(chipPaintDiscrepancies, overlaySurfaceAuditInputs)', 'chipPaintDiscrepancies'),
     current.replace('    overlaySurfaceAuditInputs,', '    overlaySurfaceAuditInputs: {},'),
     current.replace("    'docs/material-overlay-surface-review.json',\n", ''),
+    current.replace("ownerInitialStyleBinding.status === 'bound'\n    ? applyDialogScalarTypography", "true\n    ? applyDialogScalarTypography"),
+    current.replace('applyDialogScalarTypography(overlaySurfaceDiscrepancies, cases, elementInventory, retainedTypography, controlTypography, canonicalStyle)', 'overlaySurfaceDiscrepancies'),
+    current.replace('validateDialogScalarTypography(report.discrepancies, replayedRows, cases,', 'validateDialogScalarTypography(report.discrepancies, report.discrepancies, cases,'),
+    current.replace("    'tests/material-parity/modal-position-inspection.mjs',\n", ''),
   ]) {
     assert.notEqual(mutated, current);
     assert.throws(() => restorePositionProducer(mutated));

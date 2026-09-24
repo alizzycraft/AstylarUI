@@ -27,6 +27,7 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
   const excluded = new Set(['buildMaterialInputAudit', 'validateMaterialInputAudit', 'renderMaterialInputAuditMarkdown',
     'collectStyleDiscrepancies', 'sourceFingerprints', 'focusedProofInventory']);
   const additions = new Map([
+    ['./modal-position-inspection.mjs', ['applyDialogScalarTypography', 'validateDialogScalarTypography']],
     ['./overlay-surface-audit-source-binding.mjs', ['collectOverlaySurfaceAuditInputs', 'applyOverlaySurfaceAuditRows',
       'validateOverlaySurfaceAuditInputs', 'validateOverlaySurfaceAuditClassifications', 'overlaySurfaceAttributions']],
     ['./chip-paint-audit-source-binding.mjs', ['collectChipPaintAuditInputs', 'applyChipPaintAuditRows',
