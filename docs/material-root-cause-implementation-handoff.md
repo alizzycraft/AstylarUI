@@ -69,6 +69,29 @@ DPRs. No producer dependency or canonical fixture changed during the live export
 Remaining uncertainty: this reduction proves the intrinsic-sizing rule failure,
 not its full contribution to every Material dialog signature or all popup types.
 
+Dialog explicit-inheritance boundary: the same reduction now records settled
+`elementStylesMap.normal` constraints alongside native computed constraints.
+For container/inner/pane, native min-width/max-width resolve to 280px/560px and
+max-height to 100%; candidate retains literal `inherit` for all three, even
+after settlement. Thus the failure is not solely an early-prelayout cache gap.
+`StyleService.findStyleForElement` merges winning values and returns them without
+general explicit-inherit resolution; the intrinsic parser subsequently coerces
+these tokens to zero. Ordinary non-inheritance of layout properties does NOT
+explain an explicitly authored CSS-wide `inherit` request. Treat this as a
+core style-resolution support gap plus the separate intrinsic keyword/indefinite
+percentage defect, not an instruction for plugins to resolve layout themselves.
+
+The existing browser diagnostic now asserts these three resolved constraints
+for three descendants in both inherited compositions (18 honest failures).
+Evidence `dialog-inheritance-proof-310208e-dpr1/result.json`, SHA-256
+`549accc3b6fea948a2c2b2b93c2ddd1fb67446e3b18f31f6eb8721beecaf9902`:
+12 passed/14 failed cases, exit 1, no page errors, all 26 cases' geometry exactly
+unchanged from the prior width trace. TypeScript no-emit passes. Initial raw
+constraint capture is retained in `dialog-inheritance-trace-310208e-dpr1`.
+Only DPR 1 was needed for this style-token assertion; earlier width/height
+geometry remains independently reproduced at both DPRs. Do not generalize this
+result to every CSS-wide keyword/property or claim all dialog rows classified.
+
 Next tooltip sizing batch: a read-only replay using
 `collectTooltipPositionAncestry` and `inspectOverlayOwnerDeclarations` authenticated
 all 18 paired open-state trees. All 72 property observations retain active native

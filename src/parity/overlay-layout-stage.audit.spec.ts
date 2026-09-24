@@ -185,7 +185,14 @@ describe('overlay CSS layout versus projection audit', () => {
               Vector3.Project(point, Matrix.IdentityReadOnly, surface!.scene.getTransformMatrix(), viewport));
             const xs = points.map(p => p.x * canvasBox.width / engine.getRenderWidth());
             const ys = points.map(p => p.y * canvasBox.height / engine.getRenderHeight());
+            const constraintKeys = ['minWidth', 'maxWidth', 'minHeight', 'maxHeight'] as const;
+            const nativeStyle = dialog ? frame.contentWindow!.getComputedStyle(doc.getElementById(id)!) : undefined;
+            const retainedStyle = manager.elementStylesMap.get(id)?.normal;
             return { id, parentId: manager.layoutBoxesMap.get(id)?.parentId,
+              ...(dialog ? { constraints: {
+                reference: Object.fromEntries(constraintKeys.map(key => [key, nativeStyle![key]])),
+                retained: Object.fromEntries(constraintKeys.map(key => [key, retainedStyle?.[key] ?? '<omitted>'])),
+              } } : {}),
               local: manager.layoutBoxesMap.get(id)?.box.borderBox,
               css: resolveCssViewportRect(id, manager.layoutBoxesMap),
               projected: { x: Math.min(...xs), y: Math.min(...ys), width: Math.max(...xs) - Math.min(...xs), height: Math.max(...ys) - Math.min(...ys) },
@@ -224,6 +231,12 @@ describe('overlay CSS layout versus projection audit', () => {
           }
           expect(JSON.stringify(site)).toBe(authoredBefore);
           for (const observation of observations) {
+            if (dialog && !composition.includes('-explicit') && ['container', 'inner', 'pane'].includes(observation.id)) {
+              for (const key of ['minWidth', 'maxWidth', 'maxHeight'] as const) {
+                expect(observation.constraints!.retained[key]).withContext(`${observation.id} inherited ${key}`)
+                  .toBe(observation.constraints!.reference[key]);
+              }
+            }
             expect(observation.css).withContext(observation.id).toBeDefined();
             for (const key of ['x', 'y', 'width', 'height'] as const) {
               expect(observation.css![key]).withContext(`${observation.id} CSS ${key}`).toBeCloseTo(observation.reference[key], 1);
