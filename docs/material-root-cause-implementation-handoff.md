@@ -354,6 +354,35 @@ the verified compact index:
    no new harness or canonical fixture changes. Next address interaction-layer
    input ownership and integrate these chip findings; do not rerun unchanged
    label measurement as a substitute for the outstanding paint/state evidence.
+
+   Interaction-input ownership replay: the existing chip inspection suite now
+   authenticates all 76 paired states/152 owners for layer paint. Every native
+   chip retains an absolute, pointer-transparent focus/hover overlay; 48 captured
+   layers have nonzero opacity. The candidate has only label/check children and
+   substitutes flat background colors. Across eight `focus` and eight
+   `activate-leave` observations, native opacity is 0.12 while candidate normal
+   and interaction backgrounds remain identical. This proves unequal authored
+   layer/state inputs, not the absence of every possible core-generated focus
+   effect or a fresh visual reproduction of the manual hover complaint.
+
+   All eight selected-hover observations use native ink rgb(73,69,78) at 0.08
+   over rgb(234,222,247); candidate uses `#ddd2ea`, from different ink #4b4357.
+   Rounded source-over channels from the native declarations would be #ddd2e9;
+   this arithmetic is not a screenshot/raster assertion. All eight held states
+   retain native ink rgb(75,67,87) at 0.12 versus candidate flat #d7cbe4. That
+   matching flat-color arithmetic alone does not prove layer equivalence through
+   clipping, state transitions or focus. Current source still contains these
+   selected hover/active substitutions and no chip focus selector.
+
+   Classify missing reference state-layer composition and changed hover ink as
+   application authoring differences, separately from the proven core sizing
+   and rounded-clipping defects. Future implementation must restore equivalent
+   layer/owner inputs after general support is demonstrated, not tune another
+   chip-only color or offset. Existing `chip-position-inspection.spec.mjs` passes
+   3/3 in 0.93s, including all paired receipts and five earlier negative controls.
+   No canonical export or browser recapture was run for this historical-input
+   replay. Live focus/hover/held raster and source-fingerprint integration remain
+   open; the 1,654 unresolved canonical signatures are unchanged.
 3. Remaining typography and paint: line-height 67, tracking 57, font-family 31
    and color 111 unresolved groups. Reuse explicit ownership/stage proofs and
    separate missing computed evidence from unequal declarations. These property
