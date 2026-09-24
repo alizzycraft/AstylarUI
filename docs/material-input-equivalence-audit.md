@@ -27,7 +27,7 @@ Explicit gap composition: 1032 original observations support 16 unequal applicat
 
 Visual parity is green, but input equivalence is **not established**. The audit found 8483 unique normalized input differences across 389202 occurrences.
 
-1654 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
+1644 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
 
 Border initial-color evidence: 3580 uniquely paired node observations prove omitted author/inline color inputs with browser currentColor versus core transparent defaults. Attribution rejects possibly applicable state/media/reset rules and unknown selectors, and is not an equivalence waiver. Alpha paint, contextual-color paint, structure and final raster require separate evidence.
 
@@ -154,10 +154,10 @@ This means the existing screenshot score cannot be used as evidence that the ren
 
 | Classification | Unique signatures |
 | --- | ---: |
-| application-plugin-authoring-defect | 1147 |
+| application-plugin-authoring-defect | 1157 |
 | equivalent-representation | 2086 |
 | intentional-documented-limitation | 336 |
-| parity-harness-defect | 4914 |
+| parity-harness-defect | 4904 |
 
 ## Source-level compensation findings
 

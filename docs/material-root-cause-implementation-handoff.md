@@ -4,13 +4,55 @@
 
 Resume from the existing evidence, using [the incremental workflow](audit-workflow.md).
 The canonical package with decoded SHA-256
-`0f8935c3a5a7b2b54195cb3402bb70cd357c33245aa5c9719e33a134ea64b1de`
-contains **1,654 unresolved scalar signatures**, not that many confirmed bugs.
+`276bcd838575bcce26f06ab922eeacd880152c3585dee929f4635c778338767e`
+contains **1,644 unresolved scalar signatures**, not that many confirmed bugs.
 The compact index preserves all 8,483 differences / 389,202 occurrences and
 132 source findings. Static/interaction inventory is 436/436 and 1,875/1,875;
 inventory completeness is not attribution or rendering acceptance.
 
-Current integration checkpoint: the chip batch at `3a4b350` still requires cold export
+Current integration result: the cold chip export at `73e0d58` completed in
+1,921.086 seconds. Exit 1 reports only the 1,644 remaining attribution gaps;
+the four earlier source-binding errors are cleared. This is an accepted bounded
+classification integration, NOT complete audit acceptance or output parity.
+Compressed SHA-256:
+`d70aa37e4e14a9bfdc6183e0c2a7c383638d83050fc76b2d556a26b510691fa4`.
+
+- Complete conservation passes: ten chip groups / 32 occurrences classified as
+  application/plugin authoring defects; 8,473 other complete rows unchanged.
+  Exactly 48 control producer receipts change, with all other control evidence
+  conserved. Command: `node scripts/check-material-position-canonical-conservation.mjs --chip`.
+- Of 77 predecessor sections, 70 are unchanged, seven change and one chip-input
+  section is added. All 54 remaining metadata leaf changes are accounted for:
+  48 line-box receipts, three summary counts, three source-conservation receipts.
+  Both motion-report hashes were independently reconstructed by substituting
+  only the authenticated producer receipt in the preserved motion report.
+- Source inventory retains ordering and all old entries; five chip dependencies
+  are added and seven reviewed integration/guard receipts update. All 447
+  current fingerprints independently match disk. No reference capture changed.
+- Evidence: `artifacts/material-parity/chip-paint-export-73e0d58-progress.log`,
+  `chip-paint-conservation-73e0d58.json`, `chip-paint-sections-73e0d58.json`, and
+  `chip-paint-metadata-73e0d58.json` in the same artifact directory.
+- The exporter revalidated 1,205 files / 89,149,474 bytes in its evidence session
+  (two collectors, ten memory hits, no disk hits). This does not imply all
+  collectors are cached. Final full canonical/browser acceptance remains pending.
+
+Resume verification: the compact index now authenticates to the current package;
+`node scripts/audit-findings-store.mjs verify` passes with 8,483 discrepancies,
+132 source findings, 39,904 control differences and 1,644 unresolved groups.
+The focused `chip paint proposal binds` test passes after that index transition
+(47.721 seconds), replaying the explicitly pinned historical predecessor.
+
+Next priorities, from the refreshed unresolved index: dialog (216 groups),
+bottom-sheet (182), snack-bar (77) and tooltip (42) share overlay ownership and
+intrinsic-size questions but must not be assumed to share every cause. Integrate
+the already-proven snackbar authoring and tooltip constraint omissions as a
+coherent batch, then investigate remaining overlay typography/constraints at the
+first divergent stage. Reuse the existing intrinsic-percentage and inheritance
+proofs; do not repeat total-absence or large-displacement investigations against
+captures that already disprove those symptoms. Tabs (114), chips (104), and
+slider (77) remain explicit subsequent coverage, not waived by overlay priority.
+
+Historical integration checkpoint: the chip batch at `3a4b350` required cold export
 and complete conservation. The first invocation mistakenly selected the default
 `latest-report.json`; it terminated after 226.339 seconds with missing-source
 binding errors. Its generated files are retained in
