@@ -6,6 +6,7 @@ import { createServer } from 'node:http';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
+import { PNG } from 'pngjs';
 
 // Run the unchanged Jasmine reduction against the installed package. Private
 // imports below are read-only repository instrumentation, never fixture authoring.
@@ -73,6 +74,37 @@ try {
   browser = await chromium.launch({ channel: 'chrome', headless: true });
   const page = await browser.newPage({ viewport: { width: 900, height: 800 }, deviceScaleFactor: dpr });
   const observations = [], errors = [];
+  const screenshots = [];
+  await page.exposeFunction('auditCapture', async ({ composition }) => {
+    assert.ok(['fixed-clip', 'absolute-clip'].includes(composition));
+    const captures = {};
+    const rasters = {};
+    for (const [side, selector] of [['reference', 'iframe'], ['astylar', 'canvas']]) {
+      const file = `${composition}-${side}.png`;
+      const bytes = await page.locator(selector).screenshot({ path: path.join(output, file) });
+      captures[side] = { file, sha256: hash(bytes) };
+      rasters[side] = PNG.sync.read(bytes);
+    }
+    const reference = rasters.reference, candidate = rasters.astylar;
+    assert.equal(reference.width, 320 * dpr);
+    assert.equal(reference.height, 200 * dpr);
+    assert.equal(candidate.width, reference.width);
+    assert.equal(candidate.height, reference.height);
+    const isPane = (pixels, offset) => pixels[offset] === 48 && pixels[offset + 1] === 45 && pixels[offset + 2] === 50 && pixels[offset + 3] === 255;
+    let referencePanePixels = 0, candidatePanePixels = 0, paneMaskDifferences = 0, allPixelDifferences = 0;
+    for (let offset = 0; offset < reference.data.length; offset += 4) {
+      const r = isPane(reference.data, offset), a = isPane(candidate.data, offset);
+      referencePanePixels += Number(r); candidatePanePixels += Number(a);
+      paneMaskDifferences += Number(r !== a);
+      allPixelDifferences += Number(!reference.data.subarray(offset, offset + 4).equals(candidate.data.subarray(offset, offset + 4)));
+    }
+    const paint = { referencePanePixels, candidatePanePixels, paneMaskDifferences, allPixelDifferences };
+    screenshots.push({ composition, captures, paint });
+    // Fixed pane extends 20px beyond viewport; absolute pane extends 20px
+    // beyond its clipping host. Both leave exactly 28px of the 48px pane.
+    assert.equal(referencePanePixels, 120 * 28 * dpr * dpr);
+    assert.equal(paneMaskDifferences, 0, 'Pane clipping differs from native paint');
+  });
   page.on('pageerror', error => errors.push(String(error)));
   page.on('console', message => { if (message.text().startsWith('OVERLAY_LAYOUT_STAGE ')) observations.push(JSON.parse(message.text().slice(21))); });
   await page.goto(`http://127.0.0.1:${server.address().port}`);
@@ -83,7 +115,7 @@ try {
     throw error;
   }
   const result = await page.evaluate(() => window.auditDone);
-  writeFileSync(path.join(output, 'result.json'), JSON.stringify({ browser: browser.version(), result, observations, errors }, null, 2));
+  writeFileSync(path.join(output, 'result.json'), JSON.stringify({ browser: browser.version(), result, observations, screenshots, errors }, null, 2));
   console.log(JSON.stringify({ output, result, observations: observations.length, errors }));
   process.exitCode = errors.length || result.status !== 'passed' ? 1 : 0;
 } finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); }

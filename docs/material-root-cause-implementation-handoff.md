@@ -138,6 +138,28 @@ the verified compact index:
    are unchanged; this is a bounded authoring/sizing proof, not acceptance.
    Next investigate the remaining modal paint/clipping or connected-tooltip
    placement contract; do not repeat these settled auto-sizing cases unchanged.
+
+   Clipping follow-up: two controls now cross a boundary by 20px. With identical
+   input, a fixed overlay escapes its `overflow:hidden` authored ancestor and
+   clips only at the viewport; an absolute overlay clips at its positioned host.
+   Retained CSS/projection boxes agree, and actual pane-pixel masks agree exactly
+   at DPR 1 and 2: 3,360/13,440 painted pixels respectively, zero mask differences.
+   `OverflowClipService` traverses mesh descendants; the fixed owner is reparented
+   out of that host. This simple ancestor-clipping hypothesis is not reproduced.
+   It does not cover transformed containing blocks, text clipping, rounded edges,
+   live popup state or pointer routing, and does not explain old manual failures.
+   Full-image differences remain 60,640/242,560 pixels: the known default candidate
+   root is red versus native white. The mask check does not hide or accept that
+   background mismatch as full paint parity.
+   Evidence: `artifacts/material-parity/overlay-clip-eaf8142-v2-dpr1` and `-dpr2`;
+   result SHA-256 respectively
+   `1400e533da6e3763fcdc75e0321e0088aac2d0338fb9b52576eb7d15c1632ba4` and
+   `b024f3e1b3b740138495fbf6955a9ad5e7ec43bb1870074143a6fb09778f4e20`.
+   Both runs: six geometry passes, two retained fractional-projection failures,
+   zero page errors, exit 1; all four clipping raster checks pass. Screenshot
+   hashes are retained in each result. Diagnostic TypeScript passes (5.33s).
+   Next prioritize the actual connected-tooltip placement/state input contract,
+   rather than another unchanged generic overlay-position/clipping reduction.
 2. Control structure/geometry: slider 77, chips 114 and button-toggle 73. Reuse
    the existing gesture, range-travel and paint reductions; do not reopen those
    diagnoses or assume they explain every original symptom. Isolate unreviewed

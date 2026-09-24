@@ -8,8 +8,9 @@ import { resolveCssViewportRect } from '../app/services/css-layout-geometry';
 // Equal-input diagnostic reductions, not replacements for Material fixtures.
 // The private inspection symbol is read-only instrumentation, not authoring.
 describe('overlay CSS layout versus projection audit', () => {
-  for (const composition of ['nested-row', 'flat-column', 'sheet-auto'] as const) {
-    for (const [width, height] of (composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : [[320, 200], [321.5, 201.25]])) {
+  for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'fixed-clip', 'absolute-clip'] as const) {
+    const clipping = composition.endsWith('-clip');
+    for (const [width, height] of (composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
       it(`${composition} at ${width} x ${height}`, async () => {
         TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
         const frame = document.createElement('iframe');
@@ -31,8 +32,9 @@ describe('overlay CSS layout versus projection audit', () => {
           ] }] },
           styles: [
             { selector: '#host, #overlay, #wrapper, #pane, #list, #item-a, #item-b', display: 'block', boxSizing: 'border-box', margin: '0', padding: '0', borderWidth: '0', borderStyle: 'none' },
-            { selector: '#host', position: 'absolute', left: '40px', top: '30px', width: '180px', height: '90px' },
-            { selector: '#overlay', position: 'fixed', left: '0', top: '0', width: '100%', height: '100%',
+            { selector: '#host', position: 'absolute', left: '40px', top: '30px', width: '180px', height: '90px',
+              ...(clipping ? { overflow: 'hidden' as const } : {}) },
+            { selector: '#overlay', position: composition === 'absolute-clip' ? 'absolute' : 'fixed', left: '0', top: '0', width: '100%', height: '100%',
               ...(nested ? {} : { display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center' }) },
             { selector: '#wrapper', position: 'absolute', left: '0', top: '0', width: '100%', height: '100%',
               display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end' },
@@ -44,7 +46,7 @@ describe('overlay CSS layout versus projection audit', () => {
                 maxHeight: '80vh', padding: '8px 16px', overflow: 'auto' as const, background: '#302d32' },
               { selector: '#list', boxSizing: 'content-box' as const, padding: '8px 0' },
               { selector: '#item-a, #item-b', height: '48px' },
-            ] : [{ selector: '#pane', width: '120px', height: '48px', marginBottom: '8px', background: '#302d32' }]),
+            ] : [{ selector: '#pane', width: '120px', height: '48px', marginBottom: clipping ? '-20px' : '8px', background: '#302d32' }]),
           ],
         };
         const css = doc.createElement('style');
@@ -91,6 +93,10 @@ describe('overlay CSS layout versus projection audit', () => {
               canvasCssWidth: canvasBox.width, canvasCssHeight: canvasBox.height,
               renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(),
               headDisplay: frame.contentWindow!.getComputedStyle(doc.head).display }, observations }));
+          if (clipping) {
+            const capture = (window as Window & { auditCapture?: (info: { composition: string }) => Promise<void> }).auditCapture;
+            await capture?.({ composition });
+          }
           expect(JSON.stringify(site)).toBe(authoredBefore);
           for (const observation of observations) {
             expect(observation.css).withContext(observation.id).toBeDefined();
