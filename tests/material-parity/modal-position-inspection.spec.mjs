@@ -3,7 +3,9 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { PNG } from 'pngjs';
-import { collectModalPositionInspection, proveModalPositionInspection, proveDialogScalarTypographyJoin } from './modal-position-inspection.mjs';
+import { collectModalPositionInspection, proveModalPositionInspection, proveDialogScalarTypographyJoin,
+  applyDialogScalarTypography } from './modal-position-inspection.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
   overlaySurfacePredecessor } from './overlay-surface-review.mjs';
@@ -149,6 +151,29 @@ test('nine dialog scalar groups reuse original typography proofs with matching o
     }
   }
   assert.equal(groups, 9);
+  const scalarRows = compact.filter(r => r.evidence.section === 'discrepancies');
+  const before = structuredClone(scalarRows), normalize = bindPreciseAuditNormalization();
+  const applied = applyDialogScalarTypography(scalarRows, cases, inventory, retained, control, normalize);
+  const changed = applied.filter((r, i) => r !== scalarRows[i]);
+  assert.equal(changed.length, 9); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 288);
+  assert.deepEqual(scalarRows, before);
+  for (let i = 0; i < applied.length; i++) {
+    if (applied[i] === scalarRows[i]) continue;
+    const restored = { ...applied[i] };
+    for (const key of ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']) delete restored[key];
+    Object.assign(restored, applied[i].reviewEvidence.priorMetadata);
+    assert.deepEqual(restored, scalarRows[i]);
+  }
+  // In-memory canonical rows carry undefined; JSON/compact rows omit the key.
+  const inMemory = scalarRows.map(r => r.astylar === undefined ? { ...r, astylar: undefined } : r);
+  assert.equal(applyDialogScalarTypography(inMemory, cases, inventory, retained, control, normalize)
+    .filter(r => r.attribution === 'reviewed-dialog-scalar-typography-owner').length, 9);
+  for (const mutate of [cs => cs.pop(), cs => cs.push(cs[0]), cs => {
+    cs[0].styleInputs.find(i => i.id === 'dialog-title').astylar.fontFamily = 'serif';
+  }]) {
+    const changedCases = structuredClone(cases); mutate(changedCases);
+    assert.throws(() => applyDialogScalarTypography(scalarRows, changedCases, inventory, retained, control, normalize));
+  }
   const tracking = compact.filter(r => r.evidence.section === 'discrepancies' &&
     r.element === 'dialog-title' && r.property === 'letterSpacing');
   assert.equal(tracking.length, 1); assert.equal(tracking[0].reference, '0');

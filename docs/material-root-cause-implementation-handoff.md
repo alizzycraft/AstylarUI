@@ -63,6 +63,17 @@ negative checks plus forged-attribution rejection pass. Combined dialog/sheet
 focused checks pass 2/2 in 5.600 seconds. Canonical classifications are unchanged;
 production application and validation of this later batch remain pending.
 
+The same module now has `applyDialogScalarTypography`: it selects the complete
+scalar population from the supplied cases with the existing authenticated audit
+normalizer, then invokes the semantic join. Focused replay changes exactly nine
+groups / 288 occurrences, preserves all unrelated row identities and raw fields,
+and restores every changed row from recorded prior metadata. Missing/duplicate
+states and changed candidate font input are rejected. In-memory `astylar:
+undefined` and JSON's omitted key both represent omission, not a computed default;
+both forms are tested. The focused test passes in 2.662 seconds. This helper is
+not yet wired into the production builder/validator, so the canonical unresolved
+count remains 1,631. No additional report, collector, capture or full export ran.
+
 Bottom-sheet ownership check: the focused `bottom-sheet scalar typography`
 test authenticates 25 retained states and joins 15 scalar groups / 300 occurrences
 for the panel and two item anchors. Native font, line-height, tracking and color

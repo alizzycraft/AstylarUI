@@ -47,7 +47,7 @@ export function proveDialogScalarTypographyJoin(row, proofs, inventory, caseKeys
       for (const stage of ['normal', 'effective']) assert.equal(label[stage][property], undefined);
     } else if (element === 'dialog-copy') assert.equal(proof.reviewEvidence.candidateChain[0].node, node.key);
     else assert.ok(proof.reviewEvidence.structure.candidateActions.some(n => n.key === node.key));
-    if (!Object.hasOwn(row, 'astylar')) {
+    if (row.astylar === undefined) {
       assert.ok(['fontFamily', 'letterSpacing'].includes(property));
       for (const stage of [normal, effective]) assert.equal(Object.hasOwn(stage, property), false);
     } else {
@@ -60,6 +60,34 @@ export function proveDialogScalarTypographyJoin(row, proofs, inventory, caseKeys
   return { element, property, sourceAttribution: attribution, cases: [...caseKeys],
     classification: 'application-plugin-authoring-defect', inputEquivalent: false,
     renderingEquivalent: false };
+}
+
+export function applyDialogScalarTypography(rows, cases, inventory, retained, control, canonicalStyle) {
+  const pairs = new Set(['dialog-copy/fontFamily', 'dialog-copy/letterSpacing', 'dialog-copy/color',
+    'dialog-cancel/fontFamily', 'dialog-cancel/letterSpacing', 'dialog-save/fontFamily',
+    'dialog-save/letterSpacing', 'dialog-title/fontFamily', 'dialog-title/color']);
+  const metadata = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'];
+  return rows.map(row => {
+    if (row.family !== 'dialog' || row.attribution !== 'unresolved' || !pairs.has(`${row.element}/${row.property}`)) return row;
+    const matching = cases.filter(c => c.family === row.family).flatMap(c => (c.styleInputs ?? [])
+      .filter(i => i.id === row.element && canonicalStyle(i.reference ?? {})[row.property] === row.reference &&
+        canonicalStyle(i.astylar ?? {})[row.property] === row.astylar)
+      .map(i => { assert.equal(i.astylarResolvedStyleEvidenceVersion, 2); return caseKey(c, c.kind); }));
+    const proofElement = row.element === 'dialog-title' ? 'dialog-title-label' : row.element;
+    const proofs = [...retained.differences, ...control.differences].filter(p =>
+      p.family === row.family && p.element === proofElement && p.property === row.property && matching.includes(p.case));
+    const joined = proveDialogScalarTypographyJoin(row, proofs, inventory, matching);
+    return { ...row, classification: joined.classification, attribution: 'reviewed-dialog-scalar-typography-owner',
+      recommendedOwner: 'showcase dialog component typography inputs',
+      justification: 'The complete scalar population joins existing component-token authoring proofs at the same native owner and candidate declaration stage. Missing local declarations remain missing; inherited/retained values are not substituted into scalar inputs. No glyph or raster equivalence is inferred.',
+      reviewedCases: matching,
+      reviewEvidence: { sourceAttribution: joined.sourceAttribution,
+        originalRowSha256: hash(JSON.stringify(row)), proofRowsSha256: hash(JSON.stringify(proofs)),
+        priorMetadata: Object.fromEntries(metadata.filter(k => Object.hasOwn(row, k)).map(k => [k, structuredClone(row[k])])),
+        observations: proofs.map(p => ({ case: p.case, element: p.element, property: p.property,
+          referenceNode: p.referenceNode, astylarNode: p.astylarNode })),
+        inputEquivalent: false, renderingEquivalent: false } };
+  });
 }
 
 export function proveModalPositionInspection(entry, r, a, id) {
