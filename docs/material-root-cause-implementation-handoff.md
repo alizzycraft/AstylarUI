@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 24
 
+Latest preparation: bottom-sheet paint attribution is now wired into the bound
+original-capture producer branch and independently replayed from original rows.
+The unbound guard rejects paint attribution without provenance. Exact source
+transition checks reject bypassing the paint classifier or validating against
+its own output. Six producer/alignment checks pass (14.66 seconds), and both
+paint semantic/replay checks pass (6.17 seconds). Combined pending sheet scope
+is 17 groups / 279 occurrences: constraints, flow and paint. Accepted canonical
+unresolved count remains 1,595; 1,578 is only a projection, not an accepted result.
+Next: extend the existing canonical conservation comparator for this combined
+batch against accepted commit `9b0ec36`, then perform one batched cold export and
+source-fingerprint reconciliation. No renderer or comparison fixture changed;
+no full export or browser recapture was run for this wiring increment. Broader
+overlay, typography/control, input-equivalence coverage and final gates remain
+open. Older preparation notes below describe their chronological checkpoints.
+
 Accepted canonical commit: `9b0ec36`, pushed to
 `codex/material-audit-alignment-integration`. New focused bottom-sheet proof
 `proveBottomSheetPanelConstraints` authenticates all 25 original owner captures
