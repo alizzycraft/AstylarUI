@@ -27,6 +27,8 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
   const excluded = new Set(['buildMaterialInputAudit', 'validateMaterialInputAudit', 'renderMaterialInputAuditMarkdown',
     'collectStyleDiscrepancies', 'sourceFingerprints', 'focusedProofInventory']);
   const additions = new Map([
+    ['./chip-paint-audit-source-binding.mjs', ['collectChipPaintAuditInputs', 'applyChipPaintAuditRows',
+      'validateChipPaintAuditInputs', 'validateChipPaintAuditClassifications', 'chipPaintAttribution']],
     ['./position-followup-audit-source-binding.mjs', ['collectPositionFollowupAuditInputs', 'applyPositionFollowupAuditRows',
       'validatePositionFollowupAuditInputs', 'validatePositionFollowupAuditClassifications', 'positionFollowupAttribution']],
     ['./position-composition-audit-source-binding.mjs', ['collectPositionAuditInputs', 'applyPositionAuditRows', 'validatePositionAuditInputs',
@@ -76,7 +78,10 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
         assert.ok(!imports.has(node.moduleSpecifier.text)); imports.add(node.moduleSpecifier.text);
         const clause = node.importClause; assert.ok(clause && !clause.name && !clause.isTypeOnly);
         assert.ok(ts.isNamedImports(clause.namedBindings));
-        assert.deepEqual(clause.namedBindings.elements.map(n => { assert.equal(n.propertyName, undefined); return n.name.text; }), additions.get(node.moduleSpecifier.text));
+        assert.deepEqual(clause.namedBindings.elements.map(n => {
+          // A failed equality diff on a parent-linked AST node can exhaust memory.
+          assert.ok(n.propertyName === undefined, 'import aliases are not permitted'); return n.name.text;
+        }), additions.get(node.moduleSpecifier.text));
         continue;
       }
       function visit(n) { if (ts.isIdentifier(n)) assert.ok(!excluded.has(n.text), 'Current mapping source reaches changed audit orchestration'); ts.forEachChild(n, visit); }

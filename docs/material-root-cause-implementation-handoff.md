@@ -41,6 +41,35 @@ After conservation, keep the chip proposal regression tied to its preserved
 pre-classification evidence: its current working-index query expects ten
 unresolved rows and cannot be reused unchanged after refreshing that index.
 
+Reconciliation update: the 4 GiB retry is terminal, not running. It completed
+serialization after 1,752.678 seconds but failed alignment/font, text-align,
+LTR-alignment and reviewed-input source bindings, reporting 1,903 unresolved
+groups. Its outputs are preserved in
+`artifacts/material-parity/chip-paint-export-3a4b350-binding-failure` and are NOT
+canonical. The baseline above was restored and its compressed hash reverified.
+Two historical AST-projection guards omitted the exact five-name chip adapter
+import added at `3a4b350`. Focused tests reproduced both rejection errors before
+the correction. Accept only that exact import; retain all historical statement,
+normalization and source-receipt checks. Added alias, extra-member and retained
+coupling negative controls to the existing suites. The overlay alias rejection
+also exposed an assertion formatter OOM from comparing a parent-linked AST node
+with undefined; a boolean assertion preserves rejection without expanding that
+graph. The focused command below passes all three tests (11.07 seconds):
+
+`node --test --test-name-pattern="alignment integration permits|audit projection rejects|mapping projection rejects changed retained" tests/material-parity/alignment-survey-conservation.spec.mjs tests/material-parity/original-overlay-context-survey.spec.mjs`
+
+Direct sequential calls to `collectAlignmentFontAuditInputs`,
+`collectTextAlignAuditInputs`, `collectLtrAlignmentAuditInputs` and
+`collectReviewedInputAuditInputs`, each supplied the parsed pinned
+`current-ancestry-audit/latest-report.json` and that same `parityPath`, now return
+`binding.status: bound` and complete coverage. Respectively: 72/49/4/134 groups,
+4,016/2,677/178/3,325 observations, 36.60/29.33/32.31/38.07 seconds. All cover
+2,311 cases and 6,946 inputs without missing cases or inputs. This proves the
+four failed binding paths replay; it is not full export/classification
+conservation. Before export, address the chip proposal regression's dependency
+on the mutable unresolved working index noted above. Full canonical conservation
+and final browser gates remain outstanding; no renderer or fixture changed.
+
 Dialog width follow-up (separate from the height clamp): the existing reduction
 now observes `measureIntrinsicFlowChildOuterWidth` and
 `calculateIntrinsicContainerWidth` through call-through spies. In

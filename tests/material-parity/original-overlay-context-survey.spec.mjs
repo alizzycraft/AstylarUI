@@ -192,6 +192,9 @@ test('mapping projection rejects changed retained functions imports and links in
     result.normalizationTransition);
   const mutations = [
     s => s.replace('function reviewedTemplateTextMappings(', 'function alteredTemplateTextMappings('),
+    s => s.replace('collectChipPaintAuditInputs, applyChipPaintAuditRows', 'collectChipPaintAuditInputs as unexpected, applyChipPaintAuditRows'),
+    s => s.replace('collectChipPaintAuditInputs, applyChipPaintAuditRows', 'collectChipPaintAuditInputs, unexpectedMember, applyChipPaintAuditRows'),
+    s => s + '\nconst unreviewedChipCoupling = collectChipPaintAuditInputs;\n',
     s => s.replace('function canonicalStyle(', 'function alteredCanonicalStyle('),
     s => s.replace('function normalizeColor(', 'function alteredNormalizeColor('),
     s => s.replace('function normalizeColor(value) {', "function normalizeColor(value) { return 'rounded-away';"),
