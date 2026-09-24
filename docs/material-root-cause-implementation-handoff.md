@@ -16,7 +16,7 @@ and 1,875/1,875 interaction entries, with 8,483 differences / 389,202 occurrence
 and 132 source findings. Log:
 `artifacts/material-parity/modal-typography-export-20edff9-complete-inputs.log`.
 Evidence-session completion verified 1,205 reads / 89,149,474 bytes with no
-invalidations. This output is pending conservation, not accepted completion.
+invalidations. This is a conserved classification increment, not audit completion.
 The independent `--modal` conservation check session `66976` failed exact
 expected-row equality; diagnostic replay `4560` identified row 473,
 bottom-sheet-copy/letterSpacing, reviewEvidence only, with identical serialized
@@ -34,9 +34,12 @@ modal cases reproduces the exported hash exactly
 32 proofs, no inventory errors). Proof nodes retain global style/rule indices;
 the subset inventory renumbered them. The comparator now preserves original
 inventory ordering while replaying only modal semantics. Six focused tests pass.
-Full corrected replay is live as session `81663`, writing
+Full corrected replay session `81663` passed (exit 0), writing
 `artifacts/material-parity/modal-typography-conservation-20edff9-full-inventory.json`
-and its corresponding error log. Earlier diagnostic logs remain retained.
+and its corresponding empty error log. Exactly 24 groups / 588 occurrences
+changed, 8,459 complete rows are unchanged, and all other control evidence is
+conserved except the 48 permitted producer receipts. Earlier diagnostic logs
+remain retained.
 Section reconciliation `22121` and metadata/source reconciliation `56207` pass:
 72/79 sections unchanged, none added/removed; all 452 source fingerprints match
 disk (two added dependencies, five changed, none removed). The remaining metadata
@@ -45,8 +48,12 @@ and three source-binding receipts. The motion-report hash is reconstructed by
 changing only its producer receipt. Evidence: `modal-typography-sections-20edff9.json`,
 `modal-typography-metadata-sources-20edff9.json`, and
 `modal-typography-receipts-20edff9.json` under `artifacts/material-parity`.
-The batch remains unaccepted pending full row conservation. Poll `81663` before
-duplicating work. Do not accept the unresolved-count reduction alone. All five export input paths were
+Compact import `79212` and `node scripts/audit-findings-store.mjs verify` pass:
+8,483 discrepancies, 132 source findings, 39,904 control differences, 389,202
+occurrences, 1,607 unresolved groups. Compact shards total 69,703,206 bytes;
+index SHA-256 `7e3141128b5728007cf478b5d37b7820ac6a9cd56d34e0242d4f10842ce4e745`.
+This bounded canonical increment is verified. All export/conservation jobs are
+terminal. All five export input paths were
 checked before launch. Exact export command:
 
 ```powershell
@@ -59,11 +66,11 @@ These are required explicit inputs, not CLI defaults. The predecessor payload is
 retained in compact generation `4601de6aeedf0595894e22de28052ee989a163320af4464337a69302c3a04aa2`;
 its compressed hash was checked and its small manifest copied alongside it for
 streaming conservation, without copying the payload again. The existing position
-conservation comparator now supports `--modal`: after completion run it to replay
+conservation comparator's `--modal` mode independently replayed
 the combined 24-group / 588-occurrence batch independently from the pinned
 original capture and retained predecessor. It checks raw scalar preservation,
 all complete rows, and the 48 permitted control producer receipts. Comparator
-tests pass 6/6; actual canonical conservation is pending export completion.
+tests pass 6/6; actual canonical conservation passes.
 The old `--overlay` mode is not the correct gate for this new batch. Only the
 standalone comparator, its test and this ledger changed while the export ran;
 none is an export evidence dependency.
@@ -84,11 +91,14 @@ prove these scalar groups and distinguish border/padding content placement
 from the separate wrapping/shrink behavior; no new capture is needed to classify
 the authored mismatch. Canonical attribution has not changed for these groups.
 
-Working source now includes the next dialog typography integration; the accepted
-canonical checkpoint below is `771e0a8`. Its source fingerprints describe that
-checkpoint, not the subsequent integration edits. Source/export reconciliation
-is explicitly pending the combined dialog/sheet milestone; do not rerun the
-full export for each preparation edit.
+Current package hashes: compressed
+`064777d79c6b85219285c85b97fb38edac27d069c8ddec67e0ae2da5b61099e5`;
+decoded `11bfe85672fb9a1a87db562d68b4eb1a2d6adb4349a55dc5ecb92675f230980a`.
+Source/export reconciliation passes for the combined dialog/sheet milestone.
+Do not rerun the full export for each preparation edit. There remain 1,607
+unresolved groups; full audit acceptance and the final browser gates remain open.
+
+### Predecessor overlay checkpoint (historical)
 
 The overlay batch is integrated and conserved. Cold export at `55d9945`
 completed in 2,088.454 seconds; exit 1 reports only **1,631 unresolved scalar
