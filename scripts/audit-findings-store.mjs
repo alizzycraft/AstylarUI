@@ -114,7 +114,10 @@ export function queryFindings(destination, family, snapshot) {
   const generation = path.join(destination, pointer.generation), indexBytes = fs.readFileSync(path.join(generation, 'index.json'));
   assert.equal(hash(indexBytes), pointer.indexSha256, 'Working index changed; re-import canonical evidence');
   const index = JSON.parse(indexBytes);
-  return index.shards.filter(s => s.file.endsWith(`-${family}.jsonl`)).flatMap(shard => {
+  const familyShards = new Set(['discrepancies', 'sourceFindings',
+    'controlTypography-differences', 'retainedTypography-differences']
+    .map(section => `${section}-${family}.jsonl`));
+  return index.shards.filter(s => familyShards.has(s.file)).flatMap(shard => {
     assert.match(shard.file, /^[a-zA-Z0-9_-]+\.jsonl$/);
     const bytes = fs.readFileSync(path.join(generation, shard.file)); assert.equal(hash(bytes), shard.sha256);
     return bytes.toString().trimEnd().split('\n').map(line => JSON.parse(line));

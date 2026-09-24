@@ -37,10 +37,25 @@ test('compact findings preserve counts, missing values and evidence links; corru
     const pointerFile = path.join(destination, 'current.json');
     const predecessor = JSON.parse(fs.readFileSync(pointerFile));
     const nextAudit = structuredClone(audit); nextAudit.discrepancies[0].attribution = 'reviewed';
+    for (const family of ['list', 'grid-list']) {
+      nextAudit.discrepancies.push({ ...row, family });
+      nextAudit.sourceFindings.push({ family, id: `${family}-proof` });
+      nextAudit.controlTypography.differences.push({ family, case: 'a', property: 'font-size' });
+      nextAudit.retainedTypography.differences.push({ family, case: 'a', property: 'line-height' });
+    }
+    nextAudit.summary = { uniqueStyleDifferences: 3, totalStyleDifferenceOccurrences: 6, sourceFindings: 3 };
     const next = await encodeMaterialInputAuditStream(nextAudit);
     fs.writeFileSync(path.join(root, 'material-input-equivalence-audit.json'), JSON.stringify(next.manifest));
     fs.writeFileSync(path.join(root, next.manifest.payload), next.payload);
     await importFindings(root, destination);
+    for (const family of ['list', 'grid-list']) {
+      const exact = queryFindings(destination, family);
+      assert.equal(exact.length, 4, `Exact-family query: ${family}`);
+      assert.ok(exact.every(record => record.family === family));
+      assert.deepEqual(exact.map(record => record.evidence.section).sort(),
+        ['discrepancies', 'sourceFindings', 'controlTypography.differences', 'retainedTypography.differences'].sort());
+      assert.deepEqual(queryFindings(destination, family, predecessor), []);
+    }
     assert.equal(queryFindings(destination, 'slider').find(r => r.property === 'left').attribution, 'reviewed');
     assert.deepEqual(queryFindings(destination, 'slider', predecessor), records);
     assert.deepEqual(await loadFindingEvidence(destination, 'slider', finding.id, predecessor), row);

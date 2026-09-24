@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 24
 
+Compact family lookup correction: `queryFindings` previously used a suffix match,
+so querying `list` also loaded all `grid-list` shards. The existing store test now
+includes both families in all four supported sections and historical-snapshot
+queries. It reproduced the defect (eight records instead of four) before the fix,
+then passes with exact section/family filenames (0.18 seconds). Real current-index
+queries across all 36 families yield exactly 8,483 distinct scalar IDs and 1,578
+unresolved groups without an extra caller-side family filter; complete index
+verification also passes. Canonical bytes and classifications did not change.
+The store source and test fingerprints require reconciliation at the next batch
+export; do not describe the accepted package as matching those edited sources.
+No full export or browser recapture is justified for this isolated lookup fix.
+The next investigation remains the 50 sheet action owners described below.
+
 The sheet-panel cold export at `7e71c96` is independently reconciled against
 accepted `9b0ec36`: **1,578 unresolved groups**, 8,483 scalar groups / 389,202
 occurrences, 133 source findings and 39,904 control differences. Coverage remains
