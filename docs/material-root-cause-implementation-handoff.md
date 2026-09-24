@@ -20,6 +20,22 @@ The old `--overlay` mode is not the correct gate for this new batch. Only the
 standalone comparator, its test and this ledger changed while the export ran;
 none is an export evidence dependency.
 
+Next unresolved modal question narrowed during the export (read-only): the
+`dialog-actions` 17px bottom padding is not an equivalent serialization of the
+native 1px top border. All 32 hash-authenticated owner captures in
+`docs/material-modal-position-inspection.json` agree: native height 73px,
+border-box, 16px top/bottom padding and 1px solid transparent top border;
+candidate height 73px, border-box, `padding: 16px 24px 17px`, `borderWidth: 0`,
+`borderStyle: none` in normal/resolved/interaction stages. The native also uses
+`flex-wrap: wrap`, `flex-shrink: 0`, `min-height: 52px`; candidate stages use
+nowrap/shrink 1 and omit min-height. Source commit `bc0e449` introduced the
+fixed action geometry and asymmetric padding (`fix(material): match dialog
+content geometry`). This establishes historical unequal authoring, not a core
+cause or output-equivalence claim. Next: reuse the existing owner mapping to
+prove these scalar groups and distinguish border/padding content placement
+from the separate wrapping/shrink behavior; no new capture is needed to classify
+the authored mismatch. Canonical attribution has not changed for these groups.
+
 Working source now includes the next dialog typography integration; the accepted
 canonical checkpoint below is `771e0a8`. Its source fingerprints describe that
 checkpoint, not the subsequent integration edits. Source/export reconciliation
