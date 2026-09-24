@@ -587,7 +587,7 @@ export function applyTabControlStage(rows, cases, inventory, canonicalStyle) {
         const proof = proveTabControlStage(r, a, element);
         return { ...proof, referenceNode: proof.referenceLabel, astylarNode: proof.candidateControl };
       },
-      classification: 'harness-instrumentation-defect', attribution: 'reviewed-tab-control-stage',
+      classification: 'parity-harness-defect', attribution: 'reviewed-tab-control-stage',
       owner: 'comparison measurement owner mapping; separate fixture text-owner flattening',
       justification: 'Original direct measurement IDs identify a native nested text label but an AstylarUI tab control. Height, box-sizing and flex-shrink differ for those boxes; the native role=tab ancestor matches all three candidate control style stages. Preserve the original scalar values, and do not extend this ownership diagnosis to typography, padding, structural equivalence or renderer correctness.',
     }), rows);

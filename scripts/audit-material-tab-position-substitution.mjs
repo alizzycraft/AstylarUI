@@ -76,7 +76,7 @@ export function proveTabControlStage(r, a, id) {
   for (const values of Object.values(candidateStages)) assert.deepEqual(values, controlValues);
   return { element: id, referenceLabel: label.key, referenceControl: control.key,
     candidateControl: candidate.key, ancestry, labelValues, controlValues, candidateStages,
-    attributableProperties: fields, classification: 'harness-instrumentation-defect',
+    attributableProperties: fields, classification: 'parity-harness-defect',
     sourceFinding: 'fixture-tab-label-typography-flattened',
     firstDivergence: 'measurement IDs identify native text labels versus candidate controls',
     inputEquivalent: false, rendererCauseProven: false, renderingEquivalent: false };

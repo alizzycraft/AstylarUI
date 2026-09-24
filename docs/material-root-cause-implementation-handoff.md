@@ -2,6 +2,45 @@
 
 ## Current audit checkpoint — September 24
 
+Dialog/tab cold export at `99bea34` is terminal: session 26516 completed in
+2,070.83 seconds with exit 1. Coverage and raw totals remain 436/436 static,
+1,875/1,875 interaction, 8,483 groups / 389,202 occurrences, 134 source findings.
+It reports 1,541 unresolved plus ten unclassified rows: the new tab classification
+used `harness-instrumentation-defect` rather than schema `parity-harness-defect`.
+This output is rejected, not accepted canonical progress. Its manifest, markdown
+and payload are retained in `artifacts/material-parity/dialog-tab-99bea34-unclassified-export`;
+payload SHA `c8bef810fb56d5ffe323dbe311b592629ba81f3c26f4740be2efd38f9cfc71df`.
+The log is `dialog-tab-cold-progress.log`. Accepted canonical files were restored
+from `c53bd80`; no failed snapshot was imported. Correct both proof and row labels,
+assert schema membership in the focused test, then re-export/reconcile. The failed
+run's evidence session verified 1,205 files / 89,151,884 bytes, zero invalidations.
+
+Read-only next-batch evidence: the two remaining bottom-sheet-dismiss background
+groups (19 light/contrast/custom + 6 dark observations) are not simply transparent
+versus filled paint. Existing modal mapping authenticates all 25 original owners:
+native anchor background is transparent, but its generated `::before` focus layer
+computes `rgb(29, 27, 30)` at opacity `0.12` throughout. Candidate normal/effective/
+interaction backgrounds all retain `#e6e1e5` (19) or `#312f35` (6). Current fixture
+line 803 authors an unconditional ID-specific 8% mix; line 804 separately authors
+a 12% focus mix. Both originated in `8505c3b` (match bottom sheet overlay geometry).
+This distinguishes state-layer ownership and baseline authoring from a simple
+missing native fill. Next prove applicable cascade/selector precedence and bind
+the two rows with existing owner-review infrastructure; do not infer renderer
+paint equivalence or classify from host color alone. No canonical attribution or
+fingerprinted source was changed during this read-only investigation.
+Follow-up narrows the state question: all 25 authenticated original sheet records
+have `focus.astylar = bottom-sheet-primary`, omit reference focus identity, and
+report `focus.matches = true`. The native generated action has an active focus
+layer, while the candidate stays on its baseline background. Current harness
+`run-material-parity.mjs:422` gates equality only for state `focus`; open/activate
+records therefore do not prove autofocus equivalence. Current core also resolves
+live pseudo rules separately (`style.service.ts:539`), so ordinary CSS specificity
+alone is not evidence for why the candidate focus mix was absent. Track distinct
+questions: unconditional authored fill versus native pseudo ownership; actual
+overlay focus target/transfer; and missing open-state focus acceptance. Original
+bundle attribution and public focus reproduction remain pending. Do not promote
+the green focus flag or a missing reference ID to proven focus parity.
+
 Corrected `e857030` cold export is terminal (1,853.48 seconds, exit 1 solely
 for 1,560 unresolved groups). Strict canonical reconciliation passes: 8,483
 groups / 389,202 occurrences, exactly 18 changed groups / 298 occurrences,

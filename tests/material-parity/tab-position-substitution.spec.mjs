@@ -7,6 +7,7 @@ import { applyTabControlStage, validateTabControlStage, applyDialogTextFlow, val
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+import { inputDifferenceClassifications } from './input-equivalence-policy.mjs';
 
 test('tab stage review preserves raw findings and does not classify typography or unrelated rows', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -34,7 +35,8 @@ test('tab stage review preserves raw findings and does not classify typography o
   const changed = applied.filter(r => r.attribution === 'reviewed-tab-control-stage');
   assert.equal(changed.length, 10);
   assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 420);
-  assert.ok(changed.every(r => r.classification === 'harness-instrumentation-defect'));
+  assert.ok(changed.every(r => r.classification === 'parity-harness-defect'));
+  assert.ok(changed.every(r => inputDifferenceClassifications.includes(r.classification)));
   for (const row of untouched) assert.ok(applied.includes(row));
   const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
   const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
@@ -78,6 +80,7 @@ test('all 140 tab labels compare a different box while three control stages agre
       assert.deepEqual(proof.attributableProperties, properties);
       assert.equal(proof.inputEquivalent, false);
       assert.equal(proof.rendererCauseProven, false);
+      assert.ok(inputDifferenceClassifications.includes(proof.classification));
       heights[proof.controlValues.height] = (heights[proof.controlValues.height] ?? 0) + 1;
       count++;
     }
