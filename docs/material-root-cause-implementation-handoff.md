@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 25
 
+Retained focus evidence narrowed without recapture: all 25 bottom-sheet and
+24 menu open/activate/activate-leave records have one reference action matched
+by an exact non-pseudo single `:focus` selector (`.mdc-list-item:focus` on Share,
+`.mat-mdc-menu-item:focus` on Rename). Original capture and each tree SHA are
+authenticated; the actual tree-reader bytes match the captured reader receipt
+`06197eda...` and record these rules only after `element.matches(selector)`.
+The same records report candidate opener focus and incorrectly `matches: true`.
+This recovers reference focus at tree-capture time: it strengthens 49 historical
+observations beyond merely missing scalar identities, but is not an event
+timeline or proof of the current runtime cause. Dialog remains separate: its
+selector-list branches cannot be treated as exact focused-owner evidence.
+The existing retained-overlay-focus test now covers this recovery (three tests,
+4.30 seconds before the additional reader-byte assertion). No active-export
+dependency or capture changed; the test is outside its source fingerprint list.
+Next focused capture must distinguish retained-runtime mismatch from current
+signal/update settlement behavior; do not recapture simply to rediscover these
+49 historical reference focus owners.
+
 Corrected cold export is running from `b8c58ae`, session **95217**, log
 `artifacts/material-parity/appearance-b8c58ae-progress.log`. It reached
 `build-audit` after 0.97 seconds. Revalidate the handle/process before acting;
