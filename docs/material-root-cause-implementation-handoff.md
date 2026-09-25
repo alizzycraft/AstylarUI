@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+The guard correction is committed/pushed as `8f8ddbd`. Its corrected five-input
+cold export is live (session 39535, Node PID 17164), log
+`artifacts/material-parity/line-height-scalar-export-8f8ddbd.log`; verify that
+handle before treating it as live on continuation. Do not edit its dependencies.
+
+The next font join is prepared but deliberately **not integrated**:
+`retained-font-scalar.mjs` reuses the existing inventory adapter and generated
+owner mapper, consumes independently validated retained typography, and requires
+complete original membership and unique matching reference/candidate owners.
+Three focused tests pass, including wrong-owner, incomplete/duplicate membership,
+changed-stage and altered persisted-proof rejection. A replay against accepted
+`02f8a47b...` compact rows and the hash-pinned original capture changes exactly
+ten candidate groups / 614 observations; every owner and complete retained-proof
+hash matches `font-scalar-owner-replay-7bf37de.json`. No new capture or changed
+font equivalence claim was needed. This is a prepared join, not canonical
+conservation or final acceptance. Connect it only after the live line-height
+export is accepted; update both historical import guards and the producer
+transition alongside that integration to avoid repeating the failure below.
+
 The `77eb6cb` line-height export is terminal and **rejected**, not live or
 accepted. It completed in 1,797.15 seconds with 436/436 static and 1,875/1,875
 interaction coverage, but four source-binding errors and 1,667 unresolved groups.
