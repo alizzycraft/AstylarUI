@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 25
 
+The separate selected-button background question now has complete read-only
+evidence for both unresolved groups / **24 observations**: eight hover, eight
+held, eight activate. Hash-authenticated original trees and complete scalar
+snapshots show reference `button-toggle-two` retaining `rgb(234, 222, 247)` while
+a distinct descendant `mat-button-toggle-focus-overlay` has opacity 0.08. Its
+foreground is theme-dependent: `rgb(29, 27, 32)` in 18 cases and
+`rgb(230, 225, 229)` in six. A first light-only foreground assertion failed on
+dark captures; the completed proof preserves both populations, not a weakened
+single-color premise. Held captures also contain a separate `mat-ripple-element`
+(all eight); hover/activate have none at the captured boundary. Candidate owners
+have no corresponding overlay/ripple descendants. Candidate normal background
+is `#eadef7`; authored `.button-toggle-option.selected:hover` and `:active`
+rules instead replace the host background with a rounded blend using fixed
+foreground `#4b4357` at 0.08 / 0.12, respectively. Exact blend arithmetic and
+all three captured core style snapshots agree (`#ddd2ea` / `#d7cbe4`).
+Thus this is an application state-layer/structure substitution with different
+authored foregrounds, not evidence that core converted equal color inputs
+incorrectly. Commit `ae9cdad226ea19f05c0a791e4fba23e8de5f60a0` introduced both
+selected pseudo-state blend rules while restoring interaction affordances.
+Ordered case/owner/overlay/color/rule/tree-reference proof digest:
+`6148f0757c276f6f4ac74b99ff0107fb234e630d55d9762bb1563e3992ee9632`.
+No claim about whole-control raster equivalence or ripple timing follows from
+these sampled states. Next classification should preserve this distinction and
+reuse existing background proof infrastructure; canonical rows remain unchanged.
+
 Read-only next-gap investigation while the combined export runs: button-toggle
 backgrounds contain two distinct questions, not one shared color cause. Four
 unresolved `button-toggle-primary` groups / **68 observations** are opaque
