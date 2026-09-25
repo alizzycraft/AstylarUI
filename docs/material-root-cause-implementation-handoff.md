@@ -24,13 +24,31 @@ existing sources changed and the origin-motion focused test was added. The
 control-line-box producer hashes, derived owner/source binding hashes, the
 unresolved count and the inventory test's line reference (91 to 93). No other
 section changed. Canonical integration is accepted as this bounded audit
-increment, not complete input equivalence. Compact import is the next step.
+increment, not complete input equivalence. Committed/pushed as `868f9de`.
+Compact import and verification passed: 8,483 discrepancies, 134 source findings,
+39,904 controls, 389,202 occurrences and 1,420 unresolved groups. Current compact
+index SHA-256 is `1fc871effede80e9817ff17a843f2e6e37bad281143e9265ad7c6d23e5bc6362`.
 New payload SHA-256:
 `02f8a47b90b39a9b43afd79d59ec3ee68a336b05f651f658dde67735e1d4b420`;
 decoded SHA-256:
 `e63b9370e5ce46d33514ad5982408f25a11155d6be66d3a36fe3296d2c5f8985`.
 
 Next classification batch can reuse existing normal-line-box proofs rather than
+recapture typography. A complete original-tree ownership check now passes for
+all 716 shortlisted observations (1,064 hash-authenticated tree files): each
+reference host has one direct `mdc-button__label` child; host and label match
+lineHeight, fontSize, fontWeight, fontStyle, fontFamily and letterSpacing, and
+the candidate owner has core-control-texture paint. Reference identity uses
+`data-parity-id` when present, otherwise `id`; requiring only data-parity-id
+incorrectly misses ordinary opener buttons. The ordered
+{case,element,host,label,candidate} membership SHA-256 is
+`ecde2b482be5b693b76805c5937bc06c31ecfb96586c68370ed512f98952df39`.
+This answers the host/label comparability question, not overall typography
+equivalence. The classifier still needs to bind each exact label/candidate to
+its existing accepted observation and reject missing/duplicate/wrong-owner
+proofs. No scalar attribution has been changed for this next batch.
+
+The existing line-box evidence avoids the need to
 recapture typography. Twelve unresolved scalar `lineHeight: normal / omitted`
 groups have **716/716 original-capture members** with exactly one accepted
 per-case control-text line-box attribution. This includes dialog Cancel/Save
