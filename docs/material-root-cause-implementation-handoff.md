@@ -30,6 +30,16 @@ owner-attribution spec, preserve specific prior reviews ahead of the new generic
 fallback, and retain this failed export evidence. Do not lower the 66-group
 coverage requirement. Remaining batch reconciliation and all final gates remain.
 
+The focused regression now confirms that collision, not merely a count-based
+hypothesis: `node --test --test-name-pattern='font-weight fallback preserves'
+tests/material-parity/owner-initial-style-attribution.spec.mjs` fails in 18.08 s.
+With identical original inputs and follow-up evidence, adding owner-initial
+evidence replaces all four source-reviewed leaf weight groups / 96 observations.
+The new test is currently an uncommitted failing proof; the production fix is
+not applied while conservation session 15128 still reads its source dependencies.
+Preserve specific existing reviews before the generic font-weight fallback,
+then prove both preservation and fallback availability in this same test.
+
 Post-weight investigation priority (read-only while export runs): authenticated
 compact fcb still has **1,288** unresolved groups. Largest families are dialog
 161, bottom-sheet 112, chips 101, tabs 99; inset properties alone account for
