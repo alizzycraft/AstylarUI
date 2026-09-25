@@ -29,8 +29,18 @@ position and neither declaration dictionaries nor serialized CSS request an
 inset/reset. Full-tree ordered witness digest:
 `b1d509dfa66998535256ea5982009341646be7d51bd80afaaf3bb9e09107d3e4`.
 Thus relative-position authoring omission is established independently of the
-offset-stage comparison. Candidate computed position, contextual descendant
-layout and rendered equivalence remain unproved. Next integrate these two scopes
+offset-stage comparison. Current source also disproves a general implicit-relative
+alias: global/type defaults do not supply position, ordinary-flow offset logic
+requires explicit relative, and the actual source-extracted stacking kernel gives
+local depth **0.001** for omitted/static versus **0.15** for relative under the
+same controlled nested ancestry. Source
+`src/app/services/dom/positioning/stacking-context.manager.ts` normalized SHA-256:
+`e65f87b070f8a3941fd224b70e544f581f46afdf4097ef1c7db15533131e9a8a`.
+The five production methods and their production fields/constructor were parsed
+and transpiled as in the existing modal kernel proof; no algorithm was copied.
+This is current-source stacking evidence, not original-bundle runtime or final
+dialog raster proof. Candidate contextual descendant layout and rendered
+equivalence remain unproved. Next integrate these two scopes
 through the existing modal proof after export completion, with mutation rejection
 for explicit/competing offsets, inline requests and detached mappings. Do not
 convert missing candidate offsets to zero or waive position authoring. No
@@ -63,6 +73,8 @@ while active. On terminal completion inspect all validation errors, run the
 existing comparator with `--weight`, then reconcile sections/fingerprints and
 import only after acceptance. Expected unresolved count is 1,262; that count
 alone is not acceptance. The accepted snapshot remains fcb until those checks.
+Latest verified phase: `validate-audit`, reached at **851.93 s**; Node PID
+**2152** remains live. Do not treat that phase transition as terminal success.
 
 Combined original-capture replay now passes via
 `node scripts/check-material-position-canonical-conservation.mjs --weight-replay`:
