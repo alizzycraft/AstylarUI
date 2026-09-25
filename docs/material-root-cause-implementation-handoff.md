@@ -2,6 +2,68 @@
 
 ## Current audit checkpoint — September 25
 
+The stale-hover runtime question now has direct evidence. Existing probe mode
+`--hover-retarget` opens sheet/dialog at a stationary pointer, settles, then moves
+one CSS pixel within the same covered opener location. Eight captures (two
+families, native/candidate, wrappers off/on) pass settled-boundary controls with
+zero page errors. Receipt:
+`artifacts/material-parity/hover-retarget-65d6d2c-ready/result.json`, SHA-256
+`d6e95fc6f3120e926c509da95b7fd27a9247eff34465296afa43cd1d1f21610b`.
+All 517 served JavaScript URL/hash pairs match the earlier authenticated opening
+probe; all 104 installed core files and three served app sources are checked.
+
+Native opener :hover becomes false when the backdrop covers the stationary
+pointer, and elementFromPoint identifies the backdrop before/after the 1px move.
+Candidate diagnostics retain the primary ID and effective #735eab while open;
+the 1px move retargets the overlay ID and restores #6750a4. Focus stays unchanged.
+Explicit checks confirm all eight boundaries, unchanged pointer position during
+opening, 1px displacement, and both candidate state/paint-input transitions.
+This demonstrates stale hover in the current showcase rather than a color-mix
+arithmetic failure. It is still not an equal-input minimal core reproduction,
+historical-capture causality, all-state coverage, or final raster parity. Next
+reduce stationary-pointer occlusion through a minimal public surface update;
+do not fix it by adding per-overlay button background overrides.
+
+The first attempt timed out before collecting any cases while waiting for page
+load; `hover-retarget-65d6d2c/failure.json` is retained. The successful retry waits
+for DOM readiness (60s navigation bound), then the same app-ready/font/renderer
+settlement contracts. No behavior threshold was weakened. The diagnostic server
+has been stopped. The probe and this ledger are outside canonical source inputs;
+the running origin export's dependencies were not changed.
+
+Cold origin export from `65d6d2c` is running, not yet accepted. Continue the
+existing terminal session 39159 (Node PID 18656); log:
+`artifacts/material-parity/origin-motion-export-65d6d2c.log`. Do not restart it
+or modify its audit-source dependencies while live. After terminal completion,
+run the existing `--origin-motion` canonical comparator, reconcile section and
+source/metadata changes, then import/verify the compact snapshot if accepted.
+
+Read-only paint follow-up while that export runs: exact original-capture and
+tree hashes plus compact finding `2644ae20256f938f1b0970d3dc1b85013d83cdde819e0a0781748548484a5147`
+bind all eight light bottom-sheet-primary observations in order. They are a
+mixed population, not one safe color-equivalence classification. Reference host
+is rgb(103,80,164), candidate normal #6750a4, and effective/hover rule #735eab.
+The native persistent-ripple ::before layer is white at .08 for two desktop
+hover cases, zero for five activate/open cases (desktop DPR1/2 and comparison
+pane activation), and .12 for mobile DPR2 open-dismiss. The two .08 composites
+round to the candidate RGB(115,94,171), but this arithmetic proves neither input
+nor raster equivalence. Candidate retains its .08 mix across all eight cases;
+the native state layer does not. All eight group members and their occurrence
+count were asserted, not inferred from the first screenshot.
+
+Current source narrows the next investigation: `.material-button:hover` was
+authored in `2f440115`, and :active's .12 mix in `1dde7be9`; :focus supplies only
+a transparent shadow. Core `setSiteData()` retains hover while the ID remains
+enabled, and `reconcileModalState()` reapplies it to rebuilt meshes without
+re-picking at the stationary pointer. The existing authenticated dialog Escape
+runtime receipt also contains hoveredElementId=dialog-primary concurrently with
+modalDialogId=dialog-overlay. These are evidence for a stale-hover hypothesis,
+not proof that all sheet behavior shares that cause. Next decisive public check:
+open an occluding overlay without moving the pointer, inspect the hover target,
+then move slightly at the same covered location and compare native/candidate
+retargeting. Keep missing focus-state paint and state-layer ownership separate;
+do not waive the entire eight-observation color group.
+
 Origin motion integration is now wired through collection, classification,
 inventory validation and independent original-source replay. Producer-selected
 mode is checked against the evidence marker, so a report cannot disable the

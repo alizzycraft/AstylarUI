@@ -10,7 +10,9 @@ import {chromium} from 'playwright-core';
 // Wrappers preserve arguments, return values, and the original promise identity.
 const base=process.env.ASTYLAR_FOCUS_URL??'http://127.0.0.1:4435';
 const dialogEscape=process.argv.includes('--dialog-escape');
-const families=dialogEscape?['dialog']:['menu','bottom-sheet','dialog'];
+const hoverRetarget=process.argv.includes('--hover-retarget');
+assert.ok(!(dialogEscape&&hoverRetarget),'Choose one diagnostic mode');
+const families=dialogEscape?['dialog']:hoverRetarget?['bottom-sheet','dialog']:['menu','bottom-sheet','dialog'];
 const variants=dialogEscape?['unchanged','without-app-escape']:['unchanged'];
 const sequences=dialogEscape?[{name:'escape',keys:['Escape']}]:process.argv.includes('--keyboard')
  ? [{name:'arrow-escape',keys:['ArrowDown','Escape']},{name:'tab-cycle',keys:['Tab','Tab','Tab','Shift+Tab','Escape']}]
@@ -48,11 +50,13 @@ try {
     }
    })());
   });
-  await page.goto(`${base}/${mode}/${family}?benchmark=1&profile=light&interaction=open`);
+  // Startup can exceed 30s while the cold audit occupies memory/CPU. Readiness
+  // below is still the app contract, font readiness and renderer settlement.
+  await page.goto(`${base}/${mode}/${family}?benchmark=1&profile=light&interaction=open`,{waitUntil:'domcontentloaded',timeout:60000});
   await page.waitForFunction(()=>typeof window.__MATERIAL_SHOWCASE_COMMAND__==='function');
   if(mode==='astylar')await page.waitForFunction(()=>!!window.__ASTYLAR_MATERIAL_BENCHMARK__);
   await page.evaluate(async()=>{await document.fonts.ready;await window.__ASTYLAR_MATERIAL_BENCHMARK__?.waitForSettled();});
-  await page.evaluate(({mode,instrumented,family,variant,dialogEscape})=>{
+  await page.evaluate(({mode,instrumented,family,variant,dialogEscape,hoverRetarget})=>{
    const trace=[];window.__focusAudit={trace,phase:'setup'};
    const identity=()=>{const e=document.activeElement;return {tag:e?.tagName,id:e?.id,astylarId:e?.getAttribute('data-astylar-id'),parityId:e?.getAttribute('data-parity-id'),text:e?.textContent?.trim().slice(0,80)}};
    const record=(event,extra={})=>trace.push({event,phase:window.__focusAudit.phase,time:performance.now(),active:identity(),...extra});
@@ -65,7 +69,7 @@ try {
      return original(id,event);
     };
    }
-   for(const type of ['pointerdown','pointerup','click','focusin','focusout','keydown','keyup'])document.addEventListener(type,e=>record(type,{target:e.target?.id??'',text:e.target?.textContent?.trim().slice(0,50),key:e.key}),true);
+   for(const type of ['pointerdown','pointerup','click','focusin','focusout','keydown','keyup',...(hoverRetarget?['pointermove']:[])])document.addEventListener(type,e=>record(type,{target:e.target?.id??'',text:e.target?.textContent?.trim().slice(0,50),key:e.key,...(hoverRetarget?{x:e.clientX,y:e.clientY}:{})}),true);
    if(mode==='astylar'&&instrumented){
     const component=window.ng.getComponent(document.querySelector('app-astylar-showcase')),surface=component.surface;
     if(!surface)throw Error('Missing mounted surface');
@@ -83,16 +87,33 @@ try {
     window.__focusAudit.phase=label;
     const selector=mode==='astylar'?`[data-astylar-id="${family==='menu'?'menu-popup':family+'-overlay'}"]`
      :family==='menu'?'.mat-mdc-menu-panel':family==='dialog'?'mat-dialog-container':'mat-bottom-sheet-container';
-    record('boundary',{label,overlayPresent:!!document.querySelector(selector),state:window.__ASTYLAR_MATERIAL_BENCHMARK__?.state()});
+    let hover;
+    if(hoverRetarget){
+     const point=window.__focusAudit.pointer,hit=point?document.elementFromPoint(point.x,point.y):undefined;
+     if(mode==='reference'){
+      const opener=document.getElementById(family+'-primary'),ripple=opener.querySelector('.mat-mdc-button-persistent-ripple');
+      const style=getComputedStyle(opener),layer=ripple?getComputedStyle(ripple,'::before'):undefined;
+      hover={point,openerHovered:opener.matches(':hover'),hit:{tag:hit?.tagName,id:hit?.id,class:hit?.className},background:style.backgroundColor,
+       layer:layer?{background:layer.backgroundColor,opacity:layer.opacity}:undefined};
+     }else{
+      const surface=window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+      let opener;try{opener=surface.inspectResolvedStyles().elements.find(e=>e.id===family+'-primary');}catch(e){opener={unavailable:String(e)};}
+      hover={point,interaction:surface.diagnostics.interaction,opener};
+     }
+    }
+    record('boundary',{label,overlayPresent:!!document.querySelector(selector),state:window.__ASTYLAR_MATERIAL_BENCHMARK__?.state(),...(hoverRetarget?{hover}:{})});
    };
-  },{mode,instrumented,family,variant,dialogEscape});
+  },{mode,instrumented,family,variant,dialogEscape,hoverRetarget});
   let box;
   if(mode==='reference')box=await page.locator('#'+family+'-primary').boundingBox();
   else {
    const local=await page.evaluate(id=>window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id],false).elements[id].borderBox,family+'-primary');
    const canvas=await page.locator('canvas').boundingBox();box={x:canvas.x+local.left,y:canvas.y+local.top,width:local.width,height:local.height};
   }
-  assert.ok(box?.width>0);await page.mouse.move(box.x+box.width/2,box.y+box.height/2);
+  assert.ok(box?.width>0);
+  const point={x:box.x+box.width/2,y:box.y+box.height/2};
+  if(hoverRetarget)await page.evaluate(point=>{window.__focusAudit.pointer=point;},point);
+  await page.mouse.move(point.x,point.y);
   await page.evaluate(()=>window.__focusAudit.snapshot('before-down'));
   await page.mouse.down();await page.evaluate(()=>window.__focusAudit.snapshot('held'));
   await page.evaluate(()=>window.__focusAudit.snapshot('release-start'));
@@ -101,6 +122,13 @@ try {
   // Material animation-driven focus may follow the immediate action boundary.
   await page.waitForTimeout(400);
   await page.evaluate(()=>window.__focusAudit.snapshot('settled'));
+  if(hoverRetarget){
+   point.x+=1;await page.evaluate(point=>{window.__focusAudit.pointer=point;},point);
+   await page.mouse.move(point.x,point.y);
+   await page.evaluate(async()=>{await window.__ASTYLAR_MATERIAL_BENCHMARK__?.waitForSettled();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
+   await page.waitForTimeout(400);
+   await page.evaluate(()=>window.__focusAudit.snapshot('after-covered-move'));
+  }
   for(const [index,key] of sequence.keys.entries()){
    await page.keyboard.press(key);
    await page.evaluate(async()=>{await window.__ASTYLAR_MATERIAL_BENCHMARK__?.waitForSettled();});
@@ -125,7 +153,7 @@ try {
   const pair=cases.filter(c=>c.family===family&&c.mode===mode&&c.sequence===sequence.name&&c.variant===variant);assert.equal(pair.length,2);
   assert.deepEqual(pair[0].trace.at(-1).active,pair[1].trace.at(-1).active,'Instrumentation changed final focus');
   assert.deepEqual(pair[0].state,pair[1].state,'Instrumentation changed final application state');
-  const boundaries=c=>c.trace.filter(x=>x.event==='boundary'&&(x.label==='settled'||x.label.startsWith('key-'))).map(({label,active,overlayPresent,state})=>({label,active,overlayPresent,state}));
+  const boundaries=c=>c.trace.filter(x=>x.event==='boundary'&&(x.label==='settled'||x.label==='after-covered-move'||x.label.startsWith('key-'))).map(({label,active,overlayPresent,state,hover})=>({label,active,overlayPresent,state,...(hoverRetarget?{hover}:{})}));
   assert.deepEqual(boundaries(pair[0]),boundaries(pair[1]),'Instrumentation changed a settled action boundary');
  }
  console.log(JSON.stringify({cases:cases.length,errors:errors.length,sourceMatches:sourceMatches.size,wrapperBoundaryControls:'pass'}));
