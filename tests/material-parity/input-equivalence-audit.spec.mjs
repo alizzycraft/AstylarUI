@@ -602,6 +602,38 @@ test('outline token attribution requires exact authored shorthand and covers onl
   }
 });
 
+test('outline token divider extension requires zero-width currentColor other sides and rejects forged coverage', () => {
+  const raw = outlineTokenReport('divider'), entry = raw.results[0];
+  entry.styleInputs[0].reference.color = '#123456';
+  entry.inputTrees.reference.styles[0].color = '#123456';
+  const audit = buildMaterialInputAudit(raw);
+  const rows = audit.discrepancies.filter(r => r.attribution === 'reviewed-material-outline-token-substitution');
+  assert.equal(rows.length, 4);
+  for (const row of rows.filter(r => r.property !== 'borderLeftColor')) {
+    assert.match(row.justification, /side-scope overauthoring/);
+    assert.equal(row.reference, 'rgba(18,52,86,1)');
+    assert.equal(row.reviewEvidence.inputEquivalent, false);
+  }
+  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => e.includes('outline token')));
+  for (const mutate of [
+    a => { a.outlineTokenInputs[0].referenceColors.borderTopColor = 'red'; },
+    a => { a.discrepancies.find(r => r.property === 'borderTopColor').reference = 'red'; },
+  ]) {
+    const changed = structuredClone(audit); mutate(changed);
+    assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(e => e.includes('outline token')));
+  }
+  for (const mutate of [
+    e => { e.inputTrees.reference.styles[0].color = 'red'; },
+    e => { e.inputTrees.reference.styles[0].borderTopWidth = '1px'; },
+    e => { e.inputTrees.astylar.nodes[0].normalResolvedStyle.borderTopWidth = '1px'; },
+    e => { e.inputTrees.astylar.rules.push({ selector: '#button-toggle-two:hover', borderColor: 'red' }); },
+  ]) {
+    const changed = structuredClone(raw); mutate(changed.results[0]);
+    assert.ok(buildMaterialInputAudit(changed).discrepancies.every(r =>
+      r.property === 'borderLeftColor' || r.attribution !== 'reviewed-material-outline-token-substitution'));
+  }
+});
+
 test('outline token attribution rejects incomplete, conflicting and mismapped declarations or styles', () => {
   const mutations = [
     e => { delete e.inputTrees.reference.rules.at(-1).cssText; },

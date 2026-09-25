@@ -2,7 +2,16 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer } from './position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer, restoreToggleSideColorProducer } from './position-composition-producer-transition.mjs';
+
+test('toggle other-side validation restores exactly the accepted producer', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '11c01f9:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreToggleSideColorProducer(current).restoredSource, previous);
+  assert.throws(() => restoreToggleSideColorProducer(current + '\n// unrelated'));
+  assert.throws(() => restoreToggleSideColorProducer(current.replace('proof.referenceColors?.[entry.property]', 'proof.referenceColors?.wrong')));
+});
 
 test('sidenav background integration preserves its predecessor and requires complete original membership', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

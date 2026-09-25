@@ -204,7 +204,15 @@ function outlineStyles(referenceRaw, stages, sides, canonicalStyle) {
         reference[`border${side}Style`] !== 'solid') ||
       candidate.some(style => borderColorProperties.some(key => style[key] !== 'rgba(121,116,126,1)') ||
         sides.some(side => style[`border${side}Width`] !== '1px' || style[`border${side}Style`] !== 'solid'))) return;
-  return { referenceColor: color, candidateBorderColor: 'rgba(121,116,126,1)' };
+  const otherSides = ['Top', 'Right', 'Bottom'];
+  const extendsDivider = sides.length === 1 && sides[0] === 'Left' &&
+    /^rgba\(\d+,\d+,\d+,1\)$/.test(reference.color ?? '') &&
+    otherSides.every(side => reference[`border${side}Color`] === reference.color &&
+      reference[`border${side}Width`] === '0' && reference[`border${side}Style`] === 'none') &&
+    candidate.every(style => otherSides.every(side => style[`border${side}Width`] === '0' &&
+      style[`border${side}Style`] === 'solid'));
+  return { referenceColor: color, candidateBorderColor: 'rgba(121,116,126,1)',
+    ...(extendsDivider ? { referenceColors: Object.fromEntries(otherSides.map(side => [`border${side}Color`, reference.color])) } : {}) };
 }
 
 export function collectOutlineTokenInputs(inventory, canonicalStyle) {
@@ -252,11 +260,13 @@ export function collectOutlineTokenInputs(inventory, canonicalStyle) {
       if (!colors) continue;
       result.push({ case: key, element: id, referenceNode: node.key, astylarNode: candidate.key,
         referenceType: node.type, astylarType: authored.type, source: ast.resolvedStyleSource, revision: asts[0].resolvedStyleRevision,
-        ...colors, properties: target.sides.map(side => `border${side}Color`), referenceWitness,
+        ...colors, properties: [...target.sides.map(side => `border${side}Color`), ...Object.keys(colors.referenceColors ?? {})], referenceWitness,
         candidateRule: literals[0], referenceRules: [...node.rules], excludedCandidateRules: excluded, candidateRuleCount: ast.rules.length,
         classification: 'application-plugin-authoring-defect', attribution: outlineTokenAttribution, sourceFinding: target.sourceFinding,
         inputEquivalent: false, finalRasterVerified: false,
-        scope: 'Captured explicit token versus literal border-color input only; no other-side, shape, typography, animation paint or final-raster equivalence claim.' });
+        scope: colors.referenceColors
+          ? 'Left token versus literal and independently verified zero-width other-side color overauthoring only; no shape, typography, animation paint or final-raster equivalence claim.'
+          : 'Captured explicit token versus literal border-color input only; no other-side, shape, typography, animation paint or final-raster equivalence claim.' });
     }
   }
   return result;
@@ -265,21 +275,25 @@ export function collectOutlineTokenInputs(inventory, canonicalStyle) {
 export function classifyOutlineTokenInput(input, property, reference, astylar, proof, canonicalStyle) {
   const target = outlineTargets.find(target => target.sourceFinding === proof?.sourceFinding);
   if (!target || proof.attribution !== outlineTokenAttribution || input.id !== proof.element ||
-      !proof.properties.includes(property) || reference !== proof.referenceColor || astylar !== proof.candidateBorderColor ||
+      !proof.properties.includes(property) || reference !== (proof.referenceColors?.[property] ?? proof.referenceColor) || astylar !== proof.candidateBorderColor ||
       input.astylarResolvedStyleEvidenceVersion !== 2 || input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
       input.referenceStructure.type !== proof.referenceType || input.astylarStructure.type !== proof.astylarType) return;
   const witness = outlineReference(input.referenceAuthored, target, false);
   if (!witness || JSON.stringify(witness.token.declarations) !== JSON.stringify(proof.referenceWitness.token.declarations) ||
       JSON.stringify(witness.reset) !== JSON.stringify(proof.referenceWitness.reset)) return;
   const colors = outlineStyles(input.reference, [input.astylarNormalResolvedStyle, input.astylar, input.astylarInteractionResolvedStyle], target.sides, canonicalStyle);
-  if (!colors || colors.referenceColor !== reference || colors.candidateBorderColor !== astylar || !Array.isArray(input.astylarAuthored)) return;
+  if (!colors || (colors.referenceColors?.[property] ?? colors.referenceColor) !== reference ||
+      JSON.stringify(colors.referenceColors) !== JSON.stringify(proof.referenceColors) ||
+      colors.candidateBorderColor !== astylar || !Array.isArray(input.astylarAuthored)) return;
   const literals = input.astylarAuthored.filter(rule => rule.selector === target.candidate);
   if (literals.length !== 1 || literals[0].declarations?.borderColor !== '#79747e' ||
       input.astylarAuthored.some(rule => !object(rule.declarations) || Object.keys(rule.declarations).some(key =>
         colorOrResetKey(key) && !(rule === literals[0] && key === 'borderColor')))) return;
   return { classification: proof.classification, attribution: outlineTokenAttribution, reviewEvidence: structuredClone(proof),
     owner: 'showcase Material outline/divider token and side-specific border input translation',
-    justification: 'The uniquely mapped reference has the exact active serialized Material token shorthand and pending expanded color declarations. Its computed relevant border colors differ from the explicit candidate #79747e rule retained at all three current core style stages. Complete candidate rules exclude other possibly applicable color/reset inputs; duplicate, unknown, incomplete or conflicting witnesses reject attribution. Reference button reset/no-animation evidence is checked separately, and the second toggle covers only its left divider. This is source-traced unequal color authoring, not an accepted palette alias or equal-input core paint failure. Preserve the original token/side intent rather than sampling the observed color; shape, other sides and final raster remain separate.' };
+    justification: proof.referenceColors?.[property]
+      ? 'The reference token shorthand authors only the left divider. Its top/right/bottom borders are independently verified as zero width, none style and currentColor. The candidate instead authors an all-side #79747e color and solid style with zero non-left widths, retained in all three captured style stages. Complete rule and inline evidence excludes competing color/reset authoring. This is side-scope overauthoring, not a visible outline defect or an equal-input paint failure; rounded clipping, state layers and final raster remain separate.'
+      : 'The uniquely mapped reference has the exact active serialized Material token shorthand and pending expanded color declarations. Its computed relevant border colors differ from the explicit candidate #79747e rule retained at all three current core style stages. Complete candidate rules exclude other possibly applicable color/reset inputs; duplicate, unknown, incomplete or conflicting witnesses reject attribution. Reference button reset/no-animation evidence is checked separately, and the second toggle covers only its left divider. This is source-traced unequal color authoring, not an accepted palette alias or equal-input core paint failure. Preserve the original token/side intent rather than sampling the observed color; shape, other sides and final raster remain separate.' };
 }
 
 const chipSides = ['Top', 'Right', 'Bottom', 'Left'];

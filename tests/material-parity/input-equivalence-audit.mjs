@@ -925,12 +925,12 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   }
   for (const entry of report.discrepancies.filter(entry => entry.attribution === outlineTokenAttribution)) {
     const proof = report.outlineTokenInputs?.find(proof => proof.case === entry.reviewEvidence?.case && proof.element === entry.element);
-    if (!proof || !proof.properties.includes(entry.property) || entry.reference !== proof.referenceColor ||
+    if (!proof || !proof.properties.includes(entry.property) || entry.reference !== (proof.referenceColors?.[entry.property] ?? proof.referenceColor) ||
         entry.astylar !== proof.candidateBorderColor || entry.classification !== 'application-plugin-authoring-defect' ||
         JSON.stringify(proof) !== JSON.stringify(entry.reviewEvidence) || !Array.isArray(entry.reviewedCases) ||
         entry.reviewedCases.length !== entry.occurrences || new Set(entry.reviewedCases).size !== entry.occurrences ||
         entry.reviewedCases.some(key => !report.outlineTokenInputs?.some(item => item.case === key && item.element === entry.element &&
-          item.properties.includes(entry.property) && item.referenceColor === entry.reference && item.candidateBorderColor === entry.astylar))) {
+          item.properties.includes(entry.property) && (item.referenceColors?.[entry.property] ?? item.referenceColor) === entry.reference && item.candidateBorderColor === entry.astylar))) {
       errors.push('outline token classification lacks exact captured declaration and style evidence');
     }
   }

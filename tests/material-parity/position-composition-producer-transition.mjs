@@ -2,9 +2,23 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
-export function restoreSidenavBackgroundScalarProducer(source) {
+export function restoreToggleSideColorProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ['entry.reference !== (proof.referenceColors?.[entry.property] ?? proof.referenceColor)', 'entry.reference !== proof.referenceColor'],
+    ['(item.referenceColors?.[entry.property] ?? item.referenceColor) === entry.reference', 'item.referenceColor === entry.reference'],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated toggle side-color validation fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'a9f8e8861c582687024475d8b63a0cd5fc30a69ec4667a97cdb6b3baae25ab20',
+    'producer changed beyond reviewed toggle side-color validation');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreSidenavBackgroundScalarProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('proof.referenceColors?.[entry.property]') ? restoreToggleSideColorProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["  classifyRootBackgroundInput, validateRootBackgroundClassifications, rootBackgroundAttribution,\n  applySidenavBackgroundScalar, validateSidenavBackgroundScalar, sidenavBackgroundAttribution } from './root-background-classification-preparation.mjs';",
       "  classifyRootBackgroundInput, validateRootBackgroundClassifications, rootBackgroundAttribution } from './root-background-classification-preparation.mjs';"],

@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 25
 
+Button-toggle non-divider colors are now covered by the existing outline-token
+collector/classifier. It extends the 68 proven left-divider owners only when
+the other reference sides are zero-width / none / currentColor and every
+candidate stage is zero-width / solid / all-side `#79747e`. Exact token,
+inline, complete-rule and conflict-exclusion witnesses remain required.
+Original-capture replay adds **three signatures / 204 observations**. Across
+196 scoped outline proofs, every predecessor field is preserved after removing
+the explicit new side-color map/properties and associated scope description;
+68 records gain that additional evidence. Ordered added membership digest:
+`a42f03136226d03699fe127c7e6cfd0c869bb3d62a4511151349e6fb89790d6d`.
+This confirms side-scope overauthoring, not the visible clipping/rounded-fill
+defect and not equivalent inputs. Scalar validation now checks each proved
+side's own color rather than assuming every property uses the divider token.
+Its two expression changes restore byte-for-byte to the accepted producer via
+the existing source-transition infrastructure; unrelated changes are rejected.
+Six outline tests pass (37.77 s), including forged coverage, conflicting state
+rules and altered widths; all six producer-transition tests pass (1.10 s).
+Commands: `node --test --test-name-pattern="outline token" tests/material-parity/input-equivalence-audit.spec.mjs`
+and `node --test tests/material-parity/position-composition-producer-transition.spec.mjs`.
+Heading, slider-color and non-divider batches now total **31 pending signature
+classifications / 1,164 observations**. The accepted canonical count remains
+1,394 unresolved. The 68 extended existing proof records and producer receipt
+changes must also be accounted for at the next combined integration; do not
+mistake them for new classifications or omit their conservation checks.
+
 Slider native border-color coverage now extends the existing border-default
 inspector/binding/classifier, without a new report or framework. Authenticated
 replay covers **156 owners / 624 color observations / 16 unresolved signatures**.
