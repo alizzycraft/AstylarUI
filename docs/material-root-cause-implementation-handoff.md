@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+The live export has now exposed a **historical gap-source reconciliation failure**
+in both explicit-gap composition and gap-review membership subprocesses. The
+parent remains live; do not restart it or edit dependencies before it finishes.
+`readGapSurveySource` rejects the changed border module's full digest:
+current `1acfdc0cccbf85ef396fac52a5a0fcf751eb1444a7676b53c1b861ff6af764cd`,
+historical `3dbcf33ff70244a8179f438962a2549fb7e354948f084d35d433bcf82e76f9f4`.
+All seven other survey dependency receipts authenticate through their existing
+read paths. `owner-gap-input-evidence` uses `rootInitialSelectorCanApply`, whose
+border-module dependency is `selectorCanApply`. TypeScript parsing of current
+and authenticated `2cec292` sources proves this unique function byte-identical
+(digest `b9f5350855d078cde98015f370a6a35431ca1bcfe615071c84ec842fe1ecf8ff`).
+This localizes the next integration correction, but function equality alone is
+not permission to waive full-module provenance or new import side effects.
+After terminal output, extend the existing source-replay boundary with an exact
+authenticated bounded transition and negative controls; preserve the historical
+receipt and reject unrelated source edits. Run the gap checks before another
+full export. The failure log above is retained; no canonical acceptance follows
+from the partial run, and other terminal errors still need inspection.
+
 Cold combined export is running from `51fa73d` (session 52267, PID 12888,
 started 19:11:34 local); log:
 `artifacts/material-parity/border-defaults-export-51fa73d.log`.
