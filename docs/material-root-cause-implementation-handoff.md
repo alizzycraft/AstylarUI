@@ -2,6 +2,41 @@
 
 ## Current audit checkpoint — September 25
 
+Current-runtime overlay focus now has direct action-boundary evidence, not only
+the earlier scheduling reduction. `scripts/audit-material-overlay-focus-runtime.mjs`
+drives unchanged served Material routes with real pointer down/up, recording DOM
+focus and public update/settlement/focus calls. Twelve captures (three families,
+both implementations, wrappers disabled/enabled) preserve identical final focus
+and application state with zero page errors in Chrome 153.0.8010.53, light/DPR1.
+Receipt: `artifacts/material-parity/overlay-focus-current-6606d13-controls/result.json`,
+SHA `cc12796e722e1415263f84f542104897b5836913d7783bb6c30526da1e9c1e0c`.
+Three served app sources match disk; 104 installed core JS files match the retained
+source build. `served-core.json` separately binds nine focus/update/settlement
+methods from the served chunk's source map to installed code after syntax-only
+format normalization. It does not claim byte equality of Angular-linked modules.
+
+- Menu: native focuses Rename; candidate keeps its opener. The new tree contains
+  Rename, but application code makes no focus request. This is an authored
+  interaction-contract omission, not proof that core rejected a valid request.
+- Bottom sheet: native focuses Share. Candidate's `focus('bottom-sheet-dismiss')`
+  returns false **before** the first open-tree `update()` call; settled old-tree
+  IDs lack that target. The subsequent tree contains Share, but focus stays on
+  the opener. The first demonstrated divergence is application scheduling:
+  `whenSettled()` observes the old surface before Angular delivers the new input.
+- Dialog: the same early call also requests nonexistent `dialog-dismiss`.
+  Nevertheless the modal's authored autofocus later focuses `dialog-cancel`,
+  matching native Cancel. Preserve this working core behavior; do not diagnose
+  all three as a shared core focus failure.
+
+Timeline/order assertions pass. The first diagnostic attempt incorrectly called
+settled-only style inspection during an update; that instrumentation failure is
+not application evidence. The corrected observer records unavailable inspection
+without throwing, and wrapper-disabled controls establish matching end states.
+These results cover pointer opening only, not historical-bundle causality,
+keyboard traversal, dismissal, all themes/DPRs, or raster parity. Next close the
+remaining overlay interaction-state coverage and geometry/typography/paint gaps;
+do not repeat the completed opening-focus census or canonical color export.
+
 Combined color/motion export preflight is complete. The existing canonical
 conservation comparator now has `--color-motion`, pinned to accepted generation
 `65c72350...` and its decoded SHA. Independent replay authenticates the original
