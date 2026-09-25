@@ -8,7 +8,7 @@ import { execFileSync } from 'node:child_process';
 import { readAudit } from './check-material-disabled-ink-canonical-conservation.mjs';
 import { collectPositionCompositionReview, applyPositionCompositionReview,
   validatePositionCompositionRows, positionCompositionAttribution } from '../tests/material-parity/position-composition-review.mjs';
-import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreToggleSideColorProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
 import { applyRetainedFontScalar, retainedFontScalarAttribution } from '../tests/material-parity/retained-font-scalar.mjs';
 import { applySidenavBackgroundScalar, sidenavBackgroundAttribution } from '../tests/material-parity/root-background-classification-preparation.mjs';
 import { applyNormalLineBoxScalar, normalLineBoxScalarAttribution } from '../tests/material-parity/normal-line-box-scalar.mjs';
@@ -77,6 +77,56 @@ export function replayBorderDefaultRows(rows, captured) {
       reviewEvidence: first.reviewEvidence, reviewedCases: members.map(m => m.case) };
   });
   return applyMappedBorderInitial(replayed, cases, inventory, normalize);
+}
+
+export function compareBorderDefaultCanonical(previous, current, expectedRows, source) {
+  const transition = restoreToggleSideColorProducer(source);
+  const adjusted = refreshScalarControlReceipts(previous.rows, previous.control, current.control, transition);
+  const expected = JSON.parse(JSON.stringify(refreshScalarControlReceipts(expectedRows,
+    previous.control, current.control, transition)));
+  assert.equal(current.rows.length, previous.rows.length);
+  for (let i = 0; i < current.rows.length; i++) same(current.rows[i], expected[i],
+    `border canonical differs from original-source replay at ${i}: ${current.rows[i]?.family}/${current.rows[i]?.element}/${current.rows[i]?.property}`);
+  const control = structuredClone(current.control), receiptCases = [];
+  assert.equal(control.differences.length, previous.control.differences.length);
+  for (let i = 0; i < control.differences.length; i++) {
+    const before = previous.control.differences[i], after = control.differences[i];
+    if (before.attribution !== 'reviewed-interactive-normal-line-box-stage-comparison' ||
+        receipt(before)?.currentModuleSha256 !== transition.previousModuleSha256) continue;
+    assert.equal(receipt(after)?.currentModuleSha256, transition.currentModuleSha256);
+    receipt(after).currentModuleSha256 = transition.previousModuleSha256;
+    same(before, after, 'border batch changed non-receipt control evidence');
+    receiptCases.push(before.case);
+  }
+  assert.equal(receiptCases.length, 48); assert.equal(new Set(receiptCases).size, 48);
+  same(control, previous.control, 'border batch changed unrelated controls');
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  const totals = new Map(), existingProofRows = [];
+  for (let i = 0; i < current.rows.length; i++) {
+    const before = adjusted[i], after = current.rows[i];
+    same(raw(previous.rows[i]), raw(after), 'border batch changed raw scalar evidence');
+    if (isDeepStrictEqual(before, after)) continue;
+    assert.match(before.property, /^border(Top|Right|Bottom|Left)Color$/);
+    if (before.attribution === 'unresolved') {
+      const total = totals.get(after.attribution) ?? { groups: 0, observations: 0 };
+      total.groups++; total.observations += after.occurrences; totals.set(after.attribution, total);
+    } else {
+      assert.equal(before.attribution, outlineTokenAttribution); assert.equal(after.attribution, before.attribution);
+      assert.equal(before.element, 'button-toggle-two'); assert.equal(before.property, 'borderLeftColor');
+      existingProofRows.push(i);
+    }
+  }
+  same(Object.fromEntries(totals), {
+    'reviewed-border-initial-color-divergence': { groups: 12, observations: 336 },
+    'reviewed-slider-native-border-default-policy': { groups: 16, observations: 624 },
+    'reviewed-material-outline-token-substitution': { groups: 3, observations: 204 },
+    'reviewed-mapped-border-initial-color-divergence': { groups: 52, observations: 1432 },
+  }, 'border batch changed unexpected classification membership');
+  return { previous: previous.manifest, current: current.manifest, changedGroups: 83, changedOccurrences: 2596,
+    existingProofRows, scalarReceiptRows: adjusted.filter((r, i) => !isDeepStrictEqual(r, previous.rows[i])).length,
+    controlReceiptRecords: receiptCases.length, allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
+    orderedCurrentRowsSha256: digest(current.rows), inputEquivalent: false, renderingEquivalent: false };
 }
 
 // Scalar line-box findings embed complete control-proof hashes. Recompute only
@@ -342,7 +392,17 @@ function replayAppearanceRows(rows, captured, { colorMotion = false, originMotio
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && ['--appearance', '--color-motion', '--origin-motion', '--line-box', '--font-sidenav'].includes(process.argv[2])) {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--border-defaults') {
+  assert.equal(process.argv.length, 3);
+  const previous = await readAudit('artifacts/material-parity/working-audit/4059599c887ec413d7a6494d7012becb09d06ff40c1cf24b7a0c3e228631a071');
+  assert.equal(previous.manifest.uncompressedSha256, '641f5f1cb71cca2a53fb505851d30a08934619272c777a46bde11ad6ad7747fc');
+  const current = await readAudit('docs');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const expected = replayBorderDefaultRows(previous.rows, JSON.parse(bytes));
+  console.log(JSON.stringify(compareBorderDefaultCanonical(previous, current, expected,
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs')), null, 2));
+} else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && ['--appearance', '--color-motion', '--origin-motion', '--line-box', '--font-sidenav'].includes(process.argv[2])) {
   assert.equal(process.argv.length, 3);
   const colorMotion = process.argv[2] === '--color-motion';
   const originMotion = process.argv[2] === '--origin-motion';

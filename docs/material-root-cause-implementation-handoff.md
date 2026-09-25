@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 25
 
+The existing independent conservation CLI now supports `--border-defaults`.
+It authenticates accepted `4059599c…`, streams the candidate package, replays the
+original captures, checks exact complete scalar rows and preserves raw fields
+independently of expected metadata. Only the 83/2,596 reviewed additions,
+existing second-toggle left-divider proof updates and authenticated control/
+embedded-scalar producer receipts are permitted. All other control evidence
+must remain identical. The existing conservation suite passes **14/14**
+(39.21 s), including joint actual/expected raw-data forgery, lost/reordered
+records, unrelated metadata, altered producer source and control-value mutation.
+This is preparation, not a comparison result: run
+`node --max-old-space-size=8192 scripts/check-material-position-canonical-conservation.mjs --border-defaults`
+after the current export reaches terminal state. Section/source/caret receipt
+reconciliation remains separately required; this scalar/control comparator does
+not claim to cover those other top-level sections. Export `0d0e1bc` has reached
+validation without the previous binding failures in its current log.
+
 Independent border replay exposed an incomplete batch estimate: **83**, not 75,
 previously unresolved groups qualify (**2,596**, not 2,324 observations). The
 first accepted-baseline replay conserved every raw scalar row, then deliberately
