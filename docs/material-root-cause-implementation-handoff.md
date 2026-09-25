@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 25
 
+Font/sidenav export reconciliation: the cold `babb1e1` run finished in
+1,890.634 seconds with exit 1 and is **rejected**, not a new accepted baseline.
+Its invocation supplied only `--parity-report`, omitting the three line-box
+report arguments and `--supplemental-root` from the complete command recorded
+below. Consequently it reported 1,406 unresolved groups, missing 120 static /
+671 interactive natural-line-box observations, missing computed context and
+unbound supplemental captures. These are invocation/evidence omissions, not
+new renderer findings. Preserve its three generated report files and full log
+under `artifacts/material-parity/font-sidenav-export-babb1e1-missing-inputs/`;
+payload SHA-256 is
+`7c745b24d98e6ee6b8d858f82c0ea020c1bc83593c5a987157834fe790f47f27`.
+The accepted baseline remains `4ddf218e...` (1,408 unresolved groups); generated
+docs are unaccepted until reconciliation succeeds. A corrected cold run uses
+all five recorded evidence arguments, after checking each path exists, with log
+`artifacts/material-parity/font-sidenav-export-complete-inputs-574eb2a.log`.
+Do not start another export while that process is live. Inspect terminal errors,
+then run the existing `--font-sidenav` conservation check and source/section
+reconciliation before importing or committing canonical data. Expected 14-group /
+676-observation attribution is a test expectation, not an accepted result.
+
 Bottom-sheet first-action background review: both groups / **25 observations**
 have complete existing alias mappings (no scalar rule gaps), authenticated trees
 and matching scalar/style owners. Reference `bottom-sheet-dismiss` maps to the
