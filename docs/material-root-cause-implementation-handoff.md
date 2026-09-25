@@ -74,14 +74,22 @@ after dismissal, with explicit unknown/missing status rather than `undefined`
 equality. Four retained-overlay-focus tests now pass in 5.56 seconds. This closes
 the inventory question for those 30 records, not their current-runtime cause.
 
-Corrected cold export is running from `b8c58ae`, session **95217**, log
-`artifacts/material-parity/appearance-b8c58ae-progress.log`. It reached
-`build-audit` after 0.97 seconds. Revalidate the handle/process before acting;
-do not launch another export or modify its source dependencies while it runs.
-The terminal rejected run below is historical, not this active process.
-After completion, use `--appearance` comparison against accepted `0a6c0f6d...`,
-then reconcile sections/source receipts (including the 48 control producer
-receipts). The accepted count remains 1,541 until that reconciliation succeeds.
+Corrected cold export from `b8c58ae` is TERMINAL, session **95217**, exit 1
+after 2,074.90 seconds solely for 1,507 unresolved groups. The previous displaced
+followup-classification error is gone. Coverage remains 436/436 static and
+1,875/1,875 interaction, 8,483 groups / 389,202 occurrences / 134 source findings.
+The evidence session verified 1,205 files / 89,151,875 bytes, zero invalidations,
+two collectors and ten memory hits. Log: `appearance-b8c58ae-progress.log`.
+Candidate compressed SHA `65c72350ed907939fbbbdae030f4aebcb7e83f1039de66fb4b3cb2c747a30c56`,
+decoded SHA `45d4d3129ea5a13522bcd54e89f27bb80ce620e37f9e7a710c048fb1e1ce668a`.
+Independent `--appearance` conservation is running in session **83835**, output
+`artifacts/material-parity/appearance-b8c58ae-conservation.json`. Section digest
+comparison is running in **67600**, output `appearance-b8c58ae-sections.json`,
+reusing the authenticated predecessor digests from `dialog-tab-7c7beef-sections.json`.
+Revalidate these handles; do not restart them or change their dependencies.
+Reconcile changed sections/source receipts (including 48 control producer
+receipts) before compact import or canonical commit. The accepted count remains
+1,541 until reconciliation succeeds; no new canonical acceptance is claimed.
 
 Corrected-export preflight passes: the existing producer-transition helper now
 removes only the exact appearance fallback relocation and authenticates the
