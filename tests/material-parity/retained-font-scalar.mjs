@@ -29,11 +29,14 @@ export function applyRetainedFontScalar(rows, cases, inventory, retained, normal
   const mappings = index(inventory.cases, c => JSON.stringify([c.case, c.side]));
   const aliasTrees = new Map();
   return rows.map(row => {
-    if (row.attribution !== 'unresolved' || row.property !== 'fontFamily' ||
-        row.reference !== 'roboto' || row.astylar !== undefined) return row;
+    const weight = row.property === 'fontWeight' && row.family === 'button-toggle' &&
+      ['button-toggle-one', 'button-toggle-two'].includes(row.element) && row.reference === '500';
+    if (row.attribution !== 'unresolved' || row.astylar !== undefined ||
+        !(weight || row.property === 'fontFamily' && row.reference === 'roboto')) return row;
+    const property = row.property;
     const members = cases.filter(c => c.family === row.family && c.styleInputs?.some(i =>
       i.id === row.element && i.reference && i.astylar &&
-      normalize(i.reference).fontFamily === row.reference && normalize(i.astylar).fontFamily === undefined));
+      normalize(i.reference)[property] === row.reference && normalize(i.astylar)[property] === undefined));
     if (!members.length || members.length !== row.occurrences || new Set(members.map(keyOf)).size !== members.length) return row;
     const proofs = [];
     for (const member of members) {
@@ -63,6 +66,38 @@ export function applyRetainedFontScalar(rows, cases, inventory, retained, normal
         const style = inventory.styles[candidate[stage]];
         if (!input[scalar] || style?.side !== 'astylar' || !isDeepStrictEqual(input[scalar], style.value)) return row;
       }
+      if (weight) {
+        const label = `${row.element}-label`;
+        const difference = one(differences.get(JSON.stringify([key, label, property])) ?? []);
+        const comparison = one(comparisons.get(JSON.stringify([key, label])) ?? []);
+        const proof = difference?.reviewEvidence, values = difference?.values;
+        const referenceChain = proof?.referenceChain, candidateChain = proof?.candidateChain;
+        // The scalar is the host, not the text leaf. Prove that both complete
+        // reviewed chains actually include that host; never join by value alone.
+        const linked = (chain, nodes, leaf, host) => Array.isArray(chain) && chain.length > 1 &&
+          chain[0].node === leaf && chain.some(p => p.node === host) &&
+          new Set(chain.map(p => p.node)).size === chain.length && chain.every((p, i) => {
+            const node = one(nodes.filter(n => n.key === p.node));
+            return node && (i === chain.length - 1 || node.parent === chain[i + 1].node);
+          });
+        if (difference?.family !== row.family || difference.attribution !== 'reviewed-control-label-token-input' ||
+            difference.classification !== 'application-plugin-authoring-defect' || difference.source !== 'core-text-registry' ||
+            difference.revision !== maps[1].resolvedStyleRevision || comparison?.revision !== difference.revision ||
+            comparison?.source !== 'core-text-registry' || comparison.currentPseudoStatePaintVerified !== false ||
+            comparison.referenceNode !== difference.referenceNode || comparison.astylarNode !== difference.astylarNode ||
+            !isDeepStrictEqual(comparison.properties?.fontWeight, values) ||
+            values?.reference !== '500' || values.retained !== '400' || values.normal !== undefined || values.effective !== undefined ||
+            proof?.property !== property || proof.referenceComputed !== '500' || proof.candidateRetained !== '400' ||
+            !linked(referenceChain, ref.nodes, difference.referenceNode, reference.key) ||
+            !linked(candidateChain, ast.nodes, difference.astylarNode, candidate.key) ||
+            referenceChain.some(p => p.computed?.fontWeight !== '500') ||
+            candidateChain.some(p => !p.normal || !p.effective || p.normal.fontWeight !== undefined || p.effective.fontWeight !== undefined) ||
+            proof.referenceRule?.selector !== '.mat-button-toggle-appearance-standard' ||
+            proof.referenceRule.declarations?.['font-weight']?.value !== 'var(--mat-button-toggle-label-text-weight, var(--mat-sys-label-large-weight))') return row;
+        proofs.push({ case: key, referenceNode: reference.key, candidateNode: candidate.key,
+          retainedLabel: label, proofSha256: hash(difference) });
+        continue;
+      }
       const difference = one(differences.get(JSON.stringify([key, row.element, 'fontFamily'])) ?? []);
       const comparison = one(comparisons.get(JSON.stringify([key, row.element])) ?? []);
       const evidence = difference?.reviewEvidence, values = difference?.values;
@@ -80,8 +115,11 @@ export function applyRetainedFontScalar(rows, cases, inventory, retained, normal
     }
     return { ...row, classification: 'application-plugin-authoring-defect', attribution: retainedFontScalarAttribution,
       recommendedOwner: 'showcase Material component font-token translation and reference structure',
-      justification: 'Every original scalar member maps to the exact owner of an independently validated inherited-component-font proof. The reference component requests Roboto; candidate normal/effective declarations omit the component override and retain the page fallback stack. Omitted scalar fields remain omitted. This is unequal component authoring, not font-list equivalence or proof of current glyph, geometry or raster parity.',
-      reviewEvidence: { sourceAttribution, proofs, inputEquivalent: false, renderingEquivalent: false } };
+      justification: weight
+        ? 'Every original button-toggle host scalar is present in both ancestry chains of its independently validated component-label token proof. Material requests weight 500; candidate declarations omit it and the text registry retains 400. Host and leaf identities are distinct and explicitly joined. This is unequal component typography authoring, not a synthesized host computed value or proof of current glyph, geometry or raster parity.'
+        : 'Every original scalar member maps to the exact owner of an independently validated inherited-component-font proof. The reference component requests Roboto; candidate normal/effective declarations omit the component override and retain the page fallback stack. Omitted scalar fields remain omitted. This is unequal component authoring, not font-list equivalence or proof of current glyph, geometry or raster parity.',
+      reviewEvidence: { sourceAttribution: weight ? 'reviewed-control-label-token-input' : sourceAttribution,
+        proofs, inputEquivalent: false, renderingEquivalent: false } };
   });
 }
 

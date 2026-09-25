@@ -1,5 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { collectFullTreeInventory, collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { applyRetainedFontScalar, validateRetainedFontScalar, retainedFontScalarAttribution } from './retained-font-scalar.mjs';
 
 const normalize = style => ({ ...style, ...(style.fontFamily ? { fontFamily: style.fontFamily.toLowerCase() } : {}) });
@@ -23,6 +28,48 @@ function fixture() {
   return {rows,cases,inventory,retained:{differences:[difference],comparisons:[comparison]}};
 }
 const apply=f=>applyRetainedFontScalar(f.rows,f.cases,f.inventory,f.retained,normalize);
+
+test('retained weight host join covers all toggle cases and rejects detached leaf or host evidence', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes);
+  const cases = [...raw.results.map(c => ({ ...c, kind: 'static' })), ...raw.interactions.map(c => ({ ...c, kind: 'interaction' }))]
+    .filter(c => c.family === 'button-toggle');
+  assert.equal(cases.length, 68);
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const retained = collectRetainedTypographyEvidence(cases, inventory), canonical = bindPreciseAuditNormalization();
+  const snapshot = { generation: 'fcb44846abf9e0b7a63a0277d3990b8420709765748ef27fb625c2ebf40812a9',
+    indexSha256: '95d98fbe2cafb17e8a2ef0d9ed3cd04c3a909637461a684bd237de7bf3bfa4b8' };
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'button-toggle', snapshot)
+    .filter(r => r.evidence.section === 'discrepancies' && r.property === 'fontWeight' && r.reference === '500' && r.attribution === 'unresolved');
+  assert.equal(rows.length, 2);
+  const result = applyRetainedFontScalar(rows, cases, inventory, retained, canonical);
+  assert.ok(result.every(r => r.attribution === retainedFontScalarAttribution));
+  assert.equal(result.reduce((n, r) => n + r.reviewEvidence.proofs.length, 0), 136);
+  for (const [i, row] of result.entries()) {
+    for (const field of ['reference', 'astylar', 'occurrences', 'cases', 'states']) assert.deepEqual(row[field], rows[i][field]);
+    assert.equal(row.reviewEvidence.inputEquivalent, false); assert.equal(row.reviewEvidence.renderingEquivalent, false);
+  }
+  assert.deepEqual(validateRetainedFontScalar(result, rows, cases, inventory, retained, canonical), []);
+  const target = r => r.differences.find(d => d.element === 'button-toggle-one-label' && d.property === 'fontWeight');
+  for (const mutate of [
+    r => { target(r).reviewEvidence.referenceChain.pop(); },
+    r => { target(r).reviewEvidence.candidateChain.splice(1, 1); },
+    r => { target(r).revision++; },
+    r => { target(r).values.retained = '500'; },
+    r => { target(r).reviewEvidence.referenceRule.declarations['font-weight'].value = '400'; },
+    r => { r.differences.push(structuredClone(target(r))); },
+  ]) {
+    const changed = structuredClone(retained); mutate(changed);
+    const rejected = applyRetainedFontScalar(rows, cases, inventory, changed, canonical);
+    assert.equal(rejected.find(r => r.element === 'button-toggle-one').attribution, 'unresolved');
+  }
+  assert.deepEqual(applyRetainedFontScalar(rows, cases.slice(1), inventory, retained, canonical), rows);
+  for (const mutate of [r => r.pop(), r => r.push(structuredClone(r[0])), r => { r[0].reviewEvidence.proofs.pop(); }]) {
+    const changed = structuredClone(result); mutate(changed);
+    assert.equal(validateRetainedFontScalar(changed, rows, cases, inventory, retained, canonical).length, 1);
+  }
+});
 test('retained font join preserves original scalar values and complete owner proof membership',()=>{
   const f=fixture(), before=structuredClone(f), rows=apply(f);
   assert.equal(rows[0].attribution,retainedFontScalarAttribution);

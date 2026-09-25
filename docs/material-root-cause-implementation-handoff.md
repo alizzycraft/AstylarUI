@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 25
 
+Button-toggle host weight attribution is now implemented in the existing
+retained-font scalar join (no new collector/framework): **two groups / 136
+observations**, all 68 original cases. Host scalar snapshots (89 reference
+properties and all three candidate stages) bind to distinct label proofs through
+both actual ancestry chains. Validated Material token evidence requests 500 while
+candidate declarations omit weight and the text registry retains 400. This is an
+application/plugin authoring omission, not candidate host computed-style or glyph
+parity. Revision, identity, chain linkage, exact token and membership guards reject
+detached/forged evidence; persisted lost/duplicate classifications also reject.
+All four retained-font scalar tests pass (3.19 s), including existing font-family
+behavior. Production already invokes this join and validator under original-source
+binding. Combined source changes remain ahead of the canonical snapshot; next
+handle the four interactive control-label stage groups, then reconcile historical
+collector/source guards and the combined batch before a milestone export.
+
 Font-weight predecessor/production check passes (2.96 s): restoring the two
 reviewed integration literals reproduces the complete `16e7979` attribution
 module exactly. Executing that predecessor against the paired original static
