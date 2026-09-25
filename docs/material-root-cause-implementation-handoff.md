@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — September 25
 
+Slider native border-color coverage now extends the existing border-default
+inspector/binding/classifier, without a new report or framework. Authenticated
+replay covers **156 owners / 624 color observations / 16 unresolved signatures**.
+All existing 1,872 width/style/radius observations are preserved exactly against
+the immutable prior proof after removing only the newly added color properties.
+The native reference colors are `rgb(16,16,16)` or disabled
+`rgba(118,118,118,.3)`; the latter is not computed text/currentColor. All three
+candidate stages retain `#bdc3c7`, independently matched to the generic input
+entry in `src/app/config/browser-defaults.ts`. Both input layers have opacity
+zero, so this is not a diagnosis of the visible black thumb ring or drag issue.
+Color admission checks all possibly applicable candidate color/reset/motion
+rules using the existing conservative selector exclusion. The first overly
+broad guard rejected unrelated table width-only declarations; the final guard
+excludes width/style/radius from color assignment checks, not unknown selectors
+or color-bearing resets. Unknown/state color declarations still reject color
+attribution. Missing/changed stage or opacity evidence likewise rejects it.
+The existing public range reduction proves width/style/radius default selection;
+the new justification explicitly does not claim a new public color/raster proof.
+`node --test tests/material-parity/slider-border-default-evidence.spec.mjs tests/material-parity/slider-border-default-source-binding.spec.mjs`
+passes 8/8 (7.35 s), including original-population replay, prior-proof preservation,
+forgery rejection and scalar membership checks. Independent production-normalizer
+replay matches the 16 compact unresolved groups exactly; ordered membership hash
+`55f5d027774cd088552d7216de0792acc757dae85b6df38df835ec7ea236da12`.
+These classifications and the heading batch below await combined canonical
+integration (28 groups / 960 observations total). Accepted unresolved count stays
+1,394; do not present pending classifications as canonical or rendering parity.
+
 Heading border-default coverage integrated into the existing collector: its
 ordinary-element gate now includes h1–h6, with no declaration, selector, stage
 or provenance check relaxed. Original capture authentication and full before/after

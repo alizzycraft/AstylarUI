@@ -12,10 +12,10 @@ const inspect = value => inspectSliderBorderDefaults(value.entry, value.input, v
 const refNode = value => value.reference.nodes.find(node => node.attributes?.id === value.input.id);
 const astNode = value => value.candidate.nodes.find(node => node.authored?.id === value.input.id);
 
-test('original slider border owner retains shared omissions and twelve default-value differences', () => {
+test('original slider border owner retains shared omissions and sixteen default-value differences', () => {
   const snapshot = structuredClone(base), proof = inspect(base);
   assert.ok(proof); assert.deepEqual(base, snapshot);
-  assert.equal(proof.properties.length, 12);
+  assert.equal(proof.properties.length, 16);
   assert.equal(proof.borderAuthoringEquivalent, true);
   assert.equal(proof.inputEquivalent, false);
   assert.equal(proof.usedBoxParityVerified, false);
@@ -24,6 +24,27 @@ test('original slider border owner retains shared omissions and twelve default-v
   assert.deepEqual(proof.properties[0], { property: 'borderTopWidth', reference: '0px', candidate: '1px', candidateSourceProperty: 'borderWidth' });
   proof.reference.values.borderTopWidth = '999px';
   assert.equal(inspect(base).reference.values.borderTopWidth, '0px');
+});
+
+test('native color evidence rejects changed color stages and visibility without discarding older border proofs', () => {
+  for (const mutate of [
+    value => { value.input.reference.borderTopColor = 'red'; },
+    value => { value.input.reference.opacity = '1'; },
+    value => { astNode(value).normalResolvedStyle.borderColor = 'red'; },
+    value => { value.candidate.rules.push({ selector: '.range-layer:hover', borderColor: 'red' }); },
+    value => { value.candidate.rules.push({ selector: ':not(.other)', borderColor: 'red' }); },
+    value => {
+      value.input.reference.opacity = value.reference.styles[refNode(value).style].opacity = '1';
+    },
+    value => {
+      for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) astNode(value)[stage].borderColor = 'red';
+      for (const stage of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle']) value.input[stage].borderColor = 'red';
+    },
+  ]) {
+    const value = structuredClone(base); mutate(value);
+    const proof = inspect(value);
+    assert.ok(!proof || proof.properties.every(p => !p.property.endsWith('Color')));
+  }
 });
 
 test('border omission reader rejects incomplete provenance, competing rules and altered defaults', () => {
@@ -69,6 +90,7 @@ test('border omission proof covers both original input owners in all 78 captured
       const inputs = entry.styleInputs.filter(input => input.id === id); assert.equal(inputs.length, 1);
       const proof = inspectSliderBorderDefaults(entry, inputs[0], reference, candidate);
       assert.ok(proof, `${entry.profile}/${entry.viewport.id}/${entry.state ?? 'static'}#${id}`);
+      assert.equal(proof.properties.filter(p => p.property.endsWith('Color')).length, 4);
       owners++;
     }
   }

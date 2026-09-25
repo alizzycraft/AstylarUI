@@ -1,5 +1,6 @@
 import { isDeepStrictEqual } from 'node:util';
 import { inspectSliderInputBox } from './slider-input-box-evidence.mjs';
+import { selectorCanApply } from './border-initial-input-evidence.mjs';
 
 const object = value => value && typeof value === 'object' && !Array.isArray(value);
 const related = name => /^(border|appearance$|webkitappearance$|all$)/.test(name.replaceAll('-', '').toLowerCase());
@@ -12,6 +13,11 @@ const referenceValues = Object.fromEntries([
 ]);
 const candidateValues = { borderWidth: '1px', borderStyle: 'solid', borderRadius: '4px' };
 const declarationsOmitBorder = declarations => object(declarations) && !Object.keys(declarations).some(related);
+const affectsBorderColor = key => {
+  const name = key.replaceAll('-', '').toLowerCase();
+  return /^(all$|appearance$|webkitappearance$|animation|transition)/.test(name) ||
+    (name.startsWith('border') && !/(width|style|radius)$/.test(name) && !name.startsWith('borderimage'));
+};
 
 // Declaration/default evidence only. The original application has other unequal
 // box requests, so the isolated public proof's 2px effect is NOT its used-box delta.
@@ -51,6 +57,18 @@ export function inspectSliderBorderDefaults(entry, input, reference, candidate) 
     candidate: property.endsWith('Width') ? '1px' : property.endsWith('Style') ? 'solid' : '4px',
     candidateSourceProperty: property.endsWith('Width') ? 'borderWidth' : property.endsWith('Style') ? 'borderStyle' : 'borderRadius',
   }));
+  // Native disabled border colors are not currentColor. Require the captured
+  // value and all three candidate stages; do not derive either from text color.
+  const colors = sides.map(side => input.reference[`border${side}Color`]);
+  if (colors.every(color => color === colors[0]) &&
+      ['rgb(16, 16, 16)', 'rgba(118, 118, 118, 0.3)'].includes(colors[0]) &&
+      !candidate.rules.some(rule => selectorCanApply(rule.selector, ast.authored) &&
+        Object.keys(rule).some(affectsBorderColor)) &&
+      [ast.resolvedStyle, ast.normalResolvedStyle, ast.interactionResolvedStyle]
+        .every(style => style.borderColor === '#bdc3c7') && input.reference.opacity === '0') {
+    properties.push(...sides.map(side => ({ property: `border${side}Color`,
+      reference: colors[0], candidate: '#bdc3c7', candidateSourceProperty: 'borderColor' })));
+  }
   return {
     element: input.id,
     classification: 'intentional-documented-limitation',

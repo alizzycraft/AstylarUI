@@ -52,6 +52,15 @@ export function classifySliderBorderDefault(input, property, reference, astylar,
       !observation.proof.properties.some(item => item.property === property) ||
       canonicalStyle(input.reference)[property] !== reference ||
       canonicalStyle(input.astylar)[property] !== astylar) return;
+  if (property.endsWith('Color')) return {
+    classification: 'intentional-documented-limitation', attribution: sliderBorderDefaultAttribution,
+    owner: 'core input-type default selection and compatibility catalog',
+    reviewEvidence: { case: observation.case, element: observation.element,
+      referenceNode: observation.proof.reference.node, candidateNode: observation.proof.candidate.node,
+      borderAuthoringEquivalent: true, inputEquivalent: false,
+      usedBoxParityVerified: false, finalRasterVerified: false },
+    justification: 'Both captured native range owners omit border and appearance declarations. Chromium computes the captured native border color (including a distinct disabled color, not inferred currentColor); all three candidate stages retain the generic input borderColor #bdc3c7 from browser-defaults.ts. Complete original owner and declaration replay establishes this default-stage divergence. Both input layers have opacity zero; this is not the visible thumb/ring and does not diagnose drag, hit testing or final raster. The existing isolated public proof establishes width/style/radius default selection, not this color observation; no new public color-parity claim is made.',
+  };
   return {
     classification: 'intentional-documented-limitation', attribution: sliderBorderDefaultAttribution,
     owner: 'core input-type default selection and compatibility catalog',

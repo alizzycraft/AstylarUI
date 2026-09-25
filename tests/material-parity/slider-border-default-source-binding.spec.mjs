@@ -20,6 +20,7 @@ const canonical = style => {
   for (const [shorthand, suffixes] of [
     ['borderWidth', ['TopWidth', 'RightWidth', 'BottomWidth', 'LeftWidth']],
     ['borderStyle', ['TopStyle', 'RightStyle', 'BottomStyle', 'LeftStyle']],
+    ['borderColor', ['TopColor', 'RightColor', 'BottomColor', 'LeftColor']],
     ['borderRadius', ['TopLeftRadius', 'TopRightRadius', 'BottomRightRadius', 'BottomLeftRadius']],
   ]) if (result[shorthand] !== undefined) {
     assert.ok(!result[shorthand].includes(' '), 'test callback only expands uniform borders');
@@ -69,19 +70,22 @@ function withCapture(run) {
   }
 }
 
-test('slider border binding replays all original owners and preserves all twelve default differences', () => {
+test('slider border binding preserves twelve historical differences and adds four captured colors', () => {
   const options = { root: process.cwd(), parityPath: prior.capture.file };
   const evidence = collectSliderBorderDefaults(raw, options);
   assert.equal(evidence.binding.status, 'bound'); assert.equal(evidence.captures.length, 78);
   assert.equal(evidence.observations.length, 156);
   for (const [index, o] of evidence.observations.entries()) {
     const { case: key, state, inputTrees, ...proof } = prior.observations[index];
-    assert.equal(o.case, key); assert.equal(o.state, state); assert.deepEqual(o.proof, proof);
+    assert.equal(o.case, key); assert.equal(o.state, state);
+    const historical = structuredClone(o.proof);
+    historical.properties = historical.properties.filter(p => !p.property.endsWith('Color'));
+    assert.deepEqual(historical, proof);
   }
   assert.deepEqual(validateSliderBorderDefaults(evidence, options), []);
   const rows = rowsOf(evidence);
-  assert.equal(rows.length, 24); assert.equal(rows.reduce((n, row) => n + row.occurrences, 0), 1872);
-  assert.ok(rows.every(row => row.reviewedCases.length === 78 && row.cases.length === 12));
+  assert.equal(rows.length, 40); assert.equal(rows.reduce((n, row) => n + row.occurrences, 0), 2496);
+  assert.ok(rows.every(row => row.reviewedCases.length === row.occurrences && row.cases.length === Math.min(12, row.occurrences)));
   assert.deepEqual(validateSliderBorderDefaultClassifications(evidence, rows, canonical, equivalent), []);
   assert.ok(rows.every(row => row.attribution === sliderBorderDefaultAttribution &&
     row.reviewEvidence.borderAuthoringEquivalent && !row.reviewEvidence.inputEquivalent &&
@@ -118,7 +122,7 @@ test('slider border scalar coverage rejects missing duplicated relabeled or fals
   const evidence = collectSliderBorderDefaults(report, options), original = rowsOf(evidence);
   assert.deepEqual(validateSliderBorderDefaultClassifications(evidence, original, canonical, equivalent), []);
   const observation = evidence.observations[0];
-  for (const property of ['width', 'paddingLeft', 'boxSizing', 'appearance', 'borderTopColor'])
+  for (const property of ['width', 'paddingLeft', 'boxSizing', 'appearance'])
     assert.equal(classifySliderBorderDefault(observation.input, property,
       canonical(observation.input.reference)[property], canonical(observation.input.astylar)[property], observation, canonical), undefined);
   assert.equal(classifySliderBorderDefault(observation.input, 'borderTopWidth', '999px', '1px', observation, canonical), undefined);
