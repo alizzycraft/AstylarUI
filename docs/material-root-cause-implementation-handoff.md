@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 25
 
+The related bottom-sheet proposal now reuses the same modal owner-request
+proof: **13 additional groups / 325 observations** across 25 original cases.
+Only the panel's position group is newly attributed as an authored omission;
+the two list-item position groups keep their prior classifications unchanged.
+Twelve physical-inset groups are computed-zero/local-omission stage differences.
+Both focused dialog/bottom-sheet tests pass (9.74 s total), including complete
+population and prior-row conservation and rejection of missing/duplicate or
+forged evidence. The paired original rules are `.mat-bottom-sheet-container`
+and `.mdc-list-item`, each explicitly relative without physical/logical insets.
+The initial 2f44011 panel/option rules already omit position, as do current
+rules; the exact one-line panel-position history query finds no transition.
+This bounded history observation is not a full historical cascade claim and
+does not merge the separately proven height, corners or overlay substitutions.
+The pending batch is now **38 groups / 1,125 observations**; integrate these
+existing-module proposals and source conservation next. No canonical export
+was rerun; accepted canonical unresolved count remains 1,262.
+
 Dialog positioning now has a focused executable proposal in the existing
 modal inspection module/spec, not a new survey layer. Against accepted bfd986bc,
 32 original open cases / five mapped owners prove **25 groups / 800 observations**:

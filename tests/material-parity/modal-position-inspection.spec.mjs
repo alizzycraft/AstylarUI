@@ -18,7 +18,8 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   applyBottomSheetActionLayout, validateBottomSheetActionLayout, proveBottomSheetActionCorners,
   applyBottomSheetContrastCorners, validateBottomSheetContrastCorners,
   proveDialogTextFlow, applyDialogTextFlow, validateDialogTextFlow,
-  proveDialogPositionRequests, applyDialogPositionRequests, validateDialogPositionRequests } from './modal-position-inspection.mjs';
+  proveDialogPositionRequests, applyDialogPositionRequests, validateDialogPositionRequests,
+  applyBottomSheetPositionRequests, validateBottomSheetPositionRequests } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
@@ -101,6 +102,51 @@ test('dialog position requests separate authored omissions from computed offsets
     const altered = structuredClone(trees); mutate(...altered);
     assert.throws(() => proveDialogPositionRequests(entry, ...altered, 'dialog-panel'));
   }
+});
+
+test('bottom-sheet offsets reuse modal request proof without replacing reviewed list-item positions', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const cases = JSON.parse(bytes).interactions.filter(e => e.family === 'bottom-sheet' &&
+    e.styleInputs.some(i => i.id === 'bottom-sheet-panel')).map(e => ({ ...e, kind: 'interaction' }));
+  assert.equal(cases.length, 25);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', {
+    generation: 'bfd986bc6e7397d32465df25d6096d2274dfe29336924281a3f7fd0429f6f9fe',
+    indexSha256: 'fead09c2c08b3546503f0d4c014bd3700e03923524d7d8894b430dd5cc194381',
+  }).filter(r => r.evidence.section === 'discrepancies');
+  const before = structuredClone(rows), applied = applyBottomSheetPositionRequests(rows, cases, inventory, normalize);
+  const changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 13); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 325);
+  assert.equal(changed.filter(r => r.property === 'position').length, 1);
+  for (const element of ['bottom-sheet-copy', 'bottom-sheet-dismiss']) {
+    const index = rows.findIndex(r => r.element === element && r.property === 'position');
+    assert.ok(index >= 0); assert.notEqual(rows[index].attribution, 'unresolved');
+    assert.deepEqual(applied[index], before[index]);
+  }
+  assert.deepEqual(rows, before);
+  for (const row of changed) {
+    assert.equal(row.occurrences, 25); assert.equal(row.reviewedCases.length, 25);
+    for (const observation of row.reviewEvidence.observations)
+      for (const flag of ['inputEquivalent', 'renderingEquivalent', 'candidateComputedPositionVerified', 'candidateUsedOffsetsVerified'])
+        assert.equal(observation[flag], false);
+    const restored = { ...row };
+    for (const key of ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']) delete restored[key];
+    Object.assign(restored, row.reviewEvidence.priorMetadata);
+    assert.deepEqual(restored, rows.find(r => r.id === row.id));
+  }
+  const validate = candidate => validateBottomSheetPositionRequests(candidate, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  assert.deepEqual(validate(JSON.parse(JSON.stringify(applied))), []);
+  for (const mutate of [
+    rs => rs.splice(rs.indexOf(rs.find(r => r.attribution === 'reviewed-bottom-sheet-computed-offset-stage')), 1),
+    rs => rs.push(rs.find(r => r.attribution === 'reviewed-bottom-sheet-position-request-omission')),
+    rs => { rs.find(r => r.attribution === 'reviewed-bottom-sheet-computed-offset-stage').reviewEvidence.observations[0].referenceComputedOffsets.left = '1px'; },
+  ]) {
+    const altered = structuredClone(applied); mutate(altered); assert.ok(validate(altered).length);
+  }
+  for (const altered of [cases.slice(1), [...cases, cases[0]]])
+    assert.throws(() => applyBottomSheetPositionRequests(rows, altered, inventory, normalize));
 });
 
 test('oversized radius source finding binds current public-package failures and bounded controls', () => {

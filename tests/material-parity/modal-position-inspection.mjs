@@ -212,9 +212,17 @@ export function proveDialogActionBoxSubstitution(entry, r, a) {
 // In particular, a computed zero is not evidence of an authored zero offset.
 export function proveDialogPositionRequests(entry, r, a, element) {
   assert.equal(entry.family, 'dialog');
+  return proveModalOwnerPositionRequests(entry, r, a, element);
+}
+
+function proveModalOwnerPositionRequests(entry, r, a, element) {
   const selectors = { 'dialog-panel': '.mat-mdc-dialog-surface',
     'dialog-actions': '.mat-mdc-dialog-actions', 'dialog-title': '.mat-mdc-dialog-title',
-    'dialog-save': '.mdc-button', 'dialog-cancel': '.mdc-button' };
+    'dialog-save': '.mdc-button', 'dialog-cancel': '.mdc-button',
+    'bottom-sheet-panel': '.mat-bottom-sheet-container',
+    'bottom-sheet-copy': '.mdc-list-item', 'bottom-sheet-dismiss': '.mdc-list-item' };
+  assert.ok(['dialog', 'bottom-sheet'].includes(entry.family));
+  assert.ok(element.startsWith(entry.family + '-'));
   assert.ok(Object.hasOwn(selectors, element));
   assert.equal(r.ruleEvidenceComplete, true); assert.equal(a.ruleEvidenceComplete, true);
   assert.deepEqual(r.errors, []); assert.deepEqual(a.errors, []);
@@ -277,6 +285,33 @@ export function validateDialogPositionRequests(rows, originalRows, cases, invent
     assert.deepEqual(select(rows), select(applyDialogPositionRequests(originalRows, cases, inventory, canonicalStyle)));
     return [];
   } catch (error) { return [`dialog position requests do not replay from original owners: ${error.message}`]; }
+}
+
+export function applyBottomSheetPositionRequests(rows, cases, inventory, canonicalStyle) {
+  return ['bottom-sheet-panel', 'bottom-sheet-copy', 'bottom-sheet-dismiss'].reduce((values, element) => {
+    const prove = (entry, r, a) => proveModalOwnerPositionRequests(entry, r, a, element);
+    values = applyModalBoxReview(values, cases, inventory, canonicalStyle, {
+      family: 'bottom-sheet', element, properties: ['position'], prove,
+      attribution: 'reviewed-bottom-sheet-position-request-omission',
+      owner: 'showcase bottom-sheet owner positioning authoring',
+      justification: 'The mapped Material container explicitly requests relative positioning; the candidate omits position in authored rules and all three local stages. Earlier list-item position classifications retain precedence. No implicit relative default, equivalent containing block, used layout or renderer cause is inferred.',
+    });
+    return applyModalBoxReview(values, cases, inventory, canonicalStyle, {
+      family: 'bottom-sheet', element, properties: ['top', 'right', 'bottom', 'left'], prove,
+      classification: 'parity-harness-defect', attribution: 'reviewed-bottom-sheet-computed-offset-stage',
+      owner: 'input audit CSSOM resolved offsets versus local declaration inspection',
+      justification: 'Original container/list-item rules request relative positioning without physical or logical insets. Browser CSSOM reports zero offsets; candidate local declarations omit them. Zero is not an authored offset to copy. This diagnoses measurement stages only and does not waive the unequal position requests, intrinsic-height substitution, viewport clipping or overlay composition.',
+    });
+  }, rows);
+}
+
+export function validateBottomSheetPositionRequests(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => ['reviewed-bottom-sheet-position-request-omission',
+      'reviewed-bottom-sheet-computed-offset-stage'].includes(r.attribution));
+    assert.deepEqual(select(rows), select(applyBottomSheetPositionRequests(originalRows, cases, inventory, canonicalStyle)));
+    return [];
+  } catch (error) { return [`bottom-sheet position requests do not replay from original owners: ${error.message}`]; }
 }
 
 export function proveDialogTextFlow(entry, r, a, element) {
