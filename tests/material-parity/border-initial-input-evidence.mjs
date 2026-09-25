@@ -48,6 +48,26 @@ function dialogPanelMotionOverride(rules) {
     animationSettlementVerified: false, finalRasterVerified: false };
 }
 
+function dialogActionNonTopSides(rules, computed) {
+  const witnesses = rules.filter(r => r.selector === '.mat-mdc-dialog-actions' &&
+    r.active === true && Array.isArray(r.conditions) && !r.conditions.length &&
+    isDeepStrictEqual(r.declarations?.['border-top-color'], { value: 'rgba(0, 0, 0, 0)', important: false }) &&
+    isDeepStrictEqual(r.declarations?.['border-top-width'], { value: '1px', important: false }) &&
+    isDeepStrictEqual(r.declarations?.['border-top-style'], { value: 'solid', important: false }));
+  if (witnesses.length !== 1 || computed.borderTopColor !== 'rgba(0,0,0,0)' ||
+      computed.borderTopWidth !== '1px' || computed.borderTopStyle !== 'solid') return;
+  const forced = rules.filter(r => r.selector === '.mat-mdc-dialog-actions' && r.active === false &&
+    isDeepStrictEqual(r.conditions, ['(forced-colors: active)']) &&
+    isDeepStrictEqual(r.declarations, { 'border-top-color': { value: 'canvastext', important: false } }));
+  if (rules.some(r => !object(r.declarations) || Object.keys(r.declarations).some(k =>
+      colorOrResetKey(k) && !((r === witnesses[0] || forced.includes(r)) && k === 'border-top-color')))) return;
+  return { properties: ['borderRightColor', 'borderBottomColor', 'borderLeftColor'],
+    inactiveTopBorderRules: forced,
+    explicitTopBorder: { rule: witnesses[0], color: computed.borderTopColor,
+      width: computed.borderTopWidth, style: computed.borderTopStyle },
+    scope: 'Only the three omitted non-top border colors. The explicit top border and geometry remain separate.' };
+}
+
 // Extend the existing omission proof over authenticated alias identities, not
 // fabricated data-parity IDs. The caller supplies hash-checked original trees.
 export function inspectMappedBorderInitial(entry, input, reference, candidate, normalize) {
@@ -65,17 +85,21 @@ export function inspectMappedBorderInitial(entry, input, reference, candidate, n
   const referenceRules = ref.rules.map(i => reference.rules[i]);
   const motionOverride = referenceRules.some(r => !noColorOrReset(r?.declarations))
     ? dialogPanelMotionOverride(referenceRules) : undefined;
-  if (referenceRules.some(r => !noColorOrReset(r?.declarations)) && !motionOverride) return;
+  const sideScope = referenceRules.some(r => !noColorOrReset(r?.declarations)) && !motionOverride
+    ? dialogActionNonTopSides(referenceRules, normalize(input.reference)) : undefined;
+  if (referenceRules.some(r => !noColorOrReset(r?.declarations)) && !motionOverride && !sideScope) return;
   if (candidate.rules.some(rule => !object(rule) || Object.values(rule).some(v => object(v) || Array.isArray(v)) ||
       (!noColorOrReset(rule) && selectorCanApply(rule.selector, ast.authored)))) return;
   const r = normalize(input.reference), stages = [input.astylarNormalResolvedStyle, input.astylar, input.astylarInteractionResolvedStyle];
+  const properties = sideScope?.properties ?? borderColorProperties;
   if (!/^rgba\(\d+,\d+,\d+,1\)$/.test(r.color ?? '') ||
-      borderColorProperties.some(p => r[p] !== r.color) ||
-      ['Top', 'Right', 'Bottom', 'Left'].some(side => r[`border${side}Width`] !== '0' || r[`border${side}Style`] !== 'none') ||
+      properties.some(p => r[p] !== r.color) ||
+      properties.some(p => r[p.replace('Color', 'Width')] !== '0' || r[p.replace('Color', 'Style')] !== 'none') ||
       stages.some(s => !object(s) || Object.keys(s).some(k => colorOrResetKey(k) && k !== 'borderColor') ||
         borderColorProperties.some(p => normalize(s)[p] !== 'rgba(0,0,0,0)'))) return;
   return { mapping, referenceColor: r.color, candidateBorderColor: 'rgba(0,0,0,0)',
     ...(motionOverride ? { motionOverride } : {}),
+    ...(sideScope ? { sideScope, properties } : {}),
     referenceRules: ref.rules.map(i => reference.rules[i]), referenceInline: ref.inline,
     candidateRuleCount: candidate.rules.length, inputEquivalent: false, finalRasterVerified: false,
     scope: 'Mapped owner border-color omission/default divergence only. Structural replacements, capture rule gaps, border geometry and final raster remain separate.' };
@@ -107,7 +131,8 @@ function applyMappedBorderEvidence(rows, cases, inventory, normalize, buttonRese
       if (!pair) return row;
       const inspect = buttonReset ? inspectMappedButtonBorderReset : inspectMappedBorderInitial;
       const proof = inspect(c, inputs[0], pair.reference, pair.candidate, normalize);
-      if (!proof || proof.referenceColor !== row.reference || proof.candidateBorderColor !== row.astylar) return row;
+      if (!proof || (proof.properties && !proof.properties.includes(row.property)) ||
+          proof.referenceColor !== row.reference || proof.candidateBorderColor !== row.astylar) return row;
       proofs.push({ case: key, ...proof });
     }
     if (buttonReset) return { ...row, classification: 'application-plugin-authoring-defect',

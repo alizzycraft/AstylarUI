@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 25
 
+Dialog border batch preparation is complete: compact accepted membership plus
+authenticated original trees replays **15 previously unresolved groups / 480
+observations** across actions, cancel, panel and save, with no remaining dialog
+border-color groups in that population. Split: reset 8/256, panel 4/128,
+action-container non-top sides 3/96. This is not yet canonical integration.
+
+`dialogActionNonTopSides` proves only right/bottom/left omission; it retains the
+explicit transparent 1px solid top border and inactive forced-colors top-only
+`canvastext` rule. The initial conservative test rejected that additional rule;
+the corrected proof preserves it explicitly rather than discarding inactive CSS.
+All 32 owners pass nine rejection mutations each, including active/altered
+forced-colors witnesses. The top side remains unclassified by this proof.
+All five mapped-border/reset tests pass (29.20 s), exact source-history mutation
+test passes (1.18 s). Complete border source SHA:
+`bee460c11f87b7a319057bfa5e84b6521636d7f54af3aaf3eea2ca837eeb51fd`.
+Accepted `b74de570…` still has 1,311 unresolved; pending production fingerprints
+and this 15-group batch require export/reconciliation at the next milestone.
+Next use the recorded remaining border cohorts (card token, table reset, badge/
+progress motion) or shared paint-input findings; do not repeat the dialog census.
+
 The mapped initial-color proof now admits the exact authenticated dialog-panel
 motion pair through `dialogPanelMotionOverride`: two active unconditional rules
 in the same author sheet, later/higher-specificity explicit `transition:none`,

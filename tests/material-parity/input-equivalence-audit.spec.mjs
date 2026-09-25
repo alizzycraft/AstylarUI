@@ -834,6 +834,50 @@ test('mapped border initial proof covers original aliases without erasing scalar
     assert.equal(inspectMappedBorderInitial(c, input, ref, changed, normalize), undefined); }
 });
 
+test('mapped dialog action border proof retains explicit top border and limits classification to other sides', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes), normalize = bindPreciseAuditNormalization();
+  const cases = raw.interactions.filter(c => c.family === 'dialog' && c.styleInputs?.some(i => i.id === 'dialog-actions'));
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const rows = new Map();
+  for (const c of cases) {
+    const input = c.styleInputs.find(i => i.id === 'dialog-actions');
+    const ref = JSON.parse(readFileSync(c.inputTrees.reference.file)), ast = JSON.parse(readFileSync(c.inputTrees.astylar.file));
+    const proof = inspectMappedBorderInitial(c, input, ref, ast, normalize);
+    assert.deepEqual(proof?.properties, ['borderRightColor', 'borderBottomColor', 'borderLeftColor']);
+    assert.equal(proof.sideScope.explicitTopBorder.width, '1px');
+    for (const mutate of [
+      r => { r.declarations['border-top-color'].value = 'red'; },
+      r => { r.declarations['border-top-color'].important = true; },
+      r => { r.declarations['border-right-color'] = { value: 'currentcolor', important: false }; },
+      r => { r.declarations.all = { value: 'initial', important: false }; },
+      r => { r.active = false; }, r => { r.conditions = ['unknown']; },
+    ]) { const changed = structuredClone(ref);
+      mutate(changed.rules.find(r => r.selector === '.mat-mdc-dialog-actions' && r.active));
+      assert.equal(inspectMappedBorderInitial(c, input, changed, ast, normalize), undefined); }
+    for (const mutate of [
+      r => { r.active = true; }, r => { r.conditions = ['unknown']; },
+      r => { r.declarations['border-right-color'] = { value: 'canvastext', important: false }; },
+    ]) { const changed = structuredClone(ref);
+      mutate(changed.rules.find(r => r.selector === '.mat-mdc-dialog-actions' && !r.active));
+      assert.equal(inspectMappedBorderInitial(c, input, changed, ast, normalize), undefined); }
+    const r = normalize(input.reference), a = normalize(input.astylar);
+    for (const property of borderColorProperties) {
+      const key = JSON.stringify([property, r[property], a[property]]);
+      if (!rows.has(key)) rows.set(key, { family: 'dialog', element: 'dialog-actions', property,
+        reference: r[property], astylar: a[property], attribution: 'unresolved', occurrences: 0, cases: [] });
+      rows.get(key).occurrences++;
+    }
+  }
+  assert.equal(cases.length, 32);
+  const original = [...rows.values()], result = applyMappedBorderInitial(original, cases, inventory, normalize);
+  const reviewed = result.filter(r => r.attribution === mappedBorderInitialAttribution);
+  assert.equal(reviewed.length, 3); assert.equal(reviewed.reduce((n, r) => n + r.occurrences, 0), 96);
+  assert.equal(result.find(r => r.property === 'borderTopColor').attribution, 'unresolved');
+  assert.deepEqual(validateMappedBorderInitial(result, original, cases, inventory, normalize), []);
+});
+
 test('mapped dialog panel border proof requires its exact serialized no-motion override', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
