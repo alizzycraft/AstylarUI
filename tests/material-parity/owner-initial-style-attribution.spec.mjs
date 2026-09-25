@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import test, { after } from 'node:test';
 import { readFileSync, writeFileSync, mkdtempSync, unlinkSync, rmdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { buildMaterialInputAudit, validateMaterialInputAudit, collectFullTreeInventory, collectStyleDiscrepancies } from './input-equivalence-audit.mjs';
+import { execFileSync } from 'node:child_process';
+import { buildMaterialInputAudit, validateMaterialInputAudit, collectFullTreeInventory, collectStyleDiscrepancies,
+  collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
 import { projectFollowupInputAuditInputs } from './followup-input-audit-source-binding.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { bindOwnerInitialStyleSource, collectOwnerInitialStyleEvidence, classifyOwnerInitialStyleInput,
@@ -166,6 +168,35 @@ test('appearance precedence preserves an existing panel-header owner mismatch in
   args[42] = undefined;
   assert.equal(find(collectStyleDiscrepancies(...args)).attribution, ownerInitialStyleAttribution,
     'a remaining unresolved observation must still reach the new fallback');
+});
+
+test('font-weight source extension conserves predecessor observations and retained-stage precedence', async () => {
+  const file = 'tests/material-parity/owner-initial-style-attribution.mjs';
+  const before = execFileSync('git', ['show', `16e7979:${file}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const restored = current.replace("appearance: 'none', fontWeight: '400'", "appearance: 'none'")
+    .replace('reviewedAppearance: true, reviewedFontWeight: true', 'reviewedAppearance: true');
+  assert.equal(restored, before, 'only the two reviewed opt-in integration sites may differ');
+  const resolved = before.replace(/from '([^']+)'/g, (match, specifier) =>
+    specifier.startsWith('.') ? `from '${new URL(specifier, import.meta.url).href}'` : match);
+  const previous = await import('data:text/javascript;base64,' + Buffer.from(resolved).toString('base64'));
+  const oldEvidence = previous.collectOwnerInitialStyleEvidence(raw, inventory);
+  assert.deepEqual({ ...evidence, observations: evidence.observations.filter(p => p.property !== 'fontWeight') }, oldEvidence);
+  const retained = collectRetainedTypographyEvidence(cases, inventory);
+  const args = [cases, { observations: [] }, retained, ...Array.from({ length: 19 }, () => []),
+    { observations: [] }, { observations: [] }, { observations: [] }, [], oldEvidence];
+  const oldRows = collectStyleDiscrepancies(...args);
+  args[26] = evidence;
+  const newRows = collectStyleDiscrepancies(...args);
+  assert.deepEqual(newRows.filter(r => r.property !== 'fontWeight'), oldRows.filter(r => r.property !== 'fontWeight'));
+  const staticRow = rows => rows.find(r => r.element === 'stepper-content' && r.property === 'fontWeight' && r.states.includes('static'));
+  assert.equal(staticRow(oldRows).attribution, 'reviewed-stage-mismatch');
+  assert.deepEqual(staticRow(newRows), staticRow(oldRows));
+  const interactiveRow = rows => rows.find(r => r.element === 'stepper-content' && r.property === 'fontWeight' && r.states.includes('activate'));
+  assert.equal(interactiveRow(oldRows).attribution, 'unresolved');
+  assert.equal(interactiveRow(newRows).attribution, ownerInitialStyleAttribution);
+  for (const field of ['reference', 'astylar', 'occurrences', 'cases', 'states'])
+    assert.deepEqual(interactiveRow(newRows)[field], interactiveRow(oldRows)[field]);
 });
 
 test('font-weight attribution replays complete unresolved membership and retains excluded owners', () => {

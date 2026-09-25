@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+Font-weight predecessor/production check passes (2.96 s): restoring the two
+reviewed integration literals reproduces the complete `16e7979` attribution
+module exactly. Executing that predecessor against the paired original static
+and activated stepper cases yields identical non-weight observations. In the
+actual scalar production chain, non-weight rows and the static retained-stage
+weight row remain byte-for-byte equivalent as objects; only the unresolved
+interactive weight row gains the reviewed owner-initial attribution, preserving
+values, case/state lists and occurrence count. This is a bounded precedence
+regression plus exact source-delta proof, not a new full-canonical acceptance.
+The earlier full 42-group membership replay remains valid; do not rerun its
+137-second census for this test-only change. Next address the two weight-500
+button-toggle host groups using existing retained token proofs, then the four
+interactive control-label stage gaps, before reconciling the combined export.
+
 Font-weight observation-stage classification now uses the existing source-bound
 owner-initial path (property selection plus the opt-in inspector). Full unresolved
 membership replay passes: **42 groups / 2,184 observations**, of which exactly
