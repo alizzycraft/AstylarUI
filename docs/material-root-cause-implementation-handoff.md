@@ -2,14 +2,42 @@
 
 ## Current audit checkpoint — September 25
 
+The corrected origin-motion export is terminal (2,022.78 seconds). Its only
+validation error is **1,420 unresolved scalar groups**; static/interaction
+coverage remains 436/436 and 1,875/1,875, with 8,483 groups, 389,202 occurrences
+and 134 source findings. Evidence-session verification read 1,205 files with
+zero invalidations. This is not full audit acceptance.
+
+Independent `--origin-motion` conservation passed: exactly 36 groups / 704
+observations changed, all 8,447 unrelated scalar rows are identical, and the
+existing control-proof producer reconciliation passed. Receipt:
+`artifacts/material-parity/origin-motion-conservation.json`.
+All 79 sections remain present; 70 are unchanged. The nine changed sections
+are sourceFingerprints, controlLineBoxes, summary, discrepancies,
+originStageEvidence, ownerCaretInputs, reviewedSourceBatchInputs,
+controlTypography and focusedProofs; see `origin-motion-sections.json` in the
+same directory. Detailed metadata/source reconciliation passed
+(`origin-motion-metadata-check.mjs`, output `origin-motion-metadata.json`).
+All 457 source fingerprints match current normalized source bytes: exactly seven
+existing sources changed and the origin-motion focused test was added. The
+704 origin proofs gained the reviewed stage evidence; other changes are 48
+control-line-box producer hashes, derived owner/source binding hashes, the
+unresolved count and the inventory test's line reference (91 to 93). No other
+section changed. Canonical integration is accepted as this bounded audit
+increment, not complete input equivalence. Compact import is the next step.
+New payload SHA-256:
+`02f8a47b90b39a9b43afd79d59ec3ee68a336b05f651f658dde67735e1d4b420`;
+decoded SHA-256:
+`e63b9370e5ce46d33514ad5982408f25a11155d6be66d3a36fe3296d2c5f8985`.
+
 Next classification batch can reuse existing normal-line-box proofs rather than
 recapture typography. Twelve unresolved scalar `lineHeight: normal / omitted`
 groups have **716/716 original-capture members** with exactly one accepted
 per-case control-text line-box attribution. This includes dialog Cancel/Save
 (32 each), dialog opener (78), sheet opener (63), three button owners (60 each),
 card/core actions (52 each), menu opener (94), snackbar opener (71) and tooltip
-opener (62). The candidate rows are still unresolved canonically: no integration
-or count reduction is claimed while the origin export remains live.
+opener (62). These line-height candidate rows are still unresolved canonically:
+no integration or count reduction is claimed for that next batch.
 
 Read-only join receipt:
 `artifacts/material-parity/line-height-reuse-complete-membership-ed555089.json`,
@@ -31,7 +59,7 @@ not establish input equivalence, inherited-font equality, baseline, wrapping or
 raster parity. Dialog's sampled control paint is 17px, while the local resolved
 lineHeight field is omitted; these are distinct diagnostic stages.
 
-After accepting the pending origin export, add the narrow scalar-to-existing-
+After importing the accepted origin export, add the narrow scalar-to-existing-
 control-proof bridge in the existing classifier. Require complete original case
 membership, mapped button/label identity, matching raw values and validated
 per-case evidence; reject missing/duplicate/wrong-owner proofs. Preserve unrelated
