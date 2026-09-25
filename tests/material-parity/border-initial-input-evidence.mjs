@@ -106,6 +106,39 @@ export function collectButtonBorderResetInputs(inventory, canonicalStyle) {
   return collectBorderColorInputs(inventory, canonicalStyle, true);
 }
 
+// The reset is explicit reference authoring, never an omitted initial value.
+// Keep generated-owner identity checks separate from reset/candidate evidence.
+export function inspectMappedButtonBorderReset(entry, input, reference, candidate, normalize) {
+  const mapping = resolveOriginAliasPair(entry, reference, candidate, input);
+  if (mapping.status !== 'mapped') return;
+  const ref = reference.nodes.find(n => n.key === mapping.referenceNode);
+  const ast = candidate.nodes.find(n => n.key === mapping.candidateNode);
+  if (ref.type !== 'button' || ast.authored.type !== 'button' ||
+      !noColorOrReset(ref.inline) || !noColorOrReset(ast.authored.style ?? {})) return;
+  const referenceReset = materialButtonReset(ref.rules.map(i => reference.rules[i]));
+  if (!referenceReset || candidate.rules.some(rule => !object(rule) ||
+      Object.values(rule).some(v => object(v) || Array.isArray(v)) ||
+      (!noColorOrReset(rule) && selectorCanApply(rule.selector, ast.authored)))) return;
+  const widthRules = candidate.rules.filter(rule =>
+    ['.material-button', '.text-button', '.toolbar-action', '.dialog-action'].includes(rule.selector) &&
+    selectorCanApply(rule.selector, ast.authored) && normalize(rule).borderTopWidth === '0');
+  if (widthRules.length !== 1) return;
+  const r = normalize(input.reference);
+  const stages = [input.astylarNormalResolvedStyle, input.astylar, input.astylarInteractionResolvedStyle];
+  if (!/^rgba\(\d+,\d+,\d+,1\)$/.test(r.color ?? '') ||
+      borderColorProperties.some(p => r[p] !== r.color) ||
+      stages.some(s => !object(s) || Object.keys(s).some(k => colorOrResetKey(k) && k !== 'borderColor') ||
+        borderColorProperties.some(p => normalize(s)[p] !== 'rgba(0,0,0,0)')) ||
+      [input.reference, ...stages].some(s => ['Top', 'Right', 'Bottom', 'Left'].some(side =>
+        normalize(s)[`border${side}Width`] !== '0' || normalize(s)[`border${side}Style`] !== 'none'))) return;
+  return { mapping, referenceReset, candidateWidthRule: widthRules[0].selector,
+    referenceColor: r.color, candidateBorderColor: 'rgba(0,0,0,0)',
+    referenceRules: ref.rules.map(i => reference.rules[i]), candidateRuleCount: candidate.rules.length,
+    classification: 'application-plugin-authoring-defect', attribution: buttonBorderResetAttribution,
+    inputEquivalent: false, finalRasterVerified: false,
+    scope: 'Mapped explicit Material border reset versus candidate width-only authoring. No geometry, state paint or final-raster equivalence claim.' };
+}
+
 function materialButtonReset(rules) {
   if (!Array.isArray(rules) || rules.some(rule => !object(rule?.declarations))) return;
   const reset = rules.filter(rule => rule.selector === '.mdc-button' && ['top', 'right', 'bottom', 'left'].every(side =>

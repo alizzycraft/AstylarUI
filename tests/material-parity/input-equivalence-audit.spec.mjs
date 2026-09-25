@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { assertHistoricalCaseIndexSources } from './historical-case-index-source-assertion.mjs';
-import { collectBorderInitialInputs, inspectMappedBorderInitial, applyMappedBorderInitial,
+import { collectBorderInitialInputs, inspectMappedBorderInitial, inspectMappedButtonBorderReset, applyMappedBorderInitial,
   validateMappedBorderInitial, mappedBorderInitialAttribution, borderColorProperties } from './border-initial-input-evidence.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import {
@@ -831,6 +831,44 @@ test('mapped border initial proof covers original aliases without erasing scalar
     t => { t.nodes.find(n => n.authored.id === input.id).authored.style = { borderColor: 'red' }; },
   ]) { const changed = structuredClone(ast); mutate(changed);
     assert.equal(inspectMappedBorderInitial(c, input, ref, changed, normalize), undefined); }
+});
+
+test('mapped button reset verifies every dialog owner and rejects competing or incomplete evidence', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes), normalize = bindPreciseAuditNormalization();
+  const cases = raw.interactions.filter(c => c.family === 'dialog' && c.styleInputs?.some(i => i.id === 'dialog-save'));
+  // Authenticate complete captured trees before passing them to the pure proof.
+  assert.deepEqual(collectFullTreeInventory(cases).errors, []);
+  let owners = 0;
+  for (const c of cases) {
+    const ref = JSON.parse(readFileSync(c.inputTrees.reference.file));
+    const ast = JSON.parse(readFileSync(c.inputTrees.astylar.file));
+    for (const input of c.styleInputs.filter(i => ['dialog-save', 'dialog-cancel'].includes(i.id))) {
+      const proof = inspectMappedButtonBorderReset(c, input, ref, ast, normalize);
+      assert.ok(proof); owners++;
+      assert.equal(proof.candidateWidthRule, '.dialog-action');
+      assert.equal(proof.classification, 'application-plugin-authoring-defect');
+      assert.equal(proof.inputEquivalent, false); assert.equal(proof.finalRasterVerified, false);
+      for (const change of [
+        t => t.rules.push({ selector: '.dialog-action:hover', borderColor: 'red' }),
+        t => t.rules.push({ selector: ':not(.other)', all: 'initial' }),
+        t => t.rules.push({ selector: '.dialog-action', transition: 'all 1s' }),
+        t => { t.rules = t.rules.filter(r => r.selector !== '.dialog-action'); },
+        t => t.rules.push({ selector: '.dialog-action', borderWidth: '0' }),
+        t => { t.nodes.find(n => n.authored.id === input.id).authored.style = { borderColor: 'red' }; },
+      ]) { const changed = structuredClone(ast); change(changed);
+        assert.equal(inspectMappedButtonBorderReset(c, input, ref, changed, normalize), undefined); }
+      for (const change of [
+        t => { t.rules = t.rules.map(r => r.selector === '.mdc-button' ? { ...r, declarations: {} } : r); },
+        t => { t.rules = t.rules.map(r => r.selector?.includes('._mat-animation-noopable') ? { ...r, declarations: {} } : r); },
+      ]) { const changed = structuredClone(ref); change(changed);
+        assert.equal(inspectMappedButtonBorderReset(c, input, changed, ast, normalize), undefined); }
+      const missing = structuredClone(input); delete missing.astylarNormalResolvedStyle;
+      assert.equal(inspectMappedButtonBorderReset(c, missing, ref, ast, normalize), undefined);
+    }
+  }
+  assert.equal(owners, 64);
 });
 
 test('mapped border integration rejects classifications without authenticated original cases', () => {

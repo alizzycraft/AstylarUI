@@ -10,7 +10,13 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   const before = previous.toString().replaceAll('\r\n', '\n');
   const after = current.toString().replaceAll('\r\n', '\n');
   assert.equal(hash(before), '3dbcf33ff70244a8179f438962a2549fb7e354948f084d35d433bcf82e76f9f4');
-  assert.equal(hash(after), '1acfdc0cccbf85ef396fac52a5a0fcf751eb1444a7676b53c1b861ff6af764cd',
+  let reviewed = after;
+  if (hash(after) === 'd227f234f19e19e4f2ee3705d5fe6d239738fe5a33c49bdf44dae3822033f099') {
+    const addition = /\/\/ The reset is explicit reference authoring, never an omitted initial value\.[\s\S]*?export function inspectMappedButtonBorderReset\([\s\S]*?\n\}\n\n/g;
+    assert.equal([...after.matchAll(addition)].length, 1);
+    reviewed = after.replace(addition, '');
+  }
+  assert.equal(hash(reviewed), '1acfdc0cccbf85ef396fac52a5a0fcf751eb1444a7676b53c1b861ff6af764cd',
     'border evidence changed beyond the reviewed complete source snapshot');
   const selector = source => {
     const matches = [...source.matchAll(/export function selectorCanApply\(selector, authored\) \{[\s\S]*?\n\}/g)];

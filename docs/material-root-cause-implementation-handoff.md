@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 25
 
+`inspectMappedButtonBorderReset` now extends the existing border evidence module
+without changing production classifications. It reuses the complete alias and
+Material reset proof, requires exactly one reviewed zero-width rule (including
+`.dialog-action`), all three transparent candidate stages and zero/none geometry,
+and rejects competing reset/color/motion authoring. The focused original-source
+test passes for all **64 owners**, with nine rejection mutations per owner
+(competing color/reset/motion, missing/duplicate width rule, inline color,
+missing reference reset/no-motion evidence and missing candidate normal stage).
+Existing border tests pass **6/6** (45.22 s); producer-transition tests **7/7**
+and exact border-source mutation test **1/1** pass. Complete new border source
+SHA is `d227f234f19e19e4f2ee3705d5fe6d239738fe5a33c49bdf44dae3822033f099`;
+the source-history guard authenticates that exact addition and restores the
+entire accepted `1acfdc…` predecessor, retaining the shared selector unchanged.
+Next integrate this proof with full scalar membership/validation and batch it
+with the remaining border questions before another export. Accepted `b74de570…`
+remains historical to this pending source change; its index is not a claim of
+fresh producer fingerprints. No renderer, fixture or canonical output changed.
+
 The accepted batch push completed: `e25512f` is on the remote integration branch.
 GitHub warned about the 56.91 MiB canonical gzip but accepted the push.
 
