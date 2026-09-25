@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+Corrected cold export from `0d0e1bc` is running: session **81293**, PID **2452**,
+started 19:48:51 local; log `artifacts/material-parity/border-defaults-export-0d0e1bc.log`.
+All three line-box reports and supplemental root were supplied. Dependencies
+remain untouched during the run; accepted `4059599c…` remains authoritative.
+
+One remaining reference-reset question is closed without a new capture or proof
+framework: all **64 dialog action owners** pass the existing exact
+`materialButtonReset` function against their complete authenticated tree rules.
+The check extracts that function and its two lexical dependencies from the
+hash-pinned current module (no copied approximation), authenticates the original
+report plus both trees, and reuses the full alias mapping for each owner.
+Every witness is `.mdc-button` / `medium none currentColor`, with the existing
+important no-animation/no-transition selector. Ordered case/element/node/proof/
+full-rule digest: `ee1c3d712795a76f73cc508449ac10b6ab682403a8ea06cd59bb6a5d42a4785d`.
+Thus the later mapped-owner extension can reuse the reset proof rather than
+inventing another motion classifier. This establishes reference-reset eligibility,
+not full scalar classification, used geometry, motion settlement or visual parity;
+candidate-stage and exact scalar membership checks remain required at integration.
+
 Shared border-dependency reconciliation is corrected in the existing gap, caret
 and alignment readers. `verifyBorderEvidenceSourceTransition` in the existing
 producer-transition module authenticates both complete historical/current
