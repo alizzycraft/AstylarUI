@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 25
 
+Generated-owner border coverage: reused `resolveOriginAliasPair` for all
+**502 owners / 1,976 pending side observations** across badge, paginator,
+bottom-sheet, dialog, snackbar and tooltip, authenticating original report/tree
+hashes. Every owner resolves through existing structure and complete scalar/
+three-stage consistency checks. Counts: badge 52; paginator size/range 52 each;
+four sheet owners 25 each; five dialog owners 32 each; two snackbar owners 34
+each; tooltip popup 18. The 25 sheet wrappers and 34 snackbar wrappers retain
+`mapped-with-scalar-rule-gap` for `.cdk-global-overlay-wrapper` (the known
+missing scalar rule); all other owners map without gaps. No gap was normalized
+away. Every selected reference side is zero/none/currentColor and candidate
+effective border color is transparent. The initial all-four-sides assumption
+correctly failed for dialog-actions' visible top border: this population contains
+only its other three sides. The top is already outside the unresolved set.
+Ordered case/property/alias/style/tree digest:
+`8c89f0ff7da3b1370323526079a63c43766cedaec817dc4552b305ab74635cbb`.
+This establishes measurement ownership, not absent authoring or rendering
+equivalence. Next attach existing border-reset/initial-default declaration
+proofs to these exact owners, retaining wrapper rule-gap qualifications and
+dialog action side scope. No new mapper is needed; do not repeat this census.
+No canonical rows or running-export dependencies changed.
+
 Direct-owner border coverage batch: **112 owners / 448 side observations**
 across table (52), icon (20), progress-bar (20), progress-spinner (20) authenticate
 against original captures and full scalar/core snapshots. Each reference side
