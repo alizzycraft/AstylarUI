@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 25
 
+Next shared gap triage — border colors: compact accepted-baseline queries find
+**181 unresolved groups / 5,188 observations**. Rejoined every group against
+the authenticated original `b07ef154...` report using the existing precise
+normalizer and asserted each complete occurrence count, not just sampled cases.
+**4,540** observations have zero side width on both sides: 4,128 none/none,
+204 reference-none/candidate-solid, and 208 reference-solid/candidate-none.
+The latter 208 are card host borders whose reference color is not currentColor;
+do not fold these into an omitted-initial-color proof. **624** observations have
+reference zero/none versus candidate 1px/solid (the slider native inputs), and
+**24** are the already-investigated visible divider top border versus no border.
+Of the zero/zero population, 4,332 reference side colors equal reference text
+color; equality alone does not prove absent authored declarations or defaults.
+Eight unpaired observations lie outside the matched discrepancy rows and were
+not synthesized into defaults. All 181 occurrence totals still reconcile.
+Ordered original scalar/side-width/style/currentColor survey digest:
+`0b914711ac84ca9f2a65f63caa2fa995f68d3cc0139c5a3cea9cfdcbc64092bd`.
+This is triage, not new classification or a visibility/equivalence waiver.
+Reuse existing divider and slider owner/default proofs first; then extend the
+existing conservative border-initial evidence to specifically proved owner/type
+gaps. That collector intentionally excludes possible reset/state/media rules,
+unsupported selectors and unproved native-control defaults. Do not weaken it to
+classify all transparent/currentColor pairs. No canonical/export inputs changed.
+
 Overlay trigger/cancel paint review: all remaining nine background groups /
 **61 observations** are now scoped to existing causes, pending guarded canonical
 attribution. The 53 direct-ID dialog/bottom-sheet trigger cases authenticate
