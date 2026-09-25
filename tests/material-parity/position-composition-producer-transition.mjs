@@ -22,7 +22,8 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
     '0a999d524abedb0ed3c6a8665630905e3b9ed3650244a84960103e0cd4ee1f41',
     '7d8641713a314b41daf4447cc391755078ce4766732fb69fab13717de26a99c1',
     'bee460c11f87b7a319057bfa5e84b6521636d7f54af3aaf3eea2ca837eeb51fd',
-    '444231b27424f96024d2fc1b63198fb5446205ce34b03e71663b22a60c6b97fc'].includes(hash(reviewed)),
+    '444231b27424f96024d2fc1b63198fb5446205ce34b03e71663b22a60c6b97fc',
+    'a809c257d8edcd07b1261cad6f7a0a15b5245fa0832922e4bebf287e21b6eff2'].includes(hash(reviewed)),
     'border evidence changed beyond the reviewed complete source snapshot');
   const selector = source => {
     const matches = [...source.matchAll(/export function selectorCanApply\(selector, authored\) \{[\s\S]*?\n\}/g)];
@@ -35,6 +36,20 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreMappedButtonResetProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('  const beforeCardBorderTokens =')) {
+    for (const [from, to] of [
+      ['  applyCardBorderToken, validateCardBorderToken, cardBorderTokenAttribution,\n', ''],
+      ["  const beforeCardBorderTokens = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+      ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyCardBorderToken(beforeCardBorderTokens, cases, elementInventory, canonicalStyle)\n    : beforeCardBorderTokens;\n", ''],
+      ['      errors.push(...validateCardBorderToken(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === cardBorderTokenAttribution))\n    errors.push('card border token attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated card border integration fragment');
+      restored = restored.replace(from, to);
+    }
+    assert.equal(hash(restored), 'dba5d048f6a59991de52c79c39b20703c49e49c4cb25c25071f444bea59e8277',
+      'producer changed beyond reviewed card border integration');
+  }
   for (const [from, to] of [
     ['  applyMappedButtonBorderReset, validateMappedButtonBorderReset, mappedButtonBorderResetAttribution,\n', ''],
     ["  const beforeMappedButtonResets = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

@@ -4,20 +4,25 @@ import test from 'node:test';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { comparePositionCanonical, compareAppearanceCanonical, compareBorderDefaultCanonical, refreshScalarControlReceipts } from '../../scripts/check-material-position-canonical-conservation.mjs';
-import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreToggleSideColorProducer } from './position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreToggleSideColorProducer, restoreMappedButtonResetProducer } from './position-composition-producer-transition.mjs';
 import { positionCompositionAttribution } from './position-composition-review.mjs';
 import { positionFollowupAttribution } from './position-followup-review.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
 
-test('border conservation rejects changed raw data, unrelated metadata and control values even with forged expected rows', () => {
-  const transition = restoreToggleSideColorProducer(currentSource), rows = [], expected = [];
-  for (const [attribution, groups, observations] of [
+for (const dialogCard of [false, true]) test(`border conservation (${dialogCard ? 'dialog/card' : 'defaults'}) rejects changed raw data, unrelated metadata and control values even with forged expected rows`, () => {
+  const transition = dialogCard ? restoreMappedButtonResetProducer(currentSource) : restoreToggleSideColorProducer(currentSource), rows = [], expected = [];
+  const compare = (p, c, e, s) => compareBorderDefaultCanonical(p, c, e, s, { dialogCard });
+  for (const [attribution, groups, observations] of dialogCard ? [
+    ['reviewed-material-card-border-token-omission', 8, 416],
+    ['reviewed-mapped-border-initial-color-divergence', 7, 224],
+    ['reviewed-mapped-material-button-border-reset-omission', 8, 256],
+  ] : [
     ['reviewed-border-initial-color-divergence', 12, 336],
     ['reviewed-slider-native-border-default-policy', 16, 624],
     ['reviewed-material-outline-token-substitution', 3, 204],
     ['reviewed-mapped-border-initial-color-divergence', 52, 1432],
   ]) for (let i = 0; i < groups; i++) {
-    const before = { family: 'test', element: `${attribution}-${i}`, property: 'borderTopColor',
+    const before = { family: dialogCard ? (attribution.includes('card') ? 'card' : 'dialog') : 'test', element: `${attribution}-${i}`, property: 'borderTopColor',
       reference: 'black', astylar: 'transparent', occurrences: i ? 1 : observations - groups + 1,
       cases: ['original'], attribution: 'unresolved', classification: 'pending' };
     rows.push(before); expected.push({ ...before, attribution, classification: 'reviewed' });
@@ -29,7 +34,7 @@ test('border conservation rejects changed raw data, unrelated metadata and contr
   const current = { rows: structuredClone(expected), control: structuredClone(previous.control) };
   for (const c of current.control.differences)
     c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
-  assert.equal(compareBorderDefaultCanonical(previous, current, expected, currentSource).changedGroups, 83);
+  assert.equal(compare(previous, current, expected, currentSource).changedGroups, dialogCard ? 23 : 83);
   for (const mutate of [
     r => { r.reference = 'forged'; }, r => { r.cases = ['forged']; },
     r => { r.occurrences++; }, r => { r.property = 'fontSize'; },
@@ -37,7 +42,7 @@ test('border conservation rejects changed raw data, unrelated metadata and contr
   ]) {
     const changed = structuredClone(current), forged = structuredClone(expected);
     mutate(changed.rows[0]); mutate(forged[0]);
-    assert.throws(() => compareBorderDefaultCanonical(previous, changed, forged, currentSource));
+    assert.throws(() => compare(previous, changed, forged, currentSource));
   }
   for (const mutate of [
     c => { c.control.differences[0].values.painted = '20px'; },
@@ -45,11 +50,11 @@ test('border conservation rejects changed raw data, unrelated metadata and contr
     c => { c.rows.reverse(); }, c => { c.rows.pop(); },
   ]) {
     const changed = structuredClone(current); mutate(changed);
-    assert.throws(() => compareBorderDefaultCanonical(previous, changed, expected, currentSource));
+    assert.throws(() => compare(previous, changed, expected, currentSource));
   }
   const changed = structuredClone(current); changed.rows[0].justification = 'unreplayed metadata';
-  assert.throws(() => compareBorderDefaultCanonical(previous, changed, expected, currentSource));
-  assert.throws(() => compareBorderDefaultCanonical(previous, current, expected, currentSource + '\n// changed'));
+  assert.throws(() => compare(previous, changed, expected, currentSource));
+  assert.throws(() => compare(previous, current, expected, currentSource + '\n// changed'));
 });
 
 test('embedded scalar control receipts follow only exact producer transitions', () => {

@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 25
 
+Dialog/card border batch is ready for cold canonical export. Compact accepted
+membership plus original-tree replay identifies exactly **23 unresolved groups /
+896 observations**: card token/style 8/416, dialog initial-color sides 7/224,
+dialog button reset 8/256. The card path is now wired into production application
+and validation, gated by bound original cases; all raw row fields and prior
+classifications remain preserved. Missing/duplicate membership and forged proof
+tests pass. Existing canonical comparator now has `--dialog-card-borders`, pinned
+to accepted `b74de570…`, with exact 23/896 admission and the existing 48 control
+receipt constraints. Source restoration authenticates both card and dialog reset
+integration against their complete predecessor modules.
+Verification: seven border tests pass (47.27 s), three card/unbound tests pass
+(14.21 s), source/session tests 8/8 (8.34 s), canonical conservation tests 15/15
+(43.80 s). Border source SHA `a809c257d8edcd07b1261cad6f7a0a15b5245fa0832922e4bebf287e21b6eff2`.
+Expected remaining count after successful export/reconciliation: **1,288**, not
+yet accepted. Next run one cold export, inspect all errors, reconcile raw rows,
+controls and changed sections, then import the accepted compact snapshot.
+
 Card border input proof now passes for all **52 original hosts**, with eight
 side color/style properties per host. The reference explicitly authors the
 Material elevated-container border token and `solid`; the candidate omits both

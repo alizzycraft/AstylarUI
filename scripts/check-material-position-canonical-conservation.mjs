@@ -8,7 +8,7 @@ import { execFileSync } from 'node:child_process';
 import { readAudit } from './check-material-disabled-ink-canonical-conservation.mjs';
 import { collectPositionCompositionReview, applyPositionCompositionReview,
   validatePositionCompositionRows, positionCompositionAttribution } from '../tests/material-parity/position-composition-review.mjs';
-import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreToggleSideColorProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreToggleSideColorProducer, restoreMappedButtonResetProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
 import { applyRetainedFontScalar, retainedFontScalarAttribution } from '../tests/material-parity/retained-font-scalar.mjs';
 import { applySidenavBackgroundScalar, sidenavBackgroundAttribution } from '../tests/material-parity/root-background-classification-preparation.mjs';
 import { applyNormalLineBoxScalar, normalLineBoxScalarAttribution } from '../tests/material-parity/normal-line-box-scalar.mjs';
@@ -24,7 +24,8 @@ import { inspectOwnerInitialStyle } from '../tests/material-parity/owner-initial
 import { classifyOwnerInitialStyleInput, ownerInitialStyleAttribution, collectOwnerInitialStyleEvidence } from '../tests/material-parity/owner-initial-style-attribution.mjs';
 import { originStageTrees } from '../tests/material-parity/origin-stage-inventory-evidence.mjs';
 import { collectBorderInitialInputs, classifyBorderInitialInput, collectOutlineTokenInputs,
-  classifyOutlineTokenInput, outlineTokenAttribution, applyMappedBorderInitial } from '../tests/material-parity/border-initial-input-evidence.mjs';
+  classifyOutlineTokenInput, outlineTokenAttribution, applyMappedBorderInitial, applyMappedButtonBorderReset,
+  applyCardBorderToken } from '../tests/material-parity/border-initial-input-evidence.mjs';
 import { collectSliderBorderDefaults, classifySliderBorderDefault } from '../tests/material-parity/slider-border-default-source-binding.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -79,8 +80,8 @@ export function replayBorderDefaultRows(rows, captured) {
   return applyMappedBorderInitial(replayed, cases, inventory, normalize);
 }
 
-export function compareBorderDefaultCanonical(previous, current, expectedRows, source) {
-  const transition = restoreToggleSideColorProducer(source);
+export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false } = {}) {
+  const transition = dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
   const adjusted = refreshScalarControlReceipts(previous.rows, previous.control, current.control, transition);
   const expected = JSON.parse(JSON.stringify(refreshScalarControlReceipts(expectedRows,
     previous.control, current.control, transition)));
@@ -107,7 +108,8 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     const before = adjusted[i], after = current.rows[i];
     same(raw(previous.rows[i]), raw(after), 'border batch changed raw scalar evidence');
     if (isDeepStrictEqual(before, after)) continue;
-    assert.match(before.property, /^border(Top|Right|Bottom|Left)Color$/);
+    assert.match(before.property, dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    if (dialogCard) { assert.ok(['dialog', 'card'].includes(before.family)); assert.equal(before.attribution, 'unresolved'); }
     if (before.attribution === 'unresolved') {
       const total = totals.get(after.attribution) ?? { groups: 0, observations: 0 };
       total.groups++; total.observations += after.occurrences; totals.set(after.attribution, total);
@@ -117,13 +119,17 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
       existingProofRows.push(i);
     }
   }
-  same(Object.fromEntries(totals), {
+  same(Object.fromEntries(totals), dialogCard ? {
+    'reviewed-material-card-border-token-omission': { groups: 8, observations: 416 },
+    'reviewed-mapped-border-initial-color-divergence': { groups: 7, observations: 224 },
+    'reviewed-mapped-material-button-border-reset-omission': { groups: 8, observations: 256 },
+  } : {
     'reviewed-border-initial-color-divergence': { groups: 12, observations: 336 },
     'reviewed-slider-native-border-default-policy': { groups: 16, observations: 624 },
     'reviewed-material-outline-token-substitution': { groups: 3, observations: 204 },
     'reviewed-mapped-border-initial-color-divergence': { groups: 52, observations: 1432 },
   }, 'border batch changed unexpected classification membership');
-  return { previous: previous.manifest, current: current.manifest, changedGroups: 83, changedOccurrences: 2596,
+  return { previous: previous.manifest, current: current.manifest, changedGroups: dialogCard ? 23 : 83, changedOccurrences: dialogCard ? 896 : 2596,
     existingProofRows, scalarReceiptRows: adjusted.filter((r, i) => !isDeepStrictEqual(r, previous.rows[i])).length,
     controlReceiptRecords: receiptCases.length, allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
     orderedCurrentRowsSha256: digest(current.rows), inputEquivalent: false, renderingEquivalent: false };
@@ -392,7 +398,23 @@ function replayAppearanceRows(rows, captured, { colorMotion = false, originMotio
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--border-defaults') {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--dialog-card-borders') {
+  assert.equal(process.argv.length, 3);
+  const previous = await readAudit('artifacts/material-parity/working-audit/b74de5707d4cb62eee5da0aa540746d2da9116e4be73e80affbf5b6e2949816a');
+  assert.equal(previous.manifest.uncompressedSha256, '1a0f49bd56a74128125c60f17a0d3956383dce6a78e7a74419f85a97e244836f');
+  const current = await readAudit('docs');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const captured = JSON.parse(bytes);
+  const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
+    ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))].filter(c => ['dialog', 'card'].includes(c.family));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const expected = applyCardBorderToken(applyMappedButtonBorderReset(
+    applyMappedBorderInitial(previous.rows, cases, inventory, normalize), cases, inventory, normalize), cases, inventory, normalize);
+  console.log(JSON.stringify(compareBorderDefaultCanonical(previous, current, expected,
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), { dialogCard: true }), null, 2));
+} else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--border-defaults') {
   assert.equal(process.argv.length, 3);
   const previous = await readAudit('artifacts/material-parity/working-audit/4059599c887ec413d7a6494d7012becb09d06ff40c1cf24b7a0c3e228631a071');
   assert.equal(previous.manifest.uncompressedSha256, '641f5f1cb71cca2a53fb505851d30a08934619272c777a46bde11ad6ad7747fc');

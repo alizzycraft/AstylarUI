@@ -11,6 +11,7 @@ export const borderColorProperties = ['borderTopColor', 'borderRightColor', 'bor
 export const borderInitialAttribution = 'reviewed-border-initial-color-divergence';
 export const mappedBorderInitialAttribution = 'reviewed-mapped-border-initial-color-divergence';
 export const mappedButtonBorderResetAttribution = 'reviewed-mapped-material-button-border-reset-omission';
+export const cardBorderTokenAttribution = 'reviewed-material-card-border-token-omission';
 export const buttonBorderResetAttribution = 'reviewed-material-button-border-reset-omission';
 export const outlineTokenAttribution = 'reviewed-material-outline-token-substitution';
 export const chipOutlineAttribution = 'reviewed-chip-outline-owner-substitution';
@@ -115,11 +116,17 @@ export function applyMappedButtonBorderReset(rows, cases, inventory, normalize) 
   return applyMappedBorderEvidence(rows, cases, inventory, normalize, true);
 }
 
-function applyMappedBorderEvidence(rows, cases, inventory, normalize, buttonReset) {
+export function applyCardBorderToken(rows, cases, inventory, normalize) {
+  return applyMappedBorderEvidence(rows, cases, inventory, normalize, false, true);
+}
+
+function applyMappedBorderEvidence(rows, cases, inventory, normalize, buttonReset, cardToken = false) {
   const trees = new Map();
   const keyOf = c => `${c.kind ?? (c.state ? 'interaction' : 'static')}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}`;
   return rows.map(row => {
-    if (row.attribution !== 'unresolved' || !borderColorProperties.includes(row.property) || row.astylar !== 'rgba(0,0,0,0)') return row;
+    if (row.attribution !== 'unresolved' || (cardToken
+      ? !/^border(Top|Right|Bottom|Left)(Color|Style)$/.test(row.property)
+      : !borderColorProperties.includes(row.property) || row.astylar !== 'rgba(0,0,0,0)')) return row;
     const members = cases.filter(c => c.family === row.family && c.styleInputs?.some(i => i.id === row.element &&
       i.reference && i.astylar && normalize(i.reference)[row.property] === row.reference && normalize(i.astylar)[row.property] === row.astylar));
     if (!members.length || members.length !== row.occurrences || new Set(members.map(keyOf)).size !== members.length) return row;
@@ -130,12 +137,18 @@ function applyMappedBorderEvidence(rows, cases, inventory, normalize, buttonRese
       if (!trees.has(key)) trees.set(key, originStageTrees(inventory, key));
       const pair = trees.get(key);
       if (!pair) return row;
-      const inspect = buttonReset ? inspectMappedButtonBorderReset : inspectMappedBorderInitial;
+      const inspect = cardToken ? inspectMappedCardBorderToken : buttonReset ? inspectMappedButtonBorderReset : inspectMappedBorderInitial;
       const proof = inspect(c, inputs[0], pair.reference, pair.candidate, normalize);
       if (!proof || (proof.properties && !proof.properties.includes(row.property)) ||
-          proof.referenceColor !== row.reference || proof.candidateBorderColor !== row.astylar) return row;
+          (cardToken ? proof.referenceValues[row.property] !== row.reference || proof.candidateValues[row.property] !== row.astylar
+            : proof.referenceColor !== row.reference || proof.candidateBorderColor !== row.astylar)) return row;
       proofs.push({ case: key, ...proof });
     }
+    if (cardToken) return { ...row, classification: 'application-plugin-authoring-defect',
+      attribution: cardBorderTokenAttribution,
+      recommendedOwner: 'showcase Material card border token and style translation',
+      justification: 'Every original member uniquely maps the card host and matches all captured scalar fields and three candidate style stages. The complete reference rule explicitly authors a Material border-color token and solid border style; candidate inline and potentially applicable rules omit them and resolve transparent/none. Serialized variable authoring is preserved alongside computed colors, not mistaken for an absent declaration because CSSOM longhands are empty. Zero border widths do not establish input equivalence or waive paint defects.',
+      reviewEvidence: { proofs, inputEquivalent: false, finalRasterVerified: false } };
     if (buttonReset) return { ...row, classification: 'application-plugin-authoring-defect',
       attribution: mappedButtonBorderResetAttribution,
       recommendedOwner: 'showcase Material button border-reset translation; core contextual color separately',
@@ -160,6 +173,13 @@ export function validateMappedButtonBorderReset(rows, originalRows, cases, inven
   return isDeepStrictEqual(JSON.parse(JSON.stringify(select(rows))),
     JSON.parse(JSON.stringify(select(applyMappedButtonBorderReset(originalRows, cases, inventory, normalize))))) ? [] :
     ['mapped button reset attribution lacks exact original membership and declaration replay'];
+}
+
+export function validateCardBorderToken(rows, originalRows, cases, inventory, normalize) {
+  const select = values => values.filter(r => r.attribution === cardBorderTokenAttribution);
+  return isDeepStrictEqual(JSON.parse(JSON.stringify(select(rows))),
+    JSON.parse(JSON.stringify(select(applyCardBorderToken(originalRows, cases, inventory, normalize))))) ? [] :
+    ['card border token attribution lacks exact original membership and declaration replay'];
 }
 
 export function selectorCanApply(selector, authored) {

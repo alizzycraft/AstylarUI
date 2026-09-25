@@ -8,7 +8,7 @@ import ts from 'typescript';
 import { assertHistoricalCaseIndexSources } from './historical-case-index-source-assertion.mjs';
 import { collectBorderInitialInputs, inspectMappedBorderInitial, inspectMappedButtonBorderReset, applyMappedBorderInitial,
   applyMappedButtonBorderReset, validateMappedButtonBorderReset, mappedButtonBorderResetAttribution,
-  inspectMappedCardBorderToken,
+  inspectMappedCardBorderToken, applyCardBorderToken, validateCardBorderToken, cardBorderTokenAttribution,
   validateMappedBorderInitial, mappedBorderInitialAttribution, borderColorProperties } from './border-initial-input-evidence.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import {
@@ -877,6 +877,44 @@ test('mapped card border token preserves shorthand and proves omitted style and 
   assert.equal(owners, 52);
 });
 
+test('card border token classification preserves all membership and rejects forged rows', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes), normalize = bindPreciseAuditNormalization();
+  const cases = [...raw.results, ...raw.interactions].filter(c => c.family === 'card');
+  const inventory = collectFullTreeInventory(cases), grouped = new Map();
+  assert.deepEqual(inventory.errors, []);
+  for (const c of cases) {
+    const i = c.styleInputs.find(i => i.id === 'card-primary'), r = normalize(i.reference), a = normalize(i.astylar);
+    for (const property of borderColorProperties.flatMap(p => [p, p.replace('Color', 'Style')])) {
+      const key = JSON.stringify([property, r[property], a[property]]);
+      if (!grouped.has(key)) grouped.set(key, { family: c.family, element: i.id, property,
+        reference: r[property], astylar: a[property], attribution: 'unresolved', occurrences: 0, cases: [] });
+      const row = grouped.get(key); row.occurrences++;
+      if (row.cases.length < 12) row.cases.push(`${c.state ? 'interaction' : 'static'}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}`);
+    }
+  }
+  const original = [...grouped.values()], result = applyCardBorderToken(original, cases, inventory, normalize);
+  assert.equal(result.length, 8);
+  assert.equal(result.reduce((n, r) => n + r.occurrences, 0), 416);
+  assert.ok(result.every(r => r.attribution === cardBorderTokenAttribution));
+  assert.deepEqual(validateCardBorderToken(result, original, cases, inventory, normalize), []);
+  const metadata = new Set(['classification', 'attribution', 'recommendedOwner', 'justification', 'reviewEvidence']);
+  const rawFields = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  assert.deepEqual(result.map(rawFields), original.map(rawFields));
+  for (const r of result) assert.equal(r.reviewEvidence.proofs.length, r.occurrences);
+  for (const mutate of [
+    rows => rows.pop(), rows => rows.push(structuredClone(rows[0])), rows => rows[0].reviewEvidence.proofs.pop(),
+    rows => { rows[0].reference = 'forged'; }, rows => { rows[0].reviewEvidence.inputEquivalent = true; },
+    rows => { rows[0].reviewEvidence.proofs[0].token = 'invented'; },
+  ]) { const changed = structuredClone(result); mutate(changed);
+    assert.ok(validateCardBorderToken(changed, original, cases, inventory, normalize).length); }
+  for (const population of [cases.slice(1), [...cases, cases[0]]])
+    assert.ok(applyCardBorderToken(original, population, inventory, normalize).every(r => r.attribution === 'unresolved'));
+  const prior = original.map(r => ({ ...r, attribution: 'previous-review' }));
+  assert.deepEqual(applyCardBorderToken(prior, cases, inventory, normalize), prior);
+});
+
 test('mapped dialog action border proof retains explicit top border and limits classification to other sides', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
@@ -1030,6 +1068,8 @@ test('mapped border integration rejects classifications without authenticated or
   assert.ok(validateMaterialInputAudit(audit, { requireComplete: false }).includes('mapped border initial attribution lacks bound original cases'));
   audit.discrepancies[0].attribution = mappedButtonBorderResetAttribution;
   assert.ok(validateMaterialInputAudit(audit, { requireComplete: false }).includes('mapped button reset attribution lacks bound original cases'));
+  audit.discrepancies[0].attribution = cardBorderTokenAttribution;
+  assert.ok(validateMaterialInputAudit(audit, { requireComplete: false }).includes('card border token attribution lacks bound original cases'));
 });
 
 test('border initial-color heading owners retain conservative declaration and provenance checks', () => {
