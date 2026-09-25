@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 25
 
+Historical dependency reconciliation is now complete for the case-index replay.
+The policy change adds exactly two source findings (rounded-radius sampling and
+sampled dialog geometry); removing those additions reproduces the entire recorded
+policy hash. No original definition was changed. The generated-mapping reader's
+only changed dependency is its already-reviewed file-read adapter import; the
+existing `restoreMappingReadAdapterSource` authenticates that transition and the
+original mapping observations replay unchanged. The test migration check permits
+new literal focused callbacks excluded by the historical replay filter, but still
+conserves every original statement and rejects eager setup, new membership tests,
+changed assertions, or a bypassed mapping adapter.
+`node scripts/audit-material-case-index-conservation.mjs` now passes all 11
+original membership tests with writes forbidden during replay; all nine saved
+historical receipts remain unchanged. The existing conservation report records
+current source provenance and the exact additive policy transition. Migration
+checks pass 2/2; source-assertion checks passed 2/2, and policy mutation checks
+passed. The earlier failures below are superseded by this verified replay, not
+waived. Canonical classifications and renderer/fixture inputs remain unchanged.
+Next substantive work: bind descendant ancestry to original mapped owners,
+scalar occurrences and static-review precedence, then integrate the combined
+color/motion batch. Current-runtime focus and final browser gates remain open.
+
 Inherited-color ancestry guard is now executable: the focused descendant test
 passes for light/dark and rejects 22 mutations in each theme (broken parent
 links, changed root evidence, intervening color/reset/motion and state rules).

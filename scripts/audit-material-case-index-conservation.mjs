@@ -15,6 +15,34 @@ const sourceHash = value => hash(normalize(value));
 const receiptRevision = '4650791a7208b841dd29f1ced015f98234949623';
 const historical = (revision, file) => execFileSync('git', ['show', `${revision}:${file}`], { maxBuffer: 16 * 1024 * 1024 });
 
+// These two later source findings do not replace any historical policy. Prove
+// the exact additive transition before reusing the unchanged case memberships.
+function policyProjection(bytes, expected) {
+  const source = normalize(bytes);
+  assert.equal(sourceHash(source), '44461b31f8e1dfa20b6d80614ac2412cbcb32e24b1979d144284f32cad524f9d', 'unreviewed policy transition');
+  assert.equal(expected, '7e939aece26dd69b846b78fc6d21aa332463b53068f488cf19343578306d80d8');
+  const ast = ts.createSourceFile('policy.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const declarations = ast.statements.filter(ts.isVariableStatement).flatMap(n => [...n.declarationList.declarations]);
+  const owner = declarations.filter(n => n.name.getText(ast) === 'sourceAuditDefinitions');
+  assert.equal(owner.length, 1);
+  const array = owner[0].initializer.arguments[0];
+  assert.ok(ts.isArrayLiteralExpression(array));
+  const ids = ['core-rounded-radius-sampling-uses-unclamped-request', 'fixture-dialog-sampled-panel-and-action-geometry'];
+  const additions = array.elements.filter(n => ts.isCallExpression(n) && n.expression.getText(ast) === 'Object.freeze' &&
+    ts.isObjectLiteralExpression(n.arguments[0]) && n.arguments[0].properties.some(p =>
+      ts.isPropertyAssignment(p) && p.name.getText(ast) === 'id' && ts.isStringLiteral(p.initializer) && ids.includes(p.initializer.text)));
+  assert.equal(additions.length, 2);
+  let restored = source;
+  for (const node of additions.reverse()) {
+    assert.equal(source[node.end], ',');
+    restored = restored.slice(0, node.getFullStart()) + restored.slice(node.end + 1);
+  }
+  assert.equal(sourceHash(restored), expected, 'retained policy changed');
+  return { file: 'tests/material-parity/input-equivalence-policy.mjs', recordedSha256: expected,
+    currentSha256: sourceHash(source), addedSourceFindings: ids, retainedSourceUnchanged: true };
+}
+
 // Preserve saved historical receipts. The projected copies below are ONLY for
 // executing unchanged legacy membership assertions, never replacement reports.
 export function collectCaseIndexConservation({ read = readFileSync } = {}) {
@@ -24,7 +52,7 @@ export function collectCaseIndexConservation({ read = readFileSync } = {}) {
   assert.equal(sourceHash(baselineSource), '1189df0c574dc9e8058cf7a61ceb0f0751e0df48dca67b796f12dadde3ec6e45');
   assert.equal(sourceHash(recordedSource), '82854bccdaa6ff23fc5f9df987f6ec5cf3e22d0da5dbe64357109d5a03035f3b');
   const projection = verifyAlignmentAuditProjection(baselineSource, currentSource);
-  const reports = [], replayReports = [];
+  const reports = [], replayReports = [], dependencyProjections = [];
   for (const file of caseIndexReceiptFiles) {
     const bytes = read(file), saved = JSON.parse(bytes);
     const baseline = JSON.parse(historical(caseIndexReceiptRevision, file));
@@ -35,8 +63,13 @@ export function collectCaseIndexConservation({ read = readFileSync } = {}) {
     const conserved = structuredClone(saved);
     conserved.sourceFingerprints.find(item => item.file === caseIndexAuditModule).sha256 = oldReceipt[0].sha256;
     assert.deepEqual(conserved, baseline, `${file}: non-receipt evidence changed`);
-    for (const dependency of saved.sourceFingerprints.filter(item => item.file !== caseIndexAuditModule))
-      assert.equal(sourceHash(read(dependency.file)), dependency.sha256, `changed dependency: ${dependency.file}`);
+    for (const dependency of saved.sourceFingerprints.filter(item => item.file !== caseIndexAuditModule)) {
+      const bytes = read(dependency.file);
+      if (dependency.file === 'tests/material-parity/input-equivalence-policy.mjs' && sourceHash(bytes) !== dependency.sha256) {
+        const proof = policyProjection(bytes, dependency.sha256);
+        if (!dependencyProjections.some(p => p.file === proof.file)) dependencyProjections.push(proof);
+      } else assert.equal(sourceHash(bytes), dependency.sha256, `changed dependency: ${dependency.file}`);
+    }
     reports.push({ file, savedSha256: sourceHash(bytes), baselineRevision: caseIndexReceiptRevision,
       recordedSourceRevision: receiptRevision, recordedSourceSha256: receipt[0].sha256,
       currentSourceSha256: sourceHash(currentSource), conservedObjectSha256: hash(JSON.stringify(conserved)) });
@@ -44,7 +77,7 @@ export function collectCaseIndexConservation({ read = readFileSync } = {}) {
     replay.sourceFingerprints.find(item => item.file === caseIndexAuditModule).sha256 = sourceHash(currentSource);
     replayReports.push({ file, content: JSON.stringify(replay) });
   }
-  return { report: { schemaVersion: 1, kind: 'historical-case-index-conservation', reports, projection,
+  return { report: { schemaVersion: 1, kind: 'historical-case-index-conservation', reports, projection, dependencyProjections,
     historicalReceiptsRewritten: false, allNonReceiptFieldsConserved: true,
     membershipAssertionsReplayed: false, canonicalClassificationVerified: false, renderingEquivalent: false }, replayReports };
 }

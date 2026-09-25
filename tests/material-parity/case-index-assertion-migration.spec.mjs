@@ -11,6 +11,10 @@ test('entire legacy suite conserves statements outside nine receipt checks and t
   const result = verifyCaseIndexAssertionMigration(previous, current);
   assert.equal(result.replacedReceiptAssertions, 9);
   assert.equal(result.allOtherStatementsConserved, true);
+  assert.equal(result.mappingReadAdapterAuthenticated, true);
+  assert.deepEqual(result.addedIsolatedTests, [
+    'descendant color ancestry rejects broken links and intervening requests without claiming owner equivalence',
+  ]);
   assert.match(result.originalSuiteAstSha256, /^[a-f0-9]{64}$/);
 });
 test('migration proof rejects unrelated assertion changes, missing checks and wrong index identity', () => {
@@ -21,6 +25,11 @@ test('migration proof rejects unrelated assertion changes, missing checks and wr
     current.replace('audit.sourceFingerprints.length, 424', 'audit.sourceFingerprints.length, 423'),
     current.replace("'reviewed-source-batch-pipeline.spec.mjs',", "'wrong-source.spec.mjs',"),
     current.replace(' && !additions.includes(f)', ''),
+    current + "\ntest('additional case index', () => {});\n",
+    current + "\ntest('additional focused check', createCallback());\n",
+    current + "\ntest('additional focused check', { skip: true }, () => {});\n",
+    current + "\nconst eagerChange = mutateSharedState();\n",
+    current.replace('? restoreMappingReadAdapterSource(source, readFileSync(source.file))', '? source.sha256'),
   ]) {
     assert.notEqual(changed, current); assert.throws(() => verifyCaseIndexAssertionMigration(previous, changed));
   }

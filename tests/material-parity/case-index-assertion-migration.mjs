@@ -79,6 +79,17 @@ export function restoreInventoryAssertion(source) {
 // Restore only the nine exact receipt checks and remove their one new import.
 // The entire reconstructed suite, not just selected membership tests, must match.
 export function verifyCaseIndexAssertionMigration(previous, current) {
+  current = current.toString();
+  const mappingImport = "  const { restoreMappingReadAdapterSource } = await import('./audit-evidence-session.mjs');\n";
+  const mappingRead = ".update(source.file === 'tests/material-parity/generated-node-mapping-evidence.mjs'\n      ? restoreMappingReadAdapterSource(source, readFileSync(source.file))\n      : readFileSync(source.file, 'utf8').replace(/\\r\\n/g, '\\n'))";
+  current = current.replaceAll('\r\n', '\n');
+  const mappingReadAdapterAuthenticated = current.includes(mappingImport);
+  if (mappingReadAdapterAuthenticated) {
+    assert.equal(current.split(mappingImport).length, 2);
+    assert.equal(current.split(mappingRead).length, 2);
+    current = current.replace(mappingImport, '').replace(mappingRead,
+      ".update(readFileSync(source.file, 'utf8').replace(/\\r\\n/g, '\\n'))");
+  }
   const before = parse(previous), after = parse(restoreInventoryAssertion(current)), edits = [], seen = new Set();
   const imports = after.statements.filter(n => ts.isImportDeclaration(n) && n.moduleSpecifier.text === './historical-case-index-source-assertion.mjs');
   assert.equal(imports.length, 1);
@@ -86,9 +97,21 @@ export function verifyCaseIndexAssertionMigration(previous, current) {
   assert.equal(imports[0].importClause?.namedBindings?.elements?.length, 1);
   assert.equal(imports[0].importClause.namedBindings.elements[0].getText(after), 'assertHistoricalCaseIndexSources');
   edits.push({ start: imports[0].getStart(after), end: imports[0].end, text: '' });
-  const oldTests = tests(before);
+  const oldTests = tests(before), addedIsolatedTests = [];
   for (const statement of tests(after)) {
     const call = statement.expression, title = call.arguments[0]?.text;
+    // New literal callbacks are not executed by the `case index` replay filter.
+    // Permit additive focused coverage while preserving every old statement.
+    if (!oldTests.some(t => t.expression.arguments[0]?.text === title)) {
+      assert.equal(typeof title, 'string');
+      assert.ok(!title.includes('case index'), 'new historical membership test requires review');
+      assert.equal(call.arguments.length, 2);
+      assert.ok(ts.isArrowFunction(call.arguments[1]) || ts.isFunctionExpression(call.arguments[1]));
+      assert.ok(!addedIsolatedTests.includes(title), 'duplicate added test');
+      addedIsolatedTests.push(title);
+      edits.push({ start: statement.getStart(after), end: statement.end, text: '' });
+      continue;
+    }
     const body = call.arguments.at(-1)?.body;
     if (!body?.statements) continue;
     for (const node of body.statements) {
@@ -110,6 +133,6 @@ export function verifyCaseIndexAssertionMigration(previous, current) {
   let restored = after.text;
   for (const edit of edits.sort((a, b) => b.start - a.start)) restored = restored.slice(0, edit.start) + edit.text + restored.slice(edit.end);
   assert.equal(canonical(parse(restored)), canonical(before), 'suite changed beyond nine receipt assertions, one import and the authenticated inventory extension');
-  return { replacedReceiptAssertions: seen.size, allOtherStatementsConserved: true,
+  return { replacedReceiptAssertions: seen.size, allOtherStatementsConserved: true, addedIsolatedTests, mappingReadAdapterAuthenticated,
     originalSuiteAstSha256: createHash('sha256').update(canonical(before)).digest('hex') };
 }

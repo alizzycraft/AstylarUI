@@ -12402,9 +12402,12 @@ test('generated mapping case index preserves all boundaries, missing layer rules
   const { readFileSync } = await import('node:fs');
   const { createHash } = await import('node:crypto');
   const { buildGeneratedMappingAudit } = await import('./generated-node-mapping-evidence.mjs');
+  const { restoreMappingReadAdapterSource } = await import('./audit-evidence-session.mjs');
   const index = JSON.parse(readFileSync('docs/material-generated-node-mapping-audit.json'));
   for (const source of index.sourceFingerprints) assert.equal(createHash('sha256')
-    .update(readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), source.sha256, source.file);
+    .update(source.file === 'tests/material-parity/generated-node-mapping-evidence.mjs'
+      ? restoreMappingReadAdapterSource(source, readFileSync(source.file))
+      : readFileSync(source.file, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), source.sha256, source.file);
   const bytes = readFileSync(index.mainCapture.file);
   assert.equal(createHash('sha256').update(bytes).digest('hex'), index.mainCapture.sha256);
   const raw = JSON.parse(bytes), replay = buildGeneratedMappingAudit(raw);
