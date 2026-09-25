@@ -11,12 +11,43 @@ plus five appearance/motion / 232. All unrelated complete rows and raw inputs
 must remain unchanged; exactly 48 control records may change only authenticated
 producer receipts. Comparator/producer mutation tests pass 12/12 in 22.03s;
 independent historical motion conservation passes 1/1 in 32.11s. The five
-explicit export inputs and retained predecessor manifest exist. No export was
-running at preflight; D: has 3.52GiB free. Start one cold export using the recorded
-five-input command below, with progress log
-`artifacts/material-parity/color-motion-export-progress.log`. Keep the accepted
-count at 1,507 until full row/section/source conservation accepts the result.
-Do not modify export dependencies while the process is active.
+explicit export inputs and retained predecessor manifest exist. The single cold
+export from `b77284d` completed in 1,940.68 seconds; its log is
+`artifacts/material-parity/color-motion-export-progress.log`. Exit 1 reports only
+the expected incomplete-audit gate: 1,456 unresolved groups. Coverage remains
+436/436 static, 1,875/1,875 interaction, 8,483 groups / 389,202 occurrences and
+134 source findings. Evidence-session verification recorded zero invalidations.
+The accepted compressed SHA is
+`ed555089857385f46871703032b3fda742ce58f47a081b44200bc1133e8d3a2f`
+(59,481,073 bytes); decoded SHA is
+`f75431e6dcdd6ffe80c793d79cd74026c733e636654501a3f18f771ff27f30bc`
+(2,084,690,305 bytes). Independent `--color-motion` conservation passes: exactly
+51 groups / 1,428 observations changed; 8,432 complete rows and all raw inputs
+are conserved. All non-receipt control evidence is unchanged; exactly 48 producer
+receipts changed. Section hashing also completed: 70/79 sections are unchanged,
+none added or removed. Receipts are `color-motion-conservation.json` and
+`color-motion-sections.json` under `artifacts/material-parity`. The latter reuses
+the accepted predecessor's existing section receipt instead of decoding it again.
+All nine changed sections are now reconciled:
+sourceFingerprints, controlLineBoxes, summary, discrepancies, ownerCaretInputs,
+reviewedSourceBatchInputs, ownerInitialStyleEvidence, controlTypography and
+focusedProofs. The authenticated `color-motion-metadata.json` comparison preserves
+all 60,921 prior non-color observations/proofs, adds 4,995 color observations and
+454 explicit motion reviews (only 232 qualify for this classification batch).
+All 456 source fingerprints match disk. Its 64 metadata changes comprise 48
+control-line-box producer hashes, one summary count, one caret producer hash,
+eight motion source-conservation receipt fields, and six proof line shifts.
+The motion reader's exact opt-in transition and unchanged historical observations
+were already independently verified; reordered receipts do not rewrite history.
+All six proof pointers move by 44 lines to identical test declarations in the
+same file; no proof description or status changed. Source findings remain intact.
+Accepted unresolved is now **1,456**, not input or rendering equivalence. Compact
+store import and verification pass with 8,483 groups, 134 source findings, 39,904
+control records and 389,202 occurrences; compact shards total 69,980,975 bytes.
+The accepted index SHA is
+`2da3f7843d9b033afc86a29608c1a4865304094552eb4ad18822d46559bfaf48`.
+This checkpoint accompanies the canonical integration; do not rerun the completed
+export or conservation checks without changed dependencies.
 
 Descendant color is now connected to the existing independently source-bound
 observation collector/classifier. Original-source validation reconstructs the
@@ -32,12 +63,9 @@ The 460 source/owner mutations remain covered. Five focused source/appearance
 checks pass across the two runs, plus the producer transition check. Both new
 descendant files are registered in the producer source inventory, and the exact
 fallback/inventory transition restores the complete prior producer hash.
-No canonical export has run for this increment: accepted unresolved stays 1,507.
-Next integration milestone combines the 46 color groups with five pending motion
-groups, checks complete predecessor/section conservation and source receipts,
-and updates the compact store only after acceptance. Do not infer a count from
-the expected subtraction before that check. Current-runtime focus, remaining
-coverage, and final full browser acceptance remain open.
+The combined export is accepted through independent conservation as recorded
+above. Next is current-runtime overlay-focus provenance and action-boundary
+capture, followed by remaining coverage and final full browser acceptance.
 
 Descendant-color owner/scalar binding now passes the complete scoped population:
 46 groups / 1,196 original observations qualify; 22 groups / 446 remain excluded;
