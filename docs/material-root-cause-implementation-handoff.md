@@ -2,8 +2,33 @@
 
 ## Current audit checkpoint — September 25
 
-Read-only next-gap review: the accepted compact snapshot still has 1,420
-unresolved groups; backgroundColor is its largest property population (66 groups
+Line-height canonical reconciliation: the corrected export from `8f8ddbd`
+completed in 1,940.157 seconds, with only the expected unresolved-attribution
+failure: **1,408 unresolved groups**. Coverage remains 436/436 static and
+1,875/1,875 interaction cases, 8,483 groups / 389,202 observations and 134 source
+findings. `line-height-scalar-conservation.json` proves exactly 12 groups / 716
+observations changed attribution, all 8,471 unrelated scalar rows remain equal,
+and raw values and false equivalence claims remain unchanged.
+`line-height-scalar-sections.json` authenticates the canonical package and finds
+72 of 79 complete sections unchanged. The other sections are the intended
+scalar/control evidence, summary and source-binding receipts. Metadata review
+(`line-height-metadata.json`) verified all 459 LF-normalized source fingerprints
+against disk: seven changed audit sources/tests, two added line-box audit files,
+and no removed sources. All 48 control receipt changes are producer hashes;
+owner-caret and reviewed-source bindings carry the same updated producer hash.
+Independent `collectMotionSourceConservation()` replay confirms the remaining
+derived report hash `d3afe436ce07d1a43a63af6e05fa2878b16809b86c4069fb1790764b06bb281b`
+for 121 groups / 7,254 observations. No renderer or fixture changes are included.
+Canonical gzip: `4ddf218eb8caa20408c06a300568e7a8a17dcc2bbe5ebbc0527030846127776d`;
+decoded: `297f35095389029a79dcda35dfe0a9a64816c9fd40219d4aef926ca0e92b0914`.
+Compact import and `audit:findings:verify` passed with the counts above
+(70,019,613 compact bytes). Next: integrate the already-proven
+10-group / 614-observation retained-font join and four-group sidenav background
+classification. Broader unresolved coverage and final enforced browser acceptance
+remain open; this export is not audit completion or input-equivalence acceptance.
+
+Read-only next-gap review of the preceding 1,420-unresolved-group snapshot:
+backgroundColor is its largest property population (66 groups
 / 512 observations). Do not merge its state-layer, theme and overlay-owner
 symptoms into one cause. A bounded sidenav-container review now explains **four
 background groups / all 62 original observations**, without changing canonical
