@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 25
 
+Toggle non-divider border sides: reused `collectOutlineTokenInputs` against
+authenticated original trees for all **68 cases**. Its existing proof binds
+the left token/literal substitution and deliberately lists only
+`borderLeftColor`; no other-side equivalence follows. All **204 remaining
+top/right/bottom observations** compute reference currentColor RGB 75/67/87,
+zero width and none style. Candidate snapshots retain `borderWidth:0 0 0 1px`
+but apply `borderStyle:solid` and `borderColor:#79747e` across every side, exactly
+as authored by `astylar.component.ts:516`. The reference authors its divider
+on the left alone. This is shorthand-scope over-authoring, not another visible
+outline-strip color failure; zero side widths do not make the inputs equal.
+Ordered existing-proof/case/other-side-color/tree digest:
+`58840233e615cd7eb1bb64094d5af87c4039edbd9967090aadc0f0a7ef35e36e`.
+Extend the same owner evidence with this separately qualified property scope
+after export reconciliation. Do not broaden the existing left-only token claim
+or silently classify these sides as the same visible token substitution.
+Canonical rows and export dependencies unchanged.
+
 Card border-color review: all **52 captured card hosts / 208 side observations**
 have an explicit reference color request, not ordinary currentColor defaults.
 Authenticated original cases/trees and all scalar/stage/rule-index checks show
