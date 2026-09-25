@@ -208,6 +208,77 @@ export function proveDialogActionBoxSubstitution(entry, r, a) {
     candidateUsedLayoutMeasured: false, renderingEquivalent: false };
 }
 
+// Position declarations and CSSOM-resolved offsets are different questions.
+// In particular, a computed zero is not evidence of an authored zero offset.
+export function proveDialogPositionRequests(entry, r, a, element) {
+  assert.equal(entry.family, 'dialog');
+  const selectors = { 'dialog-panel': '.mat-mdc-dialog-surface',
+    'dialog-actions': '.mat-mdc-dialog-actions', 'dialog-title': '.mat-mdc-dialog-title',
+    'dialog-save': '.mdc-button', 'dialog-cancel': '.mdc-button' };
+  assert.ok(Object.hasOwn(selectors, element));
+  assert.equal(r.ruleEvidenceComplete, true); assert.equal(a.ruleEvidenceComplete, true);
+  assert.deepEqual(r.errors, []); assert.deepEqual(a.errors, []);
+  const { mapping } = proveModalPositionInspection(entry, r, a, element);
+  const reference = one(r.nodes.filter(n => n.key === mapping.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === mapping.candidateNode));
+  assert.deepEqual(reference.inline, {});
+  assert.equal(candidate.authored.style, undefined);
+  assert.equal(candidate.authored.attributes?.style, undefined);
+  const affects = key => /^(position|top|right|bottom|left|all)$|^inset/.test(key.replaceAll('-', '').toLowerCase());
+  const requests = reference.rules.map(i => r.rules[i]).filter(rule => rule.active)
+    .flatMap(rule => {
+      assert.ok(!rule.cssText.includes('\\'));
+      assert.ok(!/(?:^|[;{])\s*(?:inset[\w-]*|top|right|bottom|left|all)\s*:/i.test(rule.cssText));
+      return Object.entries(rule.declarations).filter(([key]) => affects(key))
+        .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value }));
+    });
+  assert.deepEqual(requests, [{ selector: selectors[element], conditions: [],
+    key: 'position', value: 'relative', important: false }]);
+  const candidateRequests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.keys(rule).filter(affects));
+  assert.deepEqual(candidateRequests, []);
+  const offsets = ['top', 'right', 'bottom', 'left'];
+  for (const property of offsets) assert.equal(r.styles[reference.style][property], '0px');
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    assert.ok(candidate[stage]);
+    assert.ok(!Object.keys(candidate[stage]).some(affects));
+  }
+  return { case: caseKey(entry, entry.kind), element, referenceNode: reference.key,
+    astylarNode: candidate.key, referencePositionRequests: requests, candidatePositionRequests: [],
+    referenceComputedOffsets: Object.fromEntries(offsets.map(p => [p, '0px'])),
+    positionClassification: 'application-plugin-authoring-defect',
+    offsetClassification: 'parity-harness-defect',
+    candidateComputedPositionVerified: false, candidateUsedOffsetsVerified: false,
+    inputEquivalent: false, renderingEquivalent: false };
+}
+
+export function applyDialogPositionRequests(rows, cases, inventory, canonicalStyle) {
+  return ['dialog-panel', 'dialog-actions', 'dialog-title', 'dialog-save', 'dialog-cancel']
+    .reduce((values, element) => {
+      const prove = (entry, r, a) => proveDialogPositionRequests(entry, r, a, element);
+      values = applyModalBoxReview(values, cases, inventory, canonicalStyle, {
+        element, properties: ['position'], prove, attribution: 'reviewed-dialog-position-request-omission',
+        owner: 'showcase dialog owner positioning authoring',
+        justification: 'The matched Material owner explicitly requests relative positioning; the corresponding candidate omits position in authored rules and all three local style stages. This is an unequal positioning request, not proof that an omitted value implements relative positioning. Panel/action history and differing structure remain separate; no renderer cause or rendering equivalence is inferred.',
+      });
+      return applyModalBoxReview(values, cases, inventory, canonicalStyle, {
+        element, properties: ['top', 'right', 'bottom', 'left'], prove,
+        classification: 'parity-harness-defect', attribution: 'reviewed-dialog-computed-offset-stage',
+        owner: 'input audit CSSOM resolved offsets versus local declaration inspection',
+        justification: 'Original owner rules request relative positioning but no physical or logical inset; browser CSSOM reports zero offsets while candidate local declarations omit them. The zero is not an authored offset to copy into the fixture. This attributes the observation-stage discrepancy only; the independently unequal position request, candidate computed/used offsets, containing blocks and final rendering remain unverified.',
+      });
+    }, rows);
+}
+
+export function validateDialogPositionRequests(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(r => ['reviewed-dialog-position-request-omission',
+      'reviewed-dialog-computed-offset-stage'].includes(r.attribution));
+    assert.deepEqual(select(rows), select(applyDialogPositionRequests(originalRows, cases, inventory, canonicalStyle)));
+    return [];
+  } catch (error) { return [`dialog position requests do not replay from original owners: ${error.message}`]; }
+}
+
 export function proveDialogTextFlow(entry, r, a, element) {
   assert.equal(entry.family, 'dialog');
   assert.ok(['dialog-title', 'dialog-copy'].includes(element));

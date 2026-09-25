@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 25
 
+Dialog positioning now has a focused executable proposal in the existing
+modal inspection module/spec, not a new survey layer. Against accepted bfd986bc,
+32 original open cases / five mapped owners prove **25 groups / 800 observations**:
+five explicit reference-relative/candidate-omission groups are unequal authoring;
+20 computed-zero/local-omission inset groups are observation-stage differences.
+Full matched reference declarations and CSS text reject physical/logical inset
+requests; potentially applicable candidate rules, inline styles and all three
+local stages must omit position/insets. This does not authorize copying computed
+zeros, assume an implicit candidate relative default, or prove used layout.
+The focused test passes, preserves all raw rows and checks
+full membership, missing/duplicate cases, forged classifications, injected
+physical/logical inset rules, style-stage divergence and broken owner mappings.
+Three adjacent dialog action/constraint and invalid-owner checks also pass
+(7.34 s total), preserving the earlier modal proofs.
+Recorded panel/action history remains distinct from older title/button omissions.
+**Not integrated into the canonical producer yet**: canonical unresolved count
+remains 1,262. Next compose this proposal with related positioning cohorts and
+the existing source-conservation path before the next batched export. Modal
+module/spec fingerprints and focused-test line receipts will need reconciliation
+at that milestone; no renderer or fixture source changed.
+
 Corrected weight export **bc898de is terminal**, session 7356 exit 1 after
 2,574.62 s. Its only error is the expected **1,262 unresolved groups**; the
 earlier follow-up coverage failure is absent. Coverage remains 436/436 static,

@@ -17,7 +17,8 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   applyBottomSheetPanelPaint, validateBottomSheetPanelPaint, proveBottomSheetActionLayout,
   applyBottomSheetActionLayout, validateBottomSheetActionLayout, proveBottomSheetActionCorners,
   applyBottomSheetContrastCorners, validateBottomSheetContrastCorners,
-  proveDialogTextFlow, applyDialogTextFlow, validateDialogTextFlow } from './modal-position-inspection.mjs';
+  proveDialogTextFlow, applyDialogTextFlow, validateDialogTextFlow,
+  proveDialogPositionRequests, applyDialogPositionRequests, validateDialogPositionRequests } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
@@ -33,6 +34,73 @@ import { collectFullTreeInventory, collectControlTypographyEvidence,
 const modalSizingPredecessor = Object.freeze({
   generation: '064777d79c6b85219285c85b97fb38edac27d069c8ddec67e0ae2da5b61099e5',
   indexSha256: '7e3141128b5728007cf478b5d37b7820ac6a9cd56d34e0242d4f10842ce4e745',
+});
+
+test('dialog position requests separate authored omissions from computed offsets across original owners', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const cases = JSON.parse(bytes).interactions.filter(e => e.family === 'dialog' &&
+    e.styleInputs.some(i => i.id === 'dialog-panel')).map(e => ({ ...e, kind: 'interaction' }));
+  assert.equal(cases.length, 32);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'dialog', {
+    generation: 'bfd986bc6e7397d32465df25d6096d2274dfe29336924281a3f7fd0429f6f9fe',
+    indexSha256: 'fead09c2c08b3546503f0d4c014bd3700e03923524d7d8894b430dd5cc194381',
+  }).filter(r => r.evidence.section === 'discrepancies');
+  const before = structuredClone(rows);
+  const applied = applyDialogPositionRequests(rows, cases, inventory, normalize);
+  const changed = applied.filter((row, i) => row !== rows[i]);
+  assert.equal(changed.length, 25); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 800);
+  assert.equal(changed.filter(r => r.classification === 'application-plugin-authoring-defect').length, 5);
+  assert.equal(changed.filter(r => r.classification === 'parity-harness-defect').length, 20);
+  assert.deepEqual(rows, before);
+  for (const row of changed) {
+    assert.equal(row.occurrences, 32); assert.equal(row.reviewedCases.length, 32);
+    assert.equal(row.reviewEvidence.observations.length, 32);
+    for (const observation of row.reviewEvidence.observations)
+      for (const flag of ['inputEquivalent', 'renderingEquivalent', 'candidateComputedPositionVerified', 'candidateUsedOffsetsVerified'])
+        assert.equal(observation[flag], false);
+    const restored = { ...row };
+    for (const key of ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']) delete restored[key];
+    Object.assign(restored, row.reviewEvidence.priorMetadata);
+    assert.deepEqual(restored, rows.find(r => r.id === row.id));
+  }
+  const validate = candidate => validateDialogPositionRequests(candidate, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  assert.deepEqual(validate(JSON.parse(JSON.stringify(applied))), []);
+  for (const mutate of [
+    rs => rs.splice(rs.indexOf(rs.find(r => r.reviewedCases?.length === 32 && r.attribution === 'reviewed-dialog-computed-offset-stage')), 1),
+    rs => rs.push(rs.find(r => r.attribution === 'reviewed-dialog-position-request-omission')),
+    rs => { rs.find(r => r.attribution === 'reviewed-dialog-computed-offset-stage').reviewEvidence.observations[0].referenceComputedOffsets.top = '4px'; },
+    rs => { rs.find(r => r.attribution === 'reviewed-dialog-position-request-omission').reviewedCases.pop(); },
+  ]) {
+    const altered = structuredClone(applied); mutate(altered); assert.ok(validate(altered).length);
+  }
+  for (const altered of [cases.slice(1), [...cases, cases[0]]])
+    assert.throws(() => applyDialogPositionRequests(rows, altered, inventory, normalize));
+  const entry = cases[0], key = `interaction:dialog@${entry.profile}/${entry.viewport.id}/${entry.state}`;
+  const trees = modalInventoryTrees(inventory, key), proof = proveDialogPositionRequests(entry, ...trees, 'dialog-panel');
+  const ref = r => r.nodes.find(n => n.key === proof.referenceNode);
+  const ast = a => a.nodes.find(n => n.key === proof.astylarNode);
+  for (const mutate of [
+    (r) => { r.ruleEvidenceComplete = false; },
+    (r, a) => { a.ruleEvidenceComplete = false; },
+    (r) => { ref(r).inline.top = '0px'; },
+    (r) => { const rule = r.rules[ref(r).rules[0]]; rule.declarations.inset = { value: '0', important: false }; },
+    (r) => { r.rules[ref(r).rules[0]].cssText += ' top: var(--offset);'; },
+    (r) => { r.rules[ref(r).rules[0]].cssText += ' inset-inline-start: 0px;'; },
+    (r) => { r.styles[ref(r).style].left = '1px'; },
+    (r, a) => { ast(a).authored.style = { top: '0px' }; },
+    (r, a) => { ast(a).authored.attributes = { style: 'inset: 0;' }; },
+    (r, a) => { a.rules.push({ selector: '.dialog-panel:hover', insetInlineStart: '0' }); },
+    (r, a) => { a.rules.push({ selector: '.dialog-panel', position: 'relative' }); },
+    (r, a) => { ast(a).normalResolvedStyle.top = '0'; },
+    (r, a) => { ast(a).interactionResolvedStyle.position = 'relative'; },
+    (r, a) => { ast(a).parent = 'missing'; },
+  ]) {
+    const altered = structuredClone(trees); mutate(...altered);
+    assert.throws(() => proveDialogPositionRequests(entry, ...altered, 'dialog-panel'));
+  }
 });
 
 test('oversized radius source finding binds current public-package failures and bounded controls', () => {
