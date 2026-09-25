@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 25
 
+Export `51fa73d` is now **terminal, exit 1, 1711.83 seconds**. All six invalid
+bindings (`alignmentFontInputs`, `textAlignInputs`, `ltrAlignmentInputs`,
+`ownerCaretInputs`, `gapReviewInputs`, `explicitGapInputs`) report the same changed
+border-module dependency below. These binding failures leave 1,606 unresolved
+groups; do not interpret that as accepted new findings or accept the expected
+75-group batch. Coverage remains 436/436 static and 1,875/1,875 interaction;
+8,483 groups / 389,202 observations / 134 source findings remain in the package.
+Evidence-session verification reports 1,205 files / 89,151,875 bytes,
+zero invalidations, two collectors and ten memory hits.
+The failed manifest, payload and Markdown are retained at
+`artifacts/material-parity/border-defaults-export-51fa73d-failed/`.
+Compressed SHA-256 `e8232b9014953c89db654db5f6967b5a6ebb9fb3f874a8a2bcabe215265dd4a9`
+(58,364,240 bytes); decoded SHA-256
+`33d1c08455465ac16b01d6d2eb65a2a0f9b97b8ffb9e08f928438fc442944b6f`
+(2,056,732,177 bytes). Both hashes were verified; the six binding errors were
+read directly from the authenticated decoded package. The uncommitted generated
+files under `docs/` are this failed output, **not the accepted baseline**.
+Keep the accepted `4059599c…` compact index; do not import the failed generation.
+Next reconcile the shared dependency in the existing gap, caret and alignment
+source readers, run focused negative/source-replay checks, then re-export once.
+
 The live export has now exposed a **historical gap-source reconciliation failure**
 in both explicit-gap composition and gap-review membership subprocesses. The
 parent remains live; do not restart it or edit dependencies before it finishes.
