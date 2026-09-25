@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+Descendant-color owner/scalar binding now passes the complete scoped population:
+46 groups / 1,196 original observations qualify; 22 groups / 446 remain excluded;
+152 previously reviewed static siblings are kept outside this proposed batch.
+`inspectDescendantColor` uses validated inventory trees and independently replayed
+root color proofs, unique IDs or existing reviewed generated mappings, complete
+parent chains, captured text, and exact normal/comparison/effective scalar stages.
+No candidate computed color is synthesized. All 460 mutations reject changed
+case/family/revision, scalar text/styles, broken ancestry, duplicate candidate
+keys, inline overrides and hover color requests. The duplicate-owner mutation
+initially exposed an undefined-mapping dereference; it now returns no proof.
+`node --test --test-reporter=spec tests/material-parity/root-color-descendant-evidence.spec.mjs`
+passes in 28.78 seconds. Test mutations share untouched reference style/rule
+pools rather than repeatedly cloning the entire audit. This extends the existing
+root reader; no second CSS resolver or fixture compensation was introduced.
+Canonical attribution remains pending (accepted unresolved count: 1,507).
+Next: connect this evidence to the existing scalar fallback after more-specific
+classifications, verify static precedence and source replay, and perform the
+combined color/motion integration milestone. Do not rerun the population census.
+
 Historical dependency reconciliation is now complete for the case-index replay.
 The policy change adds exactly two source findings (rounded-radius sampling and
 sampled dialog geometry); removing those additions reproduces the entire recorded
