@@ -35,6 +35,9 @@ test('alignment integration permits only reviewed orchestration, precise normali
 test('audit projection rejects retained behavior changes, import aliases and orchestration coupling', () => {
   const previous = old(main), current = read(main);
   const mutations = [
+    s => s.replace('applyNormalLineBoxScalar, validateNormalLineBoxScalar', 'applyNormalLineBoxScalar as unexpected, validateNormalLineBoxScalar'),
+    s => s.replace('applyNormalLineBoxScalar, validateNormalLineBoxScalar', 'applyNormalLineBoxScalar, unexpectedMember, validateNormalLineBoxScalar'),
+    s => s + '\nconst unreviewedLineBoxCoupling = applyNormalLineBoxScalar;\n',
     s => s.replace('collectChipPaintAuditInputs, applyChipPaintAuditRows', 'collectChipPaintAuditInputs as unexpected, applyChipPaintAuditRows'),
     s => s.replace('collectChipPaintAuditInputs, applyChipPaintAuditRows', 'collectChipPaintAuditInputs, unexpectedMember, applyChipPaintAuditRows'),
     s => s + '\nconst unreviewedChipCoupling = collectChipPaintAuditInputs;\n',

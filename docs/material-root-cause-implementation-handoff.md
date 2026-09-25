@@ -2,6 +2,32 @@
 
 ## Current audit checkpoint — September 25
 
+The `77eb6cb` line-height export is terminal and **rejected**, not live or
+accepted. It completed in 1,797.15 seconds with 436/436 static and 1,875/1,875
+interaction coverage, but four source-binding errors and 1,667 unresolved groups.
+All 1,205 evidence-session files verified without invalidation. The failure is
+in historical source guards, not changed original captures: adding the scalar
+helper import left two exact orchestration-import lists incomplete
+(`alignment-survey-conservation.mjs` and `historical-audit-module-source.mjs`).
+Their retained-mapping comparisons rejected the new import. They now permit only
+its three exact names; unchanged retained-statement checks still reject aliases,
+extra members and non-orchestration coupling. Five alignment guard tests and the
+focused overlay mapping-projection test pass, including six added mutations.
+Independent original-source replay now binds all affected populations: alignment
+and font 72 groups / 4,016 observations, text alignment 49 / 2,677, LTR alignment
+4 / 178, and reviewed inputs 134 / 3,325. No classification or renderer rule was
+changed to suppress the failure.
+
+Failed generated docs and log are preserved at
+`artifacts/material-parity/line-height-unbound-export-5664d6df`; copied gzip SHA-256
+verified as `5664d6df404e1dd1cda9fd8f5f5db05fb93d6dd3339ba9b4b31bac3964d64b93`.
+The working generated docs still contain that rejected export; do not commit or
+import them. Accepted predecessor remains `868f9de` / payload `02f8a47b...`, with
+1,420 unresolved groups. Next: commit the guard correction, rerun the same full
+five-input cold export, then inspect terminal errors and run line-box conservation,
+section/source reconciliation and compact import. Expected 1,408 is unverified.
+The earlier in-flight descriptions below are superseded by this checkpoint.
+
 Next evidence-reuse opportunity (read-only while the export runs): ten unresolved
 fontFamily scalar groups have complete original membership joined one-to-one
 to accepted `retainedTypography.differences` with attribution
