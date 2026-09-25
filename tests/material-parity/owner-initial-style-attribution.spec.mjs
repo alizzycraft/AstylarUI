@@ -170,6 +170,36 @@ test('appearance precedence preserves an existing panel-header owner mismatch in
     'a remaining unresolved observation must still reach the new fallback');
 });
 
+test('font-weight fallback preserves previously reviewed leaf classifications', () => {
+  const families = new Set(['badge', 'card', 'divider']);
+  const supplied = { results: [], interactions: original.interactions.filter(e => families.has(e.family)) };
+  const entries = supplied.interactions.map(e => ({ ...e, kind: 'interaction' }));
+  const ownerEvidence = collectOwnerInitialStyleEvidence(supplied, collectFullTreeInventory(entries));
+  const followup = { binding: { status: 'bound' }, ...projectFollowupInputAuditInputs(
+    JSON.parse(readFileSync('docs/material-followup-input-proposal-binding.json')),
+    JSON.parse(readFileSync('docs/material-followup-input-transition-dry-run.json')),
+    supplied, original, bindPreciseAuditNormalization()) };
+  const wanted = followup.groups.filter(r => r.property === 'fontWeight');
+  assert.equal(wanted.length, 4);
+  assert.equal(wanted.reduce((n, r) => n + r.occurrences, 0), 96);
+  const args = [entries, { observations: [] }, { comparisons: [], differences: [] },
+    ...Array.from({ length: 19 }, () => []),
+    { observations: [] }, { observations: [] }, { observations: [] }, [], { observations: [] }];
+  args[42] = followup;
+  const select = rows => rows.filter(r => wanted.some(w => w.element === r.element && r.property === 'fontWeight'));
+  const before = select(collectStyleDiscrepancies(...args));
+  assert.equal(before.length, 4);
+  assert.ok(before.every(r => r.attribution === 'reviewed-leaf-weight-tracking-observation-stage'));
+  args[26] = ownerEvidence;
+  assert.deepEqual(select(collectStyleDiscrepancies(...args)), before,
+    'generic weight evidence must not replace source-reviewed leaf findings');
+  args[42] = undefined;
+  const fallback = select(collectStyleDiscrepancies(...args));
+  assert.equal(fallback.length, 4);
+  assert.ok(fallback.every(r => r.attribution === ownerInitialStyleAttribution),
+    'test must exercise actual competing classifications');
+});
+
 test('font-weight source extension conserves predecessor observations and retained-stage precedence', async () => {
   const file = 'tests/material-parity/owner-initial-style-attribution.mjs';
   const before = execFileSync('git', ['show', `16e7979:${file}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n');

@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 25
 
+Weight precedence correction is now focused-test verified. Conservation session
+15128 terminated with exit 1 at row 257 (`badge/badge-label/fontWeight`),
+independently confirming the rejected export differs from original-source replay.
+The generic owner font-weight fallback now runs after existing specific reviews,
+alongside appearance/color fallback, without changing the older eight-property
+precedence. The existing regression proves all four prior complete rows / 96
+observations survive and that the fallback still classifies them when specific
+evidence is absent. Both focused weight tests pass (16.66 s); all nine producer
+source-conservation tests pass (2.08 s), including newly added rejection of either
+partially changed routing predicate. Full predecessor source hashes remain exact.
+No renderer/fixture changes or weaker coverage assertions. The failed export's
+three files are preserved at `artifacts/material-parity/rejected-weight-2bf4f0b`,
+with compressed hash checked against ac52188b below. Next rerun the corrected
+coherent batch export, then perform the pending complete reconciliation; do not
+reuse the rejected output as accepted evidence. No audit process remains live.
+
 Weight export **2bf4f0b completed but is NOT accepted** (session 31672,
 exit 1, 2,299.18 s). Its complete log reports two errors: expected **1,262**
 unresolved groups, plus an unexpected follow-up classification coverage failure

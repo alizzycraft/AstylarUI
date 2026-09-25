@@ -36,6 +36,14 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreInteractiveWeightProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  // The generic weight fallback must follow existing source-reviewed claims.
+  // Restore only its two exact routing predicates; the full hash below still
+  // rejects any other production change.
+  if (restored.includes("['appearance', 'color', 'fontWeight'].includes(property)")) {
+    assert.equal(restored.split("['appearance', 'color', 'fontWeight'].includes(property)").length, 3);
+    restored = restored.replaceAll("['appearance', 'color', 'fontWeight'].includes(property)",
+      "['appearance', 'color'].includes(property)");
+  }
   restored = restored.replace("glyph paint.' +\n      (interactiveWeight ? ' Interactive weight evidence is grouped separately from static observations; current pseudo-state paint remains unverified.' : ''),", "glyph paint.',");
   for (const [from, to] of [
     ["  const interactiveWeight = !!benchmarkCase.state && property === 'fontWeight' && reference === '400' &&\n    ['checkbox', 'radio', 'slide-toggle'].includes(benchmarkCase.family) &&\n    evidence?.case === caseKey(benchmarkCase) && evidence.family === benchmarkCase.family &&\n    evidence.state === benchmarkCase.state && evidence.source === 'core-text-registry' &&\n    Number.isInteger(evidence.revision) && evidence.revision >= 0 && evidence.currentPseudoStatePaintVerified === false;\n", ''],
@@ -251,7 +259,8 @@ export function restoreAppearancePrecedence(source) {
 export function restorePositionProducer(source, { followupOnly = false } = {}) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = (current.includes("if (property !== 'appearance' && classification.attribution === 'unresolved')") ||
-    current.includes("!['appearance', 'color'].includes(property)"))
+    current.includes("!['appearance', 'color'].includes(property)") ||
+    current.includes("!['appearance', 'color', 'fontWeight'].includes(property)"))
     ? restoreAppearancePrecedence(current).restoredSource : current;
   const replaceOnce = (from, to = '') => {
     assert.equal(restored.split(from).length, 2, 'missing or repeated position integration fragment');

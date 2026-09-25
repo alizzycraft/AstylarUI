@@ -15,6 +15,12 @@ test('interactive weight comparison restores the entire prior producer and rejec
     '...(interactiveWeight ? { currentPseudoStatePaintVerified: false, inputEquivalent: false, renderingEquivalent: false } : {})'])
     assert.throws(() => restoreInteractiveWeightProducer(current.replace(fragment, 'false')));
   assert.throws(() => restoreInteractiveWeightProducer(current + '\n// unrelated'));
+  for (const prefix of ['if (!', 'if (']) {
+    const from = prefix + "['appearance', 'color', 'fontWeight'].includes(property)";
+    assert.ok(current.includes(from));
+    assert.throws(() => restoreInteractiveWeightProducer(current.replace(from,
+      prefix + "['appearance', 'color'].includes(property)")), 'reject partial precedence routing');
+  }
 });
 
 test('mapped reset integration restores the full accepted producer and rejects incomplete wiring', () => {
