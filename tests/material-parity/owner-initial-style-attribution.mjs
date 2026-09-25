@@ -4,6 +4,8 @@ import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { inspectOwnerInitialStyle, ownerInitialValues } from './owner-initial-style-survey.mjs';
 import { originStageTrees } from './origin-stage-inventory-evidence.mjs';
+import { inspectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
+import { inspectMotionDelayTargets } from '../../scripts/audit-material-motion-delay-targets.mjs';
 
 export const ownerInitialStyleAttribution = 'reviewed-owner-initial-style-observation-stage';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -57,8 +59,13 @@ function inspect(entry, trees) {
       { family: entry.family, reviewedGeneratedOwners: true, reviewedAppearance: true }) : {
       property, element: input.id, issues: [{ reason: 'missing-paired-inventory-evidence' }],
       disposition: 'requires-specific-review', computedCandidateVerified: false, renderingEquivalent: false };
+    const motionReview = property === 'appearance' && trees && proof.issues.length &&
+      proof.issues.every(i => i.reason === 'motion-request-needs-review' && i.side === 'reference')
+      ? inspectOwnerInitialMotion(input, property, trees.reference, trees.candidate, entry.family,
+        { reviewedAppearance: true }) : undefined;
     observations.push({ case: keyOf(entry), family: entry.family, element: input.id, property,
-      referenceValue: scalar(property, input.reference[property]), ...proof });
+      referenceValue: scalar(property, input.reference[property]), ...proof,
+      ...(motionReview ? { motionReview } : {}) });
   }
   return observations;
 }
@@ -72,7 +79,16 @@ export function collectOwnerInitialStyleEvidence(report, inventory) {
 
 export function classifyOwnerInitialStyleInput(input, property, reference, candidate, proof) {
   const initialValues = reviewedInitialValues();
-  if (!proof || proof.disposition !== 'captured-default-versus-local-omission' || proof.issues?.length !== 0 ||
+  let disjointMotion = false;
+  if (property === 'appearance' && proof?.motionReview) {
+    const { case: caseKey, family, referenceValue, motionReview, ...originalProof } = proof;
+    disjointMotion = isDeepStrictEqual(originalProof, motionReview.proof) &&
+      proof.issues?.length > 0 && proof.issues.every(i => i.reason === 'motion-request-needs-review' && i.side === 'reference') &&
+      ['inputEquivalent', 'computedCandidateVerified', 'renderingEquivalent'].every(k => motionReview[k] === false) &&
+      ((motionReview.disposition === 'captured-motion-targets-disjoint' && motionReview.reasons?.length === 0) ||
+        inspectMotionDelayTargets(motionReview, { reviewedAppearance: true }).disposition === 'captured-owner-target-set-disjoint');
+  }
+  if (!proof || !(disjointMotion || proof.disposition === 'captured-default-versus-local-omission' && proof.issues?.length === 0) ||
       proof.element !== input.id || proof.property !== property || !Object.hasOwn(initialValues, property) ||
       reference !== scalar(property, initialValues[property]) || reference !== proof.referenceValue ||
       candidate !== undefined || input.astylar?.[property] !== undefined ||
@@ -80,7 +96,9 @@ export function classifyOwnerInitialStyleInput(input, property, reference, candi
       proof.source !== 'core-style-inspection' || !Number.isInteger(proof.revision) || proof.revision < 0) return;
   return { classification: 'parity-harness-defect', attribution: ownerInitialStyleAttribution,
     owner: 'input audit captured computed defaults versus local declaration stages', reviewEvidence: proof,
-    justification: 'The independently bound scalar and mapped tree retain a browser-computed initial value while all candidate local declaration stages omit it. Captured surface ancestry contains no relevant explicit, reset or motion request. This is an observation-stage mismatch, not a synthesized candidate computed value, an authoring waiver or rendering equivalence. Preserve uncaptured document inheritance, descendant used-value consumption, wrapping, hit testing, visibility, layout and raster obligations.' };
+    justification: disjointMotion
+      ? 'The independently bound appearance scalar and mapped tree retain browser-computed none versus omitted candidate local declarations. Original motion issues remain recorded: complete captured reference transition targets are disjoint, including explicit same-owner target witnesses for delay-only rules where required. No relevant explicit appearance/reset request is waived. This identifies an observation-stage mismatch only; it proves neither a cascade winner, inactive motion, candidate computed appearance, native control paint nor rendering equivalence.'
+      : 'The independently bound scalar and mapped tree retain a browser-computed initial value while all candidate local declaration stages omit it. Captured surface ancestry contains no relevant explicit, reset or motion request. This is an observation-stage mismatch, not a synthesized candidate computed value, an authoring waiver or rendering equivalence. Preserve uncaptured document inheritance, descendant used-value consumption, wrapping, hit testing, visibility, layout and raster obligations.' };
 }
 
 // Full original-source replay prevents self-consistent removal of both a

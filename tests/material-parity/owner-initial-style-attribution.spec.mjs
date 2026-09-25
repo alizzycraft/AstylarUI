@@ -158,6 +158,16 @@ test('owner initial full-population appearance integration preserves native auto
         assert.equal(classification.classification, 'parity-harness-defect');
         assert.equal(classification.reviewEvidence.computedCandidateVerified, false);
         assert.equal(classification.reviewEvidence.renderingEquivalent, false);
+        if (proof.motionReview) {
+          assert.ok(proof.issues.length, 'retain original motion issues instead of erasing them');
+          assert.match(classification.justification, /same-owner/);
+          for (const mutate of [p => { p.motionReview.computedCandidateVerified = true; },
+            p => { p.motionReview.proof.revision = -1; },
+            p => { p.issues = []; }, p => { p.motionReview.reasons.push('unknown-motion'); }]) {
+            const changed = structuredClone(proof); mutate(changed);
+            assert.equal(classifyOwnerInitialStyleInput(o.input, 'appearance', row.reference, row.astylar, changed), undefined);
+          }
+        }
       }
       return !!classification;
     });
@@ -168,7 +178,7 @@ test('owner initial full-population appearance integration preserves native auto
     else { excludedGroups++; excludedOccurrences += matching.length; }
   }
   assert.deepEqual({ eligibleGroups, eligibleOccurrences, excludedGroups, excludedOccurrences, autoOccurrences },
-    { eligibleGroups: 34, eligibleOccurrences: 2195, excludedGroups: 18, excludedOccurrences: 736, autoOccurrences: 156 });
+    { eligibleGroups: 39, eligibleOccurrences: 2427, excludedGroups: 13, excludedOccurrences: 504, autoOccurrences: 156 });
 });
 
 test('owner initial canonical integration preserves earlier classifications and enforces exact new attribution coverage', () => {

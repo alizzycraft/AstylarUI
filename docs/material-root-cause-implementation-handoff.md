@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+The five appearance/motion groups are now connected to the existing source-bound
+owner-initial collector and classifier. Original motion issues are retained with
+their review, not erased; source replay reconstructs the attached proof from the
+original tree. The appearance fallback still runs after specific classifications.
+Final focused run: five tests PASS in 95.00 seconds, including exact original
+membership/state samples, panel/header precedence, source tampering and attached
+motion-proof tampering. Against the pinned pre-appearance population, 39 groups /
+2,427 occurrences now qualify (previous 34 / 2,195 plus five / 232); 13 groups /
+504 occurrences and both native-auto groups / 156 occurrences remain excluded.
+No candidate computed value or rendering equivalence is claimed. Accepted
+canonical count stays 1,507: this code/evidence increment still needs the next
+coherent export and conservation check. Continue the inherited-color batch before
+that milestone instead of exporting for five groups alone.
+
 Appearance/motion follow-up is now executable in the existing readers, through
 an explicit `reviewedAppearance` opt-in (historical collectors do not opt in).
 The existing motion test authenticates the accepted compact generation
@@ -10,7 +24,8 @@ groups / 454 observations. Five groups / 232 observations have disjoint targets
 (badge count, both progress owners, both tab labels); chips and tab panel remain
 excluded (222). All 232 target mutations to `appearance` are rejected. This is
 target-set evidence, not inactive motion, computed candidate style or rendering
-equivalence. Source/occurrence binding into canonical attribution is still pending.
+equivalence. Source/occurrence binding is now implemented as described above;
+canonical export acceptance remains pending.
 Historical replay is preserved: exact source transitions admit only the opt-in
 change; the delay replayer reconstructs and authenticates the original reader
 before replaying its original report. No historical receipt is rewritten.
