@@ -64,6 +64,24 @@ test('owner initial attribution rejects altered sources, observations and false 
   assert.equal(classifyOwnerInitialStyleInput(input, 'fontStyle', 'normal', 'normal', proof), undefined);
 });
 
+test('descendant color source replay rejects lost membership and altered ancestry', () => {
+  const proof = evidence.observations.find(p => p.property === 'color' && p.element === 'stepper-content' && p.descendantColor);
+  assert.ok(proof);
+  const input = raw.results[0].styleInputs.find(i => i.id === 'stepper-content');
+  assert.equal(classifyOwnerInitialStyleInput(input, 'color', proof.referenceValue, undefined, proof)?.attribution,
+    ownerInitialStyleAttribution);
+  for (const mutate of [
+    e => {e.observations = e.observations.filter(p => p.property !== 'color');},
+    e => {e.observations.find(p => p.descendantColor).descendantColor.referencePath.pop();},
+  ]) {
+    const changed = structuredClone(evidence); mutate(changed);
+    assert.ok(validateOwnerInitialStyleSource(binding, changed).length);
+  }
+  const changed = structuredClone(raw);
+  changed.results[0].styleInputs.find(i => i.id === input.id).reference.color = 'red';
+  assert.equal(bindOwnerInitialStyleSource(changed, {parityPath: file}).status, 'invalid');
+});
+
 test('appearance attribution binds original observations and refuses explicit values, auto and missing coverage', () => {
   const proof = evidence.observations.find(p => p.property === 'appearance' && p.issues.length === 0);
   assert.ok(proof, 'the real captured stepper must supply a positive appearance observation');

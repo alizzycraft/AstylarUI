@@ -6,6 +6,12 @@ import { inspectOwnerInitialStyle, ownerInitialValues } from './owner-initial-st
 import { originStageTrees } from './origin-stage-inventory-evidence.mjs';
 import { inspectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
 import { inspectMotionDelayTargets } from '../../scripts/audit-material-motion-delay-targets.mjs';
+import { inspectDescendantColor } from './root-color-descendant-evidence.mjs';
+import { collectRootTypographyInputs } from './root-typography-input-evidence.mjs';
+import { collectRootColorInputs } from './root-color-input-evidence.mjs';
+import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 
 export const ownerInitialStyleAttribution = 'reviewed-owner-initial-style-observation-stage';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -18,7 +24,8 @@ const scalar = (p, v) => p === 'wordSpacing' && v === '0px' ? '0' : v;
 // which imports this attribution module in turn.
 const reviewedInitialValues = () => ({ ...ownerInitialValues, appearance: 'none' });
 const propertiesOf = input => Object.entries(reviewedInitialValues())
-  .filter(([p, v]) => input.reference?.[p] === v && input.astylar?.[p] === undefined).map(([p]) => p);
+  .filter(([p, v]) => input.reference?.[p] === v && input.astylar?.[p] === undefined).map(([p]) => p)
+  .concat(input.reference?.color !== undefined && input.astylar?.color === undefined ? ['color'] : []);
 const casesOf = report => [['static', report.results ?? []], ['interaction', report.interactions ?? []]]
   .flatMap(([kind, entries]) => entries.map(e => ({ ...e, kind,
     styleInputs: (e.styleInputs ?? []).filter(i => propertiesOf(i).length) }))).filter(e => e.styleInputs.length);
@@ -52,9 +59,20 @@ export function bindOwnerInitialStyleSource(report, { root = process.cwd(), pari
   } catch (error) { return { status: 'invalid', error: String(error) }; }
 }
 
-function inspect(entry, trees) {
+function inspect(entry, trees, colorRoot, canonical) {
   const observations = [];
   for (const input of entry.styleInputs) for (const property of propertiesOf(input)) {
+    if (property === 'color') {
+      const proof = trees && inspectDescendantColor(input, colorRoot, trees.reference, trees.candidate,
+        canonical, { family: entry.family, case: keyOf(entry) });
+      observations.push({ case: keyOf(entry), family: entry.family, element: input.id, property,
+        referenceValue: canonical(input.reference).color,
+        disposition: proof ? 'captured-inherited-color-versus-local-omission' : 'requires-specific-review',
+        computedCandidateVerified: false, renderingEquivalent: false,
+        ...(proof ? { descendantColor: proof, source: proof.source, revision: proof.revision }
+          : { issues: [{reason: 'descendant-color-ancestry-or-owner-not-proven'}] }) });
+      continue;
+    }
     const proof = trees ? inspectOwnerInitialStyle(input, property, trees.reference, trees.candidate,
       { family: entry.family, reviewedGeneratedOwners: true, reviewedAppearance: true }) : {
       property, element: input.id, issues: [{ reason: 'missing-paired-inventory-evidence' }],
@@ -73,11 +91,28 @@ function inspect(entry, trees) {
 // Reuse the captured inventory without manufacturing inherited/used styles.
 // Keep negative observations too: eligibility is not proof of equivalence.
 export function collectOwnerInitialStyleEvidence(report, inventory) {
-  const cases = casesOf(report);
-  return { schemaVersion: 1, observations: cases.flatMap(e => inspect(e, originStageTrees(inventory, keyOf(e)))) };
+  const cases = casesOf(report), canonical = bindPreciseAuditNormalization();
+  const roots = new Map(collectRootColorInputs(collectRootTypographyInputs(inventory, canonical,
+    rootInitialSelectorCanApply), canonical).map(p => [p.case, p]));
+  return { schemaVersion: 1, observations: cases.flatMap(e => inspect(e, originStageTrees(inventory, keyOf(e)), roots.get(keyOf(e)), canonical)) };
 }
 
 export function classifyOwnerInitialStyleInput(input, property, reference, candidate, proof) {
+  if (property === 'color') {
+    const p = proof?.descendantColor;
+    if (!p || proof.disposition !== 'captured-inherited-color-versus-local-omission' ||
+        proof.element !== input.id || p.element !== input.id || proof.property !== property || p.property !== property ||
+        p.case !== proof.case || p.family !== proof.family || p.source !== proof.source || p.revision !== proof.revision ||
+        p.ownerCorrespondenceVerified !== true || p.classification !== 'parity-harness-defect' ||
+        ['computedCandidateVerified', 'finalRasterVerified', 'inputEquivalent', 'renderingEquivalent'].some(k => p[k] !== false) ||
+        proof.computedCandidateVerified !== false || proof.renderingEquivalent !== false ||
+        proof.source !== 'core-style-inspection' || !Number.isInteger(proof.revision) || proof.revision < 0 ||
+        candidate !== undefined || reference !== proof.referenceValue || reference !== p.values?.reference ||
+        !['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'].every(s => input[s] && input[s].color === undefined)) return;
+    return { classification: 'parity-harness-defect', attribution: ownerInitialStyleAttribution,
+      owner: 'input audit inherited computed color versus local declaration stages', reviewEvidence: proof,
+      justification: 'Original scalar values, owner mappings and complete captured ancestry are independently bound. The browser includes the root color through inheritance while candidate local declaration stages omit color; no intervening color, reset or motion request is waived. This diagnoses different observation stages only, not a missing authored request, synthesized candidate computed color or equal rendering. Descendant color consumption, currentColor paint, compositing and raster remain separate obligations.' };
+  }
   const initialValues = reviewedInitialValues();
   let disjointMotion = false;
   if (property === 'appearance' && proof?.motionReview) {
@@ -106,23 +141,11 @@ export function classifyOwnerInitialStyleInput(input, property, reference, candi
 export function validateOwnerInitialStyleSource(binding, evidence, { root = process.cwd() } = {}) {
   const errors = [];
   try {
-    let index = 0;
-    for (const entry of casesOf(readOwnerInitialStyleSource(binding, { root }))) {
-      const trees = {};
-      for (const [side, name] of [['reference', 'reference'], ['astylar', 'candidate']]) {
-        const descriptor = entry.inputTrees?.[side];
-        const bytes = readFileSync(safePath(root, descriptor?.file));
-        if (hash(bytes) !== descriptor.sha256) throw new Error('owner initial-style tree digest changed');
-        trees[name] = JSON.parse(bytes);
-      }
-      for (const proof of inspect(entry, trees)) {
-        if (!isDeepStrictEqual(proof, evidence?.observations?.[index]))
-          throw new Error(`owner initial-style original proof differs at ${proof.case}#${proof.element}/${proof.property}`);
-        index++;
-      }
-    }
-    if (evidence?.schemaVersion !== 1 || evidence.observations.length !== index)
-      throw new Error('owner initial-style source observation coverage changed');
+    const original = readOwnerInitialStyleSource(binding, { root });
+    const inventory = collectFullTreeInventory(casesOf(original), { root });
+    if (inventory.errors.length) throw new Error('owner initial-style tree digest or inventory changed');
+    const replay = collectOwnerInitialStyleEvidence(original, inventory);
+    if (!isDeepStrictEqual(replay, evidence)) throw new Error('owner initial-style source observation coverage or proof changed');
   } catch (error) { errors.push(String(error)); }
   return errors;
 }

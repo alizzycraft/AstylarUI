@@ -1715,7 +1715,7 @@ export function collectStyleDiscrepancies(cases, originStageEvidence, retainedTy
             ?? classifyReviewedTypographyStage(benchmarkCase, input, property, referenceValue, astylarValue,
               typographyByCaseAndId.get(JSON.stringify([key, input.id])))
             ?? classifyStyleDifference(property, referenceValue, astylarValue, reference, astylar);
-        if (property !== 'appearance' && classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(
+        if (!['appearance', 'color'].includes(property) && classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(
           input, property, referenceValue, astylarValue,
           ownerInitialByCaseIdProperty.get(JSON.stringify([key, input.id, property]))) ?? classification;
         if (classification.attribution === 'unresolved') classification = classifyTooltipWrappingInput(
@@ -1782,7 +1782,7 @@ export function collectStyleDiscrepancies(cases, originStageEvidence, retainedTy
         // Preserve specific source-reviewed findings (including mismatched
         // measurement owners) before considering that fallback. Keep the
         // historical eight-property precedence unchanged.
-        if (property === 'appearance' && classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(
+        if (['appearance', 'color'].includes(property) && classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(
           input, property, referenceValue, astylarValue,
           ownerInitialByCaseIdProperty.get(JSON.stringify([key, input.id, property]))) ?? classification;
         const signature = JSON.stringify([benchmarkCase.family, input.id, property, referenceValue ?? null, astylarValue ?? null,
@@ -8806,6 +8806,8 @@ function sourceFingerprints(root) {
     'tests/material-parity/field-host-initial-style-integration.spec.mjs',
     'tests/material-parity/owner-initial-style-attribution.mjs',
     'tests/material-parity/owner-initial-style-attribution.spec.mjs',
+    'tests/material-parity/root-color-descendant-evidence.mjs',
+    'tests/material-parity/root-color-descendant-evidence.spec.mjs',
     'tests/material-parity/owner-initial-style-baseline.mjs',
     'tests/material-parity/owner-initial-style-survey.mjs',
     'tests/material-parity/owner-initial-style-survey.spec.mjs',

@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 25
 
+Descendant color is now connected to the existing independently source-bound
+observation collector/classifier. Original-source validation reconstructs the
+authenticated inventory and all observations, including negative color cases;
+missing color membership or altered ancestry is rejected. The production fallback
+handles appearance/color only after all specific reviews. A complete scoped
+production-chain check supplies original retained-typography evidence and changes
+exactly 46 groups / 1,196 observations, preserving all other complete rows,
+including earlier static reviews. It passes in 87.66 seconds. An earlier test
+omitted retained-typography evidence and incorrectly exposed 80 already-reviewed
+static observations to the fallback; corrected inputs prove actual precedence.
+The 460 source/owner mutations remain covered. Five focused source/appearance
+checks pass across the two runs, plus the producer transition check. Both new
+descendant files are registered in the producer source inventory, and the exact
+fallback/inventory transition restores the complete prior producer hash.
+No canonical export has run for this increment: accepted unresolved stays 1,507.
+Next integration milestone combines the 46 color groups with five pending motion
+groups, checks complete predecessor/section conservation and source receipts,
+and updates the compact store only after acceptance. Do not infer a count from
+the expected subtraction before that check. Current-runtime focus, remaining
+coverage, and final full browser acceptance remain open.
+
 Descendant-color owner/scalar binding now passes the complete scoped population:
 46 groups / 1,196 original observations qualify; 22 groups / 446 remain excluded;
 152 previously reviewed static siblings are kept outside this proposed batch.

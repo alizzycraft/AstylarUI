@@ -3,7 +3,8 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
-import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
+import { collectFullTreeInventory, collectStyleDiscrepancies, collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
+import { collectOwnerInitialStyleEvidence, classifyOwnerInitialStyleInput, ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
 import { collectRootTypographyInputs } from './root-typography-input-evidence.mjs';
 import { collectRootColorInputs } from './root-color-input-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
@@ -77,4 +78,35 @@ test('descendant color binds all scoped original owners and preserves reviewed s
   }
   assert.equal(acceptedGroups, 46); assert.equal(accepted, 1196); assert.equal(excluded, 446);
   assert.equal(retainedStatic, 152); assert.equal(mutationCount, 460);
+  const wanted = new Set(rows.map(r => `${r.family}/${r.element}`));
+  const cases = entries.map(e => ({ ...e, styleInputs: e.styleInputs.filter(i => wanted.has(`${e.family}/${i.id}`)) }));
+  const evidence = collectOwnerInitialStyleEvidence({ results: cases.filter(e => e.kind === 'static'),
+    interactions: cases.filter(e => e.kind === 'interaction') }, inventory);
+  const colorEvidence = { schemaVersion: 1, observations: evidence.observations.filter(p => p.property === 'color') };
+  const retained = collectRetainedTypographyEvidence(cases, inventory);
+  const args = [cases, {observations: []}, retained,
+    ...Array.from({length: 19}, () => []), {observations: []}, {observations: []}, {observations: []}, [], {observations: []}];
+  const before = collectStyleDiscrepancies(...args);
+  args[26] = colorEvidence;
+  const after = collectStyleDiscrepancies(...args);
+  const colorRows = after.filter(r => r.property === 'color' && r.attribution === ownerInitialStyleAttribution);
+  assert.equal(colorRows.length, 46);
+  assert.equal(colorRows.reduce((n,r) => n + r.occurrences, 0), 1196);
+  for (const row of colorRows) {
+    const old = rows.find(r => r.family === row.family && r.element === row.element && r.reference === row.reference);
+    assert.equal(row.occurrences, old.occurrences); assert.deepEqual(row.cases, old.cases);
+    assert.deepEqual(row.states, old.states);
+  }
+  const unchanged = rs => rs.filter(r => !(r.property === 'color' && r.attribution === ownerInitialStyleAttribution) &&
+    !colorRows.some(c => r.attribution === 'unresolved' && r.property === 'color' && c.family === r.family &&
+      c.element === r.element && c.reference === r.reference));
+  assert.deepEqual(unchanged(after), unchanged(before), 'specific and static classifications or unrelated properties changed');
+  const proof = colorEvidence.observations.find(p => p.descendantColor);
+  const input = entries.find(e => key(e) === proof.case).styleInputs.find(i => i.id === proof.element);
+  for (const mutate of [p => {p.descendantColor.ownerCorrespondenceVerified = false;},
+    p => {p.descendantColor.case = 'different';}, p => {p.referenceValue = 'red';},
+    p => {p.descendantColor.renderingEquivalent = true;}]) {
+    const changed = structuredClone(proof); mutate(changed);
+    assert.equal(classifyOwnerInitialStyleInput(input, 'color', proof.referenceValue, undefined, changed), undefined);
+  }
 });

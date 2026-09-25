@@ -41,7 +41,20 @@ export const positionProducerFiles = [
 // Remove only the reviewed appearance fallback relocation. The complete
 // predecessor hash rejects any accompanying unreviewed producer change.
 export function restoreAppearancePrecedence(source) {
-  const current = source.toString().replaceAll('\r\n', '\n');
+  const actual = source.toString().replaceAll('\r\n', '\n');
+  let current = actual;
+  if (current.includes("!['appearance', 'color'].includes(property)")) {
+    for (const [from, to] of [
+      ["!['appearance', 'color'].includes(property)", "property !== 'appearance'"],
+      ["['appearance', 'color'].includes(property)", "property === 'appearance'"],
+      ["    'tests/material-parity/root-color-descendant-evidence.mjs',\n    'tests/material-parity/root-color-descendant-evidence.spec.mjs',\n", ''],
+    ]) {
+      assert.equal(current.split(from).length, 2, 'missing or repeated descendant color integration fragment');
+      current = current.replace(from, to);
+    }
+    assert.equal(hash(current), 'cc05565c29174a385ee16c14a507d351b06d14730da88f0ba4e454af68c2746e',
+      'producer changed beyond descendant color fallback and source inventory');
+  }
   const early = "        if (property !== 'appearance' && classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(";
   const late = "        // Appearance is newly admitted generic observation-stage evidence.\n        // Preserve specific source-reviewed findings (including mismatched\n        // measurement owners) before considering that fallback. Keep the\n        // historical eight-property precedence unchanged.\n        if (property === 'appearance' && classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(\n          input, property, referenceValue, astylarValue,\n          ownerInitialByCaseIdProperty.get(JSON.stringify([key, input.id, property]))) ?? classification;\n";
   assert.equal(current.split(early).length, 2);
@@ -49,12 +62,13 @@ export function restoreAppearancePrecedence(source) {
   const restored = current.replace(early, "        if (classification.attribution === 'unresolved') classification = classifyOwnerInitialStyleInput(").replace(late, '');
   assert.equal(hash(restored), '1a88cf50442a5833624978871bcce34e475f150acb9bad5fa134cd8356b4db91',
     'producer changed beyond appearance fallback precedence');
-  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(actual) };
 }
 
 export function restorePositionProducer(source, { followupOnly = false } = {}) {
   const current = source.toString().replaceAll('\r\n', '\n');
-  let restored = current.includes("if (property !== 'appearance' && classification.attribution === 'unresolved')")
+  let restored = (current.includes("if (property !== 'appearance' && classification.attribution === 'unresolved')") ||
+    current.includes("!['appearance', 'color'].includes(property)"))
     ? restoreAppearancePrecedence(current).restoredSource : current;
   const replaceOnce = (from, to = '') => {
     assert.equal(restored.split(from).length, 2, 'missing or repeated position integration fragment');
