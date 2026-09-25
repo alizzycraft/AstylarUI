@@ -2,6 +2,40 @@
 
 ## Current audit checkpoint — September 25
 
+The same runtime probe now supports `--keyboard`: ArrowDown/Escape and three
+Tabs/Shift+Tab/Escape after pointer opening. Twenty-four captures (both surfaces,
+three families, two sequences, wrappers on/off) pass every settled-boundary
+instrumentation control with zero page errors. Receipt:
+`artifacts/material-parity/overlay-keyboard-4d782df-settled/result.json`, SHA
+`2d46a54a48316404db90f1227e5d3901c43e6aa230180719697d25958914bb90`.
+Native Escape settlement now waits for overlay removal before sampling focus;
+the first `overlay-keyboard-4d782df` capture is retained as failed timing evidence
+because a 400ms delay raced Material's 375ms sheet exit plus scheduling.
+
+- Menu ArrowDown stays on the candidate opener instead of native Delete; native
+  Tab closes the menu, while candidate Tab traverses both items then escapes to
+  BODY with the menu still open. Material `menu.mjs` wires `FocusKeyManager` and
+  `tabOut`; candidate authors menu roles but only an Escape key handler. These
+  interaction inputs are unequal, not proof that matching inputs render wrongly.
+- Bottom sheet's third Tab escapes to BODY, while native Share/Copy link cycle
+  inside the sheet. Material's container inherits a focus trap; candidate authors
+  a plain `div` with `role=dialog`, not core's `type=dialog/open/modal` contract.
+  ARIA role alone does not supply modality. Classify the missing modal interaction
+  contract at application/plugin authoring, without inventing per-sheet core keys.
+- Dialog Tab and reverse-Tab cycling match native Cancel/Save. Escape removes both
+  overlays, but candidate focus ends on BODY rather than the opener in both
+  sequences and both instrumentation modes. The app requests opener focus while
+  the old modal remains active, receives false, then removes its focused child.
+  This proves an early application restoration request. Whether synchronous
+  Angular update delivery bypasses core default dismissal/restoration remains
+  unresolved; isolate that before assigning a general core defect.
+
+Escape closes menu and sheet and restores their openers once focus is back inside
+the surface. No claim is made for Escape after focus has already left the surface,
+all themes/DPRs, disabled items, or full output parity. Next decisive check:
+dialog Escape update/default-action ordering and a separately labeled control
+without the application's Escape handler; preserve canonical fixture behavior.
+
 Current-runtime overlay focus now has direct action-boundary evidence, not only
 the earlier scheduling reduction. `scripts/audit-material-overlay-focus-runtime.mjs`
 drives unchanged served Material routes with real pointer down/up, recording DOM

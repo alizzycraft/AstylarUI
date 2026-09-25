@@ -8,6 +8,9 @@ import {chromium} from 'playwright-core';
 // Read-only runtime instrumentation of the unchanged development showcase.
 // Wrappers preserve arguments, return values, and the original promise identity.
 const base=process.env.ASTYLAR_FOCUS_URL??'http://127.0.0.1:4435';
+const sequences=process.argv.includes('--keyboard')
+ ? [{name:'arrow-escape',keys:['ArrowDown','Escape']},{name:'tab-cycle',keys:['Tab','Tab','Tab','Shift+Tab','Escape']}]
+ : [{name:'opening',keys:[]}];
 const out=path.resolve(process.argv[2]??'artifacts/material-parity/overlay-focus-current');
 assert.ok(!fs.existsSync(path.join(out,'result.json')),'Preserve the previous capture');
 fs.mkdirSync(out,{recursive:true});
@@ -23,7 +26,7 @@ assert.ok(packageReceipts.length);
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const cases=[],errors=[],served=new Map(),pending=[],sourceMatches=new Map();
 try {
- for(const instrumented of [false,true])for(const family of ['menu','bottom-sheet','dialog'])for(const mode of ['reference','astylar']){
+ for(const sequence of sequences)for(const instrumented of [false,true])for(const family of ['menu','bottom-sheet','dialog'])for(const mode of ['reference','astylar']){
   const page=await browser.newPage({viewport:{width:900,height:700},deviceScaleFactor:1});
   page.on('pageerror',e=>errors.push({family,mode,message:e.message}));
   page.on('response',r=>{
@@ -45,12 +48,12 @@ try {
   await page.waitForFunction(()=>typeof window.__MATERIAL_SHOWCASE_COMMAND__==='function');
   if(mode==='astylar')await page.waitForFunction(()=>!!window.__ASTYLAR_MATERIAL_BENCHMARK__);
   await page.evaluate(async()=>{await document.fonts.ready;await window.__ASTYLAR_MATERIAL_BENCHMARK__?.waitForSettled();});
-  await page.evaluate(({mode,instrumented})=>{
+  await page.evaluate(({mode,instrumented,family})=>{
    const trace=[];window.__focusAudit={trace,phase:'setup'};
    const identity=()=>{const e=document.activeElement;return {tag:e?.tagName,id:e?.id,astylarId:e?.getAttribute('data-astylar-id'),parityId:e?.getAttribute('data-parity-id'),text:e?.textContent?.trim().slice(0,80)}};
    const record=(event,extra={})=>trace.push({event,phase:window.__focusAudit.phase,time:performance.now(),active:identity(),...extra});
    window.__focusAudit.record=record;
-   for(const type of ['pointerdown','pointerup','click','focusin','focusout'])document.addEventListener(type,e=>record(type,{target:e.target?.id??'',text:e.target?.textContent?.trim().slice(0,50)}),true);
+   for(const type of ['pointerdown','pointerup','click','focusin','focusout','keydown','keyup'])document.addEventListener(type,e=>record(type,{target:e.target?.id??'',text:e.target?.textContent?.trim().slice(0,50),key:e.key}),true);
    if(mode==='astylar'&&instrumented){
     const component=window.ng.getComponent(document.querySelector('app-astylar-showcase')),surface=component.surface;
     if(!surface)throw Error('Missing mounted surface');
@@ -64,8 +67,13 @@ try {
     }
     const patch=component.store.patchState.bind(component.store);component.store.patchState=(...args)=>{record('state-patch',{patch:args[0]});return patch(...args);};
    }
-   window.__focusAudit.snapshot=label=>{window.__focusAudit.phase=label;record('boundary',{label});};
-  },{mode,instrumented});
+   window.__focusAudit.snapshot=label=>{
+    window.__focusAudit.phase=label;
+    const selector=mode==='astylar'?`[data-astylar-id="${family==='menu'?'menu-popup':family+'-overlay'}"]`
+     :family==='menu'?'.mat-mdc-menu-panel':family==='dialog'?'mat-dialog-container':'mat-bottom-sheet-container';
+    record('boundary',{label,overlayPresent:!!document.querySelector(selector),state:window.__ASTYLAR_MATERIAL_BENCHMARK__?.state()});
+   };
+  },{mode,instrumented,family});
   let box;
   if(mode==='reference')box=await page.locator('#'+family+'-primary').boundingBox();
   else {
@@ -81,19 +89,33 @@ try {
   // Material animation-driven focus may follow the immediate action boundary.
   await page.waitForTimeout(400);
   await page.evaluate(()=>window.__focusAudit.snapshot('settled'));
+  for(const [index,key] of sequence.keys.entries()){
+   await page.keyboard.press(key);
+   await page.evaluate(async()=>{await window.__ASTYLAR_MATERIAL_BENCHMARK__?.waitForSettled();});
+   if(key==='Escape'&&mode==='reference'){
+    const selector=family==='menu'?'.mat-mdc-menu-panel':family==='dialog'?'mat-dialog-container':'mat-bottom-sheet-container';
+    // Native sheet exit animation is 375ms plus scheduling; a 400ms sleep races
+    // DOM removal and focus restoration. Observe completion, not a guessed delay.
+    await page.locator(selector).waitFor({state:'detached',timeout:10000});
+   }
+   await page.waitForTimeout(400);
+   await page.evaluate(label=>window.__focusAudit.snapshot(label),`key-${index}-${key}`);
+  }
   const result=await page.evaluate(()=>({trace:window.__focusAudit.trace,state:window.__ASTYLAR_MATERIAL_BENCHMARK__?.state()}));
-  cases.push({family,mode,instrumented,...result});
+  cases.push({family,mode,instrumented,sequence:sequence.name,...result});
   await page.close();
  }
  await Promise.all(pending);
- const result={browser:browser.version(),viewport:{width:900,height:700,dpr:1},errors,cases,served:[...served.values()],sourceMatches:[...sourceMatches.values()],packageReceipts,probeSha256:hash(fs.readFileSync(new URL(import.meta.url))),limitations:['Development build, light profile, DPR1, pointer open only; not historical-bundle attribution or full keyboard/dismissal coverage.','Public-method wrappers observe calls without altering original results; internal autofocus is observed through DOM focus events.']};
+ const result={browser:browser.version(),viewport:{width:900,height:700,dpr:1},sequences,errors,cases,served:[...served.values()],sourceMatches:[...sourceMatches.values()],packageReceipts,probeSha256:hash(fs.readFileSync(new URL(import.meta.url))),limitations:['Development build, light profile, DPR1; only listed pointer/key sequences, not historical-bundle attribution or full interaction coverage.','Public-method wrappers observe calls without altering original results; internal autofocus is observed through DOM focus events.','Overlay presence is semantic DOM membership, not a visual/raster visibility assertion.']};
  fs.writeFileSync(path.join(out,'result.json'),JSON.stringify(result,null,2));
  assert.equal(errors.length,0);assert.equal(sourceMatches.size,3,'Missing served app source receipts');
- for(const family of ['menu','bottom-sheet','dialog'])for(const mode of ['reference','astylar']){
-  const pair=cases.filter(c=>c.family===family&&c.mode===mode);assert.equal(pair.length,2);
+ for(const sequence of sequences)for(const family of ['menu','bottom-sheet','dialog'])for(const mode of ['reference','astylar']){
+  const pair=cases.filter(c=>c.family===family&&c.mode===mode&&c.sequence===sequence.name);assert.equal(pair.length,2);
   assert.deepEqual(pair[0].trace.at(-1).active,pair[1].trace.at(-1).active,'Instrumentation changed final focus');
   assert.deepEqual(pair[0].state,pair[1].state,'Instrumentation changed final application state');
+  const boundaries=c=>c.trace.filter(x=>x.event==='boundary'&&(x.label==='settled'||x.label.startsWith('key-'))).map(({label,active,overlayPresent,state})=>({label,active,overlayPresent,state}));
+  assert.deepEqual(boundaries(pair[0]),boundaries(pair[1]),'Instrumentation changed a settled action boundary');
  }
- console.log(JSON.stringify(cases.map(c=>({family:c.family,mode:c.mode,instrumented:c.instrumented,focusCalls:c.trace.filter(x=>x.event==='focus-result').map(x=>({target:x.target,ok:x.ok})),settled:c.trace.at(-1).active})),null,2));
+ console.log(JSON.stringify({cases:cases.length,errors:errors.length,sourceMatches:sourceMatches.size,wrapperBoundaryControls:'pass'}));
 }catch(error){fs.writeFileSync(path.join(out,'failure.json'),JSON.stringify({error:String(error),cases,errors},null,2));throw error;}
 finally{await browser.close();}
