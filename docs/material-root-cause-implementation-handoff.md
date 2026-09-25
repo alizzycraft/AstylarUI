@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 25
 
+The existing scalar canonical comparator now supports the pending weight batch:
+exactly **26 groups / 1,502 observations**, with the three attribution populations
+checked independently. Raw rows, prior classifications, ordering, control evidence
+and the 48 exact producer-receipt transitions remain protected. False rendering
+equivalence and incorrect classification claims reject even when expected rows
+are forged alongside the result. The existing conservation suite passes **16/16**
+(`node --test tests/material-parity/position-canonical-conservation.spec.mjs`,
+42.17 s). This is checker verification, not canonical acceptance. Next wire the
+original-capture replay for all three weight paths into the existing comparator
+CLI, authenticate the fcb predecessor, then perform the coherent export and
+section/source-fingerprint reconciliation. No export or browser recapture ran.
+Priority remains pending source/export reconciliation first, unresolved input
+classifications grouped by subsystem next, and complete browser/final acceptance
+after coverage closes. Canonical unresolved count remains **1,288**.
+
 Weight-batch historical guards are reconciled. The initial transition test
 correctly rejected the new main-module code. The existing restoration chain now
 removes exactly the reviewed interactive-weight guard/evidence additions and

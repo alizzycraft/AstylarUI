@@ -27,6 +27,7 @@ import { collectBorderInitialInputs, classifyBorderInitialInput, collectOutlineT
   classifyOutlineTokenInput, outlineTokenAttribution, applyMappedBorderInitial, applyMappedButtonBorderReset,
   applyCardBorderToken } from '../tests/material-parity/border-initial-input-evidence.mjs';
 import { collectSliderBorderDefaults, classifySliderBorderDefault } from '../tests/material-parity/slider-border-default-source-binding.mjs';
+import { restoreInteractiveWeightProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
@@ -80,8 +81,9 @@ export function replayBorderDefaultRows(rows, captured) {
   return applyMappedBorderInitial(replayed, cases, inventory, normalize);
 }
 
-export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false } = {}) {
-  const transition = dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
+export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false, weight = false } = {}) {
+  assert.ok(!(dialogCard && weight), 'select one scalar batch');
+  const transition = weight ? restoreInteractiveWeightProducer(source) : dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
   const adjusted = refreshScalarControlReceipts(previous.rows, previous.control, current.control, transition);
   const expected = JSON.parse(JSON.stringify(refreshScalarControlReceipts(expectedRows,
     previous.control, current.control, transition)));
@@ -108,7 +110,24 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     const before = adjusted[i], after = current.rows[i];
     same(raw(previous.rows[i]), raw(after), 'border batch changed raw scalar evidence');
     if (isDeepStrictEqual(before, after)) continue;
-    assert.match(before.property, dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    assert.match(before.property, weight ? /^fontWeight$/ : dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    if (weight) {
+      assert.equal(before.attribution, 'unresolved');
+      assert.equal(before.astylar, undefined);
+      const token = after.attribution === retainedFontScalarAttribution;
+      assert.equal(before.reference, token ? '500' : '400');
+      assert.equal(after.classification, token ? 'application-plugin-authoring-defect' : 'parity-harness-defect');
+      assert.equal(after.reviewEvidence.renderingEquivalent, false);
+      if (token) {
+        assert.equal(before.family, 'button-toggle');
+        assert.ok(['button-toggle-one', 'button-toggle-two'].includes(before.element));
+        assert.equal(after.reviewEvidence.inputEquivalent, false);
+      } else if (after.attribution === 'reviewed-stage-mismatch') {
+        assert.ok(['checkbox', 'radio', 'slide-toggle'].includes(before.family));
+        assert.equal(after.reviewEvidence.currentPseudoStatePaintVerified, false);
+        assert.equal(after.reviewEvidence.inputEquivalent, false);
+      } else assert.equal(after.reviewEvidence.computedCandidateVerified, false);
+    }
     if (dialogCard) { assert.ok(['dialog', 'card'].includes(before.family)); assert.equal(before.attribution, 'unresolved'); }
     if (before.attribution === 'unresolved') {
       const total = totals.get(after.attribution) ?? { groups: 0, observations: 0 };
@@ -119,7 +138,11 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
       existingProofRows.push(i);
     }
   }
-  same(Object.fromEntries(totals), dialogCard ? {
+  same(Object.fromEntries(totals), weight ? {
+    [ownerInitialStyleAttribution]: { groups: 20, observations: 1142 },
+    [retainedFontScalarAttribution]: { groups: 2, observations: 136 },
+    'reviewed-stage-mismatch': { groups: 4, observations: 224 },
+  } : dialogCard ? {
     'reviewed-material-card-border-token-omission': { groups: 8, observations: 416 },
     'reviewed-mapped-border-initial-color-divergence': { groups: 7, observations: 224 },
     'reviewed-mapped-material-button-border-reset-omission': { groups: 8, observations: 256 },
@@ -129,7 +152,7 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     'reviewed-material-outline-token-substitution': { groups: 3, observations: 204 },
     'reviewed-mapped-border-initial-color-divergence': { groups: 52, observations: 1432 },
   }, 'border batch changed unexpected classification membership');
-  return { previous: previous.manifest, current: current.manifest, changedGroups: dialogCard ? 23 : 83, changedOccurrences: dialogCard ? 896 : 2596,
+  return { previous: previous.manifest, current: current.manifest, changedGroups: weight ? 26 : dialogCard ? 23 : 83, changedOccurrences: weight ? 1502 : dialogCard ? 896 : 2596,
     existingProofRows, scalarReceiptRows: adjusted.filter((r, i) => !isDeepStrictEqual(r, previous.rows[i])).length,
     controlReceiptRecords: receiptCases.length, allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
     orderedCurrentRowsSha256: digest(current.rows), inputEquivalent: false, renderingEquivalent: false };

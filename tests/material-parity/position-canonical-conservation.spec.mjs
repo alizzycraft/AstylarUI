@@ -7,12 +7,18 @@ import { comparePositionCanonical, compareAppearanceCanonical, compareBorderDefa
 import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreToggleSideColorProducer, restoreMappedButtonResetProducer } from './position-composition-producer-transition.mjs';
 import { positionCompositionAttribution } from './position-composition-review.mjs';
 import { positionFollowupAttribution } from './position-followup-review.mjs';
+import { restoreInteractiveWeightProducer } from './position-composition-producer-transition.mjs';
+import { ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
+import { retainedFontScalarAttribution } from './retained-font-scalar.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
 
-for (const dialogCard of [false, true]) test(`border conservation (${dialogCard ? 'dialog/card' : 'defaults'}) rejects changed raw data, unrelated metadata and control values even with forged expected rows`, () => {
-  const transition = dialogCard ? restoreMappedButtonResetProducer(currentSource) : restoreToggleSideColorProducer(currentSource), rows = [], expected = [];
-  const compare = (p, c, e, s) => compareBorderDefaultCanonical(p, c, e, s, { dialogCard });
-  for (const [attribution, groups, observations] of dialogCard ? [
+for (const mode of ['defaults', 'dialog/card', 'weight']) test(`scalar conservation (${mode}) rejects changed raw data, unrelated metadata and control values even with forged expected rows`, () => {
+  const dialogCard = mode === 'dialog/card', weight = mode === 'weight';
+  const transition = weight ? restoreInteractiveWeightProducer(currentSource) : dialogCard ? restoreMappedButtonResetProducer(currentSource) : restoreToggleSideColorProducer(currentSource), rows = [], expected = [];
+  const compare = (p, c, e, s) => compareBorderDefaultCanonical(p, c, e, s, { dialogCard, weight });
+  for (const [attribution, groups, observations] of weight ? [
+    [ownerInitialStyleAttribution, 20, 1142], [retainedFontScalarAttribution, 2, 136], ['reviewed-stage-mismatch', 4, 224],
+  ] : dialogCard ? [
     ['reviewed-material-card-border-token-omission', 8, 416],
     ['reviewed-mapped-border-initial-color-divergence', 7, 224],
     ['reviewed-mapped-material-button-border-reset-omission', 8, 256],
@@ -25,7 +31,16 @@ for (const dialogCard of [false, true]) test(`border conservation (${dialogCard 
     const before = { family: dialogCard ? (attribution.includes('card') ? 'card' : 'dialog') : 'test', element: `${attribution}-${i}`, property: 'borderTopColor',
       reference: 'black', astylar: 'transparent', occurrences: i ? 1 : observations - groups + 1,
       cases: ['original'], attribution: 'unresolved', classification: 'pending' };
-    rows.push(before); expected.push({ ...before, attribution, classification: 'reviewed' });
+    if (weight) {
+      before.property = 'fontWeight'; before.reference = attribution === retainedFontScalarAttribution ? '500' : '400';
+      delete before.astylar;
+      before.family = attribution === retainedFontScalarAttribution ? 'button-toggle' : 'checkbox';
+      if (attribution === retainedFontScalarAttribution) before.element = i ? 'button-toggle-two' : 'button-toggle-one';
+    }
+    rows.push(before); expected.push({ ...before, attribution,
+      classification: weight ? (attribution === retainedFontScalarAttribution ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : 'reviewed',
+      ...(weight ? { reviewEvidence: { renderingEquivalent: false, inputEquivalent: false,
+        currentPseudoStatePaintVerified: false, computedCandidateVerified: false } } : {}) });
   }
   const controls = Array.from({ length: 48 }, (_, i) => ({ case: `case-${i}`, element: 'button', property: 'lineHeight',
     attribution: 'reviewed-interactive-normal-line-box-stage-comparison', values: { painted: '19px' },
@@ -34,11 +49,12 @@ for (const dialogCard of [false, true]) test(`border conservation (${dialogCard 
   const current = { rows: structuredClone(expected), control: structuredClone(previous.control) };
   for (const c of current.control.differences)
     c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
-  assert.equal(compare(previous, current, expected, currentSource).changedGroups, dialogCard ? 23 : 83);
+  assert.equal(compare(previous, current, expected, currentSource).changedGroups, weight ? 26 : dialogCard ? 23 : 83);
   for (const mutate of [
     r => { r.reference = 'forged'; }, r => { r.cases = ['forged']; },
     r => { r.occurrences++; }, r => { r.property = 'fontSize'; },
     r => { r.attribution = 'unreviewed'; },
+    ...(weight ? [r => { r.reviewEvidence.renderingEquivalent = true; }, r => { r.classification = 'equivalent'; }] : []),
   ]) {
     const changed = structuredClone(current), forged = structuredClone(expected);
     mutate(changed.rows[0]); mutate(forged[0]);
