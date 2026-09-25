@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { collectFullTreeInventory, collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
+import { collectFullTreeInventory, collectRetainedTypographyEvidence, collectStyleDiscrepancies } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { applyRetainedFontScalar, validateRetainedFontScalar, retainedFontScalarAttribution } from './retained-font-scalar.mjs';
@@ -28,6 +28,42 @@ function fixture() {
   return {rows,cases,inventory,retained:{differences:[difference],comparisons:[comparison]}};
 }
 const apply=f=>applyRetainedFontScalar(f.rows,f.cases,f.inventory,f.retained,normalize);
+
+test('interactive control-label weight stages cover every case without claiming current glyph paint', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes);
+  const cases = raw.interactions.filter(c => ['checkbox', 'radio', 'slide-toggle'].includes(c.family))
+    .map(c => ({ ...c, kind: 'interaction' }));
+  assert.equal(cases.length, 168);
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const retained = collectRetainedTypographyEvidence(cases, inventory);
+  const collect = (entries, evidence) => collectStyleDiscrepancies(entries, { observations: [] }, evidence,
+    ...Array.from({ length: 19 }, () => []), { observations: [] }, { observations: [] }, { observations: [] }, [], { observations: [] });
+  const rows = collect(cases, retained);
+  const weights = rows.filter(r => r.property === 'fontWeight' && r.attribution === 'reviewed-stage-mismatch');
+  assert.equal(weights.length, 4);
+  assert.deepEqual(weights.map(r => r.element).sort(), ['checkbox-label', 'radio-solo-label', 'radio-team-label', 'slide-toggle-label']);
+  assert.equal(weights.reduce((n, r) => n + r.occurrences, 0), 224);
+  assert.ok(rows.filter(r => r.attribution === 'reviewed-stage-mismatch').every(r => r.property === 'fontWeight'));
+  for (const row of weights) {
+    assert.equal(row.occurrences, 56); assert.equal(row.reference, '400'); assert.equal(row.astylar, undefined);
+    assert.equal(row.classification, 'parity-harness-defect');
+    assert.equal(row.reviewEvidence.currentPseudoStatePaintVerified, false);
+    assert.equal(row.reviewEvidence.inputEquivalent, false); assert.equal(row.reviewEvidence.renderingEquivalent, false);
+  }
+  const entry = cases.find(c => c.family === 'checkbox');
+  const target = r => r.comparisons.find(c => c.element === 'checkbox-label' && c.case === `interaction:checkbox@${entry.profile}/${entry.viewport.id}/${entry.state}`);
+  for (const mutate of [
+    p => { p.state = 'foreign'; }, p => { p.source = 'guessed'; }, p => { p.revision = -1; },
+    p => { p.currentPseudoStatePaintVerified = true; }, p => { p.properties.fontWeight.retained = '500'; },
+    p => { p.properties.fontWeight.normal = '400'; }, p => { p.text = 'different'; },
+  ]) {
+    const changed = structuredClone(retained); mutate(target(changed));
+    const actual = collect([entry], changed);
+    assert.equal(actual.find(r => r.element === 'checkbox-label' && r.property === 'fontWeight').attribution, 'unresolved');
+  }
+});
 
 test('retained weight host join covers all toggle cases and rejects detached leaf or host evidence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

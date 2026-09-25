@@ -2155,7 +2155,12 @@ function classifyReviewedTypographyStage(benchmarkCase, input, property, referen
   // Only attribute the demonstrated missing-declaration stage mismatch. Never
   // replace declarations with retained paint values or infer inheritance here.
   const values = evidence?.properties[property];
-  if (benchmarkCase.state || astylar !== undefined || !values || reference === undefined ||
+  const interactiveWeight = !!benchmarkCase.state && property === 'fontWeight' && reference === '400' &&
+    ['checkbox', 'radio', 'slide-toggle'].includes(benchmarkCase.family) &&
+    evidence?.case === caseKey(benchmarkCase) && evidence.family === benchmarkCase.family &&
+    evidence.state === benchmarkCase.state && evidence.source === 'core-text-registry' &&
+    Number.isInteger(evidence.revision) && evidence.revision >= 0 && evidence.currentPseudoStatePaintVerified === false;
+  if ((benchmarkCase.state && !interactiveWeight) || astylar !== undefined || !values || reference === undefined ||
       implicitReferenceValues[property]?.includes(reference) ||
       input.astylarResolvedStyleEvidenceVersion !== 2 ||
       input.referenceStructure?.schemaVersion !== 2 || input.astylarStructure?.schemaVersion !== 2 ||
@@ -2167,7 +2172,8 @@ function classifyReviewedTypographyStage(benchmarkCase, input, property, referen
     attribution: 'reviewed-stage-mismatch',
     owner: 'input audit declaration versus core retained-typography stage comparison',
     reviewEvidence: { case: evidence.case, referenceNode: evidence.referenceNode, astylarNode: evidence.astylarNode,
-      source: evidence.source, revision: evidence.revision, property, values },
+      source: evidence.source, revision: evidence.revision, property, values,
+      ...(interactiveWeight ? { currentPseudoStatePaintVerified: false, inputEquivalent: false, renderingEquivalent: false } : {}) },
     justification: 'The directly mapped own-text nodes agree, and the captured core text-registry value equals the browser computed value while both candidate declaration stages omit this property. This attributes the missing scalar to a diagnostic-stage comparison, not a missing authored font or a renderer defect. Keep both stages; it does not accept other properties, substitute inherited calculations, or prove current pseudo-state glyph paint.',
   };
 }

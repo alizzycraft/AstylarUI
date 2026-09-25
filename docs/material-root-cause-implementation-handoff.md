@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 25
 
+Interactive control-label font-weight stage comparison now covers **four groups /
+224 observations** (checkbox, both radio labels, slide-toggle). The existing
+static-stage classifier admits only the reviewed control families' interactive
+weight-400 comparisons, with matching case/family/state, core text-registry
+provenance, nonnegative revision, omitted local declarations and equal retained
+weight. It explicitly retains `currentPseudoStatePaintVerified:false`,
+`inputEquivalent:false`, `renderingEquivalent:false`; other interactive typography
+properties remain excluded. Five focused retained-font tests pass in 8.06 s,
+including all 168 original family cases and mutation rejection for stale state,
+source, revision, altered retained/normal values, text and false paint claims.
+The first test invocation lacked required empty production argument wrappers and
+failed before classification; corrected invocation passes without changing guards.
+Combined pending weight batch is **26 groups / 1,502 observations** (20/1,142
+owner-stage, 2/136 toggle token, 4/224 interactive retained stage). Next reconcile
+historical source guards, complete prior-row conservation and source fingerprints
+before milestone export. Canonical snapshot remains 1,288 unresolved; do not claim
+the expected reduction is accepted yet.
+
 Button-toggle host weight attribution is now implemented in the existing
 retained-font scalar join (no new collector/framework): **two groups / 136
 observations**, all 68 original cases. Host scalar snapshots (89 reference
