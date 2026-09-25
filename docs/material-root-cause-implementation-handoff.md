@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+Weight-batch historical guards are reconciled. The initial transition test
+correctly rejected the new main-module code. The existing restoration chain now
+removes exactly the reviewed interactive-weight guard/evidence additions and
+authenticates the complete predecessor (`ca9c7a97…`); altered guard fragments or
+unrelated bytes reject. All **nine producer-transition tests pass** (1.56 s).
+Historical motion replay also passes (**121 groups / 7,254 observations**, 39.55 s):
+all non-receipt evidence and 12 mapping declarations are conserved. Survey
+restoration removes exactly the three opt-in weight changes before checking the
+prior complete source hash; it is not a wildcard fingerprint allowance. Existing
+stale receipt, changed mapping and changed evidence tests remain enforced.
+Next prepare the combined 26-group canonical conservation check using the
+accepted fcb snapshot, preserving raw rows, earlier classifications, and source
+receipt-only changes. No new export has been run for these guard edits.
+
 Interactive control-label font-weight stage comparison now covers **four groups /
 224 observations** (checkbox, both radio labels, slide-toggle). The existing
 static-stage classifier admits only the reviewed control families' interactive

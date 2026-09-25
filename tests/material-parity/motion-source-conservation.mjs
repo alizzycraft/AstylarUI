@@ -88,7 +88,19 @@ export function verifyMotionSourceConservation(saved, fresh, historicalSource, c
       // never opts in. The complete evidence equality above must still hold;
       // this exact source transition does not permit arbitrary reader changes.
       assert.equal(old.sha256, '77ea9fd39297f31e067f83b262f33a466b6b9a4b501071a178d993be170b731c');
-      assert.equal(current.sha256, '4c6d0bc3e58b444a463821967d21626a00f62232918da556c0534ac4aa43822d',
+      let survey = actual;
+      if (survey.includes('reviewedFontWeight = false')) {
+        for (const [from, to] of [
+          ["fontStyle: ['font'], fontWeight: ['font', 'fontvariationsettings'],", "fontStyle: ['font'],"],
+          ['reviewedAppearance = false, reviewedFontWeight = false', 'reviewedAppearance = false'],
+          ["  const initialValues = { ...ownerInitialValues,\n    ...(reviewedAppearance ? { appearance: 'none' } : {}),\n    ...(reviewedFontWeight ? { fontWeight: '400' } : {}) };",
+            "  const initialValues = reviewedAppearance ? { ...ownerInitialValues, appearance: 'none' } : ownerInitialValues;"],
+        ]) {
+          assert.equal(survey.split(from).length, 2, 'missing or repeated weight survey opt-in fragment');
+          survey = survey.replace(from, to);
+        }
+      }
+      assert.equal(hash(survey), '4c6d0bc3e58b444a463821967d21626a00f62232918da556c0534ac4aa43822d',
         'unreviewed owner survey source change');
       changes.push({ file: old.file, historicalSha256: old.sha256, currentSha256: current.sha256 });
     } else if (old.file === 'scripts/audit-material-owner-initial-motion.mjs' && current.sha256 !== old.sha256) {

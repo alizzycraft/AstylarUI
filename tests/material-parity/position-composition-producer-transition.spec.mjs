@@ -3,7 +3,19 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer, restoreToggleSideColorProducer, restoreMappedBorderInitialProducer } from './position-composition-producer-transition.mjs';
-import { restoreMappedButtonResetProducer } from './position-composition-producer-transition.mjs';
+import { restoreMappedButtonResetProducer, restoreInteractiveWeightProducer } from './position-composition-producer-transition.mjs';
+
+test('interactive weight comparison restores the entire prior producer and rejects altered guards', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'a1fa7b2:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreInteractiveWeightProducer(current).restoredSource, previous);
+  for (const fragment of ["property === 'fontWeight'", "reference === '400'",
+    'evidence.state === benchmarkCase.state', 'evidence.currentPseudoStatePaintVerified === false',
+    '...(interactiveWeight ? { currentPseudoStatePaintVerified: false, inputEquivalent: false, renderingEquivalent: false } : {})'])
+    assert.throws(() => restoreInteractiveWeightProducer(current.replace(fragment, 'false')));
+  assert.throws(() => restoreInteractiveWeightProducer(current + '\n// unrelated'));
+});
 
 test('mapped reset integration restores the full accepted producer and rejects incomplete wiring', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

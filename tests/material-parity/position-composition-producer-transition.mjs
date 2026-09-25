@@ -33,9 +33,25 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreMappedButtonResetProducer(source) {
+export function restoreInteractiveWeightProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["  const interactiveWeight = !!benchmarkCase.state && property === 'fontWeight' && reference === '400' &&\n    ['checkbox', 'radio', 'slide-toggle'].includes(benchmarkCase.family) &&\n    evidence?.case === caseKey(benchmarkCase) && evidence.family === benchmarkCase.family &&\n    evidence.state === benchmarkCase.state && evidence.source === 'core-text-registry' &&\n    Number.isInteger(evidence.revision) && evidence.revision >= 0 && evidence.currentPseudoStatePaintVerified === false;\n", ''],
+    ['  if ((benchmarkCase.state && !interactiveWeight) || astylar !== undefined', '  if (benchmarkCase.state || astylar !== undefined'],
+    ['      source: evidence.source, revision: evidence.revision, property, values,\n      ...(interactiveWeight ? { currentPseudoStatePaintVerified: false, inputEquivalent: false, renderingEquivalent: false } : {}) },',
+      '      source: evidence.source, revision: evidence.revision, property, values },'],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated interactive weight fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'ca9c7a97970356ef3a67f1cac30726180318e24e023b80a17e3d1c323a9de445',
+    'producer changed beyond reviewed interactive weight stage comparison');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreMappedButtonResetProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('  const interactiveWeight =') ? restoreInteractiveWeightProducer(current).restoredSource : current;
   if (restored.includes('  const beforeCardBorderTokens =')) {
     for (const [from, to] of [
       ['  applyCardBorderToken, validateCardBorderToken, cardBorderTokenAttribution,\n', ''],
