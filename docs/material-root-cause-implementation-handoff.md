@@ -8,7 +8,9 @@ interaction cases, 8,483 scalar groups / 389,202 occurrences and 134 source
 findings. Pending package SHA is
 `fcb44846abf9e0b7a63a0277d3990b8420709765748ef27fb625c2ebf40812a9`;
 decoded SHA `5bb6b2164c230ff32593d6721375f5be2379ba3a529116b6af93ba9df6df177b`.
-This package is **not yet accepted** or imported as the current compact index.
+This package is accepted as the reconciled **partial audit snapshot**, not as
+input equivalence or audit completion. Compact import is running in session
+**19351**, log `artifacts/material-parity/dialog-card-import-9e8de8a.log`.
 
 Canonical conservation passed: exactly 23 groups / 896 observations changed,
 one scalar receipt and 48 control receipts refreshed; all raw inputs and all
@@ -20,9 +22,15 @@ the restored standalone manifest; original compressed evidence was unchanged.
 Metadata comparison completed in `dialog-card-metadata-9e8de8a.json`: only the
 five expected source fingerprints changed, all 461 exported fingerprints match
 current normalized-LF files, and remaining changes are expected summary/source
-receipt updates. Whole-report section comparison is still running in session
-**88410**, output `dialog-card-sections-9e8de8a.json`. Poll it, reconcile every
-changed section, then import/commit the accepted batch; do not restart export.
+receipt updates. Whole-report comparison completed: **79 sections, 71 unchanged,
+eight changed, none added or removed** (`dialog-card-sections-9e8de8a.json`).
+Discrepancies/control typography reconcile through conservation; source
+fingerprints, control line boxes, summary, owner caret and reviewed source batch
+through the metadata comparison. The remaining focused-proof inventory has
+exactly 42 source-line updates (+233 or +2), with no other field changes
+(`dialog-card-focused-proofs-9e8de8a.json`). Both packages were authenticated
+against compressed and decoded hashes. Do not restart export. After compact
+import completes, verify the index and continue the scoped font-weight work below.
 
 Interactive control-label weight follow-up: **four groups / 224 observations**
 (56 each checkbox label, both radio labels, slide-toggle label) already have
