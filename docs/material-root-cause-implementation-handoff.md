@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 25
 
+Cold combined export is running from `51fa73d` (session 52267, PID 12888,
+started 19:11:34 local); log:
+`artifacts/material-parity/border-defaults-export-51fa73d.log`.
+The process and increasing CPU time were checked directly, not inferred from
+the log. Keep the accepted `4059599c…` baseline pending reconciliation.
+
+During that export, a read-only check closed the outstanding **32 dialog-panel
+serialized-transition witness** question. The original report hash
+`b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a`
+and both tree hashes for every owner authenticate; existing alias mapping passes
+all 32 owners. Every owner has the same two active, unconditional motion rules:
+`sheet:9/7` / `.mat-mdc-dialog-surface` serializes
+`transition: transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1)`;
+`sheet:9/10` / `._mat-animation-noopable .mat-mdc-dialog-surface` serializes
+`transition: none`, with property `none`, duration/delay `0s`, all non-important.
+The latter is later and more specific. Thus empty pending longhands are not
+absence of authoring, and the captured explicit override—not an assumption about
+variable expansion—is the useful witness. Ordered case/node/full-motion-rule
+digest: `8a0ecfc78c77d4bc9b5e564a1d6e7ddfdec8ea9277a9f4b5114058228b0badc4`.
+Next reuse the existing finite motion/reset proof with these exact witnesses
+and negative controls after export reconciliation. This check does not classify
+the rows, establish live animation settlement, or prove visual parity. No new
+capture, report, renderer change or export dependency change was needed.
+
 Mapped border proofs are now wired into the existing authenticated original-case
 post-processing and validation path. Unbound data cannot receive or retain the
 attribution. The exact added import, guarded application, original-source replay
