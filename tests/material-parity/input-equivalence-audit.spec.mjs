@@ -8,6 +8,7 @@ import ts from 'typescript';
 import { assertHistoricalCaseIndexSources } from './historical-case-index-source-assertion.mjs';
 import { collectBorderInitialInputs, inspectMappedBorderInitial, inspectMappedButtonBorderReset, applyMappedBorderInitial,
   applyMappedButtonBorderReset, validateMappedButtonBorderReset, mappedButtonBorderResetAttribution,
+  inspectMappedCardBorderToken,
   validateMappedBorderInitial, mappedBorderInitialAttribution, borderColorProperties } from './border-initial-input-evidence.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import {
@@ -832,6 +833,48 @@ test('mapped border initial proof covers original aliases without erasing scalar
     t => { t.nodes.find(n => n.authored.id === input.id).authored.style = { borderColor: 'red' }; },
   ]) { const changed = structuredClone(ast); mutate(changed);
     assert.equal(inspectMappedBorderInitial(c, input, ref, changed, normalize), undefined); }
+});
+
+test('mapped card border token preserves shorthand and proves omitted style and color', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes), normalize = bindPreciseAuditNormalization();
+  const cases = [...raw.results, ...raw.interactions].filter(c => c.family === 'card');
+  assert.deepEqual(collectFullTreeInventory(cases).errors, []); let owners = 0;
+  for (const c of cases) {
+    const input = c.styleInputs.find(i => i.id === 'card-primary');
+    const ref = JSON.parse(readFileSync(c.inputTrees.reference.file)), ast = JSON.parse(readFileSync(c.inputTrees.astylar.file));
+    const proof = inspectMappedCardBorderToken(c, input, ref, ast, normalize);
+    assert.ok(proof); owners++; assert.equal(proof.properties.length, 8);
+    assert.equal(proof.referenceValues.borderTopColor, 'rgba(248,242,246,1)');
+    for (const mutate of [
+      r => { r.cssText = r.cssText.replace('border-color:', 'unknown:'); },
+      r => { r.declarations['border-top-color'].value = 'red'; },
+      r => { r.declarations['border-top-style'].important = true; },
+      r => { r.active = false; }, r => { r.conditions = ['unknown']; },
+    ]) { const changed = structuredClone(ref); mutate(changed.rules.find(r => r.selector === '.mat-mdc-card'));
+      assert.equal(inspectMappedCardBorderToken(c, input, changed, ast, normalize), undefined); }
+    for (const rule of [{ selector: '.material-card', borderStyle: 'solid' },
+      { selector: ':not(.unknown)', all: 'initial' }, { selector: '.material-card', borderColor: 'red' },
+      { selector: '.ancestor .material-card', borderColor: 'red' },
+      { selector: 'div', WebkitAnimation: 'unknown' }]) {
+      const changed = structuredClone(ast); changed.rules.push(rule);
+      assert.equal(inspectMappedCardBorderToken(c, input, ref, changed, normalize), undefined);
+    }
+    for (const mutate of [
+      (i, r, a) => { delete i.reference.width; },
+      (i, r, a) => { i.reference.width = '999px'; },
+      (i, r, a) => { delete i.astylarNormalResolvedStyle; },
+      (i, r, a) => { a.resolvedStyleRevision = -1; },
+      (i, r, a) => { r.errors.push('incomplete CSS'); },
+      (i, r, a) => { r.nodes.push(structuredClone(r.nodes[0])); },
+      (i, r, a) => { a.nodes.push({ ...structuredClone(a.nodes.find(n => n.authored?.id === i.id)), key: 'duplicate-id' }); },
+    ]) {
+      const args = [structuredClone(input), structuredClone(ref), structuredClone(ast)]; mutate(...args);
+      assert.equal(inspectMappedCardBorderToken(c, ...args, normalize), undefined);
+    }
+  }
+  assert.equal(owners, 52);
 });
 
 test('mapped dialog action border proof retains explicit top border and limits classification to other sides', () => {

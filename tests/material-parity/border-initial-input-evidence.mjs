@@ -4,6 +4,7 @@
 import { isDeepStrictEqual } from 'node:util';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { originStageTrees } from './origin-stage-inventory-evidence.mjs';
+import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 const ordinaryTypes = new Set(['div', 'section', 'article', 'header', 'footer', 'nav', 'main', 'aside', 'span', 'p', 'label',
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
 export const borderColorProperties = ['borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor'];
@@ -182,6 +183,62 @@ export function collectBorderInitialInputs(inventory, canonicalStyle) {
 
 export function collectButtonBorderResetInputs(inventory, canonicalStyle) {
   return collectBorderColorInputs(inventory, canonicalStyle, true);
+}
+
+export function inspectMappedCardBorderToken(entry, input, reference, candidate, normalize) {
+  if (!input?.id || input.astylarResolvedStyleEvidenceVersion !== 2 ||
+      ![reference, candidate].every(t => t?.schemaVersion === 1 && Array.isArray(t.nodes) &&
+        Array.isArray(t.rules) && Array.isArray(t.errors) && !t.errors.length &&
+        new Set(t.nodes.map(n => n.key)).size === t.nodes.length) ||
+      candidate.resolvedStyleEvidenceVersion !== 2 || candidate.resolvedStyleSource !== 'core-style-inspection' ||
+      !Number.isInteger(candidate.resolvedStyleRevision) || candidate.resolvedStyleRevision < 0) return;
+  const refs = reference.nodes.filter(n => (n.attributes?.['data-parity-id'] ?? n.attributes?.id) === input.id);
+  const asts = candidate.nodes.filter(n => n.authored?.id === input.id);
+  if (refs.length !== 1 || asts.length !== 1) return;
+  const ref = refs[0], ast = asts[0];
+  if (!object(input.reference) || Object.keys(input.reference).length !== 89 ||
+      Object.entries(input.reference).some(([k, v]) => v === undefined || reference.styles?.[ref.style]?.[k] !== v) ||
+      !isDeepStrictEqual(input.astylar, ast.resolvedStyle) ||
+      !isDeepStrictEqual(input.astylarNormalResolvedStyle, ast.normalResolvedStyle) ||
+      !isDeepStrictEqual(input.astylarInteractionResolvedStyle, ast.interactionResolvedStyle)) return;
+  const mapping = { method: 'unique-direct-measurement-id', referenceNode: ref.key, candidateNode: ast.key,
+    checkedReferenceProperties: Object.keys(input.reference).length };
+  if (ref.type !== 'mat-card' || ast.authored.type !== 'div') return;
+  const borderRequest = key => {
+    const k = key.replaceAll('-', '').toLowerCase().replace(/^(webkit|moz)/, '');
+    return k === 'all' || /^(?:animation|transition)/.test(k) || (k.startsWith('border') && !k.endsWith('radius'));
+  };
+  if (!object(ref.inline) || Object.keys(ref.inline).some(borderRequest) ||
+      Object.keys(ast.authored.style ?? {}).some(borderRequest)) return;
+  const rules = ref.rules.map(i => reference.rules[i]);
+  const witnesses = rules.filter(r => r.selector === '.mat-mdc-card' && r.active === true &&
+    Array.isArray(r.conditions) && !r.conditions.length);
+  if (witnesses.length !== 1) return;
+  const witness = witnesses[0], token = 'var(--mat-card-elevated-container-color, var(--mat-sys-surface-container-low))';
+  const serialized = [...(witness.cssText ?? '').matchAll(/(?:^|;)\s*border-color\s*:\s*([^;]+);/g)].map(m => m[1].trim());
+  if (!isDeepStrictEqual(serialized, [token])) return;
+  for (const side of ['top', 'right', 'bottom', 'left']) for (const [key, value] of [['color', ''], ['width', '0px'], ['style', 'solid']])
+    if (!isDeepStrictEqual(witness.declarations?.[`border-${side}-${key}`], { value, important: false })) return;
+  if (rules.some(r => !object(r.declarations) || Object.keys(r.declarations).some(k => borderRequest(k) &&
+      !(r === witness && /^border-(top|right|bottom|left)-(color|width|style)$/.test(k))))) return;
+  if (candidate.rules.some(r => !object(r) || Object.values(r).some(v => object(v) || Array.isArray(v)) ||
+      (Object.keys(r).some(borderRequest) && rootInitialSelectorCanApply(r.selector, ast.authored)))) return;
+  const referenceValues = normalize(input.reference);
+  const stages = [input.astylarNormalResolvedStyle, input.astylar, input.astylarInteractionResolvedStyle];
+  if (stages.some(s => !object(s))) return;
+  const properties = [];
+  for (const side of ['Top', 'Right', 'Bottom', 'Left']) {
+    if (referenceValues[`border${side}Width`] !== '0' || referenceValues[`border${side}Style`] !== 'solid' ||
+        !/^rgba\(\d+,\d+,\d+,1\)$/.test(referenceValues[`border${side}Color`] ?? '') ||
+        stages.some(s => normalize(s)[`border${side}Width`] !== '0' || normalize(s)[`border${side}Style`] !== 'none' ||
+          normalize(s)[`border${side}Color`] !== 'rgba(0,0,0,0)')) return;
+    properties.push(`border${side}Color`, `border${side}Style`);
+  }
+  return { mapping, token, referenceRule: witness, properties,
+    referenceValues: Object.fromEntries(properties.map(k => [k, referenceValues[k]])),
+    candidateValues: Object.fromEntries(properties.map(k => [k, normalize(input.astylar)[k]])),
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false, finalRasterVerified: false,
+    scope: 'Explicit component border token and solid style omitted by candidate authoring. Pending empty longhands are not absence; zero widths do not establish input or raster equivalence.' };
 }
 
 // The reset is explicit reference authoring, never an omitted initial value.

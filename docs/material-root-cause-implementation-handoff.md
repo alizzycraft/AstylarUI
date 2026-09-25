@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 25
 
+Card border input proof now passes for all **52 original hosts**, with eight
+side color/style properties per host. The reference explicitly authors the
+Material elevated-container border token and `solid`; the candidate omits both
+and resolves transparent/none at all three captured stages. This is an
+application/plugin authoring omission, not equivalent zero-width inputs or a
+newly demonstrated renderer defect. The pending guard originally rejected two
+table-descendant rules; reusing the existing conservative rightmost-selector
+exclusion proves those rules cannot target this div, without assuming ancestor
+matches or synthesizing a cascade. Unknown selectors still prevent attribution.
+Each host passes 17 rejection mutations covering source rules, selectors, stage
+provenance, incomplete scalar data and duplicate identity. Six focused border
+tests pass (32.67 s); source-history guard passes (1.35 s). Reviewed module SHA:
+`444231b27424f96024d2fc1b63198fb5446205ce34b03e71663b22a60c6b97fc`.
+This is a tested inspector, **not yet production classification**: next reuse
+complete-membership application/replay for the recorded 8 groups / 416
+observations, then integrate with the pending dialog batch. Accepted canonical
+`b74de570…` remains unchanged at 1,311 unresolved; do not repeat the card census.
+
 Dialog border batch preparation is complete: compact accepted membership plus
 authenticated original trees replays **15 previously unresolved groups / 480
 observations** across actions, cancel, panel and save, with no remaining dialog

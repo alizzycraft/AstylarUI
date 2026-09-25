@@ -21,7 +21,8 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   assert.ok(['1acfdc0cccbf85ef396fac52a5a0fcf751eb1444a7676b53c1b861ff6af764cd',
     '0a999d524abedb0ed3c6a8665630905e3b9ed3650244a84960103e0cd4ee1f41',
     '7d8641713a314b41daf4447cc391755078ce4766732fb69fab13717de26a99c1',
-    'bee460c11f87b7a319057bfa5e84b6521636d7f54af3aaf3eea2ca837eeb51fd'].includes(hash(reviewed)),
+    'bee460c11f87b7a319057bfa5e84b6521636d7f54af3aaf3eea2ca837eeb51fd',
+    '444231b27424f96024d2fc1b63198fb5446205ce34b03e71663b22a60c6b97fc'].includes(hash(reviewed)),
     'border evidence changed beyond the reviewed complete source snapshot');
   const selector = source => {
     const matches = [...source.matchAll(/export function selectorCanApply\(selector, authored\) \{[\s\S]*?\n\}/g)];
