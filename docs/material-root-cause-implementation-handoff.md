@@ -25,6 +25,15 @@ SHA-256 `7abecfc83f957423871e6b169e1cdf8c7dc5e6e386c805d53beb182d5108e163`.
 It records all case/owner/proof hashes. This establishes applicability of the
 retained proof, not new canonical classification. After the live export is
 accepted, reuse this evidence through the existing classifier/validation path.
+The scalar selector boundary also passed for all 614 observations (820
+hash-checked original tree files): 528 unique direct-ID owners have exact
+reference scalar style subsets and candidate resolved-style equality; 86
+generated owners (68 active stepper content, 18 tooltip surfaces) pass existing
+`checkGeneratedMappingPair`, including original scalar/tree style, rule,
+structure and active-panel checks. In every case the selected keys equal the
+retained proof's reference/candidate keys. Reuse this existing alias validator
+for those two targets rather than assuming a matching font value proves owner
+identity. No mapping errors or unexplained cases remain in this ten-group batch.
 These proofs explain
 omitted component font overrides retaining the page fallback stack, not equal
 font lists, selected physical fonts or raster parity. Do not reopen that
