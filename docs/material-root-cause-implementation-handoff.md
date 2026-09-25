@@ -11,14 +11,33 @@ findings. Evidence-session verification: zero invalidations, 1,205 files,
 `bfd986bc6e7397d32465df25d6096d2274dfe29336924281a3f7fd0429f6f9fe`
 (60,110,439 bytes); decoded SHA-256 is
 `f1930fd29fd09bae2bd20e2d90e3de5ace07b1437f36185ae5833b6793fe5a24`
-(2,100,556,607 bytes). **Not accepted or imported yet.** Independent checks
-are live: conservation session **23252** (PID 11760), section comparison
-**64949** (PID 4896), metadata/fingerprints **11594** (PID 11540). Outputs are
+(2,100,556,607 bytes). **Partial batch reconciliation passed.** Conservation
+session 23252 and section comparison 64949 exited 0; metadata session 11594
+exited 0. Outputs are
 `artifacts/material-parity/weight-{conservation,sections,metadata}-bc898de.json`.
-Poll these existing handles; do not duplicate them. Reconcile every changed
-section/source and preserve prior rows before accepting this partial batch.
-The accepted predecessor remains fcb; modal positioning is next, and all
-remaining classifications and final browser/canonical acceptance gates remain.
+Exactly 26 groups / 1,502 observations change classification; all raw inputs,
+prior reviewed rows and non-receipt control evidence are conserved. Ordered
+current rows SHA-256:
+`a47e051a9afde539d059c32ea55688bd102b1bde83b7687a73d00aa781e1e052`.
+All 79 sections remain present; 71 are unchanged. The eight changed sections
+are sourceFingerprints, controlLineBoxes, summary, discrepancies,
+ownerCaretInputs, reviewedSourceBatchInputs, ownerInitialStyleEvidence and
+controlTypography. All 461 fingerprints match working files; the ten changed
+fingerprints match exact 9e8de8a-to-bc898de committed source transitions.
+The 48 control-line-box changes are module-hash receipts only; owner-caret and
+reviewed-batch changes are the corresponding conserved source receipts.
+Summary changes follow the independently replayed classifications.
+`weight-owner-evidence-bc898de.json` additionally proves all 65,916 prior
+observations unchanged, with exactly 5,252 added font-weight observations:
+3,617 default-versus-local-omission and 1,635 still requiring specific review.
+No equivalence claim is added. Compact import session **81739** exited 0;
+`npm run audit:findings:verify` passed (8,483 discrepancies, 134 source findings,
+39,904 controls, 389,202 occurrences, 1,262 unresolved). Import log:
+`artifacts/material-parity/weight-import-bc898de.log`. New compact generation is
+bfd986bc above, 70,151,415 bytes, index SHA-256
+`fead09c2c08b3546503f0d4c014bd3700e03923524d7d8894b430dd5cc194381`.
+Modal positioning is next; 1,262 unresolved groups, remaining coverage and
+final browser/canonical acceptance gates still prevent overall completion.
 
 Read-only dialog position history closes the origin question for the exact
 component rules. `git log -G` and `git log -L` identify **7159b1d**: it removes
