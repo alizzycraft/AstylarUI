@@ -2,6 +2,42 @@
 
 ## Current audit checkpoint — September 25
 
+Cold dialog/card export from `9e8de8a` started in session **82070**, Node PID
+**22428**, log `artifacts/material-parity/dialog-card-export-9e8de8a.log`.
+Last observed alive in build phase with increasing CPU time. Poll this handle;
+do not restart because the build phase has no intermediate log messages.
+No producer dependencies changed while it runs.
+
+Read-only next-batch triage: unresolved font-weight is **42 groups / 2,184
+observations**, not one homogeneous default problem. Two button-toggle hosts
+(136 observations) join exactly to the existing 136 validated
+`reviewed-control-label-token-input` leaf proofs: reference 500, retained 400,
+candidate local stages omitted. Host identity, all scalar fields, three core
+stages and both ancestry chains agree. Ordered case/host/proof digest:
+`9aa39b485ed1c4fcb024b564a4795c4d02125291c9709dbf808a742d31fcd8ac`.
+`c47d589` introduced the `.button-toggle-option` div/span replacement without
+font-weight; current selector at `astylar.component.ts:513` still omits it.
+Reuse retained typography evidence for these host rows rather than diagnosing
+font rendering again. No new root-cause or raster claim is implied.
+
+The other 40 groups / 2,048 observations were explored using an **in-memory,
+uncommitted diagnostic variant** of `inspectOwnerInitialStyle`: add
+`fontWeight:'400'` to initial values and `fontWeight:['font']` to aliases; all
+other guards unchanged. Original full trees authenticated; membership includes
+the row's states (the first probe correctly rejected 68 candidates for a
+56-interaction-only label row, whose 12 static cases already have a review).
+Twenty groups / 1,142 observations pass conservative surface-ancestry and
+declaration checks. Other groups remain blocked by generated ownership (sheet,
+snackbar, dialog panel), overlay ancestry (dialog actions/copy), motion (chips,
+progress, tab panel), or explicit declarations (control labels/native slider).
+Ordered complete diagnostic proof digest:
+`14eb79e9160aef03083bd6733c9aee13c4d22998c28483361637cc9b8a328c5b`.
+This probe is **not production support or classification** and does not verify
+computed candidate inheritance or glyph paint. After the current export is
+reconciled, extend the existing opt-in owner survey with negative controls and
+complete membership replay; retain all failed groups and external-inheritance
+uncertainty. Do not repeat the font-weight census.
+
 Dialog/card border batch is ready for cold canonical export. Compact accepted
 membership plus original-tree replay identifies exactly **23 unresolved groups /
 896 observations**: card token/style 8/416, dialog initial-color sides 7/224,
