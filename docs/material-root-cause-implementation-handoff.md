@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 25
 
+Cold dialog/card export has completed (2,249.6 s); its sole reported gate error
+is **1,288 unresolved differences**. Coverage remains 436 static / 1,875
+interaction cases, 8,483 scalar groups / 389,202 occurrences and 134 source
+findings. Pending package SHA is
+`fcb44846abf9e0b7a63a0277d3990b8420709765748ef27fb625c2ebf40812a9`;
+decoded SHA `5bb6b2164c230ff32593d6721375f5be2379ba3a529116b6af93ba9df6df177b`.
+This package is **not yet accepted** or imported as the current compact index.
+
+Canonical conservation passed: exactly 23 groups / 896 observations changed,
+one scalar receipt and 48 control receipts refreshed; all raw inputs and all
+non-receipt control evidence conserved. See
+`artifacts/material-parity/dialog-card-conservation-reconciled-9e8de8a.json`.
+The first attempt's ENOENT log is retained: the importer stores its manifest
+inside `index.json`, not a standalone file. The authenticated b74 index supplied
+the restored standalone manifest; original compressed evidence was unchanged.
+Metadata comparison completed in `dialog-card-metadata-9e8de8a.json`: only the
+five expected source fingerprints changed, all 461 exported fingerprints match
+current normalized-LF files, and remaining changes are expected summary/source
+receipt updates. Whole-report section comparison is still running in session
+**88410**, output `dialog-card-sections-9e8de8a.json`. Poll it, reconcile every
+changed section, then import/commit the accepted batch; do not restart export.
+
 Interactive control-label weight follow-up: **four groups / 224 observations**
 (56 each checkbox label, both radio labels, slide-toggle label) already have
 authenticated own-text retained comparisons: browser weight **400**, core text
@@ -16,11 +38,11 @@ paint equality. Next assess a property-limited stage-comparison claim with the
 current-paint limitation retained; do not remove the state guard globally or
 repeat the captured-label census. No producer or canonical changes in this step.
 
-Cold dialog/card export from `9e8de8a` started in session **82070**, Node PID
+Cold dialog/card export from `9e8de8a` used session **82070**, Node PID
 **22428**, log `artifacts/material-parity/dialog-card-export-9e8de8a.log`.
-Last observed alive in build phase with increasing CPU time. Poll this handle;
-do not restart because the build phase has no intermediate log messages.
-No producer dependencies changed while it runs.
+It is terminal with exit 1 for the unresolved-attribution gate described above.
+No producer dependencies changed during the run; evidence-session verification
+reported zero invalidations. Do not restart this completed export.
 
 Read-only next-batch triage: unresolved font-weight is **42 groups / 2,184
 observations**, not one homogeneous default problem. Two button-toggle hosts
