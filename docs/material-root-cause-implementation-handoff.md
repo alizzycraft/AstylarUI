@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+Sidenav scalar preparation now reuses `inspectSidenavBackgroundInputs` and
+`modalInventoryTrees` inside the existing background classification module.
+`applySidenavBackgroundScalar` selects complete original membership (not the
+sampled row cases), checks counts/uniqueness and replays every captured owner and
+declaration proof. Failed or ambiguous proofs stay unresolved. Its paired
+validator rejects missing or altered persisted classifications. The focused
+`sidenav scalar join` test passed in 2.423 seconds, including incomplete/duplicate
+membership, damaged proof, invalid inventory and unrelated-element controls.
+A separate applicability replay against the authenticated accepted compact
+generation `4ddf218e...` changed exactly **four groups / 62 observations**, leaving
+all **128 other sidenav scalar rows** identical. No canonical data was changed.
+Next: wire these existing exports into the producer/validator and its exact
+historical source guards, then verify the combined pending font/sidenav batch.
+
 The sidenav background's previously read-only finding now has an executable
 owner/declaration check in the existing background audit module:
 `inspectSidenavBackgroundInputs`. It verifies unique owners, the complete 89-field

@@ -3,7 +3,8 @@ import { createHash } from 'node:crypto';
 import { readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
-import { collectRootBackgroundInputs } from '../../scripts/audit-material-root-background-inputs.mjs';
+import { collectRootBackgroundInputs, inspectSidenavBackgroundInputs } from '../../scripts/audit-material-root-background-inputs.mjs';
+import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { bindOwnerCaretCaptureSubset } from './owner-caret-audit-source-binding.mjs';
 import { reviewedInputClassificationContexts, classifyReviewedInput } from './reviewed-input-audit-source-binding.mjs';
@@ -15,6 +16,45 @@ const metadataKeys = ['classification', 'attribution', 'justification', 'recomme
 export const rootBackgroundAttribution = 'reviewed-root-background-prequantized-theme-input';
 export const rootBackgroundClassificationContexts = reviewedInputClassificationContexts;
 export const classifyRootBackgroundInput = classifyReviewedInput;
+export const sidenavBackgroundAttribution = 'reviewed-sidenav-background-token-input';
+
+// Reuse the authenticated original cases/inventory. A partial scalar population
+// or failed owner proof stays unresolved, never a sampled or inferred success.
+export function applySidenavBackgroundScalar(rows, cases, inventory, normalize) {
+  return rows.map(row => {
+    if (row.attribution !== 'unresolved' || row.family !== 'sidenav' ||
+        row.element !== 'sidenav-primary' || row.property !== 'backgroundColor') return row;
+    try {
+      const members = cases.filter(c => c.family === row.family && c.styleInputs?.some(i =>
+        i.id === row.element && i.reference && i.astylar &&
+        normalize(i.reference).backgroundColor === row.reference && normalize(i.astylar).backgroundColor === row.astylar));
+      assert.ok(members.length); assert.equal(members.length, row.occurrences);
+      const seen = new Set(), proofs = members.map(c => {
+        const key = `${c.kind ?? (c.state ? 'interaction' : 'static')}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}`;
+        assert.ok(!seen.has(key), 'duplicate original case'); seen.add(key);
+        const inputs = c.styleInputs.filter(i => i.id === row.element);
+        assert.equal(inputs.length, 1);
+        const proof = inspectSidenavBackgroundInputs(inputs[0], ...modalInventoryTrees(inventory, key));
+        assert.equal(normalize({ backgroundColor: proof.referenceComputed }).backgroundColor, row.reference);
+        assert.equal(normalize({ background: proof.candidateRequested }).backgroundColor, row.astylar);
+        return { case: key, inputSha256: digest(inputs[0]), proofSha256: digest(proof),
+          referenceNode: proof.referenceNode, candidateNode: proof.candidateNode,
+          referenceToken: proof.referenceToken, candidateRequested: proof.candidateRequested };
+      });
+      return { ...row, classification: 'application-plugin-authoring-defect', attribution: sidenavBackgroundAttribution,
+        recommendedOwner: 'showcase sidenav background token translation',
+        justification: 'Every original member has a unique sidenav container owner and one captured background declaration path. The reference resolves its Material background token to a different color from the candidate authored literal, which survives unchanged through all three core style snapshots. This is unequal component authoring before paint, not a demonstrated renderer color defect or output-equivalence claim.',
+        reviewEvidence: { proofs, inputEquivalent: false, rendererDefectProven: false, renderingEquivalent: false } };
+    } catch { return row; }
+  });
+}
+
+export function validateSidenavBackgroundScalar(rows, originalRows, cases, inventory, normalize) {
+  const select = values => values.filter(r => r.attribution === sidenavBackgroundAttribution);
+  const expected = select(applySidenavBackgroundScalar(originalRows, cases, inventory, normalize));
+  return isDeepStrictEqual(JSON.parse(JSON.stringify(select(rows))), JSON.parse(JSON.stringify(expected))) ? [] :
+    ['sidenav background scalar attribution lacks complete original membership and captured declaration replay'];
+}
 
 export function collectRootBackgroundAuditInputs(report, { root = process.cwd(), parityPath } = {}) {
   const empty = { schemaVersion: 1, binding: { status: 'unbound' }, observations: [], groups: [] };

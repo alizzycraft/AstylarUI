@@ -4,6 +4,48 @@ import test from 'node:test';
 import { collectRootBackgroundAuditInputs, rootBackgroundClassificationContexts,
   classifyRootBackgroundInput, rootBackgroundAttribution, validateRootBackgroundEvidence,
   validateRootBackgroundClassifications } from './root-background-classification-preparation.mjs';
+import { applySidenavBackgroundScalar, validateSidenavBackgroundScalar, sidenavBackgroundAttribution } from './root-background-classification-preparation.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { createHash } from 'node:crypto';
+
+test('sidenav scalar join covers four complete populations and rejects incomplete or altered evidence', async () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const original = JSON.parse(bytes);
+  const cases = [...original.results.map(c => ({ ...c, kind: 'static' })),
+    ...original.interactions.map(c => ({ ...c, kind: 'interaction' }))].filter(c => c.family === 'sidenav');
+  const { collectFullTreeInventory } = await import('./input-equivalence-audit.mjs');
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const groups = new Map();
+  for (const c of cases) {
+    const input = c.styleInputs.find(i => i.id === 'sidenav-primary');
+    const reference = normalize(input.reference).backgroundColor, astylar = normalize(input.astylar).backgroundColor;
+    const key = JSON.stringify([reference, astylar]);
+    if (!groups.has(key)) groups.set(key, { family: 'sidenav', element: input.id, property: 'backgroundColor',
+      reference, astylar, attribution: 'unresolved', occurrences: 0, cases: ['not-authoritative-sample'] });
+    groups.get(key).occurrences++;
+  }
+  const rows = [...groups.values()], before = JSON.stringify(rows);
+  const applied = applySidenavBackgroundScalar(rows, cases, inventory, normalize);
+  assert.equal(applied.length, 4);
+  assert.equal(applied.reduce((sum, r) => sum + r.reviewEvidence.proofs.length, 0), 62);
+  assert.ok(applied.every(r => r.attribution === sidenavBackgroundAttribution && r.reviewEvidence.inputEquivalent === false));
+  assert.equal(JSON.stringify(rows), before);
+  assert.deepEqual(applied.map(r => [r.reference, r.astylar, r.occurrences, r.cases]), rows.map(r => [r.reference, r.astylar, r.occurrences, r.cases]));
+  assert.deepEqual(validateSidenavBackgroundScalar(applied, rows, cases, inventory, normalize), []);
+  const damaged = structuredClone(applied); damaged[0].reviewEvidence.proofs.pop();
+  assert.equal(validateSidenavBackgroundScalar(damaged, rows, cases, inventory, normalize).length, 1);
+  assert.equal(validateSidenavBackgroundScalar(applied.slice(1), rows, cases, inventory, normalize).length, 1);
+  for (const wrongCases of [cases.slice(1), [...cases, cases[0]]])
+    assert.ok(applySidenavBackgroundScalar(rows, wrongCases, inventory, normalize).some(r => r.attribution === 'unresolved'));
+  const wrongRows = rows.map(r => ({ ...r, occurrences: r.occurrences + 1 }));
+  assert.deepEqual(applySidenavBackgroundScalar(wrongRows, cases, inventory, normalize), wrongRows);
+  const badInventory = { ...inventory, errors: [{ message: 'untrusted capture' }] };
+  assert.deepEqual(applySidenavBackgroundScalar(rows, cases, badInventory, normalize), rows);
+  const unrelated = { ...rows[0], element: 'sidenav-root' };
+  assert.deepEqual(applySidenavBackgroundScalar([unrelated], cases, inventory, normalize), [unrelated]);
+});
 
 test('all root background source proofs bind precise unequal values to exact original cases', () => {
   const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
