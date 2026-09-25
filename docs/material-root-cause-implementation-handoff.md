@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 25
 
+Tab background review: all **16 groups / 42 observations** retain the existing
+text-span-versus-control ownership distinction. Reference `tab-activity` and
+`tab-overview` IDs identify transparent inner spans, not tab hosts; candidate
+IDs identify childless buttons. The alias-only resolver correctly rejected the
+direct reference IDs. Subsequent direct-owner checks verified all 89 scalar
+fields, all three candidate snapshots and exact candidate authored rule indices
+against authenticated `b07ef154...` trees; reference ancestry independently
+reaches a role=tab host and its generated `.mdc-tab__ripple::before` layer.
+The host also remains transparent. Across these boundaries its separate layer
+has opacity **.04 in 26 observations, zero in eight, and .12 in eight**, with
+RGB 29/27/32 or dark-profile 230/225/229. In particular, captured hover and held
+layers both use .04; focus/activation/leave cases must not be collapsed into one
+assumed native state. Candidate effective fill exactly matches `.tab:hover`
+(.08 opaque preblend), `.tab:active` (.12), or `.tab:focus` (.12 over a different
+surface-container base), while its normal background stays transparent.
+Current source `astylar.component.ts:728–730` and introducing commit `bc4d442`
+establish this application state-layer substitution. It is distinct from the
+already-proved measurement-owner mismatch; neither is an equal-input core
+color-conversion failure. Ordered owner/ancestor/pseudo-rule/fill/tree digest:
+`42df1a409e72499366e9e44a79256b93c2ce5d9342321eb9b7ca7f3e30316db4`.
+Bind both qualifications in subsequent background attribution; do not equate
+the complete row or assert final raster/ripple/focus parity. Canonical rows and
+running-export dependencies remain unchanged.
+
 Card paint review closes two distinct questions across all nine remaining
 background groups / **37 observations**. Authenticated original `b07ef154...`
 case/tree bytes, all 89 reference fields, all three candidate style snapshots
