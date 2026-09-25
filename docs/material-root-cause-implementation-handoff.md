@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 25
 
+Corrected cold weight export launched from **bc898de**, session **7356**, log
+`artifacts/material-parity/weight-export-bc898de.log`. All five original and
+supplemental input paths exist; the rejected prior payload's archived hash was
+rechecked before launch. No prior audit process was running. Invocation is the
+same complete cold export as 2bf4f0b, with only the verified classification
+precedence correction and its proofs added. Freeze export dependencies until
+terminal; do not restart on quiet output. Expected remaining unresolved count
+is still 1,262, but all errors, prior-review conservation, sections and source
+fingerprints must reconcile before acceptance/import. After this milestone,
+continue the positioning/owner-stage priority below; final browser and complete
+audit acceptance remain pending.
+
 Weight precedence correction is now focused-test verified. Conservation session
 15128 terminated with exit 1 at row 257 (`badge/badge-label/fontWeight`),
 independently confirming the rejected export differs from original-source replay.
