@@ -2,9 +2,27 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
-export function restoreRetainedFontScalarProducer(source) {
+export function restoreSidenavBackgroundScalarProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["  classifyRootBackgroundInput, validateRootBackgroundClassifications, rootBackgroundAttribution,\n  applySidenavBackgroundScalar, validateSidenavBackgroundScalar, sidenavBackgroundAttribution } from './root-background-classification-preparation.mjs';",
+      "  classifyRootBackgroundInput, validateRootBackgroundClassifications, rootBackgroundAttribution } from './root-background-classification-preparation.mjs';"],
+    ["  const beforeSidenavBackgroundScalars = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applySidenavBackgroundScalar(beforeSidenavBackgroundScalars, cases, elementInventory, canonicalStyle)\n    : beforeSidenavBackgroundScalars;\n", ''],
+    ['      errors.push(...validateSidenavBackgroundScalar(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n', ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === sidenavBackgroundAttribution))\n    errors.push('sidenav background scalar attribution lacks bound original cases');\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated sidenav background integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), '52b9416a468d4bfb601ab682e598c289ae0c4e97a4b483090b9fe867985c61ff',
+    'producer changed beyond reviewed sidenav background integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreRetainedFontScalarProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('  const beforeSidenavBackgroundScalars =') ? restoreSidenavBackgroundScalarProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyRetainedFontScalar, validateRetainedFontScalar, retainedFontScalarAttribution } from './retained-font-scalar.mjs';\n", ''],
     ["  const beforeRetainedFontScalars = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

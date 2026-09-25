@@ -2,7 +2,20 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer } from './position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer } from './position-composition-producer-transition.mjs';
+
+test('sidenav background integration preserves its predecessor and requires complete original membership', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '4c34566:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreSidenavBackgroundScalarProducer(current).restoredSource, previous);
+  for (const fragment of [
+    'applySidenavBackgroundScalar(beforeSidenavBackgroundScalars, cases, elementInventory, canonicalStyle)',
+    'validateSidenavBackgroundScalar(report.discrepancies, replayedRows, cases,',
+    "    errors.push('sidenav background scalar attribution lacks bound original cases');\n",
+  ]) assert.throws(() => restoreSidenavBackgroundScalarProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreSidenavBackgroundScalarProducer(current + '\n// unrelated\n'));
+});
 
 test('retained font integration preserves its full predecessor and requires original-case validation', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

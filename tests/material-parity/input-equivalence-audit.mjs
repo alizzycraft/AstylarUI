@@ -69,7 +69,8 @@ import { collectReviewedSourceBatchAuditInputs, validateReviewedSourceBatchAudit
   classifyReviewedSourceBatchInput, validateReviewedSourceBatchClassifications, reviewedSourceBatchAttributions } from './reviewed-source-batch-audit-source-binding.mjs';
 import { ownerCaretClassificationContexts } from './owner-caret-source-binding.mjs';
 import { collectRootBackgroundAuditInputs, validateRootBackgroundEvidence, rootBackgroundClassificationContexts,
-  classifyRootBackgroundInput, validateRootBackgroundClassifications, rootBackgroundAttribution } from './root-background-classification-preparation.mjs';
+  classifyRootBackgroundInput, validateRootBackgroundClassifications, rootBackgroundAttribution,
+  applySidenavBackgroundScalar, validateSidenavBackgroundScalar, sidenavBackgroundAttribution } from './root-background-classification-preparation.mjs';
 import { classifyOwnerCaretInput, ownerCaretAttributions } from './owner-caret-classification.mjs';
 import { validateOwnerCaretAttributionRows } from './owner-caret-attribution-coverage.mjs';
 import { sliderInputBoxAttribution, collectSliderInputBoxes, classifySliderInputBox,
@@ -279,9 +280,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforeRetainedFontScalars = ownerInitialStyleBinding.status === 'bound'
     ? applyNormalLineBoxScalar(beforeNormalLineBoxScalars, cases, elementInventory, controlTypography)
     : beforeNormalLineBoxScalars;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforeSidenavBackgroundScalars = ownerInitialStyleBinding.status === 'bound'
     ? applyRetainedFontScalar(beforeRetainedFontScalars, cases, elementInventory, retainedTypography, canonicalStyle)
     : beforeRetainedFontScalars;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applySidenavBackgroundScalar(beforeSidenavBackgroundScalars, cases, elementInventory, canonicalStyle)
+    : beforeSidenavBackgroundScalars;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -606,6 +610,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.elementInventory, report.controlTypography));
       errors.push(...validateRetainedFontScalar(report.discrepancies, replayedRows, cases,
         report.elementInventory, report.retainedTypography, canonicalStyle));
+      errors.push(...validateSidenavBackgroundScalar(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
       errors.push(...validateDialogTextFlow(report.discrepancies, replayedRows, cases,
         report.elementInventory, canonicalStyle));
       errors.push(...validateTabControlStage(report.discrepancies, replayedRows, cases,
@@ -640,6 +646,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     errors.push('button-host line-height attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === retainedFontScalarAttribution))
     errors.push('component font scalar attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === sidenavBackgroundAttribution))
+    errors.push('sidenav background scalar attribution lacks bound original cases');
   if (report.sliderBorderDefaults?.binding?.status === 'bound') {
     errors.push(...validateSliderBorderDefaults(report.sliderBorderDefaults, { root }));
     errors.push(...validateSliderBorderDefaultClassifications(report.sliderBorderDefaults,

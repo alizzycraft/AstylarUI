@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 25
 
+Combined font/sidenav integration milestone: sidenav application and validation
+are now wired into the main producer alongside retained-font classification.
+Both require bound original cases. The existing exact source-transition chain
+restores the complete predecessor and both mapping projection guards reject
+aliases, extra imported members and coupling into retained mapping behavior.
+Verification: 10 producer/alignment tests, one selected overlay projection test,
+one full-population sidenav join test and three font tests passed (15 total).
+Next is one combined cold canonical export, expected to attribute 14 groups /
+676 observations, followed by unrelated-row/control/section conservation and
+compact-index reconciliation. This expectation is not an accepted result;
+the current canonical snapshot still has 1,408 unresolved groups.
+
 Sidenav scalar preparation now reuses `inspectSidenavBackgroundInputs` and
 `modalInventoryTrees` inside the existing background classification module.
 `applySidenavBackgroundScalar` selects complete original membership (not the
