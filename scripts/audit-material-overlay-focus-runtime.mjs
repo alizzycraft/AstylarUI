@@ -12,7 +12,8 @@ import {PNG} from 'pngjs';
 const base=process.env.ASTYLAR_FOCUS_URL??'http://127.0.0.1:4435';
 const dialogEscape=process.argv.includes('--dialog-escape');
 const hoverRetarget=process.argv.includes('--hover-retarget');
-const publicHover=process.argv.includes('--public-hover');
+const inspectPicks=process.argv.includes('--public-hover-picks');
+const publicHover=process.argv.includes('--public-hover')||inspectPicks;
 assert.ok([dialogEscape,hoverRetarget,publicHover].filter(Boolean).length<=1,'Choose one diagnostic mode');
 const families=dialogEscape||publicHover?['dialog']:hoverRetarget?['bottom-sheet','dialog']:['menu','bottom-sheet','dialog'];
 const variants=publicHover?['passive-cover','hoverable-cover']:dialogEscape?['unchanged','without-app-escape']:['unchanged'];
@@ -34,7 +35,7 @@ assert.ok(packageReceipts.length);
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const cases=[],errors=[],served=new Map(),pending=[],sourceMatches=new Map();
 try {
- for(const dpr of publicHover?[1,2]:[1])for(const variant of variants)for(const sequence of sequences)for(const instrumented of publicHover?[false]:[false,true])for(const family of families)for(const mode of ['reference','astylar']){
+ for(const dpr of publicHover?[1,2]:[1])for(const variant of variants)for(const sequence of sequences)for(const instrumented of publicHover&&!inspectPicks?[false]:[false,true])for(const family of families)for(const mode of ['reference','astylar']){
   const page=await browser.newPage({viewport:{width:900,height:700},deviceScaleFactor:dpr});
   page.on('pageerror',e=>errors.push({family,mode,message:e.message}));
   page.on('response',r=>{
@@ -59,8 +60,15 @@ try {
   if(mode==='astylar')await page.waitForFunction(()=>!!window.__ASTYLAR_MATERIAL_BENCHMARK__);
   await page.evaluate(async()=>{await document.fonts.ready;await window.__ASTYLAR_MATERIAL_BENCHMARK__?.waitForSettled();});
   if(publicHover){
-   cases.push(await capturePublicHover(page,mode,dpr,variant));
-   await page.close();continue;
+   let captured;
+   try{captured=await capturePublicHover(page,mode,dpr,variant,instrumented);}
+   finally{
+    const cleanup=await page.evaluate(async()=>{const p=window.__publicHover;if(!p?.observer)return null;const removed=p.surface.scene.onPointerObservable.remove(p.observer);await new Promise(r=>setTimeout(r,0));return {removed,before:p.observerCount,after:p.surface.scene.onPointerObservable.observers.length};});
+    if(cleanup){assert.equal(cleanup.removed,true);assert.equal(cleanup.after,cleanup.before);if(captured)captured.observerCleanup=cleanup;}
+    await page.close();
+   }
+   cases.push(captured);
+   continue;
   }
   await page.evaluate(({mode,instrumented,family,variant,dialogEscape,hoverRetarget})=>{
    const trace=[];window.__focusAudit={trace,phase:'setup'};
@@ -159,6 +167,11 @@ try {
  ]:['Development build, light profile, DPR1; only listed pointer/key sequences, not historical-bundle attribution or full interaction coverage.','Public-method wrappers observe calls without altering original results; internal autofocus is observed through DOM focus events.','Overlay presence is semantic DOM membership, not a visual/raster visibility assertion.','without-app-escape deliberately removes one application handler at runtime; it is a causal control, never equivalent-input or output-parity evidence.']};
  fs.writeFileSync(path.join(out,'result.json'),JSON.stringify(result,null,2));
  assert.equal(errors.length,0);assert.equal(sourceMatches.size,3,'Missing served app source receipts');
+ if(inspectPicks)for(const c of cases.filter(c=>c.instrumented)){
+  const baseline=cases.find(b=>!b.instrumented&&b.mode===c.mode&&b.dpr===c.dpr&&b.variant===c.variant);assert.ok(baseline);
+  const observable=x=>Object.fromEntries(Object.entries(x.observations).map(([label,o])=>[label,{hover:o.interaction?.hoveredElementId??o.hit,pixel:o.raster.rgba,background:o.elements?.find(e=>e.id==='audit-target')?.effective.background??o.background}]));
+  assert.deepEqual(observable(c),observable(baseline),'Read-only picking observer changed behavior');
+ }
  if(!publicHover)for(const variant of variants)for(const sequence of sequences)for(const family of families)for(const mode of ['reference','astylar']){
   const pair=cases.filter(c=>c.family===family&&c.mode===mode&&c.sequence===sequence.name&&c.variant===variant);assert.equal(pair.length,2);
   assert.deepEqual(pair[0].trace.at(-1).active,pair[1].trace.at(-1).active,'Instrumentation changed final focus');
@@ -173,7 +186,7 @@ finally{await browser.close();}
 
 // Minimal runtime-only SiteData/DOM pair. No Material element, click action,
 // animation, transform, modal semantics or private renderer mutation is used.
-async function capturePublicHover(page,mode,dpr,variant){
+async function capturePublicHover(page,mode,dpr,variant,instrumented){
  const styles=[
   {selector:'#audit-root',position:'relative',width:'900px',height:'700px',margin:'0px',padding:'0px',background:'#ffffff'},
   {selector:'#audit-target',position:'absolute',left:'100px',top:'100px',width:'160px',height:'60px',margin:'0px',padding:'0px',background:'#123456'},
@@ -182,10 +195,14 @@ async function capturePublicHover(page,mode,dpr,variant){
  ];
  if(variant==='hoverable-cover')styles.push({selector:'#audit-cover:hover',background:'#777777'});
  const data=covered=>({root:{children:[{type:'div',id:'audit-root',children:[{type:'div',id:'audit-target'},...(covered?[{type:'div',id:'audit-cover'}]:[])]}]},styles});
- await page.evaluate(async({mode,initial})=>{
+ await page.evaluate(async({mode,initial,instrumented})=>{
   if(mode==='astylar'){
    const surface=window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
    window.__publicHover={surface};await surface.update(initial);await surface.whenSettled();
+   if(instrumented){
+    const p=window.__publicHover;p.picks=[];p.observerCount=surface.scene.onPointerObservable.observers.length;
+    p.observer=surface.scene.onPointerObservable.add(info=>p.picks.push({phase:p.phase,type:info.type,pickedMesh:info.pickInfo?.pickedMesh?.name??null,x:info.event?.offsetX,y:info.event?.offsetY}));
+   }
   }else{
    const host=document.createElement('div');Object.assign(host.style,{position:'fixed',inset:'0',zIndex:'2147483647'});
    document.body.append(host);const shadow=host.attachShadow({mode:'open'}),style=document.createElement('style');
@@ -193,21 +210,22 @@ async function capturePublicHover(page,mode,dpr,variant){
    shadow.append(style);const root=document.createElement('div');root.id='audit-root';const target=document.createElement('div');target.id='audit-target';root.append(target);shadow.append(root);
    window.__publicHover={shadow,root,target};
   }
- },{mode,initial:data(false)});
+ },{mode,initial:data(false),instrumented});
  const host=mode==='astylar'?await page.locator('canvas').boundingBox():{x:0,y:0,width:900,height:700};
  assert.deepEqual(host,{x:0,y:0,width:900,height:700},'Reduction requires matching CSS-space hosts');
  const settle=async()=>{await page.evaluate(async()=>{await window.__publicHover.surface?.whenSettled();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});await page.waitForTimeout(100);};
  const snapshot=async label=>{const observation=await page.evaluate(({mode,label})=>{
-  const p=window.__publicHover;
+  const p=window.__publicHover;p.phase=label;
   if(mode==='astylar')return {label,interaction:p.surface.diagnostics.interaction,messages:p.surface.diagnostics.messages,
    elements:p.surface.inspectResolvedStyles().elements.filter(e=>e.id?.startsWith('audit-')),
-   boxes:[...document.querySelectorAll('[data-astylar-id]')].filter(e=>e.getAttribute('data-astylar-id')?.startsWith('audit-')).map(e=>{const r=e.getBoundingClientRect();return {id:e.getAttribute('data-astylar-id'),x:r.x,y:r.y,width:r.width,height:r.height};})};
+   boxes:[...document.querySelectorAll('[data-astylar-id]')].filter(e=>e.getAttribute('data-astylar-id')?.startsWith('audit-')).map(e=>{const r=e.getBoundingClientRect();return {id:e.getAttribute('data-astylar-id'),x:r.x,y:r.y,width:r.width,height:r.height};}),
+   ...(p.picks?{picking:{events:[...p.picks],predicate:String(p.surface.scene.pointerMovePredicate),constantlyUpdateMeshUnderPointer:p.surface.scene.constantlyUpdateMeshUnderPointer,meshes:p.surface.scene.meshes.filter(m=>['audit-target','audit-cover'].includes(m.name)).map(m=>({name:m.name,isPickable:m.isPickable,isVisible:m.isVisible,enabled:m.isEnabled(),ready:m.isReady(),enablePointerMoveEvents:m.enablePointerMoveEvents,actionManager:!!m.actionManager,predicateEligible:p.surface.scene.pointerMovePredicate?.(m)}))}}:{})};
   const box=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};
   return {label,hovered:p.target.matches(':hover'),background:getComputedStyle(p.target).backgroundColor,
    targetBox:box(p.target),coverBox:p.root.querySelector('#audit-cover')?box(p.root.querySelector('#audit-cover')):null,
    hit:p.shadow.elementFromPoint(180,130)?.id};
  },{mode,label});
-  const file=`public-hover-${variant}-${mode}-dpr${dpr}-${label}.png`,bytes=await page.screenshot({path:path.join(out,file)}),png=PNG.sync.read(bytes);
+  const file=`public-hover-${variant}-${mode}-dpr${dpr}-${instrumented?'observed':'plain'}-${label}.png`,bytes=await page.screenshot({path:path.join(out,file)}),png=PNG.sync.read(bytes);
   const offset=(130*dpr*png.width+180*dpr)*4;
   return {...observation,raster:{file,sha256:hash(bytes),point:{x:180,y:130},rgba:[...png.data.subarray(offset,offset+4)]}};
  };
@@ -230,7 +248,7 @@ async function capturePublicHover(page,mode,dpr,variant){
   // Record a mismatched moving-pointer hit too; it is a separate diagnostic
   // failure, not grounds for silently treating occlusion as established.
  }
- return {mode,dpr,variant,host,inputs:{before:data(false),after:data(true)},observations,
+ return {mode,dpr,variant,instrumented,host,inputs:{before:data(false),after:data(true)},observations,
   expectations:{stationaryTarget:'audit-cover',movedTarget:'audit-cover'},
   ...(mode==='astylar'?{stationaryTargetMatches:stationary.interaction.hoveredElementId==='audit-cover',movedTargetMatches:moved.interaction.hoveredElementId==='audit-cover'}:{})};
 }

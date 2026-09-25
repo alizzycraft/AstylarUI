@@ -2,6 +2,41 @@
 
 ## Current audit checkpoint — September 25
 
+The passive-cover causal path is now observed, not just inferred from source.
+Probe `--public-hover-picks` adds a read-only observer to the public surface's
+scene, records incoming picked-mesh names and native CSS offsets, and reads the
+live move predicate and mesh eligibility. It changes no predicate, mesh,
+coordinate or renderer state. All eight observer-on/off pairs have identical
+hover, resolved background and point pixels. All four candidate observers are
+removed explicitly, restoring the original count (2). The server is stopped.
+
+Receipt: `artifacts/material-parity/public-hover-picking-cb547a8/result.json`,
+SHA-256 `c7d0ea5498fb156bbdd04b2c34da345dd90cb4224cb2e3bb2ce4013649a007c3`.
+Sixteen cases and 64 hash-verified screenshots cover two variants, two sides,
+two DPRs and observer controls. Zero page errors; all 517 served JavaScript
+hashes match the earlier public reduction. The live predicate's AST matches
+installed Babylon **8.56.2** `Inputs/scene.inputManager.js` in all four observed
+candidate cases (source SHA-256
+`18245b7fa202883d17a5d9b4154dc7d35b70757090fc259df866d00f276ed349`).
+
+The passive cover is visible, ready, enabled and pickable, but has no action
+manager, no explicit move eligibility, and fails that predicate. At native
+offsets (181,130), and after reentry at (180,130), the incoming move event names
+the obscured `audit-target`. The hoverable cover differs only in its shared
+authored hover rule; it acquires an action manager, passes the predicate and is
+the incoming picked mesh. Both variants preserve the old target during the
+stationary update; no pointer event is dispatched by that update.
+
+Ownership is core interaction/picking, not Material plugin paint. The earlier
+direct-blocker safeguard (`0e17f146`, `resolvePointerTarget`) cannot help when
+the backend already skipped the front box and core accepts the eligible direct
+hit behind it. Plan the general fix around CSS-visible pointer ownership,
+independent of whether a hover style exists, plus stationary-pointer revalidation
+after layout/stacking changes. Keep these separate from retained paint continuity
+on unchanged owners. Do not add dummy hover rules or a plugin-owned hit-test path.
+This closes the reduced picking-path question, not every Material observation,
+pointer-down/touch behavior, nested clipping case or final acceptance gate.
+
 The public hover reduction now separates two failures without Material controls.
 `scripts/audit-material-overlay-focus-runtime.mjs --public-hover` replaces only
 the runtime document through public `surface.update()`; native HTML uses the
@@ -114,9 +149,9 @@ failure has a distinct candidate cause: installed Babylon's pointer-move predica
 filters for an action manager / explicit move eligibility, while core accepts an
 eligible direct hit before checking blockers or performing a full multi-pick.
 Thus a skipped front box cannot be rescued by the later direct-blocker branch.
-Verify the served Babylon predicate and exact event path before calling that
-branch-level causal trace complete. No source change, private runtime intervention,
-or fixture compensation was made; the source-inspection server is stopped.
+The subsequent observer-controlled receipt at the top of this checkpoint now
+verifies the live Babylon predicate and incoming event path. No source change,
+private runtime intervention or fixture compensation was made.
 
 Read-only paint follow-up while that export runs: exact original-capture and
 tree hashes plus compact finding `2644ae20256f938f1b0970d3dc1b85013d83cdde819e0a0781748548484a5147`
