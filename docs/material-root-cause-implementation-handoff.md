@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 25
 
+Mapped reset classification/replay is implemented in the existing border module,
+sharing complete case-membership logic with mapped initial colors. Focused tests
+prove **8 groups / 256 observations**, preserve every raw field and prior review,
+and reject missing/duplicated cases, deleted rows/proofs, forged values, invented
+width-rule evidence and false equivalence. Both reset tests pass (11.47 s).
+The existing mapped initial-color full-membership test still passes (12.92 s),
+and the exact source-history mutation test passes (1.14 s). Full border module
+snapshot `0a999d524abedb0ed3c6a8665630905e3b9ed3650244a84960103e0cd4ee1f41`
+is explicitly authenticated by the historical-reader guard; unknown modifications
+still reject and shared selector bytes remain equal. No canonical classifications
+have changed yet. Next wire `applyMappedButtonBorderReset` and
+`validateMappedButtonBorderReset` into the bound-original-case production path,
+including unbound-evidence rejection and exact producer-source conservation;
+batch the later export with remaining border/paint evidence, not this helper alone.
+
 `inspectMappedButtonBorderReset` now extends the existing border evidence module
 without changing production classifications. It reuses the complete alias and
 Material reset proof, requires exactly one reviewed zero-width rule (including

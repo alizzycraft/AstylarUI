@@ -9,6 +9,7 @@ const ordinaryTypes = new Set(['div', 'section', 'article', 'header', 'footer', 
 export const borderColorProperties = ['borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor'];
 export const borderInitialAttribution = 'reviewed-border-initial-color-divergence';
 export const mappedBorderInitialAttribution = 'reviewed-mapped-border-initial-color-divergence';
+export const mappedButtonBorderResetAttribution = 'reviewed-mapped-material-button-border-reset-omission';
 export const buttonBorderResetAttribution = 'reviewed-material-button-border-reset-omission';
 export const outlineTokenAttribution = 'reviewed-material-outline-token-substitution';
 export const chipOutlineAttribution = 'reviewed-chip-outline-owner-substitution';
@@ -51,6 +52,14 @@ export function inspectMappedBorderInitial(entry, input, reference, candidate, n
 
 // Original membership, not the twelve display samples, controls admission.
 export function applyMappedBorderInitial(rows, cases, inventory, normalize) {
+  return applyMappedBorderEvidence(rows, cases, inventory, normalize, false);
+}
+
+export function applyMappedButtonBorderReset(rows, cases, inventory, normalize) {
+  return applyMappedBorderEvidence(rows, cases, inventory, normalize, true);
+}
+
+function applyMappedBorderEvidence(rows, cases, inventory, normalize, buttonReset) {
   const trees = new Map();
   const keyOf = c => `${c.kind ?? (c.state ? 'interaction' : 'static')}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}`;
   return rows.map(row => {
@@ -65,10 +74,16 @@ export function applyMappedBorderInitial(rows, cases, inventory, normalize) {
       if (!trees.has(key)) trees.set(key, originStageTrees(inventory, key));
       const pair = trees.get(key);
       if (!pair) return row;
-      const proof = inspectMappedBorderInitial(c, inputs[0], pair.reference, pair.candidate, normalize);
+      const inspect = buttonReset ? inspectMappedButtonBorderReset : inspectMappedBorderInitial;
+      const proof = inspect(c, inputs[0], pair.reference, pair.candidate, normalize);
       if (!proof || proof.referenceColor !== row.reference || proof.candidateBorderColor !== row.astylar) return row;
       proofs.push({ case: key, ...proof });
     }
+    if (buttonReset) return { ...row, classification: 'application-plugin-authoring-defect',
+      attribution: mappedButtonBorderResetAttribution,
+      recommendedOwner: 'showcase Material button border-reset translation; core contextual color separately',
+      justification: 'Every original member has an authenticated button identity and explicit Material medium none currentColor reset with verified no-motion declarations. The candidate authors only zero border width and retains transparent border color in every captured core stage. Complete candidate rules exclude competing color/reset/motion requests. This is incomplete reset translation, not equivalent input, a native-default guess, or a waiver of geometry and paint defects.',
+      reviewEvidence: { proofs, inputEquivalent: false, finalRasterVerified: false } };
     return { ...row, classification: 'intentional-documented-limitation', attribution: mappedBorderInitialAttribution,
       recommendedOwner: 'core browser defaults and contextual border-color resolution',
       justification: 'Every original member has a reviewed generated-owner mapping, matching scalar/full-tree styles, omitted border-color/reset authoring in the complete captured rules and inline declarations, reference currentColor and transparent color in all three candidate stages. The known wrapper scalar z-index omission is retained and checked against full-tree rules, not filled in. This extends the existing initial-color default finding; it does not equate replacement structures, border geometry or final raster.',
@@ -81,6 +96,13 @@ export function validateMappedBorderInitial(rows, originalRows, cases, inventory
   return isDeepStrictEqual(JSON.parse(JSON.stringify(select(rows))),
     JSON.parse(JSON.stringify(select(applyMappedBorderInitial(originalRows, cases, inventory, normalize))))) ? [] :
     ['mapped border initial-color attribution lacks exact original membership and declaration replay'];
+}
+
+export function validateMappedButtonBorderReset(rows, originalRows, cases, inventory, normalize) {
+  const select = values => values.filter(r => r.attribution === mappedButtonBorderResetAttribution);
+  return isDeepStrictEqual(JSON.parse(JSON.stringify(select(rows))),
+    JSON.parse(JSON.stringify(select(applyMappedButtonBorderReset(originalRows, cases, inventory, normalize))))) ? [] :
+    ['mapped button reset attribution lacks exact original membership and declaration replay'];
 }
 
 export function selectorCanApply(selector, authored) {

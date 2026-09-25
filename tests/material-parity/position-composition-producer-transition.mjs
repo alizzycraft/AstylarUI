@@ -16,7 +16,10 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
     assert.equal([...after.matchAll(addition)].length, 1);
     reviewed = after.replace(addition, '');
   }
-  assert.equal(hash(reviewed), '1acfdc0cccbf85ef396fac52a5a0fcf751eb1444a7676b53c1b861ff6af764cd',
+  // The second complete snapshot adds the tested mapped-reset membership path;
+  // it does not alter the shared selector consumed by historical readers.
+  assert.ok(['1acfdc0cccbf85ef396fac52a5a0fcf751eb1444a7676b53c1b861ff6af764cd',
+    '0a999d524abedb0ed3c6a8665630905e3b9ed3650244a84960103e0cd4ee1f41'].includes(hash(reviewed)),
     'border evidence changed beyond the reviewed complete source snapshot');
   const selector = source => {
     const matches = [...source.matchAll(/export function selectorCanApply\(selector, authored\) \{[\s\S]*?\n\}/g)];

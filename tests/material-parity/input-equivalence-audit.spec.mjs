@@ -7,6 +7,7 @@ import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { assertHistoricalCaseIndexSources } from './historical-case-index-source-assertion.mjs';
 import { collectBorderInitialInputs, inspectMappedBorderInitial, inspectMappedButtonBorderReset, applyMappedBorderInitial,
+  applyMappedButtonBorderReset, validateMappedButtonBorderReset, mappedButtonBorderResetAttribution,
   validateMappedBorderInitial, mappedBorderInitialAttribution, borderColorProperties } from './border-initial-input-evidence.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import {
@@ -869,6 +870,44 @@ test('mapped button reset verifies every dialog owner and rejects competing or i
     }
   }
   assert.equal(owners, 64);
+});
+
+test('mapped button reset classification preserves full membership and rejects forged rows', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes), normalize = bindPreciseAuditNormalization();
+  const cases = raw.interactions.filter(c => c.family === 'dialog' && c.styleInputs?.some(i => i.id === 'dialog-save'));
+  const inventory = collectFullTreeInventory(cases), grouped = new Map();
+  const keyOf = c => `interaction:${c.family}@${c.profile}/${c.viewport.id}/${c.state}`;
+  for (const c of cases) for (const i of c.styleInputs.filter(i => ['dialog-save', 'dialog-cancel'].includes(i.id))) {
+    const r = normalize(i.reference), a = normalize(i.astylar);
+    for (const property of borderColorProperties) {
+      const key = JSON.stringify([i.id, property, r[property], a[property]]);
+      if (!grouped.has(key)) grouped.set(key, { family: c.family, element: i.id, property,
+        reference: r[property], astylar: a[property], attribution: 'unresolved', occurrences: 0, cases: [] });
+      const row = grouped.get(key); row.occurrences++;
+      if (row.cases.length < 12) row.cases.push(keyOf(c));
+    }
+  }
+  const original = [...grouped.values()], result = applyMappedButtonBorderReset(original, cases, inventory, normalize);
+  assert.equal(result.length, 8);
+  assert.equal(result.reduce((n, r) => n + r.occurrences, 0), 256);
+  assert.ok(result.every(r => r.attribution === mappedButtonBorderResetAttribution));
+  assert.deepEqual(validateMappedButtonBorderReset(result, original, cases, inventory, normalize), []);
+  const metadata = new Set(['classification', 'attribution', 'recommendedOwner', 'justification', 'reviewEvidence']);
+  const rawFields = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  assert.deepEqual(result.map(rawFields), original.map(rawFields));
+  for (const r of result) assert.equal(r.reviewEvidence.proofs.length, r.occurrences);
+  for (const mutate of [
+    rows => rows.pop(), rows => rows[0].reviewEvidence.proofs.pop(),
+    rows => { rows[0].reference = 'forged'; }, rows => { rows[0].reviewEvidence.inputEquivalent = true; },
+    rows => { rows[0].reviewEvidence.proofs[0].candidateWidthRule = '.invented'; },
+  ]) { const changed = structuredClone(result); mutate(changed);
+    assert.ok(validateMappedButtonBorderReset(changed, original, cases, inventory, normalize).length); }
+  for (const population of [cases.slice(1), [...cases, cases[0]]])
+    assert.ok(applyMappedButtonBorderReset(original, population, inventory, normalize).some(r => r.attribution === 'unresolved'));
+  const prior = original.map(r => ({ ...r, attribution: 'previous-review' }));
+  assert.deepEqual(applyMappedButtonBorderReset(prior, cases, inventory, normalize), prior);
 });
 
 test('mapped border integration rejects classifications without authenticated original cases', () => {
