@@ -2,6 +2,42 @@
 
 ## Current audit checkpoint — September 25
 
+Next classification batch can reuse existing normal-line-box proofs rather than
+recapture typography. Twelve unresolved scalar `lineHeight: normal / omitted`
+groups have **716/716 original-capture members** with exactly one accepted
+per-case control-text line-box attribution. This includes dialog Cancel/Save
+(32 each), dialog opener (78), sheet opener (63), three button owners (60 each),
+card/core actions (52 each), menu opener (94), snackbar opener (71) and tooltip
+opener (62). The candidate rows are still unresolved canonically: no integration
+or count reduction is claimed while the origin export remains live.
+
+Read-only join receipt:
+`artifacts/material-parity/line-height-reuse-complete-membership-ed555089.json`,
+SHA-256 `23b1b4adf61e684369d450678afd92913300045728de2f140e77394ee7dc5be9`.
+It pins accepted generation/index and the full original capture hash, lists all
+716 distinct control evidence IDs and exact case membership, and checks every
+group's raw occurrence count. Both compact and canonical scalar `cases` arrays
+are samples (12 entries), **not complete membership**. An initial summary-only
+join did not establish coverage; the final join reconstructs members from all
+original static/interaction style observations and rejects count mismatches.
+
+Applicability: `attributeObservedNormalLineBoxes`,
+`attributeObservedInteractiveLineBoxes` and `candidateTypographyOmissionChain`
+are unchanged from accepted `6606d13`; all 14 supporting normal/control-line-box,
+input-tree and capture-validation source fingerprints checked against the
+accepted metadata receipt still match. Existing proofs explain browser normal
+versus measured candidate paint, with explicit omission-chain checks; they do
+not establish input equivalence, inherited-font equality, baseline, wrapping or
+raster parity. Dialog's sampled control paint is 17px, while the local resolved
+lineHeight field is omitted; these are distinct diagnostic stages.
+
+After accepting the pending origin export, add the narrow scalar-to-existing-
+control-proof bridge in the existing classifier. Require complete original case
+membership, mapped button/label identity, matching raw values and validated
+per-case evidence; reject missing/duplicate/wrong-owner proofs. Preserve unrelated
+classifications and all raw values. Do not add new browser runs or a separate
+line-height census merely to reproduce these already retained measurements.
+
 The passive-cover causal path is now observed, not just inferred from source.
 Probe `--public-hover-picks` adds a read-only observer to the public surface's
 scene, records incoming picked-mesh names and native CSS offsets, and reads the
