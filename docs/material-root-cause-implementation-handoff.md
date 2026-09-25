@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 25
 
+Caret and control receipt reconciliation passes: exactly three caret changes
+(authenticated border-module hash/verification label plus current main producer
+hash) and 48 control-line-box producer hashes, with no other metadata changes.
+`verifyBorderEvidenceSourceTransition` authenticated complete old/new source
+snapshots; producer restoration also passed. The remaining section diff completed
+in session 74730 and is retained as
+`artifacts/material-parity/border-defaults-proof-sections-v2-0d0e1bc.json`.
+Its first invocation had a PowerShell quoting error before reading data; preserve
+the earlier `border-defaults-proof-sections-0d0e1bc-error.log`, not a false pass.
+Outline changes are 68 owners × five fields; slider changes are 156 owners ×
+four added color properties. Heading insertions shift array indices, so the
+63,724 leaf diffs must still be reconciled by stable identity, not accepted as
+unrelated wholesale changes.
+
+The proof-catalog section changes only 42 line pointers. A focused workflow test
+revealed a **pre-existing stale expectation: 107 actual entries versus 106**.
+Independent TypeScript extraction of both accepted `2cec292` and current
+`focusedProofInventory`/`proof` functions produced identical 107-entry inventories
+against current files; every pointer resolves. No catalog addition occurred in
+this batch. The other workflow test passes. Correct the stale count with its
+proof after retaining this failure; do not describe the unchanged test as green.
+No export/import is running; candidate acceptance remains pending complete
+heading/outline/slider section conservation. Reuse the completed scalar/source/
+motion/section results instead of rerunning them.
+
 Independent reconciliation of candidate `b74de570…` now passes scalar/control
 conservation: **83 groups / 2,596 observations**, all raw inputs unchanged,
 one existing outline proof row, one embedded scalar receipt row and 48 control
