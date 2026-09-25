@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 25
 
+Origin motion integration is now wired through collection, classification,
+inventory validation and independent original-source replay. Producer-selected
+mode is checked against the evidence marker, so a report cannot disable the
+review or enable it on its own. Exact captured motion requests remain part of
+the proof; forged requests and invented settlement/equivalence claims fail.
+The integration suite passes 5/5 in 178.81 seconds: default historical results
+remain intact, independent source replay passes, and actual aggregation of the
+origin-bearing capture population preserves 8,314 complete rows except exactly
+36 classification groups / 704 observations. This is not the full canonical
+8,483-row conservation claim; the full export/comparator remains the next gate.
+
+The existing canonical comparator now supports `--origin-motion`, using the
+authenticated `ed555089...` predecessor and independent full-inventory replay.
+It requires exactly 36/704 changes, unchanged raw inputs and all unrelated rows,
+and only the authenticated producer receipt change in 48 control records.
+Its synthetic mutation suite passes 11/11 in 23.96 seconds. Producer-transition
+tests pass 2/2 in 0.71 seconds: reversing only the five intended integration
+edits restores the exact accepted `16de9bd1...` main producer; missing collection,
+validation, replay, source registration or unrelated edits are rejected.
+Seven existing canonical source receipts now differ intentionally and one
+focused-test source is newly registered. Reconcile these at the next cold export,
+with section/metadata conservation and compact-index refresh after acceptance.
+No canonical count reduction is claimed yet; full browser acceptance remains
+pending, and no renderer or canonical fixture behavior changed.
+
 The direct origin-motion question now has a focused proof, using an opt-in
 `reviewedDisjointMotion` branch of the existing stage inspector. The default
 collector remains unchanged. Exact original capture/tree authentication and the

@@ -2,6 +2,24 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+// Authenticate the complete predecessor, not just the lines we expect to change.
+export function restoreOriginMotionProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current;
+  for (const [from, to] of [
+    ["collectOriginStageEvidence(originStageBinding.status === 'bound' ? cases : [], elementInventory, canonicalStyle, { reviewedDisjointMotion: true })", "collectOriginStageEvidence(originStageBinding.status === 'bound' ? cases : [], elementInventory, canonicalStyle)"],
+    ['validateOriginStageEvidence(report.originStageEvidence, report.elementInventory, report.discrepancies, canonicalStyle, { reviewedDisjointMotion: true })', 'validateOriginStageEvidence(report.originStageEvidence, report.elementInventory, report.discrepancies, canonicalStyle)'],
+    ['validateOriginStageSource(report.originStageBinding, report.originStageEvidence, { root, canonicalStyle, reviewedDisjointMotion: true })', 'validateOriginStageSource(report.originStageBinding, report.originStageEvidence, { root, canonicalStyle })'],
+    ['Explicit disjoint motion targets receive guarded stage review; other motion/explicit-origin cases remain unresolved. No candidate used origin', 'Motion/explicit-origin cases remain unresolved; no candidate used origin'],
+    ["    'tests/material-parity/origin-motion-stage-review.spec.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated origin motion integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), '16de9bd146280fbbc29d81fdb4c88bf0376672aae9121667e138339b21fe0a8a',
+    'producer changed beyond reviewed origin motion integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
 export const positionFollowupProducerFiles = [
   'tests/material-parity/position-followup-audit-source-binding.mjs',
   'tests/material-parity/position-followup-audit-source-binding.spec.mjs',
@@ -42,7 +60,7 @@ export const positionProducerFiles = [
 // predecessor hash rejects any accompanying unreviewed producer change.
 export function restoreAppearancePrecedence(source) {
   const actual = source.toString().replaceAll('\r\n', '\n');
-  let current = actual;
+  let current = actual.includes('reviewedDisjointMotion: true') ? restoreOriginMotionProducer(actual).restoredSource : actual;
   if (current.includes("!['appearance', 'color'].includes(property)")) {
     for (const [from, to] of [
       ["!['appearance', 'color'].includes(property)", "property !== 'appearance'"],

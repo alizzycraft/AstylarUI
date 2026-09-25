@@ -2,7 +2,24 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { restorePositionProducer } from './position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreOriginMotionProducer } from './position-composition-producer-transition.mjs';
+
+test('origin motion producer transition preserves the exact accepted predecessor and rejects partial integration', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const prior = execFileSync('git', ['show', '498c5e2:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreOriginMotionProducer(current).restoredSource, prior);
+  for (const fragment of [
+    "collectOriginStageEvidence(originStageBinding.status === 'bound' ? cases : [], elementInventory, canonicalStyle, { reviewedDisjointMotion: true })",
+    'validateOriginStageEvidence(report.originStageEvidence, report.elementInventory, report.discrepancies, canonicalStyle, { reviewedDisjointMotion: true })',
+    'validateOriginStageSource(report.originStageBinding, report.originStageEvidence, { root, canonicalStyle, reviewedDisjointMotion: true })',
+    "    'tests/material-parity/origin-motion-stage-review.spec.mjs',\n",
+  ]) {
+    assert.ok(current.includes(fragment));
+    assert.throws(() => restoreOriginMotionProducer(current.replace(fragment, '')));
+  }
+  assert.throws(() => restoreOriginMotionProducer(current + '\n// unrelated change\n'));
+});
 
 test('position producer integration preserves every prior byte outside the exact added boundary', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

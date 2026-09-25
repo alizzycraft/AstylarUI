@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
-import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
+import { collectFullTreeInventory, collectStyleDiscrepancies } from './input-equivalence-audit.mjs';
+import ts from 'typescript';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { collectOriginStageEvidence, classifyOriginStageInput, validateOriginStageEvidence, originStageTrees } from './origin-stage-inventory-evidence.mjs';
 import { bindOriginStageSource, validateOriginStageSource } from './origin-stage-source-binding.mjs';
 
@@ -106,4 +108,59 @@ test('origin stage source binding rejects self-consistent deletion and altered o
   const changedRaw = { ...raw, results: raw.results.slice(1) };
   assert.equal(bindOriginStageSource(changedRaw, { parityPath: survey.capturePath }).status, 'invalid');
   assert.equal(bindOriginStageSource(raw).status, 'unbound');
+});
+
+test('reviewed origin motion integrates exactly 36 complete groups with independent source replay', t => {
+  const canonical = bindPreciseAuditNormalization(), options = { reviewedDisjointMotion: true };
+  const reviewed = collectOriginStageEvidence(cases, inventory, canonical, options);
+  const legacy = { ...evidence, observations: evidence.observations.map(o => ({ ...o,
+    comparisonOrigin: canonical({ transformOrigin: o.comparisonOrigin }).transformOrigin })) };
+  assert.deepEqual(reviewed.captures, legacy.captures);
+  assert.equal(reviewed.observations.length, 6938);
+  let changedObservations = 0;
+  for (let i = 0; i < legacy.observations.length; i++) {
+    const before = legacy.observations[i], after = reviewed.observations[i];
+    if (JSON.stringify(before) === JSON.stringify(after)) continue;
+    assert.equal(before.status, 'unresolved');
+    assert.equal(before.reason, 'motion declarations require separate state/cascade proof');
+    assert.equal(after.status, 'observed-declaration-stage-gap');
+    assert.equal(after.motionReview.disposition, 'captured-origin-motion-targets-disjoint');
+    changedObservations++;
+  }
+  assert.equal(changedObservations, 704);
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const ast = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true);
+  const fn = ast.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'collectStyleDiscrepancies');
+  const aggregate = origin => collectStyleDiscrepancies(...fn.parameters.map(p => p.name.text === 'cases' ? cases
+    : p.name.text === 'originStageEvidence' ? origin : Object.assign([], { observations: [], comparisons: [], differences: [], groups: [] })));
+  const beforeRows = aggregate(legacy), afterRows = aggregate(reviewed);
+  assert.equal(beforeRows.length, afterRows.length);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const rawRow = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  const changed = [];
+  for (let i = 0; i < beforeRows.length; i++) {
+    if (JSON.stringify(beforeRows[i]) === JSON.stringify(afterRows[i])) continue;
+    assert.deepEqual(rawRow(beforeRows[i]), rawRow(afterRows[i]));
+    assert.equal(beforeRows[i].attribution, 'unresolved');
+    assert.equal(afterRows[i].attribution, 'reviewed-origin-declaration-stage');
+    assert.equal(afterRows[i].property, 'transformOrigin'); changed.push(afterRows[i]);
+  }
+  assert.equal(changed.length, 36);
+  assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 704);
+  assert.deepEqual(validateOriginStageEvidence(reviewed, inventory, afterRows, canonical, options), []);
+  const binding = bindOriginStageSource(raw, { parityPath: survey.capturePath });
+  assert.deepEqual(validateOriginStageSource(binding, reviewed, { canonicalStyle: canonical, ...options }), []);
+  assert.ok(validateOriginStageEvidence(reviewed, inventory, afterRows, canonical).length);
+  assert.ok(validateOriginStageSource(binding, reviewed).length);
+  const forged = structuredClone(reviewed), target = forged.observations.find(o => o.motionReview);
+  target.motionReview.requests = [];
+  assert.ok(validateOriginStageSource(binding, forged, { canonicalStyle: canonical, ...options }).length);
+  const actual = reviewed.observations.find(o => o.motionReview);
+  const capture = reviewed.captures.find(c => `${c.kind}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}` === actual.case);
+  const input = capture.styleInputs.find(i => i.id === actual.element);
+  for (const flag of ['animationSettlementVerified', 'indirectEffectsExcluded']) {
+    const forgedProof = { ...actual, motionReview: { ...actual.motionReview, [flag]: true } };
+    assert.equal(classifyOriginStageInput(input, 'transformOrigin', actual.comparisonOrigin, undefined, forgedProof), undefined);
+  }
+  t.diagnostic(`${beforeRows.length} complete aggregate rows conserved except 36 reviewed groups / 704 occurrences`);
 });

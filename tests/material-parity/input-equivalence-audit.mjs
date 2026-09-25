@@ -196,7 +196,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const rootTypographyInputs = collectRootTypographyInputs(elementInventory, canonicalStyle, typographySelectorCanApply);
   const rootInitialStyleInputs = collectRootInitialStyleInputs(elementInventory);
   const originStageBinding = bindOriginStageSource(parityReport, { root, parityPath: options.parityPath });
-  const originStageEvidence = collectOriginStageEvidence(originStageBinding.status === 'bound' ? cases : [], elementInventory, canonicalStyle);
+  const originStageEvidence = collectOriginStageEvidence(originStageBinding.status === 'bound' ? cases : [], elementInventory, canonicalStyle, { reviewedDisjointMotion: true });
   const rootHeightInputs = collectRootHeightInputs(rootTypographyInputs, canonicalStyle);
   const rootColorInputs = collectRootColorInputs(rootTypographyInputs, canonicalStyle);
   const fieldColorInputs = collectFieldColorInputs(fieldHostTypographyInputs, rootColorInputs, canonicalStyle);
@@ -650,8 +650,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     errors.push('slider box attribution lacks independently bound original capture evidence');
   }
   if (report.originStageBinding?.status === 'bound') {
-    errors.push(...validateOriginStageEvidence(report.originStageEvidence, report.elementInventory, report.discrepancies, canonicalStyle));
-    errors.push(...validateOriginStageSource(report.originStageBinding, report.originStageEvidence, { root, canonicalStyle }));
+    errors.push(...validateOriginStageEvidence(report.originStageEvidence, report.elementInventory, report.discrepancies, canonicalStyle, { reviewedDisjointMotion: true }));
+    errors.push(...validateOriginStageSource(report.originStageBinding, report.originStageEvidence, { root, canonicalStyle, reviewedDisjointMotion: true }));
   } else if (requireComplete || report.originStageBinding?.status === 'invalid' ||
       report.originStageEvidence?.observations?.length || report.discrepancies?.some(d => d.attribution === originStageAttribution)) {
     errors.push('origin stage attribution lacks independently bound original capture evidence');
@@ -1412,7 +1412,7 @@ export function renderMaterialInputAuditMarkdown(report) {
     '',
     'Counts are review signatures, not counts of confirmed renderer bugs. Browser computed styles include used pixel values, while Astylar resolved styles can retain percentages, auto sizes, and track expressions. Those unresolved comparisons are reported as harness normalization gaps, not accepted equivalence.',
     '',
-    `Origin-stage evidence: source binding is ${report.originStageBinding?.status ?? 'missing'}; ${report.originStageEvidence?.observations.filter(o => o.status === 'observed-declaration-stage-gap').length ?? 0} observations establish only a browser-used versus candidate-declaration stage distinction. Original report and tree replay protect full case coverage. Motion/explicit-origin cases remain unresolved; no candidate used origin, reference-box equality or rendered equivalence is inferred.`,
+    `Origin-stage evidence: source binding is ${report.originStageBinding?.status ?? 'missing'}; ${report.originStageEvidence?.observations.filter(o => o.status === 'observed-declaration-stage-gap').length ?? 0} observations establish only a browser-used versus candidate-declaration stage distinction. Original report and tree replay protect full case coverage. Explicit disjoint motion targets receive guarded stage review; other motion/explicit-origin cases remain unresolved. No candidate used origin, reference-box equality or rendered equivalence is inferred.`,
     '',
     `Evidence: complete enforced parity report with ${report.generatedFrom.browser?.name ?? 'browser'} ${report.generatedFrom.browser?.version ?? ''}.`,
     '',
@@ -8787,6 +8787,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/origin-stage-inventory-evidence.spec.mjs',
     'tests/material-parity/origin-stage-source-binding.mjs',
     'tests/material-parity/transform-origin-stage-evidence.mjs',
+    'tests/material-parity/origin-motion-stage-review.spec.mjs',
     'tests/material-parity/origin-alias-mapping-evidence.mjs',
     'tests/material-parity/border-initial-input-evidence.mjs',
     'tests/material-parity/chip-host-typography-evidence.mjs',

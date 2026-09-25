@@ -29,7 +29,7 @@ export function originStageTrees(inventory, key) {
   };
 }
 
-export function collectOriginStageEvidence(cases, inventory, canonicalStyle = style => style) {
+export function collectOriginStageEvidence(cases, inventory, canonicalStyle = style => style, { reviewedDisjointMotion = false } = {}) {
   const observations = [], captures = [];
   for (const entry of cases) {
     const inputs = (entry.styleInputs ?? []).filter(i => i.reference?.transformOrigin !== undefined && i.astylar?.transformOrigin === undefined);
@@ -40,25 +40,30 @@ export function collectOriginStageEvidence(cases, inventory, canonicalStyle = st
     for (const input of inputs) observations.push({ case: key, family: entry.family, element: input.id,
       property: 'transformOrigin', comparisonOrigin: canonicalStyle({ transformOrigin: input.reference.transformOrigin }).transformOrigin,
       ...(!trees ? { status: 'unresolved', reason: 'missing paired inventory evidence' }
-        : inspectTransformOriginDeclarationStage(entry, trees.reference, trees.candidate, input)) });
+        : inspectTransformOriginDeclarationStage(entry, trees.reference, trees.candidate, input, { reviewedDisjointMotion })) });
   }
-  return { schemaVersion: 1, captures, observations };
+  return { schemaVersion: 1, ...(reviewedDisjointMotion ? { reviewedDisjointMotion: true } : {}), captures, observations };
 }
 
 export function classifyOriginStageInput(input, property, reference, candidate, proof) {
   if (property !== 'transformOrigin' || proof?.status !== 'observed-declaration-stage-gap' ||
       proof.element !== input.id || proof.property !== property || reference !== proof.comparisonOrigin || candidate !== undefined ||
       proof.attribution !== originStageAttribution || proof.classification !== 'parity-harness-defect' ||
-      ['inputEquivalent', 'candidateComputedOriginVerified', 'referenceBoxEqualityVerified', 'finalRasterVerified'].some(k => proof[k] !== false)) return;
+      ['inputEquivalent', 'candidateComputedOriginVerified', 'referenceBoxEqualityVerified', 'finalRasterVerified'].some(k => proof[k] !== false) ||
+      proof.motionReview && (proof.motionReview.disposition !== 'captured-origin-motion-targets-disjoint' ||
+        !Array.isArray(proof.motionReview.requests) || !proof.motionReview.requests.length ||
+        proof.motionReview.animationSettlementVerified !== false || proof.motionReview.indirectEffectsExcluded !== false)) return;
   return { classification: proof.classification, attribution: proof.attribution, owner: proof.owner,
     justification: proof.justification, reviewEvidence: proof };
 }
 
-export function validateOriginStageEvidence(evidence, inventory, discrepancies, canonicalStyle = style => style) {
+export function validateOriginStageEvidence(evidence, inventory, discrepancies, canonicalStyle = style => style, { reviewedDisjointMotion = false } = {}) {
   const errors = [];
   if (evidence?.schemaVersion !== 1 || !Array.isArray(evidence.captures) || !Array.isArray(evidence.observations))
     return ['origin stage evidence is missing or malformed'];
-  const replay = collectOriginStageEvidence(evidence.captures, inventory, canonicalStyle);
+  if (evidence.reviewedDisjointMotion !== (reviewedDisjointMotion ? true : undefined))
+    return ['origin motion review mode differs from required producer mode'];
+  const replay = collectOriginStageEvidence(evidence.captures, inventory, canonicalStyle, { reviewedDisjointMotion });
   if (!isDeepStrictEqual(replay, evidence)) errors.push('origin stage evidence does not replay from captured scalars and inventory');
   const positive = replay.observations.filter(o => o.status === 'observed-declaration-stage-gap');
   const identities = positive.map(o => JSON.stringify([o.case, o.element]));

@@ -32,9 +32,11 @@ export function bindOriginStageSource(report, { root = process.cwd(), parityPath
 // Independent source replay binds BOTH completeness and the declarations used by
 // the proof. Matching a report against its own retained captures is insufficient.
 // Pooled reference rule indices may differ; all other proof fields must match.
-export function validateOriginStageSource(binding, evidence, { root = process.cwd(), canonicalStyle = s => s } = {}) {
+export function validateOriginStageSource(binding, evidence, { root = process.cwd(), canonicalStyle = s => s, reviewedDisjointMotion = false } = {}) {
   const errors = [];
   if (binding?.status !== 'bound') return ['origin stage evidence lacks original capture binding'];
+  if (evidence?.reviewedDisjointMotion !== (reviewedDisjointMotion ? true : undefined))
+    return ['origin motion review mode differs from required source replay mode'];
   try {
     const bytes = readFileSync(safePath(root, binding.file));
     if (hash(bytes) !== binding.sha256) throw new Error('original origin capture digest changed');
@@ -57,7 +59,7 @@ export function validateOriginStageSource(binding, evidence, { root = process.cw
       for (const input of entry.styleInputs) {
         const proof = { case: keyOf(entry), family: entry.family, element: input.id, property: 'transformOrigin',
           comparisonOrigin: canonicalStyle({ transformOrigin: input.reference.transformOrigin }).transformOrigin,
-          ...inspectTransformOriginDeclarationStage(entry, trees.reference, trees.astylar, input) };
+          ...inspectTransformOriginDeclarationStage(entry, trees.reference, trees.astylar, input, { reviewedDisjointMotion }) };
         if (!isDeepStrictEqual(comparable(proof), comparable(evidence.observations?.[index] ?? {})))
           throw new Error(`origin proof differs from original source at ${keyOf(entry)}#${input.id}`);
         index++;
