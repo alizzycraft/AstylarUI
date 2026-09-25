@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 25
 
+Post-weight investigation priority (read-only while export runs): authenticated
+compact fcb still has **1,288** unresolved groups. Largest families are dialog
+161, bottom-sheet 112, chips 101, tabs 99; inset properties alone account for
+170 groups (top 39/right 48/bottom 41/left 42). Continue source/export
+reconciliation first, then group positioning/box/typography questions by owner
+and observation stage rather than classify one scalar at a time. Table's eight
+reset groups are bounded but not the highest-impact remaining cluster.
+
+New dialog scalar matched-rule check distinguishes two competing explanations:
+missing position authoring versus computed-offset/local-declaration stage
+mismatch. All **32** captured open dialog cases, across activate, activate-leave,
+open-hover-content and open, have the same result for panel, actions, title,
+save and cancel: **160 owners / 640 inset observations**, browser offsets `0px`
+and explicit `position:relative`, candidate offsets/position omitted. Captured
+matched rules author relative position but no inset on the reference and neither
+on the candidate. Ordered witness digest
+`7d05be4f6a3462bbbce93b26687273ec1b4ef796995d6b9fd92f16a97bcdd3af`.
+This is scalar matched-rule evidence, not full ancestry/inline/alias closure or
+proof of candidate computed position. Next reuse existing modal owner mapping
+and complete tree checks to distinguish those claims; do not convert missing
+candidate offsets to zero or waive the authored relative-position difference.
+No canonical classifications or export dependencies changed.
+
 Read-only follow-up during the weight export closes the table-host reset history
 question. Compact fcb findings contain **eight unresolved side-color groups /
 208 observations**, two theme values per side (39 light and 13 dark), belonging
