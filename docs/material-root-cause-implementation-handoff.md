@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 25
 
+The mapped initial-color proof now admits the exact authenticated dialog-panel
+motion pair through `dialogPanelMotionOverride`: two active unconditional rules
+in the same author sheet, later/higher-specificity explicit `transition:none`,
+exact serialized base transition and five verified pending/disabled longhands.
+Other color/reset requests still reject; no variable expansion or empty-longhand
+absence is inferred. The witness is retained in each proof and explicitly does
+not certify animation settlement or raster output. Original **32 panel owners**
+pass, with seven mutation controls per owner (inactive/conditional/reordered
+override, altered serialization, important base, added transition and color rule).
+Existing mapped-initial and mapped-reset coverage remains green: **4/4** tests
+(26.73 s); exact complete-source/selector mutation test **1/1** (1.29 s).
+Full reviewed border module SHA:
+`7d8641713a314b41daf4447cc391755078ce4766732fb69fab13717de26a99c1`.
+This extends the already-wired mapped-initial path; next quantify complete scalar
+membership alongside the action-container non-top sides before the batch export.
+Canonical `b74de570…` is unchanged; no renderer or fixture changes.
+
 Mapped-button reset production wiring is complete: application is gated by bound
 original cases, validation independently replays complete original membership,
 and unbound reports carrying this attribution are rejected. Exact producer

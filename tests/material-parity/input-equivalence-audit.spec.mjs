@@ -834,6 +834,33 @@ test('mapped border initial proof covers original aliases without erasing scalar
     assert.equal(inspectMappedBorderInitial(c, input, ref, changed, normalize), undefined); }
 });
 
+test('mapped dialog panel border proof requires its exact serialized no-motion override', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes), normalize = bindPreciseAuditNormalization();
+  const cases = raw.interactions.filter(c => c.family === 'dialog' && c.styleInputs?.some(i => i.id === 'dialog-panel'));
+  assert.deepEqual(collectFullTreeInventory(cases).errors, []);
+  let owners = 0;
+  for (const c of cases) {
+    const input = c.styleInputs.find(i => i.id === 'dialog-panel');
+    const ref = JSON.parse(readFileSync(c.inputTrees.reference.file)), ast = JSON.parse(readFileSync(c.inputTrees.astylar.file));
+    const proof = inspectMappedBorderInitial(c, input, ref, ast, normalize);
+    assert.ok(proof?.motionOverride); owners++;
+    assert.equal(proof.motionOverride.animationSettlementVerified, false);
+    for (const mutate of [
+      t => { t.rules.find(r => r.selector === '._mat-animation-noopable .mat-mdc-dialog-surface').active = false; },
+      t => { t.rules.find(r => r.selector === '._mat-animation-noopable .mat-mdc-dialog-surface').conditions = ['unknown']; },
+      t => { t.rules.find(r => r.selector === '._mat-animation-noopable .mat-mdc-dialog-surface').source = 'sheet:9/0'; },
+      t => { t.rules.find(r => r.selector === '._mat-animation-noopable .mat-mdc-dialog-surface').cssText = 'transition: all 1s;'; },
+      t => { t.rules.find(r => r.selector === '.mat-mdc-dialog-surface').declarations['transition-property'].important = true; },
+      t => { t.rules.find(r => r.selector === '.mat-mdc-dialog-surface').cssText += ' transition: border-color 1s;'; },
+      t => { t.rules.find(r => r.selector === '.mat-mdc-dialog-surface').declarations['border-color'] = { value: 'red', important: false }; },
+    ]) { const changed = structuredClone(ref); mutate(changed);
+      assert.equal(inspectMappedBorderInitial(c, input, changed, ast, normalize), undefined); }
+  }
+  assert.equal(owners, 32);
+});
+
 test('mapped button reset verifies every dialog owner and rejects competing or incomplete evidence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');

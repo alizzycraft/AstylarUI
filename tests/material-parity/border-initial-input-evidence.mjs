@@ -21,6 +21,33 @@ const colorOrResetKey = key => {
 };
 const noColorOrReset = declarations => object(declarations) && !Object.keys(declarations).some(colorOrResetKey);
 
+// Finite captured Material rule pair, not a general cascade/variable evaluator.
+function dialogPanelMotionOverride(rules) {
+  const motion = rules.filter(r => Object.keys(r.declarations ?? {}).some(k => /^(animation|transition)/.test(k)));
+  if (motion.length !== 2) return;
+  const base = motion.find(r => r.selector === '.mat-mdc-dialog-surface');
+  const stop = motion.find(r => r.selector === '._mat-animation-noopable .mat-mdc-dialog-surface');
+  if (!base || !stop || motion.some(r => r.active !== true || !Array.isArray(r.conditions) || r.conditions.length)) return;
+  const order = r => r.source?.match(/^sheet:(\d+)\/(\d+)$/);
+  const a = order(base), b = order(stop);
+  if (!a || !b || a[1] !== b[1] || Number(a[2]) >= Number(b[2])) return;
+  const serialized = r => [...(r.cssText ?? '').matchAll(/(?:^|;)\s*transition\s*:\s*([^;]+);/g)].map(m => m[1].trim());
+  if (!isDeepStrictEqual(serialized(base), ['transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1)']) ||
+      !isDeepStrictEqual(serialized(stop), ['none'])) return;
+  const expected = { 'transition-property': 'none', 'transition-duration': '0s',
+    'transition-delay': '0s', 'transition-timing-function': 'ease', 'transition-behavior': 'normal' };
+  for (const r of motion) {
+    const entries = Object.entries(r.declarations).filter(([k]) => /^(animation|transition)/.test(k));
+    if (entries.length !== 5 || entries.some(([k, d]) => !(k in expected) ||
+        !object(d) || d.important !== false || d.value !== (r === base ? '' : expected[k]))) return;
+  }
+  if (rules.some(r => !object(r.declarations) || Object.keys(r.declarations).some(k =>
+      colorOrResetKey(k) && !/^(animation|transition)/.test(k)))) return;
+  return { disposition: 'captured-explicit-transition-none-override', rules: motion,
+    reason: 'Same author sheet; the later selector has greater class specificity. Pending base longhands are not treated as absent.',
+    animationSettlementVerified: false, finalRasterVerified: false };
+}
+
 // Extend the existing omission proof over authenticated alias identities, not
 // fabricated data-parity IDs. The caller supplies hash-checked original trees.
 export function inspectMappedBorderInitial(entry, input, reference, candidate, normalize) {
@@ -35,7 +62,10 @@ export function inspectMappedBorderInitial(entry, input, reference, candidate, n
   if (!(ordinaryTypes.has(ref.type) || ref.type === 'a' || /^mat-[a-z-]+$/.test(ref.type)) ||
       !(ordinaryTypes.has(ast.authored.type) || ast.authored.type === 'button') ||
       !noColorOrReset(ref.inline) || !noColorOrReset(ast.authored.style ?? {})) return;
-  if (ref.rules.some(i => !noColorOrReset(reference.rules[i]?.declarations))) return;
+  const referenceRules = ref.rules.map(i => reference.rules[i]);
+  const motionOverride = referenceRules.some(r => !noColorOrReset(r?.declarations))
+    ? dialogPanelMotionOverride(referenceRules) : undefined;
+  if (referenceRules.some(r => !noColorOrReset(r?.declarations)) && !motionOverride) return;
   if (candidate.rules.some(rule => !object(rule) || Object.values(rule).some(v => object(v) || Array.isArray(v)) ||
       (!noColorOrReset(rule) && selectorCanApply(rule.selector, ast.authored)))) return;
   const r = normalize(input.reference), stages = [input.astylarNormalResolvedStyle, input.astylar, input.astylarInteractionResolvedStyle];
@@ -45,6 +75,7 @@ export function inspectMappedBorderInitial(entry, input, reference, candidate, n
       stages.some(s => !object(s) || Object.keys(s).some(k => colorOrResetKey(k) && k !== 'borderColor') ||
         borderColorProperties.some(p => normalize(s)[p] !== 'rgba(0,0,0,0)'))) return;
   return { mapping, referenceColor: r.color, candidateBorderColor: 'rgba(0,0,0,0)',
+    ...(motionOverride ? { motionOverride } : {}),
     referenceRules: ref.rules.map(i => reference.rules[i]), referenceInline: ref.inline,
     candidateRuleCount: candidate.rules.length, inputEquivalent: false, finalRasterVerified: false,
     scope: 'Mapped owner border-color omission/default divergence only. Structural replacements, capture rule gaps, border geometry and final raster remain separate.' };
