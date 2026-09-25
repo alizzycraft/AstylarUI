@@ -91,13 +91,24 @@ Section comparison is TERMINAL/PASS (**67600**), `appearance-b8c58ae-sections.js
 controlLineBoxes, summary, discrepancies, ownerCaretInputs,
 reviewedSourceBatchInputs, ownerInitialStyleEvidence, controlTypography.
 Predecessor digests were reused from `dialog-tab-7c7beef-sections.json`.
-Targeted authenticated metadata comparison is running in **15177**, output
-`artifacts/material-parity/appearance-b8c58ae-metadata.json`: verify every source
-against disk, preserve non-appearance observations, and enumerate remaining
-receipt/summary changes. Revalidate this handle rather than restart it.
-Reconcile all remaining changes before compact import or canonical commit.
-The accepted count remains 1,541 until reconciliation succeeds; no new canonical
-acceptance is claimed.
+Targeted authenticated metadata comparison is TERMINAL/PASS (**15177**): all
+454 source fingerprints match disk; 54,139 non-appearance observations are
+unchanged; 6,782 appearance observations are added, preserving exclusions.
+All 55 metadata changes are reconciled: 48 control-line-box producer receipts,
+one owner-caret producer receipt, the unresolved count, and five motion receipt
+fields. The historical motion report reconstructed with current authenticated
+source receipts hashes to `d6c98047bd06a82010b70674fdb278c3c20b91886d3e81c539eca8eae2674ff3`;
+the previously passed independent motion replay preserves its non-receipt evidence.
+Evidence: `appearance-b8c58ae-{metadata,receipts}.json`. The unchanged section
+digests preserve all 134 source findings and 107 ordered proof entries.
+Compact import (**99125**) and `npm run audit:findings:verify` both PASS:
+8,483 groups / 389,202 occurrences / 39,904 control records / 134 source findings,
+1,507 unresolved, 69,907,914 compact bytes. The small manifest is retained beside
+the new generation's compressed payload for subsequent authenticated comparisons.
+The appearance batch is accepted as a bounded evidence transition, not completion
+of input equivalence or the final browser gates. Next shared batch: inherited
+color ancestry and disjoint appearance/motion populations already scoped below;
+do not repeat their surveys. Current-runtime overlay focus remains a separate gap.
 
 Corrected-export preflight passes: the existing producer-transition helper now
 removes only the exact appearance fallback relocation and authenticates the
