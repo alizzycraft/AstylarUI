@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 25
 
+Inherited-color ancestry guard is now executable: the focused descendant test
+passes for light/dark and rejects 22 mutations in each theme (broken parent
+links, changed root evidence, intervening color/reset/motion and state rules).
+The existing root-color behavior test also passes. This is only ancestry proof:
+owner correspondence, original scalar membership and prior-static precedence
+must still be bound before any of the proposed 46 groups / 1,196 observations
+can be attributed. No canonical count changed (accepted: 1,507).
+The extension in `root-color-descendant-evidence.mjs` imports the unchanged
+historical root-color collector; keeping the extension separate avoids a
+new historical source-projection mechanism or rewriting root receipts.
+
+Additional integration gap found by the historical root-color case-index test:
+the shared case-index conservation gate rejects the already-committed
+`input-equivalence-policy.mjs` dependency (current LF SHA `44461b31f8e1dfa20b6d80614ac2412cbcb32e24b1979d144284f32cad524f9d`,
+recorded `7e939aece26dd69b846b78fc6d21aa332463b53068f488cf19343578306d80d8`).
+The policy has no working-tree diff; latest touching commit is `eb5de6a`.
+Command: `node --test --test-reporter=spec --test-name-pattern="descendant color ancestry|root color separates|root color case index" tests/material-parity/input-equivalence-audit.spec.mjs`:
+two pass, one fails at this dependency guard, before membership replay. Do not
+report the historical membership gate as passed or refresh its receipt blindly.
+Next: inspect the policy transition's applicability to the historical case
+indexes, preserve all original assertions, then bind descendant owner/scalar
+evidence using existing source inventory. Batch with pending motion integration;
+do not export solely for this ancestry helper.
+
 The five appearance/motion groups are now connected to the existing source-bound
 owner-initial collector and classifier. Original motion issues are retained with
 their review, not erased; source replay reconstructs the attached proof from the

@@ -10940,6 +10940,50 @@ function rootColorReport(family = 'chips', dark = false, size = '16px') {
   return raw;
 }
 
+test('descendant color ancestry rejects broken links and intervening requests without claiming owner equivalence', async () => {
+  const { collectRootTypographyInputs } = await import('./root-typography-input-evidence.mjs');
+  const { collectRootColorInputs } = await import('./root-color-input-evidence.mjs');
+  const { extendRootColorAncestry } = await import('./root-color-descendant-evidence.mjs');
+  const { rootInitialSelectorCanApply } = await import('./root-initial-style-evidence.mjs');
+  const { bindPreciseAuditNormalization } = await import('./audit-normalization-contracts.mjs');
+  const canonical = bindPreciseAuditNormalization();
+  for (const dark of [false, true]) {
+    const raw = rootColorReport('chips', dark), inventory = collectFullTreeInventory(raw.results.map(e => ({...e, kind: 'static'})));
+    const roots = collectRootColorInputs(collectRootTypographyInputs(inventory, canonical, rootInitialSelectorCanApply), canonical);
+    assert.equal(roots.length, 1);
+    const root = roots[0];
+    const fixture = () => ({ root: structuredClone(root),
+      reference: [...structuredClone(root.referencePath), { key: 'descendant', parent: root.referencePath.at(-1).key,
+        type: 'span', attributes: { id: 'descendant' }, inline: {}, computed: structuredClone(root.referencePath.at(-1).computed), rules: [] }],
+      candidate: [...structuredClone(root.candidatePath), { key: 'descendant', parent: root.candidatePath.at(-1).key,
+        authored: { type: 'span', id: 'descendant' }, normal: {}, comparison: {}, effective: {}, rules: [] }] });
+    const inspect = f => extendRootColorAncestry(f.root, f.reference, f.candidate, canonical);
+    const f = fixture(), before = JSON.stringify(f), proof = inspect(f);
+    assert.ok(proof); assert.equal(proof.ownerCorrespondenceVerified, false);
+    assert.equal(proof.computedCandidateVerified, false); assert.equal(proof.finalRasterVerified, false);
+    assert.equal(JSON.stringify(f), before);
+    const changes = [
+      x => { x.reference[2].parent = 'missing'; }, x => { x.candidate[2].parent = 'missing'; },
+      x => { x.reference[2].key = x.reference[1].key; }, x => { x.candidate.pop(); },
+      x => { x.root.computedCandidateVerified = true; }, x => { x.root.revision = -1; },
+      x => { x.reference[2].computed.color = 'red'; },
+      x => { x.reference[2].inline.color = { value: 'inherit', important: false }; },
+      x => { x.reference[2].attributes.style = 'color: inherit'; },
+      x => { x.candidate[2].authored.attributes = { style: 'color: inherit' }; },
+      x => { x.candidate[2].authored.style = { color: 'inherit' }; },
+      ...['normal', 'comparison', 'effective'].map(stage => x => { x.candidate[2][stage].color = '#1d1b20'; }),
+      ...['color', 'all', 'transition', 'animation'].map(key => x => {
+        x.candidate[2].rules.push({ selector: '#descendant:hover', declarations: { [key]: 'inherit' } });
+      }),
+      ...['color', 'all', 'transition', 'animation'].map(key => x => {
+        x.reference[2].rules.push({ selector: '#descendant', active: true, conditions: [], declarations: { [key]: { value: 'inherit', important: false } } });
+      }),
+    ];
+    for (const [i, change] of changes.entries()) { const changed = fixture(); change(changed); assert.equal(inspect(changed), undefined, `mutation ${i}`); }
+    assert.equal(changes.length, 22);
+  }
+});
+
 test('root color separates inherited browser values from local declarations across states and dark overrides', () => {
   const raw = parityReport({}, {}); raw.results = [];
   for (const family of ['chips', 'button', 'datepicker']) for (const dark of [false, true]) for (const size of ['16px', '14.4px', '18.4px'])
