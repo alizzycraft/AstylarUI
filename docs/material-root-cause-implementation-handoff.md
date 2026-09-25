@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 25
 
+Corrected export `0d0e1bc` is terminal: **exit 1, 1,988.51 seconds**.
+Its sole reported error is **1,311 unresolved groups**, matching the proposed
+83-group reduction from the accepted baseline. Coverage remains 436/436 static
+and 1,875/1,875 interaction cases; all 8,483 groups, 389,202 observations and
+134 source findings remain. Evidence-session verification read 1,205 files /
+89,151,875 bytes with zero invalidations (two collectors, ten memory hits).
+Candidate compressed SHA is `b74de5707d4cb62eee5da0aa540746d2da9116e4be73e80affbf5b6e2949816a`
+(59,678,514 bytes); decoded SHA is
+`1a0f49bd56a74128125c60f17a0d3956383dce6a78e7a74419f85a97e244836f`
+(2,091,224,225 bytes). This is **not yet accepted** or imported into the index.
+Independent scalar/control conservation is running in session 32955, output
+`artifacts/material-parity/border-defaults-conservation-0d0e1bc.json`; section
+comparison is running in session 50196, output
+`artifacts/material-parity/border-defaults-sections-0d0e1bc.json`. Each has a
+matching `-error.log`. Reconcile changed source/caret/producer metadata before
+acceptance. Accepted `4059599c…` remains the baseline. Do not restart the export.
+
 The existing independent conservation CLI now supports `--border-defaults`.
 It authenticates accepted `4059599c…`, streams the candidate package, replays the
 original captures, checks exact complete scalar rows and preserves raw fields
