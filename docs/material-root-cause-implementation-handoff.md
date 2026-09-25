@@ -2,6 +2,32 @@
 
 ## Current audit checkpoint — September 25
 
+Card paint review closes two distinct questions across all nine remaining
+background groups / **37 observations**. Authenticated original `b07ef154...`
+case/tree bytes, all 89 reference fields, all three candidate style snapshots
+and every scalar-authored rule/index agree with exact owners.
+For `card-open`, eight groups / 24 hover/held/activate observations use a
+transparent reference host plus persistent-ripple `::before` in the profile
+primary color at .08/.12/.08 opacity. Candidate normal background is transparent
+but its childless button receives the exact opaque `.text-button:hover/:active`
+fill. Source `astylar.component.ts:649–650` preblends against a fixed
+mode-dependent card base. `7945a42` introduced these mixes; this shares the
+toolbar's state-layer substitution, but not its base-color expression.
+Separately, all **13 dark-profile `card-primary` cases**, including the unsampled
+final interaction, resolve the reference's
+`var(--mat-card-elevated-container-color, var(--mat-sys-surface-container-low))`
+to RGB 248/242/246. Candidate `.material-card` explicitly requests `#fff7ff`
+and preserves it at every stage. This mismatch already existed in the original
+showcase `2f44011`; it is not established as a later compensation. The same
+substituted dark base feeds the candidate action mixes. First divergence is
+application authoring, not an equal-input core paint conversion failure.
+Ordered owner/case/paint/tree descriptor digest:
+`3b141bf5f32639227f01ecfcf1d66f7dbb8338ab3f05bf5c8e7537055d7b9d3d`.
+Keep token replacement and state-layer composition separate in subsequent
+guarded attribution. Neither static blend similarity nor matching opacity
+proves equivalent clipping, focus, animation or final raster. No canonical
+rows or running-export dependencies changed.
+
 Toolbar action background review: all eight remaining background groups /
 **24 observations** (hover, held, activate; four profiles; DPR 1/2) are a
 state-layer ownership substitution, not evidence of core color conversion
