@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 25
 
+Mapped plain-border proof is implemented in the existing
+`border-initial-input-evidence.mjs`, reusing `resolveOriginAliasPair`,
+`originStageTrees`, declaration exclusion and precise normalization. It admits
+**44 groups / 290 owners / 1,160 side observations** from the original captures.
+The 59 wrapper owners retain `mapped-with-scalar-rule-gap`; the only admitted
+gap is the exact missing `.cdk-global-overlay-wrapper` non-important z-index
+1000 declaration, checked independently against complete tree rules. No missing
+border/color rule, extra rule or arbitrary gap is accepted or manufactured.
+Reference resets/motion, candidate possible color/reset/motion rules and inline
+requests remain rejection conditions. Anchor-to-button replacements keep their
+mapping/type evidence and are not declared structurally equivalent.
+The existing spec now authenticates original capture/tree provenance, all 44
+groups, all 1,160 members, and all 236 per-side wrapper gap receipts. Negative
+checks reject erased gaps, forged values/equivalence, removed proofs, missing or
+duplicate original cases, inventory errors, hover colors and unknown reset
+selectors. Heading regression coverage also passes. Focused command:
+`node --test --test-name-pattern="mapped border initial proof|border initial-color heading owners" tests/material-parity/input-equivalence-audit.spec.mjs`.
+This is a tested pure application/replay boundary, **not yet called by the main
+builder**. Next wire it through the existing authenticated original-case
+post-processing and validation path, and extend the existing historical source
+transition checks. No extra evidence format or framework is needed. Together
+with the previous 31 groups, 75 classifications / 2,324 observations have focused
+proof awaiting wiring/integration; canonical unresolved remains 1,394.
+
 Generated-owner declaration routing completed for the **470 remaining owners**
 after excluding the 32 dialog titles handled by the heading batch. Scope is
 the compact unresolved scalar value membership, not every matching ID (some

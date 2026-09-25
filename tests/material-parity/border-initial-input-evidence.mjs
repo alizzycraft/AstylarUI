@@ -1,10 +1,14 @@
 // This is a conservative declaration-exclusion proof, not another cascade or
 // selector engine. A possibly applicable color/reset rule prevents attribution,
 // even when overridden, inactive, unsupported, or outside the current media.
+import { isDeepStrictEqual } from 'node:util';
+import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+import { originStageTrees } from './origin-stage-inventory-evidence.mjs';
 const ordinaryTypes = new Set(['div', 'section', 'article', 'header', 'footer', 'nav', 'main', 'aside', 'span', 'p', 'label',
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
 export const borderColorProperties = ['borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor'];
 export const borderInitialAttribution = 'reviewed-border-initial-color-divergence';
+export const mappedBorderInitialAttribution = 'reviewed-mapped-border-initial-color-divergence';
 export const buttonBorderResetAttribution = 'reviewed-material-button-border-reset-omission';
 export const outlineTokenAttribution = 'reviewed-material-outline-token-substitution';
 export const chipOutlineAttribution = 'reviewed-chip-outline-owner-substitution';
@@ -15,6 +19,69 @@ const colorOrResetKey = key => {
     !/(width|style|radius)$/.test(normalized) && !normalized.startsWith('borderimage'));
 };
 const noColorOrReset = declarations => object(declarations) && !Object.keys(declarations).some(colorOrResetKey);
+
+// Extend the existing omission proof over authenticated alias identities, not
+// fabricated data-parity IDs. The caller supplies hash-checked original trees.
+export function inspectMappedBorderInitial(entry, input, reference, candidate, normalize) {
+  const mapping = resolveOriginAliasPair(entry, reference, candidate, input);
+  if (mapping.status !== 'mapped') {
+    if (mapping.status !== 'mapped-with-scalar-rule-gap' || mapping.extraRules.length ||
+        mapping.missingRules.length !== 1 || mapping.missingRules[0].selector !== '.cdk-global-overlay-wrapper' ||
+        !isDeepStrictEqual(mapping.missingRules[0].declarations, { 'z-index': { value: '1000', important: false } })) return;
+  }
+  const ref = reference.nodes.find(n => n.key === mapping.referenceNode);
+  const ast = candidate.nodes.find(n => n.key === mapping.candidateNode);
+  if (!(ordinaryTypes.has(ref.type) || ref.type === 'a' || /^mat-[a-z-]+$/.test(ref.type)) ||
+      !(ordinaryTypes.has(ast.authored.type) || ast.authored.type === 'button') ||
+      !noColorOrReset(ref.inline) || !noColorOrReset(ast.authored.style ?? {})) return;
+  if (ref.rules.some(i => !noColorOrReset(reference.rules[i]?.declarations))) return;
+  if (candidate.rules.some(rule => !object(rule) || Object.values(rule).some(v => object(v) || Array.isArray(v)) ||
+      (!noColorOrReset(rule) && selectorCanApply(rule.selector, ast.authored)))) return;
+  const r = normalize(input.reference), stages = [input.astylarNormalResolvedStyle, input.astylar, input.astylarInteractionResolvedStyle];
+  if (!/^rgba\(\d+,\d+,\d+,1\)$/.test(r.color ?? '') ||
+      borderColorProperties.some(p => r[p] !== r.color) ||
+      ['Top', 'Right', 'Bottom', 'Left'].some(side => r[`border${side}Width`] !== '0' || r[`border${side}Style`] !== 'none') ||
+      stages.some(s => !object(s) || Object.keys(s).some(k => colorOrResetKey(k) && k !== 'borderColor') ||
+        borderColorProperties.some(p => normalize(s)[p] !== 'rgba(0,0,0,0)'))) return;
+  return { mapping, referenceColor: r.color, candidateBorderColor: 'rgba(0,0,0,0)',
+    referenceRules: ref.rules.map(i => reference.rules[i]), referenceInline: ref.inline,
+    candidateRuleCount: candidate.rules.length, inputEquivalent: false, finalRasterVerified: false,
+    scope: 'Mapped owner border-color omission/default divergence only. Structural replacements, capture rule gaps, border geometry and final raster remain separate.' };
+}
+
+// Original membership, not the twelve display samples, controls admission.
+export function applyMappedBorderInitial(rows, cases, inventory, normalize) {
+  const trees = new Map();
+  const keyOf = c => `${c.kind ?? (c.state ? 'interaction' : 'static')}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}`;
+  return rows.map(row => {
+    if (row.attribution !== 'unresolved' || !borderColorProperties.includes(row.property) || row.astylar !== 'rgba(0,0,0,0)') return row;
+    const members = cases.filter(c => c.family === row.family && c.styleInputs?.some(i => i.id === row.element &&
+      i.reference && i.astylar && normalize(i.reference)[row.property] === row.reference && normalize(i.astylar)[row.property] === row.astylar));
+    if (!members.length || members.length !== row.occurrences || new Set(members.map(keyOf)).size !== members.length) return row;
+    const proofs = [];
+    for (const c of members) {
+      const key = keyOf(c), inputs = c.styleInputs.filter(i => i.id === row.element);
+      if (inputs.length !== 1) return row;
+      if (!trees.has(key)) trees.set(key, originStageTrees(inventory, key));
+      const pair = trees.get(key);
+      if (!pair) return row;
+      const proof = inspectMappedBorderInitial(c, inputs[0], pair.reference, pair.candidate, normalize);
+      if (!proof || proof.referenceColor !== row.reference || proof.candidateBorderColor !== row.astylar) return row;
+      proofs.push({ case: key, ...proof });
+    }
+    return { ...row, classification: 'intentional-documented-limitation', attribution: mappedBorderInitialAttribution,
+      recommendedOwner: 'core browser defaults and contextual border-color resolution',
+      justification: 'Every original member has a reviewed generated-owner mapping, matching scalar/full-tree styles, omitted border-color/reset authoring in the complete captured rules and inline declarations, reference currentColor and transparent color in all three candidate stages. The known wrapper scalar z-index omission is retained and checked against full-tree rules, not filled in. This extends the existing initial-color default finding; it does not equate replacement structures, border geometry or final raster.',
+      reviewEvidence: { proofs, inputEquivalent: false, finalRasterVerified: false } };
+  });
+}
+
+export function validateMappedBorderInitial(rows, originalRows, cases, inventory, normalize) {
+  const select = values => values.filter(r => r.attribution === mappedBorderInitialAttribution);
+  return isDeepStrictEqual(JSON.parse(JSON.stringify(select(rows))),
+    JSON.parse(JSON.stringify(select(applyMappedBorderInitial(originalRows, cases, inventory, normalize))))) ? [] :
+    ['mapped border initial-color attribution lacks exact original membership and declaration replay'];
+}
 
 export function selectorCanApply(selector, authored) {
   if (typeof selector !== 'string' || !selector.trim()) return true;

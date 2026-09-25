@@ -6,7 +6,8 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { assertHistoricalCaseIndexSources } from './historical-case-index-source-assertion.mjs';
-import { collectBorderInitialInputs } from './border-initial-input-evidence.mjs';
+import { collectBorderInitialInputs, inspectMappedBorderInitial, applyMappedBorderInitial,
+  validateMappedBorderInitial, mappedBorderInitialAttribution, borderColorProperties } from './border-initial-input-evidence.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import {
   buildMaterialInputAudit,
@@ -774,6 +775,62 @@ test('button border-reset evidence and per-case classification cannot be forged'
     const changed = structuredClone(original); change(changed);
     assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(error => error.includes('button border-reset')), String(change));
   }
+});
+
+test('mapped border initial proof covers original aliases without erasing scalar rule gaps', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const original = JSON.parse(bytes), normalize = bindPreciseAuditNormalization();
+  const ids = new Set(['paginator-size', 'paginator-range', 'bottom-sheet-overlay', 'bottom-sheet-panel',
+    'bottom-sheet-dismiss', 'bottom-sheet-copy', 'snack-bar-overlay', 'snack-bar-surface', 'tooltip-popup']);
+  const cases = [...original.results.map(c => ({ ...c, kind: 'static' })), ...original.interactions.map(c => ({ ...c, kind: 'interaction' }))]
+    .filter(c => c.styleInputs?.some(i => ids.has(i.id)));
+  const rows = new Map();
+  for (const c of cases) for (const i of c.styleInputs ?? []) {
+    if (!ids.has(i.id) || !i.reference || !i.astylar) continue;
+    const r = normalize(i.reference), a = normalize(i.astylar);
+    for (const property of borderColorProperties) {
+      if (!r[property] || a[property] !== 'rgba(0,0,0,0)') continue;
+      const key = JSON.stringify([c.family, i.id, property, r[property], a[property]]);
+      if (!rows.has(key)) rows.set(key, { family: c.family, element: i.id, property,
+        reference: r[property], astylar: a[property], attribution: 'unresolved', occurrences: 0, cases: [] });
+      const row = rows.get(key); row.occurrences++;
+      if (row.cases.length < 12) row.cases.push(`${c.kind}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}`);
+    }
+  }
+  const inventory = collectFullTreeInventory(cases), sourceRows = [...rows.values()];
+  const result = applyMappedBorderInitial(sourceRows, cases, inventory, normalize);
+  assert.equal(result.length, 44);
+  assert.ok(result.every(r => r.attribution === mappedBorderInitialAttribution));
+  assert.equal(result.reduce((n, r) => n + r.occurrences, 0), 1160);
+  const proofs = result.flatMap(r => r.reviewEvidence.proofs);
+  const gaps = proofs.filter(p => p.mapping.status === 'mapped-with-scalar-rule-gap');
+  assert.equal(gaps.length, 59 * 4);
+  assert.ok(gaps.every(p => p.mapping.missingRules[0].selector === '.cdk-global-overlay-wrapper'));
+  assert.deepEqual(validateMappedBorderInitial(result, sourceRows, cases, inventory, normalize), []);
+  const firstKey = result[0].reviewEvidence.proofs[0].case;
+  const keyOf = c => `${c.kind}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}`;
+  for (const changed of [cases.filter(c => keyOf(c) !== firstKey), [...cases, cases.find(c => keyOf(c) === firstKey)]])
+    assert.equal(applyMappedBorderInitial(sourceRows, changed, inventory, normalize)[0].attribution, 'unresolved');
+  assert.equal(applyMappedBorderInitial(sourceRows, cases,
+    { ...inventory, errors: [...inventory.errors, { case: firstKey, reason: 'incomplete capture' }] }, normalize)[0].attribution, 'unresolved');
+  for (const mutate of [
+    r => { r[0].reviewEvidence.inputEquivalent = true; },
+    r => { r[0].reviewEvidence.proofs.pop(); },
+    r => { r[0].reference = 'forged'; },
+    r => { r.find(r => r.element === 'bottom-sheet-overlay').reviewEvidence.proofs[0].mapping.missingRules = []; },
+  ]) { const changed = structuredClone(result); mutate(changed);
+    assert.ok(validateMappedBorderInitial(changed, sourceRows, cases, inventory, normalize).length); }
+  const c = cases.find(c => c.styleInputs.some(i => i.id === 'bottom-sheet-dismiss' && i.reference && i.astylar));
+  const input = c.styleInputs.find(i => i.id === 'bottom-sheet-dismiss');
+  const ref = JSON.parse(readFileSync(c.inputTrees.reference.file)), ast = JSON.parse(readFileSync(c.inputTrees.astylar.file));
+  assert.ok(inspectMappedBorderInitial(c, input, ref, ast, normalize));
+  for (const mutate of [
+    t => { t.rules.push({ selector: '#bottom-sheet-dismiss:hover', borderColor: 'red' }); },
+    t => { t.rules.push({ selector: ':not(.other)', all: 'initial' }); },
+    t => { t.nodes.find(n => n.authored.id === input.id).authored.style = { borderColor: 'red' }; },
+  ]) { const changed = structuredClone(ast); mutate(changed);
+    assert.equal(inspectMappedBorderInitial(c, input, ref, changed, normalize), undefined); }
 });
 
 test('border initial-color heading owners retain conservative declaration and provenance checks', () => {
