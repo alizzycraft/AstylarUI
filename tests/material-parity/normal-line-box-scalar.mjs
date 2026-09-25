@@ -1,9 +1,19 @@
 import { createHash } from 'node:crypto';
+import { isDeepStrictEqual } from 'node:util';
 
 const one = values => values.length === 1 ? values[0] : undefined;
 const keyOf = c => `${c.kind ?? (c.state ? 'interaction' : 'static')}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}`;
 const accepted = new Set(['reviewed-normal-line-box-stage-comparison', 'reviewed-interactive-normal-line-box-stage-comparison']);
 export const normalLineBoxScalarAttribution = 'reviewed-button-host-normal-line-box-stage';
+
+export function validateNormalLineBoxScalar(rows, originalRows, cases, inventory, controlTypography) {
+  const selected = values => values.filter(r => r.attribution === normalLineBoxScalarAttribution);
+  const expected = selected(applyNormalLineBoxScalar(originalRows, cases, inventory, controlTypography));
+  // Canonical JSON omits undefined fields; compare the persisted representation
+  // without turning omitted values into CSS defaults.
+  return isDeepStrictEqual(JSON.parse(JSON.stringify(selected(rows))), JSON.parse(JSON.stringify(expected))) ? [] :
+    ['button-host line-height attribution lacks original membership and exact validated control-owner replay'];
+}
 
 // The caller must independently validate/replay controlTypography first. This
 // join is not a validator for detached measurement reports or forged proofs.

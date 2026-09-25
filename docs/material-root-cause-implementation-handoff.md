@@ -34,8 +34,12 @@ decoded SHA-256:
 `e63b9370e5ce46d33514ad5982408f25a11155d6be66d3a36fe3296d2c5f8985`.
 
 Next classification batch can reuse existing normal-line-box proofs rather than
-recapture typography. The new narrow `normal-line-box-scalar.mjs` join is not
-yet connected to production classification. Its focused spec passes two tests,
+recapture typography. The narrow `normal-line-box-scalar.mjs` join is now
+connected to production classification and original-case validation replay.
+The source-transition guard reconstructs accepted producer `383e243a...` exactly
+and preserves the earlier origin/position transition chain. Six focused tests
+pass (scalar join/validation and producer transitions), including persisted-JSON
+comparison without supplying defaults for omitted fields. Its join spec includes
 including 16 rejection mutations (missing/duplicate/wrong owner, changed stage,
 incomplete/duplicate cases, differing host/label style and pre-reviewed rows).
 It preserves raw fields and consumes independently validated control proofs;
@@ -44,10 +48,10 @@ snapshot replay passed with exactly the intended 12 groups / 716 observations,
 each with complete proof membership:
 `artifacts/material-parity/line-height-scalar-replay-868f9de.json`.
 The replay authenticated the canonical compressed/decoded payload and rebuilt
-the inventory from original cases. Helper production wiring, independent
-validation replay and producer-fingerprint reconciliation remain next; no new
-canonical count is claimed. Keep this helper/evidence commit separate from
-the production integration so the source transition stays reviewable.
+the inventory from original cases. Full production precedence, export and
+canonical conservation checks remain next; no new canonical count is claimed.
+The tested helper is committed separately as `5f3a714`; current integration
+does not change any renderer or fixture.
 
 The next classification batch can reuse existing normal-line-box proofs rather than
 recapture typography. A complete original-tree ownership check now passes for

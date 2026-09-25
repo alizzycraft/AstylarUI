@@ -2,7 +2,19 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { restorePositionProducer, restoreOriginMotionProducer } from './position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer } from './position-composition-producer-transition.mjs';
+
+test('scalar line-box integration restores the complete accepted origin producer', () => {
+  const file='tests/material-parity/input-equivalence-audit.mjs';
+  const current=readFileSync(file,'utf8').replaceAll('\r\n','\n');
+  const previous=execFileSync('git',['show','868f9de:'+file],{encoding:'utf8',maxBuffer:4000000}).replaceAll('\r\n','\n');
+  assert.equal(restoreNormalLineBoxScalarProducer(current).restoredSource,previous);
+  for(const fragment of ['applyNormalLineBoxScalar(beforeNormalLineBoxScalars, cases, elementInventory, controlTypography)',
+    'validateNormalLineBoxScalar(report.discrepancies, replayedRows, cases,',
+    "    'tests/material-parity/normal-line-box-scalar.spec.mjs',\n"])
+    assert.throws(()=>restoreNormalLineBoxScalarProducer(current.replace(fragment,'')));
+  assert.throws(()=>restoreNormalLineBoxScalarProducer(current+'\n// unrelated\n'));
+});
 
 test('origin motion producer transition preserves the exact accepted predecessor and rejects partial integration', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

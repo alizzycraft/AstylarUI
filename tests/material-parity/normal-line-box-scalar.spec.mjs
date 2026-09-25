@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { applyNormalLineBoxScalar, normalLineBoxScalarAttribution } from './normal-line-box-scalar.mjs';
+import { applyNormalLineBoxScalar, validateNormalLineBoxScalar, normalLineBoxScalarAttribution } from './normal-line-box-scalar.mjs';
 
 function fixture() {
   const key = 'static:button@light/desktop';
@@ -19,6 +19,17 @@ function fixture() {
   return {rows,cases,inventory,control:{differences:[difference]}};
 }
 const apply = f => applyNormalLineBoxScalar(f.rows,f.cases,f.inventory,f.control);
+test('line-box scalar validation rejects missing forged or altered attributions', () => {
+  const f=fixture(), rows=apply(f);
+  const validate = r => validateNormalLineBoxScalar(r,f.rows,f.cases,f.inventory,f.control);
+  assert.deepEqual(validate(rows),[]);
+  assert.deepEqual(validate(JSON.parse(JSON.stringify(rows))),[]);
+  assert.equal(validate([]).length,1);
+  for(const mutate of [r=>r[0].occurrences++,r=>r[0].reviewEvidence.inputEquivalent=true,
+    r=>r[0].reviewEvidence.proofs[0].referenceLabel='other',r=>r.push(structuredClone(r[0]))]){
+    const changed=structuredClone(rows);mutate(changed);assert.equal(validate(changed).length,1);
+  }
+});
 test('line-box scalar join preserves raw values and requires full original membership', () => {
   const f=fixture(), before=structuredClone(f), result=apply(f);
   assert.equal(result[0].attribution,normalLineBoxScalarAttribution);

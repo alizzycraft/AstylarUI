@@ -2,10 +2,28 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+export function restoreNormalLineBoxScalarProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current;
+  for (const [from, to] of [
+    ["import { applyNormalLineBoxScalar, validateNormalLineBoxScalar, normalLineBoxScalarAttribution } from './normal-line-box-scalar.mjs';\n", ''],
+    ["  const beforeNormalLineBoxScalars = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyNormalLineBoxScalar(beforeNormalLineBoxScalars, cases, elementInventory, controlTypography)\n    : beforeNormalLineBoxScalars;\n", ''],
+    ['      errors.push(...validateNormalLineBoxScalar(report.discrepancies, replayedRows, cases,\n        report.elementInventory, report.controlTypography));\n', ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))\n    errors.push('button-host line-height attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/normal-line-box-scalar.mjs',\n    'tests/material-parity/normal-line-box-scalar.spec.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated normal-line-box scalar integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), '383e243a07218768ffddc7f1801da7c001f66e802c693ebd59effce4d1999f6c',
+    'producer changed beyond reviewed scalar line-box integration');
+  return {restoredSource:restored,previousModuleSha256:hash(restored),currentModuleSha256:hash(current)};
+}
 // Authenticate the complete predecessor, not just the lines we expect to change.
 export function restoreOriginMotionProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
-  let restored = current;
+  let restored = current.includes("from './normal-line-box-scalar.mjs'") ? restoreNormalLineBoxScalarProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["collectOriginStageEvidence(originStageBinding.status === 'bound' ? cases : [], elementInventory, canonicalStyle, { reviewedDisjointMotion: true })", "collectOriginStageEvidence(originStageBinding.status === 'bound' ? cases : [], elementInventory, canonicalStyle)"],
     ['validateOriginStageEvidence(report.originStageEvidence, report.elementInventory, report.discrepancies, canonicalStyle, { reviewedDisjointMotion: true })', 'validateOriginStageEvidence(report.originStageEvidence, report.elementInventory, report.discrepancies, canonicalStyle)'],
