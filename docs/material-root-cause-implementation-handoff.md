@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+Next evidence-reuse opportunity (read-only while the export runs): ten unresolved
+fontFamily scalar groups have complete original membership joined one-to-one
+to accepted `retainedTypography.differences` with attribution
+`reviewed-inherited-component-font-stack`. Population: card-title 52;
+checkbox-label, expansion-title, radio-solo-label, radio-team-label,
+slide-toggle-label, step-details-text, step-review-text and stepper-content
+68 each; tooltip-popup 18. Total **614/614 observations in ten groups**.
+The query authenticated compact shards at accepted generation `02f8a47b...`,
+used existing canonicalStyle normalization, and reconstructed membership from
+the complete original report (SHA-256 `b07ef154...` rechecked), not sampled case
+lists. It required both sides' style inputs; missing input objects were not
+treated as empty styles. Source is the existing retained font-token/ancestry
+proof, not a new font measurement. No new attribution is claimed yet.
+Next inspect exact reference/candidate mappings and raw-versus-retained values,
+then reuse the existing validated proof if those agree. These proofs explain
+omitted component font overrides retaining the page fallback stack, not equal
+font lists, selected physical fonts or raster parity. Do not reopen that
+already investigated root cause or alter producer dependencies mid-export.
+
 The line-height scalar production export is running from `77eb6cb` with cold
 evidence replay and all five original/supplemental input paths. Log:
 `artifacts/material-parity/line-height-scalar-export-77eb6cb.log`.
