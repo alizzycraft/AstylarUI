@@ -2,6 +2,43 @@
 
 ## Current audit checkpoint — September 25
 
+Resume triage after the overlay-focus investigations: compact queries against
+canonical generation `ed555089...` still report 1,456 unresolved groups. The
+largest families are dialog (186), bottom sheet (132), chips (101), tabs (99),
+card (87), slider (74), snackbar (69), and button-toggle (68). Largest property
+populations include backgroundColor (66), lineHeight (61), transformOrigin (59),
+color (50), boxSizing (49), and letterSpacing (48). These are prioritization
+counts, not evidence of shared causes. Current-file LF-normalized SHA-256 checks
+against the accepted `color-motion-metadata.json` receipt reproduce all 456
+source fingerprints with zero mismatches; no canonical export is needed merely
+to resume. Supplemental runtime probes remain separately scoped evidence.
+
+The next bounded question is whether the remaining origin observations with
+explicit, disjoint motion targets can receive an observation-stage attribution
+without assuming computed candidate origins or equal rendering. Competing
+explanations remain a browser-used/local-declaration measurement mismatch,
+unequal origin authoring, and motion/reference-box effects. Reuse the existing
+origin stage inspector and direct motion-target review infrastructure, not a
+new origin census or blanket motion waiver.
+
+An exact compact-index join now validates applicability of the historical
+`docs/material-origin-request-contexts.json` (SHA-256
+`8cd9950f3dc692509f1b8fd897fe60b9239281acfeac482c07e48e62a4d55696`):
+all 1,368 observations reproduce the occurrence counts of all 59 current
+unresolved transformOrigin groups. Join by family, element, and origin through
+`bindPreciseAuditNormalization()`; literal raw-string joining correctly failed
+on `32.5703px` versus canonical `32.57px`, so do not invent a new rounding rule.
+Contexts 0, 1, and 4 cover 704 observations / 36 groups across nine families.
+Their complete captured motion rules name box-shadow, border, or none, with
+explicit animation-name none wherever animation metadata occurs. This selects
+the next direct-target proof, not an accepted classification: first validate
+the exact owners/stages and negative controls for transform-origin, transform,
+all, variables, missing targets, named animations, and changed ancestry. Keep
+the other 664 observations / 23 groups guarded; transform-target motion,
+incomplete declarations and explicit tooltip ancestor origin need their own
+proof. Historical reference-only motion samples must not be extrapolated to
+every state. No origin classifications or canonical inputs changed this turn.
+
 Dialog Escape restoration is now isolated by the existing probe's explicit
 `--dialog-escape` mode. Eight captures compare unchanged routes with a separately
 labeled runtime control that bypasses only `AstylarShowcaseComponent.handleKeydown`
