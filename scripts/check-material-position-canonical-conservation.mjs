@@ -8,7 +8,8 @@ import { execFileSync } from 'node:child_process';
 import { readAudit } from './check-material-disabled-ink-canonical-conservation.mjs';
 import { collectPositionCompositionReview, applyPositionCompositionReview,
   validatePositionCompositionRows, positionCompositionAttribution } from '../tests/material-parity/position-composition-review.mjs';
-import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { applyNormalLineBoxScalar, normalLineBoxScalarAttribution } from '../tests/material-parity/normal-line-box-scalar.mjs';
 import { collectOriginStageEvidence, classifyOriginStageInput, originStageAttribution } from '../tests/material-parity/origin-stage-inventory-evidence.mjs';
 import { collectPositionFollowupReview, applyPositionFollowupReview,
   validatePositionFollowupRows, positionFollowupAttribution } from '../tests/material-parity/position-followup-review.mjs';
@@ -112,9 +113,9 @@ export function comparePositionCanonical(previous, current, expectedRows, curren
 // Reuse the canonical reader/comparison boundary for the appearance batch.
 // Expected rows come from independent source replay. Only the exact fallback
 // relocation may change the producer receipt; control values remain identical.
-export function compareAppearanceCanonical(previous, current, expectedRows, currentSource, { colorMotion = false, originMotion = false } = {}) {
-  assert.ok(!(colorMotion && originMotion));
-  const transition = originMotion ? restoreOriginMotionProducer(currentSource) : restoreAppearancePrecedence(currentSource);
+export function compareAppearanceCanonical(previous, current, expectedRows, currentSource, { colorMotion = false, originMotion = false, lineBox = false } = {}) {
+  assert.ok([colorMotion, originMotion, lineBox].filter(Boolean).length <= 1);
+  const transition = lineBox ? restoreNormalLineBoxScalarProducer(currentSource) : originMotion ? restoreOriginMotionProducer(currentSource) : restoreAppearancePrecedence(currentSource);
   if (colorMotion) {
     assert.ok(currentSource.toString().includes("!['appearance', 'color'].includes(property)"));
     transition.previousModuleSha256 = 'cc05565c29174a385ee16c14a507d351b06d14730da88f0ba4e454af68c2746e';
@@ -141,14 +142,18 @@ export function compareAppearanceCanonical(previous, current, expectedRows, curr
     const before = previous.rows[i], after = current.rows[i];
     if (isDeepStrictEqual(before, after)) continue;
     assert.equal(before.attribution, 'unresolved');
-    if (originMotion) assert.equal(before.property, 'transformOrigin');
+    if (lineBox) { assert.equal(before.property, 'lineHeight'); assert.equal(before.reference, 'normal'); }
+    else if (originMotion) assert.equal(before.property, 'transformOrigin');
     else if (colorMotion && before.property === 'color')
       assert.ok(['rgba(29,27,32,1)', 'rgba(230,225,229,1)'].includes(before.reference));
     else { assert.equal(before.property, 'appearance'); assert.equal(before.reference, 'none'); }
     assert.equal(before.astylar, undefined);
-    assert.equal(after.attribution, originMotion ? originStageAttribution : ownerInitialStyleAttribution);
+    assert.equal(after.attribution, lineBox ? normalLineBoxScalarAttribution : originMotion ? originStageAttribution : ownerInitialStyleAttribution);
     assert.equal(after.classification, 'parity-harness-defect');
-    if (originMotion) {
+    if (lineBox) {
+      assert.equal(after.reviewEvidence.inputEquivalent, false);
+      assert.equal(after.reviewEvidence.finalRasterVerified, false);
+    } else if (originMotion) {
       assert.equal(after.reviewEvidence.candidateComputedOriginVerified, false);
       assert.equal(after.reviewEvidence.finalRasterVerified, false);
       assert.equal(after.reviewEvidence.motionReview.disposition, 'captured-origin-motion-targets-disjoint');
@@ -157,14 +162,15 @@ export function compareAppearanceCanonical(previous, current, expectedRows, curr
       assert.equal(after.reviewEvidence.renderingEquivalent, false);
     }
     same(raw(before), raw(after), 'appearance classification changed raw input');
-    assert.equal(after.reviewedCases.length, before.occurrences);
-    assert.equal(new Set(after.reviewedCases).size, before.occurrences);
-    same(after.reviewedCases.slice(0, 12), before.cases, 'appearance case samples changed');
+    const reviewedCases = lineBox ? after.reviewEvidence.proofs.map(p => p.case) : after.reviewedCases;
+    assert.equal(reviewedCases.length, before.occurrences);
+    assert.equal(new Set(reviewedCases).size, before.occurrences);
+    same(reviewedCases.slice(0, 12), before.cases, 'appearance case samples changed');
     changes.push({ family: after.family, element: after.element, property: after.property, occurrences: after.occurrences,
       previousRowSha256: digest(before), currentRowSha256: digest(after) });
   }
-  assert.equal(changes.length, originMotion ? 36 : colorMotion ? 51 : 34);
-  const changedOccurrences = originMotion ? 704 : colorMotion ? 1428 : 2195;
+  assert.equal(changes.length, lineBox ? 12 : originMotion ? 36 : colorMotion ? 51 : 34);
+  const changedOccurrences = lineBox ? 716 : originMotion ? 704 : colorMotion ? 1428 : 2195;
   assert.equal(changes.reduce((n, row) => n + row.occurrences, 0), changedOccurrences);
   if (colorMotion) {
     assert.equal(changes.filter(r => r.property === 'color').length, 46);
@@ -225,23 +231,30 @@ function replayAppearanceRows(rows, captured, { colorMotion = false, originMotio
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && ['--appearance', '--color-motion', '--origin-motion'].includes(process.argv[2])) {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && ['--appearance', '--color-motion', '--origin-motion', '--line-box'].includes(process.argv[2])) {
   assert.equal(process.argv.length, 3);
   const colorMotion = process.argv[2] === '--color-motion';
   const originMotion = process.argv[2] === '--origin-motion';
-  const previous = await readAudit('artifacts/material-parity/working-audit/' + (originMotion
+  const lineBox = process.argv[2] === '--line-box';
+  const previous = await readAudit('artifacts/material-parity/working-audit/' + (lineBox
+    ? '02f8a47b90b39a9b43afd79d59ec3ee68a336b05f651f658dde67735e1d4b420' : originMotion
     ? 'ed555089857385f46871703032b3fda742ce58f47a081b44200bc1133e8d3a2f' : colorMotion
     ? '65c72350ed907939fbbbdae030f4aebcb7e83f1039de66fb4b3cb2c747a30c56'
     : '0a6c0f6defafd4e27f0b93f3d4e732621a8f8a7d4807fc516f09c21270091296'));
-  assert.equal(previous.manifest.uncompressedSha256, originMotion
+  assert.equal(previous.manifest.uncompressedSha256, lineBox
+    ? 'e63b9370e5ce46d33514ad5982408f25a11155d6be66d3a36fe3296d2c5f8985' : originMotion
     ? 'f75431e6dcdd6ffe80c793d79cd74026c733e636654501a3f18f771ff27f30bc' : colorMotion
     ? '45d4d3129ea5a13522bcd54e89f27bb80ce620e37f9e7a710c048fb1e1ce668a'
     : '185cecca3e2dbd07000dcb8a952639fe4df39811b4e0833f9330ec91355ea18c');
   const current = await readAudit('docs');
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
-  console.log(JSON.stringify(compareAppearanceCanonical(previous, current, replayAppearanceRows(previous.rows, JSON.parse(bytes), {colorMotion, originMotion}),
-    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), {colorMotion, originMotion}), null, 2));
+  const captured = JSON.parse(bytes);
+  const cases = [...captured.results.map(c => ({...c,kind:'static'})), ...captured.interactions.map(c => ({...c,kind:'interaction'}))];
+  const expected = lineBox ? applyNormalLineBoxScalar(previous.rows, cases, collectFullTreeInventory(cases), current.control)
+    : replayAppearanceRows(previous.rows, captured, {colorMotion, originMotion});
+  console.log(JSON.stringify(compareAppearanceCanonical(previous, current, expected,
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), {colorMotion, originMotion, lineBox}), null, 2));
 } else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   const followupOnly = process.argv[2] === '--followup';
   const chipOnly = process.argv[2] === '--chip';

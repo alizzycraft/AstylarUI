@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+The line-height scalar production export is running from `77eb6cb` with cold
+evidence replay and all five original/supplemental input paths. Log:
+`artifacts/material-parity/line-height-scalar-export-77eb6cb.log`.
+Do not change producer dependencies or restart while it is live. Terminal
+validation must be inspected before accepting the generated docs; 1,408 remaining
+unresolved groups is the expected result, not a verified result yet.
+Then run `node --max-old-space-size=8192 scripts/check-material-position-canonical-conservation.mjs --line-box`.
+This existing comparator now pins accepted predecessor `02f8a47b...`, requires
+exactly 12 groups / 716 observations, preserves raw fields and every unrelated
+row, and allows only the existing 48 control-producer hash updates. Its eleven
+tests passed in 28.97 seconds, including seven new line-box negative controls.
+Section/source reconciliation, compact import and final browser acceptance
+remain separate gates. Canonical accepted unresolved count remains 1,420.
+
 The corrected origin-motion export is terminal (2,022.78 seconds). Its only
 validation error is **1,420 unresolved scalar groups**; static/interaction
 coverage remains 436/436 and 1,875/1,875, with 8,483 groups, 389,202 occurrences
