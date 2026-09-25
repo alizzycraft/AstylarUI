@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 25
 
+Independent reconciliation of candidate `b74de570…` now passes scalar/control
+conservation: **83 groups / 2,596 observations**, all raw inputs unchanged,
+one existing outline proof row, one embedded scalar receipt row and 48 control
+producer receipts. Ordered current rows SHA:
+`6243cce40b4a0077121ba04de8c2dd87bf5bed371ccb239301875d7a4a4e559b`.
+All **461** source fingerprints match current normalized-LF files. Independent
+motion replay reproduces `59065eee6fd927b7be36688db357c6ace85db8a87e8e2a04151567921643316c`,
+preserving 121 groups / 7,254 observations and historical receipts.
+All three reconciliation sessions are terminal, exit 0. The section inventory
+preserves all 79 sections with no additions/removals: 68 unchanged, 11 changed
+(`sourceFingerprints`, `controlLineBoxes`, `summary`, `discrepancies`,
+`borderInitialInputs`, `outlineTokenInputs`, `ownerCaretInputs`,
+`reviewedSourceBatchInputs`, `sliderBorderDefaults`, `controlTypography`,
+`focusedProofs`). Metadata diff is retained at
+`artifacts/material-parity/border-defaults-metadata-0d0e1bc.json`.
+**Next:** reconcile the complete changed border collector sections and
+`focusedProofs` against the already-reviewed finite extensions, plus verify the
+three caret binding changes. Do not accept/import yet or repeat completed scalar,
+source-fingerprint, motion or section checks. No export is running.
+
 Corrected export `0d0e1bc` is terminal: **exit 1, 1,988.51 seconds**.
 Its sole reported error is **1,311 unresolved groups**, matching the proposed
 83-group reduction from the accepted baseline. Coverage remains 436/436 static
