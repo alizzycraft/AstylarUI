@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+Slider border-color applicability: the existing complete-source
+`collectSliderBorderDefaults` replay binds all **156 original native owners**,
+and its declaration-exclusion proof already rejects any authored border/reset
+input on either side. All **624 side-color observations** retain candidate
+`#bdc3c7` at all three stages, matching generic input defaults in
+`src/app/config/browser-defaults.ts:302`. Browser enabled ranges (140 owners)
+compute RGB 16/16/16, equal to text color. Disabled ranges (16 owners) instead
+compute `rgba(118,118,118,0.3)` while their text is RGB 197/197/197: disabled
+native UA border color must not be misclassified as ordinary currentColor.
+Both captured input layers have opacity zero for every owner; this is not a
+visible thumb-ring diagnosis or a new drag/layout finding. The existing public
+range/default selection proof is reusable for ownership, but its machine-readable
+property scope currently names only widths/styles/radii, not colors. Extend
+that same proof explicitly after export reconciliation rather than inventing
+another collector or claiming its current assertions cover color.
+Ordered case/owner/four-side/reference-text/candidate-color digest:
+`8e94e80c807fc7535317d09328c7cb09d4d63dca3e989e86ac722a4ad9a2813d`.
+No canonical classifications or running-export dependencies changed.
+
 Next shared gap triage — border colors: compact accepted-baseline queries find
 **181 unresolved groups / 5,188 observations**. Rejoined every group against
 the authenticated original `b07ef154...` report using the existing precise
