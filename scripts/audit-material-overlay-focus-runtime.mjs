@@ -5,10 +5,14 @@ import {createHash} from 'node:crypto';
 import {createRequire} from 'node:module';
 import {chromium} from 'playwright-core';
 
-// Read-only runtime instrumentation of the unchanged development showcase.
+// Runtime instrumentation of the unchanged development showcase. The explicit
+// --dialog-escape variant separately labels its temporary causal intervention.
 // Wrappers preserve arguments, return values, and the original promise identity.
 const base=process.env.ASTYLAR_FOCUS_URL??'http://127.0.0.1:4435';
-const sequences=process.argv.includes('--keyboard')
+const dialogEscape=process.argv.includes('--dialog-escape');
+const families=dialogEscape?['dialog']:['menu','bottom-sheet','dialog'];
+const variants=dialogEscape?['unchanged','without-app-escape']:['unchanged'];
+const sequences=dialogEscape?[{name:'escape',keys:['Escape']}]:process.argv.includes('--keyboard')
  ? [{name:'arrow-escape',keys:['ArrowDown','Escape']},{name:'tab-cycle',keys:['Tab','Tab','Tab','Shift+Tab','Escape']}]
  : [{name:'opening',keys:[]}];
 const out=path.resolve(process.argv[2]??'artifacts/material-parity/overlay-focus-current');
@@ -26,7 +30,7 @@ assert.ok(packageReceipts.length);
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const cases=[],errors=[],served=new Map(),pending=[],sourceMatches=new Map();
 try {
- for(const sequence of sequences)for(const instrumented of [false,true])for(const family of ['menu','bottom-sheet','dialog'])for(const mode of ['reference','astylar']){
+ for(const variant of variants)for(const sequence of sequences)for(const instrumented of [false,true])for(const family of families)for(const mode of ['reference','astylar']){
   const page=await browser.newPage({viewport:{width:900,height:700},deviceScaleFactor:1});
   page.on('pageerror',e=>errors.push({family,mode,message:e.message}));
   page.on('response',r=>{
@@ -48,11 +52,19 @@ try {
   await page.waitForFunction(()=>typeof window.__MATERIAL_SHOWCASE_COMMAND__==='function');
   if(mode==='astylar')await page.waitForFunction(()=>!!window.__ASTYLAR_MATERIAL_BENCHMARK__);
   await page.evaluate(async()=>{await document.fonts.ready;await window.__ASTYLAR_MATERIAL_BENCHMARK__?.waitForSettled();});
-  await page.evaluate(({mode,instrumented,family})=>{
+  await page.evaluate(({mode,instrumented,family,variant,dialogEscape})=>{
    const trace=[];window.__focusAudit={trace,phase:'setup'};
    const identity=()=>{const e=document.activeElement;return {tag:e?.tagName,id:e?.id,astylarId:e?.getAttribute('data-astylar-id'),parityId:e?.getAttribute('data-parity-id'),text:e?.textContent?.trim().slice(0,80)}};
    const record=(event,extra={})=>trace.push({event,phase:window.__focusAudit.phase,time:performance.now(),active:identity(),...extra});
    window.__focusAudit.record=record;
+   if(mode==='astylar'&&variant==='without-app-escape'){
+    const component=window.ng.getComponent(document.querySelector('app-astylar-showcase'));
+    const original=component.handleKeydown.bind(component);
+    component.handleKeydown=(id,event)=>{
+     if(event.key==='Escape'){record('diagnostic-bypass-app-escape',{id});return;}
+     return original(id,event);
+    };
+   }
    for(const type of ['pointerdown','pointerup','click','focusin','focusout','keydown','keyup'])document.addEventListener(type,e=>record(type,{target:e.target?.id??'',text:e.target?.textContent?.trim().slice(0,50),key:e.key}),true);
    if(mode==='astylar'&&instrumented){
     const component=window.ng.getComponent(document.querySelector('app-astylar-showcase')),surface=component.surface;
@@ -60,7 +72,7 @@ try {
     const ids=()=>{try{return surface.inspectResolvedStyles().elements.map(e=>e.id);}catch(e){return {unavailable:String(e)};}};
     for(const method of ['update','whenSettled','focus']){
      const original=surface[method].bind(surface);
-     surface[method]=(...args)=>{record(method+'-call',{target:method==='focus'?args[0]:undefined,ids:ids()});const result=original(...args);
+     surface[method]=(...args)=>{record(method+'-call',{target:method==='focus'?args[0]:undefined,ids:ids(),...(dialogEscape?{interaction:surface.diagnostics.interaction,stack:new Error().stack}:{})});const result=original(...args);
       if(method==='focus')record('focus-result',{target:args[0],ok:result,ids:ids()});
       else result?.then(()=>record(method+'-resolved',{ids:ids()}),e=>record(method+'-rejected',{error:String(e)}));
       return result;};
@@ -73,7 +85,7 @@ try {
      :family==='menu'?'.mat-mdc-menu-panel':family==='dialog'?'mat-dialog-container':'mat-bottom-sheet-container';
     record('boundary',{label,overlayPresent:!!document.querySelector(selector),state:window.__ASTYLAR_MATERIAL_BENCHMARK__?.state()});
    };
-  },{mode,instrumented,family});
+  },{mode,instrumented,family,variant,dialogEscape});
   let box;
   if(mode==='reference')box=await page.locator('#'+family+'-primary').boundingBox();
   else {
@@ -102,15 +114,15 @@ try {
    await page.evaluate(label=>window.__focusAudit.snapshot(label),`key-${index}-${key}`);
   }
   const result=await page.evaluate(()=>({trace:window.__focusAudit.trace,state:window.__ASTYLAR_MATERIAL_BENCHMARK__?.state()}));
-  cases.push({family,mode,instrumented,sequence:sequence.name,...result});
+  cases.push({family,mode,instrumented,variant,sequence:sequence.name,...result});
   await page.close();
  }
  await Promise.all(pending);
- const result={browser:browser.version(),viewport:{width:900,height:700,dpr:1},sequences,errors,cases,served:[...served.values()],sourceMatches:[...sourceMatches.values()],packageReceipts,probeSha256:hash(fs.readFileSync(new URL(import.meta.url))),limitations:['Development build, light profile, DPR1; only listed pointer/key sequences, not historical-bundle attribution or full interaction coverage.','Public-method wrappers observe calls without altering original results; internal autofocus is observed through DOM focus events.','Overlay presence is semantic DOM membership, not a visual/raster visibility assertion.']};
+ const result={browser:browser.version(),viewport:{width:900,height:700,dpr:1},sequences,variants,errors,cases,served:[...served.values()],sourceMatches:[...sourceMatches.values()],packageReceipts,probeSha256:hash(fs.readFileSync(new URL(import.meta.url))),limitations:['Development build, light profile, DPR1; only listed pointer/key sequences, not historical-bundle attribution or full interaction coverage.','Public-method wrappers observe calls without altering original results; internal autofocus is observed through DOM focus events.','Overlay presence is semantic DOM membership, not a visual/raster visibility assertion.','without-app-escape deliberately removes one application handler at runtime; it is a causal control, never equivalent-input or output-parity evidence.']};
  fs.writeFileSync(path.join(out,'result.json'),JSON.stringify(result,null,2));
  assert.equal(errors.length,0);assert.equal(sourceMatches.size,3,'Missing served app source receipts');
- for(const sequence of sequences)for(const family of ['menu','bottom-sheet','dialog'])for(const mode of ['reference','astylar']){
-  const pair=cases.filter(c=>c.family===family&&c.mode===mode&&c.sequence===sequence.name);assert.equal(pair.length,2);
+ for(const variant of variants)for(const sequence of sequences)for(const family of families)for(const mode of ['reference','astylar']){
+  const pair=cases.filter(c=>c.family===family&&c.mode===mode&&c.sequence===sequence.name&&c.variant===variant);assert.equal(pair.length,2);
   assert.deepEqual(pair[0].trace.at(-1).active,pair[1].trace.at(-1).active,'Instrumentation changed final focus');
   assert.deepEqual(pair[0].state,pair[1].state,'Instrumentation changed final application state');
   const boundaries=c=>c.trace.filter(x=>x.event==='boundary'&&(x.label==='settled'||x.label.startsWith('key-'))).map(({label,active,overlayPresent,state})=>({label,active,overlayPresent,state}));

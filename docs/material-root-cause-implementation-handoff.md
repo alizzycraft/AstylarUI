@@ -2,6 +2,35 @@
 
 ## Current audit checkpoint — September 25
 
+Dialog Escape restoration is now isolated by the existing probe's explicit
+`--dialog-escape` mode. Eight captures compare unchanged routes with a separately
+labeled runtime control that bypasses only `AstylarShowcaseComponent.handleKeydown`
+for Escape. Both variants are repeated with public-method wrappers disabled and
+enabled; all settled-boundary controls and causal assertions pass, zero page errors.
+Receipt: `artifacts/material-parity/dialog-escape-07609be/result.json`, SHA
+`cc1d89c684b71dfff83356a48ab0e1d7a2b28f4197ef5494211cb541884a4fce`.
+
+The unchanged candidate closes but ends on BODY. Its opener-focus request returns
+false while public diagnostics still show `modalDialogId=dialog-overlay`. Bypassing
+the app's Escape handler lets core restore `dialog-primary` before the app's close
+callback updates state; that callback's focus request succeeds with no active modal.
+Native restores its opener in both controls. This establishes the competing
+application dismissal path as causal in this showcase, rather than a generally
+broken core Escape-restoration path. `handleKeydown` patches closed state and
+focuses too early; core `update()` synchronously replaces interaction data, while
+`dismissActiveModal()` owns modal removal, opener restoration and the close event.
+Do not implement a fixture offset or duplicate focus manager. Future implementation
+should respect the existing core modal lifecycle and synchronize app state from
+its close notification, with focused regression proof. Exact reentrant Angular
+stack ordering is not fully established by the captured limited-depth stacks;
+no broader guarantee about arbitrary callback-time updates follows from this test.
+
+The causal variant is deliberately **not equal-input parity evidence** and never
+changes checked-in showcase authoring. All source/provenance receipts remain in
+the capture. Opening, traversal and Escape questions for this light/DPR1 subset
+are now answered; next return to remaining material input classifications and
+coverage, reserving complete browser/state gates for final integration.
+
 The same runtime probe now supports `--keyboard`: ArrowDown/Escape and three
 Tabs/Shift+Tab/Escape after pointer opening. Twenty-four captures (both surfaces,
 three families, two sequences, wrappers on/off) pass every settled-boundary
@@ -26,15 +55,14 @@ because a 400ms delay raced Material's 375ms sheet exit plus scheduling.
   overlays, but candidate focus ends on BODY rather than the opener in both
   sequences and both instrumentation modes. The app requests opener focus while
   the old modal remains active, receives false, then removes its focused child.
-  This proves an early application restoration request. Whether synchronous
-  Angular update delivery bypasses core default dismissal/restoration remains
-  unresolved; isolate that before assigning a general core defect.
+  This proves an early application restoration request. The subsequent causal
+  control above isolates the competing application path; do not assign a general
+  core defect from the failed showcase path alone.
 
 Escape closes menu and sheet and restores their openers once focus is back inside
 the surface. No claim is made for Escape after focus has already left the surface,
 all themes/DPRs, disabled items, or full output parity. Next decisive check:
-dialog Escape update/default-action ordering and a separately labeled control
-without the application's Escape handler; preserve canonical fixture behavior.
+dialog Escape control is now completed above; preserve canonical fixture behavior.
 
 Current-runtime overlay focus now has direct action-boundary evidence, not only
 the earlier scheduling reduction. `scripts/audit-material-overlay-focus-runtime.mjs`
