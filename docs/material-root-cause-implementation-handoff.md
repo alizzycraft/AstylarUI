@@ -82,14 +82,22 @@ The evidence session verified 1,205 files / 89,151,875 bytes, zero invalidations
 two collectors and ten memory hits. Log: `appearance-b8c58ae-progress.log`.
 Candidate compressed SHA `65c72350ed907939fbbbdae030f4aebcb7e83f1039de66fb4b3cb2c747a30c56`,
 decoded SHA `45d4d3129ea5a13522bcd54e89f27bb80ce620e37f9e7a710c048fb1e1ce668a`.
-Independent `--appearance` conservation is running in session **83835**, output
-`artifacts/material-parity/appearance-b8c58ae-conservation.json`. Section digest
-comparison is running in **67600**, output `appearance-b8c58ae-sections.json`,
-reusing the authenticated predecessor digests from `dialog-tab-7c7beef-sections.json`.
-Revalidate these handles; do not restart them or change their dependencies.
-Reconcile changed sections/source receipts (including 48 control producer
-receipts) before compact import or canonical commit. The accepted count remains
-1,541 until reconciliation succeeds; no new canonical acceptance is claimed.
+Independent `--appearance` conservation is TERMINAL/PASS (session **83835**):
+exactly 34 groups / 2,195 occurrences changed; 8,449 unrelated complete rows and
+all raw inputs are preserved. Forty-eight control records change only the
+authenticated producer receipt. Evidence: `appearance-b8c58ae-conservation.json`.
+Section comparison is TERMINAL/PASS (**67600**), `appearance-b8c58ae-sections.json`:
+71/79 sections unchanged, eight require explanation: sourceFingerprints,
+controlLineBoxes, summary, discrepancies, ownerCaretInputs,
+reviewedSourceBatchInputs, ownerInitialStyleEvidence, controlTypography.
+Predecessor digests were reused from `dialog-tab-7c7beef-sections.json`.
+Targeted authenticated metadata comparison is running in **15177**, output
+`artifacts/material-parity/appearance-b8c58ae-metadata.json`: verify every source
+against disk, preserve non-appearance observations, and enumerate remaining
+receipt/summary changes. Revalidate this handle rather than restart it.
+Reconcile all remaining changes before compact import or canonical commit.
+The accepted count remains 1,541 until reconciliation succeeds; no new canonical
+acceptance is claimed.
 
 Corrected-export preflight passes: the existing producer-transition helper now
 removes only the exact appearance fallback relocation and authenticates the
