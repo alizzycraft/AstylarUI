@@ -41,6 +41,16 @@ test('interactive control-label weight stages cover every case without claiming 
   const collect = (entries, evidence) => collectStyleDiscrepancies(entries, { observations: [] }, evidence,
     ...Array.from({ length: 19 }, () => []), { observations: [] }, { observations: [] }, { observations: [] }, [], { observations: [] });
   const rows = collect(cases, retained);
+  const staticCases = raw.results.filter(c => ['checkbox', 'radio', 'slide-toggle'].includes(c.family))
+    .map(c => ({ ...c, kind: 'static' }));
+  const combinedCases = [...staticCases, ...cases];
+  const combinedRetained = collectRetainedTypographyEvidence(combinedCases, collectFullTreeInventory(combinedCases));
+  const combined = collect(combinedCases, combinedRetained);
+  const combinedWeights = combined.filter(r => r.property === 'fontWeight' && r.attribution === 'reviewed-stage-mismatch');
+  assert.equal(combinedWeights.length, 8, 'static and interactive evidence must not collapse into one group');
+  assert.deepEqual(combinedWeights.filter(r => !r.states.includes('static')), rows.filter(r => r.property === 'fontWeight' && r.attribution === 'reviewed-stage-mismatch'));
+  assert.deepEqual(combinedWeights.filter(r => r.states.includes('static')),
+    collect(staticCases, combinedRetained).filter(r => r.property === 'fontWeight' && r.attribution === 'reviewed-stage-mismatch'));
   const weights = rows.filter(r => r.property === 'fontWeight' && r.attribution === 'reviewed-stage-mismatch');
   assert.equal(weights.length, 4);
   assert.deepEqual(weights.map(r => r.element).sort(), ['checkbox-label', 'radio-solo-label', 'radio-team-label', 'slide-toggle-label']);

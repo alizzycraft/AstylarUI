@@ -36,6 +36,7 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreInteractiveWeightProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  restored = restored.replace("glyph paint.' +\n      (interactiveWeight ? ' Interactive weight evidence is grouped separately from static observations; current pseudo-state paint remains unverified.' : ''),", "glyph paint.',");
   for (const [from, to] of [
     ["  const interactiveWeight = !!benchmarkCase.state && property === 'fontWeight' && reference === '400' &&\n    ['checkbox', 'radio', 'slide-toggle'].includes(benchmarkCase.family) &&\n    evidence?.case === caseKey(benchmarkCase) && evidence.family === benchmarkCase.family &&\n    evidence.state === benchmarkCase.state && evidence.source === 'core-text-registry' &&\n    Number.isInteger(evidence.revision) && evidence.revision >= 0 && evidence.currentPseudoStatePaintVerified === false;\n", ''],
     ['  if ((benchmarkCase.state && !interactiveWeight) || astylar !== undefined', '  if (benchmarkCase.state || astylar !== undefined'],

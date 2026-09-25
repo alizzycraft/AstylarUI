@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 25
 
+Combined original-capture replay now passes via
+`node scripts/check-material-position-canonical-conservation.mjs --weight-replay`:
+all **42** unresolved predecessor weight groups are accounted for; exactly
+**26 / 1,502** are attributed (20/1,142 owner-stage, 4/224 interactive stage,
+2/136 toggle token), and **16** remain excluded. Full canonical comparison is
+wired through the same command with `--weight`; it has not run yet.
+
+The initial combined replay failed on checkbox-label membership (`0 !== 1`):
+production grouped new interactive rows with old static rows because their
+classification/justification keys were identical. This lost the interactive
+proof's explicit false paint/equivalence flags. Audit instrumentation now gives
+interactive weight evidence a distinct scope sentence, preserving static
+justification and grouping byte-for-byte. A mixed original static/interactive
+test proves eight separate groups and exact independently collected evidence.
+Focused interaction/source tests pass (2/2, 7.83 s), all producer-transition tests
+pass (9/9, 1.78 s), and focused scalar conservation tests pass (4/4, 2.21 s).
+No renderer or fixture changed. The fcb predecessor's standalone manifest was
+restored from its hash-authenticated index; archived payload bytes are untouched.
+Next run the coherent milestone export, then `--weight`, section/fingerprint
+reconciliation and canonical import. Do not rerun this population census without
+a relevant change. Canonical unresolved count is still **1,288**, not yet 1,262.
+
 The existing scalar canonical comparator now supports the pending weight batch:
 exactly **26 groups / 1,502 observations**, with the three attribution populations
 checked independently. Raw rows, prior classifications, ordering, control evidence

@@ -28,10 +28,37 @@ import { collectBorderInitialInputs, classifyBorderInitialInput, collectOutlineT
   applyCardBorderToken } from '../tests/material-parity/border-initial-input-evidence.mjs';
 import { collectSliderBorderDefaults, classifySliderBorderDefault } from '../tests/material-parity/slider-border-default-source-binding.mjs';
 import { restoreInteractiveWeightProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { collectStyleDiscrepancies } from '../tests/material-parity/input-equivalence-audit.mjs';
+import { queryFindings } from './audit-findings-store.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
 const receipt = row => row?.reviewEvidence?.observation?.normalizationReconciliation;
+
+// Use original captures and existing classifiers, not the proposed export's
+// attribution. Full inventory ordering preserves retained-proof node receipts.
+export function replayWeightRows(rows, captured) {
+  const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
+    ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const retained = collectRetainedTypographyEvidence(cases, inventory, collectControlTypographyEvidence(cases, inventory));
+  const owner = collectOwnerInitialStyleEvidence(captured, inventory);
+  const replay = collectStyleDiscrepancies(cases, { observations: [] }, retained,
+    ...Array.from({ length: 19 }, () => []), { observations: [] }, { observations: [] }, { observations: [] }, [], owner);
+  const metadata = ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'];
+  const matches = (a, b) => ['family', 'element', 'property', 'reference', 'astylar', 'states', 'cases', 'occurrences']
+    .every(k => isDeepStrictEqual(a[k], b[k]));
+  const expected = rows.map(row => {
+    if (row.property !== 'fontWeight' || row.attribution !== 'unresolved') return row;
+    const candidates = replay.filter(r => matches(row, r));
+    assert.equal(candidates.length, 1, `weight original membership changed: ${row.family}/${row.element}/${row.states}`);
+    const result = candidates[0];
+    if (![ownerInitialStyleAttribution, 'reviewed-stage-mismatch'].includes(result.attribution)) return row;
+    return { ...row, ...Object.fromEntries(metadata.filter(k => Object.hasOwn(result, k)).map(k => [k, result[k]])) };
+  });
+  return applyRetainedFontScalar(expected, cases, inventory, retained, normalize);
+}
 
 // Replay only this batch from original captures, never from the new canonical
 // classifications. The caller authenticates the original report bytes; the
@@ -421,7 +448,36 @@ function replayAppearanceRows(rows, captured, { colorMotion = false, originMotio
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--dialog-card-borders') {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--weight-replay') {
+  assert.equal(process.argv.length, 3);
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const captured = JSON.parse(bytes);
+  const snapshot = { generation: 'fcb44846abf9e0b7a63a0277d3990b8420709765748ef27fb625c2ebf40812a9',
+    indexSha256: '95d98fbe2cafb17e8a2ef0d9ed3cd04c3a909637461a684bd237de7bf3bfa4b8' };
+  const rows = [...new Set(captured.results.map(c => c.family))]
+    .flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies' && r.property === 'fontWeight' && r.attribution === 'unresolved');
+  assert.equal(rows.length, 42);
+  const result = replayWeightRows(rows, captured), changed = result.filter(r => r.attribution !== 'unresolved');
+  const totals = Object.fromEntries([...new Set(changed.map(r => r.attribution))].map(a => [a, {
+    groups: changed.filter(r => r.attribution === a).length,
+    observations: changed.filter(r => r.attribution === a).reduce((n, r) => n + r.occurrences, 0),
+  }]));
+  same(totals, { [ownerInitialStyleAttribution]: { groups: 20, observations: 1142 },
+    [retainedFontScalarAttribution]: { groups: 2, observations: 136 }, 'reviewed-stage-mismatch': { groups: 4, observations: 224 } });
+  console.log(JSON.stringify({ totals, excludedGroups: result.length - changed.length, canonicalAcceptance: false }));
+} else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--weight') {
+  assert.equal(process.argv.length, 3);
+  const previous = await readAudit('artifacts/material-parity/working-audit/fcb44846abf9e0b7a63a0277d3990b8420709765748ef27fb625c2ebf40812a9');
+  assert.equal(previous.manifest.uncompressedSha256, '5bb6b2164c230ff32593d6721375f5be2379ba3a529116b6af93ba9df6df177b');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const expected = replayWeightRows(previous.rows, JSON.parse(bytes));
+  const current = await readAudit('docs');
+  console.log(JSON.stringify(compareBorderDefaultCanonical(previous, current, expected,
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), { weight: true }), null, 2));
+} else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--dialog-card-borders') {
   assert.equal(process.argv.length, 3);
   const previous = await readAudit('artifacts/material-parity/working-audit/b74de5707d4cb62eee5da0aa540746d2da9116e4be73e80affbf5b6e2949816a');
   assert.equal(previous.manifest.uncompressedSha256, '1a0f49bd56a74128125c60f17a0d3956383dce6a78e7a74419f85a97e244836f');
