@@ -106,6 +106,30 @@ test('appearance attribution binds original observations and refuses explicit va
   assert.equal(JSON.stringify(input), before);
 });
 
+test('font-weight attribution is source-bound and refuses lost observations or equivalence claims', () => {
+  const proof = evidence.observations.find(p => p.property === 'fontWeight' && p.element === 'stepper-content' && !p.issues.length);
+  assert.ok(proof);
+  const input = raw.results[0].styleInputs.find(i => i.id === proof.element);
+  const result = classifyOwnerInitialStyleInput(input, 'fontWeight', '400', undefined, proof);
+  assert.equal(result.attribution, ownerInitialStyleAttribution);
+  assert.equal(result.classification, 'parity-harness-defect');
+  assert.equal(result.reviewEvidence.computedCandidateVerified, false);
+  assert.equal(result.reviewEvidence.renderingEquivalent, false);
+  for (const patch of [{ referenceValue: '500' }, { renderingEquivalent: true },
+    { computedCandidateVerified: true }, { issues: [{ reason: 'explicit-relevant-request', key: 'font' }] }])
+    assert.equal(classifyOwnerInitialStyleInput(input, 'fontWeight', '400', undefined, { ...proof, ...patch }), undefined);
+  assert.equal(classifyOwnerInitialStyleInput(input, 'fontWeight', '500', undefined, proof), undefined);
+  assert.equal(classifyOwnerInitialStyleInput(input, 'fontWeight', '400', '400', proof), undefined);
+  for (const mutate of [
+    e => { e.observations = e.observations.filter(p => p.property !== 'fontWeight'); },
+    e => { e.observations.push(structuredClone(proof)); },
+    e => { e.observations.find(p => p.property === 'fontWeight').referencePath = ['fabricated']; },
+  ]) {
+    const changed = structuredClone(evidence); mutate(changed);
+    assert.ok(validateOwnerInitialStyleSource(binding, changed).length);
+  }
+});
+
 test('appearance precedence preserves an existing panel-header owner mismatch in the production chain', () => {
   const entry = original.results.find(e => e.family === 'expansion');
   assert.ok(entry);
@@ -142,6 +166,46 @@ test('appearance precedence preserves an existing panel-header owner mismatch in
   args[42] = undefined;
   assert.equal(find(collectStyleDiscrepancies(...args)).attribution, ownerInitialStyleAttribution,
     'a remaining unresolved observation must still reach the new fallback');
+});
+
+test('font-weight attribution replays complete unresolved membership and retains excluded owners', () => {
+  const snapshot = { generation: 'fcb44846abf9e0b7a63a0277d3990b8420709765748ef27fb625c2ebf40812a9',
+    indexSha256: '95d98fbe2cafb17e8a2ef0d9ed3cd04c3a909637461a684bd237de7bf3bfa4b8' };
+  const entries = [...original.results.map(e => ({ ...e, kind: 'static' })),
+    ...original.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+  const rows = [...new Set(entries.map(e => e.family))]
+    .flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies' && r.attribution === 'unresolved' && r.property === 'fontWeight');
+  assert.equal(rows.length, 42);
+  const source = bindOwnerInitialStyleSource(original, { parityPath: index.capture.file });
+  assert.equal(source.status, 'bound');
+  const full = collectOwnerInitialStyleEvidence(original, collectFullTreeInventory(entries));
+  const byOwner = new Map(full.observations.map(p => [JSON.stringify([p.case, p.element, p.property]), p]));
+  assert.equal(byOwner.size, full.observations.length);
+  let groups = 0, occurrences = 0, excluded = 0;
+  for (const row of rows) {
+    const cases = entries.filter(e => e.family === row.family && row.states.includes(e.state ?? 'static'))
+      .flatMap(e => e.styleInputs.filter(i => i.id === row.element && i.reference?.fontWeight === row.reference &&
+        i.astylar?.fontWeight === row.astylar).map(input => ({ e, input, case: keyOf(e) })));
+    assert.equal(cases.length, row.occurrences);
+    assert.equal(new Set(cases.map(c => c.case)).size, cases.length);
+    assert.deepEqual(cases.slice(0, 12).map(c => c.case), row.cases);
+    assert.deepEqual([...new Set(cases.map(c => c.e.state ?? 'static'))], row.states);
+    const outcomes = cases.map(c => classifyOwnerInitialStyleInput(c.input, 'fontWeight', row.reference, row.astylar,
+      byOwner.get(JSON.stringify([c.case, row.element, row.property]))));
+    assert.equal(new Set(outcomes.map(Boolean)).size, 1, 'mixed eligibility must stay explicit');
+    if (outcomes[0]) {
+      groups++; occurrences += cases.length;
+      for (const result of outcomes) {
+        assert.equal(result.attribution, ownerInitialStyleAttribution);
+        assert.equal(result.classification, 'parity-harness-defect');
+        assert.equal(result.reviewEvidence.computedCandidateVerified, false);
+        assert.equal(result.reviewEvidence.renderingEquivalent, false);
+      }
+    } else excluded += cases.length;
+  }
+  assert.equal(groups, 20); assert.equal(occurrences, 1142); assert.equal(excluded, 1042);
 });
 
 test('owner initial full-population appearance integration preserves native auto and excluded owners', () => {

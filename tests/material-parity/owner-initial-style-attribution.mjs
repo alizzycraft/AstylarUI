@@ -22,7 +22,7 @@ const scalar = (p, v) => p === 'wordSpacing' && v === '0px' ? '0' : v;
 // inferred candidate default or a waiver of native control paint requirements.
 // Read lazily: the survey's reviewed owner mappings import the audit module,
 // which imports this attribution module in turn.
-const reviewedInitialValues = () => ({ ...ownerInitialValues, appearance: 'none' });
+const reviewedInitialValues = () => ({ ...ownerInitialValues, appearance: 'none', fontWeight: '400' });
 const propertiesOf = input => Object.entries(reviewedInitialValues())
   .filter(([p, v]) => input.reference?.[p] === v && input.astylar?.[p] === undefined).map(([p]) => p)
   .concat(input.reference?.color !== undefined && input.astylar?.color === undefined ? ['color'] : []);
@@ -74,7 +74,7 @@ function inspect(entry, trees, colorRoot, canonical) {
       continue;
     }
     const proof = trees ? inspectOwnerInitialStyle(input, property, trees.reference, trees.candidate,
-      { family: entry.family, reviewedGeneratedOwners: true, reviewedAppearance: true }) : {
+      { family: entry.family, reviewedGeneratedOwners: true, reviewedAppearance: true, reviewedFontWeight: true }) : {
       property, element: input.id, issues: [{ reason: 'missing-paired-inventory-evidence' }],
       disposition: 'requires-specific-review', computedCandidateVerified: false, renderingEquivalent: false };
     const motionReview = property === 'appearance' && trees && proof.issues.length &&

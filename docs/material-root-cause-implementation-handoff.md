@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 25
 
+Font-weight observation-stage classification now uses the existing source-bound
+owner-initial path (property selection plus the opt-in inspector). Full unresolved
+membership replay passes: **42 groups / 2,184 observations**, of which exactly
+**20 / 1,142** qualify and **22 / 1,042** remain excluded. Every original case,
+state list and sampled ordering matches the pinned fcb compact snapshot; duplicate
+evidence is rejected and neither candidate computed weight nor raster equivalence
+is claimed. The full population test passed in 137.36 s; do not repeat this census
+without a relevant change. Five focused binding/rejection/precedence tests pass
+in 12.59 s, including lost weight observations and forged equality rejection.
+Next reconcile this collector's complete predecessor (non-weight observations
+must remain unchanged), verify production precedence for the new weight rows,
+and integrate with the remaining weight-token/retained-stage batch before another
+canonical export. Current canonical count **1,288** is unchanged; source is newer
+than that accepted snapshot. No renderer, plugin or fixture changes.
+
 Generated font-weight owner replay is now complete: **78 slider-visual and 56
 interactive stepper-content cases**, each authenticated against original tree
 hashes. Existing unique alias/template mappings succeed for every case, with
