@@ -2,6 +2,44 @@
 
 ## Current audit checkpoint — September 25
 
+The public hover reduction now separates two failures without Material controls.
+`scripts/audit-material-overlay-focus-runtime.mjs --public-hover` replaces only
+the runtime document through public `surface.update()`; native HTML uses the
+same generated declarations in an isolated shadow root. One absolutely positioned
+box is covered by an opaque sibling. A second variant adds only a cover :hover
+rule on both sides. No click, modal, animation, transform or private scene update
+is involved. Existing host handlers only record these unrelated IDs.
+
+Accepted supplemental receipt:
+`artifacts/material-parity/public-hover-b8b0471-final/result.json`, SHA-256
+`d11c78684fb013027e98eef8510f7d311d40847b89ca23e65d0f30b90476b0d1`.
+Eight cases cover native/candidate, passive/hoverable cover, DPR1/2. All 32
+screenshots were rehashed; paired authored inputs are equal; all 517 served
+JavaScript URL/hash pairs match the prior authenticated runtime; diagnostics
+and page errors are empty. The host is exactly 900x700 CSS pixels on both sides.
+Native geometry and point pixels establish that the cover occupies the pointer
+location; candidate pixels also show the cover there, excluding a missing or
+off-position cover at that point. Semantic proxy rectangles are not layout proof.
+
+- Hoverable cover: native immediately drops the old hover; candidate keeps it
+  after settled update, painting the cover's normal gray instead of hover gray.
+  A 1px move retargets correctly, as does leaving and reentering. Both DPRs agree.
+- Passive cover: candidate keeps targeting the obscured original box even after
+  the 1px move and a complete leave/reenter, while native targets the cover.
+  Adding the hover rule changes this moving-pointer outcome, distinguishing
+  eligibility/picking from the stationary-update problem.
+
+These are public-reproduction interaction defects, not proof that every historic
+Material paint mismatch shares a cause. Next trace the served runtime's hover
+reconciliation and non-interactive blocker eligibility separately; source-only
+inspection is not yet proof of the exact served branch. Preserve the current
+reproduction, and do not compensate by adding fixture hover styles. Full-state
+coverage and final browser acceptance remain pending. The diagnostic server is
+stopped. The initial attempts are retained as non-acceptance evidence: the first
+used unsupported backgroundColor; the corrected intermediate controls reused
+screenshot filenames across variants. The final run uses supported background,
+unique filenames and hash-verified images. No renderer or canonical inputs changed.
+
 The stale-hover runtime question now has direct evidence. Existing probe mode
 `--hover-retarget` opens sheet/dialog at a stationary pointer, settles, then moves
 one CSS pixel within the same covered opener location. Eight captures (two
