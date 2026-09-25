@@ -14,6 +14,29 @@ const normalized = key => key.replaceAll('-', '').toLowerCase();
 const originRequest = key => /^(transformorigin|transformbox|all)$/.test(normalized(key));
 const motionRequest = key => /^(animation|transition)/.test(normalized(key));
 const inactive = value => value === undefined || typeof value === 'string' && ['none', 'matrix(1,0,0,1,0,0)'].includes(value.replace(/\s/g, ''));
+// Opt-in investigation only. These targets do not name transform-origin;
+// box/reference-size effects are deliberately NOT claimed equivalent.
+const originDisjointTargets = new Set(['none', 'box-shadow', 'border']);
+const motionFields = new Set(['transition-property', 'transition-duration', 'transition-delay',
+  'transition-timing-function', 'transition-behavior', 'animation-name', 'animation-duration',
+  'animation-delay', 'animation-timing-function', 'animation-iteration-count', 'animation-direction',
+  'animation-fill-mode', 'animation-play-state', 'animation-timeline', 'animation-range-start', 'animation-range-end']);
+function reviewOriginMotion(declarations) {
+  const requests = [];
+  for (const [declarationIndex, declaration] of declarations.entries()) {
+    const entries = Object.entries(declaration).filter(([key]) => motionRequest(key));
+    if (!entries.length) continue;
+    if (entries.some(([key, value]) => !motionFields.has(key) || !object(value) ||
+        typeof value.value !== 'string' || typeof value.important !== 'boolean' || !value.value.trim() ||
+        /(?:var\(|env\(|inherit|revert|unset|initial|[\\/])/i.test(value.value))) return;
+    if (entries.some(([key]) => key.startsWith('transition-')) &&
+        !declaration['transition-property']?.value.split(',').every(target => originDisjointTargets.has(target.trim()))) return;
+    if (entries.some(([key]) => key.startsWith('animation-')) && declaration['animation-name']?.value !== 'none') return;
+    requests.push({ declarationIndex, declarations: Object.fromEntries(entries) });
+  }
+  return requests.length ? { disposition: 'captured-origin-motion-targets-disjoint', requests,
+    animationSettlementVerified: false, indirectEffectsExcluded: false } : undefined;
+}
 const chain = (tree, leaf) => {
   const path = [], seen = new Set();
   for (let node = leaf; node; node = one(tree.nodes.filter(n => n.key === node.parent))) {
@@ -23,9 +46,10 @@ const chain = (tree, leaf) => {
 };
 
 // Guarded attribution of an observation-stage difference, NEVER equivalence.
-// Motion, explicit origin/reset requests and unproved mapping stay unresolved.
+// Motion stays unresolved by default; the opt-in review retains its exact requests.
+// Explicit origin/reset requests and unproved mapping always stay unresolved.
 // No computed candidate origin or reference-box geometry is synthesized here.
-export function inspectTransformOriginDeclarationStage(entry, reference, candidate, input) {
+export function inspectTransformOriginDeclarationStage(entry, reference, candidate, input, { reviewedDisjointMotion = false } = {}) {
   const unresolved = reason => ({ status: 'unresolved', reason });
   if (!input || ![reference, candidate].every(t => t?.schemaVersion === 1 && Array.isArray(t.nodes) &&
       Array.isArray(t.rules) && Array.isArray(t.errors) && !t.errors.length && new Set(t.nodes.map(n => n.key)).size === t.nodes.length) ||
@@ -71,8 +95,12 @@ export function inspectTransformOriginDeclarationStage(entry, reference, candida
   }
   if (refDeclarations.some(d => Object.keys(d).some(originRequest)) ||
       candidateDeclarations.some(d => Object.keys(d).some(originRequest))) return unresolved('explicit origin/reference-box/reset request');
+  let motionReview;
   if (refDeclarations.some(d => Object.keys(d).some(motionRequest)) ||
-      candidateDeclarations.some(d => Object.keys(d).some(motionRequest))) return unresolved('motion declarations require separate state/cascade proof');
+      candidateDeclarations.some(d => Object.keys(d).some(motionRequest))) {
+    if (!reviewedDisjointMotion || candidateDeclarations.some(d => Object.keys(d).some(motionRequest)) ||
+        !(motionReview = reviewOriginMotion(refDeclarations))) return unresolved('motion declarations require separate state/cascade proof');
+  }
   // SVG presentation attributes and origins outside ordinary CSS boxes have a
   // different default contract. Do not infer it from a string that looks like px.
   if (refPath.some(n => ['svg', 'g', 'path', 'rect', 'circle', 'ellipse', 'line', 'polygon', 'polyline', 'text', 'use'].includes(n.type) ||
@@ -87,5 +115,8 @@ export function inspectTransformOriginDeclarationStage(entry, reference, candida
     candidatePath: astPath.map(n => ({ key: n.key, type: n.authored.type ?? '<synthetic-root>' })),
     mapping: mapping ? { status: mapping.status, method: mapping.method, missingRules: mapping.missingRules, extraRules: mapping.extraRules } : { status: 'direct-id' },
     inputEquivalent: false, candidateComputedOriginVerified: false, referenceBoxEqualityVerified: false, finalRasterVerified: false,
-    justification: 'The exact captured scalar and tree agree on browser-used origin pixels while all candidate declaration stages omit the property. Complete captured target/ancestor declarations contain no origin, reference-box, reset or motion request. This attributes a comparison of different observation stages, not missing authored CSS or a computed candidate value. Default/reference-box semantics, known core transform-origin limitations, unrelated rule gaps and rendered output remain separate obligations.' };
+    ...(motionReview ? { motionReview } : {}),
+    justification: motionReview
+      ? 'The exact scalar/tree and candidate declaration stages establish different observation stages. Complete target/ancestor declarations contain no origin, reference-box or reset request; each captured reference motion rule explicitly targets none, box-shadow or border, and any animation metadata explicitly names none in that same rule. No cascade winner, animation settlement, indirect box-size effect, computed candidate origin or rendering equivalence is inferred. Known core origin limitations remain separate obligations.'
+      : 'The exact captured scalar and tree agree on browser-used origin pixels while all candidate declaration stages omit the property. Complete captured target/ancestor declarations contain no origin, reference-box, reset or motion request. This attributes a comparison of different observation stages, not missing authored CSS or a computed candidate value. Default/reference-box semantics, known core transform-origin limitations, unrelated rule gaps and rendered output remain separate obligations.' };
 }

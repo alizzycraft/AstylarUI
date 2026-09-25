@@ -24,7 +24,7 @@ test('all canonical proof pointers resolve after focused/integration test moves'
 });
 
 test('focused audit suites do not invoke full aggregation and keep integration explicitly available', () => {
-  for (const area of ['slider', 'position']) {
+  for (const area of ['slider', 'position', 'origin']) {
     const focused = selectAuditTests('focused', area), integration = selectAuditTests('integration', area);
     assert.ok(integration.length);
     for (const file of focused) {

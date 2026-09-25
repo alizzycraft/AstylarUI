@@ -4,6 +4,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const auditSuites = {
+  origin: { focused: ['origin-motion-stage-review'], integration: ['origin-stage-inventory-evidence'] },
   slider: { focused: ['slider-input-box-source-binding'], integration: ['slider-input-box-integration'] },
   position: {
     focused: ['position-composition-review', 'position-followup-review'],
@@ -20,7 +21,7 @@ export function selectAuditTests(tier, area) {
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   const [tier, area = 'workflow', ...extra] = process.argv.slice(2);
-  assert.equal(extra.length, 0, 'Usage: run-audit-tests.mjs focused|integration slider|position|workflow');
+  assert.equal(extra.length, 0, 'Usage: run-audit-tests.mjs focused|integration slider|position|origin|workflow');
   const files = selectAuditTests(tier, area);
   console.log(JSON.stringify({ tier, area, files, browserCapture: false, fullAudit: false }));
   const result = spawnSync(process.execPath, ['--test', '--test-concurrency=1', ...files], { stdio: 'inherit' });

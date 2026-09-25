@@ -2,6 +2,32 @@
 
 ## Current audit checkpoint — September 25
 
+The direct origin-motion question now has a focused proof, using an opt-in
+`reviewedDisjointMotion` branch of the existing stage inspector. The default
+collector remains unchanged. Exact original capture/tree authentication and the
+pinned compact predecessor reproduce all 59 groups / 1,368 observations;
+36 complete groups / 704 observations qualify for measurement-stage attribution,
+and 23 / 664 remain guarded. Forty-two negative controls reject transform/origin
+targets, all, variables, unknown fields, incomplete targets, named animations,
+explicit/ancestor origins, missing ancestry, candidate motion, changed scalars
+and missing provenance. No capture is mutated or motion rule deleted to pass.
+The proof retains exact motion requests and explicitly denies verified animation
+settlement, absence of indirect effects, computed candidate origins, reference-box
+equality, input equivalence and raster parity.
+
+Verification: `node --test tests/material-parity/origin-motion-stage-review.spec.mjs`
+passes (1/1, 13.02 seconds). The unchanged default-mode inventory/source-binding
+suite passes (4/4, 100.53 seconds), preserving all 6,938 historical dispositions.
+The focused and integration commands are now available through
+`npm run audit:test:focused -- origin` and `npm run audit:test:integration -- origin`.
+Next integrate the opt-in proof into the existing collector, independent source
+replay, validation and canonical membership checks as one coherent batch. The
+canonical count is still 1,456: the 36-group proposal is not yet exported.
+This edit changes the inspector's source receipt; reconcile it at integration
+rather than misrepresenting the earlier 456/456 freshness check as current.
+No renderer, reference or candidate fixture changes, browser recapture, or
+successful scratch artifacts were produced.
+
 Resume triage after the overlay-focus investigations: compact queries against
 canonical generation `ed555089...` still report 1,456 unresolved groups. The
 largest families are dialog (186), bottom sheet (132), chips (101), tabs (99),
