@@ -19,11 +19,22 @@ and explicit `position:relative`, candidate offsets/position omitted. Captured
 matched rules author relative position but no inset on the reference and neither
 on the candidate. Ordered witness digest
 `7d05be4f6a3462bbbce93b26687273ec1b4ef796995d6b9fd92f16a97bcdd3af`.
-This is scalar matched-rule evidence, not full ancestry/inline/alias closure or
-proof of candidate computed position. Next reuse existing modal owner mapping
-and complete tree checks to distinguish those claims; do not convert missing
-candidate offsets to zero or waive the authored relative-position difference.
-No canonical classifications or export dependencies changed.
+Complete-tree follow-up now passes for all 160 owners (3.00 s), reusing
+`collectFullTreeInventory`, `modalInventoryTrees`, `proveModalPositionInspection`
+and conservative candidate selector exclusion. Every mapping is `mapped`, both
+rule sets are complete, reference inline styles are empty, candidate inline
+styles absent, and complete candidate rules plus all three captured core style
+stages omit position/insets. Active reference rules explicitly request relative
+position and neither declaration dictionaries nor serialized CSS request an
+inset/reset. Full-tree ordered witness digest:
+`b1d509dfa66998535256ea5982009341646be7d51bd80afaaf3bb9e09107d3e4`.
+Thus relative-position authoring omission is established independently of the
+offset-stage comparison. Candidate computed position, contextual descendant
+layout and rendered equivalence remain unproved. Next integrate these two scopes
+through the existing modal proof after export completion, with mutation rejection
+for explicit/competing offsets, inline requests and detached mappings. Do not
+convert missing candidate offsets to zero or waive position authoring. No
+canonical classifications or export dependencies changed during these checks.
 
 Read-only follow-up during the weight export closes the table-host reset history
 question. Compact fcb findings contain **eight unresolved side-color groups /
