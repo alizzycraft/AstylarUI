@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 25
 
+Bottom-sheet overlay background review: all **25 observations** map the scalar
+reference to the transparent `.cdk-global-overlay-wrapper`, not its separate
+sibling `.cdk-overlay-backdrop`. That sibling computes `rgba(0,0,0,0.32)` with
+opacity 1, matching the candidate's authored `.modal-overlay` background at all
+three core style stages. Therefore the raw transparent-versus-dim scalar is an
+owner/composition distinction, not evidence of a missing reference backdrop or
+incorrect alpha conversion. It does not establish equivalent stacking, hit
+testing, lifetime or rendering for the candidate's merged wrapper/backdrop.
+Strict `checkGeneratedMappingPair` rejects these cases because scalar authored
+rules omit `.cdk-global-overlay-wrapper { z-index:1000 }`. The existing
+`resolveOriginAliasPair` independently verifies owner identity, all 89 reference
+fields and all candidate stages while reporting `mapped-with-scalar-rule-gap`.
+All 25 cases have exactly that missing rule and no extra rules; the gap remains
+explicit and was not normalized away. Original capture/tree hashes and candidate
+authored paint-rule identity were verified. Ordered case/wrapper/backdrop/owner/
+gap/input/tree-reference digest:
+`fe294f1eb96312e91ff612a0ade742c64ed3081c7174b17aeb18f46ddbfc947e`.
+Next connect to the existing overlay-composition finding with property-specific
+owner evidence, preserving the rule-gap qualification; do not relabel the
+complete row as equivalent from matching backdrop RGBA alone. Canonical data
+and running-export inputs are unchanged.
+
 Disabled slider background review: the two remaining range-input background
 groups cover exactly **16 observations** (two native owners in eight disabled
 cases). Complete original owner/scalar/tree checks against `b07ef154...` prove
