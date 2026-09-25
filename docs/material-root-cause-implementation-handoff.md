@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 25
 
+Cold combined export launched from `babb1e1`; log:
+`artifacts/material-parity/font-sidenav-export-babb1e1.log`. Its session was
+confirmed live during preparation of the conservation check; last observed phase
+was `build-audit`. Do not restart from an unchanged progress log alone.
+The existing canonical comparator now accepts `--font-sidenav`, independently
+replays the original font/sidenav proofs, requires exactly 14 groups / 676
+observations (10 font / 614, four background / 62), and conserves all raw values,
+unrelated rows and non-producer control evidence. Its 12 tests passed in 34.332
+seconds, including eight new rejection controls. This checker is not an export
+dependency and no running-export source was changed. Actual canonical comparison,
+section/source reconciliation and compact import remain pending export completion.
+
 Combined font/sidenav integration milestone: sidenav application and validation
 are now wired into the main producer alongside retained-font classification.
 Both require bound original cases. The existing exact source-transition chain

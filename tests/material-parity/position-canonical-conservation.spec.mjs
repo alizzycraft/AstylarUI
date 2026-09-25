@@ -4,10 +4,47 @@ import test from 'node:test';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { comparePositionCanonical, compareAppearanceCanonical } from '../../scripts/check-material-position-canonical-conservation.mjs';
-import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer } from './position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer } from './position-composition-producer-transition.mjs';
 import { positionCompositionAttribution } from './position-composition-review.mjs';
 import { positionFollowupAttribution } from './position-followup-review.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
+
+test('font and sidenav batch conserves values, membership and unrelated records', () => {
+  const make = () => {
+    const transition = restoreRetainedFontScalarProducer(currentSource);
+    const rows = Array.from({ length: 14 }, (_, i) => {
+      const font = i < 10, occurrences = font ? (i === 0 ? 65 : 61) : (i < 12 ? 16 : 15);
+      return { family: font ? 'fixture' : 'sidenav', element: font ? `owner-${i}` : 'sidenav-primary',
+        property: font ? 'fontFamily' : 'backgroundColor', reference: font ? 'roboto' : 'rgba(254,248,252,1)',
+        ...(font ? {} : { astylar: `candidate-${i}` }), attribution: 'unresolved', occurrences,
+        cases: Array.from({ length: 12 }, (_, j) => `case-${j}`) };
+    });
+    rows.push({ attribution: 'unresolved', property: 'width', occurrences: 1 });
+    const previous = { rows, control: { differences: Array.from({ length: 48 }, (_, i) => ({ case: `control-${i}`,
+      attribution: 'reviewed-interactive-normal-line-box-stage-comparison',
+      reviewEvidence: { observation: { normalizationReconciliation: { currentModuleSha256: transition.previousModuleSha256 } } } })), gaps: [] } };
+    const current = structuredClone(previous);
+    for (const row of current.control.differences) row.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
+    current.rows = current.rows.map((r, i) => i === 14 ? r : ({ ...r, classification: 'application-plugin-authoring-defect',
+      attribution: i < 10 ? 'reviewed-scalar-component-font-omission' : 'reviewed-sidenav-background-token-input',
+      reviewEvidence: { inputEquivalent: false, renderingEquivalent: false,
+        proofs: Array.from({ length: r.occurrences }, (_, j) => ({ case: `case-${j}` })) } }));
+    return [previous, current, structuredClone(current.rows), currentSource, { fontSidenav: true }];
+  };
+  const result = compareAppearanceCanonical(...make());
+  assert.equal(result.changedGroups, 14); assert.equal(result.changedOccurrences, 676);
+  assert.equal(result.unchangedCompleteRows, 1);
+  for (const mutate of [
+    a => { a[1].rows[0].reference = a[2][0].reference = 'arial'; },
+    a => { a[1].rows[10].astylar = a[2][10].astylar = 'changed'; },
+    a => { a[1].rows[0].reviewEvidence.inputEquivalent = a[2][0].reviewEvidence.inputEquivalent = true; },
+    a => { a[1].rows[0].reviewEvidence.proofs.pop(); a[2] = structuredClone(a[1].rows); },
+    a => { a[1].rows[10].family = a[2][10].family = 'dialog'; },
+    a => { a[1].rows[14].occurrences = a[2][14].occurrences = 2; },
+    a => { a[1].control.gaps.push('changed'); },
+    a => { a[1].control.differences.pop(); },
+  ]) { const args = make(); mutate(args); assert.throws(() => compareAppearanceCanonical(...args)); }
+});
 test('appearance batch conserves raw inputs, exclusions and controls independently of expected metadata', () => {
   const make = (colorMotion = false, originMotion = false, lineBox = false) => {
     const count = lineBox ? 12 : originMotion ? 36 : colorMotion ? 51 : 34;
