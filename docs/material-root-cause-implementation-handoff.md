@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 25
 
+Shared border-dependency reconciliation is corrected in the existing gap, caret
+and alignment readers. `verifyBorderEvidenceSourceTransition` in the existing
+producer-transition module authenticates both complete historical/current
+snapshots and conserves the shared standalone selector source. Historical
+receipts remain historical; caret records the distinct current receipt and
+verification method. Unknown module edits, changed imports/helpers, substituted
+historical bytes and forged descriptor hashes are rejected.
+Focused source/conservation suites pass **18/18** (12.99 s); original alignment,
+text-alignment and LTR adapter replays pass **3/3** (82.16 s). Direct original
+caret replay binds **4,050 observations**. Both previously failing commands pass:
+`node scripts/audit-material-explicit-gap-composition.mjs --check`
+(16 groups, 296 cases, 1,032 observations, 40 negative controls) and
+`node scripts/bind-material-gap-review-membership.mjs --check`
+(38 groups, 1,902 observations, 676 cases; the two unresolved motion groups remain).
+No original reports or comparison inputs were rewritten. These focused results
+repair all six observed binding paths, not canonical acceptance. Next run one
+corrected combined export and independently reconcile the 75 pending groups,
+existing outline proofs and all producer/caret/source receipt changes against
+accepted `4059599c…`. The failed `e8232b90…` package stays retained, not imported.
+
 Export `51fa73d` is now **terminal, exit 1, 1711.83 seconds**. All six invalid
 bindings (`alignmentFontInputs`, `textAlignInputs`, `ltrAlignmentInputs`,
 `ownerCaretInputs`, `gapReviewInputs`, `explicitGapInputs`) report the same changed

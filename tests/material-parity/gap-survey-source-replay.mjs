@@ -5,16 +5,18 @@ import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
+import { borderEvidenceBaseline, verifyBorderEvidenceSourceTransition } from './position-composition-producer-transition.mjs';
 
 const hash = text => createHash('sha256').update(text.replaceAll('\r\n', '\n')).digest('hex');
 export const gapSurveyNormalizationRevision = '4650791a7208b841dd29f1ced015f98234949623';
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 
 // The survey is historical evidence, not a demand that the live normalizer
-// retain its old color-rounding bug. Only that dependency is read historically;
+// retain its old color-rounding bug. That dependency is read historically;
 // The mapping module's later read adapter can be restored only by its exact
 // import substitution; its entire remaining source must retain the old digest.
-// No mapping rules or unrelated dependencies are accepted historically.
+// The reviewed border extension requires both complete pinned sources and the
+// unchanged shared selector. No other dependency change is admitted.
 export function readGapSurveySource(descriptor, readers = {}) {
   const readCurrent = readers.current ?? (file => readFileSync(file, 'utf8'));
   const readHistorical = readers.historical ?? ((revision, file) => execFileSync('git',
@@ -23,6 +25,11 @@ export function readGapSurveySource(descriptor, readers = {}) {
     ? readHistorical(gapSurveyNormalizationRevision, descriptor.file) : readCurrent(descriptor.file);
   if (descriptor.file === 'tests/material-parity/generated-node-mapping-evidence.mjs' && hash(source) !== descriptor.sha256) {
     source = restoreMappingReadAdapterSource(descriptor, source);
+  }
+  if (descriptor.file === 'tests/material-parity/border-initial-input-evidence.mjs' && hash(source) !== descriptor.sha256) {
+    const historical = readHistorical(borderEvidenceBaseline, descriptor.file);
+    verifyBorderEvidenceSourceTransition(historical, source);
+    source = historical;
   }
   assert.equal(hash(source), descriptor.sha256, `gap survey dependency changed: ${descriptor.file}`);
   return source;

@@ -2,6 +2,24 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
+export const borderEvidenceBaseline = '2cec29224f374d8d2e379d4f8486f3a8a8e078aa';
+// These complete snapshots contain the reviewed heading, toggle-side and mapped
+// border additions. This is not permission to ignore arbitrary module changes.
+// Gap/caret/alignment consumers use the unchanged standalone selector helper.
+export function verifyBorderEvidenceSourceTransition(previous, current) {
+  const before = previous.toString().replaceAll('\r\n', '\n');
+  const after = current.toString().replaceAll('\r\n', '\n');
+  assert.equal(hash(before), '3dbcf33ff70244a8179f438962a2549fb7e354948f084d35d433bcf82e76f9f4');
+  assert.equal(hash(after), '1acfdc0cccbf85ef396fac52a5a0fcf751eb1444a7676b53c1b861ff6af764cd',
+    'border evidence changed beyond the reviewed complete source snapshot');
+  const selector = source => {
+    const matches = [...source.matchAll(/export function selectorCanApply\(selector, authored\) \{[\s\S]*?\n\}/g)];
+    assert.equal(matches.length, 1); return matches[0][0];
+  };
+  assert.equal(selector(before), selector(after), 'shared selector implementation changed');
+  return { historicalSha256: hash(before), currentSha256: hash(after),
+    completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
+}
 export function restoreMappedBorderInitialProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;

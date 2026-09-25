@@ -6,11 +6,31 @@ import { isDeepStrictEqual } from 'node:util';
 import test from 'node:test';
 import { readGapSurveySource, bindGapSurveyNormalizer, gapSurveyNormalizationRevision } from './gap-survey-source-replay.mjs';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
+import { borderEvidenceBaseline, verifyBorderEvidenceSourceTransition } from './position-composition-producer-transition.mjs';
 
 const survey = JSON.parse(readFileSync('docs/material-owner-gap-input-survey.json'));
 const moduleFile = survey.productionNormalization.module;
 const source = readFileSync(moduleFile, 'utf8');
 const sha = text => createHash('sha256').update(text).digest('hex');
+
+test('border source reconciliation pins complete snapshots and rejects unrelated or helper changes', () => {
+  const file = 'tests/material-parity/border-initial-input-evidence.mjs';
+  const descriptor = survey.sourceFingerprints.find(s => s.file === file);
+  const before = execFileSync('git', ['show', `${borderEvidenceBaseline}:${file}`], { encoding: 'utf8' });
+  const current = readFileSync(file, 'utf8');
+  assert.equal(verifyBorderEvidenceSourceTransition(before, current).selectorSourceConserved, true);
+  assert.equal(readGapSurveySource(descriptor).replaceAll('\r\n', '\n'), before.replaceAll('\r\n', '\n'));
+  assert.equal(readGapSurveySource(descriptor, { current: () => before }), before);
+  for (const changed of [current + '\n// unrelated', current.replace('selectorCanApply(selector, authored)',
+    'selectorCanApply(selector, changed)'), current.replace("from 'node:util'", "from 'other'"),
+    current.replace("'h1', 'h2'", "'h9', 'h2'")]) {
+    assert.notEqual(changed, current);
+    assert.throws(() => readGapSurveySource(descriptor, { current: () => changed }));
+  }
+  assert.throws(() => verifyBorderEvidenceSourceTransition(before + '\n// forged', current));
+  assert.throws(() => readGapSurveySource({ ...descriptor, sha256: '0'.repeat(64) }));
+  assert.throws(() => readGapSurveySource(descriptor, { historical: () => current }));
+});
 
 test('mapping read-adapter reconciliation conserves the entire historical mapping implementation', () => {
   const file = 'tests/material-parity/generated-node-mapping-evidence.mjs';
