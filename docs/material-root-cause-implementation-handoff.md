@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+Initial-border collector gap, card titles: all **52 owners / 208 side-color
+observations** have reference type `mat-card-title` and candidate type `h2`.
+The existing collector admits custom Material reference hosts but excludes `h2`
+from its candidate ordinary-type set. Complete authenticated owner checks match
+all 89 scalar reference fields and all three candidate snapshots. Reusing its
+conservative `selectorCanApply` exclusions, no candidate rule could supply a
+border color/reset/motion declaration; reference matched rules and both inline
+inputs likewise omit them. Every side is zero/none; reference color follows text
+color and candidate retains transparent at all stages. This supports extending
+the existing omission/default proof to the heading owner with explicit tests,
+not relaxing declaration checks or changing the fixture type. Do not infer
+whole-component equivalence from this property-specific default divergence.
+Ordered case/type-owner/color/tree digest:
+`aee1715970873a44011c37a508af54a7ed6c0938994a6b7ca0ce01784d00a671`.
+Other sampled blockers differ: tables and plugin/`img` candidates are outside
+the type allowlist; stepper content has duplicate reference IDs. Those samples
+are routing hints only, not whole-population proofs. Preserve alias and plugin
+ownership checks when extending coverage. Canonical/export inputs unchanged.
+
 Toggle non-divider border sides: reused `collectOutlineTokenInputs` against
 authenticated original trees for all **68 cases**. Its existing proof binds
 the left token/literal substitution and deliberately lists only
