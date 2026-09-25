@@ -2,6 +2,34 @@
 
 ## Current audit checkpoint — September 25
 
+Overlay trigger/cancel paint review: all remaining nine background groups /
+**61 observations** are now scoped to existing causes, pending guarded canonical
+attribution. The 53 direct-ID dialog/bottom-sheet trigger cases authenticate
+`b07ef154...` and exact paired trees, all 89 reference fields, all candidate
+snapshots and authored rule/index records. Candidate effective background is
+always the exact `.material-button:hover` opaque preblend; normal background
+remains the unblended primary and the candidate has no child state layer.
+Reference persistent-ripple `::before` is .08 in **16 hover** cases, zero in
+**33 activate/open** cases, and .12 in **four mobile open-dismiss** cases.
+Do not flatten those populations into one assumed hover state. The 33 covered
+triggers connect to the existing passive-cover/stationary-hover ownership proof;
+this read-only applicability check does not independently establish that causal
+path or final raster equivalence. Shared preblend authoring originates in
+`2f44011`, source `astylar.component.ts:533`. Ordered case/layer/normal/effective/
+tree digest: `c28e428d3786758874614e080bb12ef91c9e23d10b310bcd26b46f7ddafd7f0b`.
+Separately, all eight `dialog-cancel` open-hover-content observations pass the
+existing full alias mapping without rule gaps. Reference host stays transparent;
+its generated layer is RGB 125/0/250, opacity **.12 in five and .08 in three**
+captured boundaries. Candidate childless button remains normal-transparent but
+uses fixed hover fill `#f4e4fc`, authored by `.dialog-action:hover` at line 795
+as an .08 mix. `f566f80` introduced that rule. Preserve the observed opacity
+variation without inferring focus timing from state names; no fresh runtime
+reproduction was needed to establish these unequal authored paint mechanisms.
+Cancel case/alias/layer/fill/tree digest:
+`88abbcc0ad5116dfa8a4d36c129a86c9aea73600fd4dfb24425502577966f5a2`.
+The corrected export has reached validation; its results are not yet accepted.
+No export dependencies, renderer code or comparison fixtures changed.
+
 Tab background review: all **16 groups / 42 observations** retain the existing
 text-span-versus-control ownership distinction. Reference `tab-activity` and
 `tab-overview` IDs identify transparent inner spans, not tab hosts; candidate
