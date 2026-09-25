@@ -2,6 +2,34 @@
 
 ## Current audit checkpoint — September 25
 
+Weight export **2bf4f0b completed but is NOT accepted** (session 31672,
+exit 1, 2,299.18 s). Its complete log reports two errors: expected **1,262**
+unresolved groups, plus an unexpected follow-up classification coverage failure
+**62 != 66**. Evidence-session verification reports zero invalidations across
+1,205 files / 89,151,875 bytes. Coverage remains 436 static / 1,875 interaction,
+8,483 scalar groups / 389,202 occurrences and 134 source findings.
+Unaccepted output compressed SHA-256:
+`ac52188b1f0aa40235fb69af2e6a68f8fc272debf457d598b48f8090c656c9e3`;
+decoded SHA-256:
+`788fd8162482f72f14cc6cb4564ea8e8e479dbafbe5f35eec8b8a588fc515c2b`.
+Do not import, commit or call this canonical batch accepted yet; fcb remains
+the accepted predecessor. The existing `--weight` conservation comparison is
+running as session **15128**, output
+`artifacts/material-parity/weight-conservation-2bf4f0b.json`; poll that handle,
+do not duplicate it or change its source dependencies until terminal.
+
+Specific new investigation: did the generic owner font-weight fallback preempt
+already-reviewed follow-up classifications? Production ordering places that
+fallback before `classifyFollowupInput`. The authenticated historical transition
+contains four omitted/400 weight groups (badge-label 40, card-copy 40,
+divider-above 8, divider-below 8 observations) as well as the separately
+mismatched expansion weight. This explains a plausible four-group collision,
+but exact exported rows still require the running conservation result. Next:
+confirm the affected rows, reproduce both competing classifiers in the existing
+owner-attribution spec, preserve specific prior reviews ahead of the new generic
+fallback, and retain this failed export evidence. Do not lower the 66-group
+coverage requirement. Remaining batch reconciliation and all final gates remain.
+
 Post-weight investigation priority (read-only while export runs): authenticated
 compact fcb still has **1,288** unresolved groups. Largest families are dialog
 161, bottom-sheet 112, chips 101, tabs 99; inset properties alone account for
