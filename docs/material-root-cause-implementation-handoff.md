@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 25
 
+Divider background applicability: reused all **24** saved
+`material-flow-position-substitutions.json` divider proofs instead of reopening
+the confirmed empty-block used-height investigation. Each saved case/input hash
+and original tree descriptor matches `b07ef154...`; fresh pure proof replay equals
+the existing proof, and full scalar/reference and three candidate style snapshots
+match those owners. The reference is a transparent zero-content-height block
+painted through a solid 1px top border, whose authored color is
+`var(--mat-divider-color, var(--mat-sys-outline))` and computed RGB **123,117,127**.
+The candidate's exact `.divider` rule substitutes an absolutely positioned 1px
+content-height strip with background `#cac4d0` (**202,196,208**) and no border.
+Thus both the paint model and paint color differ; this cannot be classified as
+an equivalent border-to-fill representation merely because both create a line.
+The existing flow proof already owns the positional substitution; connect its
+background/top-border/height scalar findings to that cause rather than creating
+a duplicate core diagnosis. Other zero-width border-side currentColor differences
+remain separate initial-style questions. Ordered case/input/proof/token digest:
+`d53901aa1f4eddcc3696cf38c2523bcf0aca9d64feb8ef4c64c1236d033dfef3`.
+No canonical classifications changed in this applicability check; combined
+font/sidenav export remains in validation.
+
 Read-only grid-list background review closes the cause question for eight
 unresolved groups / **104 tile observations in 52 cases**. Every original tree
 file is hash-authenticated against `b07ef154...`; each tile has unique reference
