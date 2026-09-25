@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 25
 
+Bottom-sheet first-action background review: both groups / **25 observations**
+have complete existing alias mappings (no scalar rule gaps), authenticated trees
+and matching scalar/style owners. Reference `bottom-sheet-dismiss` maps to the
+first list link: transparent host plus generated focus-dependent `::before`,
+computed RGB **29,27,30** at opacity **0.12** in every captured open state.
+Candidate `#bottom-sheet-dismiss` instead authors an unconditional opaque
+background already present in its normal style, unchanged at all three stages:
+`#e6e1e5` (19 cases), `#312f35` (six). Source line 803 pre-mixes at **0.08**, with
+a mode-dependent base and `theme.onSurface`; this is not equivalent focus-layer
+authoring or a proved core blend failure. `0d67d46` introduced the unconditional
+ID fill using `theme.surface`; `8505c3b` changed its base to fixed mode-dependent
+panel colors. Keep this visual-state substitution separate from the existing
+runtime proof that the candidate first action does not receive focus correctly.
+Ordered case/owner/pseudo/fill/tree-reference digest:
+`8cd4fa005ea4b5ef5fd400aa41615f6c31b66574af469eef872d5fb3cdb25fdd`.
+No raster-equivalence claim follows from the blend or matching static screenshots.
+Canonical rows and export dependencies remain unchanged.
+
 Bottom-sheet overlay background review: all **25 observations** map the scalar
 reference to the transparent `.cdk-global-overlay-wrapper`, not its separate
 sibling `.cdk-overlay-backdrop`. That sibling computes `rgba(0,0,0,0.32)` with
