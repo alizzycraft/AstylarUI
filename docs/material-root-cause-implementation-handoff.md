@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 25
 
+Read-only next-gap review: the accepted compact snapshot still has 1,420
+unresolved groups; backgroundColor is its largest property population (66 groups
+/ 512 observations). Do not merge its state-layer, theme and overlay-owner
+symptoms into one cause. A bounded sidenav-container review now explains **four
+background groups / all 62 original observations**, without changing canonical
+classification. Competing explanations were wrong owner mapping, unequal token
+authoring, or a later color conversion. All 124 original tree files were
+hash-authenticated against original report `b07ef154...`; unique reference
+`mat-sidenav-container#sidenav-primary` and candidate `div#sidenav-primary` match
+all 89 reference scalar fields and all three candidate style snapshots.
+The sole active reference background declaration is `.mat-drawer-container`:
+`var(--mat-sidenav-content-background-color, var(--mat-sys-background))`, computing
+`rgba(254,248,252,1)` throughout this capture. Candidate `.sidenav-container`
+explicitly requests `theme.surface` (astylar.component.ts:680), yielding
+`rgba(255,251,254,1)` (16), `rgba(28,27,31,1)` (16), `rgba(255,255,255,1)` (15),
+and `rgba(244,251,250,1)` (15). Each captured authored candidate rule matches
+the tree rule and normal/effective/resolved background; this is unequal
+component authoring before rendering, not inherited text-color evidence or a
+confirmed core color defect. Ordered {case, referenceNode, candidateNode,
+referenceToken, candidate, inputSha256, trees} digest:
+`5b30c0a26fcd50fbc6d3d8f6aa22c58e7c191b8e0952b82253f34c63f48e2bb9`.
+Remaining boundary: bind these four rows through the existing classifier and
+review source history before claiming when/why the substitution was introduced.
+No claim is made that all 66 background groups share this cause.
+
 The guard correction is committed/pushed as `8f8ddbd`. Its corrected five-input
 cold export is live (session 39535, Node PID 17164), log
 `artifacts/material-parity/line-height-scalar-export-8f8ddbd.log`; verify that
