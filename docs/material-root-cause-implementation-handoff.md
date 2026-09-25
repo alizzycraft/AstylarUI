@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+The accepted batch push completed: `e25512f` is on the remote integration branch.
+GitHub warned about the 56.91 MiB canonical gzip but accepted the push.
+
+The remaining mapped dialog-button reset question now has complete candidate
+evidence: **64 owners / 256 side observations** authenticate their original
+report, full trees and alias identities. Each uses the exact `.dialog-action`
+zero-width rule, omits competing color/reset/motion declarations in every
+potentially applicable candidate rule and inline input, and retains transparent
+border color with zero/none geometry in all three candidate stages. Reference
+colors remain currentColor. Ordered case/mapping/width-rule/color digest:
+`e4fba3e19f469472464e0d2a07c2b8349d9df0254a06807c7fd658dbc4fae170`.
+Together with the previously authenticated reference-reset witness `ee1c3d…`,
+this is the existing incomplete reset translation, not equal-input rendering.
+The initial probe correctly failed its existing width-rule allowlist (zero
+matches): these use `.dialog-action`, not `.material-button` / `.text-button`.
+No source classifier was broadened. Next extend the existing reset proof through
+the authenticated alias mapper with this exact width-rule case and rejection
+tests, then batch its classifications; do not rerun the reference/candidate census.
+
 **Accepted border batch: `b74de570…`.** All pending section conservation checks
 pass (`artifacts/material-parity/border-defaults-collector-conservation-0d0e1bc.json`):
 3,580 existing initial-color proofs remain byte-for-byte equal after removing
