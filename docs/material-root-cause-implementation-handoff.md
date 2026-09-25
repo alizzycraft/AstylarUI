@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 25
 
+Independent border replay exposed an incomplete batch estimate: **83**, not 75,
+previously unresolved groups qualify (**2,596**, not 2,324 observations). The
+first accepted-baseline replay conserved every raw scalar row, then deliberately
+failed the old expectation (`83 !== 75`); this was not hidden by accepting the
+new export. A compact membership query isolated the additional eight groups to
+`stepper-content` (68 owners / 272 side observations). The earlier 44-group
+mapped test covered nine named owners, while production's reviewed alias mapper
+also admits stepper content. A separate check authenticated original report and
+both trees for all 68 owners; all satisfy the unchanged complete omission/stage
+proof with mapping status `mapped`, reference light/dark currentColor and candidate
+transparent. Ordered case/proof digest:
+`e4a674d1b189be8c0e9d4b8ca89eaa0ee959f6adf1d774d9eecfd4a67342492c`.
+This is additional same-proof coverage, not a new root cause or renderer change.
+
+`replayBorderDefaultRows` now extends the existing independent conservation
+script, outside the export's dependencies. It derives heading, slider-color,
+outline-side and mapped-owner metadata from authenticated original tree
+collectors, checks full membership/state consistency, and preserves all other
+rows. The accepted full-baseline replay plus exact raw-row comparison ran before
+the count expectation failed; syntax/diff checks pass. Full comparison with the
+new canonical output and receipt transitions remains pending. Do not rerun the
+owner census or restore the incorrect 75-group expectation; use 83/2,596 at that
+integration, and keep the extra stepper proof covered in future focused tests.
+
 Corrected cold export from `0d0e1bc` is running: session **81293**, PID **2452**,
 started 19:48:51 local; log `artifacts/material-parity/border-defaults-export-0d0e1bc.log`.
 All three line-box reports and supplemental root were supplied. Dependencies

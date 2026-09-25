@@ -23,10 +23,61 @@ import { bindPreciseAuditNormalization } from '../tests/material-parity/audit-no
 import { inspectOwnerInitialStyle } from '../tests/material-parity/owner-initial-style-survey.mjs';
 import { classifyOwnerInitialStyleInput, ownerInitialStyleAttribution, collectOwnerInitialStyleEvidence } from '../tests/material-parity/owner-initial-style-attribution.mjs';
 import { originStageTrees } from '../tests/material-parity/origin-stage-inventory-evidence.mjs';
+import { collectBorderInitialInputs, classifyBorderInitialInput, collectOutlineTokenInputs,
+  classifyOutlineTokenInput, outlineTokenAttribution, applyMappedBorderInitial } from '../tests/material-parity/border-initial-input-evidence.mjs';
+import { collectSliderBorderDefaults, classifySliderBorderDefault } from '../tests/material-parity/slider-border-default-source-binding.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
 const receipt = row => row?.reviewEvidence?.observation?.normalizationReconciliation;
+
+// Replay only this batch from original captures, never from the new canonical
+// classifications. The caller authenticates the original report bytes; the
+// existing collectors authenticate every tree and slider capture binding.
+export function replayBorderDefaultRows(rows, captured) {
+  const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
+    ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))];
+  const normalize = bindPreciseAuditNormalization(), inventory = collectFullTreeInventory(cases);
+  assert.deepEqual(inventory.errors, []);
+  const keyOf = c => `${c.kind}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}`;
+  const index = values => new Map(values.map(p => [JSON.stringify([p.case, p.element]), p]));
+  const initial = index(collectBorderInitialInputs(inventory, normalize));
+  const outline = index(collectOutlineTokenInputs(inventory, normalize));
+  const slider = collectSliderBorderDefaults(captured, { root: process.cwd(),
+    parityPath: 'artifacts/material-parity/current-ancestry-audit/latest-report.json' });
+  assert.equal(slider.binding.status, 'bound', slider.binding.error);
+  const native = index(slider.observations);
+  const replayed = rows.map(row => {
+    if (!/^border(Top|Right|Bottom|Left)Color$/.test(row.property) ||
+        !['unresolved', outlineTokenAttribution].includes(row.attribution)) return row;
+    const members = [];
+    for (const c of cases.filter(c => c.family === row.family)) {
+      const inputs = c.styleInputs.filter(i => i.id === row.element && i.reference && i.astylar &&
+        normalize(i.reference)[row.property] === row.reference && normalize(i.astylar)[row.property] === row.astylar);
+      assert.ok(inputs.length <= 1, 'duplicate original border owner');
+      if (!inputs.length) continue;
+      const input = inputs[0], key = keyOf(c), owner = JSON.stringify([key, input.id]);
+      const args = [input, row.property, row.reference, row.astylar];
+      const result = classifySliderBorderDefault(...args, native.get(owner), normalize)
+        ?? classifyBorderInitialInput(...args, initial.get(owner), normalize)
+        ?? classifyOutlineTokenInput(...args, outline.get(owner), normalize);
+      members.push({ case: key, state: c.state ?? 'static', result });
+    }
+    assert.equal(members.length, row.occurrences, 'border replay original membership changed');
+    assert.equal(new Set(members.map(m => m.case)).size, members.length);
+    same(members.slice(0, 12).map(m => m.case), row.cases, 'border sample membership changed');
+    same([...new Set(members.map(m => m.state))], row.states, 'border states changed');
+    assert.equal(new Set(members.map(m => Boolean(m.result))).size, 1, 'mixed border eligibility');
+    if (!members[0].result) return row;
+    const first = members[0].result;
+    for (const { result } of members) for (const field of ['classification', 'attribution', 'owner', 'justification'])
+      assert.equal(result[field], first[field], 'border group would split under source replay');
+    return { ...row, classification: first.classification, attribution: first.attribution,
+      justification: first.justification, recommendedOwner: first.owner,
+      reviewEvidence: first.reviewEvidence, reviewedCases: members.map(m => m.case) };
+  });
+  return applyMappedBorderInitial(replayed, cases, inventory, normalize);
+}
 
 // Scalar line-box findings embed complete control-proof hashes. Recompute only
 // hashes whose underlying proof changed by the independently allowed receipt.
