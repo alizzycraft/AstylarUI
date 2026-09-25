@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+Card border-color review: all **52 captured card hosts / 208 side observations**
+have an explicit reference color request, not ordinary currentColor defaults.
+Authenticated original cases/trees and all scalar/stage/rule-index checks show
+one active `.mat-mdc-card` border rule: zero width, solid style, with
+`border-color: var(--mat-card-elevated-container-color, var(--mat-sys-surface-container-low))`
+preserved in `cssText`. All four computed colors are RGB 248/242/246 across
+profiles. Expanded captured side-color declaration values are empty strings;
+they must not be interpreted as absence of the variable-bearing shorthand.
+Candidate authored rules omit border color/style/width (radius is separate),
+and every core snapshot retains zero/none/transparent. Thus this is omitted
+component border-token/style authoring, not a demonstrated equal-input color
+resolution failure. The reference token is the same one already reviewed for
+card surface paint. Zero widths mean no border strip in these states, but do
+not establish general rendering or input equivalence. Ordered case/owner/full
+border-rule/tree digest:
+`0bb7c5d4a69a30055f86e57a329e226ce68d89e5f9b8e56f6e4a3aa4846eb18d`.
+Keep full shorthand text in the eventual guard; do not weaken declaration
+exclusion to accept empty longhand fields. Canonical/export inputs unchanged.
+
 Slider border-color applicability: the existing complete-source
 `collectSliderBorderDefaults` replay binds all **156 original native owners**,
 and its declaration-exclusion proof already rejects any authored border/reset
