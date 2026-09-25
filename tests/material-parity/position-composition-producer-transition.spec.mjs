@@ -2,7 +2,21 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer } from './position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer } from './position-composition-producer-transition.mjs';
+
+test('retained font integration preserves its full predecessor and requires original-case validation', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '8065221:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreRetainedFontScalarProducer(current).restoredSource, previous);
+  for (const fragment of [
+    'applyRetainedFontScalar(beforeRetainedFontScalars, cases, elementInventory, retainedTypography, canonicalStyle)',
+    'validateRetainedFontScalar(report.discrepancies, replayedRows, cases,',
+    "    'tests/material-parity/retained-font-scalar.spec.mjs',\n",
+    "    errors.push('component font scalar attribution lacks bound original cases');\n",
+  ]) assert.throws(() => restoreRetainedFontScalarProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreRetainedFontScalarProducer(current + '\n// unrelated\n'));
+});
 
 test('scalar line-box integration restores the complete accepted origin producer', () => {
   const file='tests/material-parity/input-equivalence-audit.mjs';

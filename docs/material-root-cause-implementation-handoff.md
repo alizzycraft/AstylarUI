@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 25
 
+Retained-font integration is now wired into the existing scalar classifier and
+original-case validator, with both historical mapping import guards updated in
+the same increment. Its prior full-population proof covers 10 groups / 614
+observations; this wiring does not itself make those rows canonical. Focused
+verification: retained-font plus producer-transition suites 7/7; alignment source
+conservation 5/5; selected overlay mapping-projection test 1/1. New negative
+controls reject import aliases, extra imports and coupling into retained mapping
+logic. Exact whole-source restoration returns the accepted `8065221` producer
+hash, so unrelated source changes cannot pass this transition. The retained
+font proof is still independently validated by the existing inherited-component
+font-stack validator; raw scalar values and false equivalence claims are kept.
+Canonical data remains the accepted **1,408-unresolved-group** snapshot below.
+Next integration milestone must replay this wiring, conserve unrelated rows and
+refresh source fingerprints; do not describe the pending source as already
+represented by that snapshot. Prioritize the four proven sidenav background rows
+next, then remaining shared layout/typography/paint gaps by their demonstrated
+owner. No new browser capture is justified by this metadata-only integration.
+
 Line-height canonical reconciliation: the corrected export from `8f8ddbd`
 completed in 1,940.157 seconds, with only the expected unresolved-attribution
 failure: **1,408 unresolved groups**. Coverage remains 436/436 static and

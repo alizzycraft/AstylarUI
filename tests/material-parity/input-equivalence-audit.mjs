@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { applyNormalLineBoxScalar, validateNormalLineBoxScalar, normalLineBoxScalarAttribution } from './normal-line-box-scalar.mjs';
+import { applyRetainedFontScalar, validateRetainedFontScalar, retainedFontScalarAttribution } from './retained-font-scalar.mjs';
 import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints, applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints, applyBottomSheetPanelFlow, validateBottomSheetPanelFlow, applyBottomSheetPanelPaint, validateBottomSheetPanelPaint, applyBottomSheetActionLayout, validateBottomSheetActionLayout, applyBottomSheetContrastCorners, validateBottomSheetContrastCorners, applyDialogTextFlow, validateDialogTextFlow, applyTabControlStage, validateTabControlStage } from './modal-position-inspection.mjs';
 import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, validateOverlaySurfaceAuditInputs,
   validateOverlaySurfaceAuditClassifications, overlaySurfaceAttributions } from './overlay-surface-audit-source-binding.mjs';
@@ -275,9 +276,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforeNormalLineBoxScalars = ownerInitialStyleBinding.status === 'bound'
     ? applyTabControlStage(applyDialogTextFlow(modalDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
     : modalDiscrepancies;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforeRetainedFontScalars = ownerInitialStyleBinding.status === 'bound'
     ? applyNormalLineBoxScalar(beforeNormalLineBoxScalars, cases, elementInventory, controlTypography)
     : beforeNormalLineBoxScalars;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyRetainedFontScalar(beforeRetainedFontScalars, cases, elementInventory, retainedTypography, canonicalStyle)
+    : beforeRetainedFontScalars;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -600,6 +604,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
       const selected = rows => rows.filter(r => r.attribution === ownerInitialStyleAttribution);
       errors.push(...validateNormalLineBoxScalar(report.discrepancies, replayedRows, cases,
         report.elementInventory, report.controlTypography));
+      errors.push(...validateRetainedFontScalar(report.discrepancies, replayedRows, cases,
+        report.elementInventory, report.retainedTypography, canonicalStyle));
       errors.push(...validateDialogTextFlow(report.discrepancies, replayedRows, cases,
         report.elementInventory, canonicalStyle));
       errors.push(...validateTabControlStage(report.discrepancies, replayedRows, cases,
@@ -632,6 +638,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   }
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))
     errors.push('button-host line-height attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === retainedFontScalarAttribution))
+    errors.push('component font scalar attribution lacks bound original cases');
   if (report.sliderBorderDefaults?.binding?.status === 'bound') {
     errors.push(...validateSliderBorderDefaults(report.sliderBorderDefaults, { root }));
     errors.push(...validateSliderBorderDefaultClassifications(report.sliderBorderDefaults,
@@ -8872,6 +8880,8 @@ function sourceFingerprints(root) {
     'tests/material-parity/normal-line-box-report.spec.mjs',
     'tests/material-parity/normal-line-box-scalar.mjs',
     'tests/material-parity/normal-line-box-scalar.spec.mjs',
+    'tests/material-parity/retained-font-scalar.mjs',
+    'tests/material-parity/retained-font-scalar.spec.mjs',
     'tests/material-parity/normal-line-box-evidence.mjs',
     'scripts/audit-material-normal-line-boxes.mjs',
     'scripts/audit-material-button-defaults.mjs',

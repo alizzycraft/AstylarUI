@@ -28,6 +28,7 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
     'collectStyleDiscrepancies', 'sourceFingerprints', 'focusedProofInventory']);
   const additions = new Map([
     ['./normal-line-box-scalar.mjs', ['applyNormalLineBoxScalar', 'validateNormalLineBoxScalar', 'normalLineBoxScalarAttribution']],
+    ['./retained-font-scalar.mjs', ['applyRetainedFontScalar', 'validateRetainedFontScalar', 'retainedFontScalarAttribution']],
     ['./modal-position-inspection.mjs', ['applyDialogScalarTypography', 'validateDialogScalarTypography', 'applyBottomSheetScalarTypography', 'validateBottomSheetScalarTypography', 'applyDialogActionBox', 'validateDialogActionBox', 'applyDialogPanelConstraints', 'validateDialogPanelConstraints', 'applyBottomSheetPanelConstraints', 'validateBottomSheetPanelConstraints', 'applyBottomSheetPanelFlow', 'validateBottomSheetPanelFlow', 'applyBottomSheetPanelPaint', 'validateBottomSheetPanelPaint', 'applyBottomSheetActionLayout', 'validateBottomSheetActionLayout', 'applyBottomSheetContrastCorners', 'validateBottomSheetContrastCorners', 'applyDialogTextFlow', 'validateDialogTextFlow', 'applyTabControlStage', 'validateTabControlStage']],
     ['./overlay-surface-audit-source-binding.mjs', ['collectOverlaySurfaceAuditInputs', 'applyOverlaySurfaceAuditRows',
       'validateOverlaySurfaceAuditInputs', 'validateOverlaySurfaceAuditClassifications', 'overlaySurfaceAttributions']],

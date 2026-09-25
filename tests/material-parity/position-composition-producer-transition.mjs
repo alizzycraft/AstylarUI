@@ -2,9 +2,27 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
-export function restoreNormalLineBoxScalarProducer(source) {
+export function restoreRetainedFontScalarProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyRetainedFontScalar, validateRetainedFontScalar, retainedFontScalarAttribution } from './retained-font-scalar.mjs';\n", ''],
+    ["  const beforeRetainedFontScalars = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyRetainedFontScalar(beforeRetainedFontScalars, cases, elementInventory, retainedTypography, canonicalStyle)\n    : beforeRetainedFontScalars;\n", ''],
+    ['      errors.push(...validateRetainedFontScalar(report.discrepancies, replayedRows, cases,\n        report.elementInventory, report.retainedTypography, canonicalStyle));\n', ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === retainedFontScalarAttribution))\n    errors.push('component font scalar attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/retained-font-scalar.mjs',\n    'tests/material-parity/retained-font-scalar.spec.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated retained-font scalar integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), '14095dd051f70abbf93b83571d62d781d5c5f33e173c809e498ced4e93ac716b',
+    'producer changed beyond reviewed retained-font scalar integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreNormalLineBoxScalarProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes("from './retained-font-scalar.mjs'") ? restoreRetainedFontScalarProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyNormalLineBoxScalar, validateNormalLineBoxScalar, normalLineBoxScalarAttribution } from './normal-line-box-scalar.mjs';\n", ''],
     ["  const beforeNormalLineBoxScalars = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
