@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+Generated font-weight owner replay is now complete: **78 slider-visual and 56
+interactive stepper-content cases**, each authenticated against original tree
+hashes. Existing unique alias/template mappings succeed for every case, with
+three rejection mutations per case (duplicate owner, broken ancestry, altered
+normal stage). Six focused survey tests pass in 3.11 s. The stepper's 12 static
+cases already have retained-stage attribution and are intentionally outside this
+unresolved interaction population, not silently dropped. Combined with the
+18 direct-owner groups, inspection now covers **20 groups / 1,142 observations**.
+Next extend `owner-initial-style-attribution.mjs`'s existing source-bound property
+selection, inspection and classification path with the opt-in weight evidence;
+retain existing precedence and independently replay full membership. No new
+survey framework or rendering claim is needed. Production/canonical integration
+is still pending; the accepted partial snapshot remains at 1,288 unresolved.
+
 Font-weight survey now has an explicit `reviewedFontWeight` opt-in; existing
 survey populations remain unchanged. Five focused tests pass (2.19 s), including
 30 declaration-location mutations plus ancestry, motion, provenance, unknown

@@ -103,6 +103,45 @@ test('font-weight survey is opt-in and keeps captured ancestry separate from inh
   }
 });
 
+test('font-weight generated owners replay every original slider and interactive stepper case', () => {
+  const entries = [...raw.results.map(e => ({ ...e, kind: 'static' })),
+    ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const readTree = descriptor => {
+    const bytes = readFileSync(descriptor.file);
+    assert.equal(hash(bytes), descriptor.sha256);
+    return JSON.parse(bytes);
+  };
+  for (const [family, element, count] of [['slider', 'slider-visual', 78], ['stepper', 'stepper-content', 56]]) {
+    const cases = entries.filter(e => e.family === family && (family !== 'stepper' || e.kind === 'interaction'));
+    assert.equal(cases.length, count);
+    const seen = new Set();
+    for (const e of cases) {
+      const key = `${e.kind}:${family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+      assert.equal(seen.has(key), false); seen.add(key);
+      const input = e.styleInputs.find(i => i.id === element);
+      assert.ok(input); assert.equal(input.reference.fontWeight, '400');
+      assert.equal(input.astylar.fontWeight, undefined);
+      const reference = readTree(e.inputTrees.reference), candidate = readTree(e.inputTrees.astylar);
+      const options = { family, reviewedGeneratedOwners: true, reviewedFontWeight: true };
+      const inspect = (r = reference, a = candidate, i = input) => inspectOwnerInitialStyle(i, 'fontWeight', r, a, options);
+      const proof = inspect();
+      assert.deepEqual(proof.issues, [], key);
+      assert.equal(proof.mapping.kind, family === 'slider' ? 'unique-captured-data-parity-id' : 'reviewed-showcase-template-text');
+      assert.equal(proof.referenceComputed, '400');
+      assert.equal(proof.candidateLocalDeclaration, '<omitted>');
+      assert.equal(proof.computedCandidateVerified, false); assert.equal(proof.renderingEquivalent, false);
+      const duplicate = structuredClone(reference);
+      duplicate.nodes.push(structuredClone(duplicate.nodes.find(n => n.key === proof.mapping.referenceNode)));
+      assert.equal(inspect(duplicate).disposition, 'requires-specific-review', `${key}: duplicate mapping`);
+      const broken = structuredClone(candidate);
+      broken.nodes.find(n => n.key === proof.mapping.astylarNode).parent = 'missing';
+      assert.equal(inspect(reference, broken).disposition, 'requires-specific-review', `${key}: broken ancestry`);
+      const scalar = structuredClone(input); scalar.astylarNormalResolvedStyle.fontWeight = '700';
+      assert.equal(inspect(reference, candidate, scalar).disposition, 'requires-specific-review', `${key}: altered stage`);
+    }
+  }
+});
+
 test('owner survey rejects incomplete ancestry, competing requests, unknown selectors, motion and mismatched stages', () => {
   const mutations = [
     v => { v.reference.errors.push('unreadable stylesheet'); },
