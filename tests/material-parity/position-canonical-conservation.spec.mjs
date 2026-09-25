@@ -3,11 +3,37 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { comparePositionCanonical, compareAppearanceCanonical } from '../../scripts/check-material-position-canonical-conservation.mjs';
+import { comparePositionCanonical, compareAppearanceCanonical, refreshScalarControlReceipts } from '../../scripts/check-material-position-canonical-conservation.mjs';
 import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer } from './position-composition-producer-transition.mjs';
 import { positionCompositionAttribution } from './position-composition-review.mjs';
 import { positionFollowupAttribution } from './position-followup-review.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
+
+test('embedded scalar control receipts follow only exact producer transitions', () => {
+  const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const transition = { previousModuleSha256: 'old', currentModuleSha256: 'new' };
+  const before = { case: 'case', element: 'button', property: 'lineHeight',
+    attribution: 'reviewed-interactive-normal-line-box-stage-comparison', values: { painted: '19px' },
+    reviewEvidence: { observation: { normalizationReconciliation: { currentModuleSha256: 'old' } } } };
+  const after = structuredClone(before);
+  after.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = 'new';
+  const rows = [{ element: 'button', attribution: 'reviewed-button-host-normal-line-box-stage',
+    reviewEvidence: { proofs: [{ case: 'case', controlProofSha256: hash(before) }] } }];
+  const refreshed = refreshScalarControlReceipts(rows, { differences: [before] }, { differences: [after] }, transition);
+  assert.equal(refreshed[0].reviewEvidence.proofs[0].controlProofSha256, hash(after));
+  assert.equal(rows[0].reviewEvidence.proofs[0].controlProofSha256, hash(before));
+  for (const mutate of [
+    d => { d.values.painted = '20px'; },
+    d => { d.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = 'forged'; },
+  ]) {
+    const changed = structuredClone(after); mutate(changed);
+    assert.throws(() => refreshScalarControlReceipts(rows, { differences: [before] }, { differences: [changed] }, transition));
+  }
+  const forged = structuredClone(rows); forged[0].reviewEvidence.proofs[0].controlProofSha256 = 'forged';
+  assert.deepEqual(refreshScalarControlReceipts(forged, { differences: [before] }, { differences: [after] }, transition), forged);
+  const wrongOwner = structuredClone(rows); wrongOwner[0].element = 'other';
+  assert.throws(() => refreshScalarControlReceipts(wrongOwner, { differences: [before] }, { differences: [after] }, transition));
+});
 
 test('font and sidenav batch conserves values, membership and unrelated records', () => {
   const make = () => {
@@ -29,11 +55,21 @@ test('font and sidenav batch conserves values, membership and unrelated records'
       attribution: i < 10 ? 'reviewed-scalar-component-font-omission' : 'reviewed-sidenav-background-token-input',
       reviewEvidence: { inputEquivalent: false, renderingEquivalent: false,
         proofs: Array.from({ length: r.occurrences }, (_, j) => ({ case: `case-${j}` })) } }));
-    return [previous, current, structuredClone(current.rows), currentSource, { fontSidenav: true }];
+    const proofHash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+    const scalar = { attribution: 'reviewed-button-host-normal-line-box-stage', property: 'lineHeight',
+      reviewEvidence: { proofs: [{ case: 'control-0', controlProofSha256: proofHash(previous.control.differences[0]) }] } };
+    previous.rows.push(scalar);
+    const refreshed = structuredClone(scalar);
+    refreshed.reviewEvidence.proofs[0].controlProofSha256 = proofHash(current.control.differences[0]);
+    current.rows.push(refreshed);
+    const expected = structuredClone(current.rows);
+    expected[15] = structuredClone(scalar);
+    return [previous, current, expected, currentSource, { fontSidenav: true }];
   };
   const result = compareAppearanceCanonical(...make());
   assert.equal(result.changedGroups, 14); assert.equal(result.changedOccurrences, 676);
   assert.equal(result.unchangedCompleteRows, 1);
+  assert.equal(result.scalarReceiptRows, 1);
   for (const mutate of [
     a => { a[1].rows[0].reference = a[2][0].reference = 'arial'; },
     a => { a[1].rows[10].astylar = a[2][10].astylar = 'changed'; },
@@ -43,6 +79,8 @@ test('font and sidenav batch conserves values, membership and unrelated records'
     a => { a[1].rows[14].occurrences = a[2][14].occurrences = 2; },
     a => { a[1].control.gaps.push('changed'); },
     a => { a[1].control.differences.pop(); },
+    a => { a[1].rows[15].reviewEvidence.proofs[0].controlProofSha256 = 'forged'; },
+    a => { a[1].rows[15].reference = a[2][15].reference = 'forged'; },
   ]) { const args = make(); mutate(args); assert.throws(() => compareAppearanceCanonical(...args)); }
 });
 test('appearance batch conserves raw inputs, exclusions and controls independently of expected metadata', () => {

@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 25
 
+Export reconciliation: the independent font/sidenav comparison exposed a
+previously unmodeled dependency, not yet a changed rendering observation.
+Scalar normal-line-box findings hash complete control proofs; the 48 allowed
+producer-source receipt transitions therefore also change embedded proof hashes.
+The first failure was row 903, proof 12 (`controlProofSha256`), retained in
+`artifacts/material-parity/font-sidenav-conservation-diagnostic.log`.
+The existing conservation checker now derives these hash transitions from
+predecessor control proofs, requires exact current proof equality except the
+authenticated producer hash, and preserves every other scalar field. Receipt-only
+rows are counted separately from newly classified and completely unchanged rows.
+No rendering input or canonical output was edited to accommodate the failure.
+Focused command `node --test tests/material-parity/position-canonical-conservation.spec.mjs`
+passes all 13 tests (33.46 s), including altered measurement, forged receipt/hash,
+wrong owner and jointly forged scalar input rejection. Full conservation replay
+is still pending; do not promote the new canonical package or working index yet.
+Independent `collectMotionSourceConservation()` replay also reproduces
+`d6d652a4194ef4be7b80407f37b85a443bd1971609588711ea2ed59e7549ae25`
+for all 121 groups / 7,254 observations with all non-receipt evidence conserved.
+Next: finish reconciliation, then integrate existing border/default and
+background/state-layer proofs below without repeating their investigations.
+The candidate export has 1,394 unresolved signatures; final audit acceptance
+and full enforced browser gates remain outstanding.
+
 Generated-owner border coverage: reused `resolveOriginAliasPair` for all
 **502 owners / 1,976 pending side observations** across badge, paginator,
 bottom-sheet, dialog, snackbar and tooltip, authenticating original report/tree

@@ -28,6 +28,35 @@ const digest = value => createHash('sha256').update(JSON.stringify(value)).diges
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
 const receipt = row => row?.reviewEvidence?.observation?.normalizationReconciliation;
 
+// Scalar line-box findings embed complete control-proof hashes. Recompute only
+// hashes whose underlying proof changed by the independently allowed receipt.
+export function refreshScalarControlReceipts(rows, previousControl, currentControl, transition) {
+  const replacements = new Map();
+  for (const before of previousControl.differences) {
+    if (before.attribution !== 'reviewed-interactive-normal-line-box-stage-comparison' ||
+        receipt(before)?.currentModuleSha256 !== transition.previousModuleSha256) continue;
+    const matches = currentControl.differences.filter(after => after.case === before.case &&
+      after.element === before.element && after.property === before.property);
+    assert.equal(matches.length, 1, 'control receipt must identify exactly one proof');
+    const expected = structuredClone(before);
+    receipt(expected).currentModuleSha256 = transition.currentModuleSha256;
+    same(matches[0], expected, 'scalar control receipt changed more than producer source');
+    replacements.set(digest(before), { case: before.case, element: before.element, hash: digest(expected) });
+  }
+  return rows.map(row => {
+    if (row.attribution !== normalLineBoxScalarAttribution) return row;
+    const updated = structuredClone(row);
+    for (const proof of updated.reviewEvidence.proofs) {
+      const replacement = replacements.get(proof.controlProofSha256);
+      if (!replacement) continue;
+      assert.equal(proof.case, replacement.case);
+      assert.equal(row.element, replacement.element);
+      proof.controlProofSha256 = replacement.hash;
+    }
+    return updated;
+  });
+}
+
 // The CLI independently derives expectedRows from authenticated predecessor
 // records and fresh source review. This comparator cannot create that premise.
 export function comparePositionCanonical(previous, current, expectedRows, currentSource, { followupOnly = false, chipOnly = false, overlayOnly = false, modalOnly = false, modalBoxOnly = false, sheetPanelOnly = false, sheetActionOnly = false, dialogTabOnly = false, previousSource } = {}) {
@@ -122,7 +151,23 @@ export function compareAppearanceCanonical(previous, current, expectedRows, curr
     assert.ok(currentSource.toString().includes("!['appearance', 'color'].includes(property)"));
     transition.previousModuleSha256 = 'cc05565c29174a385ee16c14a507d351b06d14730da88f0ba4e454af68c2746e';
   }
-  same(current.rows, JSON.parse(JSON.stringify(expectedRows)), 'appearance rows differ from source replay');
+  const receiptAdjustedPrevious = fontSidenav
+    ? refreshScalarControlReceipts(previous.rows, previous.control, current.control, transition) : previous.rows;
+  const serializedExpected = JSON.parse(JSON.stringify(fontSidenav
+    ? refreshScalarControlReceipts(expectedRows, previous.control, current.control, transition) : expectedRows));
+  if (!isDeepStrictEqual(current.rows, serializedExpected)) {
+    const firstDifference = (actual, expected, field = '') => {
+      if (isDeepStrictEqual(actual, expected)) return;
+      if (actual && expected && typeof actual === 'object' && typeof expected === 'object') {
+        for (const key of new Set([...Object.keys(actual), ...Object.keys(expected)])) {
+          const difference = firstDifference(actual[key], expected[key], `${field}/${key}`);
+          if (difference) return difference;
+        }
+      }
+      return { field, actual, expected };
+    };
+    assert.fail(`appearance rows differ from source replay: ${JSON.stringify(firstDifference(current.rows, serializedExpected))}`);
+  }
   assert.equal(current.rows.length, previous.rows.length);
   const control = structuredClone(current.control), receiptCases = [];
   assert.equal(control.differences.length, previous.control.differences.length);
@@ -141,7 +186,7 @@ export function compareAppearanceCanonical(previous, current, expectedRows, curr
   const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
   const changes = [];
   for (let i = 0; i < previous.rows.length; i++) {
-    const before = previous.rows[i], after = current.rows[i];
+    const before = receiptAdjustedPrevious[i], after = current.rows[i];
     if (isDeepStrictEqual(before, after)) continue;
     assert.equal(before.attribution, 'unresolved');
     if (fontSidenav) {
@@ -189,8 +234,10 @@ export function compareAppearanceCanonical(previous, current, expectedRows, curr
     assert.equal(changes.filter(r => r.property === 'color').length, 46);
     assert.equal(changes.filter(r => r.property === 'color').reduce((n,r) => n + r.occurrences, 0), 1196);
   }
+  const scalarReceiptRows = receiptAdjustedPrevious.filter((row, i) => !isDeepStrictEqual(row, previous.rows[i])).length;
   return { previous: previous.manifest, current: current.manifest, changedGroups: changes.length,
-    changedOccurrences, unchangedCompleteRows: current.rows.length - changes.length, changes,
+    changedOccurrences, unchangedCompleteRows: current.rows.length - changes.length - scalarReceiptRows,
+    scalarReceiptRows, changes,
     previousUnresolved: previous.rows.filter(r => r.attribution === 'unresolved').length,
     currentUnresolved: current.rows.filter(r => r.attribution === 'unresolved').length,
     allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
