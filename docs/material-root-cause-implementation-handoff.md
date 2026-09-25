@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 25
 
+Corrected weight export **bc898de is terminal**, session 7356 exit 1 after
+2,574.62 s. Its only error is the expected **1,262 unresolved groups**; the
+earlier follow-up coverage failure is absent. Coverage remains 436/436 static,
+1,875/1,875 interaction, 8,483 groups / 389,202 occurrences and 134 source
+findings. Evidence-session verification: zero invalidations, 1,205 files,
+89,151,875 bytes. Compressed SHA-256 is
+`bfd986bc6e7397d32465df25d6096d2274dfe29336924281a3f7fd0429f6f9fe`
+(60,110,439 bytes); decoded SHA-256 is
+`f1930fd29fd09bae2bd20e2d90e3de5ace07b1437f36185ae5833b6793fe5a24`
+(2,100,556,607 bytes). **Not accepted or imported yet.** Independent checks
+are live: conservation session **23252** (PID 11760), section comparison
+**64949** (PID 4896), metadata/fingerprints **11594** (PID 11540). Outputs are
+`artifacts/material-parity/weight-{conservation,sections,metadata}-bc898de.json`.
+Poll these existing handles; do not duplicate them. Reconcile every changed
+section/source and preserve prior rows before accepting this partial batch.
+The accepted predecessor remains fcb; modal positioning is next, and all
+remaining classifications and final browser/canonical acceptance gates remain.
+
 Read-only dialog position history closes the origin question for the exact
 component rules. `git log -G` and `git log -L` identify **7159b1d**: it removes
 `position:'relative'` from `.dialog-panel` while changing content-box 232px /
