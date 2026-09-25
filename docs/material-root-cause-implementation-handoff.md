@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 25
 
+**Accepted border batch: `b74de570…`.** All pending section conservation checks
+pass (`artifacts/material-parity/border-defaults-collector-conservation-0d0e1bc.json`):
+3,580 existing initial-color proofs remain byte-for-byte equal after removing
+exactly 84 reviewed heading additions (52 card, 32 dialog; added-proof digest
+`1a22c39ea3b1b9b010ca76f64384ee45e943c14755a622ba2260b01af8afbcf7`).
+All old outline fields survive the 68 owner extensions; all old slider fields
+survive the 624 color-property additions. Proof catalog differences are line
+numbers only. Together with the completed scalar/control, all-section, caret,
+motion and source checks below, this reconciles the complete export.
+
+The compact index import completed: **8,483 groups, 134 source findings, 39,904
+control differences, 389,202 occurrences, 1,311 unresolved**; compact bytes
+70,091,865. No export or import remains running. Original `4059599c…` and failed
+`e8232b90…` remain retained for their referenced evidence. The stale workflow
+count was corrected in `418ba73`; both focused tests pass (0.93 s), including
+the broken-pointer negative control. That test is outside canonical fingerprints.
+Next continue the recorded mapped Material-button reset / dialog-panel motion
+border gaps and shared paint-input gaps; do not repeat this integration. Final
+full audit/browser acceptance remains outstanding; this is not renderer parity
+or audit completion. No renderer/reference fixture was changed.
+
 Caret and control receipt reconciliation passes: exactly three caret changes
 (authenticated border-module hash/verification label plus current main producer
 hash) and 48 control-line-box producer hashes, with no other metadata changes.
