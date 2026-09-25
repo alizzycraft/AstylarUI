@@ -64,6 +64,45 @@ test('appearance review rejects vendor aliases, resets, explicit defaults and na
   assert.ok(proof.issues.some(i => i.reason === 'reference-noninitial-value'));
 });
 
+test('font-weight survey is opt-in and keeps captured ancestry separate from inherited candidate paint', () => {
+  const before = JSON.stringify(original);
+  assert.equal(Object.hasOwn(ownerInitialValues, 'fontWeight'), false);
+  assert.equal(inspect(original, 'fontWeight').disposition, 'requires-specific-review');
+  const review = value => inspectOwnerInitialStyle(value.input, 'fontWeight', value.reference, value.candidate,
+    { reviewedFontWeight: true });
+  const proof = review(original);
+  assert.equal(proof.disposition, 'captured-default-versus-local-omission');
+  assert.equal(proof.referenceComputed, '400');
+  assert.equal(proof.candidateLocalDeclaration, '<omitted>');
+  assert.equal(proof.computedCandidateVerified, false);
+  assert.equal(proof.renderingEquivalent, false);
+  assert.equal(JSON.stringify(original), before);
+  for (const property of ['fontWeight', 'font-weight', 'font', 'fontVariationSettings', 'font-variation-settings', 'all']) {
+    for (const location of ['reference-inline', 'reference-attribute', 'candidate-inline', 'candidate-attribute', 'candidate-rule']) {
+      const value = structuredClone(original);
+      if (location === 'reference-inline') value.reference.nodes[0].inline[property] = { value: 'inherit', important: false };
+      if (location === 'reference-attribute') value.reference.nodes[0].attributes.style = `${property}: inherit`;
+      if (location === 'candidate-inline') value.candidate.nodes[1].authored.style = { [property]: 'inherit' };
+      if (location === 'candidate-attribute') value.candidate.nodes[1].authored.attributes = { style: `${property}: inherit` };
+      if (location === 'candidate-rule') value.candidate.rules.push({ selector: '#page', [property]: 'inherit' });
+      assert.equal(review(value).disposition, 'requires-specific-review', `${property}/${location}`);
+    }
+  }
+  const mutations = [
+    v => { v.reference.styles[v.reference.nodes[0].style].fontWeight = '700'; },
+    v => { v.input.reference.fontWeight = '500'; },
+    v => { v.input.astylar.fontWeight = '400'; },
+    v => { v.candidate.nodes[1].parent = 'missing'; },
+    v => { v.candidate.rules.push({ selector: ':is(#badge-primary)', fontWeight: '400' }); },
+    v => { v.candidate.rules.push({ selector: '#page', transitionProperty: 'font-weight' }); },
+    v => { v.candidate.resolvedStyleSource = 'guessed'; },
+  ];
+  for (const [i, mutate] of mutations.entries()) {
+    const value = structuredClone(original); mutate(value);
+    assert.equal(review(value).disposition, 'requires-specific-review', `weight mutation ${i}`);
+  }
+});
+
 test('owner survey rejects incomplete ancestry, competing requests, unknown selectors, motion and mismatched stages', () => {
   const mutations = [
     v => { v.reference.errors.push('unreadable stylesheet'); },

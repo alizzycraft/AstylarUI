@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 25
 
+Font-weight survey now has an explicit `reviewedFontWeight` opt-in; existing
+survey populations remain unchanged. Five focused tests pass (2.19 s), including
+30 declaration-location mutations plus ancestry, motion, provenance, unknown
+selector and scalar disagreement controls. Font shorthand and variation settings
+remain review blockers. No candidate computed weight or final paint is inferred.
+Authenticated current compact membership plus original trees reproduces **18
+direct-owner groups / 1,008 observations**. An initial expected-20 assertion
+rejected the probe: it omitted `reviewedGeneratedOwners`. Representative checks
+confirm the missing slider-visual and stepper-content owners use existing unique
+alias/template mappings. Next replay all their 78/56 observations with those
+reviewed mappings, then add complete-membership attribution through existing
+machinery. Do not treat the representative checks as the complete 20-group proof.
+The survey extension is not yet production classification; its source changes
+also mean the last canonical snapshot predates this new inspector revision.
+
 Cold dialog/card export has completed (2,249.6 s); its sole reported gate error
 is **1,288 unresolved differences**. Coverage remains 436 static / 1,875
 interaction cases, 8,483 scalar groups / 389,202 occurrences and 134 source
@@ -9,8 +24,11 @@ findings. Pending package SHA is
 `fcb44846abf9e0b7a63a0277d3990b8420709765748ef27fb625c2ebf40812a9`;
 decoded SHA `5bb6b2164c230ff32593d6721375f5be2379ba3a529116b6af93ba9df6df177b`.
 This package is accepted as the reconciled **partial audit snapshot**, not as
-input equivalence or audit completion. Compact import is running in session
-**19351**, log `artifacts/material-parity/dialog-card-import-9e8de8a.log`.
+input equivalence or audit completion. Compact import and index verification
+completed: 8,483 discrepancies, 134 source findings, 39,904 controls, 389,202
+occurrences and 1,288 unresolved. Log:
+`artifacts/material-parity/dialog-card-import-9e8de8a.log`. Canonical batch
+`3f74d9b` is pushed; GitHub warned about the 56.98 MB compressed report size.
 
 Canonical conservation passed: exactly 23 groups / 896 observations changed,
 one scalar receipt and 48 control receipts refreshed; all raw inputs and all
