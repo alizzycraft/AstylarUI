@@ -15,8 +15,17 @@ the complete original report (SHA-256 `b07ef154...` rechecked), not sampled case
 lists. It required both sides' style inputs; missing input objects were not
 treated as empty styles. Source is the existing retained font-token/ancestry
 proof, not a new font measurement. No new attribution is claimed yet.
-Next inspect exact reference/candidate mappings and raw-versus-retained values,
-then reuse the existing validated proof if those agree. These proofs explain
+Exact reference/candidate mapping and raw-versus-retained replay now passed for
+all 614 observations. Fresh `collectRetainedTypographyEvidence` over the original
+full inventory reproduced every accepted complete-row hash exactly, with one
+comparison per owner, scalar reference Roboto, omitted normal/effective candidate
+font-family, and both proof chains rooted at the mapped text owners. Receipt:
+`artifacts/material-parity/font-scalar-owner-replay-7bf37de.json` (168,366 bytes),
+SHA-256 `7abecfc83f957423871e6b169e1cdf8c7dc5e6e386c805d53beb182d5108e163`.
+It records all case/owner/proof hashes. This establishes applicability of the
+retained proof, not new canonical classification. After the live export is
+accepted, reuse this evidence through the existing classifier/validation path.
+These proofs explain
 omitted component font overrides retaining the page fallback stack, not equal
 font lists, selected physical fonts or raster parity. Do not reopen that
 already investigated root cause or alter producer dependencies mid-export.
