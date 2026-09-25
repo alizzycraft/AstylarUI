@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 25
 
+Mapped border proofs are now wired into the existing authenticated original-case
+post-processing and validation path. Unbound data cannot receive or retain the
+attribution. The exact added import, guarded application, original-source replay
+and unbound rejection restore byte-for-byte to producer
+`f2ef21859fbacba4894bdb5efdd45438f41ff05860a6206df73d9bfd325197cb`.
+Existing historical alignment/overlay projections verify that bounded transition
+before retaining their prior declarations; no historical receipt is rewritten.
+The combined producer-transition, alignment-survey and original-overlay-context
+suite passes **22/22** (20.88 s). Original mapped-owner plus heading checks pass
+**2/2** (12.29 s), and the new main-validator unbound rejection passes separately.
+Next run one cold combined export for the 75 pending classifications, with all
+three line-box reports and the supplemental root explicitly supplied. Keep the
+accepted `4059599c…` package/index until independent row/section/source
+conservation succeeds; the standalone manifest beside its retained gzip now
+matches the accepted manifest, enabling the existing streaming comparator.
+Do not change export dependencies during the run or launch a duplicate export.
+
 Mapped plain-border proof is implemented in the existing
 `border-initial-input-evidence.mjs`, reusing `resolveOriginAliasPair`,
 `originStageTrees`, declaration exclusion and precise normalization. It admits

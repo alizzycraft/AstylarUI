@@ -2,9 +2,26 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 
 const hash = text => createHash('sha256').update(text).digest('hex');
-export function restoreToggleSideColorProducer(source) {
+export function restoreMappedBorderInitialProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ['  applyMappedBorderInitial, validateMappedBorderInitial, mappedBorderInitialAttribution,\n', ''],
+    ["  const beforeMappedBorderInitials = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyMappedBorderInitial(beforeMappedBorderInitials, cases, elementInventory, canonicalStyle)\n    : beforeMappedBorderInitials;\n", ''],
+    ['      errors.push(...validateMappedBorderInitial(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n', ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === mappedBorderInitialAttribution))\n    errors.push('mapped border initial attribution lacks bound original cases');\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated mapped border integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'f2ef21859fbacba4894bdb5efdd45438f41ff05860a6206df73d9bfd325197cb',
+    'producer changed beyond reviewed mapped border integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreToggleSideColorProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('  const beforeMappedBorderInitials =') ? restoreMappedBorderInitialProducer(current).restoredSource : current;
   for (const [from, to] of [
     ['entry.reference !== (proof.referenceColors?.[entry.property] ?? proof.referenceColor)', 'entry.reference !== proof.referenceColor'],
     ['(item.referenceColors?.[entry.property] ?? item.referenceColor) === entry.reference', 'item.referenceColor === entry.reference'],

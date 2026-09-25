@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
+import { restoreMappedBorderInitialProducer } from './position-composition-producer-transition.mjs';
 import { isDeepStrictEqual } from 'node:util';
 import { conserveDisabledInkGuard } from './disabled-ink-source-transition.mjs';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
@@ -98,7 +99,8 @@ export function verifyOverlayMappingAuditProjection(recorded, currentBytes, hist
     return statements;
   }
   let disabledInkGuardTransition;
-  try { disabledInkGuardTransition = conserveDisabledInkGuard(current); }
+  try { disabledInkGuardTransition = conserveDisabledInkGuard(current.includes('  const beforeMappedBorderInitials =')
+    ? restoreMappedBorderInitialProducer(current).restoredSource : current); }
   catch (cause) { throw new Error('Current mapping source failed disabled-ink source conservation', { cause }); }
   const before = project(old, false), after = project(disabledInkGuardTransition.source, true);
   // Keep the exact deep comparison, but do not ask assert's diff formatter to

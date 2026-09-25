@@ -2,7 +2,19 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer, restoreToggleSideColorProducer } from './position-composition-producer-transition.mjs';
+import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer, restoreToggleSideColorProducer, restoreMappedBorderInitialProducer } from './position-composition-producer-transition.mjs';
+
+test('mapped border integration preserves its predecessor and requires source replay', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '9879cbb:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreMappedBorderInitialProducer(current).restoredSource, previous);
+  for (const fragment of ['applyMappedBorderInitial(beforeMappedBorderInitials, cases, elementInventory, canonicalStyle)',
+    'validateMappedBorderInitial(report.discrepancies, replayedRows, cases,',
+    "    errors.push('mapped border initial attribution lacks bound original cases');\n"])
+    assert.throws(() => restoreMappedBorderInitialProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreMappedBorderInitialProducer(current + '\nconst unrelated = true;'));
+});
 
 test('toggle other-side validation restores exactly the accepted producer', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

@@ -7,6 +7,7 @@ import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
 import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { conserveDisabledInkGuard } from './disabled-ink-source-transition.mjs';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
+import { restoreMappedBorderInitialProducer } from './position-composition-producer-transition.mjs';
 
 export const alignmentSurveyBaseline = '67db724e5f258c84cfdc70e9da2ccb6ee6353ad0';
 const auditFile = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -69,7 +70,8 @@ export function verifyAlignmentAuditProjection(previous, current) {
     sha256: '8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e' };
   bindOwnerCaretNormalization(normalized(previous), historicalNormalization);
   bindPreciseAuditNormalization(normalized(current));
-  const disabledInkGuardTransition = conserveDisabledInkGuard(current);
+  const disabledInkGuardTransition = conserveDisabledInkGuard(normalized(current).includes('  const beforeMappedBorderInitials =')
+    ? restoreMappedBorderInitialProducer(current).restoredSource : current);
   const project = (source, changed) => {
     const ast = parse(auditFile, source), removed = new Set(), imports = new Set(), retained = [];
     for (const node of ast.statements) {

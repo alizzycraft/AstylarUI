@@ -833,6 +833,12 @@ test('mapped border initial proof covers original aliases without erasing scalar
     assert.equal(inspectMappedBorderInitial(c, input, ref, changed, normalize), undefined); }
 });
 
+test('mapped border integration rejects classifications without authenticated original cases', () => {
+  const audit = buildMaterialInputAudit(borderInitialReport());
+  audit.discrepancies[0].attribution = mappedBorderInitialAttribution;
+  assert.ok(validateMaterialInputAudit(audit, { requireComplete: false }).includes('mapped border initial attribution lacks bound original cases'));
+});
+
 test('border initial-color heading owners retain conservative declaration and provenance checks', () => {
   const normalize = bindPreciseAuditNormalization();
   const collect = raw => collectBorderInitialInputs(collectFullTreeInventory(raw.results), normalize);
