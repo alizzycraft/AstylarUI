@@ -2,6 +2,16 @@
 
 ## Current audit checkpoint — September 25
 
+Weight milestone cold export launched from **2bf4f0b**, session **31672**,
+log `artifacts/material-parity/weight-export-2bf4f0b.log`. All five explicit
+input paths were checked present; invocation matches the complete cold export
+below (current ancestry, normal line box, control line box v3, supplemental line
+box and supplemental root). Do not restart this run or edit its dependencies
+while active. On terminal completion inspect all validation errors, run the
+existing comparator with `--weight`, then reconcile sections/fingerprints and
+import only after acceptance. Expected unresolved count is 1,262; that count
+alone is not acceptance. The accepted snapshot remains fcb until those checks.
+
 Combined original-capture replay now passes via
 `node scripts/check-material-position-canonical-conservation.mjs --weight-replay`:
 all **42** unresolved predecessor weight groups are accounted for; exactly
