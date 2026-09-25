@@ -102,6 +102,7 @@ import { appearanceInitialAttribution, collectAppearanceInitialInputs, classifyA
 import { collectNonGridTemplateInputs, classifyNonGridTemplateInput, nonGridTemplateAttribution, gridTemplateProperties } from './grid-template-input-evidence.mjs';
 import { selectorCanApply, borderColorProperties, borderInitialAttribution, collectBorderInitialInputs, classifyBorderInitialInput,
   applyMappedBorderInitial, validateMappedBorderInitial, mappedBorderInitialAttribution,
+  applyMappedButtonBorderReset, validateMappedButtonBorderReset, mappedButtonBorderResetAttribution,
   buttonBorderResetAttribution, collectButtonBorderResetInputs, classifyButtonBorderResetInput,
   outlineTokenAttribution, collectOutlineTokenInputs, classifyOutlineTokenInput,
   chipOutlineAttribution, collectChipOutlineInputs, classifyChipOutlineInput } from './border-initial-input-evidence.mjs';
@@ -287,9 +288,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforeMappedBorderInitials = ownerInitialStyleBinding.status === 'bound'
     ? applySidenavBackgroundScalar(beforeSidenavBackgroundScalars, cases, elementInventory, canonicalStyle)
     : beforeSidenavBackgroundScalars;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforeMappedButtonResets = ownerInitialStyleBinding.status === 'bound'
     ? applyMappedBorderInitial(beforeMappedBorderInitials, cases, elementInventory, canonicalStyle)
     : beforeMappedBorderInitials;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyMappedButtonBorderReset(beforeMappedButtonResets, cases, elementInventory, canonicalStyle)
+    : beforeMappedButtonResets;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -618,6 +622,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.elementInventory, canonicalStyle));
       errors.push(...validateMappedBorderInitial(report.discrepancies, replayedRows, cases,
         report.elementInventory, canonicalStyle));
+      errors.push(...validateMappedButtonBorderReset(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
       errors.push(...validateDialogTextFlow(report.discrepancies, replayedRows, cases,
         report.elementInventory, canonicalStyle));
       errors.push(...validateTabControlStage(report.discrepancies, replayedRows, cases,
@@ -656,6 +662,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     errors.push('sidenav background scalar attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === mappedBorderInitialAttribution))
     errors.push('mapped border initial attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === mappedButtonBorderResetAttribution))
+    errors.push('mapped button reset attribution lacks bound original cases');
   if (report.sliderBorderDefaults?.binding?.status === 'bound') {
     errors.push(...validateSliderBorderDefaults(report.sliderBorderDefaults, { root }));
     errors.push(...validateSliderBorderDefaultClassifications(report.sliderBorderDefaults,

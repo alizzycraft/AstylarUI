@@ -914,6 +914,8 @@ test('mapped border integration rejects classifications without authenticated or
   const audit = buildMaterialInputAudit(borderInitialReport());
   audit.discrepancies[0].attribution = mappedBorderInitialAttribution;
   assert.ok(validateMaterialInputAudit(audit, { requireComplete: false }).includes('mapped border initial attribution lacks bound original cases'));
+  audit.discrepancies[0].attribution = mappedButtonBorderResetAttribution;
+  assert.ok(validateMaterialInputAudit(audit, { requireComplete: false }).includes('mapped button reset attribution lacks bound original cases'));
 });
 
 test('border initial-color heading owners retain conservative declaration and provenance checks', () => {

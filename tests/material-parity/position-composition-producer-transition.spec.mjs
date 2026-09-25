@@ -3,6 +3,19 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer, restoreToggleSideColorProducer, restoreMappedBorderInitialProducer } from './position-composition-producer-transition.mjs';
+import { restoreMappedButtonResetProducer } from './position-composition-producer-transition.mjs';
+
+test('mapped reset integration restores the full accepted producer and rejects incomplete wiring', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'e25512f:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreMappedButtonResetProducer(current).restoredSource, previous);
+  for (const fragment of ['applyMappedButtonBorderReset(beforeMappedButtonResets, cases, elementInventory, canonicalStyle)',
+    'validateMappedButtonBorderReset(report.discrepancies, replayedRows, cases,',
+    "    errors.push('mapped button reset attribution lacks bound original cases');\n"])
+    assert.throws(() => restoreMappedButtonResetProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreMappedButtonResetProducer(current + '\n// unrelated'));
+});
 
 test('mapped border integration preserves its predecessor and requires source replay', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

@@ -29,9 +29,27 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreMappedBorderInitialProducer(source) {
+export function restoreMappedButtonResetProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ['  applyMappedButtonBorderReset, validateMappedButtonBorderReset, mappedButtonBorderResetAttribution,\n', ''],
+    ["  const beforeMappedButtonResets = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyMappedButtonBorderReset(beforeMappedButtonResets, cases, elementInventory, canonicalStyle)\n    : beforeMappedButtonResets;\n", ''],
+    ['      errors.push(...validateMappedButtonBorderReset(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n', ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === mappedButtonBorderResetAttribution))\n    errors.push('mapped button reset attribution lacks bound original cases');\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated mapped reset integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), '9be3c2759e00aeda6ce6ece68423598b0a74401f2576e21d00f09aee4c85d10a',
+    'producer changed beyond reviewed mapped reset integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+
+export function restoreMappedBorderInitialProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('  const beforeMappedButtonResets =') ? restoreMappedButtonResetProducer(current).restoredSource : current;
   for (const [from, to] of [
     ['  applyMappedBorderInitial, validateMappedBorderInitial, mappedBorderInitialAttribution,\n', ''],
     ["  const beforeMappedBorderInitials = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

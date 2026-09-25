@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+Mapped-button reset production wiring is complete: application is gated by bound
+original cases, validation independently replays complete original membership,
+and unbound reports carrying this attribution are rejected. Exact producer
+restoration removes only the five reviewed integration fragments and reconstructs
+accepted main SHA `9be3c2759e00aeda6ce6ece68423598b0a74401f2576e21d00f09aee4c85d10a`.
+All historical adapters inherit that restoration through the existing chain.
+Source/dependency suites pass **19/19** (14.27 s); original mapped-reset,
+membership/tampering and production unbound-evidence tests pass **3/3** (13.24 s).
+The full export is deliberately deferred to the next coherent batch: accepted
+`b74de570…` still has 1,311 unresolved groups and is not current producer evidence.
+Next address the already-recorded dialog-panel serialized motion/override and
+dialog-action side-scope border questions; use their existing source witnesses,
+not another census. No renderer or fixture changes.
+
 Mapped reset classification/replay is implemented in the existing border module,
 sharing complete case-membership logic with mapped initial colors. Focused tests
 prove **8 groups / 256 observations**, preserve every raw field and prior review,
