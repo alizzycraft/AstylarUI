@@ -75,6 +75,17 @@ import only after acceptance. Expected unresolved count is 1,262; that count
 alone is not acceptance. The accepted snapshot remains fcb until those checks.
 Latest verified phase: `validate-audit`, reached at **851.93 s**; Node PID
 **2152** remains live. Do not treat that phase transition as terminal success.
+Pre-export fingerprint reconciliation scope is now established: **461** prior
+audited files checked against current LF-normalized bytes, **451 unchanged /
+10 changed**. Every changed baseline hash was independently checked against
+Git **9e8de8a**. The ten are `position-composition-producer-transition.mjs` and
+its spec, `motion-source-conservation.mjs`, `input-equivalence-audit.mjs`,
+`owner-initial-style-attribution.mjs` and its spec, `owner-initial-style-survey.mjs`
+and its spec, and `retained-font-scalar.mjs` and its spec (all under
+`tests/material-parity`). Current main producer hash is
+`6c6194f17fd0651c043ec3890870d2df12158558626e49d615e65a2fd29a6bfd`.
+No audited renderer or fixture source changed. Reconcile the export against this
+exact delta; this preflight does not authenticate or accept the new package.
 
 Combined original-capture replay now passes via
 `node scripts/check-material-position-canonical-conservation.mjs --weight-replay`:
