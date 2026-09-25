@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 25
 
+The sidenav background's previously read-only finding now has an executable
+owner/declaration check in the existing background audit module:
+`inspectSidenavBackgroundInputs`. It verifies unique owners, the complete 89-field
+reference snapshot, all three candidate snapshots, core inspection provenance,
+the sole active reference token rule, and exact authored candidate rule identity.
+Inline overrides, competing paint/motion declarations and equal colors fail the
+check. `root-background-inputs.spec.mjs` authenticates the pinned original capture
+and all 124 tree files, proves the four color populations across 62 observations,
+and rejects 13 evidence mutations without modifying inputs. Full existing suite:
+4/4 passed in 11.475 seconds, including unchanged replay of all 144 root groups /
+2,311 observations. This is a reusable proof for scalar integration, not a new
+report or canonical classification. Next: attach this exact check to original
+scalar membership through existing inventory adapters and validation. The
+canonical unresolved count remains 1,408; pending font wiring is also not yet
+exported. Keep root fractional-color and sidenav token causes separate.
+
 Retained-font integration is now wired into the existing scalar classifier and
 original-case validator, with both historical mapping import guards updated in
 the same increment. Its prior full-population proof covers 10 groups / 614

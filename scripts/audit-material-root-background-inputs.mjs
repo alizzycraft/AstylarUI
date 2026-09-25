@@ -68,6 +68,56 @@ export function inspectRootBackgroundInputs(input, reference, candidate, mixHex)
     inputEquivalent: false, rendererDefectProven: false, rasterDifferenceProven: false };
 }
 
+// Component-token mismatch, distinct from the root's fractional color mix.
+// Caller authenticates original capture/tree bytes; this checks owner identity,
+// complete scalar snapshots and the single captured declaration path.
+export function inspectSidenavBackgroundInputs(input, reference, candidate) {
+  assert.equal(input.id, 'sidenav-primary');
+  assert.deepEqual(reference.errors, []); assert.deepEqual(candidate.errors, []);
+  assert.equal(reference.schemaVersion, 1); assert.equal(candidate.schemaVersion, 1);
+  assert.equal(candidate.resolvedStyleEvidenceVersion, 2);
+  assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+  assert.ok(Number.isInteger(candidate.resolvedStyleRevision));
+  assert.equal(input.astylarResolvedStyleEvidenceVersion, 2);
+  const ref = one(reference.nodes.filter(n => n.attributes?.id === input.id), 'unique sidenav reference');
+  const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id), 'unique sidenav candidate');
+  assert.equal(ref.type, 'mat-sidenav-container'); assert.equal(ast.authored.type, 'div');
+  assert.equal(ast.authored.class, 'sidenav-container');
+  const changesPaint = key => /^(?:background|all$|animation|transition)/.test(key);
+  assert.ok(!Object.keys(ref.inline).some(changesPaint), 'sidenav inline paint override');
+  assert.equal(ast.authored.style, undefined, 'candidate inline override');
+  assert.equal(Object.keys(input.reference).length, 89);
+  for (const [key, value] of Object.entries(input.reference)) assert.equal(reference.styles[ref.style][key], value);
+  for (const [scalar, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'],
+    ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']]) {
+    assert.ok(input[scalar]); assert.deepEqual(input[scalar], ast[stage]);
+  }
+  const rule = one(ref.rules.map(i => reference.rules[i]).filter(r =>
+    Object.keys(r.declarations).some(changesPaint)), 'single sidenav reference paint rule');
+  assert.equal(rule.selector, '.mat-drawer-container');
+  assert.equal(rule.active, true); assert.deepEqual(rule.conditions, []);
+  assert.deepEqual(Object.keys(rule.declarations).filter(changesPaint), ['background-color']);
+  const token = 'var(--mat-sidenav-content-background-color, var(--mat-sys-background))';
+  assert.deepEqual(rule.declarations['background-color'], { value: token, important: false });
+  const authored = one(input.astylarAuthored, 'single sidenav authored rule');
+  assert.equal(authored.selector, '.sidenav-container');
+  assert.deepEqual(candidate.rules[authored.index], { selector: authored.selector, ...authored.declarations });
+  assert.deepEqual(Object.keys(authored.declarations).filter(changesPaint), ['background']);
+  const requested = authored.declarations.background;
+  const channels = hexChannels(requested);
+  for (const stage of ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle'])
+    assert.equal(ast[stage].background, requested);
+  const computed = input.reference.backgroundColor;
+  const rgb = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(computed);
+  assert.ok(rgb, 'unreviewed reference color representation');
+  assert.notDeepEqual(rgb.slice(1).map(Number), channels, 'sidenav authoring must actually differ');
+  return { element: input.id, referenceNode: ref.key, candidateNode: ast.key,
+    referenceToken: token, referenceComputed: computed, candidateRequested: requested,
+    referenceRule: rule, candidateRule: authored,
+    classification: 'application-plugin-authoring-defect', owner: 'showcase sidenav background token translation',
+    inputEquivalent: false, rendererDefectProven: false, renderingEquivalent: false };
+}
+
 export function collectRootBackgroundInputs() {
   const themeFile = 'examples/material-showcase/src/app/theme.ts';
   const source = readFileSync(themeFile, 'utf8').replaceAll('\r\n', '\n');
