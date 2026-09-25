@@ -9,14 +9,17 @@ import { positionCompositionAttribution } from './position-composition-review.mj
 import { positionFollowupAttribution } from './position-followup-review.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
 test('appearance batch conserves raw inputs, exclusions and controls independently of expected metadata', () => {
-  const make = () => {
-    const rows = Array.from({ length: 34 }, (_, i) => {
-      const occurrences = i === 0 ? 83 : 64;
-      return { family: 'fixture', element: `owner-${i}`, property: 'appearance', reference: 'none',
+  const make = (colorMotion = false) => {
+    const count = colorMotion ? 51 : 34;
+    const rows = Array.from({ length: count }, (_, i) => {
+      const occurrences = colorMotion ? (i < 46 ? 26 : i === 50 ? 48 : 46) : i === 0 ? 83 : 64;
+      return { family: 'fixture', element: `owner-${i}`, property: colorMotion && i < 46 ? 'color' : 'appearance',
+        reference: colorMotion && i < 46 ? 'rgba(29,27,32,1)' : 'none',
         occurrences, cases: Array.from({ length: 12 }, (_, j) => `case-${j}`), attribution: 'unresolved' };
     });
     rows.push({ family: 'slider', element: 'range', property: 'appearance', reference: 'auto', occurrences: 156, attribution: 'unresolved' });
     const transition = restoreAppearancePrecedence(currentSource);
+    if (colorMotion) transition.previousModuleSha256 = 'cc05565c29174a385ee16c14a507d351b06d14730da88f0ba4e454af68c2746e';
     const previous = { rows, control: { differences: Array.from({ length: 48 }, (_, i) => ({
       case: `case-${i}`, attribution: 'reviewed-interactive-normal-line-box-stage-comparison',
       reviewEvidence: { observation: { normalizationReconciliation: {
@@ -25,11 +28,11 @@ test('appearance batch conserves raw inputs, exclusions and controls independent
     const current = structuredClone(previous);
     for (const row of current.control.differences)
       row.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
-    current.rows = current.rows.map((r, i) => i === 34 ? r : { ...r,
+    current.rows = current.rows.map((r, i) => i === count ? r : { ...r,
       attribution: 'reviewed-owner-initial-style-observation-stage', classification: 'parity-harness-defect',
       reviewEvidence: { computedCandidateVerified: false, renderingEquivalent: false },
       reviewedCases: Array.from({ length: r.occurrences }, (_, j) => `case-${j}`) });
-    return [previous, current, structuredClone(current.rows), currentSource];
+    return [previous, current, structuredClone(current.rows), currentSource, {colorMotion}];
   };
   const args = make();
   assert.equal(compareAppearanceCanonical(...args).changedGroups, 34);
@@ -46,6 +49,16 @@ test('appearance batch conserves raw inputs, exclusions and controls independent
     a => { a[3] = Buffer.from(a[3] + '\nconst unrelated = true;'); },
     a => { a[1].rows[0].reviewEvidence.renderingEquivalent = a[2][0].reviewEvidence.renderingEquivalent = true; },
   ]) { const changed = make(); mutate(changed); assert.throws(() => compareAppearanceCanonical(...changed)); }
+  const batch = compareAppearanceCanonical(...make(true));
+  assert.equal(batch.changedGroups, 51); assert.equal(batch.changedOccurrences, 1428);
+  for (const mutate of [
+    a => {a[1].rows[0].reference = a[2][0].reference = 'red';},
+    a => {a[1].rows[0].property = a[2][0].property = 'background';},
+    a => {a[1].rows[51].attribution = a[2][51].attribution = 'reviewed-owner-initial-style-observation-stage';},
+    a => {a[1].control.differences[0].reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = 'forged';},
+    a => {a[1].rows[0].reviewedCases.pop(); a[2][0].reviewedCases.pop();},
+    a => {a[1].rows[0].reviewEvidence.renderingEquivalent = a[2][0].reviewEvidence.renderingEquivalent = true;},
+  ]) {const changed = make(true); mutate(changed); assert.throws(() => compareAppearanceCanonical(...changed));}
 });
 function sample(followupOnly = false) {
   const proof = restorePositionProducer(currentSource, { followupOnly });

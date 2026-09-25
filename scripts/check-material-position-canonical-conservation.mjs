@@ -17,7 +17,7 @@ import { applyDialogScalarTypography, applyBottomSheetScalarTypography, applyDia
 import { collectFullTreeInventory, collectControlTypographyEvidence, collectRetainedTypographyEvidence } from '../tests/material-parity/input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { inspectOwnerInitialStyle } from '../tests/material-parity/owner-initial-style-survey.mjs';
-import { classifyOwnerInitialStyleInput, ownerInitialStyleAttribution } from '../tests/material-parity/owner-initial-style-attribution.mjs';
+import { classifyOwnerInitialStyleInput, ownerInitialStyleAttribution, collectOwnerInitialStyleEvidence } from '../tests/material-parity/owner-initial-style-attribution.mjs';
 import { originStageTrees } from '../tests/material-parity/origin-stage-inventory-evidence.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -111,8 +111,12 @@ export function comparePositionCanonical(previous, current, expectedRows, curren
 // Reuse the canonical reader/comparison boundary for the appearance batch.
 // Expected rows come from independent source replay. Only the exact fallback
 // relocation may change the producer receipt; control values remain identical.
-export function compareAppearanceCanonical(previous, current, expectedRows, currentSource) {
+export function compareAppearanceCanonical(previous, current, expectedRows, currentSource, { colorMotion = false } = {}) {
   const transition = restoreAppearancePrecedence(currentSource);
+  if (colorMotion) {
+    assert.ok(currentSource.toString().includes("!['appearance', 'color'].includes(property)"));
+    transition.previousModuleSha256 = 'cc05565c29174a385ee16c14a507d351b06d14730da88f0ba4e454af68c2746e';
+  }
   same(current.rows, JSON.parse(JSON.stringify(expectedRows)), 'appearance rows differ from source replay');
   assert.equal(current.rows.length, previous.rows.length);
   const control = structuredClone(current.control), receiptCases = [];
@@ -135,7 +139,9 @@ export function compareAppearanceCanonical(previous, current, expectedRows, curr
     const before = previous.rows[i], after = current.rows[i];
     if (isDeepStrictEqual(before, after)) continue;
     assert.equal(before.attribution, 'unresolved');
-    assert.equal(before.property, 'appearance'); assert.equal(before.reference, 'none');
+    if (colorMotion && before.property === 'color')
+      assert.ok(['rgba(29,27,32,1)', 'rgba(230,225,229,1)'].includes(before.reference));
+    else { assert.equal(before.property, 'appearance'); assert.equal(before.reference, 'none'); }
     assert.equal(before.astylar, undefined);
     assert.equal(after.attribution, ownerInitialStyleAttribution);
     assert.equal(after.classification, 'parity-harness-defect');
@@ -145,13 +151,18 @@ export function compareAppearanceCanonical(previous, current, expectedRows, curr
     assert.equal(after.reviewedCases.length, before.occurrences);
     assert.equal(new Set(after.reviewedCases).size, before.occurrences);
     same(after.reviewedCases.slice(0, 12), before.cases, 'appearance case samples changed');
-    changes.push({ family: after.family, element: after.element, occurrences: after.occurrences,
+    changes.push({ family: after.family, element: after.element, property: after.property, occurrences: after.occurrences,
       previousRowSha256: digest(before), currentRowSha256: digest(after) });
   }
-  assert.equal(changes.length, 34);
-  assert.equal(changes.reduce((n, row) => n + row.occurrences, 0), 2195);
+  assert.equal(changes.length, colorMotion ? 51 : 34);
+  const changedOccurrences = colorMotion ? 1428 : 2195;
+  assert.equal(changes.reduce((n, row) => n + row.occurrences, 0), changedOccurrences);
+  if (colorMotion) {
+    assert.equal(changes.filter(r => r.property === 'color').length, 46);
+    assert.equal(changes.filter(r => r.property === 'color').reduce((n,r) => n + r.occurrences, 0), 1196);
+  }
   return { previous: previous.manifest, current: current.manifest, changedGroups: changes.length,
-    changedOccurrences: 2195, unchangedCompleteRows: current.rows.length - changes.length, changes,
+    changedOccurrences, unchangedCompleteRows: current.rows.length - changes.length, changes,
     previousUnresolved: previous.rows.filter(r => r.attribution === 'unresolved').length,
     currentUnresolved: current.rows.filter(r => r.attribution === 'unresolved').length,
     allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
@@ -160,18 +171,30 @@ export function compareAppearanceCanonical(previous, current, expectedRows, curr
     orderedCurrentRowsSha256: digest(current.rows), inputEquivalent: false, renderingEquivalent: false };
 }
 
-function replayAppearanceRows(rows, captured) {
+function replayAppearanceRows(rows, captured, { colorMotion = false } = {}) {
   const entries = [...captured.results.map(e => ({ ...e, kind: 'static' })),
     ...captured.interactions.map(e => ({ ...e, kind: 'interaction' }))];
   const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
   const inventory = collectFullTreeInventory(entries), trees = new Map();
+  const canonical = bindPreciseAuditNormalization();
+  const observations = colorMotion ? new Map(collectOwnerInitialStyleEvidence(captured, inventory).observations
+    .map(p => [JSON.stringify([p.case, p.element, p.property]), p])) : undefined;
   return rows.map(row => {
-    if (row.attribution !== 'unresolved' || row.property !== 'appearance' || row.reference !== 'none' || row.astylar !== undefined) return row;
+    if (row.attribution !== 'unresolved' || row.astylar !== undefined ||
+        !(row.property === 'appearance' && row.reference === 'none' || colorMotion && row.property === 'color' &&
+          ['rgba(29,27,32,1)', 'rgba(230,225,229,1)'].includes(row.reference))) return row;
     const members = [];
     for (const entry of entries.filter(e => e.family === row.family)) {
-      const inputs = entry.styleInputs.filter(i => i.id === row.element && i.reference?.appearance === 'none' && i.astylar?.appearance === undefined);
+      if (colorMotion && !row.states.includes(entry.state ?? 'static')) continue;
+      const inputs = entry.styleInputs.filter(i => i.id === row.element && canonical(i.reference ?? {})[row.property] === row.reference && i.astylar?.[row.property] === undefined);
       assert.ok(inputs.length <= 1); if (!inputs.length) continue;
       const key = keyOf(entry), input = inputs[0];
+      if (colorMotion) {
+        const proof = observations.get(JSON.stringify([key, input.id, row.property])); assert.ok(proof);
+        members.push({case: key, state: entry.state ?? 'static',
+          result: classifyOwnerInitialStyleInput(input, row.property, row.reference, undefined, proof)});
+        continue;
+      }
       if (!trees.has(key)) trees.set(key, originStageTrees(inventory, key));
       const pair = trees.get(key); assert.ok(pair);
       const proof = { case: key, family: entry.family, element: input.id, property: 'appearance', referenceValue: 'none',
@@ -191,15 +214,20 @@ function replayAppearanceRows(rows, captured) {
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--appearance') {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && ['--appearance', '--color-motion'].includes(process.argv[2])) {
   assert.equal(process.argv.length, 3);
-  const previous = await readAudit('artifacts/material-parity/working-audit/0a6c0f6defafd4e27f0b93f3d4e732621a8f8a7d4807fc516f09c21270091296');
-  assert.equal(previous.manifest.uncompressedSha256, '185cecca3e2dbd07000dcb8a952639fe4df39811b4e0833f9330ec91355ea18c');
+  const colorMotion = process.argv[2] === '--color-motion';
+  const previous = await readAudit('artifacts/material-parity/working-audit/' + (colorMotion
+    ? '65c72350ed907939fbbbdae030f4aebcb7e83f1039de66fb4b3cb2c747a30c56'
+    : '0a6c0f6defafd4e27f0b93f3d4e732621a8f8a7d4807fc516f09c21270091296'));
+  assert.equal(previous.manifest.uncompressedSha256, colorMotion
+    ? '45d4d3129ea5a13522bcd54e89f27bb80ce620e37f9e7a710c048fb1e1ce668a'
+    : '185cecca3e2dbd07000dcb8a952639fe4df39811b4e0833f9330ec91355ea18c');
   const current = await readAudit('docs');
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
-  console.log(JSON.stringify(compareAppearanceCanonical(previous, current, replayAppearanceRows(previous.rows, JSON.parse(bytes)),
-    readFileSync('tests/material-parity/input-equivalence-audit.mjs')), null, 2));
+  console.log(JSON.stringify(compareAppearanceCanonical(previous, current, replayAppearanceRows(previous.rows, JSON.parse(bytes), {colorMotion}),
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), {colorMotion}), null, 2));
 } else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   const followupOnly = process.argv[2] === '--followup';
   const chipOnly = process.argv[2] === '--chip';

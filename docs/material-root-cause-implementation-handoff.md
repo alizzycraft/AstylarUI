@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 25
 
+Combined color/motion export preflight is complete. The existing canonical
+conservation comparator now has `--color-motion`, pinned to accepted generation
+`65c72350...` and its decoded SHA. Independent replay authenticates the original
+capture/inventory, preserves row state membership (including static exclusions),
+and requires exactly 51 changed groups / 1,428 observations: 46 color / 1,196
+plus five appearance/motion / 232. All unrelated complete rows and raw inputs
+must remain unchanged; exactly 48 control records may change only authenticated
+producer receipts. Comparator/producer mutation tests pass 12/12 in 22.03s;
+independent historical motion conservation passes 1/1 in 32.11s. The five
+explicit export inputs and retained predecessor manifest exist. No export was
+running at preflight; D: has 3.52GiB free. Start one cold export using the recorded
+five-input command below, with progress log
+`artifacts/material-parity/color-motion-export-progress.log`. Keep the accepted
+count at 1,507 until full row/section/source conservation accepts the result.
+Do not modify export dependencies while the process is active.
+
 Descendant color is now connected to the existing independently source-bound
 observation collector/classifier. Original-source validation reconstructs the
 authenticated inventory and all observations, including negative color cases;
