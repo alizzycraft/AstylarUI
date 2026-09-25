@@ -23,8 +23,13 @@ component authoring before rendering, not inherited text-color evidence or a
 confirmed core color defect. Ordered {case, referenceNode, candidateNode,
 referenceToken, candidate, inputSha256, trees} digest:
 `5b30c0a26fcd50fbc6d3d8f6aa22c58e7c191b8e0952b82253f34c63f48e2bb9`.
-Remaining boundary: bind these four rows through the existing classifier and
-review source history before claiming when/why the substitution was introduced.
+History review: `git log -G 'sidenav-container'` identifies only initial showcase
+commit `2f440115740ff76fa9e55b3f4a11568207b2af5a`; its complete container rule
+equals the current rule (trimmed line comparison). All 62 reference owners also
+have no inline background/background-color override. This is an original
+fixture-authoring mismatch, not a demonstrated later compensating fix or proof
+of the author's intent. Remaining boundary: bind these four rows through the
+existing classifier with the same owner, authored-rule and stage checks.
 No claim is made that all 66 background groups share this cause.
 
 The guard correction is committed/pushed as `8f8ddbd`. Its corrected five-input
