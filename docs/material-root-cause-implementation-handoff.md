@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 25
 
+Direct-owner border coverage batch: **112 owners / 448 side observations**
+across table (52), icon (20), progress-bar (20), progress-spinner (20) authenticate
+against original captures and full scalar/core snapshots. Each reference side
+is zero/none/currentColor; candidate is zero/none/transparent throughout. No
+possibly applicable candidate color/reset rule passes the existing conservative
+selector exclusion. The default collector's type gate excludes table, img and
+the two plugin types, but removing that gate alone would be unsafe:
+- All 52 tables explicitly author `.mat-mdc-table { border:0px; }`, expanded to
+  zero/none/currentColor on every side. This is reset omission, not un-authored
+  initial color. Border-spacing keys are also conservatively rejected.
+- All 20 progress bars declare `transition-property:opacity`; all 20 spinners
+  declare the same plus matched `transition:none!important`. There are no
+  reference border-color declarations. Existing motion evidence can distinguish
+  these finite non-border transitions; do not permit arbitrary motion globally.
+- All 20 icons pass the declaration-exclusion checks, but remain image
+  replacements for Material icon hosts. Default-style evidence cannot prove
+  equivalent icon rendering or erase that existing structural finding.
+Full owner/stage/tree population digest:
+`05d5298acf5d02318f3ce447b4bce71cb6e7a4fb647f11bc0fca5cfd3ec3e4b6`.
+Independent all-92-case reference reset/transition witness digest:
+`1e56f1d7458422a5f695949896da856a4453aad2d374893948edf9e7caae475f`.
+Extend existing reset/motion/owner evidence with property-limited claims after
+export reconciliation. Do not infer plugin paint behavior from inspected style
+alone. No canonical or running-export dependency changed.
+
 Initial-border collector gap, card titles: all **52 owners / 208 side-color
 observations** have reference type `mat-card-title` and candidate type `h2`.
 The existing collector admits custom Material reference hosts but excludes `h2`
