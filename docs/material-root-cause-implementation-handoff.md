@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 25
 
+Read-only next-gap investigation while the combined export runs: button-toggle
+backgrounds contain two distinct questions, not one shared color cause. Four
+unresolved `button-toggle-primary` groups / **68 observations** are opaque
+candidate group fills versus transparent reference groups. All original 136 tree
+files were hash-checked against report `b07ef154...`; unique reference
+`mat-button-toggle-group` and candidate `div` owners match all 89 reference
+fields and all three candidate snapshots. Reference computed background is
+`rgba(0, 0, 0, 0)` throughout, with no inline or matching rule declarations for
+background/all/animation/transition. Candidate has one exact authored ID rule,
+equal to its captured tree rule, requesting `#f6f1f9`, `#27252c`, `#f0f0f0`, or
+`#e5f2f1` (17 cases each); those values survive every style stage unchanged.
+First divergence is component authoring, not demonstrated core color conversion.
+History identifies `3d0d5ce7b3e08462e779cea6725a6093ddc6a0eb` adding opaque
+`#eadef7` to the previously unfilled group in a compact-control parity change;
+`88d1090` retains it while changing density dimensions, and `f3c8254` substitutes
+`theme.surfaceContainer`. This establishes later input drift, but does not by
+itself prove the author's intent or the hidden renderer defect. Keep its eventual
+removal separate from core clipping/selected-child investigation. Two additional
+selected-child background groups (24 observations) remain a separate state-layer
+question. No canonical classification or production source changed in this review.
+
 Cold combined export launched from `babb1e1`; log:
 `artifacts/material-parity/font-sidenav-export-babb1e1.log`. Its session was
 confirmed live during preparation of the conservation check; last observed phase
