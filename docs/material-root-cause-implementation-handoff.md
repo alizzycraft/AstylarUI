@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 25
 
+Toolbar action background review: all eight remaining background groups /
+**24 observations** (hover, held, activate; four profiles; DPR 1/2) are a
+state-layer ownership substitution, not evidence of core color conversion
+failure. Original `b07ef154...` capture and all 48 tree hashes authenticate;
+all 89 scalar reference fields and three candidate snapshots match their
+exact owners. Reference button host stays transparent and its persistent-ripple
+child generates `::before`: profile-primary RGB 103/80/164, 208/188/255, 0/0/0
+or 0/106/106, opacity .08 for hover/activate and .12 for held. No transient
+`mat-ripple-element` exists at these captured boundaries. Candidate has no
+child state layer: normal background is transparent, effective background is
+the exact captured `#toolbar-action:hover/:active` opaque rule. Current
+`astylar.component.ts:676–679` preblends `theme.surface` with `theme.primary`;
+`92067a1` introduced the class hover/active mixes while aligning toolbar states.
+Matching opacity fractions do not prove equivalent composition over ancestors,
+rounding, clipping, focus or animation. Do not label the whole row equivalent.
+The scalar authored-rule projection omits `mediaMaxWidth:500px` on the 64px
+toolbar width rule in all 24 cases; complete trees retain it. The initial
+strict rule comparison rejected that omission; follow-up checks explicitly
+accounted for exactly that extra tree field, preserving the evidence limitation.
+Ordered case/pseudo paint/candidate fill/tree descriptor proof digest:
+`dfd0f408432feb11c347c3eb9ad08c0c5ad190d53ffd07f148163b6724a3089b`.
+Next attach property-specific ownership evidence to the existing state-layer
+classification infrastructure; canonical rows and export inputs are unchanged.
+
 Font/sidenav export reconciliation: the cold `babb1e1` run finished in
 1,890.634 seconds with exit 1 and is **rejected**, not a new accepted baseline.
 Its invocation supplied only `--parity-report`, omitting the three line-box
