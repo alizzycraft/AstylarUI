@@ -15,10 +15,10 @@ const animationFields = new Set(['animation-name', 'animation-duration', 'animat
 // This does not claim these transitions have no indirect layout/paint effect.
 const disjointTargets = new Set(['none', 'transform', 'box-shadow', 'border', 'opacity', 'color', 'height']);
 
-export function inspectOwnerInitialMotion(input, property, reference, candidate, family) {
-  assert.ok(Object.hasOwn(ownerInitialValues, property));
+export function inspectOwnerInitialMotion(input, property, reference, candidate, family, { reviewedAppearance = false } = {}) {
+  assert.ok(Object.hasOwn(ownerInitialValues, property) || reviewedAppearance && property === 'appearance');
   const proof = inspectOwnerInitialStyle(input, property, reference, candidate,
-    { family, reviewedGeneratedOwners: true });
+    { family, reviewedGeneratedOwners: true, reviewedAppearance });
   const reasons = [], requests = [];
   if (!proof.issues.length || proof.issues.some(i => i.reason !== 'motion-request-needs-review' || i.side !== 'reference')) {
     return { proof, disposition: 'requires-specific-review', reasons: ['not-reference-motion-only'], requests,

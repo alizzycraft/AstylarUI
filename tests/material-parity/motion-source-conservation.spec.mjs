@@ -19,7 +19,7 @@ test('motion replay conserves every finding and rejects stale or changed mapping
   assert.equal(result.historicalReceiptsRewritten, false);
   assert.equal(result.inputEquivalent, false);
   assert.deepEqual(result.sourceReceiptTransitions.map(s => s.file),
-    ['tests/material-parity/owner-initial-style-survey.mjs', file]);
+    ['scripts/audit-material-owner-initial-motion.mjs', 'tests/material-parity/owner-initial-style-survey.mjs', file]);
   for (const { name } of result.unchangedMappingDeclarations) {
     const changed = current.replace(`function ${name}(`, `function changed_${name}(`);
     assert.notEqual(changed, current);

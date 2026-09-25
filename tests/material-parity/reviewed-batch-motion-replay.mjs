@@ -21,7 +21,15 @@ export function replayReviewedBatchMotion() {
   const conservation = verifyMotionSourceConservation(motion, fresh, historical, readFileSync(moduleFile, 'utf8'));
   const delay = JSON.parse(readFileSync('docs/material-motion-delay-target-review.json', 'utf8'));
   assert.equal(hash(JSON.stringify(delay, null, 2) + '\n'), delayHash);
-  const source = readFileSync(delay.source.file, 'utf8').replaceAll('\r\n', '\n');
+  let source = readFileSync(delay.source.file, 'utf8').replaceAll('\r\n', '\n');
+  if (hash(source) !== delay.source.sha256) {
+    assert.equal(hash(source), '63791d89fdbea7f357911b90af22840f6f1b3b5aefb88d094960a642e69446f2',
+      'unreviewed delay appearance opt-in change');
+    source = source.replace('inspectMotionDelayTargets(review, { reviewedAppearance = false } = {})',
+      'inspectMotionDelayTargets(review)').replace(
+      "!(properties.has(review?.proof?.property) || reviewedAppearance && review?.proof?.property === 'appearance')",
+      '!properties.has(review?.proof?.property)');
+  }
   assert.equal(hash(source), delay.source.sha256, 'delay collector changed');
   const ast = ts.createSourceFile(delay.source.file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   assert.equal(ast.parseDiagnostics.length, 0);
@@ -30,7 +38,8 @@ export function replayReviewedBatchMotion() {
     'unexpected delay collector execution boundary');
   const collect = new Function('assert', 'createHash', 'readFileSync', 'isDeepStrictEqual', 'collectOwnerInitialMotion',
     declarations.map(n => n.getText(ast).replace(/^export /, '')).join('\n') + '\nreturn collectMotionDelayTargets;')(
-    assert, createHash, readFileSync, isDeepStrictEqual, () => motion);
+    assert, createHash, (file, ...args) => file === delay.source.file ? source : readFileSync(file, ...args),
+    isDeepStrictEqual, () => motion);
   const replayed = collect();
   assert.ok(isDeepStrictEqual(replayed, delay), 'complete delay replay differs');
   return { motion, delay, conservation: { ...conservation,

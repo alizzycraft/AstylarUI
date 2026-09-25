@@ -6,6 +6,8 @@ import { syncBuiltinESMExports } from 'node:module';
 import test from 'node:test';
 import { collectOwnerInitialMotion, inspectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
 import { verifyMotionSourceConservation } from './motion-source-conservation.mjs';
+import { inspectMotionDelayTargets } from '../../scripts/audit-material-motion-delay-targets.mjs';
+import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const file = 'docs/material-owner-initial-motion-review.json';
@@ -17,6 +19,50 @@ const fixture = () => ({ input: structuredClone(entry.styleInputs.find(i => i.id
   candidate: JSON.parse(fs.readFileSync(entry.inputTrees.astylar.file)) });
 const inspect = f => inspectOwnerInitialMotion(f.input, 'overflowWrap', f.reference, f.candidate, 'button');
 const declarations = f => f.reference.rules.find(r => r.selector === '.mat-mdc-unelevated-button').declarations;
+
+test('appearance opt-in proves five motion groups while preserving chips and panel exclusions', () => {
+  const snapshot = { generation: '65c72350ed907939fbbbdae030f4aebcb7e83f1039de66fb4b3cb2c747a30c56',
+    indexSha256: '2e1e8bbf6b89cd1d640a0c1bf2aca86f723d19e13f864cd5b6d753d05769c44e' };
+  // Pin the accepted population rather than changing it when later batches land.
+  const rows = ['badge', 'progress-bar', 'progress-spinner', 'tabs', 'chips']
+    .flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+    .filter(r => r.property === 'appearance' && r.reference === 'none' && r.attribution === 'unresolved');
+  assert.equal(rows.length, 8);
+  assert.equal(hash(fs.readFileSync(report.capture.file)), report.capture.sha256);
+  const entries = [...original.results.map(e => ({ ...e, kind: 'static' })),
+    ...original.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const load = descriptor => { const bytes = fs.readFileSync(descriptor.file);
+    assert.equal(hash(bytes), descriptor.sha256); return JSON.parse(bytes); };
+  let proved = 0, retained = 0, mutations = 0;
+  for (const row of rows) {
+    const members = entries.filter(e => e.family === row.family && row.states.includes(e.state ?? 'static'))
+      .flatMap(e => e.styleInputs.filter(i => i.id === row.element && i.reference?.appearance === 'none' &&
+        i.astylar?.appearance === undefined).map(input => ({ e, input })));
+    assert.equal(members.length, row.occurrences);
+    assert.deepEqual(members.slice(0, 12).map(({e}) => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`), row.cases);
+    const eligible = ['badge-count', 'progress-bar-primary', 'progress-spinner-primary', 'tab-activity', 'tab-overview'].includes(row.element);
+    for (const {e,input} of members) {
+      const reference = load(e.inputTrees.reference), candidate = load(e.inputTrees.astylar);
+      assert.throws(() => inspectOwnerInitialMotion(input, 'appearance', reference, candidate, e.family));
+      const review = inspectOwnerInitialMotion(input, 'appearance', reference, candidate, e.family, { reviewedAppearance: true });
+      const delay = inspectMotionDelayTargets(review, { reviewedAppearance: true });
+      const passes = review.disposition === 'captured-motion-targets-disjoint' || delay.disposition === 'captured-owner-target-set-disjoint';
+      assert.equal(passes, eligible, `${row.element} ${e.profile}/${e.viewport.id}/${e.state}`);
+      assert.equal(review.computedCandidateVerified, false); assert.equal(review.renderingEquivalent, false);
+      if (passes) {
+        const changed = structuredClone(reference);
+        for (const rule of changed.rules) if (rule.declarations['transition-property'])
+          rule.declarations['transition-property'].value = 'appearance';
+        const negative = inspectOwnerInitialMotion(input, 'appearance', changed, candidate, e.family, { reviewedAppearance: true });
+        assert.equal(negative.disposition, 'requires-specific-review');
+        assert.equal(inspectMotionDelayTargets(negative, { reviewedAppearance: true }).disposition, 'requires-specific-review');
+        mutations++;
+      }
+    }
+    if (eligible) proved += members.length; else retained += members.length;
+  }
+  assert.equal(proved, 232); assert.equal(retained, 222); assert.equal(mutations, 232);
+});
 
 test('motion review replays all original members and retains the 35 unproven groups without writes', () => {
   const canonical = 'docs/material-input-equivalence-audit.json';

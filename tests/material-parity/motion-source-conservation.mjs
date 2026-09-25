@@ -91,10 +91,17 @@ export function verifyMotionSourceConservation(saved, fresh, historicalSource, c
       assert.equal(current.sha256, '4c6d0bc3e58b444a463821967d21626a00f62232918da556c0534ac4aa43822d',
         'unreviewed owner survey source change');
       changes.push({ file: old.file, historicalSha256: old.sha256, currentSha256: current.sha256 });
+    } else if (old.file === 'scripts/audit-material-owner-initial-motion.mjs' && current.sha256 !== old.sha256) {
+      assert.equal(old.sha256, 'c0bc61f1cbc6b81b403d231e36efdaa1b8ceb79705df08b0c7f34da2c613b4b1');
+      assert.equal(current.sha256, '612d6fbcb4f92e67dd8c4ee80731348a7677db2dad50611bb42d012c2f70471a',
+        'unreviewed motion appearance opt-in change');
+      // Historical calls do not opt in; complete non-receipt equality above
+      // remains mandatory, rather than inferring conservation from this hash.
+      changes.push({ file: old.file, historicalSha256: old.sha256, currentSha256: current.sha256 });
     } else assert.deepEqual(current, old, 'unreviewed source dependency changed');
   }
   assert.equal(changes.filter(c => c.file === moduleFile).length, 1);
-  assert.ok(changes.length === 1 || changes.length === 2);
+  assert.ok(changes.length >= 1 && changes.length <= 3);
   return { schemaVersion: 1, historicalRevision: revision, historicalReport: { file: reportFile, sha256: reportHash },
     currentReportSha256: hash(JSON.stringify(fresh, null, 2) + '\n'), sourceReceiptTransitions: changes,
     unchangedMappingDeclarations: [...before].map(([name, text]) => ({ name, sha256: hash(text) })),

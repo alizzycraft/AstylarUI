@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 25
 
+Appearance/motion follow-up is now executable in the existing readers, through
+an explicit `reviewedAppearance` opt-in (historical collectors do not opt in).
+The existing motion test authenticates the accepted compact generation
+`65c72350...`, original capture and every tree, then checks all eight scoped
+groups / 454 observations. Five groups / 232 observations have disjoint targets
+(badge count, both progress owners, both tab labels); chips and tab panel remain
+excluded (222). All 232 target mutations to `appearance` are rejected. This is
+target-set evidence, not inactive motion, computed candidate style or rendering
+equivalence. Source/occurrence binding into canonical attribution is still pending.
+Historical replay is preserved: exact source transitions admit only the opt-in
+change; the delay replayer reconstructs and authenticates the original reader
+before replaying its original report. No historical receipt is rewritten.
+All eight tests across owner-initial-motion-review, motion-source-conservation,
+and motion-delay-target-review pass in 39.38 seconds. Accepted count stays 1,507.
+Batch this reader/source-fingerprint transition with the next coherent integration;
+do not run a new canonical export merely for this leaf-reader increment.
+
 Current overlay authoring is now distinguished by executing the actual
 `handleClick`, `familyElements`, and outside-dismiss methods with a mocked public
 surface (source SHA `2c2979adc26453138e25dffeaeed18d3669514994eea662236ca8649ea00a863`).
