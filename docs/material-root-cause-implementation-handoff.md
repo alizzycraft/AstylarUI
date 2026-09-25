@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 25
 
+Read-only dialog position history closes the origin question for the exact
+component rules. `git log -G` and `git log -L` identify **7159b1d**: it removes
+`position:'relative'` from `.dialog-panel` while changing content-box 232px /
+min-height 112px into border-box 280px / min-height 160px and column flex. In
+the same change `.dialog-actions` loses absolute/right 24px/bottom 16px and
+becomes normal-flow flex with margin-top 16px and flex-end justification.
+Executable assertions over **2f44011**, **7159b1d^**, **7159b1d** and HEAD confirm
+that exact transition; the working rules match HEAD. `.dialog-title` and
+`.dialog-action` omit position in all four checked revisions. Thus panel
+position removal and action layout substitution are historical parity edits,
+whereas these title/button rule omissions predate them. Do not classify all five
+owners as one newly introduced change or infer the motivating core defect from
+the commit title. This proves exact rule history, not all historical cascade or
+rendered causality; the already-recorded full-tree current capture proof owns
+the present mismatch. Integrate this distinction with the pending modal owner
+classification after export reconciliation. No export dependency was changed.
+
 Corrected cold weight export launched from **bc898de**, session **7356**, log
 `artifacts/material-parity/weight-export-bc898de.log`. All five original and
 supplemental input paths exist; the rejected prior payload's archived hash was
