@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 25
 
+Disabled slider background review: the two remaining range-input background
+groups cover exactly **16 observations** (two native owners in eight disabled
+cases). Complete original owner/scalar/tree checks against `b07ef154...` prove
+both sides are disabled range inputs. Reference has no authored background/all/
+motion declaration and computes transparent; candidate likewise has no authored
+background request but all three inspected core style stages retain white.
+Both reference and candidate input layers have **opacity zero** throughout, so
+this is not evidence of a visible white fill or the reported black thumb ring.
+`src/app/config/browser-defaults.ts:298` explicitly supplies white for generic
+inputs; `StyleDefaultsService.getElementTypeDefaults` merges by element type
+only, without a disabled/type-specific parameter. First observed divergence is
+default-style semantics, separate from the already investigated slider thumb
+ownership/drag path and fixture value/domain substitutions. A minimal public
+disabled-range/defaults reduction remains necessary before extending this to a
+general browser-support claim; do not fix it with a showcase-only background.
+All 16 authored rule records match their captured rule indices and all 89
+reference fields / three candidate snapshots match exact owners. Ordered
+case/owner/input/tree-reference proof digest:
+`2f19520ee088811d6226292651405de6e26b0eb47010876acbc02f2aef32de3d`.
+Canonical classification remains pending; no renderer change or raster claim.
+
 Divider background applicability: reused all **24** saved
 `material-flow-position-substitutions.json` divider proofs instead of reopening
 the confirmed empty-block used-height investigation. Each saved case/input hash
