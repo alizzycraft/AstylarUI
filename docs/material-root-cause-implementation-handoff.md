@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 25
 
+Read-only follow-up during the weight export closes the table-host reset history
+question. Compact fcb findings contain **eight unresolved side-color groups /
+208 observations**, two theme values per side (39 light and 13 dark), belonging
+to the already authenticated 52 table owners. `git log -L` for the exact
+`.material-table` rule identifies initial commit **2f44011** and sizing commit
+**f980edc**. At both commits and current HEAD the host authors only
+`borderWidth:'0'`, with no border color/style/reset. The initial whole-rule
+equality assertion failed correctly: f980edc changes height 162/114/138 to
+160/112/136 and font size 14 to 16. Restricting the historical claim to border
+semantics passes all three revisions; current on-disk rule also matches HEAD.
+Do not describe the whole rule as unchanged. This is a long-standing explicit
+reference reset translation omission, not a new core default regression or the
+separate detached-cell-border finding. Existing 52-case rule/owner evidence above
+still owns capture coverage; it was not recensused. Next extend the existing
+reset proof narrowly for table `0px none currentColor`, checking competing rules
+and treating border-spacing separately from color. No scalar classification or
+export dependency was changed during the active run.
+
 Weight milestone cold export launched from **2bf4f0b**, session **31672**,
 log `artifacts/material-parity/weight-export-2bf4f0b.log`. All five explicit
 input paths were checked present; invocation matches the complete cold export
