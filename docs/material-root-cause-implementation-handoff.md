@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+Interactive control-label weight follow-up: **four groups / 224 observations**
+(56 each checkbox label, both radio labels, slide-toggle label) already have
+authenticated own-text retained comparisons: browser weight **400**, core text
+registry weight **400**, candidate normal/effective declarations omitted, text
+and owner identities matching. Ordered case/owner/revision/value digest:
+`5c5e407471acbf41e7322122754022df38361b5e56649bddc5782ac2f0bbf488`.
+`classifyReviewedTypographyStage` explicitly rejects `benchmarkCase.state`,
+explaining why the 12 static cases per label have stage-mismatch attribution
+while these interaction cases remain unresolved. This does not by itself prove
+the state exclusion is wrong: retained registry equality is not current glyph
+paint equality. Next assess a property-limited stage-comparison claim with the
+current-paint limitation retained; do not remove the state guard globally or
+repeat the captured-label census. No producer or canonical changes in this step.
+
 Cold dialog/card export from `9e8de8a` started in session **82070**, Node PID
 **22428**, log `artifacts/material-parity/dialog-card-export-9e8de8a.log`.
 Last observed alive in build phase with increasing CPU time. Poll this handle;
