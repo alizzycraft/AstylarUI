@@ -2,6 +2,40 @@
 
 ## Current audit checkpoint — September 25
 
+Generated-owner declaration routing completed for the **470 remaining owners**
+after excluding the 32 dialog titles handled by the heading batch. Scope is
+the compact unresolved scalar value membership, not every matching ID (some
+tooltip IDs have no paired captured owner and must stay outside this population).
+Original report and every read tree digest authenticate; existing alias mapping
+checks all 89 reference fields, candidate stages and structure. No potentially
+applicable candidate border-color/reset/motion declaration or parsed inline
+color/reset appears under the existing conservative selector exclusion.
+Reference witnesses divide the work into:
+- **290 plain omitted-declaration owners:** paginator size/range 52 each;
+  four sheet owners 25 each; snackbar wrapper/surface 34 each; tooltip popup 18.
+  Preserve the existing scalar-rule gaps on 25 sheet and 34 snackbar wrappers;
+  complete-tree declarations, not an assumed scalar omission, are the evidence.
+  Sheet action reference anchors versus candidate buttons remain structurally
+  unequal; border-default attribution cannot erase that distinction.
+- **64 dialog action buttons:** explicit `.mdc-button` currentColor resets with
+  important no-animation/no-transition rules; save also has a non-important
+  box-shadow transition. Reuse the existing reset proof, not the omission proof.
+- **52 badges:** transform transition plus explicit none/zero-duration override.
+  Reuse finite motion evidence; do not globally permit unknown transitions.
+- **32 dialog panels:** pending variable transition longhands plus explicit
+  none/zero-duration override. Inspect the retained serialized transition witness
+  before claiming disjoint motion; empty longhands alone are insufficient.
+- **32 dialog action containers:** explicit transparent top-border color only.
+  The 96 pending side observations exclude that already-classified top border;
+  use side-specific declaration exclusion, not all-four-side omission.
+Ordered case/owner/mapping-status/reference-declaration/candidate-rule digest:
+`350362deec18dc72578ca301a982fbb7b1a861c83ec64391dd5b831c1456833a`.
+This closes declaration routing, not canonical attribution or rendering parity.
+Next extend the existing border proof over reviewed alias identities for the
+290 plain owners, then reuse reset/motion/side-scope witnesses for the remainder.
+Do not repeat the owner census or silently drop the known wrapper capture gaps.
+No source fingerprints, canonical package or rendering inputs changed here.
+
 Button-toggle non-divider colors are now covered by the existing outline-token
 collector/classifier. It extends the 68 proven left-divider owners only when
 the other reference sides are zero-width / none / currentColor and every
