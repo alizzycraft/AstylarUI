@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 25
 
+Read-only grid-list background review closes the cause question for eight
+unresolved groups / **104 tile observations in 52 cases**. Every original tree
+file is hash-authenticated against `b07ef154...`; each tile has unique reference
+`mat-grid-tile` and candidate `div` owners. All 89 reference fields and all three
+candidate snapshots match their captured trees. Reference tile backgrounds are
+transparent throughout, with no inline or matching-rule background/all/motion
+declarations. Each candidate tile has one `.grid-tile` authored rule, identical
+to its captured rule, requesting opaque `theme.surfaceContainer`; literal colors
+`#f6f1f9`, `#27252c`, `#f0f0f0`, `#e5f2f1` each occur 13 times per tile and survive
+all core style stages. This is unequal authoring before paint. Ordered case,
+owner, input hash and tree-reference digest:
+`4321966571424d69f02c4a35f96d647f56728cb33215b653253cfb4c814d606d`.
+History differs from button-toggle: initial showcase `2f44011` already authored
+opaque light/dark tile fills; `d3ff236` replaced that expression with
+`theme.surfaceContainer`, and `2f63b52` restored flex centering without changing
+the background. Do not label the original fill a later compensation or infer
+intent from these commits. Future classification can share the demonstrated
+transparent-reference/opaque-authored-fill proof pattern, preserving distinct
+owner rules and history. No canonical rows changed. Combined export progressed
+to `validate-audit` at 730.784 seconds; acceptance remains pending.
+
 The separate selected-button background question now has complete read-only
 evidence for both unresolved groups / **24 observations**: eight hover, eight
 held, eight activate. Hash-authenticated original trees and complete scalar
