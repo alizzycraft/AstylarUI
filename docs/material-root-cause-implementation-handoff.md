@@ -16,13 +16,26 @@ No rendering input or canonical output was edited to accommodate the failure.
 Focused command `node --test tests/material-parity/position-canonical-conservation.spec.mjs`
 passes all 13 tests (33.46 s), including altered measurement, forged receipt/hash,
 wrong owner and jointly forged scalar input rejection. Full conservation replay
-is still pending; do not promote the new canonical package or working index yet.
+`node --max-old-space-size=8192 scripts/check-material-position-canonical-conservation.mjs --font-sidenav`
+passed against authenticated packages: exactly 14 newly classified groups / 676
+observations (10 font groups / 614, four sidenav groups / 62), all raw inputs and
+all non-receipt control evidence conserved. Receipt:
+`artifacts/material-parity/font-sidenav-conservation.json`, ordered current rows
+`2cee668eb0f5e6ca5b40c0e286716baeb678f17fb5c12080553e4f1eb3285834`.
+That run loaded the checker before its reporting-only count correction: its
+`unchangedCompleteRows:8469` includes receipt-only scalar rows and must not be
+interpreted as byte-identical rows. The committed checker reports those separately.
+All 461 current source fingerprints were independently revalidated. Section
+reconciliation preserves 72 of 79 sections, with no sections added or removed;
+the seven changes are classification data/summary and traced producer receipts.
+Accepted partial-audit package SHA-256:
+`4059599c887ec413d7a6494d7012becb09d06ff40c1cf24b7a0c3e228631a071`.
 Independent `collectMotionSourceConservation()` replay also reproduces
 `d6d652a4194ef4be7b80407f37b85a443bd1971609588711ea2ed59e7549ae25`
 for all 121 groups / 7,254 observations with all non-receipt evidence conserved.
-Next: finish reconciliation, then integrate existing border/default and
+Next: refresh the compact working index once, then integrate existing border/default and
 background/state-layer proofs below without repeating their investigations.
-The candidate export has 1,394 unresolved signatures; final audit acceptance
+The reconciled export has 1,394 unresolved signatures; final audit acceptance
 and full enforced browser gates remain outstanding.
 
 Generated-owner border coverage: reused `resolveOriginAliasPair` for all
