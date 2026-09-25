@@ -1,7 +1,8 @@
 // This is a conservative declaration-exclusion proof, not another cascade or
 // selector engine. A possibly applicable color/reset rule prevents attribution,
 // even when overridden, inactive, unsupported, or outside the current media.
-const ordinaryTypes = new Set(['div', 'section', 'article', 'header', 'footer', 'nav', 'main', 'aside', 'span', 'p', 'label']);
+const ordinaryTypes = new Set(['div', 'section', 'article', 'header', 'footer', 'nav', 'main', 'aside', 'span', 'p', 'label',
+  'h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
 export const borderColorProperties = ['borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor'];
 export const borderInitialAttribution = 'reviewed-border-initial-color-divergence';
 export const buttonBorderResetAttribution = 'reviewed-material-button-border-reset-omission';

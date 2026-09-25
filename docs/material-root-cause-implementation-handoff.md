@@ -2,6 +2,32 @@
 
 ## Current audit checkpoint — September 25
 
+Heading border-default coverage integrated into the existing collector: its
+ordinary-element gate now includes h1–h6, with no declaration, selector, stage
+or provenance check relaxed. Original capture authentication and full before/after
+collector replay preserve all **3,424 existing proofs** and add exactly **84**:
+52 card titles (`mat-card-title` → `h2`) and 32 dialog titles (`h2` → `h2`).
+The first expected-count check failed at 84 versus 52; the additional dialog
+population was explicitly examined, not silently accepted. Ordered added-proof
+digest: `1a22c39ea3b1b9b010ca76f64384ee45e943c14755a622ba2260b01af8afbcf7`.
+Independent scalar-classifier replay against every original member accepts all
+336 side-color observations, exactly matching 12 unresolved compact signatures
+(eight card / four dialog). This is the existing transparent-versus-currentColor
+default finding, not a new structure/raster equivalence claim. Native controls,
+tables, images and plugin types remain outside this ordinary-element extension.
+`node --test --test-name-pattern="border initial-color" tests/material-parity/input-equivalence-audit.spec.mjs`
+passed 5/5 (34.28 s). The expanded focused heading test also passes for all six
+candidate heading types against both Material and ordinary reference headings,
+rejecting state color, unknown reset selectors, inline resets, reference color
+authoring and missing normal-style evidence. No fixtures or renderer changed.
+These 12 classifications await the next coherent canonical integration batch;
+do not subtract them from the accepted unresolved count yet. This collector
+change deliberately makes the saved source fingerprint historical until that
+integration, while the original capture remains immutable.
+The preceding `2cec292` canonical commit is pushed, and its compact import
+completed: 8,483 scalar groups / 389,202 occurrences / 134 source findings /
+39,904 controls / 1,394 unresolved; compact bytes 70,020,140.
+
 Export reconciliation: the independent font/sidenav comparison exposed a
 previously unmodeled dependency, not yet a changed rendering observation.
 Scalar normal-line-box findings hash complete control proofs; the 48 allowed
@@ -33,7 +59,7 @@ Accepted partial-audit package SHA-256:
 Independent `collectMotionSourceConservation()` replay also reproduces
 `d6d652a4194ef4be7b80407f37b85a443bd1971609588711ea2ed59e7549ae25`
 for all 121 groups / 7,254 observations with all non-receipt evidence conserved.
-Next: refresh the compact working index once, then integrate existing border/default and
+Next: integrate existing border/default and
 background/state-layer proofs below without repeating their investigations.
 The reconciled export has 1,394 unresolved signatures; final audit acceptance
 and full enforced browser gates remain outstanding.

@@ -6,6 +6,8 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import ts from 'typescript';
 import { assertHistoricalCaseIndexSources } from './historical-case-index-source-assertion.mjs';
+import { collectBorderInitialInputs } from './border-initial-input-evidence.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import {
   buildMaterialInputAudit,
   attributeObservedNormalLineBoxes,
@@ -739,6 +741,31 @@ test('button border-reset evidence and per-case classification cannot be forged'
   ]) {
     const changed = structuredClone(original); change(changed);
     assert.ok(validateMaterialInputAudit(changed, { requireComplete: false }).some(error => error.includes('button border-reset')), String(change));
+  }
+});
+
+test('border initial-color heading owners retain conservative declaration and provenance checks', () => {
+  const normalize = bindPreciseAuditNormalization();
+  const collect = raw => collectBorderInitialInputs(collectFullTreeInventory(raw.results), normalize);
+  for (const referenceType of ['mat-card-title', 'h2']) for (const type of ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']) {
+    const raw = borderInitialReport(), entry = raw.results[0];
+    entry.inputTrees.reference.nodes[0].type = referenceType;
+    entry.inputTrees.astylar.nodes[0].authored.type = type;
+    const proof = collect(raw);
+    assert.equal(proof.length, 1, type);
+    assert.equal(proof[0].astylarType, type);
+    assert.equal(proof[0].inputEquivalent, false);
+    assert.equal(proof[0].finalRasterVerified, false);
+    for (const mutate of [
+      e => { e.inputTrees.astylar.rules.push({ selector: `${type}:hover`, borderColor: 'red' }); },
+      e => { e.inputTrees.astylar.rules.push({ selector: ':not(.other)', all: 'initial' }); },
+      e => { e.inputTrees.astylar.nodes[0].authored.style = { border: '0' }; },
+      e => { e.inputTrees.reference.nodes[0].inline = { 'border-color': 'currentColor' }; },
+      e => { delete e.inputTrees.astylar.nodes[0].normalResolvedStyle; },
+    ]) {
+      const changed = structuredClone(raw); mutate(changed.results[0]);
+      assert.equal(collect(changed).length, 0, `${type}: ${mutate}`);
+    }
   }
 });
 
