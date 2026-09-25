@@ -69,12 +69,54 @@ settlement contracts. No behavior threshold was weakened. The diagnostic server
 has been stopped. The probe and this ledger are outside canonical source inputs;
 the running origin export's dependencies were not changed.
 
-Cold origin export from `65d6d2c` is running, not yet accepted. Continue the
-existing terminal session 39159 (Node PID 18656); log:
-`artifacts/material-parity/origin-motion-export-65d6d2c.log`. Do not restart it
-or modify its audit-source dependencies while live. After terminal completion,
-run the existing `--origin-motion` canonical comparator, reconcile section and
-source/metadata changes, then import/verify the compact snapshot if accepted.
+The first cold origin export (session 39159) finished in 1,996.12 seconds but
+is **not accepted**. Its invocation omitted the four supplemental input options
+used by the accepted baseline. Besides 1,420 unresolved scalars, validation
+therefore reports missing/unbound supplemental and line-box evidence. This is
+an execution mistake, not a proved collector or renderer regression. The failed
+manifest/payload/Markdown are preserved in
+`artifacts/material-parity/origin-motion-incomplete-invocation-65d6d2c`;
+payload SHA-256 is
+`280dd6171aadd1fe27e2fdd7ed3a237d0f6b106fb208670f888c9b723258cf73`.
+Do not import that snapshot or stage its current unaccepted docs changes.
+
+All five evidence paths were checked present before the corrected cold run.
+It is now active in **session 27712, Node PID 21052**, started at `196ff42`;
+log: `artifacts/material-parity/origin-motion-export-complete-inputs-196ff42.log`.
+The audit producer dependencies remain those of `65d6d2c`; later runtime probes
+and this ledger are outside that source inventory. Preserve the live run and
+do not change its dependencies. The complete invocation (with
+`ASTYLAR_AUDIT_COLD=1` and `ASTYLAR_AUDIT_PROGRESS=1`) is:
+
+```powershell
+node --max-old-space-size=8192 scripts/run-material-input-audit.mjs --parity-report=artifacts/material-parity/current-ancestry-audit/latest-report.json --normal-line-box-report=artifacts/material-parity/normal-line-box-current-ancestry-audit/latest-report.json --control-line-box-report=artifacts/material-parity/control-line-box-current-ancestry-audit-v3/latest-report.json --supplemental-line-box-report=artifacts/material-parity/supplemental-line-box-current-ancestry-audit/latest-report.json --supplemental-root=artifacts/material-parity/supplemental-current-ancestry-audit
+```
+
+After terminal completion, inspect **all** validation errors before running the
+existing `--origin-motion` canonical comparator, section/source/metadata
+reconciliation and compact import/verification. The accepted predecessor remains
+`ed555089...`; an expected scalar count alone does not accept a replacement.
+
+Hover source follow-up: the fresh served core chunk and map still have hashes
+`ce7cd7a2fa62ab7abaf9b89045ec9d9390463477a25f8ed40773f841ad90a15d`
+and `dba484044ca0dea965d8ef4b12635673f0f055d7711099d2f6476ca490988ec4`.
+Method AST comparisons (structure, identifiers and literal values, excluding
+formatting/comments) match served map, installed JavaScript and transpiled current
+source for interaction `setSiteData`, `reconcileModalState`, `resolvePointerTarget`,
+`firstEligiblePointerTarget`, `firstVisiblePointerElement`, and element creation
+`createElement`. A whole-method `setupMouseEvents` comparison did not match and
+must not be reported as verified. Its inspected served prefix creates the action
+manager, while `createElement` calls it only when hover declarations exist.
+
+The demonstrated stationary failure is consistent with retained hover being
+reapplied during `reconcileModalState` without a new hit check. The passive-cover
+failure has a distinct candidate cause: installed Babylon's pointer-move predicate
+filters for an action manager / explicit move eligibility, while core accepts an
+eligible direct hit before checking blockers or performing a full multi-pick.
+Thus a skipped front box cannot be rescued by the later direct-blocker branch.
+Verify the served Babylon predicate and exact event path before calling that
+branch-level causal trace complete. No source change, private runtime intervention,
+or fixture compensation was made; the source-inspection server is stopped.
 
 Read-only paint follow-up while that export runs: exact original-capture and
 tree hashes plus compact finding `2644ae20256f938f1b0970d3dc1b85013d83cdde819e0a0781748548484a5147`
