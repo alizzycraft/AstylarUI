@@ -5,6 +5,21 @@ import { execFileSync } from 'node:child_process';
 import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer, restoreToggleSideColorProducer, restoreMappedBorderInitialProducer } from './position-composition-producer-transition.mjs';
 import { restoreMappedButtonResetProducer, restoreInteractiveWeightProducer, restoreModalPositionProducer } from './position-composition-producer-transition.mjs';
 import { restoreControlPositionProducer } from './position-composition-producer-transition.mjs';
+import { restoreWidthOverflowProducer } from './position-composition-producer-transition.mjs';
+
+test('width and overflow integration restores the complete accepted position producer', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'd7843b4:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreWidthOverflowProducer(current).restoredSource, previous);
+  for (const fragment of ['applyControlWidthRequests(beforeWidthOverflowRequests, cases',
+    'validateOmittedWidthObservations(report.discrepancies, replayedRows, cases,',
+    'validateOverlayOverflowRequests(report.discrepancies, replayedRows, cases,',
+    "errors.push('width and overflow attribution lacks bound original cases');",
+    "    'tests/material-parity/overlay-overflow-observation.mjs',\n"])
+    assert.throws(() => restoreWidthOverflowProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreWidthOverflowProducer(current + '\n// unrelated'));
+});
 
 test('control position helpers leave historical collector sources byte-identical', () => {
   for (const name of ['chip-position-inspection', 'static-position-observation']) {

@@ -33,9 +33,29 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreControlPositionProducer(source) {
+export function restoreWidthOverflowProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyControlWidthRequests, validateControlWidthRequests, applyOmittedWidthObservations, validateOmittedWidthObservations, applyExplicitWidthCompositions, validateExplicitWidthCompositions } from './control-width-observation.mjs';\n", ''],
+    ["import { applyOverlayOverflowRequests, validateOverlayOverflowRequests } from './overlay-overflow-observation.mjs';\n", ''],
+    ["    'tests/material-parity/control-width-observation.mjs',\n    'tests/material-parity/control-width-observation.spec.mjs',\n    'tests/material-parity/overlay-overflow-observation.mjs',\n    'tests/material-parity/overlay-overflow-observation.spec.mjs',\n", ''],
+    ["  const beforeWidthOverflowRequests = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyOverlayOverflowRequests(applyExplicitWidthCompositions(applyOmittedWidthObservations(applyControlWidthRequests(beforeWidthOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)\n    : beforeWidthOverflowRequests;\n", ''],
+    ['      errors.push(...validateControlWidthRequests(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n      errors.push(...validateOmittedWidthObservations(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n      errors.push(...validateExplicitWidthCompositions(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n      errors.push(...validateOverlayOverflowRequests(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n', ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>\n      ['reviewed-control-fixed-width-authoring', 'reviewed-omitted-width-observation-stage',\n        'reviewed-explicit-width-composition-substitution', 'reviewed-dialog-overflow-computed-axis',\n        'reviewed-overlay-overflow-request-omission'].includes(d.attribution)))\n    errors.push('width and overflow attribution lacks bound original cases');\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated width/overflow integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'cdffcae2fdac88767983cc7f26cdb0428ca358f5fa8ab54521b590cc74b96771',
+    'producer changed beyond reviewed width/overflow integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+
+export function restoreControlPositionProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('beforeWidthOverflowRequests') ? restoreWidthOverflowProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyChipPositionRequests, validateChipPositionRequests } from './control-position-observation.mjs';\n", ''],
     ["import { applyButtonOffsetObservations, validateButtonOffsetObservations } from './control-position-observation.mjs';\n", ''],

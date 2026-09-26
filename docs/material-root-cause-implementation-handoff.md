@@ -13,9 +13,26 @@ groups / 389,202 occurrences, 134 source findings, 39,904 control differences;
 coverage stays 436 static / 1,875 interaction cases. Compact shards total
 70,364,126 bytes. All reconciliation/import sessions are terminal; do not restart.
 
-Next integrate the already-proved **47 width + four overflow groups** as one
-coherent batch against this accepted snapshot, preserving historical source
-bindings and all unrelated evidence. They are not in this accepted export.
+**Width/overflow integration now wired, not exported:** the production stage and
+original-case validators cover the already-proved **47 width + four overflow
+groups**. The focused production replay changes exactly 51 groups / 1,764
+observations, rejects forged reviewed-case membership for each attribution, and
+leaves unbound inputs untouched. Accepted canonical counts above are unchanged.
+
+Verification: `node --test tests/material-parity/control-width-observation.spec.mjs
+tests/material-parity/overlay-overflow-observation.spec.mjs
+tests/material-parity/position-composition-producer-transition.spec.mjs
+tests/material-parity/static-position-observation.spec.mjs` passed **23/23** in
+49.71 s. Complete predecessor-source restoration and its mutation controls pass;
+the historical position-stage test now explicitly replays that authenticated
+predecessor. Width/overflow tests use the accepted fea569ed snapshot.
+`npm run audit:review -- position --cold` passed in 2.75 s: two collectors, two
+memory hits, no disk hits/invalidations, 1,205 files / 89,151,875 bytes reverified.
+
+Next extend the existing canonical conservation comparator with this batch's
+exact membership and original-source replay, verify its negative controls and
+remaining source bindings, then perform one cold export and reconcile all
+sections/source fingerprints before accepting it. No export is running.
 Full input-equivalence acceptance and final enforced browser gates remain open.
 Earlier chronological notes below describe preparation, not current job state.
 

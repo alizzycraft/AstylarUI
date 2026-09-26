@@ -10,6 +10,7 @@ import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { applyOverlayOverflowRequests, validateOverlayOverflowRequests } from './overlay-overflow-observation.mjs';
 
 test('control fixed-width requests retain all 544 original owners and reject false equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -68,8 +69,8 @@ test('control fixed-width requests retain all 544 original owners and reject fal
       proveControlWidthRequest(entry, ...trees, element));
   }
   const snapshot = {
-    generation: '77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752',
-    indexSha256: 'd84236477a9da75dc58de0e5d3d48db58c98bab5232d746cdf5d88501ced2459',
+    generation: 'fea569edc8edf1e05d1686bcb7c2a8eecc0bfb53bff5d5b8baeb6fbb59602040',
+    indexSha256: '672b4d61922a8ef775f4e2c723ca09c9ab70684d93822cd3fe3b53d0df6c9d57',
   };
   const rows = Object.keys(controlWidthOwners).flatMap(family =>
     queryFindings('artifacts/material-parity/working-audit', family, snapshot))
@@ -108,8 +109,7 @@ test('control fixed-width requests retain all 544 original owners and reject fal
   }
   for (const altered of [cases.slice(1), [...cases, cases[0]]])
     assert.throws(() => applyControlWidthRequests(rows, altered, inventory, normalize));
-  // Full production wiring/export still awaits the current position export's
-  // reconciliation. This replay does not alter the accepted canonical package.
+  // This focused replay does not alter the accepted canonical package.
 });
 
 test('combined width batch covers all 47 pending groups and selects only active stepper content', () => {
@@ -118,13 +118,13 @@ test('combined width batch covers all 47 pending groups and selects only active 
     'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const report = JSON.parse(bytes);
   const families = [...new Set([...Object.keys(controlWidthOwners), ...Object.keys(omittedWidthOwners),
-    ...Object.keys(autoWidthOwners), 'grid-list', 'tabs'])];
+    ...Object.keys(autoWidthOwners), 'grid-list', 'tabs', 'dialog'])];
   const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
     ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
   const snapshot = {
-    generation: '77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752',
-    indexSha256: 'd84236477a9da75dc58de0e5d3d48db58c98bab5232d746cdf5d88501ced2459',
+    generation: 'fea569edc8edf1e05d1686bcb7c2a8eecc0bfb53bff5d5b8baeb6fbb59602040',
+    indexSha256: '672b4d61922a8ef775f4e2c723ca09c9ab70684d93822cd3fe3b53d0df6c9d57',
   };
   const rows = families.flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, snapshot))
     .filter(row => row.evidence.section === 'discrepancies');
@@ -136,6 +136,38 @@ test('combined width batch covers all 47 pending groups and selects only active 
   const pending = rows.filter(row => row.property === 'width' && row.attribution === 'unresolved');
   assert.equal(pending.length, 47); assert.deepEqual(changed.map(row => row.id), pending.map(row => row.id));
   assert.equal(changed.reduce((sum, row) => sum + row.occurrences, 0), 1664);
+  // Exercise the actual production final stage without rebuilding the full audit.
+  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const start = source.indexOf("  const discrepancies = ownerInitialStyleBinding.status === 'bound'");
+  const end = source.indexOf('  const classifications = countBy(discrepancies', start);
+  assert.ok(start > 0 && end > start);
+  const implementations = { applyControlWidthRequests, applyOmittedWidthObservations,
+    applyExplicitWidthCompositions, applyOverlayOverflowRequests };
+  const run = new Function('ownerInitialStyleBinding', 'beforeWidthOverflowRequests', 'cases',
+    'elementInventory', 'canonicalStyle', ...Object.keys(implementations),
+    source.slice(start, end) + '\nreturn discrepancies;');
+  const integrated = run({ status: 'bound' }, rows, cases, inventory, normalize, ...Object.values(implementations));
+  assert.equal(run({ status: 'unbound' }, rows, cases, inventory, normalize, ...Object.values(implementations)), rows);
+  assert.deepEqual(integrated, applyOverlayOverflowRequests(applied, cases, inventory, normalize));
+  const integratedChanges = integrated.filter((row, i) => row !== rows[i]);
+  assert.equal(integratedChanges.length, 51);
+  assert.equal(integratedChanges.reduce((sum, row) => sum + row.occurrences, 0), 1764);
+  assert.deepEqual(rows, original);
+  const validators = { validateControlWidthRequests, validateOmittedWidthObservations,
+    validateExplicitWidthCompositions, validateOverlayOverflowRequests };
+  const validationStart = source.indexOf('      errors.push(...validateControlWidthRequests(');
+  const validationEnd = source.indexOf('      if (JSON.stringify(selected(replayedRows))', validationStart);
+  assert.ok(validationStart > 0 && validationEnd > validationStart);
+  const validateProduction = new Function('report', 'replayedRows', 'cases', 'canonicalStyle',
+    ...Object.keys(validators), 'const errors = [];\n' + source.slice(validationStart, validationEnd) + '\nreturn errors;');
+  const validateIntegrated = values => validateProduction({ discrepancies: values, elementInventory: inventory },
+    rows, cases, normalize, ...Object.values(validators));
+  assert.deepEqual(validateIntegrated(integrated), []);
+  for (const attribution of new Set(integratedChanges.map(row => row.attribution))) {
+    const forged = integrated.map(row => row.attribution === attribution
+      ? { ...row, reviewedCases: row.reviewedCases.slice(1) } : row);
+    assert.ok(validateIntegrated(forged).length, attribution);
+  }
   const autoRows = changed.filter(row => autoWidthOwners[row.family]?.includes(row.element));
   assert.equal(autoRows.length, 10); assert.equal(autoRows.reduce((sum, row) => sum + row.occurrences, 0), 576);
   for (const row of autoRows) {
@@ -178,8 +210,8 @@ test('grid and tab width findings retain their distinct explicit layout substitu
     ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => ['grid-list', 'tabs'].includes(e.family));
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
   const snapshot = {
-    generation: '77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752',
-    indexSha256: 'd84236477a9da75dc58de0e5d3d48db58c98bab5232d746cdf5d88501ced2459',
+    generation: 'fea569edc8edf1e05d1686bcb7c2a8eecc0bfb53bff5d5b8baeb6fbb59602040',
+    indexSha256: '672b4d61922a8ef775f4e2c723ca09c9ab70684d93822cd3fe3b53d0df6c9d57',
   };
   const rows = ['grid-list', 'tabs'].flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, snapshot))
     .filter(row => row.evidence.section === 'discrepancies');
@@ -233,8 +265,8 @@ test('omitted width stage review binds 14 groups without erasing layout and unpa
     ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => omittedWidthOwners[e.family]);
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
   const snapshot = {
-    generation: '77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752',
-    indexSha256: 'd84236477a9da75dc58de0e5d3d48db58c98bab5232d746cdf5d88501ced2459',
+    generation: 'fea569edc8edf1e05d1686bcb7c2a8eecc0bfb53bff5d5b8baeb6fbb59602040',
+    indexSha256: '672b4d61922a8ef775f4e2c723ca09c9ab70684d93822cd3fe3b53d0df6c9d57',
   };
   const rows = Object.keys(omittedWidthOwners).flatMap(family =>
     queryFindings('artifacts/material-parity/working-audit', family, snapshot))

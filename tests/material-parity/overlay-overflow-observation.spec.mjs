@@ -16,8 +16,8 @@ test('overlay overflow review distinguishes three authored-axis groups from dial
   const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
     ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => ['tooltip', 'dialog'].includes(e.family));
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
-  const snapshot = { generation: '77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752',
-    indexSha256: 'd84236477a9da75dc58de0e5d3d48db58c98bab5232d746cdf5d88501ced2459' };
+  const snapshot = { generation: 'fea569edc8edf1e05d1686bcb7c2a8eecc0bfb53bff5d5b8baeb6fbb59602040',
+    indexSha256: '672b4d61922a8ef775f4e2c723ca09c9ab70684d93822cd3fe3b53d0df6c9d57' };
   const rows = ['tooltip', 'dialog'].flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, snapshot))
     .filter(row => row.evidence.section === 'discrepancies');
   const before = structuredClone(rows), applied = applyOverlayOverflowRequests(rows, cases, inventory, normalize);

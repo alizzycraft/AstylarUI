@@ -5,6 +5,8 @@ import { applyDialogScalarTypography, validateDialogScalarTypography, applyBotto
 import { applyDialogPositionRequests, validateDialogPositionRequests, applyBottomSheetPositionRequests, validateBottomSheetPositionRequests } from './modal-position-inspection.mjs';
 import { applyChipPositionRequests, validateChipPositionRequests } from './control-position-observation.mjs';
 import { applyButtonOffsetObservations, validateButtonOffsetObservations } from './control-position-observation.mjs';
+import { applyControlWidthRequests, validateControlWidthRequests, applyOmittedWidthObservations, validateOmittedWidthObservations, applyExplicitWidthCompositions, validateExplicitWidthCompositions } from './control-width-observation.mjs';
+import { applyOverlayOverflowRequests, validateOverlayOverflowRequests } from './overlay-overflow-observation.mjs';
 import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, validateOverlaySurfaceAuditInputs,
   validateOverlaySurfaceAuditClassifications, overlaySurfaceAttributions } from './overlay-surface-audit-source-binding.mjs';
 import { collectChipPaintAuditInputs, applyChipPaintAuditRows, validateChipPaintAuditInputs,
@@ -304,9 +306,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforeControlPositionRequests = ownerInitialStyleBinding.status === 'bound'
     ? applyBottomSheetPositionRequests(applyDialogPositionRequests(beforeModalPositionRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
     : beforeModalPositionRequests;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforeWidthOverflowRequests = ownerInitialStyleBinding.status === 'bound'
     ? applyButtonOffsetObservations(applyChipPositionRequests(beforeControlPositionRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
     : beforeControlPositionRequests;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyOverlayOverflowRequests(applyExplicitWidthCompositions(applyOmittedWidthObservations(applyControlWidthRequests(beforeWidthOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : beforeWidthOverflowRequests;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -670,6 +675,14 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.elementInventory, canonicalStyle));
       errors.push(...validateButtonOffsetObservations(report.discrepancies, replayedRows, cases,
         report.elementInventory, canonicalStyle));
+      errors.push(...validateControlWidthRequests(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
+      errors.push(...validateOmittedWidthObservations(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
+      errors.push(...validateExplicitWidthCompositions(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
+      errors.push(...validateOverlayOverflowRequests(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
       if (JSON.stringify(selected(replayedRows)) !== JSON.stringify(selected(report.discrepancies)))
         errors.push('owner initial-style attributions lack replayed original precedence, values and exact case coverage');
     } catch (error) { errors.push(`owner initial-style replay failed: ${error}`); }
@@ -698,6 +711,11 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
       ['reviewed-chip-position-request-omission', 'reviewed-chip-computed-offset-stage',
         'reviewed-button-computed-offset-stage'].includes(d.attribution)))
     errors.push('control position attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>
+      ['reviewed-control-fixed-width-authoring', 'reviewed-omitted-width-observation-stage',
+        'reviewed-explicit-width-composition-substitution', 'reviewed-dialog-overflow-computed-axis',
+        'reviewed-overlay-overflow-request-omission'].includes(d.attribution)))
+    errors.push('width and overflow attribution lacks bound original cases');
   if (report.sliderBorderDefaults?.binding?.status === 'bound') {
     errors.push(...validateSliderBorderDefaults(report.sliderBorderDefaults, { root }));
     errors.push(...validateSliderBorderDefaultClassifications(report.sliderBorderDefaults,
@@ -8614,6 +8632,10 @@ function sourceFingerprints(root) {
     'tests/material-parity/chip-paint-audit-source-binding.mjs',
     'tests/material-parity/chip-position-inspection.mjs',
     'tests/material-parity/control-position-observation.mjs',
+    'tests/material-parity/control-width-observation.mjs',
+    'tests/material-parity/control-width-observation.spec.mjs',
+    'tests/material-parity/overlay-overflow-observation.mjs',
+    'tests/material-parity/overlay-overflow-observation.spec.mjs',
     'tests/material-parity/chip-position-inspection.spec.mjs',
     'scripts/audit-findings-store.mjs',
     'docs/material-chip-paint-review.json',
