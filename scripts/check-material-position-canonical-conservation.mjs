@@ -37,6 +37,9 @@ import { applyButtonOffsetObservations } from '../tests/material-parity/control-
 import { restoreWidthOverflowProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
 import { applyControlWidthRequests, applyOmittedWidthObservations, applyExplicitWidthCompositions } from '../tests/material-parity/control-width-observation.mjs';
 import { applyOverlayOverflowRequests } from '../tests/material-parity/overlay-overflow-observation.mjs';
+import { restoreSnackbarOverflowProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { applySnackbarPositionRequests } from '../tests/material-parity/snackbar-position-observation.mjs';
+import { applyControlClippingRequests, applyMappedVisibleOverflow } from '../tests/material-parity/control-overflow-observation.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
@@ -141,9 +144,18 @@ export function replayWidthOverflowRows(rows, captured) {
     cases, inventory, normalize), cases, inventory, normalize);
 }
 
-export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false, weight = false, modalPosition = false, controlPosition = false, widthOverflow = false } = {}) {
-  assert.ok(Number(dialogCard) + Number(weight) + Number(modalPosition) + Number(controlPosition) + Number(widthOverflow) <= 1, 'select one scalar batch');
-  const transition = widthOverflow ? restoreWidthOverflowProducer(source) : controlPosition ? restoreControlPositionProducer(source) : modalPosition ? restoreModalPositionProducer(source) : weight ? restoreInteractiveWeightProducer(source) : dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
+export function replaySnackbarOverflowRows(rows, captured) {
+  const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
+    ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  return applyMappedVisibleOverflow(applyControlClippingRequests(
+    applySnackbarPositionRequests(rows, cases, inventory, normalize), cases, inventory, normalize), cases, inventory, normalize);
+}
+
+export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false, weight = false, modalPosition = false, controlPosition = false, widthOverflow = false, snackbarOverflow = false } = {}) {
+  assert.ok(Number(dialogCard) + Number(weight) + Number(modalPosition) + Number(controlPosition) + Number(widthOverflow) + Number(snackbarOverflow) <= 1, 'select one scalar batch');
+  const transition = snackbarOverflow ? restoreSnackbarOverflowProducer(source) : widthOverflow ? restoreWidthOverflowProducer(source) : controlPosition ? restoreControlPositionProducer(source) : modalPosition ? restoreModalPositionProducer(source) : weight ? restoreInteractiveWeightProducer(source) : dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
   const adjusted = refreshScalarControlReceipts(previous.rows, previous.control, current.control, transition);
   const expected = JSON.parse(JSON.stringify(refreshScalarControlReceipts(expectedRows,
     previous.control, current.control, transition)));
@@ -170,7 +182,26 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     const before = adjusted[i], after = current.rows[i];
     same(raw(previous.rows[i]), raw(after), 'border batch changed raw scalar evidence');
     if (isDeepStrictEqual(before, after)) continue;
-    assert.match(before.property, widthOverflow ? /^(width|overflowX|overflowY)$/ : modalPosition || controlPosition ? /^(position|top|right|bottom|left)$/ : weight ? /^fontWeight$/ : dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    assert.match(before.property, snackbarOverflow ? /^(position|right|bottom|overflowX|overflowY)$/ : widthOverflow ? /^(width|overflowX|overflowY)$/ : modalPosition || controlPosition ? /^(position|top|right|bottom|left)$/ : weight ? /^fontWeight$/ : dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    if (snackbarOverflow) {
+      assert.equal(before.attribution, 'unresolved');
+      const visible = after.attribution === 'reviewed-mapped-visible-overflow-initial-value';
+      const stage = ['reviewed-snackbar-computed-offset-stage', 'reviewed-progress-overflow-computed-axis'].includes(after.attribution);
+      assert.equal(after.classification, visible ? 'equivalent-representation' : stage ? 'parity-harness-defect' : 'application-plugin-authoring-defect');
+      assert.equal(after.reviewEvidence.inputEquivalent, false); assert.equal(after.reviewEvidence.renderingEquivalent, false);
+      if (before.property === 'position' || ['right', 'bottom'].includes(before.property)) {
+        assert.equal(before.family, 'snack-bar'); assert.equal(before.element, 'snack-bar-overlay');
+        assert.equal(before.occurrences, 34);
+        assert.equal(before.reference, before.property === 'position' ? 'absolute' : '0');
+        assert.equal(before.astylar, before.property === 'position' ? 'fixed' : undefined);
+        assert.equal(after.attribution, before.property === 'position' ? 'reviewed-snackbar-overlay-position-substitution' : 'reviewed-snackbar-computed-offset-stage');
+      } else {
+        assert.equal(before.astylar, undefined);
+        assert.equal(before.reference, visible ? 'visible' : stage ? 'auto' : 'hidden');
+        if (stage) { assert.equal(before.element, 'progress-bar-primary'); assert.equal(before.property, 'overflowY'); assert.equal(before.occurrences, 20); }
+        else assert.ok(['reviewed-control-clipping-request-omission', 'reviewed-mapped-visible-overflow-initial-value'].includes(after.attribution));
+      }
+    }
     if (widthOverflow) {
       assert.equal(before.attribution, 'unresolved');
       const stage = ['reviewed-omitted-width-observation-stage', 'reviewed-dialog-overflow-computed-axis'].includes(after.attribution);
@@ -244,7 +275,13 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
       existingProofRows.push(i);
     }
   }
-  same(Object.fromEntries(totals), widthOverflow ? {
+  same(Object.fromEntries(totals), snackbarOverflow ? {
+    'reviewed-snackbar-overlay-position-substitution': { groups: 1, observations: 34 },
+    'reviewed-snackbar-computed-offset-stage': { groups: 2, observations: 68 },
+    'reviewed-control-clipping-request-omission': { groups: 15, observations: 640 },
+    'reviewed-progress-overflow-computed-axis': { groups: 1, observations: 20 },
+    'reviewed-mapped-visible-overflow-initial-value': { groups: 12, observations: 530 },
+  } : widthOverflow ? {
     'reviewed-control-fixed-width-authoring': { groups: 16, observations: 544 },
     'reviewed-omitted-width-observation-stage': { groups: 24, observations: 946 },
     'reviewed-explicit-width-composition-substitution': { groups: 7, observations: 174 },
@@ -273,7 +310,7 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     'reviewed-material-outline-token-substitution': { groups: 3, observations: 204 },
     'reviewed-mapped-border-initial-color-divergence': { groups: 52, observations: 1432 },
   }, 'border batch changed unexpected classification membership');
-  return { previous: previous.manifest, current: current.manifest, changedGroups: widthOverflow ? 51 : controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83, changedOccurrences: widthOverflow ? 1764 : controlPosition ? 3160 : modalPosition ? 1125 : weight ? 1502 : dialogCard ? 896 : 2596,
+  return { previous: previous.manifest, current: current.manifest, changedGroups: snackbarOverflow ? 31 : widthOverflow ? 51 : controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83, changedOccurrences: snackbarOverflow ? 1292 : widthOverflow ? 1764 : controlPosition ? 3160 : modalPosition ? 1125 : weight ? 1502 : dialogCard ? 896 : 2596,
     existingProofRows, scalarReceiptRows: adjusted.filter((r, i) => !isDeepStrictEqual(r, previous.rows[i])).length,
     controlReceiptRecords: receiptCases.length, allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
     orderedCurrentRowsSha256: digest(current.rows), inputEquivalent: false, renderingEquivalent: false };
@@ -546,7 +583,17 @@ function replayAppearanceRows(rows, captured, { colorMotion = false, originMotio
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--width-overflow') {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--snackbar-overflow') {
+  assert.equal(process.argv.length, 3);
+  const previous = await readAudit('artifacts/material-parity/working-audit/f86307bd22b7699155bc1e28730c1a446c825a214d97c9258555c8b33a265162');
+  assert.equal(previous.manifest.uncompressedSha256, 'b91fdd5c1596d79c1f401836b8cd83ba04a29103f78105c50f9b43284261e7b2');
+  const current = await readAudit('docs');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const expected = replaySnackbarOverflowRows(previous.rows, JSON.parse(bytes));
+  console.log(JSON.stringify(compareBorderDefaultCanonical(previous, current, expected,
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), { snackbarOverflow: true }), null, 2));
+} else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--width-overflow') {
   assert.equal(process.argv.length, 3);
   const previous = await readAudit('artifacts/material-parity/working-audit/fea569edc8edf1e05d1686bcb7c2a8eecc0bfb53bff5d5b8baeb6fbb59602040');
   assert.equal(previous.manifest.uncompressedSha256, '98d8aada931c0f393616ffd4ddfb4177f7099d33690042cabe42db98504d0f70');

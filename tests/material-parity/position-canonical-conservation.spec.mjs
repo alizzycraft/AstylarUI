@@ -10,15 +10,23 @@ import { positionFollowupAttribution } from './position-followup-review.mjs';
 import { restoreInteractiveWeightProducer, restoreModalPositionProducer, restoreControlPositionProducer, restoreWidthOverflowProducer } from './position-composition-producer-transition.mjs';
 import { ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
 import { retainedFontScalarAttribution } from './retained-font-scalar.mjs';
+import { restoreSnackbarOverflowProducer } from './position-composition-producer-transition.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
 
-for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'control-position', 'width-overflow']) test(`scalar conservation (${mode}) rejects changed raw data, unrelated metadata and control values even with forged expected rows`, () => {
+for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'control-position', 'width-overflow', 'snackbar-overflow']) test(`scalar conservation (${mode}) rejects changed raw data, unrelated metadata and control values even with forged expected rows`, () => {
+  const snackbarOverflow = mode === 'snackbar-overflow';
   const widthOverflow = mode === 'width-overflow';
   const controlPosition = mode === 'control-position';
   const dialogCard = mode === 'dialog/card', weight = mode === 'weight', modalPosition = mode === 'modal-position';
-  const transition = widthOverflow ? restoreWidthOverflowProducer(currentSource) : controlPosition ? restoreControlPositionProducer(currentSource) : modalPosition ? restoreModalPositionProducer(currentSource) : weight ? restoreInteractiveWeightProducer(currentSource) : dialogCard ? restoreMappedButtonResetProducer(currentSource) : restoreToggleSideColorProducer(currentSource), rows = [], expected = [];
-  const compare = (p, c, e, s) => compareBorderDefaultCanonical(p, c, e, s, { dialogCard, weight, modalPosition, controlPosition, widthOverflow });
-  for (const [attribution, groups, observations] of widthOverflow ? [
+  const transition = snackbarOverflow ? restoreSnackbarOverflowProducer(currentSource) : widthOverflow ? restoreWidthOverflowProducer(currentSource) : controlPosition ? restoreControlPositionProducer(currentSource) : modalPosition ? restoreModalPositionProducer(currentSource) : weight ? restoreInteractiveWeightProducer(currentSource) : dialogCard ? restoreMappedButtonResetProducer(currentSource) : restoreToggleSideColorProducer(currentSource), rows = [], expected = [];
+  const compare = (p, c, e, s) => compareBorderDefaultCanonical(p, c, e, s, { dialogCard, weight, modalPosition, controlPosition, widthOverflow, snackbarOverflow });
+  for (const [attribution, groups, observations] of snackbarOverflow ? [
+    ['reviewed-snackbar-overlay-position-substitution', 1, 34],
+    ['reviewed-snackbar-computed-offset-stage', 2, 68],
+    ['reviewed-control-clipping-request-omission', 15, 640],
+    ['reviewed-progress-overflow-computed-axis', 1, 20],
+    ['reviewed-mapped-visible-overflow-initial-value', 12, 530],
+  ] : widthOverflow ? [
     ['reviewed-control-fixed-width-authoring', 16, 544],
     ['reviewed-omitted-width-observation-stage', 24, 946],
     ['reviewed-explicit-width-composition-substitution', 7, 174],
@@ -79,9 +87,21 @@ for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'cont
         delete before.astylar;
       }
     }
+    if (snackbarOverflow) {
+      delete before.astylar;
+      before.property = i % 2 ? 'overflowY' : 'overflowX';
+      before.reference = attribution.includes('initial-value') ? 'visible' : attribution.includes('computed-axis') ? 'auto' : 'hidden';
+      if (attribution.includes('computed-axis')) { before.element = 'progress-bar-primary'; before.property = 'overflowY'; }
+      if (attribution.includes('snackbar')) {
+        before.family = 'snack-bar'; before.element = 'snack-bar-overlay'; before.occurrences = 34;
+        before.property = attribution.includes('position-substitution') ? 'position' : i ? 'bottom' : 'right';
+        before.reference = before.property === 'position' ? 'absolute' : '0';
+        if (before.property === 'position') before.astylar = 'fixed';
+      }
+    }
     rows.push(before); expected.push({ ...before, attribution,
-      classification: widthOverflow ? (['reviewed-omitted-width-observation-stage', 'reviewed-dialog-overflow-computed-axis'].includes(attribution) ? 'parity-harness-defect' : 'application-plugin-authoring-defect') : modalPosition || controlPosition ? (before.property === 'position' ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : weight ? (attribution === retainedFontScalarAttribution ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : 'reviewed',
-      ...(widthOverflow || weight || modalPosition || controlPosition ? { reviewEvidence: { renderingEquivalent: false, inputEquivalent: false,
+      classification: snackbarOverflow ? (attribution.includes('initial-value') ? 'equivalent-representation' : attribution.includes('computed-') ? 'parity-harness-defect' : 'application-plugin-authoring-defect') : widthOverflow ? (['reviewed-omitted-width-observation-stage', 'reviewed-dialog-overflow-computed-axis'].includes(attribution) ? 'parity-harness-defect' : 'application-plugin-authoring-defect') : modalPosition || controlPosition ? (before.property === 'position' ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : weight ? (attribution === retainedFontScalarAttribution ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : 'reviewed',
+      ...(snackbarOverflow || widthOverflow || weight || modalPosition || controlPosition ? { reviewEvidence: { renderingEquivalent: false, inputEquivalent: false,
         currentPseudoStatePaintVerified: false, computedCandidateVerified: false } } : {}) });
   }
   const controls = Array.from({ length: 48 }, (_, i) => ({ case: `case-${i}`, element: 'button', property: 'lineHeight',
@@ -91,12 +111,12 @@ for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'cont
   const current = { rows: structuredClone(expected), control: structuredClone(previous.control) };
   for (const c of current.control.differences)
     c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
-  assert.equal(compare(previous, current, expected, currentSource).changedGroups, widthOverflow ? 51 : controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83);
+  assert.equal(compare(previous, current, expected, currentSource).changedGroups, snackbarOverflow ? 31 : widthOverflow ? 51 : controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83);
   for (const mutate of [
     r => { r.reference = 'forged'; }, r => { r.cases = ['forged']; },
     r => { r.occurrences++; }, r => { r.property = 'fontSize'; },
     r => { r.attribution = 'unreviewed'; },
-    ...(widthOverflow || weight || modalPosition || controlPosition ? [r => { r.reviewEvidence.renderingEquivalent = true; }, r => { r.classification = 'equivalent'; }] : []),
+    ...(snackbarOverflow || widthOverflow || weight || modalPosition || controlPosition ? [r => { r.reviewEvidence.renderingEquivalent = true; }, r => { r.classification = 'equivalent'; }] : []),
   ]) {
     const changed = structuredClone(current), forged = structuredClone(expected);
     mutate(changed.rows[0]); mutate(forged[0]);
