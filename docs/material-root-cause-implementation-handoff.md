@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 27
 
+**Remaining button-overflow investigation:** a new independent browser probe,
+`tests/material-parity/button-overflow-initial.spec.mjs`, passes **1/1** (1.57 s
+test body). Native button omission and explicit visible X/Y give identical
+computed axes, outside-descendant hit reachability and zero scroll offsets.
+Hidden, mixed visible/hidden axes and a clipping ancestor are distinct negative
+controls. This answers the browser-default question, not full rendering parity.
+Source trace: `ElementCreationService.createElement` routes core buttons through
+`InputElementService.createInputElement` to `ButtonManager.createButton`.
+ButtonManager creates the label as a separate child mesh with intrinsic texture
+dimensions, without a button-width maxWidth argument or an own overflow-clipping
+branch. Shared `OverflowClipService.apply` and `AstylarScrollRuntime.reconcile`
+only register clipping for hidden/clip/auto/scroll. This narrows, but does not
+replace, candidate runtime proof: existing ButtonManager specs cover icon labels
+and line-box centering, not oversized descendant clipping. Next extend the owning
+focused control proof after the live export finishes, then bind only the 12-button
+population's initial-value claim; do not waive paint, ancestor clipping or plugin
+differences. No canonical classifications changed. The new standalone browser
+test is not imported/fingerprinted by the running export; its dependencies were
+left untouched. PID 16516 was revalidated live (CPU 506.02 s); no restart issued.
+
 **Predecessor position batch:** all export, conservation, section/source and compact
 index checks passed. New canonical compressed SHA / index generation:
 `fea569edc8edf1e05d1686bcb7c2a8eecc0bfb53bff5d5b8baeb6fbb59602040`;
