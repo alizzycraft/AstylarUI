@@ -2,10 +2,33 @@
 
 ## Current audit checkpoint — September 25
 
-September 26 continuation: cold modal export from pushed **c454fae** is running
-as session 30237 / PID 22024; log `modal-position-export-c454fae.log`. Do not
-restart merely because aggregation is quiet. No acceptance yet. Accepted bfd
-still has 1,262 unresolved groups. Authenticated compact priority counts are
+September 26: cold modal export **c454fae** terminated, session 30237 exit 1,
+after 2,299.35 s. Its only error is 1,224 unresolved groups. Coverage remains
+436/436 static and 1,875/1,875 interaction, with 8,483 groups / 389,202
+occurrences / 134 source findings. Evidence session: zero invalidations,
+1,205 files / 89,151,875 bytes verified. Log: `modal-position-export-c454fae.log`.
+Complete-row conservation (session 94428 exit 0) confirms exactly 38 groups /
+1,125 observations changed, preserving all raw inputs and non-receipt controls.
+Section comparison (72538 exit 0) retains all 79 sections, 72 unchanged; changes
+are sourceFingerprints, controlLineBoxes, summary, discrepancies, ownerCaretInputs,
+reviewedSourceBatchInputs and controlTypography. Metadata extraction (84047
+exit 0) plus assertions verifies all 461 current fingerprints and five exact
+bc898de-to-c454fae source changes. The 50 module receipts change only the module
+hash; remaining metadata differences are three expected summary values and the
+validated replay-report digest. Evidence: `modal-position-{conservation,sections,
+metadata}-c454fae.json`. New compressed SHA is
+`77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752`
+(60,139,403 bytes); decoded SHA
+`d595011706e4008ade0bc85663fbcd08fbda940b95dfc64f7cd4b3ffaf2989a6`
+(2,101,378,814 bytes). Ordered rows SHA:
+`a0b9604ab285de0e682443939297f8297a62ffa0ff2986945c2e9cd16ed85d0a`.
+Partial batch reconciliation passed. Compact import session 38996 exited 0;
+`npm run audit:findings:verify` passed with 8,483 discrepancies, 134 source
+findings, 39,904 controls, 389,202 occurrences and 1,224 unresolved groups.
+Import log: `modal-position-import-c454fae.log`; compact bytes 70,213,826.
+Index SHA: `d84236477a9da75dc58de0e5d3d48db58c98bab5232d746cdf5d88501ced2459`.
+This is not whole-audit acceptance; final browser gates remain required.
+Prior accepted bfd priority counts (before the 38-group batch) were
 dialog 161, bottom-sheet 112, chips 100, tabs 98; position/insets total 206.
 
 Next chip question now has a bounded read-only answer, not a new classification:
