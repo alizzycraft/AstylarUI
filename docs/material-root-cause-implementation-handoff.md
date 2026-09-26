@@ -86,10 +86,28 @@ tests/material-parity/snackbar-position-observation.spec.mjs` passes **4/4 in
 false classifications and invented rendering claims are checked. Initial-value
 reuse explicitly pins the six unchanged defaults/clip/scroll sources and tests.
 The mapped proof is now reusable in the existing clipping review module rather
-than duplicated in the prerequisite test. No production wiring, producer receipt
-transition or new export has happened yet; those are the next coherent step.
-Dependencies of that export have not changed. The following independent proofs
-are not imported or fingerprinted by its producer and are not in its batch.
+than duplicated in the prerequisite test.
+
+**Combined snackbar/overflow production wiring is now verified, not exported.**
+The final bound-input stage applies the three reviews, fingerprints their four
+module/spec files, and validates original-case replay. Unbound inputs remain
+unchanged. The focused test extracts the actual production stage and validators,
+checks all 31 groups / 1,292 observations and rejects forged case membership for
+each of the five attributions. Complete predecessor restoration equals accepted
+8978a4b byte-for-byte (module hash d5d87c9a...), retaining historical chain guards.
+The older width-stage test explicitly replays that authenticated predecessor.
+`node --test tests/material-parity/control-overflow-observation.spec.mjs
+tests/material-parity/snackbar-position-observation.spec.mjs
+tests/material-parity/position-composition-producer-transition.spec.mjs
+tests/material-parity/control-width-observation.spec.mjs` passes **22/22 in
+55.96 s**. Cold position review passes (4.19 s; two collectors, two memory hits,
+no disk hits/invalidations; 1,205 files / 89,151,875 bytes reverified). Chip and
+followup production bindings independently remain `bound` (8.47 s).
+Next extend the existing canonical comparator for this exact batch before the
+next cold export and all-section/source reconciliation. No export job is live;
+canonical acceptance still has 1,127 unresolved groups, not the proposed 1,096.
+The accepted width/overflow export predates this new wiring. The following
+proof details belong to the new batch and are not canonically applied yet.
 
 Next pending snackbar proof: `snackbar-position-observation.spec.mjs` passes
 **1/1** (3.03 s), covering all 34 original wrapper states and exactly three scalar
@@ -133,7 +151,7 @@ suite passes **2/2 in 13.30 s**; an initial test used the wrong mapping-result f
 (`astylarNode` instead of `candidateNode`) and failed before correction. No new
 canonical classifications or clipping/rendering claims were applied. The combined
 proposal above now binds these mappings using the same initial-value scope;
-main-builder integration remains pending.
+main-builder wiring is now tested above, but canonical acceptance remains pending.
 Earlier chronological notes below describe preparation, not current job state.
 
 Position reconciliation progress: canonical conservation **passed**, session

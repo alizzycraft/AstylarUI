@@ -84,8 +84,31 @@ test('combined snackbar and overflow proposal preserves all current raw rows and
   const before = structuredClone(rows);
   const applied = applyMappedVisibleOverflow(applyControlClippingRequests(
     applySnackbarPositionRequests(rows, cases, inventory, normalize), cases, inventory, normalize), cases, inventory, normalize);
+  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const start = source.indexOf("  const discrepancies = ownerInitialStyleBinding.status === 'bound'");
+  const end = source.indexOf('  const classifications = countBy(discrepancies', start);
+  assert.ok(start > 0 && end > start);
+  const implementations = { applyMappedVisibleOverflow, applyControlClippingRequests, applySnackbarPositionRequests };
+  const run = new Function('ownerInitialStyleBinding', 'beforeSnackbarOverflowRequests', 'cases',
+    'elementInventory', 'canonicalStyle', ...Object.keys(implementations), source.slice(start, end) + '\nreturn discrepancies;');
+  assert.deepEqual(run({ status: 'bound' }, rows, cases, inventory, normalize, ...Object.values(implementations)), applied);
+  assert.equal(run({ status: 'unbound' }, rows, cases, inventory, normalize, ...Object.values(implementations)), rows);
+  const validators = { validateSnackbarPositionRequests, validateControlClippingRequests, validateMappedVisibleOverflow };
+  const validationStart = source.indexOf('      errors.push(...validateSnackbarPositionRequests(');
+  const validationEnd = source.indexOf('      if (JSON.stringify(selected(replayedRows))', validationStart);
+  assert.ok(validationStart > 0 && validationEnd > validationStart);
+  const validateProduction = new Function('report', 'replayedRows', 'cases', 'canonicalStyle',
+    ...Object.keys(validators), 'const errors = [];\n' + source.slice(validationStart, validationEnd) + '\nreturn errors;');
+  const validateIntegrated = values => validateProduction({ discrepancies: values, elementInventory: inventory },
+    rows, cases, normalize, ...Object.values(validators));
+  assert.deepEqual(validateIntegrated(applied), []);
   assert.deepEqual(rows, before); assert.equal(applied.length, rows.length);
   const changed = applied.filter((r, i) => r !== rows[i]);
+  for (const attribution of new Set(changed.map(row => row.attribution))) {
+    const forged = applied.map(row => row.attribution === attribution
+      ? { ...row, reviewedCases: row.reviewedCases.slice(1) } : row);
+    assert.ok(validateIntegrated(forged).length, attribution);
+  }
   assert.equal(changed.length, 31); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 1292);
   assert.equal(applied.filter(r => r.attribution === 'unresolved').length, 1096);
   const visible = changed.filter(r => r.attribution === 'reviewed-mapped-visible-overflow-initial-value');

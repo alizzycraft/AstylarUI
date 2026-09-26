@@ -11,6 +11,7 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { applyOverlayOverflowRequests, validateOverlayOverflowRequests } from './overlay-overflow-observation.mjs';
+import { restoreSnackbarOverflowProducer } from './position-composition-producer-transition.mjs';
 
 test('control fixed-width requests retain all 544 original owners and reject false equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -136,8 +137,8 @@ test('combined width batch covers all 47 pending groups and selects only active 
   const pending = rows.filter(row => row.property === 'width' && row.attribution === 'unresolved');
   assert.equal(pending.length, 47); assert.deepEqual(changed.map(row => row.id), pending.map(row => row.id));
   assert.equal(changed.reduce((sum, row) => sum + row.occurrences, 0), 1664);
-  // Exercise the actual production final stage without rebuilding the full audit.
-  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  // Replay the hash-authenticated width-stage predecessor, not the newer batch.
+  const source = restoreSnackbarOverflowProducer(readFileSync('tests/material-parity/input-equivalence-audit.mjs')).restoredSource;
   const start = source.indexOf("  const discrepancies = ownerInitialStyleBinding.status === 'bound'");
   const end = source.indexOf('  const classifications = countBy(discrepancies', start);
   assert.ok(start > 0 && end > start);

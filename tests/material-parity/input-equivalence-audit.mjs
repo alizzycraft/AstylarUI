@@ -7,6 +7,8 @@ import { applyChipPositionRequests, validateChipPositionRequests } from './contr
 import { applyButtonOffsetObservations, validateButtonOffsetObservations } from './control-position-observation.mjs';
 import { applyControlWidthRequests, validateControlWidthRequests, applyOmittedWidthObservations, validateOmittedWidthObservations, applyExplicitWidthCompositions, validateExplicitWidthCompositions } from './control-width-observation.mjs';
 import { applyOverlayOverflowRequests, validateOverlayOverflowRequests } from './overlay-overflow-observation.mjs';
+import { applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
+import { applyControlClippingRequests, validateControlClippingRequests, applyMappedVisibleOverflow, validateMappedVisibleOverflow } from './control-overflow-observation.mjs';
 import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, validateOverlaySurfaceAuditInputs,
   validateOverlaySurfaceAuditClassifications, overlaySurfaceAttributions } from './overlay-surface-audit-source-binding.mjs';
 import { collectChipPaintAuditInputs, applyChipPaintAuditRows, validateChipPaintAuditInputs,
@@ -309,9 +311,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforeWidthOverflowRequests = ownerInitialStyleBinding.status === 'bound'
     ? applyButtonOffsetObservations(applyChipPositionRequests(beforeControlPositionRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
     : beforeControlPositionRequests;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforeSnackbarOverflowRequests = ownerInitialStyleBinding.status === 'bound'
     ? applyOverlayOverflowRequests(applyExplicitWidthCompositions(applyOmittedWidthObservations(applyControlWidthRequests(beforeWidthOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
     : beforeWidthOverflowRequests;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyMappedVisibleOverflow(applyControlClippingRequests(applySnackbarPositionRequests(beforeSnackbarOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : beforeSnackbarOverflowRequests;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -683,6 +688,12 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.elementInventory, canonicalStyle));
       errors.push(...validateOverlayOverflowRequests(report.discrepancies, replayedRows, cases,
         report.elementInventory, canonicalStyle));
+      errors.push(...validateSnackbarPositionRequests(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
+      errors.push(...validateControlClippingRequests(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
+      errors.push(...validateMappedVisibleOverflow(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
       if (JSON.stringify(selected(replayedRows)) !== JSON.stringify(selected(report.discrepancies)))
         errors.push('owner initial-style attributions lack replayed original precedence, values and exact case coverage');
     } catch (error) { errors.push(`owner initial-style replay failed: ${error}`); }
@@ -716,6 +727,11 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         'reviewed-explicit-width-composition-substitution', 'reviewed-dialog-overflow-computed-axis',
         'reviewed-overlay-overflow-request-omission'].includes(d.attribution)))
     errors.push('width and overflow attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>
+      ['reviewed-snackbar-overlay-position-substitution', 'reviewed-snackbar-computed-offset-stage',
+        'reviewed-control-clipping-request-omission', 'reviewed-progress-overflow-computed-axis',
+        'reviewed-mapped-visible-overflow-initial-value'].includes(d.attribution)))
+    errors.push('snackbar and overflow attribution lacks bound original cases');
   if (report.sliderBorderDefaults?.binding?.status === 'bound') {
     errors.push(...validateSliderBorderDefaults(report.sliderBorderDefaults, { root }));
     errors.push(...validateSliderBorderDefaultClassifications(report.sliderBorderDefaults,
@@ -8636,6 +8652,10 @@ function sourceFingerprints(root) {
     'tests/material-parity/control-width-observation.spec.mjs',
     'tests/material-parity/overlay-overflow-observation.mjs',
     'tests/material-parity/overlay-overflow-observation.spec.mjs',
+    'tests/material-parity/snackbar-position-observation.mjs',
+    'tests/material-parity/snackbar-position-observation.spec.mjs',
+    'tests/material-parity/control-overflow-observation.mjs',
+    'tests/material-parity/control-overflow-observation.spec.mjs',
     'tests/material-parity/chip-position-inspection.spec.mjs',
     'scripts/audit-findings-store.mjs',
     'docs/material-chip-paint-review.json',

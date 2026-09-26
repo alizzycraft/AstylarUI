@@ -33,9 +33,29 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreWidthOverflowProducer(source) {
+export function restoreSnackbarOverflowProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';\n", ''],
+    ["import { applyControlClippingRequests, validateControlClippingRequests, applyMappedVisibleOverflow, validateMappedVisibleOverflow } from './control-overflow-observation.mjs';\n", ''],
+    ["    'tests/material-parity/snackbar-position-observation.mjs',\n    'tests/material-parity/snackbar-position-observation.spec.mjs',\n    'tests/material-parity/control-overflow-observation.mjs',\n    'tests/material-parity/control-overflow-observation.spec.mjs',\n", ''],
+    ["  const beforeSnackbarOverflowRequests = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyMappedVisibleOverflow(applyControlClippingRequests(applySnackbarPositionRequests(beforeSnackbarOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)\n    : beforeSnackbarOverflowRequests;\n", ''],
+    ['      errors.push(...validateSnackbarPositionRequests(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n      errors.push(...validateControlClippingRequests(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n      errors.push(...validateMappedVisibleOverflow(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n', ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>\n      ['reviewed-snackbar-overlay-position-substitution', 'reviewed-snackbar-computed-offset-stage',\n        'reviewed-control-clipping-request-omission', 'reviewed-progress-overflow-computed-axis',\n        'reviewed-mapped-visible-overflow-initial-value'].includes(d.attribution)))\n    errors.push('snackbar and overflow attribution lacks bound original cases');\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated snackbar/overflow integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'd5d87c9a649b725f685bffe95f2c6d74bda6a2c4bf5bc8e0b22ba8a4c463a8fc',
+    'producer changed beyond reviewed snackbar/overflow integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+
+export function restoreWidthOverflowProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('beforeSnackbarOverflowRequests') ? restoreSnackbarOverflowProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyControlWidthRequests, validateControlWidthRequests, applyOmittedWidthObservations, validateOmittedWidthObservations, applyExplicitWidthCompositions, validateExplicitWidthCompositions } from './control-width-observation.mjs';\n", ''],
     ["import { applyOverlayOverflowRequests, validateOverlayOverflowRequests } from './overlay-overflow-observation.mjs';\n", ''],

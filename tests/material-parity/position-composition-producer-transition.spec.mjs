@@ -6,6 +6,21 @@ import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLine
 import { restoreMappedButtonResetProducer, restoreInteractiveWeightProducer, restoreModalPositionProducer } from './position-composition-producer-transition.mjs';
 import { restoreControlPositionProducer } from './position-composition-producer-transition.mjs';
 import { restoreWidthOverflowProducer } from './position-composition-producer-transition.mjs';
+import { restoreSnackbarOverflowProducer } from './position-composition-producer-transition.mjs';
+
+test('snackbar and overflow integration restores the entire accepted width producer', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '8978a4b:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreSnackbarOverflowProducer(current).restoredSource, previous);
+  for (const fragment of ['applySnackbarPositionRequests(beforeSnackbarOverflowRequests, cases',
+    'validateControlClippingRequests(report.discrepancies, replayedRows, cases,',
+    'validateMappedVisibleOverflow(report.discrepancies, replayedRows, cases,',
+    "errors.push('snackbar and overflow attribution lacks bound original cases');",
+    "    'tests/material-parity/control-overflow-observation.mjs',\n"])
+    assert.throws(() => restoreSnackbarOverflowProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreSnackbarOverflowProducer(current + '\n// unrelated'));
+});
 
 test('width and overflow integration restores the complete accepted position producer', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
