@@ -1,8 +1,8 @@
 # Material audit: evidence-led implementation priorities
 
-## Current audit checkpoint — September 26
+## Current audit checkpoint — September 27
 
-**Accepted position batch:** all export, conservation, section/source and compact
+**Predecessor position batch:** all export, conservation, section/source and compact
 index checks passed. New canonical compressed SHA / index generation:
 `fea569edc8edf1e05d1686bcb7c2a8eecc0bfb53bff5d5b8baeb6fbb59602040`;
 index SHA `672b4d61922a8ef775f4e2c723ca09c9ab70684d93822cd3fe3b53d0df6c9d57`.
@@ -11,13 +11,13 @@ the 46-group / 3,160-observation position review and source receipts. No section
 was added or removed. Import/verify pass: **1,178 unresolved**, 8,483 scalar
 groups / 389,202 occurrences, 134 source findings, 39,904 control differences;
 coverage stays 436 static / 1,875 interaction cases. Compact shards total
-70,364,126 bytes. All reconciliation/import sessions are terminal; do not restart.
+70,364,126 bytes. These counts precede the width/overflow acceptance below.
 
-**Width/overflow exported, reconciliation pending:** the production stage and
+**Accepted width/overflow batch:** the production stage and
 original-case validators cover the already-proved **47 width + four overflow
 groups**. The focused production replay changes exactly 51 groups / 1,764
 observations, rejects forged reviewed-case membership for each attribution, and
-leaves unbound inputs untouched. Accepted canonical counts above are unchanged.
+leaves unbound inputs untouched. Full canonical acceptance evidence follows below.
 
 Verification: `node --test tests/material-parity/control-width-observation.spec.mjs
 tests/material-parity/overlay-overflow-observation.spec.mjs
@@ -36,8 +36,8 @@ was 18/19: an older color-batch assertion expected a routing predicate predating
 the reviewed weight extension. It now checks the hash-authenticated predecessor;
 no producer behavior or source-hash guard was weakened.
 Full original-case-order replay across all 8,483 compact scalar rows also passes:
-51 groups / 1,764 observations change, leaving **1,127 proposed unresolved**.
-This is not an accepted canonical count. Chip and followup production collectors
+51 groups / 1,764 observations change, leaving **1,127 unresolved** after acceptance.
+Chip and followup production collectors
 both independently report `bound` (8.56 s preflight).
 
 Cold export **a478a11 is terminal**: session 2559 exited 1, with only the expected
@@ -50,7 +50,7 @@ two collectors, ten memory hits, zero disk hits/invalidations, 1,205 files /
 `f86307bd22b7699155bc1e28730c1a446c825a214d97c9258555c8b33a265162`
 (60,304,079 bytes); decoded SHA:
 `b91fdd5c1596d79c1f401836b8cd83ba04a29103f78105c50f9b43284261e7b2`
-(2,104,936,839 bytes). This export is not accepted yet; pointer remains fea569ed.
+(2,104,936,839 bytes). This export is now accepted after the checks below.
 Reconciliation against fea569ed: comparator session **20009** and metadata session
 **57670** are terminal, exit 0. Exactly 51 groups / 1,764 observations change;
 one scalar and 48 control producer receipts refresh; all raw inputs and
@@ -61,10 +61,20 @@ overflow module/spec receipts, three changed main/transition module/spec receipt
 matched to d7843b4 -> a478a11, 459 unchanged, none removed. Both motion-report
 hashes were independently reconstructed. The 54 non-fingerprint leaf changes
 are 48 control receipts, three summary counts and three source-binding receipts.
-All-section digests session **78099 / PID 2120 remains live**; revalidate before
-waiting. Outputs use `width-overflow-{conservation,sections,metadata}-a478a11.json`
-in the same artifact directory. Finish all-section reconciliation before compact
-import and canonical acceptance. Do not rerun the two completed checks.
+All-section digests session **78099** is terminal, exit 0: 79 sections retained,
+72 unchanged, seven expected changes explained by scalar reviews and source/
+control receipts. None added or removed. Outputs use
+`width-overflow-{conservation,sections,metadata}-a478a11.json` in the same artifact
+directory. Compact import session 24309 and `npm run audit:findings:verify` pass:
+8,483 scalar groups / 389,202 occurrences, 134 source findings, 39,904 control
+differences and **1,127 unresolved**. New generation is f86307bd (full SHA above),
+index SHA `9222220df3105817b2f39275395d883ff8201560f00f696320dfec0171339c8a`;
+compact shards total 70,454,748 bytes. Retained gzip has its standalone manifest.
+All export/reconciliation/import sessions are terminal; do not restart them.
+This is evidence acceptance, not input/rendering equivalence or final audit
+completion. Next integrate the pending snackbar/clipping findings and mapped
+ordinary initial-value review as one coherent batch; retain other control/plugin
+overflow questions separately and preserve the full final gates.
 Dependencies of that export have not changed. The following independent proofs
 are not imported or fingerprinted by its producer and are not in its batch.
 
