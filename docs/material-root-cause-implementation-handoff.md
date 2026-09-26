@@ -2,6 +2,35 @@
 
 ## Current audit checkpoint — September 25
 
+Width-history follow-up (September 26): the remaining 13 candidate-fixed-pixel
+width signatures cover 476 original owners: badge 52, chips 76 each, radio 68,
+slide-toggle 68, button-toggle group 68 and second option 68. The authenticated
+b07ef154 inventory trace found complete rule inventories, no reference owner
+inline/active width/logical-axis/reset request, and explicit candidate widths
+retained in all three local stages. This remains an observation, not a blanket
+classification or proof of equal structure/used layout. Together with checkbox
+68 owners this accounts for 544 candidate-pixel observations; the separate
+candidate `100%` tab-panel cohort accounts for the remaining 70 of 614.
+
+History distinguishes original authoring from later calibration: badge widths
+90.953125/81.859375/104.65625px, radio 153/129/137px, slide-toggle 179px and
+button-toggle group 130px already occur in initial showcase commit 2f44011.
+Do not attribute the unrelated `.step-tab` 130px change in bc4d442 to this group.
+The second button-toggle option originally shared a 65px rule; c47d589 replaces
+that with state-dependent 80/47px widths, and 88d1090 changes 80 to 81px.
+f3c8254 retains those widths while changing paint/radii. Exact diffs were checked;
+the current second-option rule is at astylar.component.ts:516. These changes
+establish differing authored requests, not the original visual cause or intent.
+Reuse the already-recorded chip history rather than surveying it again.
+
+Next: extend the existing fixed-width authoring proof to these control owners
+with exact full-population binding and owner/logical-axis negative controls.
+The existing button proof assumes native button/label structure and cannot be
+applied unchanged to these controls. Keep first-divergence claims scoped to width
+requests, and retain structural/intrinsic sizing uncertainty. No new capture or
+framework is needed for this step. The corrected export remains live (PID 2388,
+session 21784 revalidated); its dependencies are unchanged by this ledger entry.
+
 Corrected cold export at source **1a7c2ff** is live in session 21784, PID 2388,
 log `control-position-export-1a7c2ff.log`; revalidate the handle before waiting.
 Do not use the prior failed 11ccc0a2 payload as the accepted predecessor.
