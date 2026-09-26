@@ -31,6 +31,9 @@ import { restoreInteractiveWeightProducer, restoreModalPositionProducer } from '
 import { applyDialogPositionRequests, applyBottomSheetPositionRequests } from '../tests/material-parity/modal-position-inspection.mjs';
 import { collectStyleDiscrepancies } from '../tests/material-parity/input-equivalence-audit.mjs';
 import { queryFindings } from './audit-findings-store.mjs';
+import { restoreControlPositionProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { applyChipPositionRequests } from '../tests/material-parity/chip-position-inspection.mjs';
+import { applyButtonOffsetObservations } from '../tests/material-parity/static-position-observation.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
@@ -117,9 +120,17 @@ export function replayModalPositionRows(rows, captured) {
   return applyBottomSheetPositionRequests(applyDialogPositionRequests(rows, cases, inventory, normalize), cases, inventory, normalize);
 }
 
-export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false, weight = false, modalPosition = false } = {}) {
-  assert.ok(Number(dialogCard) + Number(weight) + Number(modalPosition) <= 1, 'select one scalar batch');
-  const transition = modalPosition ? restoreModalPositionProducer(source) : weight ? restoreInteractiveWeightProducer(source) : dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
+export function replayControlPositionRows(rows, captured) {
+  const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
+    ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  return applyButtonOffsetObservations(applyChipPositionRequests(rows, cases, inventory, normalize), cases, inventory, normalize);
+}
+
+export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false, weight = false, modalPosition = false, controlPosition = false } = {}) {
+  assert.ok(Number(dialogCard) + Number(weight) + Number(modalPosition) + Number(controlPosition) <= 1, 'select one scalar batch');
+  const transition = controlPosition ? restoreControlPositionProducer(source) : modalPosition ? restoreModalPositionProducer(source) : weight ? restoreInteractiveWeightProducer(source) : dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
   const adjusted = refreshScalarControlReceipts(previous.rows, previous.control, current.control, transition);
   const expected = JSON.parse(JSON.stringify(refreshScalarControlReceipts(expectedRows,
     previous.control, current.control, transition)));
@@ -146,7 +157,27 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     const before = adjusted[i], after = current.rows[i];
     same(raw(previous.rows[i]), raw(after), 'border batch changed raw scalar evidence');
     if (isDeepStrictEqual(before, after)) continue;
-    assert.match(before.property, modalPosition ? /^(position|top|right|bottom|left)$/ : weight ? /^fontWeight$/ : dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    assert.match(before.property, modalPosition || controlPosition ? /^(position|top|right|bottom|left)$/ : weight ? /^fontWeight$/ : dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    if (controlPosition) {
+      assert.equal(before.attribution, 'unresolved'); assert.equal(before.astylar, undefined);
+      const position = before.property === 'position';
+      assert.equal(before.reference, position ? 'relative' : '0');
+      assert.equal(after.classification, position ? 'application-plugin-authoring-defect' : 'parity-harness-defect');
+      assert.equal(after.reviewEvidence.inputEquivalent, false);
+      assert.equal(after.reviewEvidence.renderingEquivalent, false);
+      if (before.family === 'chips') {
+        assert.ok(['chip-0', 'chip-1'].includes(before.element));
+        assert.equal(before.occurrences, 76);
+        assert.equal(after.attribution, position ? 'reviewed-chip-position-request-omission' : 'reviewed-chip-computed-offset-stage');
+      } else {
+        const owners = { 'button-primary': 60, 'button-secondary': 60, 'button-disabled': 60,
+          'card-open': 52, 'menu-primary': 94, 'bottom-sheet-primary': 63,
+          'dialog-primary': 78, 'snack-bar-primary': 71, 'tooltip-primary': 62 };
+        assert.equal(position, false); assert.ok(Object.hasOwn(owners, before.element));
+        assert.equal(before.occurrences, owners[before.element]);
+        assert.equal(after.attribution, 'reviewed-button-computed-offset-stage');
+      }
+    }
     if (modalPosition) {
       assert.ok(['dialog', 'bottom-sheet'].includes(before.family));
       assert.equal(before.attribution, 'unresolved'); assert.equal(before.astylar, undefined);
@@ -184,7 +215,11 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
       existingProofRows.push(i);
     }
   }
-  same(Object.fromEntries(totals), modalPosition ? {
+  same(Object.fromEntries(totals), controlPosition ? {
+    'reviewed-chip-position-request-omission': { groups: 2, observations: 152 },
+    'reviewed-chip-computed-offset-stage': { groups: 8, observations: 608 },
+    'reviewed-button-computed-offset-stage': { groups: 36, observations: 2400 },
+  } : modalPosition ? {
     'reviewed-dialog-position-request-omission': { groups: 5, observations: 160 },
     'reviewed-dialog-computed-offset-stage': { groups: 20, observations: 640 },
     'reviewed-bottom-sheet-position-request-omission': { groups: 1, observations: 25 },
@@ -203,7 +238,7 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     'reviewed-material-outline-token-substitution': { groups: 3, observations: 204 },
     'reviewed-mapped-border-initial-color-divergence': { groups: 52, observations: 1432 },
   }, 'border batch changed unexpected classification membership');
-  return { previous: previous.manifest, current: current.manifest, changedGroups: modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83, changedOccurrences: modalPosition ? 1125 : weight ? 1502 : dialogCard ? 896 : 2596,
+  return { previous: previous.manifest, current: current.manifest, changedGroups: controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83, changedOccurrences: controlPosition ? 3160 : modalPosition ? 1125 : weight ? 1502 : dialogCard ? 896 : 2596,
     existingProofRows, scalarReceiptRows: adjusted.filter((r, i) => !isDeepStrictEqual(r, previous.rows[i])).length,
     controlReceiptRecords: receiptCases.length, allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
     orderedCurrentRowsSha256: digest(current.rows), inputEquivalent: false, renderingEquivalent: false };
@@ -472,7 +507,17 @@ function replayAppearanceRows(rows, captured, { colorMotion = false, originMotio
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--modal-position') {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--control-position') {
+  assert.equal(process.argv.length, 3);
+  const previous = await readAudit('artifacts/material-parity/working-audit/77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752');
+  assert.equal(previous.manifest.uncompressedSha256, 'd595011706e4008ade0bc85663fbcd08fbda940b95dfc64f7cd4b3ffaf2989a6');
+  const current = await readAudit('docs');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const expected = replayControlPositionRows(previous.rows, JSON.parse(bytes));
+  console.log(JSON.stringify(compareBorderDefaultCanonical(previous, current, expected,
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), { controlPosition: true }), null, 2));
+} else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--modal-position') {
   assert.equal(process.argv.length, 3);
   const previous = await readAudit('artifacts/material-parity/working-audit/bfd986bc6e7397d32465df25d6096d2274dfe29336924281a3f7fd0429f6f9fe');
   assert.equal(previous.manifest.uncompressedSha256, 'f1930fd29fd09bae2bd20e2d90e3de5ace07b1437f36185ae5833b6793fe5a24');

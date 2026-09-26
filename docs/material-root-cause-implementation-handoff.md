@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 25
 
+September 26 integration checkpoint: the existing canonical comparator now has
+`--control-position`, independently replaying the bound original captures against
+accepted snapshot 77595d08. It requires exactly 46 groups / 3,160 observations,
+conserves raw rows and unrelated controls, and restricts producer-receipt changes.
+Six focused conservation tests pass (2.81 s), including simultaneous mutations
+of proposed and expected rows. The original-capture semantic and producer tests
+remain the evidence for the classifications; these checks do not prove rendering.
+Next run one cold export, then full-row/section/fingerprint reconciliation before
+accepting the projected 1,178 count. Current accepted count remains 1,224.
+The predecessor's standalone manifest is restored beside its existing compressed
+payload for streaming comparison; no decoded report or duplicate payload is made.
+Remaining priorities are shared overlay/coordinate/typography ownership and
+slider interaction uncertainties, then remaining box/paint/structure input groups;
+do not reopen completed chip/button censuses or treat this batch as full coverage.
+Final complete canonical and enforced browser acceptance remain outstanding.
+
 Control-position production integration now applies the prepared chip/button
 reviews after modal reviews, only for bound original cases; unbound attributions
 are rejected. Source-extracted producer and validator replay passes with exactly

@@ -7,16 +7,20 @@ import { comparePositionCanonical, compareAppearanceCanonical, compareBorderDefa
 import { restorePositionProducer, restoreAppearancePrecedence, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreToggleSideColorProducer, restoreMappedButtonResetProducer } from './position-composition-producer-transition.mjs';
 import { positionCompositionAttribution } from './position-composition-review.mjs';
 import { positionFollowupAttribution } from './position-followup-review.mjs';
-import { restoreInteractiveWeightProducer, restoreModalPositionProducer } from './position-composition-producer-transition.mjs';
+import { restoreInteractiveWeightProducer, restoreModalPositionProducer, restoreControlPositionProducer } from './position-composition-producer-transition.mjs';
 import { ownerInitialStyleAttribution } from './owner-initial-style-attribution.mjs';
 import { retainedFontScalarAttribution } from './retained-font-scalar.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
 
-for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position']) test(`scalar conservation (${mode}) rejects changed raw data, unrelated metadata and control values even with forged expected rows`, () => {
+for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'control-position']) test(`scalar conservation (${mode}) rejects changed raw data, unrelated metadata and control values even with forged expected rows`, () => {
+  const controlPosition = mode === 'control-position';
   const dialogCard = mode === 'dialog/card', weight = mode === 'weight', modalPosition = mode === 'modal-position';
-  const transition = modalPosition ? restoreModalPositionProducer(currentSource) : weight ? restoreInteractiveWeightProducer(currentSource) : dialogCard ? restoreMappedButtonResetProducer(currentSource) : restoreToggleSideColorProducer(currentSource), rows = [], expected = [];
-  const compare = (p, c, e, s) => compareBorderDefaultCanonical(p, c, e, s, { dialogCard, weight, modalPosition });
-  for (const [attribution, groups, observations] of modalPosition ? [
+  const transition = controlPosition ? restoreControlPositionProducer(currentSource) : modalPosition ? restoreModalPositionProducer(currentSource) : weight ? restoreInteractiveWeightProducer(currentSource) : dialogCard ? restoreMappedButtonResetProducer(currentSource) : restoreToggleSideColorProducer(currentSource), rows = [], expected = [];
+  const compare = (p, c, e, s) => compareBorderDefaultCanonical(p, c, e, s, { dialogCard, weight, modalPosition, controlPosition });
+  for (const [attribution, groups, observations] of controlPosition ? [
+    ['reviewed-chip-position-request-omission', 2, 152], ['reviewed-chip-computed-offset-stage', 8, 608],
+    ['reviewed-button-computed-offset-stage', 36, 2400],
+  ] : modalPosition ? [
     ['reviewed-dialog-position-request-omission', 5, 160], ['reviewed-dialog-computed-offset-stage', 20, 640],
     ['reviewed-bottom-sheet-position-request-omission', 1, 25], ['reviewed-bottom-sheet-computed-offset-stage', 12, 300],
   ] : weight ? [
@@ -46,9 +50,20 @@ for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position']) test
       before.reference = before.property === 'position' ? 'relative' : '0';
       before.occurrences = before.family === 'dialog' ? 32 : 25; delete before.astylar;
     }
+    if (controlPosition) {
+      const chips = attribution.includes('chip');
+      const owners = [['button-primary', 60], ['button-secondary', 60], ['button-disabled', 60],
+        ['card-open', 52], ['menu-primary', 94], ['bottom-sheet-primary', 63],
+        ['dialog-primary', 78], ['snack-bar-primary', 71], ['tooltip-primary', 62]];
+      before.family = chips ? 'chips' : owners[Math.floor(i / 4)][0].replace(/-(primary|secondary|disabled|open)$/, '');
+      before.property = attribution.includes('request-omission') ? 'position' : ['top', 'right', 'bottom', 'left'][i % 4];
+      before.element = chips ? `chip-${before.property === 'position' ? i : Math.floor(i / 4)}` : owners[Math.floor(i / 4)][0];
+      before.occurrences = chips ? 76 : owners[Math.floor(i / 4)][1];
+      before.reference = before.property === 'position' ? 'relative' : '0'; delete before.astylar;
+    }
     rows.push(before); expected.push({ ...before, attribution,
-      classification: modalPosition ? (before.property === 'position' ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : weight ? (attribution === retainedFontScalarAttribution ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : 'reviewed',
-      ...(weight || modalPosition ? { reviewEvidence: { renderingEquivalent: false, inputEquivalent: false,
+      classification: modalPosition || controlPosition ? (before.property === 'position' ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : weight ? (attribution === retainedFontScalarAttribution ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : 'reviewed',
+      ...(weight || modalPosition || controlPosition ? { reviewEvidence: { renderingEquivalent: false, inputEquivalent: false,
         currentPseudoStatePaintVerified: false, computedCandidateVerified: false } } : {}) });
   }
   const controls = Array.from({ length: 48 }, (_, i) => ({ case: `case-${i}`, element: 'button', property: 'lineHeight',
@@ -58,12 +73,12 @@ for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position']) test
   const current = { rows: structuredClone(expected), control: structuredClone(previous.control) };
   for (const c of current.control.differences)
     c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
-  assert.equal(compare(previous, current, expected, currentSource).changedGroups, modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83);
+  assert.equal(compare(previous, current, expected, currentSource).changedGroups, controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83);
   for (const mutate of [
     r => { r.reference = 'forged'; }, r => { r.cases = ['forged']; },
     r => { r.occurrences++; }, r => { r.property = 'fontSize'; },
     r => { r.attribution = 'unreviewed'; },
-    ...(weight || modalPosition ? [r => { r.reviewEvidence.renderingEquivalent = true; }, r => { r.classification = 'equivalent'; }] : []),
+    ...(weight || modalPosition || controlPosition ? [r => { r.reviewEvidence.renderingEquivalent = true; }, r => { r.classification = 'equivalent'; }] : []),
   ]) {
     const changed = structuredClone(current), forged = structuredClone(expected);
     mutate(changed.rows[0]); mutate(forged[0]);
