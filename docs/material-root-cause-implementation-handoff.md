@@ -13,7 +13,7 @@ groups / 389,202 occurrences, 134 source findings, 39,904 control differences;
 coverage stays 436 static / 1,875 interaction cases. Compact shards total
 70,364,126 bytes. All reconciliation/import sessions are terminal; do not restart.
 
-**Width/overflow integration now wired, not exported:** the production stage and
+**Width/overflow exported, reconciliation pending:** the production stage and
 original-case validators cover the already-proved **47 width + four overflow
 groups**. The focused production replay changes exactly 51 groups / 1,764
 observations, rejects forged reviewed-case membership for each attribution, and
@@ -40,13 +40,33 @@ Full original-case-order replay across all 8,483 compact scalar rows also passes
 This is not an accepted canonical count. Chip and followup production collectors
 both independently report `bound` (8.56 s preflight).
 
-When the current cold export finishes, run the comparator against accepted
-fea569ed and reconcile all sections/source fingerprints before importing it.
-Cold export started from **a478a11** and remains live: session **2559**, Node PID
-**19412**, log `artifacts/material-parity/width-overflow-export-a478a11.log`.
-Revalidate that handle before waiting; do not restart it from this note alone.
-Dependencies of that export have not changed. The following independent proof
-is not imported or fingerprinted by the running producer and is not in its batch.
+Cold export **a478a11 is terminal**: session 2559 exited 1, with only the expected
+**1,127 unresolved groups** error. Do not restart it. Coverage remains 436/436
+static and 1,875/1,875 interaction; 8,483 scalar groups / 389,202 occurrences and
+134 source findings remain. Elapsed time: 2,909,828.64 ms. Evidence verification:
+two collectors, ten memory hits, zero disk hits/invalidations, 1,205 files /
+89,151,875 bytes reverified. Log: `width-overflow-export-a478a11.log` under
+`artifacts/material-parity`. Compressed SHA:
+`f86307bd22b7699155bc1e28730c1a446c825a214d97c9258555c8b33a265162`
+(60,304,079 bytes); decoded SHA:
+`b91fdd5c1596d79c1f401836b8cd83ba04a29103f78105c50f9b43284261e7b2`
+(2,104,936,839 bytes). This export is not accepted yet; pointer remains fea569ed.
+Reconciliation against fea569ed: comparator session **20009** and metadata session
+**57670** are terminal, exit 0. Exactly 51 groups / 1,764 observations change;
+one scalar and 48 control producer receipts refresh; all raw inputs and
+non-receipt control evidence are conserved. Ordered current row SHA:
+`f5c4858613f8bc0a10c27e6c389580ec7f37fe0a8e02595e04f13bd19e62b0c1`.
+All 466 source fingerprints match normalized disk contents: four added width/
+overflow module/spec receipts, three changed main/transition module/spec receipts
+matched to d7843b4 -> a478a11, 459 unchanged, none removed. Both motion-report
+hashes were independently reconstructed. The 54 non-fingerprint leaf changes
+are 48 control receipts, three summary counts and three source-binding receipts.
+All-section digests session **78099 / PID 2120 remains live**; revalidate before
+waiting. Outputs use `width-overflow-{conservation,sections,metadata}-a478a11.json`
+in the same artifact directory. Finish all-section reconciliation before compact
+import and canonical acceptance. Do not rerun the two completed checks.
+Dependencies of that export have not changed. The following independent proofs
+are not imported or fingerprinted by its producer and are not in its batch.
 
 Next pending snackbar proof: `snackbar-position-observation.spec.mjs` passes
 **1/1** (3.03 s), covering all 34 original wrapper states and exactly three scalar
@@ -90,8 +110,6 @@ suite passes **2/2 in 13.30 s**; an initial test used the wrong mapping-result f
 (`astylarNode` instead of `candidateNode`) and failed before correction. No new
 canonical classifications or clipping/rendering claims were applied. Integrate
 these mappings into the existing initial-value review only after export acceptance.
-The export has advanced through validation and evidence-session verification to
-canonical encoding (2,762,614.95 ms at phase start); session 2559 is still live.
 Earlier chronological notes below describe preparation, not current job state.
 
 Position reconciliation progress: canonical conservation **passed**, session
