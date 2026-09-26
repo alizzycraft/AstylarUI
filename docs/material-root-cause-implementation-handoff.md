@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+Position reconciliation progress: canonical conservation **passed**, session
+72707 terminal exit 0. Exactly 46 groups / 3,160 observations change; one scalar
+and 48 control producer receipts refresh; all raw inputs and non-receipt control
+evidence are conserved. Ordered current row SHA:
+`f7e9193832aecafe7cb30a80014e1238563ec79527ab44971306b238772c15ac`.
+Metadata/source stream session 28844 also exited 0. All 462 source fingerprints
+match normalized on-disk files: one added control-position module, six changed
+files matched to d963dd2 -> 1a7c2ff history, 455 unchanged. The 54 non-fingerprint
+leaf changes are 48 producer receipts, three summary counts and three binding
+receipts. Both old/new motion-report hashes were independently reconstructed
+from the retained report with only its source receipts refreshed.
+All-section comparison session **54679 / PID 19996 remains live**; revalidate
+and finish it before compact import/acceptance. Do not rerun either passed check.
+
 **Position export 1a7c2ff is terminal**, session 21784 exited 1; do not restart.
 Its only reported error is the expected **1,178 unresolved groups**. It retains
 436/436 static, 1,875/1,875 interaction, 8,483 scalar groups / 389,202 occurrences
