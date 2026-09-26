@@ -42,7 +42,25 @@ both independently report `bound` (8.56 s preflight).
 
 Next perform one cold export, run the comparator against accepted fea569ed, and
 reconcile all sections/source fingerprints before importing and accepting it.
-No export is running at this committed checkpoint.
+Cold export started from **a478a11** and remains live: session **2559**, Node PID
+**19412**, log `artifacts/material-parity/width-overflow-export-a478a11.log`.
+Revalidate that handle before waiting; do not restart it from this note alone.
+Dependencies of that export have not changed. The following independent proof
+is not imported or fingerprinted by the running producer and is not in its batch.
+
+Next pending snackbar proof: `snackbar-position-observation.spec.mjs` passes
+**1/1** (3.03 s), covering all 34 original wrapper states and exactly three scalar
+groups / 102 observations. Native absolute wrapper inside fixed CDK container
+versus candidate fixed overlay inside the showcase section is an authored
+composition substitution. Native right/bottom zeros are CSSOM observations with
+no matching authored physical/logical inset requests, not zeros to copy. Existing
+alias mapping's missing scalar z-index rule stays explicit. Negative controls
+reject forged rules, ancestry, insets, local stages, membership and missing-paint
+cause claims. Raw scalar rows and unrelated findings are conserved. This proof
+does not diagnose the old missing-snackbar symptom; retained paint already shows
+all 34 surfaces. Reuse the existing 0d67d46 -> f3c8254 -> 899c741 history below;
+do not reopen that settled compensation history. Production integration remains
+pending after width/overflow acceptance, with no new canonical count claimed.
 Full input-equivalence acceptance and final enforced browser gates remain open.
 Earlier chronological notes below describe preparation, not current job state.
 
