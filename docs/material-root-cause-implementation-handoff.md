@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 25
 
+Control-width scalar membership is now reconciled in the focused proof using
+the existing `applyModalBoxReview` mechanism: exactly 16 unresolved groups /
+544 observations map to the full original owner set. No omitted or duplicate
+case is accepted; every raw row is restored exactly from retained prior metadata,
+and unrelated rows retain identity. Replay rejects deleted/duplicated findings,
+truncated case membership, changed raw values/prior metadata and forged
+equivalence flags. The original inventory and precise production normalization
+are reused; no new evidence/report framework or capture was introduced.
+Production wiring, source fingerprinting and canonical acceptance remain pending.
+The position export has advanced to validation (build elapsed 842,411 ms), so
+keep its source dependencies frozen until reconciliation finishes.
+
 Control-width owner proof now covers all 544 original owners (September 26).
 `node --test tests/material-parity/control-width-observation.spec.mjs` passes
 1/1 (5.48 s test body). It uses the existing authenticated inventory reader and

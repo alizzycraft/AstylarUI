@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { applyModalBoxReview } from './modal-position-inspection.mjs';
 
 // Scope the claim to owner requests, not to equivalent control composition or
 // used intrinsic size. Keep this review independent of historical collectors.
@@ -69,4 +70,26 @@ export function proveControlWidthRequest(entry, r, a, element) {
     firstDivergence: 'reference owner omits width request; candidate owner requests fixed pixels',
     inputEquivalent: false, structuralEquivalenceVerified: false, candidateUsedLayoutVerified: false,
     renderingEquivalent: false, originalRasterCauseProven: false };
+}
+
+export function applyControlWidthRequests(rows, cases, inventory, canonicalStyle) {
+  let values = rows;
+  for (const [family, owners] of Object.entries(controlWidthOwners)) for (const element of Object.keys(owners)) {
+    values = applyModalBoxReview(values, cases, inventory, canonicalStyle, {
+      family, element, properties: ['width'],
+      prove: (entry, r, a) => proveControlWidthRequest(entry, r, a, element),
+      attribution: 'reviewed-control-fixed-width-authoring',
+      owner: 'Material showcase control owner fixed-width authoring',
+      justification: 'Complete original owner rules omit width and both logical sizing axes; candidate rules request fixed-pixel widths retained in all three local stages. Scalar normalization cannot make these authored requests equivalent, including subpixel-near checkbox widths. Native badge/radio CSSOM auto is preserved, not reconstructed as pixels. This proves owner input inequality only; control structure, intrinsic sizing, candidate used layout and the original raster cause remain unproved. Initial versus later width history is retained separately.',
+    });
+  }
+  return values;
+}
+
+export function validateControlWidthRequests(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(row => row.attribution === 'reviewed-control-fixed-width-authoring');
+    assert.deepEqual(select(rows), select(applyControlWidthRequests(originalRows, cases, inventory, canonicalStyle)));
+    return [];
+  } catch (error) { return [`control fixed-width review does not replay from original owners: ${error.message}`]; }
 }

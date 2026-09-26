@@ -2,9 +2,12 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { controlWidthOwners, proveControlWidthRequest } from './control-width-observation.mjs';
+import { controlWidthOwners, proveControlWidthRequest, applyControlWidthRequests,
+  validateControlWidthRequests } from './control-width-observation.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
+import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 
 test('control fixed-width requests retain all 544 original owners and reject false equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -62,6 +65,47 @@ test('control fixed-width requests retain all 544 original owners and reject fal
     assert.deepEqual(proveControlWidthRequest(entry, ...unrelated, element),
       proveControlWidthRequest(entry, ...trees, element));
   }
-  // Canonical application awaits independent source replay and exact scalar
-  // membership conservation; this proof makes no rendering or default claims.
+  const snapshot = {
+    generation: '77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752',
+    indexSha256: 'd84236477a9da75dc58de0e5d3d48db58c98bab5232d746cdf5d88501ced2459',
+  };
+  const rows = Object.keys(controlWidthOwners).flatMap(family =>
+    queryFindings('artifacts/material-parity/working-audit', family, snapshot))
+    .filter(row => row.evidence.section === 'discrepancies');
+  const before = structuredClone(rows), normalize = bindPreciseAuditNormalization();
+  const applied = applyControlWidthRequests(rows, cases, inventory, normalize);
+  assert.deepEqual(rows, before); assert.equal(applied.length, rows.length);
+  const changed = applied.filter((row, i) => row !== rows[i]);
+  assert.equal(changed.length, 16);
+  assert.equal(changed.reduce((sum, row) => sum + row.occurrences, 0), 544);
+  const reviewed = new Set();
+  for (const row of changed) {
+    assert.equal(row.attribution, 'reviewed-control-fixed-width-authoring');
+    assert.equal(row.classification, 'application-plugin-authoring-defect');
+    assert.equal(row.reviewedCases.length, row.occurrences);
+    assert.equal(row.reviewEvidence.observations.length, row.occurrences);
+    for (const key of row.reviewedCases) {
+      const owner = JSON.stringify([key, row.element]); assert.ok(!reviewed.has(owner)); reviewed.add(owner);
+    }
+    const restored = { ...row };
+    for (const key of ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'])
+      delete restored[key];
+    Object.assign(restored, row.reviewEvidence.priorMetadata);
+    assert.deepEqual(restored, rows.find(original => original.id === row.id));
+  }
+  assert.deepEqual(reviewed, seen);
+  const validate = values => validateControlWidthRequests(values, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  const target = values => values.find(row => row.attribution === 'reviewed-control-fixed-width-authoring');
+  for (const mutate of [values => values.splice(values.indexOf(target(values)), 1),
+    values => values.push(target(values)), values => target(values).reviewedCases.pop(),
+    values => { target(values).reference = 'fabricated'; },
+    values => { target(values).reviewEvidence.priorMetadata.attribution = 'fabricated'; },
+    values => { target(values).reviewEvidence.observations[0].inputEquivalent = true; }]) {
+    const altered = structuredClone(applied); mutate(altered); assert.ok(validate(altered).length);
+  }
+  for (const altered of [cases.slice(1), [...cases, cases[0]]])
+    assert.throws(() => applyControlWidthRequests(rows, altered, inventory, normalize));
+  // Full production wiring/export still awaits the current position export's
+  // reconciliation. This replay does not alter the accepted canonical package.
 });
