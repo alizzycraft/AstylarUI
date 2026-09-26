@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+Overlay overflow proof complete, pending production integration:
+`node --test tests/material-parity/overlay-overflow-observation.spec.mjs` passes
+**2/2** (4.05 s total). Existing inventory/mapping and `applyModalBoxReview`
+bind exactly four groups / 100 scalar observations across 50 owners. Tooltip
+X/Y and dialog Y are omitted authored requests (three groups / 68); dialog X
+is a computed-axis observation (one group / 32). Raw values, omitted candidate
+fields and all unrelated findings are conserved. Controls reject incomplete
+rules, added horizontal declarations, candidate logical overflow, changed local
+stages/computed axes and falsely relabeled authored axes.
+
+Native Chrome **153.0.8010.53**, viewport 800x600/DPR1, confirms the axis
+distinction with five declaration variants: omitted axes compute visible;
+Y auto with X omitted or visible computes auto/auto; X clip with Y auto computes
+hidden/auto; hidden shorthand computes hidden/hidden. This is a native CSSOM
+sensitivity proof, not a paired Astylar rendering/scrolling test. No screenshots,
+new capture directories, renderer changes or export dependencies were added.
+Next batch wiring can include these four findings alongside 47 width groups
+after the still-live position export is reconciled. All broader gates remain.
+
 Next high-impact question after width integration: tooltip/dialog overflow.
 A read-only authenticated b07ef154 inventory trace (3.16 s) covers all 18 paired
 tooltip owners and 32 dialog panels using existing alias mappings and complete
