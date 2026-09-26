@@ -109,9 +109,13 @@ across all 8,483 compact rows confirms 31 groups / 1,292 observations and 1,096
 proposed unresolved. Its full spec passes **20/20 in 57.79 s**, rejecting jointly
 forged raw/expected rows, wrong classifications, lost/reordered rows, altered
 controls and unrelated source changes. No new validation framework was added.
-Next run one cold export, then this comparator and all-section/source receipt
-reconciliation before compact import. Canonical acceptance still has 1,127
-unresolved groups, not the proposed 1,096.
+Cold export started from **f5b2ece**: session **50788**, Node PID **16516**
+(parent 20884), log `artifacts/material-parity/snackbar-overflow-export-f5b2ece.log`.
+It is live in build-audit; revalidate its handle before waiting. Do not restart
+on quiet output or timeout, and do not change its dependencies while it runs.
+After it finishes, run `--snackbar-overflow` and all-section/source receipt
+reconciliation against accepted f86307bd before compact import. Canonical
+acceptance still has 1,127 unresolved groups, not the proposed 1,096.
 The accepted width/overflow export predates this new wiring. The following
 proof details belong to the new batch and are not canonically applied yet.
 
