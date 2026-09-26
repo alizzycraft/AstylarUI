@@ -3,7 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { controlWidthOwners, proveControlWidthRequest, applyControlWidthRequests,
-  validateControlWidthRequests, omittedWidthOwners, proveOmittedWidthObservation,
+  validateControlWidthRequests, omittedWidthOwners, autoWidthOwners, proveOmittedWidthObservation,
   applyOmittedWidthObservations, validateOmittedWidthObservations, proveExplicitWidthComposition,
   applyExplicitWidthCompositions, validateExplicitWidthCompositions } from './control-width-observation.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
@@ -110,6 +110,63 @@ test('control fixed-width requests retain all 544 original owners and reject fal
     assert.throws(() => applyControlWidthRequests(rows, altered, inventory, normalize));
   // Full production wiring/export still awaits the current position export's
   // reconciliation. This replay does not alter the accepted canonical package.
+});
+
+test('combined width batch covers all 47 pending groups and selects only active stepper content', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = JSON.parse(bytes);
+  const families = [...new Set([...Object.keys(controlWidthOwners), ...Object.keys(omittedWidthOwners),
+    ...Object.keys(autoWidthOwners), 'grid-list', 'tabs'])];
+  const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
+    ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const snapshot = {
+    generation: '77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752',
+    indexSha256: 'd84236477a9da75dc58de0e5d3d48db58c98bab5232d746cdf5d88501ced2459',
+  };
+  const rows = families.flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, snapshot))
+    .filter(row => row.evidence.section === 'discrepancies');
+  const original = structuredClone(rows);
+  const apply = values => applyExplicitWidthCompositions(applyOmittedWidthObservations(
+    applyControlWidthRequests(values, cases, inventory, normalize), cases, inventory, normalize), cases, inventory, normalize);
+  const applied = apply(rows), changed = applied.filter((row, i) => row !== rows[i]);
+  assert.deepEqual(rows, original); assert.equal(applied.length, rows.length);
+  const pending = rows.filter(row => row.property === 'width' && row.attribution === 'unresolved');
+  assert.equal(pending.length, 47); assert.deepEqual(changed.map(row => row.id), pending.map(row => row.id));
+  assert.equal(changed.reduce((sum, row) => sum + row.occurrences, 0), 1664);
+  const autoRows = changed.filter(row => autoWidthOwners[row.family]?.includes(row.element));
+  assert.equal(autoRows.length, 10); assert.equal(autoRows.reduce((sum, row) => sum + row.occurrences, 0), 576);
+  for (const row of autoRows) {
+    assert.equal(row.reference, 'auto'); assert.equal(Object.hasOwn(row, 'astylar'), false);
+    assert.equal(row.attribution, 'reviewed-omitted-width-observation-stage');
+    assert.equal(row.reviewedCases.length, row.occurrences);
+    for (const proof of row.reviewEvidence.observations) {
+      assert.equal(proof.candidateComputedWidthVerified, false); assert.equal(proof.inputEquivalent, false);
+    }
+  }
+  assert.deepEqual(validateOmittedWidthObservations(applied, rows, cases, inventory, normalize), []);
+  const entry = cases.find(e => e.family === 'stepper');
+  const key = `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`;
+  const trees = modalInventoryTrees(inventory, key);
+  const proof = proveOmittedWidthObservation(entry, ...trees, 'stepper-content');
+  assert.equal(trees[0].nodes.filter(n => n.attributes?.['data-parity-id'] === 'stepper-content').length, 2);
+  const selected = trees[0].nodes.find(n => n.key === proof.referenceNode);
+  assert.match(trees[0].nodes.find(n => n.key === selected.parent).attributes.class, /content-current/);
+  for (const mutate of [
+    ([r]) => { r.nodes.find(n => n.key === selected.parent).attributes.class = 'mat-horizontal-stepper-content-next'; },
+    ([r]) => { r.nodes.find(n => n.key === selected.key).attributes.id = 'stepper-content'; },
+    ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.width = 'auto'; },
+    ([r]) => { r.nodes.find(n => n.key === selected.key).inline.inlineSize = { value: 'auto', important: false }; },
+  ]) {
+    const altered = structuredClone(trees); mutate(altered);
+    assert.throws(() => proveOmittedWidthObservation(entry, ...altered, 'stepper-content'));
+  }
+  const forged = structuredClone(applied);
+  forged.find(row => row.element === 'stepper-content' && row.property === 'width')
+    .reviewEvidence.observations[0].candidateComputedWidthVerified = true;
+  assert.ok(validateOmittedWidthObservations(forged, rows, cases, inventory, normalize).length);
 });
 
 test('grid and tab width findings retain their distinct explicit layout substitutions', () => {

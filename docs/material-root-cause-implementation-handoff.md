@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 25
 
+Width batch ready for production integration: all **47** previously unresolved
+width groups / **1,664** observations now have source-backed proposed reviews.
+The final ten groups / 576 observations are native span CSSOM `auto` versus
+candidate local omission (badge/checkbox/radio/switch labels, divider text and
+stepper text/content). Both mapped owners omit width/logical axes/reset; no
+candidate computed default or equal used width is inferred. Stepper's duplicate
+active/inactive content spans use the existing generated-owner proof, not the
+first matching node. Tests reject inactive selection, direct-ID alias shadows,
+injected `auto` and forged computed-width claims.
+
+`node --test tests/material-parity/control-width-observation.spec.mjs`: **4/4**
+pass, 37.29 s total. Combined application changes exactly the complete 47-group
+pending width set in the accepted compact snapshot and preserves all other
+rows. Sub-batches remain distinct: 16 fixed-request groups / 544 observations,
+24 observation-stage groups / 946, and seven composition substitutions / 174.
+Next reconcile the live position export first, then wire this coherent width
+batch once with source fingerprints, independent replay and full predecessor
+conservation. Accepted canonical unresolved count remains 1,224; none of this
+pending evidence authorizes renderer/fixture changes or claims audit completion.
+
 Explicit grid/tab widths now reuse the established composition proofs rather
 than the omitted-width classification. Seven groups / 174 observations bind
 six grid tile width signatures (52 owners per tile) and the tab-panel percentage

@@ -99,9 +99,13 @@ export function validateControlWidthRequests(rows, originalRows, cases, inventor
 export const omittedWidthOwners = Object.freeze({ card: ['card-copy', 'card-title'],
   chips: ['chips-primary'], expansion: ['expansion-title'],
   paginator: ['paginator-range', 'paginator-size'], tooltip: ['tooltip-popup'] });
+export const autoWidthOwners = Object.freeze({ badge: ['badge-label'], checkbox: ['checkbox-label'],
+  divider: ['divider-above', 'divider-below'], radio: ['radio-solo-label', 'radio-team-label'],
+  'slide-toggle': ['slide-toggle-label'], stepper: ['step-details-text', 'step-review-text', 'stepper-content'] });
 
 export function proveOmittedWidthObservation(entry, r, a, element) {
-  assert.ok(omittedWidthOwners[entry.family]?.includes(element));
+  const auto = autoWidthOwners[entry.family]?.includes(element) === true;
+  assert.ok(auto || omittedWidthOwners[entry.family]?.includes(element));
   if (entry.family === 'tooltip') assert.ok(['hover', 'held'].includes(entry.state));
   for (const tree of [r, a]) {
     assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []);
@@ -110,7 +114,7 @@ export function proveOmittedWidthObservation(entry, r, a, element) {
   assert.equal(a.resolvedStyleEvidenceVersion, 2); assert.equal(a.resolvedStyleSource, 'core-style-inspection');
   const input = one(entry.styleInputs.filter(input => input.id === element));
   let reference, mapping;
-  if (['paginator', 'tooltip'].includes(entry.family)) {
+  if (['paginator', 'tooltip'].includes(entry.family) || element === 'stepper-content') {
     mapping = resolveOriginAliasPair(entry, r, a, input);
     assert.ok(['mapped', 'mapped-with-scalar-rule-gap'].includes(mapping.status));
     reference = one(r.nodes.filter(n => n.key === mapping.referenceNode));
@@ -128,7 +132,12 @@ export function proveOmittedWidthObservation(entry, r, a, element) {
   for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'])
     assert.deepEqual(Object.keys(candidate[stage]).filter(affects), []);
   const style = r.styles[reference.style];
-  assert.equal(style.writingMode, 'horizontal-tb'); assert.match(style.width, /^\d+(?:\.\d+)?px$/);
+  assert.equal(style.writingMode, 'horizontal-tb');
+  if (auto) {
+    assert.equal(style.width, 'auto'); assert.equal(reference.type, 'span');
+    assert.equal(candidate.authored.type, 'span');
+    assert.equal(reference.ownText, candidate.authored.textContent);
+  } else assert.match(style.width, /^\d+(?:\.\d+)?px$/);
   assert.equal(input.reference.width, style.width); assert.equal(Object.hasOwn(input.astylar, 'width'), false);
   return { element, referenceNode: reference.key, astylarNode: candidate.key,
     ...(mapping ? { mapping } : {}), referenceComputedWidth: style.width,
@@ -141,13 +150,13 @@ export function proveOmittedWidthObservation(entry, r, a, element) {
 
 export function applyOmittedWidthObservations(rows, cases, inventory, canonicalStyle) {
   let values = rows;
-  for (const [family, owners] of Object.entries(omittedWidthOwners)) for (const element of owners)
+  for (const [family, owners] of Object.entries({ ...omittedWidthOwners, ...autoWidthOwners })) for (const element of owners)
     values = applyModalBoxReview(values, cases, inventory, canonicalStyle, {
       family, element, properties: ['width'],
       prove: (entry, r, a) => proveOmittedWidthObservation(entry, r, a, element),
       classification: 'parity-harness-defect', attribution: 'reviewed-omitted-width-observation-stage',
       owner: 'input audit CSSOM resolved width versus local declaration inspection',
-      justification: 'Full original owner rules omit width, logical sizing axes and resets on both sides; browser CSSOM reports a pixel width while all three candidate local stages omit width. The scalar comparison mixes observation stages. Do not copy computed browser pixels into candidate authoring or infer an implicit candidate default. Different structure, formatting contexts and min/max constraints remain separate findings; equal used width, input equivalence and the original renderer/raster cause are unproved.',
+      justification: 'Full original owner rules omit width, logical sizing axes and resets on both sides; browser CSSOM reports a resolved width (pixels or auto) while all three candidate local stages omit width. The scalar comparison mixes observation stages. Do not copy computed browser values into candidate authoring or infer an implicit candidate default. Different structure, formatting contexts and min/max constraints remain separate findings; equal used width, input equivalence and the original renderer/raster cause are unproved.',
     });
   return values;
 }
