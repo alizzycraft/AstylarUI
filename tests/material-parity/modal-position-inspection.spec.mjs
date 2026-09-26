@@ -149,6 +149,41 @@ test('bottom-sheet offsets reuse modal request proof without replacing reviewed 
     assert.throws(() => applyBottomSheetPositionRequests(rows, altered, inventory, normalize));
 });
 
+test('production modal position step and validators compose both populations with prior review precedence', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const cases = JSON.parse(bytes).interactions.filter(e => ['dialog', 'bottom-sheet'].includes(e.family) &&
+    e.styleInputs.some(i => i.id === `${e.family}-panel`)).map(e => ({ ...e, kind: 'interaction' }));
+  assert.equal(cases.length, 57);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const snapshot = { generation: 'bfd986bc6e7397d32465df25d6096d2274dfe29336924281a3f7fd0429f6f9fe',
+    indexSha256: 'fead09c2c08b3546503f0d4c014bd3700e03923524d7d8894b430dd5cc194381' };
+  const rows = ['dialog', 'bottom-sheet'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies');
+  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const producer = source.slice(source.indexOf("  const discrepancies = ownerInitialStyleBinding.status === 'bound'"),
+    source.indexOf('  const classifications = countBy(discrepancies'));
+  assert.ok(producer.includes('applyBottomSheetPositionRequests'));
+  const run = new Function('ownerInitialStyleBinding', 'beforeModalPositionRequests', 'cases', 'elementInventory',
+    'canonicalStyle', 'applyDialogPositionRequests', 'applyBottomSheetPositionRequests', producer + '\nreturn discrepancies;');
+  const applied = run({ status: 'bound' }, rows, cases, inventory, normalize, applyDialogPositionRequests, applyBottomSheetPositionRequests);
+  assert.equal(run({ status: 'unbound' }, rows, cases, inventory, normalize, applyDialogPositionRequests, applyBottomSheetPositionRequests), rows);
+  const changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 38); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 1125);
+  const replayedRows = rows.map(r => r.family === 'bottom-sheet' && ['bottom-sheet-copy', 'bottom-sheet-dismiss'].includes(r.element) &&
+    r.property === 'position' ? { ...r, attribution: 'unresolved' } : r);
+  assert.ok(validateBottomSheetPositionRequests(applied, replayedRows, cases, inventory, normalize).length,
+    'unreviewed rows must not bypass the earlier list-item classification');
+  const start = source.indexOf('      errors.push(...validateDialogPositionRequests(');
+  const end = source.indexOf('      if (JSON.stringify(selected(replayedRows))', start);
+  assert.ok(start > 0 && end > start);
+  const check = new Function('report', 'replayedRows', 'cases', 'canonicalStyle', 'validateDialogPositionRequests',
+    'validateBottomSheetPositionRequests', 'applyBottomSheetActionLayout',
+    'const errors = [];\n' + source.slice(start, end) + '\nreturn errors;');
+  assert.deepEqual(check({ discrepancies: applied, elementInventory: inventory }, replayedRows, cases, normalize,
+    validateDialogPositionRequests, validateBottomSheetPositionRequests, applyBottomSheetActionLayout), []);
+});
+
 test('oversized radius source finding binds current public-package failures and bounded controls', () => {
   const findings = sourceAuditDefinitions.filter(f => f.id === 'core-rounded-radius-sampling-uses-unclamped-request');
   assert.equal(findings.length, 1);

@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { applyNormalLineBoxScalar, validateNormalLineBoxScalar, normalLineBoxScalarAttribution } from './normal-line-box-scalar.mjs';
 import { applyRetainedFontScalar, validateRetainedFontScalar, retainedFontScalarAttribution } from './retained-font-scalar.mjs';
 import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints, applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints, applyBottomSheetPanelFlow, validateBottomSheetPanelFlow, applyBottomSheetPanelPaint, validateBottomSheetPanelPaint, applyBottomSheetActionLayout, validateBottomSheetActionLayout, applyBottomSheetContrastCorners, validateBottomSheetContrastCorners, applyDialogTextFlow, validateDialogTextFlow, applyTabControlStage, validateTabControlStage } from './modal-position-inspection.mjs';
+import { applyDialogPositionRequests, validateDialogPositionRequests, applyBottomSheetPositionRequests, validateBottomSheetPositionRequests } from './modal-position-inspection.mjs';
 import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, validateOverlaySurfaceAuditInputs,
   validateOverlaySurfaceAuditClassifications, overlaySurfaceAttributions } from './overlay-surface-audit-source-binding.mjs';
 import { collectChipPaintAuditInputs, applyChipPaintAuditRows, validateChipPaintAuditInputs,
@@ -295,9 +296,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforeCardBorderTokens = ownerInitialStyleBinding.status === 'bound'
     ? applyMappedButtonBorderReset(beforeMappedButtonResets, cases, elementInventory, canonicalStyle)
     : beforeMappedButtonResets;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforeModalPositionRequests = ownerInitialStyleBinding.status === 'bound'
     ? applyCardBorderToken(beforeCardBorderTokens, cases, elementInventory, canonicalStyle)
     : beforeCardBorderTokens;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyBottomSheetPositionRequests(applyDialogPositionRequests(beforeModalPositionRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : beforeModalPositionRequests;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -652,6 +656,11 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.elementInventory, canonicalStyle));
       errors.push(...validateBottomSheetPanelFlow(report.discrepancies, replayedRows, cases,
         report.elementInventory, canonicalStyle));
+      errors.push(...validateDialogPositionRequests(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
+      errors.push(...validateBottomSheetPositionRequests(report.discrepancies,
+        applyBottomSheetActionLayout(replayedRows, cases, report.elementInventory, canonicalStyle), cases,
+        report.elementInventory, canonicalStyle));
       if (JSON.stringify(selected(replayedRows)) !== JSON.stringify(selected(report.discrepancies)))
         errors.push('owner initial-style attributions lack replayed original precedence, values and exact case coverage');
     } catch (error) { errors.push(`owner initial-style replay failed: ${error}`); }
@@ -672,6 +681,10 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     errors.push('mapped button reset attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === cardBorderTokenAttribution))
     errors.push('card border token attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>
+      ['reviewed-dialog-position-request-omission', 'reviewed-dialog-computed-offset-stage',
+        'reviewed-bottom-sheet-position-request-omission', 'reviewed-bottom-sheet-computed-offset-stage'].includes(d.attribution)))
+    errors.push('modal position attribution lacks bound original cases');
   if (report.sliderBorderDefaults?.binding?.status === 'bound') {
     errors.push(...validateSliderBorderDefaults(report.sliderBorderDefaults, { root }));
     errors.push(...validateSliderBorderDefaultClassifications(report.sliderBorderDefaults,

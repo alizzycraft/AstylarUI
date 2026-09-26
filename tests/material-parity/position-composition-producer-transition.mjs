@@ -33,9 +33,27 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreInteractiveWeightProducer(source) {
+export function restoreModalPositionProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyDialogPositionRequests, validateDialogPositionRequests, applyBottomSheetPositionRequests, validateBottomSheetPositionRequests } from './modal-position-inspection.mjs';\n", ''],
+    ["  const beforeModalPositionRequests = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyBottomSheetPositionRequests(applyDialogPositionRequests(beforeModalPositionRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)\n    : beforeModalPositionRequests;\n", ''],
+    ['      errors.push(...validateDialogPositionRequests(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n      errors.push(...validateBottomSheetPositionRequests(report.discrepancies,\n        applyBottomSheetActionLayout(replayedRows, cases, report.elementInventory, canonicalStyle), cases,\n        report.elementInventory, canonicalStyle));\n', ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>\n      ['reviewed-dialog-position-request-omission', 'reviewed-dialog-computed-offset-stage',\n        'reviewed-bottom-sheet-position-request-omission', 'reviewed-bottom-sheet-computed-offset-stage'].includes(d.attribution)))\n    errors.push('modal position attribution lacks bound original cases');\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated modal position integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'f78d198a7d5830283ffd3ac50efae1b5d3de7ba31e48f70e9de74bcebda172ed',
+    'producer changed beyond reviewed modal position integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+
+export function restoreInteractiveWeightProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('beforeModalPositionRequests') ? restoreModalPositionProducer(current).restoredSource : current;
   // The generic weight fallback must follow existing source-reviewed claims.
   // Restore only its two exact routing predicates; the full hash below still
   // rejects any other production change.

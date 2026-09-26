@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+The combined modal-position proposal is now wired into the audit producer,
+after prior reviews and only with bound original cases. Validation replays the
+earlier bottom-sheet action classification before the new position/offset
+checks; skipping that precedence demonstrably fails. The source-extracted
+production step and validation calls pass over all 57 original modal cases,
+changing exactly **38 groups / 1,125 observations**; an unbound producer keeps
+the original rows. Ten source-conservation tests pass (2.16 s), restoring the
+entire accepted weight producer byte-for-byte and rejecting removed binding,
+validation or precedence. The combined production test passes in 5.52 s.
+No canonical rebuild yet: prepare the independent predecessor conservation
+comparison for this batch, then perform one complete export/reconciliation.
+Expected unresolved count after acceptance is **1,224**, not yet the accepted
+canonical count (1,262). Remaining audit and final browser gates are unchanged.
+
 The related bottom-sheet proposal now reuses the same modal owner-request
 proof: **13 additional groups / 325 observations** across 25 original cases.
 Only the panel's position group is newly attributed as an authored omission;

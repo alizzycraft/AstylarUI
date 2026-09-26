@@ -3,7 +3,24 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer, restoreToggleSideColorProducer, restoreMappedBorderInitialProducer } from './position-composition-producer-transition.mjs';
-import { restoreMappedButtonResetProducer, restoreInteractiveWeightProducer } from './position-composition-producer-transition.mjs';
+import { restoreMappedButtonResetProducer, restoreInteractiveWeightProducer, restoreModalPositionProducer } from './position-composition-producer-transition.mjs';
+
+test('modal position integration restores the full weight producer and rejects missing provenance or precedence', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'bc898de:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreModalPositionProducer(current).restoredSource, previous);
+  for (const [from, to] of [
+    ["const discrepancies = ownerInitialStyleBinding.status === 'bound'", 'const discrepancies = true'],
+    ['applyDialogPositionRequests(beforeModalPositionRequests, cases', 'applyDialogPositionRequests(beforeCardBorderTokens, cases'],
+    ['applyBottomSheetActionLayout(replayedRows, cases, report.elementInventory, canonicalStyle), cases,', 'replayedRows, cases,'],
+    ['validateDialogPositionRequests(report.discrepancies, replayedRows, cases,', 'validateDialogPositionRequests(report.discrepancies, report.discrepancies, cases,'],
+    ["errors.push('modal position attribution lacks bound original cases');", ''],
+  ]) {
+    assert.ok(current.includes(from)); assert.throws(() => restoreModalPositionProducer(current.replace(from, to)));
+  }
+  assert.throws(() => restoreModalPositionProducer(current + '\n// unrelated'));
+});
 
 test('interactive weight comparison restores the entire prior producer and rejects altered guards', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
