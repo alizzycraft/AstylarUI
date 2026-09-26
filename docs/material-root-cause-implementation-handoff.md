@@ -29,10 +29,20 @@ predecessor. Width/overflow tests use the accepted fea569ed snapshot.
 `npm run audit:review -- position --cold` passed in 2.75 s: two collectors, two
 memory hits, no disk hits/invalidations, 1,205 files / 89,151,875 bytes reverified.
 
-Next extend the existing canonical conservation comparator with this batch's
-exact membership and original-source replay, verify its negative controls and
-remaining source bindings, then perform one cold export and reconcile all
-sections/source fingerprints before accepting it. No export is running.
+The existing canonical comparator now supports `--width-overflow`, with original
+capture replay, exact 51/1,764 membership, raw-input/control conservation and
+receipt-only refresh. Its full spec passes **19/19** in 48.25 s. The first run
+was 18/19: an older color-batch assertion expected a routing predicate predating
+the reviewed weight extension. It now checks the hash-authenticated predecessor;
+no producer behavior or source-hash guard was weakened.
+Full original-case-order replay across all 8,483 compact scalar rows also passes:
+51 groups / 1,764 observations change, leaving **1,127 proposed unresolved**.
+This is not an accepted canonical count. Chip and followup production collectors
+both independently report `bound` (8.56 s preflight).
+
+Next perform one cold export, run the comparator against accepted fea569ed, and
+reconcile all sections/source fingerprints before importing and accepting it.
+No export is running at this committed checkpoint.
 Full input-equivalence acceptance and final enforced browser gates remain open.
 Earlier chronological notes below describe preparation, not current job state.
 
