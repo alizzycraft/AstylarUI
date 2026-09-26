@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 25
 
+Next high-impact question after width integration: tooltip/dialog overflow.
+A read-only authenticated b07ef154 inventory trace (3.16 s) covers all 18 paired
+tooltip owners and 32 dialog panels using existing alias mappings and complete
+rule inventories. Tooltip's active `.mat-mdc-tooltip-surface` rule explicitly
+requests `overflow-x:hidden`, `overflow-y:hidden` and `overflow-wrap:anywhere`.
+Dialog's `.mat-mdc-dialog-surface` explicitly requests only `overflow-y:auto`;
+CSSOM reports `auto` for both axes. Candidate owners have no inline or possibly
+applicable overflow/reset requests and omit them in all three local stages.
+These are two distinct proofs: omitted authored clipping requests for tooltip,
+and omitted vertical scroll request plus an axis-computation question for dialog.
+Do not call the dialog's horizontal `auto` an explicit authored declaration.
+Next bind these distinctions to the four existing overflow scalar groups with
+axis-coupling/hidden-request controls; reuse current owner/layout findings rather
+than reopen dialog size or tooltip placement. No new canonical attribution or
+functional clipping/scrolling claim follows from this read-only trace.
+
+Export 1a7c2ff remains live in session 21784 / PID 2388, validation phase;
+the accepted pointer remains 77595d08. Original session polling and advancing
+CPU confirm a running process, not a stale log. No restart or source change.
+
 Width batch ready for production integration: all **47** previously unresolved
 width groups / **1,664** observations now have source-backed proposed reviews.
 The final ten groups / 576 observations are native span CSSOM `auto` versus
