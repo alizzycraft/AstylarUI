@@ -22,6 +22,17 @@ evidence and complete rule provenance before binding a stage classification;
 do not copy the browser's computed width into candidate authoring. The already
 proved tooltip local-flow substitution and wrapping mismatch remain separate.
 
+The next read-only inventory check (2.40 s) authenticated original report b07ef154,
+retained all 62 tooltip cases and mapped all 18 popup owners through the existing
+alias resolver. Both trees have complete rule evidence; no active matched native
+or possibly applicable candidate rule requests `width`, `inline-size`, or `all`.
+This narrows the remaining width question to observation-stage/used sizing, not
+an omitted explicit pixel-width request. Existing sizing-constraint proofs at
+`tooltip-position-composition.spec.mjs` already cover min/max width/height; reuse
+them instead of repeating that investigation. Next extend the existing semantic
+proof with inline/logical-size/reset negative controls and exact width-row binding
+after the running export has reconciled. No canonical classification changes yet.
+
 September 26 integration checkpoint: the existing canonical comparator now has
 `--control-position`, independently replaying the bound original captures against
 accepted snapshot 77595d08. It requires exactly 46 groups / 3,160 observations,
