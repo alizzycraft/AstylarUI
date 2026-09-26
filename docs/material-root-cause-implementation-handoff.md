@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 25
 
+Corrected cold export at source **1a7c2ff** is live in session 21784, PID 2388,
+log `control-position-export-1a7c2ff.log`; revalidate the handle before waiting.
+Do not use the prior failed 11ccc0a2 payload as the accepted predecessor.
+
+Next explicit-width question: the three checkbox-primary signatures differ by
+only 0.001px after scalar normalization, but input evidence is not equivalent.
+An authenticated b07ef154 inventory assertion (2.61 s) covers all 68 owners:
+reference inline/active matched rules request neither width, logical sizing axes,
+nor reset; candidate #checkbox-primary explicitly requests 149.5625px in 34 cases,
+137.5625px in 17, and 141.5625px in 17. Each request survives all three local
+stages; both rule inventories are complete. Exact constants exist in initial
+showcase commit 2f44011 (git -S history and original blob inspected), so do not
+label them a later parity-fix introduction or infer intent. Current location is
+`examples/material-showcase/src/app/astylar.component.ts:771`. Next bind the
+existing fixed-width authoring contract to this checkbox cohort with owner and
+logical-axis controls; retain formatting/structure and renderer uncertainty.
+No classification, fixture, renderer or running-export dependency changed.
+
 Binding-regression correction prepared: the new chip/button inventory reviews
 now live in `control-position-observation.mjs`; historical chip/static modules
 are byte-identical to accepted d963dd2. No hash exceptions, cache bypasses, or
