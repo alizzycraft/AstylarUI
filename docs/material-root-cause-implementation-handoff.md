@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 25
 
+Explicit grid/tab widths now reuse the established composition proofs rather
+than the omitted-width classification. Seven groups / 174 observations bind
+six grid tile width signatures (52 owners per tile) and the tab-panel percentage
+signature (70). Native grid tiles explicitly request `calc(50% - 0.5px)` with
+absolute placement; candidate relative tiles omit width inside a zero-gap
+two-track grid. Native tab text is an inline span; the exact alias mapping binds
+it to the custom showcase tab-panel renderer with an explicit `100%` request.
+Both are authoring/composition substitutions, not proved core calc/percentage
+defects. Existing position/gutter and plugin ownership findings remain in force.
+
+`node --test --test-name-pattern='grid and tab width' tests/material-parity/control-width-observation.spec.mjs`
+passes 1/1 (3.80 s body): full original inventory, exact case/count membership,
+raw-row restoration, independent replay and changed-owner/width/logical-axis/
+provenance controls. No canonical export dependency changed. Pending width
+batch now covers 37 of the 47 unresolved width groups (1,088 observations);
+remaining ten groups / 576 observations compare native `auto` with omitted
+candidate width on label/text owners and require their own mapped-owner check.
+Do not reopen settled grid composition or infer that all width work is accepted.
+
 Omitted-width question resolved at the observation-stage boundary: 14 groups /
 370 original owners (card copy/title 52 each, chip list 76, expansion title 68,
 paginator range/size 52 each, tooltip surface 18) compare CSSOM resolved pixel

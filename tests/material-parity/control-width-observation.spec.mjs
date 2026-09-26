@@ -4,7 +4,8 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { controlWidthOwners, proveControlWidthRequest, applyControlWidthRequests,
   validateControlWidthRequests, omittedWidthOwners, proveOmittedWidthObservation,
-  applyOmittedWidthObservations, validateOmittedWidthObservations } from './control-width-observation.mjs';
+  applyOmittedWidthObservations, validateOmittedWidthObservations, proveExplicitWidthComposition,
+  applyExplicitWidthCompositions, validateExplicitWidthCompositions } from './control-width-observation.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
@@ -109,6 +110,61 @@ test('control fixed-width requests retain all 544 original owners and reject fal
     assert.throws(() => applyControlWidthRequests(rows, altered, inventory, normalize));
   // Full production wiring/export still awaits the current position export's
   // reconciliation. This replay does not alter the accepted canonical package.
+});
+
+test('grid and tab width findings retain their distinct explicit layout substitutions', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = JSON.parse(bytes);
+  const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
+    ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => ['grid-list', 'tabs'].includes(e.family));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const snapshot = {
+    generation: '77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752',
+    indexSha256: 'd84236477a9da75dc58de0e5d3d48db58c98bab5232d746cdf5d88501ced2459',
+  };
+  const rows = ['grid-list', 'tabs'].flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, snapshot))
+    .filter(row => row.evidence.section === 'discrepancies');
+  const before = structuredClone(rows), applied = applyExplicitWidthCompositions(rows, cases, inventory, normalize);
+  assert.deepEqual(rows, before); assert.equal(applied.length, rows.length);
+  const changed = applied.filter((row, i) => row !== rows[i]);
+  assert.equal(changed.length, 7); assert.equal(changed.reduce((sum, row) => sum + row.occurrences, 0), 174);
+  const counts = {};
+  for (const row of changed) {
+    counts[row.element] = (counts[row.element] ?? 0) + row.occurrences;
+    assert.equal(row.classification, 'application-plugin-authoring-defect');
+    assert.equal(row.reviewedCases.length, row.occurrences);
+    assert.equal(new Set(row.reviewedCases).size, row.occurrences);
+    const restored = { ...row };
+    for (const key of ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'])
+      delete restored[key];
+    Object.assign(restored, row.reviewEvidence.priorMetadata);
+    assert.deepEqual(restored, rows.find(original => original.id === row.id));
+  }
+  assert.deepEqual(counts, { 'grid-tile-one': 52, 'grid-tile-two': 52, 'tab-panel': 70 });
+  for (const [family, element] of [['grid-list', 'grid-tile-one'], ['tabs', 'tab-panel']]) {
+    const entry = cases.find(e => e.family === family);
+    const key = `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`;
+    const trees = modalInventoryTrees(inventory, key), proof = proveExplicitWidthComposition(entry, ...trees, element);
+    for (const mutate of [
+      ([r]) => { r.ruleEvidenceComplete = false; },
+      ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).authored.type = 'foreign'; },
+      ([, a]) => { a.rules.push({ selector: '#' + element, inlineSize: '50%' }); },
+      ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.width = '50%'; },
+      ([r]) => { r.nodes.find(n => n.key === proof.referenceNode).inline.width = { value: '50%', important: false }; },
+    ]) {
+      const altered = structuredClone(trees); mutate(altered);
+      assert.throws(() => proveExplicitWidthComposition(entry, ...altered, element));
+    }
+  }
+  const validate = values => validateExplicitWidthCompositions(values, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  const target = values => values.find(row => row.attribution === 'reviewed-explicit-width-composition-substitution');
+  for (const mutate of [values => values.splice(values.indexOf(target(values)), 1),
+    values => target(values).reviewedCases.pop(), values => { target(values).reference = 'auto'; }]) {
+    const altered = structuredClone(applied); mutate(altered); assert.ok(validate(altered).length);
+  }
 });
 
 test('omitted width stage review binds 14 groups without erasing layout and unpaired tooltip gaps', () => {

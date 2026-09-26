@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+import { proveGridPositionSubstitution } from '../../scripts/audit-material-grid-position-substitution.mjs';
 
 // Scope the claim to owner requests, not to equivalent control composition or
 // used intrinsic size. Keep this review independent of historical collectors.
@@ -157,4 +158,73 @@ export function validateOmittedWidthObservations(rows, originalRows, cases, inve
     assert.deepEqual(select(rows), select(applyOmittedWidthObservations(originalRows, cases, inventory, canonicalStyle)));
     return [];
   } catch (error) { return [`omitted width observation does not replay from original owners: ${error.message}`]; }
+}
+
+export function proveExplicitWidthComposition(entry, r, a, element) {
+  const grid = entry.family === 'grid-list';
+  assert.ok(grid ? ['grid-tile-one', 'grid-tile-two'].includes(element) :
+    entry.family === 'tabs' && element === 'tab-panel');
+  for (const tree of [r, a]) {
+    assert.deepEqual(tree.errors, []); assert.equal(tree.ruleEvidenceComplete, true);
+    assert.equal(new Set(tree.nodes.map(n => n.key)).size, tree.nodes.length);
+  }
+  assert.equal(a.resolvedStyleSource, 'core-style-inspection'); assert.equal(a.resolvedStyleEvidenceVersion, 2);
+  const input = one(entry.styleInputs.filter(input => input.id === element));
+  let reference, composition;
+  if (grid) {
+    composition = proveGridPositionSubstitution(r, a);
+    reference = one(r.nodes.filter(n => n.attributes?.id === element));
+    assert.equal(reference.type, 'mat-grid-tile');
+    assert.deepEqual(Object.keys(reference.inline).filter(affects), ['width']);
+    assert.deepEqual(reference.inline.width, { value: 'calc(50% - 0.5px)', important: false });
+  } else {
+    composition = resolveOriginAliasPair(entry, r, a, input);
+    assert.equal(composition.status, 'mapped');
+    reference = one(r.nodes.filter(n => n.key === composition.referenceNode));
+    assert.equal(reference.type, 'span'); assert.deepEqual(reference.inline, {});
+  }
+  for (const rule of reference.rules.map(i => r.rules[i]).filter(rule => rule.active)) {
+    assert.ok(!rule.cssText.includes('\\'));
+    assert.doesNotMatch(rule.cssText, /(?:^|[;{])\s*(?:width|inline-size|block-size|all)\s*:/i);
+    assert.deepEqual(Object.keys(rule.declarations).filter(affects), []);
+  }
+  const candidate = one(a.nodes.filter(n => n.authored?.id === element));
+  assert.equal(candidate.authored.type, grid ? 'div' : 'showcase.material:tab-panel');
+  assert.equal(candidate.authored.style, undefined); assert.equal(candidate.authored.attributes?.style, undefined);
+  const requests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.keys(rule).filter(affects).map(key => ({ selector: rule.selector, key, value: rule[key] })));
+  assert.deepEqual(requests, grid ? [] : [{ selector: '.tab-panel', key: 'width', value: '100%' }]);
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    assert.deepEqual(Object.keys(candidate[stage]).filter(affects), grid ? [] : ['width']);
+    assert.equal(candidate[stage].width, grid ? undefined : '100%');
+  }
+  assert.equal(input.reference.width, r.styles[reference.style].width);
+  assert.equal(input.astylar.width, candidate.resolvedStyle.width);
+  return { element, referenceNode: reference.key, astylarNode: candidate.key, composition,
+    referenceWidthRequest: grid ? 'calc(50% - 0.5px)' : '<omitted>',
+    candidateWidthRequest: grid ? '<omitted>' : '100%', referenceComputedWidth: input.reference.width,
+    classification: 'application-plugin-authoring-defect', inputEquivalent: false,
+    structuralEquivalenceVerified: false, candidateUsedLayoutVerified: false,
+    renderingEquivalent: false, originalRasterCauseProven: false };
+}
+
+export function applyExplicitWidthCompositions(rows, cases, inventory, canonicalStyle) {
+  return [['grid-list', 'grid-tile-one'], ['grid-list', 'grid-tile-two'], ['tabs', 'tab-panel']]
+    .reduce((values, [family, element]) => applyModalBoxReview(values, cases, inventory, canonicalStyle, {
+      family, element, properties: ['width'],
+      prove: (entry, r, a) => proveExplicitWidthComposition(entry, r, a, element),
+      attribution: 'reviewed-explicit-width-composition-substitution',
+      owner: family === 'grid-list' ? 'showcase grid-list layout substitution' : 'showcase tab content plugin substitution',
+      justification: family === 'grid-list'
+        ? 'The existing full grid composition proof establishes absolute native tiles with inline calc(50% - 0.5px) widths versus relative candidate tiles in a zero-gap two-track grid. Candidate owners omit width in all local stages. This is unequal layout authoring, not an equivalent omission or a demonstrated core grid/calc failure. Preserve the original calc request and known gutter/composition difference; no screenshot-calibrated width remedy follows.'
+        : 'The existing exact owner mapping identifies native inline text span versus the showcase tab-panel rendering plugin. The native owner omits width while the plugin requests 100% in its rule and all local stages. This is part of the known text-owner/plugin composition substitution, not equivalent percentage sizing or evidence of a core percentage-width defect. Plugin paint/typography ownership and used-layout uncertainty remain separate.',
+    }), rows);
+}
+
+export function validateExplicitWidthCompositions(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(row => row.attribution === 'reviewed-explicit-width-composition-substitution');
+    assert.deepEqual(select(rows), select(applyExplicitWidthCompositions(originalRows, cases, inventory, canonicalStyle)));
+    return [];
+  } catch (error) { return [`explicit width composition does not replay from original owners: ${error.message}`]; }
 }
