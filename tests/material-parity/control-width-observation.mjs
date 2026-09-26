@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
+import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 
 // Scope the claim to owner requests, not to equivalent control composition or
 // used intrinsic size. Keep this review independent of historical collectors.
@@ -92,4 +93,68 @@ export function validateControlWidthRequests(rows, originalRows, cases, inventor
     assert.deepEqual(select(rows), select(applyControlWidthRequests(originalRows, cases, inventory, canonicalStyle)));
     return [];
   } catch (error) { return [`control fixed-width review does not replay from original owners: ${error.message}`]; }
+}
+
+export const omittedWidthOwners = Object.freeze({ card: ['card-copy', 'card-title'],
+  chips: ['chips-primary'], expansion: ['expansion-title'],
+  paginator: ['paginator-range', 'paginator-size'], tooltip: ['tooltip-popup'] });
+
+export function proveOmittedWidthObservation(entry, r, a, element) {
+  assert.ok(omittedWidthOwners[entry.family]?.includes(element));
+  if (entry.family === 'tooltip') assert.ok(['hover', 'held'].includes(entry.state));
+  for (const tree of [r, a]) {
+    assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []);
+    assert.equal(new Set(tree.nodes.map(n => n.key)).size, tree.nodes.length);
+  }
+  assert.equal(a.resolvedStyleEvidenceVersion, 2); assert.equal(a.resolvedStyleSource, 'core-style-inspection');
+  const input = one(entry.styleInputs.filter(input => input.id === element));
+  let reference, mapping;
+  if (['paginator', 'tooltip'].includes(entry.family)) {
+    mapping = resolveOriginAliasPair(entry, r, a, input);
+    assert.ok(['mapped', 'mapped-with-scalar-rule-gap'].includes(mapping.status));
+    reference = one(r.nodes.filter(n => n.key === mapping.referenceNode));
+  } else reference = one(r.nodes.filter(n => n.attributes?.id === element));
+  const candidate = one(a.nodes.filter(n => n.authored?.id === element));
+  assert.deepEqual(reference.inline, {}); assert.ok(!reference.attributes.style);
+  assert.equal(candidate.authored.style, undefined); assert.equal(candidate.authored.attributes?.style, undefined);
+  for (const rule of reference.rules.map(i => r.rules[i]).filter(rule => rule.active)) {
+    assert.ok(!rule.cssText.includes('\\'));
+    assert.doesNotMatch(rule.cssText, /(?:^|[;{])\s*(?:width|inline-size|block-size|all)\s*:/i);
+    assert.deepEqual(Object.keys(rule.declarations).filter(affects), []);
+  }
+  for (const rule of a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored)))
+    assert.deepEqual(Object.keys(rule).filter(affects), []);
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'])
+    assert.deepEqual(Object.keys(candidate[stage]).filter(affects), []);
+  const style = r.styles[reference.style];
+  assert.equal(style.writingMode, 'horizontal-tb'); assert.match(style.width, /^\d+(?:\.\d+)?px$/);
+  assert.equal(input.reference.width, style.width); assert.equal(Object.hasOwn(input.astylar, 'width'), false);
+  return { element, referenceNode: reference.key, astylarNode: candidate.key,
+    ...(mapping ? { mapping } : {}), referenceComputedWidth: style.width,
+    referenceWidthRequest: '<omitted>', candidateWidthRequest: '<omitted>',
+    classification: 'parity-harness-defect',
+    firstDivergence: 'CSSOM resolved width compared with local declaration-stage omission',
+    inputEquivalent: false, structuralEquivalenceVerified: false, candidateComputedWidthVerified: false,
+    candidateUsedLayoutVerified: false, renderingEquivalent: false, originalRasterCauseProven: false };
+}
+
+export function applyOmittedWidthObservations(rows, cases, inventory, canonicalStyle) {
+  let values = rows;
+  for (const [family, owners] of Object.entries(omittedWidthOwners)) for (const element of owners)
+    values = applyModalBoxReview(values, cases, inventory, canonicalStyle, {
+      family, element, properties: ['width'],
+      prove: (entry, r, a) => proveOmittedWidthObservation(entry, r, a, element),
+      classification: 'parity-harness-defect', attribution: 'reviewed-omitted-width-observation-stage',
+      owner: 'input audit CSSOM resolved width versus local declaration inspection',
+      justification: 'Full original owner rules omit width, logical sizing axes and resets on both sides; browser CSSOM reports a pixel width while all three candidate local stages omit width. The scalar comparison mixes observation stages. Do not copy computed browser pixels into candidate authoring or infer an implicit candidate default. Different structure, formatting contexts and min/max constraints remain separate findings; equal used width, input equivalence and the original renderer/raster cause are unproved.',
+    });
+  return values;
+}
+
+export function validateOmittedWidthObservations(rows, originalRows, cases, inventory, canonicalStyle) {
+  try {
+    const select = values => values.filter(row => row.attribution === 'reviewed-omitted-width-observation-stage');
+    assert.deepEqual(select(rows), select(applyOmittedWidthObservations(originalRows, cases, inventory, canonicalStyle)));
+    return [];
+  } catch (error) { return [`omitted width observation does not replay from original owners: ${error.message}`]; }
 }

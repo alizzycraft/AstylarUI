@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 25
 
+Omitted-width question resolved at the observation-stage boundary: 14 groups /
+370 original owners (card copy/title 52 each, chip list 76, expansion title 68,
+paginator range/size 52 each, tooltip surface 18) compare CSSOM resolved pixel
+width with absent local declarations. Complete original rules omit width,
+both logical axes and reset on both mapped owners; all three candidate stages
+omit them. `control-width-observation.mjs` reuses the existing unique-ID or
+origin-alias proofs and scalar/tree agreement; no default or used width is
+invented. Proposed attribution is harness observation-stage mismatch, not equal
+layout or equal inputs. Different composition, min/max sizing and the tooltip
+flow substitution remain independent findings. Grid's explicit calc width and
+the tab panel's candidate percentage width remain outside this proof.
+
+The first full-population trial rejected tooltip `open`, correctly exposing its
+already-known unpaired state. Only the 18 source-paired hover/held observations
+bind the existing width row; the regression explicitly rejects `open` and does
+not waive that gap. Full replay preserves all raw rows and omissions, exact
+owner counts and earlier classifications; mutation controls reject hidden
+requests, incomplete provenance, duplicate owners, altered stages, fabricated
+defaults and equivalence claims. Both width tests pass (2/2, 21.45 s total).
+Combined pending width batch is 30 groups / 914 observations; it is not yet
+canonical or included in the position export, whose process remains live.
+
 Control-width scalar membership is now reconciled in the focused proof using
 the existing `applyModalBoxReview` mechanism: exactly 16 unresolved groups /
 544 observations map to the full original owner set. No omitted or duplicate
