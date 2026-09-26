@@ -649,7 +649,7 @@ export function proveBottomSheetPanelPaint(entry, r, a) {
     limitation: 'Original owner requests and observed styles only. Supplemental ancestor captures are not substituted for original interaction context. Empty CSSOM expansions are not resolved token values; no renderer paint cause is inferred.' };
 }
 
-function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition) {
+export function applyModalBoxReview(rows, cases, inventory, canonicalStyle, definition) {
   const properties = new Set(definition.properties);
   const proofs = new Map();
   return rows.map(row => {

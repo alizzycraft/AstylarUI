@@ -2,6 +2,17 @@
 
 ## Current audit checkpoint — September 25
 
+Chip position row binding is prepared in the existing chip module/spec, reusing
+the existing modal row-review helper (exported without changing its behavior).
+Against accepted 77595d08, exactly ten groups / 760 observations are proposed:
+two unequal position requests and eight computed-offset observation-stage groups.
+Both focused chip tests pass (8.36 s), conserving raw rows/full 76-case membership
+and unrelated findings, and rejecting missing/duplicate cases and forged review
+data. The two adjacent dialog/bottom-sheet checks also pass (8.75 s), preserving
+their earlier classifications. Not integrated into the canonical producer yet. Next compose this prepared
+batch with related positioning reviews and source conservation before a full
+export; accepted unresolved count remains 1,224. Do not repeat the chip census.
+
 Chip follow-up: `proveChipPositionRequests` is now in the existing chip module,
 with a focused original-capture test over 76 cases / 152 owners and 608 offsets.
 It requires complete rule evidence, exact two reference-relative declarations,
