@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 25
 
+Chip follow-up: `proveChipPositionRequests` is now in the existing chip module,
+with a focused original-capture test over 76 cases / 152 owners and 608 offsets.
+It requires complete rule evidence, exact two reference-relative declarations,
+no applicable candidate position/inset/reset requests, and preserved composition.
+Fourteen negative mutations plus an invalid-owner check reject forged/missing
+evidence. Three focused tests (new proof and existing structure checks) pass in
+2.67 s. Computed/used candidate positioning and rendering equivalence remain
+explicitly unproved. Next bind this proof to the ten pending chip scalar groups
+(two position and eight offsets), conserve raw rows and full membership, and
+batch related work before another export. Canonical accepted count remains
+1,224. Chip module/spec fingerprints now differ from the accepted snapshot;
+reconcile them at that next milestone, not by rerunning a full export now.
+
 September 26: cold modal export **c454fae** terminated, session 30237 exit 1,
 after 2,299.35 s. Its only error is 1,224 unresolved groups. Coverage remains
 436/436 static and 1,875/1,875 interaction, with 8,483 groups / 389,202

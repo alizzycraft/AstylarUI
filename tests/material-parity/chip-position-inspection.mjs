@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { queryFindings, loadFindingEvidence, saveReviewProposal } from '../../scripts/audit-findings-store.mjs';
+import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const ids = ['chip-0', 'chip-1', 'chips-primary'];
 const one = ns => { assert.equal(ns.length, 1); return ns[0]; };
@@ -45,6 +46,43 @@ export function proveChipPositionInspection(r, a) {
     classification: 'unresolved', rendererCauseProven: false, inputEquivalenceProven: false,
     remainingQuestion: 'Position omissions belong to a flattened button/graphic/focus composition; prove original structure before attributing text alignment or hover failures to core.' };
 }
+// Declare the observation boundary explicitly: computed browser offsets are
+// not authored offsets and local omissions do not establish used positioning.
+export function proveChipPositionRequests(r, a, element) {
+  assert.ok(['chip-0', 'chip-1'].includes(element));
+  assert.equal(r.ruleEvidenceComplete, true); assert.equal(a.ruleEvidenceComplete, true);
+  const composition = proveChipPositionInspection(r, a);
+  const owner = one(composition.chips.filter(chip => chip.id === element));
+  const reference = one(r.nodes.filter(n => n.key === owner.referenceOwner));
+  const candidate = one(a.nodes.filter(n => n.key === owner.candidateOwner));
+  assert.deepEqual(reference.inline, {});
+  assert.equal(candidate.authored.style, undefined);
+  assert.equal(candidate.authored.attributes?.style, undefined);
+  const affects = key => /^(position|top|right|bottom|left|all)$|^inset/.test(key.replaceAll('-', '').toLowerCase());
+  const requests = reference.rules.map(i => r.rules[i]).filter(rule => rule.active).flatMap(rule => {
+    assert.ok(!rule.cssText.includes('\\'));
+    assert.doesNotMatch(rule.cssText, /(?:^|[;{])\s*(?:inset[\w-]*|top|right|bottom|left|all)\s*:/i);
+    return Object.entries(rule.declarations).filter(([key]) => affects(key))
+      .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value }));
+  });
+  assert.deepEqual(requests, ['.mdc-evolution-chip', '.mat-mdc-chip'].map(selector => ({
+    selector, conditions: [], key: 'position', value: 'relative', important: false,
+  })));
+  assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.keys(rule).filter(affects)), []);
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+    assert.ok(!Object.keys(candidate[stage]).some(affects));
+  }
+  const offsets = ['top', 'right', 'bottom', 'left'];
+  for (const property of offsets) assert.equal(r.styles[reference.style][property], '0px');
+  return { element, referenceNode: reference.key, astylarNode: candidate.key,
+    referencePositionRequests: requests, candidatePositionRequests: [],
+    referenceComputedOffsets: Object.fromEntries(offsets.map(p => [p, '0px'])),
+    positionClassification: 'application-plugin-authoring-defect', offsetClassification: 'parity-harness-defect',
+    candidateComputedPositionVerified: false, candidateUsedOffsetsVerified: false,
+    inputEquivalent: false, renderingEquivalent: false, rendererCauseProven: false };
+}
+
 export function collectChipPositionInspection() {
   const file = 'docs/material-position-input-population.json', b = readFileSync(file);
   assert.equal(hash(b), '71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff');

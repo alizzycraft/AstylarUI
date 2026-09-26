@@ -1,9 +1,64 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { createHash } from 'node:crypto';
+import { proveChipPositionRequests } from './chip-position-inspection.mjs';
+import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
+import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { collectChipPositionInspection, proveChipPositionInspection, collectChipPaintProposal, applyChipPaintProposal, chipPaintPredecessor } from './chip-position-inspection.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { collectChipPaintAuditInputs, validateChipPaintAuditInputs, validateChipPaintAuditClassifications, applyChipPaintAuditRows } from './chip-paint-audit-source-binding.mjs';
+test('chip position requests separate explicit relative rules from computed zero offsets', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = JSON.parse(bytes);
+  const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
+    ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => e.family === 'chips');
+  assert.equal(cases.length, 76);
+  const inventory = collectFullTreeInventory(cases);
+  const keys = cases.map(e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`);
+  assert.equal(new Set(keys).size, 76);
+  let owners = 0;
+  for (const key of keys) {
+    const trees = modalInventoryTrees(inventory, key);
+    for (const element of ['chip-0', 'chip-1']) {
+      const proof = proveChipPositionRequests(...trees, element);
+      assert.equal(proof.referencePositionRequests.length, 2);
+      assert.deepEqual(proof.referenceComputedOffsets, { top: '0px', right: '0px', bottom: '0px', left: '0px' });
+      assert.equal(proof.positionClassification, 'application-plugin-authoring-defect');
+      assert.equal(proof.offsetClassification, 'parity-harness-defect');
+      for (const flag of ['candidateComputedPositionVerified', 'candidateUsedOffsetsVerified',
+        'inputEquivalent', 'renderingEquivalent', 'rendererCauseProven']) assert.equal(proof[flag], false);
+      owners++;
+    }
+  }
+  assert.equal(owners, 152);
+  const original = modalInventoryTrees(inventory, keys[0]);
+  const ref = r => r.nodes.find(n => n.attributes?.id === 'chip-0');
+  const ast = a => a.nodes.find(n => n.authored?.id === 'chip-0');
+  const positionRule = r => r.rules[ref(r).rules.find(i => r.rules[i].selector === '.mat-mdc-chip')];
+  for (const mutate of [
+    ([r]) => { r.ruleEvidenceComplete = false; },
+    ([, a]) => { a.ruleEvidenceComplete = false; },
+    ([r]) => { ref(r).inline = { top: '1px' }; },
+    ([, a]) => { ast(a).authored.style = { position: 'relative' }; },
+    ([, a]) => { ast(a).authored.attributes = { style: 'inset:0' }; },
+    ([, a]) => { a.rules.push({ selector: '#chip-0', insetInlineStart: '1px' }); },
+    ([r]) => { positionRule(r).declarations.position.important = true; },
+    ([r]) => { positionRule(r).conditions = ['(min-width: 1px)']; },
+    ([r]) => { positionRule(r).active = false; },
+    ([r]) => { r.rules[ref(r).rules[0]].cssText += 'inset-inline:1px;'; },
+    ([r]) => { r.rules[ref(r).rules[0]].declarations.all = { value: 'initial', important: false }; },
+    ([r]) => { r.styles[ref(r).style].left = '1px'; },
+    ([, a]) => { ast(a).interactionResolvedStyle.top = '1px'; },
+    ([r]) => { ref(r).parent = 'wrong-owner'; },
+  ]) {
+    const trees = structuredClone(original); mutate(trees);
+    assert.throws(() => proveChipPositionRequests(...trees, 'chip-0'));
+  }
+  assert.throws(() => proveChipPositionRequests(...original, 'chips-primary'));
+});
+
 test('chips retain three complete source-backed owner groups across 76 states', () => {
   assert.deepEqual(collectChipPositionInspection(), JSON.parse(readFileSync('docs/material-chip-position-inspection.json')));
 });
