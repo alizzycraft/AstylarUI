@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 25
 
+Control-width owner proof now covers all 544 original owners (September 26).
+`node --test tests/material-parity/control-width-observation.spec.mjs` passes
+1/1 (5.48 s test body). It uses the existing authenticated inventory reader and
+checks eight unique owner mappings, complete rules, reference inline/rule
+absence including both logical sizing axes/reset, exact candidate selector
+requests and all three local stages, and original scalar/tree agreement.
+All 16 candidate-width signatures have exact population counts. Thirteen
+negative controls per owner reject incomplete provenance, duplicate/wrong
+owners, hidden inline/logical/reset requests and changed stages; unrelated-owner
+rules leave the proof unchanged. Badge/radio reference CSSOM widths are `auto`,
+not pixels; the initial pixel-only assertion exposed that distinction and was
+replaced with explicit owner-specific expectations, not a fabricated used width.
+
+The new `control-width-observation.mjs` proof establishes only unequal authored
+width requests. Structure, used layout, rendering equivalence and original
+raster cause remain explicitly unproved. It is not wired into the running
+export or any historical collector. Next reuse `applyModalBoxReview` for exact
+original-case/scalar membership replay and conservation, then integrate at the
+next coherent export milestone. Do not report the canonical unresolved count as
+reduced by this focused proof. Corrected export PID 2388 remains live with CPU
+advancing; accepted baseline remains 77595d08 pending full reconciliation.
+
 Width-history follow-up (September 26): the remaining 13 candidate-fixed-pixel
 width signatures cover 476 original owners: badge 52, chips 76 each, radio 68,
 slide-toggle 68, button-toggle group 68 and second option 68. The authenticated
