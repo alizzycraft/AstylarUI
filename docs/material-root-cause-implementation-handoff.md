@@ -40,8 +40,8 @@ Full original-case-order replay across all 8,483 compact scalar rows also passes
 This is not an accepted canonical count. Chip and followup production collectors
 both independently report `bound` (8.56 s preflight).
 
-Next perform one cold export, run the comparator against accepted fea569ed, and
-reconcile all sections/source fingerprints before importing and accepting it.
+When the current cold export finishes, run the comparator against accepted
+fea569ed and reconcile all sections/source fingerprints before importing it.
 Cold export started from **a478a11** and remains live: session **2559**, Node PID
 **19412**, log `artifacts/material-parity/width-overflow-export-a478a11.log`.
 Revalidate that handle before waiting; do not restart it from this note alone.
@@ -61,6 +61,21 @@ does not diagnose the old missing-snackbar symptom; retained paint already shows
 all 34 surfaces. Reuse the existing 0d67d46 -> f3c8254 -> 899c741 history below;
 do not reopen that settled compensation history. Production integration remains
 pending after width/overflow acceptance, with no new canonical count claimed.
+
+Additional pending clipping proof: `control-overflow-observation.spec.mjs`
+passes **1/1** (9.53 s), covering all **330** core/sidenav/grid/badge/icon/progress
+owner instances, **16 groups / 660 scalar observations**. Fifteen groups retain
+explicit hidden clipping requests versus candidate omissions; progress-bar Y is
+separate computed `auto` with only X `hidden` authored. Core's visible button
+rules and hidden ripple rules both remain in the proof, together with native
+computed hidden. Changed DOM/plugin/replaced-element structures are not equated.
+Negative controls reject incomplete rules, resets/logical axes, changed local
+stages/types, duplicate owners, forged case membership and clipping claims. Raw
+rows and unrelated findings are conserved. This new standalone module is not a
+dependency of the running width/overflow export and is not canonically applied.
+Remaining visible-overflow populations need separate treatment: explicit visible
+button requests are not the same provenance as both-side omissions. Do not
+collapse them into clipping defects or assume candidate computed defaults.
 Full input-equivalence acceptance and final enforced browser gates remain open.
 Earlier chronological notes below describe preparation, not current job state.
 
