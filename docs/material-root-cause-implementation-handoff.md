@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 25
 
+Cold control-position export at source **5c0a5bb** is running in session 87004,
+PID 19464, log `artifacts/material-parity/control-position-export-5c0a5bb.log`.
+Revalidate that handle before waiting; quiet build output is not a restart signal.
+Do not change producer dependencies during this export.
+
+Read-only next-question triage against authenticated compact snapshot 77595d08:
+tooltip has 28 unresolved scalar groups, snackbar 57, bottom sheet 99, dialog
+136 and slider 57 (includes the pending trigger-offset batch). Tooltip width
+finding `29760bb85c7c3078944909decd0c2a255df3556790becc22158c8255753a3012`
+compares native computed `106.812px` with an absent candidate local-stage width.
+An inline Node assertion using `collectTooltipPositionAncestry` authenticated all
+18 original tree pairs: native matched rules and inline styles have no `width`
+declaration, the Material surface requests min/max widths 40/200px, and candidate
+`#tooltip-popup` plus all three local stages omit width. Assertions passed; no
+new report, classification or rendering claim was produced. This is not proof
+of whole-cascade absence or equal used sizes. Next check existing sizing-context
+evidence and complete rule provenance before binding a stage classification;
+do not copy the browser's computed width into candidate authoring. The already
+proved tooltip local-flow substitution and wrapping mismatch remain separate.
+
 September 26 integration checkpoint: the existing canonical comparator now has
 `--control-position`, independently replaying the bound original captures against
 accepted snapshot 77595d08. It requires exactly 46 groups / 3,160 observations,
