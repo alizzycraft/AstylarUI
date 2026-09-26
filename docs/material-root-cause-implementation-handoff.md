@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 25
 
+Button-offset proposal now exists in the existing static-position observation
+module/spec, reusing the same row-review helper as chips and modals. All three
+tests pass (14.72 s): 36 groups / 2,400 observations retain complete membership,
+raw-row recovery, and the card-open explicit-relative versus other-owner omission
+distinction. Mutations cover rule completeness, provenance, inline/logical inset
+requests, resets, computed offsets, position-stage changes, types and duplicate
+owners; missing/duplicate cases and forged review metadata fail. Earlier seven
+static-position populations remain unchanged. Combined pending batch: 46 groups /
+3,160 observations including chips. Next integrate both proposals into production
+with source conservation and a combined replay test before one batched export.
+Accepted unresolved count remains 1,224; no renderer/fixture changes were made.
+
 Next coherent cohort: 36 unresolved button-offset groups / 2,400 observations.
 Read-only original b07ef154 inventory assertions (3.70 s) cover nine direct-ID
 button owners: button-primary/secondary/disabled 60 each, card-open 52,
