@@ -2,6 +2,36 @@
 
 ## Current audit checkpoint — September 25
 
+September 26 continuation: cold modal export from pushed **c454fae** is running
+as session 30237 / PID 22024; log `modal-position-export-c454fae.log`. Do not
+restart merely because aggregation is quiet. No acceptance yet. Accepted bfd
+still has 1,262 unresolved groups. Authenticated compact priority counts are
+dialog 161, bottom-sheet 112, chips 100, tabs 98; position/insets total 206.
+
+Next chip question now has a bounded read-only answer, not a new classification:
+the hash-pinned original b07ef154 capture, replayed through existing full-tree
+inventory and selector applicability helpers, has 76 chip cases / 152 owners
+with complete rule evidence. Each reference owner has exactly two unconditional,
+non-important relative declarations (`.mdc-evolution-chip`, `.mat-mdc-chip`),
+no active physical/logical inset or `all` request, and four computed `0px`
+offsets. Candidate inline styles, potentially applicable rules and all three
+local stages omit positioning requests. Assertions passed in 2.72 s for all
+608 offset observations. Existing captured structure proof separately shows
+flattened button/graphic/focus ownership; do not infer rendering equivalence.
+Next extend the existing chip proof/spec with these exact declarations and
+negative controls after the export dependency freeze ends; do not loosen the
+modal single-declaration guard or rerun this census. Canonical rows unchanged.
+
+Bounded chip history check: initial `2f44011` and current `.chip` owner rules
+omit position; exact one-line `.chip`, `.chip.selected`, `#chip-0/1` position
+history has no transitions. This is not a complete historical cascade claim.
+Keep it distinct from `3d0d5ce` adding `.chip-label { position: relative;
+top: -2px }` and `00de46c` removing that label offset while reducing selected
+widths 98/94 to 97/93px. `db8f743` introduced selected/unselected width branches
+98/68 and 94/64px. These source changes establish distinct authoring decisions,
+not their intent or a demonstrated renderer cause. Owner positioning omission
+must not be described as removal of the label compensation.
+
 The existing scalar conservation comparator now supports `--modal-position`;
 it authenticates bfd986bc and the new export, replays both modal proposals from
 the complete original inventory, conserves every raw row/prior review and all
