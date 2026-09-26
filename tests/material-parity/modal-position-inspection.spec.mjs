@@ -21,6 +21,7 @@ import { collectModalPositionInspection, proveModalPositionInspection, proveDial
   proveDialogPositionRequests, applyDialogPositionRequests, validateDialogPositionRequests,
   applyBottomSheetPositionRequests, validateBottomSheetPositionRequests } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { restoreControlPositionProducer } from './position-composition-producer-transition.mjs';
 import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
@@ -161,8 +162,9 @@ test('production modal position step and validators compose both populations wit
   const rows = ['dialog', 'bottom-sheet'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
     .filter(r => r.evidence.section === 'discrepancies');
   const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
-  const producer = source.slice(source.indexOf("  const discrepancies = ownerInitialStyleBinding.status === 'bound'"),
-    source.indexOf('  const classifications = countBy(discrepancies'));
+  const modalSource = source.includes('beforeControlPositionRequests') ? restoreControlPositionProducer(source).restoredSource : source;
+  const producer = modalSource.slice(modalSource.indexOf("  const discrepancies = ownerInitialStyleBinding.status === 'bound'"),
+    modalSource.indexOf('  const classifications = countBy(discrepancies'));
   assert.ok(producer.includes('applyBottomSheetPositionRequests'));
   const run = new Function('ownerInitialStyleBinding', 'beforeModalPositionRequests', 'cases', 'elementInventory',
     'canonicalStyle', 'applyDialogPositionRequests', 'applyBottomSheetPositionRequests', producer + '\nreturn discrepancies;');
@@ -174,12 +176,12 @@ test('production modal position step and validators compose both populations wit
     r.property === 'position' ? { ...r, attribution: 'unresolved' } : r);
   assert.ok(validateBottomSheetPositionRequests(applied, replayedRows, cases, inventory, normalize).length,
     'unreviewed rows must not bypass the earlier list-item classification');
-  const start = source.indexOf('      errors.push(...validateDialogPositionRequests(');
-  const end = source.indexOf('      if (JSON.stringify(selected(replayedRows))', start);
+  const start = modalSource.indexOf('      errors.push(...validateDialogPositionRequests(');
+  const end = modalSource.indexOf('      if (JSON.stringify(selected(replayedRows))', start);
   assert.ok(start > 0 && end > start);
   const check = new Function('report', 'replayedRows', 'cases', 'canonicalStyle', 'validateDialogPositionRequests',
     'validateBottomSheetPositionRequests', 'applyBottomSheetActionLayout',
-    'const errors = [];\n' + source.slice(start, end) + '\nreturn errors;');
+    'const errors = [];\n' + modalSource.slice(start, end) + '\nreturn errors;');
   assert.deepEqual(check({ discrepancies: applied, elementInventory: inventory }, replayedRows, cases, normalize,
     validateDialogPositionRequests, validateBottomSheetPositionRequests, applyBottomSheetActionLayout), []);
 });

@@ -33,9 +33,28 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreModalPositionProducer(source) {
+export function restoreControlPositionProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyChipPositionRequests, validateChipPositionRequests } from './chip-position-inspection.mjs';\n", ''],
+    ["import { applyButtonOffsetObservations, validateButtonOffsetObservations } from './static-position-observation.mjs';\n", ''],
+    ["  const beforeControlPositionRequests = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyButtonOffsetObservations(applyChipPositionRequests(beforeControlPositionRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)\n    : beforeControlPositionRequests;\n", ''],
+    ['      errors.push(...validateChipPositionRequests(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n      errors.push(...validateButtonOffsetObservations(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n', ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>\n      ['reviewed-chip-position-request-omission', 'reviewed-chip-computed-offset-stage',\n        'reviewed-button-computed-offset-stage'].includes(d.attribution)))\n    errors.push('control position attribution lacks bound original cases');\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated control position integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), '56532a01e43cb1ec9428515e58aa761d609f635cbbee15387de62b4d6a832c2a',
+    'producer changed beyond reviewed control position integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+
+export function restoreModalPositionProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('beforeControlPositionRequests') ? restoreControlPositionProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyDialogPositionRequests, validateDialogPositionRequests, applyBottomSheetPositionRequests, validateBottomSheetPositionRequests } from './modal-position-inspection.mjs';\n", ''],
     ["  const beforeModalPositionRequests = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

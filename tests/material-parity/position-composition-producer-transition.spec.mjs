@@ -4,6 +4,20 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLineBoxScalarProducer, restoreRetainedFontScalarProducer, restoreSidenavBackgroundScalarProducer, restoreToggleSideColorProducer, restoreMappedBorderInitialProducer } from './position-composition-producer-transition.mjs';
 import { restoreMappedButtonResetProducer, restoreInteractiveWeightProducer, restoreModalPositionProducer } from './position-composition-producer-transition.mjs';
+import { restoreControlPositionProducer } from './position-composition-producer-transition.mjs';
+
+test('control position integration restores the complete accepted modal producer', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'd963dd2:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreControlPositionProducer(current).restoredSource, previous);
+  for (const fragment of ["const discrepancies = ownerInitialStyleBinding.status === 'bound'",
+    'applyChipPositionRequests(beforeControlPositionRequests, cases',
+    'validateButtonOffsetObservations(report.discrepancies, replayedRows, cases,',
+    "errors.push('control position attribution lacks bound original cases');"])
+    assert.throws(() => restoreControlPositionProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreControlPositionProducer(current + '\n// unrelated'));
+});
 
 test('modal position integration restores the full weight producer and rejects missing provenance or precedence', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

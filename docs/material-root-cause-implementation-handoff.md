@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 25
 
+Control-position production integration now applies the prepared chip/button
+reviews after modal reviews, only for bound original cases; unbound attributions
+are rejected. Source-extracted producer and validator replay passes with exactly
+46 groups / 3,160 observations and unchanged unbound inputs. The preceding modal
+production/precedence test remains intact through exact source restoration;
+both integration tests pass (7.12 s). Eleven source-conservation tests pass
+(1.96 s), restoring the complete accepted modal producer hash 56532a01 and
+rejecting missing guards, validation and provenance. No full export yet. Next
+extend the existing canonical conservation comparator for this combined batch,
+then one cold export/reconciliation. Expected unresolved count after acceptance
+is 1,178; accepted count is still 1,224. All remaining audit/final gates stand.
+
 Button-offset proposal now exists in the existing static-position observation
 module/spec, reusing the same row-review helper as chips and modals. All three
 tests pass (14.72 s): 36 groups / 2,400 observations retain complete membership,
