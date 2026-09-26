@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 25
 
+Width follow-up cohort (read-only, snapshot 77595d08): all 47 unresolved width
+groups comprise 10 native-auto/candidate-omitted groups (576 observations),
+17 candidate-explicit groups (614), and 20 native-pixel/candidate-omitted groups
+(474). An authenticated original b07ef154 inventory check (4.48 s) separates the
+last cohort across all 474 owners: grid-tile-one/two each have 52 explicit native
+inline `width:calc(50% - 0.5px)` requests, covering six groups. The other 14 groups /
+370 owners have no native inline/active matched or candidate inline/possibly
+applicable `width`, `inline-size`, or `all` request: card-copy/title 52 each,
+chips-primary 76, paginator-range/size 52 each, expansion-title 68, tooltip-popup
+18. Direct unique IDs identify six owners; existing aliases identify paginator
+and tooltip. Complete rule evidence holds throughout. This is a bounded trace,
+not yet a classification: preserve grid's explicit sizing/composition question,
+and check formatting context, local stages, logical-axis aliases and controls
+before binding the other groups. No blanket omitted-width default is justified.
+Reuse the existing sizing and mapping proofs; no new capture/report framework.
+
 Cold control-position export at source **5c0a5bb** is running in session 87004,
 PID 19464, log `artifacts/material-parity/control-position-export-5c0a5bb.log`.
 Revalidate that handle before waiting; quiet build output is not a restart signal.
