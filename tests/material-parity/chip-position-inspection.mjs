@@ -4,8 +4,6 @@ import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { queryFindings, loadFindingEvidence, saveReviewProposal } from '../../scripts/audit-findings-store.mjs';
-import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
-import { applyModalBoxReview } from './modal-position-inspection.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const ids = ['chip-0', 'chip-1', 'chips-primary'];
 const one = ns => { assert.equal(ns.length, 1); return ns[0]; };
@@ -47,73 +45,6 @@ export function proveChipPositionInspection(r, a) {
     classification: 'unresolved', rendererCauseProven: false, inputEquivalenceProven: false,
     remainingQuestion: 'Position omissions belong to a flattened button/graphic/focus composition; prove original structure before attributing text alignment or hover failures to core.' };
 }
-// Declare the observation boundary explicitly: computed browser offsets are
-// not authored offsets and local omissions do not establish used positioning.
-export function proveChipPositionRequests(r, a, element) {
-  assert.ok(['chip-0', 'chip-1'].includes(element));
-  assert.equal(r.ruleEvidenceComplete, true); assert.equal(a.ruleEvidenceComplete, true);
-  const composition = proveChipPositionInspection(r, a);
-  const owner = one(composition.chips.filter(chip => chip.id === element));
-  const reference = one(r.nodes.filter(n => n.key === owner.referenceOwner));
-  const candidate = one(a.nodes.filter(n => n.key === owner.candidateOwner));
-  assert.deepEqual(reference.inline, {});
-  assert.equal(candidate.authored.style, undefined);
-  assert.equal(candidate.authored.attributes?.style, undefined);
-  const affects = key => /^(position|top|right|bottom|left|all)$|^inset/.test(key.replaceAll('-', '').toLowerCase());
-  const requests = reference.rules.map(i => r.rules[i]).filter(rule => rule.active).flatMap(rule => {
-    assert.ok(!rule.cssText.includes('\\'));
-    assert.doesNotMatch(rule.cssText, /(?:^|[;{])\s*(?:inset[\w-]*|top|right|bottom|left|all)\s*:/i);
-    return Object.entries(rule.declarations).filter(([key]) => affects(key))
-      .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value }));
-  });
-  assert.deepEqual(requests, ['.mdc-evolution-chip', '.mat-mdc-chip'].map(selector => ({
-    selector, conditions: [], key: 'position', value: 'relative', important: false,
-  })));
-  assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
-    .flatMap(rule => Object.keys(rule).filter(affects)), []);
-  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
-    assert.ok(!Object.keys(candidate[stage]).some(affects));
-  }
-  const offsets = ['top', 'right', 'bottom', 'left'];
-  for (const property of offsets) assert.equal(r.styles[reference.style][property], '0px');
-  return { element, referenceNode: reference.key, astylarNode: candidate.key,
-    referencePositionRequests: requests, candidatePositionRequests: [],
-    referenceComputedOffsets: Object.fromEntries(offsets.map(p => [p, '0px'])),
-    positionClassification: 'application-plugin-authoring-defect', offsetClassification: 'parity-harness-defect',
-    candidateComputedPositionVerified: false, candidateUsedOffsetsVerified: false,
-    inputEquivalent: false, renderingEquivalent: false, rendererCauseProven: false };
-}
-
-export function applyChipPositionRequests(rows, cases, inventory, canonicalStyle) {
-  return ['chip-0', 'chip-1'].reduce((values, element) => {
-    const prove = (entry, r, a) => {
-      assert.equal(entry.family, 'chips');
-      return proveChipPositionRequests(r, a, element);
-    };
-    values = applyModalBoxReview(values, cases, inventory, canonicalStyle, {
-      family: 'chips', element, properties: ['position'], prove,
-      attribution: 'reviewed-chip-position-request-omission',
-      owner: 'showcase chip owner positioning and flattened composition',
-      justification: 'Two captured active Material rules explicitly request relative positioning on the chip owner; the candidate omits position in inline authoring, potentially applicable rules and all three local stages. This establishes unequal requests, not a core positioning defect or an implicit relative default. Flattened focus/button/graphic structure and historical label offsets remain separate findings.',
-    });
-    return applyModalBoxReview(values, cases, inventory, canonicalStyle, {
-      family: 'chips', element, properties: ['top', 'right', 'bottom', 'left'], prove,
-      classification: 'parity-harness-defect', attribution: 'reviewed-chip-computed-offset-stage',
-      owner: 'input audit CSSOM resolved offsets versus local declarations',
-      justification: 'Captured reference chip rules request relative positioning without physical/logical insets or resets; CSSOM reports zero offsets while candidate local styles omit them. These are different observation stages, not authored zeros to copy into the fixture. Unequal owner positioning and structure remain; candidate computed/used positioning and rendering equivalence are unproved.',
-    });
-  }, rows);
-}
-
-export function validateChipPositionRequests(rows, originalRows, cases, inventory, canonicalStyle) {
-  try {
-    const select = values => values.filter(row => ['reviewed-chip-position-request-omission',
-      'reviewed-chip-computed-offset-stage'].includes(row.attribution));
-    assert.deepEqual(select(rows), select(applyChipPositionRequests(originalRows, cases, inventory, canonicalStyle)));
-    return [];
-  } catch (error) { return [`chip position requests do not replay from original owners: ${error.message}`]; }
-}
-
 export function collectChipPositionInspection() {
   const file = 'docs/material-position-input-population.json', b = readFileSync(file);
   assert.equal(hash(b), '71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff');

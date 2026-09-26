@@ -3,8 +3,8 @@ import { applyNormalLineBoxScalar, validateNormalLineBoxScalar, normalLineBoxSca
 import { applyRetainedFontScalar, validateRetainedFontScalar, retainedFontScalarAttribution } from './retained-font-scalar.mjs';
 import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints, applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints, applyBottomSheetPanelFlow, validateBottomSheetPanelFlow, applyBottomSheetPanelPaint, validateBottomSheetPanelPaint, applyBottomSheetActionLayout, validateBottomSheetActionLayout, applyBottomSheetContrastCorners, validateBottomSheetContrastCorners, applyDialogTextFlow, validateDialogTextFlow, applyTabControlStage, validateTabControlStage } from './modal-position-inspection.mjs';
 import { applyDialogPositionRequests, validateDialogPositionRequests, applyBottomSheetPositionRequests, validateBottomSheetPositionRequests } from './modal-position-inspection.mjs';
-import { applyChipPositionRequests, validateChipPositionRequests } from './chip-position-inspection.mjs';
-import { applyButtonOffsetObservations, validateButtonOffsetObservations } from './static-position-observation.mjs';
+import { applyChipPositionRequests, validateChipPositionRequests } from './control-position-observation.mjs';
+import { applyButtonOffsetObservations, validateButtonOffsetObservations } from './control-position-observation.mjs';
 import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, validateOverlaySurfaceAuditInputs,
   validateOverlaySurfaceAuditClassifications, overlaySurfaceAttributions } from './overlay-surface-audit-source-binding.mjs';
 import { collectChipPaintAuditInputs, applyChipPaintAuditRows, validateChipPaintAuditInputs,
@@ -8613,6 +8613,7 @@ function sourceFingerprints(root) {
     'docs/material-overlay-surface-review.json',
     'tests/material-parity/chip-paint-audit-source-binding.mjs',
     'tests/material-parity/chip-position-inspection.mjs',
+    'tests/material-parity/control-position-observation.mjs',
     'tests/material-parity/chip-position-inspection.spec.mjs',
     'scripts/audit-findings-store.mjs',
     'docs/material-chip-paint-review.json',

@@ -6,6 +6,15 @@ import { restorePositionProducer, restoreOriginMotionProducer, restoreNormalLine
 import { restoreMappedButtonResetProducer, restoreInteractiveWeightProducer, restoreModalPositionProducer } from './position-composition-producer-transition.mjs';
 import { restoreControlPositionProducer } from './position-composition-producer-transition.mjs';
 
+test('control position helpers leave historical collector sources byte-identical', () => {
+  for (const name of ['chip-position-inspection', 'static-position-observation']) {
+    const file = `tests/material-parity/${name}.mjs`;
+    const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const accepted = execFileSync('git', ['show', 'd963dd2:' + file], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+    assert.equal(current, accepted, name);
+  }
+});
+
 test('control position integration restores the complete accepted modal producer', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
   const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');

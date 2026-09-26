@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
-import { proveChipPositionRequests, applyChipPositionRequests, validateChipPositionRequests } from './chip-position-inspection.mjs';
+import { proveChipPositionRequests, applyChipPositionRequests, validateChipPositionRequests } from './control-position-observation.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';

@@ -32,8 +32,8 @@ import { applyDialogPositionRequests, applyBottomSheetPositionRequests } from '.
 import { collectStyleDiscrepancies } from '../tests/material-parity/input-equivalence-audit.mjs';
 import { queryFindings } from './audit-findings-store.mjs';
 import { restoreControlPositionProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
-import { applyChipPositionRequests } from '../tests/material-parity/chip-position-inspection.mjs';
-import { applyButtonOffsetObservations } from '../tests/material-parity/static-position-observation.mjs';
+import { applyChipPositionRequests } from '../tests/material-parity/control-position-observation.mjs';
+import { applyButtonOffsetObservations } from '../tests/material-parity/control-position-observation.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);

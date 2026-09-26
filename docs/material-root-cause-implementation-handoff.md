@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+Binding-regression correction prepared: the new chip/button inventory reviews
+now live in `control-position-observation.mjs`; historical chip/static modules
+are byte-identical to accepted d963dd2. No hash exceptions, cache bypasses, or
+classification weakening. The new module is explicitly source-fingerprinted,
+and producer restoration removes only its exact integration fragments. Twelve
+source-conservation tests pass (2.28 s); nine old/new binding, membership and
+production tests pass (37.88 s); six canonical-conservation tests pass (5.15 s);
+the existing focused position suite passes 3/3 (3.68 s). Both previously failed
+bindings are independently bound again (chip 10 groups, followup 14). The new
+batch remains 46 groups / 3,160 observations. Next commit and cold export, then
+compare against accepted 77595d08, not the failed output. No canonical count is
+accepted yet. Failed output is retained under `control-position-failed-5c0a5bb`
+with compressed SHA 11ccc0a25a0cbb7abea8597a2ac958e4779ff1c4f39f9200547038294885f526.
+
 **Control-position export 5c0a5bb failed reconciliation prerequisites.** Session
 87004 terminated exit 1. Coverage remains 436/436 static, 1,875/1,875 interaction,
 8,483 differences / 389,202 occurrences / 134 source findings, but output has

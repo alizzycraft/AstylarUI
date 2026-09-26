@@ -37,8 +37,9 @@ export function restoreControlPositionProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
   for (const [from, to] of [
-    ["import { applyChipPositionRequests, validateChipPositionRequests } from './chip-position-inspection.mjs';\n", ''],
-    ["import { applyButtonOffsetObservations, validateButtonOffsetObservations } from './static-position-observation.mjs';\n", ''],
+    ["import { applyChipPositionRequests, validateChipPositionRequests } from './control-position-observation.mjs';\n", ''],
+    ["import { applyButtonOffsetObservations, validateButtonOffsetObservations } from './control-position-observation.mjs';\n", ''],
+    ["    'tests/material-parity/control-position-observation.mjs',\n", ''],
     ["  const beforeControlPositionRequests = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
     ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyButtonOffsetObservations(applyChipPositionRequests(beforeControlPositionRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)\n    : beforeControlPositionRequests;\n", ''],
     ['      errors.push(...validateChipPositionRequests(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n      errors.push(...validateButtonOffsetObservations(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n', ''],

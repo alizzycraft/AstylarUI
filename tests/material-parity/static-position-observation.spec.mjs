@@ -3,12 +3,12 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
 import { buttonOffsetOwners, proveButtonOffsetObservation, applyButtonOffsetObservations,
-  validateButtonOffsetObservations } from './static-position-observation.mjs';
+  validateButtonOffsetObservations } from './control-position-observation.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
-import { applyChipPositionRequests, validateChipPositionRequests } from './chip-position-inspection.mjs';
+import { applyChipPositionRequests, validateChipPositionRequests } from './control-position-observation.mjs';
 import { collectStaticPositionObservations, proveStaticPositionObservation } from './static-position-observation.mjs';
 test('button offset observation review preserves 36 complete groups and candidate positioning distinctions', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
