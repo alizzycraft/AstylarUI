@@ -2,6 +2,16 @@
 
 ## Current audit checkpoint — September 25
 
+Tooltip width observation now has a focused regression in the existing
+`tooltip-position-composition.spec.mjs` (not a running export dependency).
+`node --test --test-name-pattern='tooltip pixel width' tests/material-parity/tooltip-position-composition.spec.mjs`
+passes 1/1 (1.26 s). It authenticates 18 original tree pairs and the pinned compact
+row, checks exact count/sample/state membership, horizontal writing mode, empty
+inline requests, absence of width/both logical sizing axes/reset rules and all
+three candidate stages. This locks the observed stage distinction without
+claiming rendering equivalence or changing classification. Production semantic
+binding and negative controls remain next after export reconciliation.
+
 Width follow-up cohort (read-only, snapshot 77595d08): all 47 unresolved width
 groups comprise 10 native-auto/candidate-omitted groups (576 observations),
 17 candidate-explicit groups (614), and 20 native-pixel/candidate-omitted groups

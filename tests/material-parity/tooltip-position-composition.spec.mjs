@@ -8,6 +8,43 @@ import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-me
 import { collectTooltipPositionComposition, proveTooltipPositionComposition } from './tooltip-position-composition.mjs';
 import { proveTooltipSizingRequests } from './overlay-surface-review.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
+import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+
+test('tooltip pixel width is a computed observation, not an explicit owner width request', () => {
+  const report = collectTooltipPositionComposition(); // authenticates all original tree receipts
+  const snapshot = { generation: '77595d08eb0f857cf058eb072074a433702f11e022dac2f1bfb666375d923752',
+    indexSha256: 'd84236477a9da75dc58de0e5d3d48db58c98bab5232d746cdf5d88501ced2459' };
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'tooltip', snapshot)
+    .filter(r => r.evidence.section === 'discrepancies' && r.element === 'tooltip-popup' && r.property === 'width');
+  assert.equal(rows.length, 1);
+  const row = rows[0]; assert.equal(row.reference, '106.812px');
+  assert.equal(Object.hasOwn(row, 'astylar'), false);
+  const keys = [];
+  // Include both logical axes conservatively; this is not a CSS default or
+  // computed candidate reconstruction, and does not classify min/max constraints.
+  const relevant = k => /^(width|inlinesize|blocksize|all)$/.test(k.replaceAll('-', '').toLowerCase());
+  for (const observation of report.observations) {
+    const [r, a] = ['reference', 'astylar'].map(side => JSON.parse(readFileSync(observation.inputTrees[side].file)));
+    const rn = r.nodes.find(n => n.key === observation.paths.reference[0].key);
+    const an = a.nodes.find(n => n.key === observation.paths.astylar[0].key);
+    assert.equal(r.styles[rn.style].width, row.reference);
+    assert.equal(r.styles[rn.style].writingMode, 'horizontal-tb');
+    assert.deepEqual(rn.inline, {});
+    for (const rule of rn.rules.map(i => r.rules[i]).filter(rule => rule.active))
+      assert.deepEqual(Object.keys(rule.declarations).filter(relevant), []);
+    assert.equal(an.authored.style, undefined); assert.equal(an.authored.attributes?.style, undefined);
+    for (const rule of a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, an.authored)))
+      assert.deepEqual(Object.keys(rule).filter(relevant), []);
+    for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'])
+      assert.deepEqual(Object.keys(an[stage]).filter(relevant), []);
+    keys.push(observation.case);
+  }
+  assert.equal(new Set(keys).size, 18); assert.equal(row.occurrences, keys.length);
+  assert.deepEqual(row.cases, keys.slice(0, 12));
+  assert.deepEqual(row.states, [...new Set(keys.map(key => key.split('/').at(-1)))]);
+  // The width row remains unresolved until production binding and independent
+  // replay; no equivalence, used size, clipping or renderer-cause claim follows.
+});
 
 test('paired tooltip rasters retain small DPR-dependent ink offsets, not the earlier large displacement', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
