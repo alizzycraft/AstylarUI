@@ -27,7 +27,8 @@ import { collectBorderInitialInputs, classifyBorderInitialInput, collectOutlineT
   classifyOutlineTokenInput, outlineTokenAttribution, applyMappedBorderInitial, applyMappedButtonBorderReset,
   applyCardBorderToken } from '../tests/material-parity/border-initial-input-evidence.mjs';
 import { collectSliderBorderDefaults, classifySliderBorderDefault } from '../tests/material-parity/slider-border-default-source-binding.mjs';
-import { restoreInteractiveWeightProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { restoreInteractiveWeightProducer, restoreModalPositionProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { applyDialogPositionRequests, applyBottomSheetPositionRequests } from '../tests/material-parity/modal-position-inspection.mjs';
 import { collectStyleDiscrepancies } from '../tests/material-parity/input-equivalence-audit.mjs';
 import { queryFindings } from './audit-findings-store.mjs';
 
@@ -108,9 +109,17 @@ export function replayBorderDefaultRows(rows, captured) {
   return applyMappedBorderInitial(replayed, cases, inventory, normalize);
 }
 
-export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false, weight = false } = {}) {
-  assert.ok(!(dialogCard && weight), 'select one scalar batch');
-  const transition = weight ? restoreInteractiveWeightProducer(source) : dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
+export function replayModalPositionRows(rows, captured) {
+  const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
+    ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  return applyBottomSheetPositionRequests(applyDialogPositionRequests(rows, cases, inventory, normalize), cases, inventory, normalize);
+}
+
+export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false, weight = false, modalPosition = false } = {}) {
+  assert.ok(Number(dialogCard) + Number(weight) + Number(modalPosition) <= 1, 'select one scalar batch');
+  const transition = modalPosition ? restoreModalPositionProducer(source) : weight ? restoreInteractiveWeightProducer(source) : dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
   const adjusted = refreshScalarControlReceipts(previous.rows, previous.control, current.control, transition);
   const expected = JSON.parse(JSON.stringify(refreshScalarControlReceipts(expectedRows,
     previous.control, current.control, transition)));
@@ -137,7 +146,17 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     const before = adjusted[i], after = current.rows[i];
     same(raw(previous.rows[i]), raw(after), 'border batch changed raw scalar evidence');
     if (isDeepStrictEqual(before, after)) continue;
-    assert.match(before.property, weight ? /^fontWeight$/ : dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    assert.match(before.property, modalPosition ? /^(position|top|right|bottom|left)$/ : weight ? /^fontWeight$/ : dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    if (modalPosition) {
+      assert.ok(['dialog', 'bottom-sheet'].includes(before.family));
+      assert.equal(before.attribution, 'unresolved'); assert.equal(before.astylar, undefined);
+      const position = before.property === 'position';
+      assert.equal(before.reference, position ? 'relative' : '0');
+      assert.equal(before.occurrences, before.family === 'dialog' ? 32 : 25);
+      assert.equal(after.classification, position ? 'application-plugin-authoring-defect' : 'parity-harness-defect');
+      assert.equal(after.reviewEvidence.inputEquivalent, false);
+      assert.equal(after.reviewEvidence.renderingEquivalent, false);
+    }
     if (weight) {
       assert.equal(before.attribution, 'unresolved');
       assert.equal(before.astylar, undefined);
@@ -165,7 +184,12 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
       existingProofRows.push(i);
     }
   }
-  same(Object.fromEntries(totals), weight ? {
+  same(Object.fromEntries(totals), modalPosition ? {
+    'reviewed-dialog-position-request-omission': { groups: 5, observations: 160 },
+    'reviewed-dialog-computed-offset-stage': { groups: 20, observations: 640 },
+    'reviewed-bottom-sheet-position-request-omission': { groups: 1, observations: 25 },
+    'reviewed-bottom-sheet-computed-offset-stage': { groups: 12, observations: 300 },
+  } : weight ? {
     [ownerInitialStyleAttribution]: { groups: 20, observations: 1142 },
     [retainedFontScalarAttribution]: { groups: 2, observations: 136 },
     'reviewed-stage-mismatch': { groups: 4, observations: 224 },
@@ -179,7 +203,7 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     'reviewed-material-outline-token-substitution': { groups: 3, observations: 204 },
     'reviewed-mapped-border-initial-color-divergence': { groups: 52, observations: 1432 },
   }, 'border batch changed unexpected classification membership');
-  return { previous: previous.manifest, current: current.manifest, changedGroups: weight ? 26 : dialogCard ? 23 : 83, changedOccurrences: weight ? 1502 : dialogCard ? 896 : 2596,
+  return { previous: previous.manifest, current: current.manifest, changedGroups: modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83, changedOccurrences: modalPosition ? 1125 : weight ? 1502 : dialogCard ? 896 : 2596,
     existingProofRows, scalarReceiptRows: adjusted.filter((r, i) => !isDeepStrictEqual(r, previous.rows[i])).length,
     controlReceiptRecords: receiptCases.length, allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
     orderedCurrentRowsSha256: digest(current.rows), inputEquivalent: false, renderingEquivalent: false };
@@ -448,7 +472,17 @@ function replayAppearanceRows(rows, captured, { colorMotion = false, originMotio
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--weight-replay') {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--modal-position') {
+  assert.equal(process.argv.length, 3);
+  const previous = await readAudit('artifacts/material-parity/working-audit/bfd986bc6e7397d32465df25d6096d2274dfe29336924281a3f7fd0429f6f9fe');
+  assert.equal(previous.manifest.uncompressedSha256, 'f1930fd29fd09bae2bd20e2d90e3de5ace07b1437f36185ae5833b6793fe5a24');
+  const current = await readAudit('docs');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const expected = replayModalPositionRows(previous.rows, JSON.parse(bytes));
+  console.log(JSON.stringify(compareBorderDefaultCanonical(previous, current, expected,
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), { modalPosition: true }), null, 2));
+} else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--weight-replay') {
   assert.equal(process.argv.length, 3);
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');

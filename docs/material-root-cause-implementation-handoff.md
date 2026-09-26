@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 25
 
+The existing scalar conservation comparator now supports `--modal-position`;
+it authenticates bfd986bc and the new export, replays both modal proposals from
+the complete original inventory, conserves every raw row/prior review and all
+non-receipt control evidence, and permits only the 38-group/1,125-observation
+batch with its exact per-attribution counts. Five focused comparator tests pass
+(2.58 s), including forged expected-row, equivalence, membership and control
+mutations. Independent replay against the original capture also passes with
+38/1,125. The compact generation's standalone manifest was restored and checked
+against its existing compressed payload, not a duplicated capture. Next run
+one complete export and `node scripts/check-material-position-canonical-conservation.mjs --modal-position`,
+then reconcile sections/fingerprints and import once. No export acceptance yet.
+
 The combined modal-position proposal is now wired into the audit producer,
 after prior reviews and only with bound original cases. Validation replays the
 earlier bottom-sheet action classification before the new position/offset
