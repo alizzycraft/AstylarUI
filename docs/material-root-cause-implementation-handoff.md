@@ -116,6 +116,24 @@ on quiet output or timeout, and do not change its dependencies while it runs.
 After it finishes, run `--snackbar-overflow` and all-section/source receipt
 reconciliation against accepted f86307bd before compact import. Canonical
 acceptance still has 1,127 unresolved groups, not the proposed 1,096.
+Next unresolved overflow question, outside the live export: compact queries and
+an authenticated original-tree census (6.63 s) leave **42 groups / 2,592 scalar
+observations**, 21 owners / 1,296 instances. Twelve button owners / 716 instances
+have exactly `.mdc-button` visible X/Y requests: toolbar action, card open, three
+button examples, menu trigger, bottom-sheet trigger, dialog trigger/cancel/save,
+snackbar trigger and tooltip trigger. Candidate rules and all three local stages
+omit overflow. This is not automatically a defect: the existing initial-value
+proof deliberately excluded controls, so verify the button's own paint/clipping
+path before calling explicit visible and omission equivalent.
+The other nine owners / 580 instances have no captured authored overflow request:
+card/dialog headings (84), table (52), slider inputs (156), range-visual/tab-panel
+plugins (148), and tab buttons mapped from spans (140). Native axes compute visible
+while candidate local stages omit them. Separate observation-stage attribution
+from used clipping and the already-documented structure/plugin substitutions.
+Direct/alias mapping and full rules were inspected; no new classifications were
+applied. Next use existing public control proofs to distinguish default-value
+equivalence from control-owned clipping, without broadening the ordinary-node
+waiver. Shared sizing/typography/paint questions and final gates remain open.
 The accepted width/overflow export predates this new wiring. The following
 proof details belong to the new batch and are not canonically applied yet.
 
