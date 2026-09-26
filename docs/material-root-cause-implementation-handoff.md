@@ -77,6 +77,21 @@ Remaining visible-overflow populations need separate treatment: explicit visible
 button requests are not the same provenance as both-side omissions. Do not
 collapse them into clipping defects or assume candidate computed defaults.
 Full input-equivalence acceptance and final enforced browser gates remain open.
+Mapped visible-overflow prerequisites now have a focused check in the same
+`control-overflow-observation.spec.mjs`: **265 owners** (paginator range/size,
+stepper active content, bottom-sheet wrapper and snackbar wrapper/surface) retain
+both native visible axes and omit overflow/reset requests in candidate authoring,
+potentially applicable rules and all three captured stages. Existing alias
+mapping is reused, including scalar-rule gaps; it is not structural equivalence.
+The existing default/clip/scroll proof's four implementation sources and two core
+tests are pinned unchanged. Controls reject alias shadows, unknown-selector
+overflow, logical-axis overrides, resets and plugin substitution. The combined
+suite passes **2/2 in 13.30 s**; an initial test used the wrong mapping-result field
+(`astylarNode` instead of `candidateNode`) and failed before correction. No new
+canonical classifications or clipping/rendering claims were applied. Integrate
+these mappings into the existing initial-value review only after export acceptance.
+The export has advanced through validation and evidence-session verification to
+canonical encoding (2,762,614.95 ms at phase start); session 2559 is still live.
 Earlier chronological notes below describe preparation, not current job state.
 
 Position reconciliation progress: canonical conservation **passed**, session

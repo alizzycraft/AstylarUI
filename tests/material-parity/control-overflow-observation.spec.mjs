@@ -8,6 +8,78 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { clippingOwners, proveControlClippingRequests, applyControlClippingRequests,
   validateControlClippingRequests } from './control-overflow-observation.mjs';
+import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+
+test('265 mapped ordinary owners satisfy the retained initial-overflow proof prerequisites, not rendering equivalence', () => {
+  // Reuse the existing browser/core sensitivity proof, but require its owning
+  // sources and tests to remain unchanged. This does not apply classifications.
+  const fingerprints = {
+    'src/app/config/browser-defaults.ts': 'c429bec0fa047e71148f4ce743868a4c89986fde28cc7d11076bb7afa89993f3',
+    'src/app/services/dom/style-defaults.service.ts': '379775839024538bcd2a6acc69528039e24fc58b849e52841ba9d6c88f4da7d0',
+    'src/app/services/dom/elements/overflow-clip.service.ts': 'f66a26a20844e471cf7db4a4e6e9cf6f197f97a0d4eb9cad3cb23bc3892f802a',
+    'src/lib/astylar-scroll-runtime.ts': '2c7f0667264471b12315c5619e446dde65c6bb266d0bf114f84688f76f5288ac',
+    'src/app/services/dom/elements/overflow-clip.service.spec.ts': '1a1b9cf370ee02e9c7fa9f77cac2050cf36504f14f832f5239d7b9301f34fbf4',
+    'src/lib/astylar-scroll-runtime.spec.ts': '91a1f492f15e6a2d27844655b8a017a6d632f8698450bb9ab20f09a24a461e8e',
+  };
+  for (const [file, expected] of Object.entries(fingerprints)) assert.equal(createHash('sha256')
+    .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const captured = JSON.parse(bytes), owners = {
+    paginator: ['paginator-range', 'paginator-size'], stepper: ['stepper-content'],
+    'bottom-sheet': ['bottom-sheet-overlay'], 'snack-bar': ['snack-bar-overlay', 'snack-bar-surface'],
+  };
+  const cases = [...captured.results.map(e => ({ ...e, kind: 'static' })),
+    ...captured.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => owners[e.family]);
+  const inventory = collectFullTreeInventory(cases), counts = {}, samples = new Map();
+  const affects = key => key.replaceAll('-', '').toLowerCase().startsWith('overflow') || key.toLowerCase() === 'all';
+  const verify = (entry, r, a, input) => {
+    for (const tree of [r, a]) { assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []); }
+    const mapping = resolveOriginAliasPair(entry, r, a, input);
+    assert.ok(['mapped', 'mapped-with-scalar-rule-gap'].includes(mapping.status));
+    const ref = r.nodes.find(n => n.key === mapping.referenceNode), ast = a.nodes.find(n => n.key === mapping.candidateNode);
+    assert.ok(['div', 'span'].includes(ast.authored.type));
+    assert.ok(!['html', 'body', 'input', 'textarea', 'select', 'button', 'img', 'svg'].includes(ref.type));
+    for (const key of ['overflowX', 'overflowY']) assert.equal(r.styles[ref.style][key], 'visible');
+    for (const style of [ast.authored.style ?? {}, ast.normalResolvedStyle, ast.resolvedStyle, ast.interactionResolvedStyle]) {
+      assert.ok(style && typeof style === 'object' && !Array.isArray(style));
+      assert.ok(!Object.keys(style).some(affects));
+    }
+    assert.doesNotMatch(ast.authored.attributes?.style ?? '', /(?:overflow(?:-[\w-]+)?|all)\s*:/i);
+    assert.ok(!a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, ast.authored))
+      .some(rule => Object.keys(rule).some(affects)));
+    assert.ok(Array.isArray(input.astylarAuthored));
+    assert.ok(input.astylarAuthored.every(rule => rule.declarations && !Object.keys(rule.declarations).some(affects)));
+    return mapping;
+  };
+  for (const entry of cases) for (const element of owners[entry.family]) {
+    const inputs = entry.styleInputs.filter(i => i.id === element);
+    if (!inputs.length) continue; // Closed overlays have no owner; expected totals below are exact.
+    assert.equal(inputs.length, 1);
+    const pair = modalInventoryTrees(inventory,
+      `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+    const mapping = verify(entry, ...pair, inputs[0]);
+    counts[element] = (counts[element] ?? 0) + 1;
+    if (!samples.has(element)) samples.set(element, { entry, pair, input: inputs[0], mapping });
+  }
+  assert.deepEqual(counts, { 'paginator-range': 52, 'paginator-size': 52, 'stepper-content': 68,
+    'bottom-sheet-overlay': 25, 'snack-bar-overlay': 34, 'snack-bar-surface': 34 });
+  for (const [element, { entry, pair, input, mapping }] of samples) {
+    for (const mutate of [
+      ([r]) => { r.ruleEvidenceComplete = false; },
+      ([r]) => { r.nodes.find(n => n.key === mapping.referenceNode).attributes.id = element; },
+      ([, a]) => { a.rules.push({ selector: '[unknown]', overflow: 'hidden' }); },
+      ([, a]) => { a.nodes.find(n => n.key === mapping.candidateNode).authored.style = { overflowBlock: 'clip' }; },
+      ([, a]) => { a.nodes.find(n => n.key === mapping.candidateNode).normalResolvedStyle.all = 'unset'; },
+      ([, a]) => { a.nodes.find(n => n.key === mapping.candidateNode).authored.type = 'showcase.material:panel'; },
+    ]) {
+      const changed = structuredClone(pair); mutate(changed);
+      assert.throws(() => verify(entry, ...changed, input), undefined, element);
+    }
+  }
+});
 
 test('330 control owners preserve clipping requests, competing visible rules and the progress computed axis', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
