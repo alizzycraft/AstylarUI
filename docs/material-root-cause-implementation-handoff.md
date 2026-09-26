@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 25
 
+**Position export 1a7c2ff is terminal**, session 21784 exited 1; do not restart.
+Its only reported error is the expected **1,178 unresolved groups**. It retains
+436/436 static, 1,875/1,875 interaction, 8,483 scalar groups / 389,202 occurrences
+and 134 source findings. Cold evidence verification: two collectors, ten memory
+hits, zero disk hits/invalidations, 1,205 files / 89,151,875 bytes reverified.
+Recorded elapsed time 2,174,042.54 ms. Compressed output SHA
+`fea569edc8edf1e05d1686bcb7c2a8eecc0bfb53bff5d5b8baeb6fbb59602040`
+(60,238,808 bytes); decoded SHA
+`98d8aada931c0f393616ffd4ddfb4177f7099d33690042cabe42db98504d0f70`
+(2,103,412,390 bytes). Output is **not accepted yet**; pointer remains 77595d08.
+
+Reconciliation is running: canonical conservation `--control-position` session
+72707 / PID 18460, all-section digest comparison session 54679 / PID 19996,
+metadata/source comparison session 28844 / PID 12808. Revalidate handles before
+waiting. Outputs are `artifacts/material-parity/control-position-{conservation,
+sections,metadata}-1a7c2ff.json`. All compare against accepted 77595d08, not the
+failed 11ccc0a2 package. Finish exact section/source/receipt reconciliation,
+then import/verify once and commit the canonical files. The pending 47 width
+and four overflow groups are deliberately absent from this exported batch.
+
 Overlay overflow proof complete, pending production integration:
 `node --test tests/material-parity/overlay-overflow-observation.spec.mjs` passes
 **2/2** (4.05 s total). Existing inventory/mapping and `applyModalBoxReview`
