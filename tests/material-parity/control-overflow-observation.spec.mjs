@@ -7,9 +7,9 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { clippingOwners, proveControlClippingRequests, applyControlClippingRequests,
-  validateControlClippingRequests } from './control-overflow-observation.mjs';
-import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
-import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+  validateControlClippingRequests, proveMappedVisibleOverflow, applyMappedVisibleOverflow,
+  validateMappedVisibleOverflow } from './control-overflow-observation.mjs';
+import { applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
 
 test('265 mapped ordinary owners satisfy the retained initial-overflow proof prerequisites, not rendering equivalence', () => {
   // Reuse the existing browser/core sensitivity proof, but require its owning
@@ -34,25 +34,12 @@ test('265 mapped ordinary owners satisfy the retained initial-overflow proof pre
   const cases = [...captured.results.map(e => ({ ...e, kind: 'static' })),
     ...captured.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => owners[e.family]);
   const inventory = collectFullTreeInventory(cases), counts = {}, samples = new Map();
-  const affects = key => key.replaceAll('-', '').toLowerCase().startsWith('overflow') || key.toLowerCase() === 'all';
   const verify = (entry, r, a, input) => {
-    for (const tree of [r, a]) { assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []); }
-    const mapping = resolveOriginAliasPair(entry, r, a, input);
-    assert.ok(['mapped', 'mapped-with-scalar-rule-gap'].includes(mapping.status));
-    const ref = r.nodes.find(n => n.key === mapping.referenceNode), ast = a.nodes.find(n => n.key === mapping.candidateNode);
-    assert.ok(['div', 'span'].includes(ast.authored.type));
-    assert.ok(!['html', 'body', 'input', 'textarea', 'select', 'button', 'img', 'svg'].includes(ref.type));
-    for (const key of ['overflowX', 'overflowY']) assert.equal(r.styles[ref.style][key], 'visible');
-    for (const style of [ast.authored.style ?? {}, ast.normalResolvedStyle, ast.resolvedStyle, ast.interactionResolvedStyle]) {
-      assert.ok(style && typeof style === 'object' && !Array.isArray(style));
-      assert.ok(!Object.keys(style).some(affects));
-    }
-    assert.doesNotMatch(ast.authored.attributes?.style ?? '', /(?:overflow(?:-[\w-]+)?|all)\s*:/i);
-    assert.ok(!a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, ast.authored))
-      .some(rule => Object.keys(rule).some(affects)));
-    assert.ok(Array.isArray(input.astylarAuthored));
-    assert.ok(input.astylarAuthored.every(rule => rule.declarations && !Object.keys(rule.declarations).some(affects)));
-    return mapping;
+    const proof = proveMappedVisibleOverflow(entry, r, a, input.id);
+    assert.equal(proof.initialValueEquivalent, true);
+    for (const flag of ['inputEquivalent', 'structuralEquivalenceVerified', 'clippingVerified', 'scrollingVerified', 'renderingEquivalent'])
+      assert.equal(proof[flag], false);
+    return proof.mapping;
   };
   for (const entry of cases) for (const element of owners[entry.family]) {
     const inputs = entry.styleInputs.filter(i => i.id === element);
@@ -79,6 +66,51 @@ test('265 mapped ordinary owners satisfy the retained initial-overflow proof pre
       assert.throws(() => verify(entry, ...changed, input), undefined, element);
     }
   }
+});
+
+test('combined snackbar and overflow proposal preserves all current raw rows and exact original case membership', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const captured = JSON.parse(bytes);
+  const cases = [...captured.results.map(e => ({ ...e, kind: 'static' })),
+    ...captured.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const rows = [...new Set(cases.map(e => e.family))].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, {
+    generation: 'f86307bd22b7699155bc1e28730c1a446c825a214d97c9258555c8b33a265162',
+    indexSha256: '9222220df3105817b2f39275395d883ff8201560f00f696320dfec0171339c8a',
+  })).filter(r => r.evidence.section === 'discrepancies').sort((a, b) => a.evidence.ordinal - b.evidence.ordinal);
+  assert.equal(rows.length, 8483);
+  const before = structuredClone(rows);
+  const applied = applyMappedVisibleOverflow(applyControlClippingRequests(
+    applySnackbarPositionRequests(rows, cases, inventory, normalize), cases, inventory, normalize), cases, inventory, normalize);
+  assert.deepEqual(rows, before); assert.equal(applied.length, rows.length);
+  const changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 31); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 1292);
+  assert.equal(applied.filter(r => r.attribution === 'unresolved').length, 1096);
+  const visible = changed.filter(r => r.attribution === 'reviewed-mapped-visible-overflow-initial-value');
+  assert.equal(visible.length, 12); assert.equal(visible.reduce((n, r) => n + r.occurrences, 0), 530);
+  for (const row of changed) {
+    assert.equal(row.reviewedCases.length, row.occurrences);
+    assert.equal(new Set(row.reviewedCases).size, row.occurrences);
+    const restored = { ...row };
+    for (const key of ['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']) delete restored[key];
+    Object.assign(restored, row.reviewEvidence.priorMetadata);
+    assert.deepEqual(restored, rows.find(r => r.id === row.id));
+  }
+  for (const validate of [validateMappedVisibleOverflow, validateControlClippingRequests, validateSnackbarPositionRequests])
+    assert.deepEqual(validate(applied, rows, cases, inventory, normalize), []);
+  for (const mutate of [r => { r.reference = 'hidden'; }, r => r.reviewedCases.pop(),
+    r => { r.reviewEvidence.observations[0].renderingEquivalent = true; },
+    r => { r.classification = 'application-plugin-authoring-defect'; }]) {
+    const altered = structuredClone(applied);
+    mutate(altered.find(r => r.attribution === 'reviewed-mapped-visible-overflow-initial-value'));
+    assert.ok(validateMappedVisibleOverflow(altered, rows, cases, inventory, normalize).length);
+  }
+  const target = cases.findIndex(e => e.family === 'snack-bar' && e.styleInputs.some(i => i.id === 'snack-bar-overlay'));
+  assert.ok(target >= 0);
+  assert.throws(() => applyMappedVisibleOverflow(rows, cases.filter((_, i) => i !== target), inventory, normalize));
+  assert.throws(() => applyMappedVisibleOverflow(rows, [...cases, cases[target]], inventory, normalize));
 });
 
 test('330 control owners preserve clipping requests, competing visible rules and the progress computed axis', () => {

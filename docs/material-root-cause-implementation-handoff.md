@@ -75,6 +75,19 @@ This is evidence acceptance, not input/rendering equivalence or final audit
 completion. Next integrate the pending snackbar/clipping findings and mapped
 ordinary initial-value review as one coherent batch; retain other control/plugin
 overflow questions separately and preserve the full final gates.
+That combined proposal now passes against **all 8,483 current scalar rows**:
+**31 groups / 1,292 observations**, with all raw values and unrelated rows
+conserved. It combines three snackbar groups / 102 observations, sixteen
+clipping/axis groups / 660, and twelve mapped ordinary initial-overflow groups /
+530. Proposed unresolved count is **1,096**; accepted canonical remains 1,127.
+`node --test tests/material-parity/control-overflow-observation.spec.mjs
+tests/material-parity/snackbar-position-observation.spec.mjs` passes **4/4 in
+26.38 s**. Full original case order, exact memberships, duplicate/missing cases,
+false classifications and invented rendering claims are checked. Initial-value
+reuse explicitly pins the six unchanged defaults/clip/scroll sources and tests.
+The mapped proof is now reusable in the existing clipping review module rather
+than duplicated in the prerequisite test. No production wiring, producer receipt
+transition or new export has happened yet; those are the next coherent step.
 Dependencies of that export have not changed. The following independent proofs
 are not imported or fingerprinted by its producer and are not in its batch.
 
@@ -118,8 +131,9 @@ tests are pinned unchanged. Controls reject alias shadows, unknown-selector
 overflow, logical-axis overrides, resets and plugin substitution. The combined
 suite passes **2/2 in 13.30 s**; an initial test used the wrong mapping-result field
 (`astylarNode` instead of `candidateNode`) and failed before correction. No new
-canonical classifications or clipping/rendering claims were applied. Integrate
-these mappings into the existing initial-value review only after export acceptance.
+canonical classifications or clipping/rendering claims were applied. The combined
+proposal above now binds these mappings using the same initial-value scope;
+main-builder integration remains pending.
 Earlier chronological notes below describe preparation, not current job state.
 
 Position reconciliation progress: canonical conservation **passed**, session

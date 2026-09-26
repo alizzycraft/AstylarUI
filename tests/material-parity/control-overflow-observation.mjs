@@ -1,7 +1,75 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
+
+export const mappedVisibleOwners = Object.freeze({
+  paginator: ['paginator-range', 'paginator-size'], stepper: ['stepper-content'],
+  'bottom-sheet': ['bottom-sheet-overlay'], 'snack-bar': ['snack-bar-overlay', 'snack-bar-surface'],
+});
+
+// Applicability of the existing initial-overflow proof, not a fresh rendering
+// experiment. Invalidate reuse if any owning implementation or sensitivity test changes.
+const initialOverflowSources = Object.freeze({
+  'src/app/config/browser-defaults.ts': 'c429bec0fa047e71148f4ce743868a4c89986fde28cc7d11076bb7afa89993f3',
+  'src/app/services/dom/style-defaults.service.ts': '379775839024538bcd2a6acc69528039e24fc58b849e52841ba9d6c88f4da7d0',
+  'src/app/services/dom/elements/overflow-clip.service.ts': 'f66a26a20844e471cf7db4a4e6e9cf6f197f97a0d4eb9cad3cb23bc3892f802a',
+  'src/lib/astylar-scroll-runtime.ts': '2c7f0667264471b12315c5619e446dde65c6bb266d0bf114f84688f76f5288ac',
+  'src/app/services/dom/elements/overflow-clip.service.spec.ts': '1a1b9cf370ee02e9c7fa9f77cac2050cf36504f14f832f5239d7b9301f34fbf4',
+  'src/lib/astylar-scroll-runtime.spec.ts': '91a1f492f15e6a2d27844655b8a017a6d632f8698450bb9ab20f09a24a461e8e',
+});
+
+export function proveMappedVisibleOverflow(entry, r, a, element) {
+  assert.ok(mappedVisibleOwners[entry.family]?.includes(element));
+  for (const tree of [r, a]) { assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []); }
+  const inputs = entry.styleInputs.filter(i => i.id === element); assert.equal(inputs.length, 1);
+  const input = inputs[0], mapping = resolveOriginAliasPair(entry, r, a, input);
+  assert.ok(['mapped', 'mapped-with-scalar-rule-gap'].includes(mapping.status));
+  const ref = r.nodes.find(n => n.key === mapping.referenceNode), ast = a.nodes.find(n => n.key === mapping.candidateNode);
+  assert.ok(['div', 'span'].includes(ast.authored.type));
+  assert.ok(!['html', 'body', 'input', 'textarea', 'select', 'button', 'img', 'svg'].includes(ref.type));
+  for (const key of ['overflowX', 'overflowY']) assert.equal(r.styles[ref.style][key], 'visible');
+  const affects = key => key.replaceAll('-', '').toLowerCase().startsWith('overflow') || key.toLowerCase() === 'all';
+  for (const style of [ast.authored.style ?? {}, ast.normalResolvedStyle, ast.resolvedStyle, ast.interactionResolvedStyle]) {
+    assert.ok(style && typeof style === 'object' && !Array.isArray(style));
+    assert.ok(!Object.keys(style).some(affects));
+  }
+  assert.doesNotMatch(ast.authored.attributes?.style ?? '', /(?:overflow(?:-[\w-]+)?|all)\s*:/i);
+  assert.ok(!a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, ast.authored))
+    .some(rule => Object.keys(rule).some(affects)));
+  assert.ok(Array.isArray(input.astylarAuthored));
+  assert.ok(input.astylarAuthored.every(rule => rule.declarations && !Object.keys(rule.declarations).some(affects)));
+  return { element, mapping, referenceNode: ref.key, astylarNode: ast.key,
+    referenceAxes: { overflowX: 'visible', overflowY: 'visible' }, candidateAxes: 'omitted',
+    initialOverflowSources, initialValueEquivalent: true, inputEquivalent: false,
+    structuralEquivalenceVerified: false, clippingVerified: false, scrollingVerified: false,
+    renderingEquivalent: false,
+    scope: 'Initial overflow value only; no container, clipping, reachability or final-raster equivalence claim.' };
+}
+
+export function applyMappedVisibleOverflow(rows, cases, inventory, normalize) {
+  for (const [file, expected] of Object.entries(initialOverflowSources)) assert.equal(createHash('sha256')
+    .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
+  let values = rows;
+  for (const [family, owners] of Object.entries(mappedVisibleOwners)) for (const element of owners)
+    values = applyModalBoxReview(values, cases, inventory, normalize, { family, element,
+      properties: ['overflowX', 'overflowY'], prove: (entry, r, a) => proveMappedVisibleOverflow(entry, r, a, element),
+      classification: 'equivalent-representation', attribution: 'reviewed-mapped-visible-overflow-initial-value',
+      owner: 'none',
+      justification: 'Existing alias proofs identify the ordinary div/span owner without equating structure or dropping scalar-rule gaps. Native axes both compute visible; candidate rules, inline inputs and all three local stages omit overflow/reset. The unchanged defaults/clip/scroll sources and sensitivity tests establish the same initial no-clipping/no-scroll-container branch for omission and visible. This extends only that existing initial-value proof to mapped owners; it does not establish container geometry, ancestor clipping, reachability, plugin/control behavior or equal rendering.',
+    });
+  return values;
+}
+
+export function validateMappedVisibleOverflow(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-mapped-visible-overflow-initial-value');
+    assert.deepEqual(select(rows), select(applyMappedVisibleOverflow(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`mapped visible overflow does not replay from original owners: ${error.message}`]; }
+}
 
 export const clippingOwners = Object.freeze({
   core: { 'core-primary': ['button', 'button', '.mat-ripple'] },
