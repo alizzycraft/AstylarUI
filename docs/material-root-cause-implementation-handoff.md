@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 25
 
+**Control-position export 5c0a5bb failed reconciliation prerequisites.** Session
+87004 terminated exit 1. Coverage remains 436/436 static, 1,875/1,875 interaction,
+8,483 differences / 389,202 occurrences / 134 source findings, but output has
+1,202 unresolved groups (not expected 1,178) and two binding errors. It is not
+accepted; accepted baseline remains 77595d08 / 1,224 unresolved. Retain the failed
+output and `control-position-export-5c0a5bb.log`; do not import it as accepted.
+Focused collector replay (6.48 s) identifies exact causes: chip-paint source
+expects chip-position-inspection hash 82921a30 but receives b3b034c0 after new
+position helpers; position-followup's persistent dependency graph now reaches
+untracked `origin-alias-mapping-evidence.mjs` through static-position's new modal
+helper import. Ten chip and fourteen followup groups lose their old binding,
+explaining the 24-group excess. Keep both guards intact. Next separate the new
+control-position helpers from the existing historical/cached collector modules,
+verify those modules restore exactly and all old/new focused bindings pass,
+then reconcile producer-source changes before a corrected batched export.
+Evidence-session verification had zero invalidations; this does not negate the
+separate binding failures. Recorded export elapsed time is 24,455,013.82 ms,
+including an unusually long encoding interval across a polling-host timeout;
+do not present this as a normal CPU-runtime benchmark.
+
 Tooltip width observation now has a focused regression in the existing
 `tooltip-position-composition.spec.mjs` (not a running export dependency).
 `node --test --test-name-pattern='tooltip pixel width' tests/material-parity/tooltip-position-composition.spec.mjs`
