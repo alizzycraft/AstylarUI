@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 25
 
+Next coherent cohort: 36 unresolved button-offset groups / 2,400 observations.
+Read-only original b07ef154 inventory assertions (3.70 s) cover nine direct-ID
+button owners: button-primary/secondary/disabled 60 each, card-open 52,
+menu-primary 94, bottom-sheet-primary 63, dialog-primary 78, snack-bar-primary
+71 and tooltip-primary 62. All 600 owners have complete rule evidence, an active
+`.mdc-button` relative request, no active reference physical/logical inset or
+reset, and four computed zero offsets. Candidate inline/rule/stage offsets are
+omitted throughout. Crucially, card-open has `.text-button` relative positioning
+in all three stages; the other eight omit it. Preserve this split: attribute
+only the offset observation-stage issue, not positioning/rendering equivalence.
+Next extend existing position-observation proof/tests with this exact cohort,
+negative controls and complete row conservation; combine with the prepared chip
+batch before the next canonical milestone. No new classification was applied.
+
 Chip position row binding is prepared in the existing chip module/spec, reusing
 the existing modal row-review helper (exported without changing its behavior).
 Against accepted 77595d08, exactly ten groups / 760 observations are proposed:
