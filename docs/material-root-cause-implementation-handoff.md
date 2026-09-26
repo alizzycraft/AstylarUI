@@ -1,6 +1,23 @@
 # Material audit: evidence-led implementation priorities
 
-## Current audit checkpoint — September 25
+## Current audit checkpoint — September 26
+
+**Accepted position batch:** all export, conservation, section/source and compact
+index checks passed. New canonical compressed SHA / index generation:
+`fea569edc8edf1e05d1686bcb7c2a8eecc0bfb53bff5d5b8baeb6fbb59602040`;
+index SHA `672b4d61922a8ef775f4e2c723ca09c9ab70684d93822cd3fe3b53d0df6c9d57`.
+All 79 sections reconcile: 72 unchanged; seven changed sections explained by
+the 46-group / 3,160-observation position review and source receipts. No section
+was added or removed. Import/verify pass: **1,178 unresolved**, 8,483 scalar
+groups / 389,202 occurrences, 134 source findings, 39,904 control differences;
+coverage stays 436 static / 1,875 interaction cases. Compact shards total
+70,364,126 bytes. All reconciliation/import sessions are terminal; do not restart.
+
+Next integrate the already-proved **47 width + four overflow groups** as one
+coherent batch against this accepted snapshot, preserving historical source
+bindings and all unrelated evidence. They are not in this accepted export.
+Full input-equivalence acceptance and final enforced browser gates remain open.
+Earlier chronological notes below describe preparation, not current job state.
 
 Position reconciliation progress: canonical conservation **passed**, session
 72707 terminal exit 0. Exactly 46 groups / 3,160 observations change; one scalar
