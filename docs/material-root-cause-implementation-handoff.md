@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — September 27
 
+- Explicit zero-normalized tracking tokens now have a focused proof for **112
+  observations**: toolbar-title 40 inherits its token from an ancestor; card-title
+  40 and dialog-title 32 declare theirs directly. Native computed `normal` does
+  not erase the authored variable expression; all candidate captured paths omit
+  tracking requests. The proof retains full declaration traces, including motion
+  for the 32 dialog observations. Token sensitivity and current glyph paint remain
+  unmeasured, and no canonical classification was changed. Existing population
+  suite passed **1/1, 21.04 s**, including changed candidate stages and token
+  declaration rejection. Initial negative control selected an unrelated pooled
+  rule and failed to throw; corrected it to the exact traced owner's rule index.
+- **Wrapping export is terminal and rejected**, not ready for compact import.
+  PID 3780 is absent; its log reports two errors: independently bound reviewed
+  input evidence missing, and **1,164** unresolved groups rather than the expected
+  1,030. Evidence-session verification itself passed (1,205 files, zero invalidation).
+  Failed output is preserved under
+  `artifacts/material-parity/wrapping-export-9a7f2d7-invalid-binding/`; current
+  `docs` generated outputs still contain that rejected proposal. The accepted
+  compact snapshot remains baf0ccb8. Do not commit/import the rejected output.
+  Streamed `reviewedInputs.binding.error` identifies the frozen tab-panel proof.
+  Replaying `collectTabPanelInputs()` and recursively comparing with
+  `docs/material-tab-panel-inputs.json` finds **exactly one difference**:
+  `/sources/2/sha256`, old `1d6bf44d12422208a523501b13b374faa8a127b6ed3b20d60a3eb766d385bce0`,
+  current `cae41ea0e442f07b0cc3f9ff5ead1016e4c13de02a5e57ed7e1b0d2f6a0a84ed`.
+  The appended wrapping browser test changed the historical typography spec's
+  whole-file receipt. Source replay rejects all 134 reviewed-input groups, exactly
+  explaining 1,164 minus 1,030. No original findings or plugin source changed.
+  **Next priority:** isolate the added wrapping diagnostic from the frozen
+  typography spec (whose original test body is unchanged), preserving both tests
+  and their browser proof; update wrapping diagnostic references/fingerprints.
+  Run the existing tab proof and reviewed-input source-binding checks before any
+  new export. Do not merely update or waive the frozen hash, and do not rerun the
+  expensive exporter until the source-binding failure is independently resolved.
 - Zero/omitted tracking next action is now narrowed using the **existing**
   `inspectOwnerInitialStyle` survey, evaluated in memory with only
   `letterSpacing: 'normal'` added to its initial-value candidates. No production
@@ -50,8 +82,8 @@
   remain unchanged. Prioritize that reconciliation, then remaining tracking
   host/token boundaries, followed by shared box-sizing/line-height/grid gaps;
   preserve the final complete coverage and enforced-browser requirements.
-- Wrapping milestone export is **running**, source commit **9a7f2d7**, session
-  **35804**, child PID **3780** (revalidated live during this checkpoint).
+- Wrapping milestone export was launched from source commit **9a7f2d7**, session
+  **35804**, child PID **3780** (now terminal; failure disposition above).
   Command: `ASTYLAR_AUDIT_COLD=1 node scripts/export-material-input-audit-current-ancestry.mjs`.
   All five required capture/line-box/supplemental inputs are present. Log:
   `artifacts/material-parity/wrapping-export-b99f957-integration.log`.

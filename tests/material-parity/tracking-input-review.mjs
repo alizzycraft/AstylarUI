@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
+import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
@@ -113,4 +114,44 @@ export function applyToggleTrackingHosts(rows, cases, inventory, retained, norma
     prove: (entry, reference, candidate) => proveToggleTrackingHost(entry,
       one(entry.styleInputs.filter(i => i.id === element)), reference, candidate, retained),
   }), rows);
+}
+
+const zeroTokens = {
+  'toolbar-title': 'var(--mat-toolbar-title-text-tracking, var(--mat-sys-title-large-tracking))',
+  'card-title': 'var(--mat-card-title-text-tracking, var(--mat-sys-title-large-tracking))',
+  'dialog-title': 'var(--mat-dialog-subhead-tracking, var(--mat-sys-headline-small-tracking, 0.03125em))',
+};
+// Identity is independently established by the original scalar/tree mapping.
+// Preserve the token even when the current computed value normalizes to zero.
+export function proveZeroTrackingToken(entry, input, reference, candidate, identity) {
+  assert.ok(Object.hasOwn(zeroTokens, input.id));
+  assert.equal(input.reference.letterSpacing, 'normal');
+  const native = one(reference.nodes.filter(n => n.key === identity.referenceNode));
+  const ast = one(candidate.nodes.filter(n => n.key === identity.candidateNode));
+  assert.equal(ast.authored.id, input.id);
+  for (const [property, value] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][property], value);
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(ast[stage], input[scalar]); assert.equal(ast[stage].letterSpacing, undefined);
+  }
+  const trace = inspectOverlayOwnerDeclarations('letterSpacing', identity, reference, candidate);
+  const requests = trace.referencePath.flatMap(n => {
+    assert.deepEqual(n.inline, {});
+    return n.rules.flatMap(rule => Object.entries(rule.declarations)
+      .filter(([key]) => !/^(animation|transition)/.test(key))
+      .map(([property, declaration]) => ({ node: n.node, property, declaration, active: rule.active, selector: rule.selector })));
+  });
+  const request = one(requests);
+  assert.equal(request.property, 'letter-spacing'); assert.equal(request.active, true);
+  assert.deepEqual(request.declaration, { value: zeroTokens[input.id], important: false });
+  for (const n of trace.candidatePath) {
+    assert.deepEqual(n.inline, {});
+    for (const declarations of [...Object.values(n.declarations), ...n.possibleRules.map(r => r.declarations)])
+      assert.ok(Object.keys(declarations).every(key => /^(animation|transition)/.test(key)));
+  }
+  return { case: keyOf(entry), element: input.id, referenceNode: native.key, astylarNode: ast.key,
+    request, trace, referenceComputed: 'normal', candidateLocalDeclaration: '<omitted>',
+    tokenSensitivityMeasured: false, motionActivityVerified: false,
+    candidateComputedVerified: false, rendererCauseProven: false,
+    inputEquivalent: false, renderingEquivalent: false };
 }

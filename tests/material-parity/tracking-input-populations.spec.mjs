@@ -10,6 +10,7 @@ import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-rev
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { applyTrackingLabels, validateTrackingLabels, trackingLabelAttribution, proveTrackingLabel } from './tracking-input-review.mjs';
 import { applyToggleTrackingHosts, proveToggleTrackingHost, trackingHostAttribution } from './tracking-input-review.mjs';
+import { proveZeroTrackingToken } from './tracking-input-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
@@ -132,7 +133,7 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
     }
     assert.fail('incomplete owner ancestry');
   };
-  const groups = {}, counts = {}, tokens = {};
+  const groups = {}, counts = {}, tokens = {}, zeroProofs = [];
   for (const row of allRows) {
     // Some owners' static rows are already reviewed; do not re-add those cases
     // to their unresolved interaction population merely because values match.
@@ -151,6 +152,20 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
         candidateNode: candidate.key, referencePath: ancestry(r, native), candidatePath: ancestry(a, candidate),
         missingRules: [], extraRules: [] } : resolveOriginAliasPair(entry, r, a, input);
       const trace = inspectOverlayOwnerDeclarations('letterSpacing', identity, r, a);
+      if (['toolbar-title', 'card-title', 'dialog-title'].includes(row.element)) {
+        zeroProofs.push(proveZeroTrackingToken(entry, input, r, a, identity));
+        if (zeroProofs.length === 1) {
+          const changed = structuredClone(a);
+          changed.nodes.find(n => n.key === identity.candidateNode).normalResolvedStyle.letterSpacing = 'normal';
+          assert.throws(() => proveZeroTrackingToken(entry, input, r, changed, identity));
+          const altered = structuredClone(r);
+          const ownerToken = trace.referencePath.flatMap(n => n.rules).find(rule => rule.declarations?.['letter-spacing']);
+          assert.ok(ownerToken);
+          const tokenRule = altered.rules[ownerToken.index];
+          assert.ok(tokenRule); tokenRule.declarations['letter-spacing'].value = 'normal';
+          assert.throws(() => proveZeroTrackingToken(entry, input, altered, a, identity));
+        }
+      }
       const signature = `${trace.hasRelevantRequest}/${trace.hasMotionRequest}`;
       patterns.add(signature); counts[signature] = (counts[signature] ?? 0) + 1;
       for (const node of trace.referencePath) for (const rule of node.rules) {
@@ -167,6 +182,9 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
   assert.deepEqual(groups, { 'true/false': 2, 'false/false': 28, 'false/true': 8, 'true/true': 1 });
   assert.deepEqual(counts, { 'true/false': 80, 'false/false': 1563, 'false/true': 366, 'true/true': 32 });
   assert.deepEqual(tokens, { 'toolbar-title': 40, 'card-title': 40, 'dialog-title': 32 });
+  assert.equal(zeroProofs.length, 112);
+  assert.equal(zeroProofs.filter(p => p.request.node !== p.referenceNode).length, 40);
+  assert.equal(zeroProofs.filter(p => p.trace.hasMotionRequest).length, 32);
   // No classification mutation: equal leaf zeros do not establish host token,
   // inheritance, current glyph paint or rendering equivalence.
 });
