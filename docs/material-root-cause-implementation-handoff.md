@@ -16,8 +16,24 @@
   52 historical observations, not proof of the historical browser's rule or
   candidate used-box behavior. Preserve that boundary: do not classify the
   omitted candidate field as equivalent, nor invent a missing Material rule.
-  Next bind the historical browser version/default evidence and candidate table
-  defaults through the existing box-sizing review after export reconciliation.
+  Candidate source follow-up: executing the current TypeScript defaults module
+  in isolation confirms table defaults contain only display table / width auto,
+  with no global boxSizing field. `StyleDefaultsService.getElementTypeDefaults`
+  merges that baseline; `StyleService.findStyleForElement` applies it before
+  authored rules. `ElementDimensionService.calculateDimensions` (lines 312-323)
+  explicitly preserves historical border-box interpretation when boxSizing is
+  omitted, adding declared-size padding/borders only for explicit content-box.
+  Thus an omitted captured field is not evidence that candidate table sizing
+  defaults to content-box. `TableService` also consumes stored dimensions and
+  performs its own row/column sizing, so this source trace alone cannot prove
+  final table geometry. Defaults SHA-256:
+  `c429bec0fa047e71148f4ce743868a4c89986fde28cc7d11076bb7afa89993f3`;
+  dimension source SHA-256:
+  `24d3c910ec0f054f0ec2de1808420f3e6571708a13348eea0887d040c9aa3d30`.
+  Next bind historical browser evidence and run a minimal equal-input public
+  table/div sizing contrast through the existing box-sizing proof, including
+  nonzero padding/borders; do not generalize the button proof or this source
+  inspection into used-size equivalence for the 52 table observations.
   Export PID 380 has advanced to `validate-audit` (901.80 s elapsed at entry)
   and was independently verified live at 1,246.50 CPU seconds. No export
   dependency or canonical classification changed during this investigation.
