@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 27
 
+- Read-only explicit box-sizing investigation answers authored-versus-default
+  provenance for all **10 groups / 621 observations**. Original capture
+  `b07ef154...` and collected tree inventory authenticate the population; exact
+  states, first-12 samples and counts match accepted `462dddc7`. All native
+  owners compute `content-box`, with no captured active own `box-sizing`/`all`
+  request. Every candidate has exactly one matching authored `border-box` rule,
+  and complete scalar snapshots equal all three captured candidate stages.
+  Owners/rules: bottom-sheet-overlay `.modal-overlay` (25); button-toggle-one/two
+  `.button-toggle-option` and group `#button-toggle-primary` (68 each);
+  checkbox-primary `#checkbox-primary` (68); chip-0/1 `.chip` (76 each);
+  snack-bar-overlay `.snack-overlay` (34); stepper-primary `.stepper` (68);
+  tab-panel `.tab-panel` (70). Ordered owner/rule/mapping/scalar proof digest:
+  `bde0d10c6e1a0219e8cae6e4832494e13e7e1a27edcff3220eeb6a9826aa9e4d`.
+  First demonstrated difference is candidate authoring before layout, not a
+  core default insertion. Preserve the native span/private tab-plugin owner
+  distinction and both overlays' `mapped-with-scalar-rule-gap` status. This
+  does not prove used box geometry, screenshot causality, compensation intent
+  or renderer equivalence. Next retain these assertions in the existing review
+  infrastructure, inspect history for intent separately, and review the 39
+  omitted-candidate groups without assuming defaults. No classification or
+  exporter dependency changed. Export PID 380 remains live at 439.53 CPU seconds.
 - Cold complete-input typography export from **60df658** is running (session
   **8290**, exporter PID **380**, log
   `artifacts/material-parity/typography-export-60df658-complete-inputs.log`).
