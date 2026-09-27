@@ -30,6 +30,18 @@ groups to original case values/counts/sample order. This closes the full-proof
 reuse prerequisite, without applying new classifications or running a browser
 capture. Integrate through the existing scalar-review mechanism after the active
 export, preserving the distinction between local omissions and actual paint.
+That scalar bridge is now prepared in `tab-scalar-typography.mjs`, reusing
+`applyModalBoxReview` for original-case binding and raw-row conservation. It
+consumes independently replayed control evidence (not arbitrary detached
+reports), checks exact native/candidate owners and normal/effective values, and
+stores control-proof hashes instead of copying full proof trees. The extended
+focused test passes **1/1 in 10.06 s**: exactly four groups / 280 observations
+change; unrelated rows and raw values remain unchanged; missing/duplicate control
+proofs, forged raw values, lost case membership, changed proof hashes and false
+rendering claims are rejected. This standalone bridge is **not production-wired
+or canonical**. Wire it only after current export acceptance, with independently
+validated control evidence and the existing canonical conservation checks. No
+live-export dependency was changed.
 
 **Deferred focused verification:** `button.manager.spec.ts` now has an uncommitted
 oversized-label test for omitted/visible/hidden overflow, using ButtonManager and

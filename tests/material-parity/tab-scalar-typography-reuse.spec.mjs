@@ -4,6 +4,8 @@ import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory, collectControlTypographyEvidence } from './input-equivalence-audit.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { applyTabScalarTypography, validateTabScalarTypography, tabScalarTypographyAttribution } from './tab-scalar-typography.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 test('all unresolved tab tracking and line-height scalars retain an exact existing control proof', () => {
@@ -24,7 +26,8 @@ test('all unresolved tab tracking and line-height scalars retain an exact existi
   const selected = rows.filter(r => r.evidence.section === 'discrepancies' && r.attribution === 'unresolved' &&
     ['tab-overview', 'tab-activity'].includes(r.element) && properties.includes(r.property));
   assert.equal(selected.length, 4);
-  const proofs = collectControlTypographyEvidence(tabs, inventory).differences.filter(r =>
+  const control = collectControlTypographyEvidence(tabs, inventory);
+  const proofs = control.differences.filter(r =>
     r.attribution === 'reviewed-tab-label-typography-input' && properties.includes(r.property));
   assert.equal(proofs.length, 280);
   let matched = 0;
@@ -49,5 +52,31 @@ test('all unresolved tab tracking and line-height scalars retain an exact existi
     assert.deepEqual(row.cases, keys.slice(0, 12));
   }
   assert.equal(matched, 280);
+  const scalarRows = rows.filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const normalize = bindPreciseAuditNormalization();
+  const applied = applyTabScalarTypography(scalarRows, cases, inventory, control, normalize);
+  const changed = applied.filter(r => r.attribution === tabScalarTypographyAttribution);
+  assert.equal(changed.length, 4);
+  assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 280);
+  assert.deepEqual(validateTabScalarTypography(applied, scalarRows, cases, inventory, control, normalize), []);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  assert.deepEqual(applied.map(raw), scalarRows.map(raw));
+  for (let i = 0; i < applied.length; i++) if (applied[i].attribution !== tabScalarTypographyAttribution)
+    assert.deepEqual(applied[i], scalarRows[i]);
+  for (const mutate of [
+    r => { r.reference = 'forged'; },
+    r => { r.reviewedCases.pop(); },
+    r => { r.reviewEvidence.renderingEquivalent = true; },
+    r => { r.reviewEvidence.observations[0].controlProofSha256 = 'forged'; },
+  ]) {
+    const forged = structuredClone(applied);
+    mutate(forged.find(r => r.attribution === tabScalarTypographyAttribution));
+    assert.equal(validateTabScalarTypography(forged, scalarRows, cases, inventory, control, normalize).length, 1);
+  }
+  const missing = { ...control, differences: control.differences.filter(p => p !== proofs[0]) };
+  assert.throws(() => applyTabScalarTypography(scalarRows, cases, inventory, missing, normalize));
+  const duplicate = { ...control, differences: [...control.differences, proofs[0]] };
+  assert.throws(() => applyTabScalarTypography(scalarRows, cases, inventory, duplicate, normalize));
   // This is proof reuse, not canonical classification or rendering acceptance.
 });
