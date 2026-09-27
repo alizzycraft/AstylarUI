@@ -2,6 +2,13 @@
 
 ## Current audit checkpoint — September 27
 
+**Corrected cold export is live:** session **57045**, launcher PID **22792**,
+exporter PID **21308**, launched from **00f8133** with all five evidence arguments.
+Log: `artifacts/material-parity/authored-typography-export-complete-inputs-00f8133.log`.
+Initial phase is build-audit. Keep producer/evidence dependencies unchanged,
+poll this same handle, and do not restart based on quiet output. Subsequent
+wrapping tests and this ledger are outside the export dependency inventory.
+
 **c8b3ceb export rejected; invocation failure, not renderer regression:** session
 96508 / PID 5144 is terminal (exit 1, 1,992.22 s). It omitted the three line-box
 reports and supplemental root, repeating the previously recorded incomplete-
