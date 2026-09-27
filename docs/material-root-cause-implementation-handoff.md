@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 27
 
+- Zero/omitted tracking next action is now narrowed using the **existing**
+  `inspectOwnerInitialStyle` survey, evaluated in memory with only
+  `letterSpacing: 'normal'` added to its initial-value candidates. No production
+  file or active export dependency changed. Original full trees were collected;
+  scalar membership used accepted baf0ccb8 rows and their state boundaries.
+  Result: **25 groups / 1,470 observations** pass the survey's captured-surface
+  ancestry, exact owner/stage and no-request guards. Six groups / 302 observations
+  require motion review (badge count, both chips, tab panel, both progress owners);
+  two / 80 retain explicit tokens (toolbar/card titles); four / 125 require owner
+  mapping (sheet overlay, snackbar overlay/surface, dialog panel); two / 64 require
+  overlay ancestry (dialog actions/title). Total remains 39 / 2,041.
+  This is routing evidence, not a provenance receipt or canonical classification:
+  external inheritance, candidate computed tracking and current paint are not
+  established. Next add a separate opt-in tracking mode to the existing survey
+  and its existing negative-control tests **after the wrapping export terminates**;
+  preserve the historical survey population and all 14 non-passing groups. Reuse
+  the existing attribution path for the proven captured-stage scope, rather than
+  creating a new survey/report framework or repeating this census. The diagnostic
+  completed with exit 0; export PID 3780 remains live (CPU 2,345 s at this check).
 - Button-toggle tracking boundary is now prepared for **two host groups / 136
   observations**. Both mapped hosts are textless; the native Material host's
   explicit token computes 0.096px, its nested button/span compute normal, and the
