@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 27
 
+- Normal line-height follow-up: authenticated all **156 slider-thumb observations**
+  (78 per owner) and both original tree hashes per case. Every native thumb has
+  the active `button, input, select` reset with explicit `line-height: inherit`;
+  native scalar values compute to `normal` while candidate scalar line-height
+  remains omitted. This is not a no-request/default population. The existing
+  `audit-material-range-font-reset.mjs` proof establishes font-size inheritance,
+  not line-height equivalence; reuse its owner paths but do not extend its claim
+  without a line-height proof. Captured declarations are expanded longhands:
+  font-shorthand alias detection alone does not explain this exception.
+  Read-only original-report/tree-hash check passed, **156/156, exit 0, 1.52 s**.
+  A broader exploratory survey recheck failed its membership assertion (24 vs 8)
+  because it omitted accepted row state filtering for divider text. Its totals
+  are invalid and were not imported. Next survey replay must filter `row.states`
+  before checking counts. Remaining work is still the 36 normal/omitted groups,
+  prepared tracking/line-height integration, other unresolved property families,
+  source reconciliation and final canonical/browser gates. Prioritize request
+  ownership and overlay ancestry before accepting default-like values.
+  Corrected export PID 4632 was revalidated live at 1,718.78 CPU seconds; leave
+  its dependencies unchanged until terminal, then reconcile before import.
 - Remaining explicit line-height host requests are now prepared: **three groups /
   124 observations** (toolbar 52, paginator 52, spinner 20). Original nodes are
   textless; toolbar/paginator own active typography tokens computing 28px/16px,
