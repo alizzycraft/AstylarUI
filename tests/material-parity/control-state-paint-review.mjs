@@ -8,6 +8,38 @@ import { proveFlowPositionSubstitution } from '../../scripts/audit-material-flow
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+// Caller supplies the independently replayed disabled-label stage collector,
+// not inferred inherited values or classifications from the proposed export.
+export function applyDisabledLabelColorReview(rows, evidence) {
+  assert.deepEqual(evidence.counts, { groups: 8, cases: 24, observations: 32, ownColorOmitted: 24 });
+  assert.equal(evidence.observations.length, 32);
+  return rows.map(row => {
+    if (row.attribution !== 'unresolved' || row.property !== 'color' ||
+        !['checkbox', 'radio', 'expansion'].includes(row.family) ||
+        row.states.length !== 1 || row.states[0] !== 'disabled') return row;
+    const observations = evidence.observations.filter(o => o.family === row.family && o.element === row.element &&
+      o.reference === row.reference && (o.candidateLocal ?? undefined) === row.astylar);
+    const keys = observations.map(o => o.case);
+    assert.equal(keys.length, row.occurrences); assert.equal(new Set(keys).size, keys.length);
+    assert.deepEqual(keys.slice(0, 12), row.cases);
+    for (const o of observations) {
+      assert.equal(o.classification, 'application-plugin-authoring-defect');
+      assert.equal(o.inputEquivalent, false); assert.equal(o.renderingEquivalent, false);
+      assert.equal(o.localOmissionPreserved, true);
+      assert.notEqual(o.candidateRetained, o.reference);
+    }
+    assert.ok(observations.length);
+    const first = observations[0];
+    assert.ok(observations.every(o => o.attribution === first.attribution));
+    return { ...row, classification: first.classification, attribution: first.attribution,
+      recommendedOwner: first.recommendedOwner,
+      justification: 'The existing source-bound retained-style proof identifies unequal disabled-label ink authoring. Join its exact precise-color observations without replacing omitted local declarations with inherited values. This is not local/computed style or final rendering equivalence.',
+      reviewedCases: keys, reviewEvidence: { originalRowSha256: digest(row), observations,
+        capture: evidence.capture, transition: evidence.transition,
+        inputEquivalent: false, renderingEquivalent: false, localOmissionPreserved: true } };
+  });
+}
 const targets = { tabs: ['tab-overview', 'tab-activity'], card: ['card-open', 'card-primary'], dialog: ['dialog-cancel'],
   toolbar: ['toolbar-action'], 'grid-list': ['grid-tile-one', 'grid-tile-two'], 'button-toggle': ['button-toggle-primary', 'button-toggle-two'],
   'bottom-sheet': ['bottom-sheet-dismiss', 'bottom-sheet-overlay'], divider: ['divider-primary'], slider: ['slider-start', 'slider-primary'] };

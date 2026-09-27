@@ -6,7 +6,31 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
-import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions } from './control-state-paint-review.mjs';
+import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions, applyDisabledLabelColorReview } from './control-state-paint-review.mjs';
+import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
+
+test('disabled label colors reuse all 32 retained-stage proofs without filling omitted locals', () => {
+  const evidence = collectDisabledLabelColorStages();
+  assert.deepEqual(evidence, JSON.parse(readFileSync('docs/material-disabled-label-color-stages.json')));
+  const snapshot = { generation: 'd25a9078972edf1884a4e56a7c17f4a7b3d249d3ed22933811f69daa4aafda9a',
+    indexSha256: 'c1934e90c7ca80ff121da83a6871d10da201f798f37cdb92f8badce7c24529ad' };
+  const rows = ['checkbox', 'radio', 'expansion'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies');
+  const result = applyDisabledLabelColorReview(rows, evidence);
+  const changed = result.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 8); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 32);
+  assert.equal(changed.flatMap(r => r.reviewEvidence.observations).filter(o => o.ownColorOmitted).length, 24);
+  const metadata = new Set(['classification', 'attribution', 'recommendedOwner', 'justification', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  result.forEach((r, i) => assert.deepEqual(raw(r), raw(rows[i])));
+  const missing = structuredClone(evidence); missing.observations.pop();
+  assert.throws(() => applyDisabledLabelColorReview(rows, missing));
+  const invented = structuredClone(evidence);
+  invented.observations.find(o => o.candidateLocal === null).candidateLocal = 'rgba(29,27,32,1)';
+  assert.throws(() => applyDisabledLabelColorReview(rows, invented));
+  const equivalent = structuredClone(evidence); equivalent.observations[0].renderingEquivalent = true;
+  assert.throws(() => applyDisabledLabelColorReview(rows, equivalent));
+});
 
 test('control paint preserves owner boundaries and all 397 captured observations', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');

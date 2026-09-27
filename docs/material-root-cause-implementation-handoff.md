@@ -40,6 +40,22 @@ changes were made, and this checkpoint does not establish rendering equivalence.
 
 ### Prepared work and prior checkpoint history
 
+September 28 disabled-label color preparation: fresh replay of
+`collectDisabledLabelColorStages()` exactly matches the retained
+`docs/material-disabled-label-color-stages.json` and all eight current unresolved
+checkbox/radio/expansion disabled color groups (**32 observations**, 24 cases).
+The existing control-paint module now joins those proofs with exact values,
+ordered membership and row receipts. It preserves the **24 omitted local colors**
+instead of substituting retained/inherited values; the prior authoring diagnosis
+and local/computed distinction remain separate. No root-cause reinvestigation or
+browser recapture was needed. The expanded focused file passed **2/2 in 23.17 s**,
+including lost observations, invented local color, fabricated rendering parity
+and unchanged raw-row checks. This prepares 8/46 remaining color groups; 38 groups
+/ 1,058 observations still need existing-proof applicability review. Background
+preparation remains 62/62 groups / 450 observations. None is canonical yet;
+grid/height export PID 5300 remains live and reconciliation is still first in
+the integration queue.
+
 September 28 background classification preparation is now complete for the
 remaining **62 groups / 450 observations**: 54/397 in the existing control-state
 paint join and 8/53 overlay triggers. The two disabled-range groups now bind all
