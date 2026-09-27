@@ -1,6 +1,44 @@
 # Material audit: evidence-led implementation priorities
 
-## Current audit checkpoint — September 27
+## Current audit checkpoint — September 28
+
+Accepted box-sizing generation:
+`d25a9078972edf1884a4e56a7c17f4a7b3d249d3ed22933811f69daa4aafda9a`.
+Complete-input cold export from `6a23c58` finished in **2,512.22 seconds**.
+Exit 1 reports **890 unresolved groups**, not a validation error. Coverage remains
+436/436 static and 1,875/1,875 interaction cases; all 8,483 scalar groups and
+389,202 observations remain. Evidence-session verification invalidated zero
+dependencies (1,205 files / 89,151,875 bytes).
+
+`check-material-position-canonical-conservation.mjs --box-sizing` passed:
+exactly 49 groups / 2,657 observations, one scalar producer receipt and 48 control
+receipts changed; all raw inputs and unrelated evidence are conserved.
+`material-audit-section-digests.mjs` authenticated both packages: 79 sections,
+72 unchanged, none added/removed. All seven changed sections are reconciled:
+discrepancies, sourceFingerprints, summary, controlTypography, controlLineBoxes,
+ownerCaretInputs and reviewedSourceBatchInputs. All **482** current source hashes
+match; two helper/spec files were added, three producer/transition files changed,
+and none removed. Other changes are the expected producer receipts and counts
+(authoring +10, harness -10, unresolved 939 → 890).
+
+Evidence logs: `artifacts/material-parity/box-sizing-export-6a23c58.log`,
+`box-sizing-conservation-6a23c58.log`, `box-sizing-sections-6a23c58.json`,
+`box-sizing-metadata-6a23c58.log`, `box-sizing-source-hashes-6a23c58.log` in that
+same directory. Compact import and verification passed: 134 source findings,
+39,904 control records, 71,058,664 compact bytes. Index SHA-256:
+`c1934e90c7ca80ff121da83a6871d10da201f798f37cdb92f8badce7c24529ad`.
+Decoded SHA-256:
+`be773eb197ae0906de595ab97ac332ef09af59af2f8b4c929c8f60abb933bdc8`.
+The standalone manifest is retained beside the compressed indexed evidence.
+No decoded 2 GB file was written. All checkpoint reconciliation jobs are complete.
+
+**Next:** integrate the already prepared grid (60 groups) and height (43 groups)
+proofs as one coherent batch, retaining scope limits; then join existing paint
+proofs before starting new investigations. The 890 unresolved groups and final
+enforced browser gates still prevent audit completion. No renderer or fixture
+changes were made, and this checkpoint does not establish rendering equivalence.
+
+### Prepared work and prior checkpoint history
 
 September 28 next paint question: compact queries retain 62 background-color
 groups / 450 observations and 46 color groups / 1,090 observations. Reusing
@@ -49,7 +87,7 @@ production/canonical classifications. Next integrate the prepared grid and heigh
 batches after box-sizing export reconciliation; do not repeat their source surveys
 or infer used-size equivalence from omission.
 
-Accepted typography generation:
+Previously accepted typography generation (superseded by the checkpoint above):
 `e25dab5fef84be5038dc83bff954f0681c3661c86bb0dd546dd118876d842760`.
 The complete-input cold export from 60df658 finished in **2,370.75 s**; exit 1
 reports **939 unresolved groups**, not an export/validation error. Coverage
