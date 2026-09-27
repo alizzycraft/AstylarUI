@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 27
 
+September 28 prepared height evidence: the existing height proof now covers all
+43 remaining groups / 1,414 original observations. Of these, 29 groups / 1,076
+observations have no own height, logical-size or reset declaration in captured
+native rules, candidate rules, inline requests or the three candidate stages.
+Unique direct owners are joined directly; non-direct owners reuse the existing
+alias proof. Browser-computed auto/pixel heights remain distinct from omitted
+candidate declarations; candidate computed/used height and rendering equivalence
+are not established. The other 14 groups / 338 observations retain their fixed
+height authoring proof. The expanded focused test passed 1/1 in 33.99 seconds,
+including injected logical-size, native-inline and local-stage negative controls.
+An initial attempt incorrectly sent direct IDs through the alias-only resolver;
+the corrected join requires unique direct owners before falling back to aliases.
+These standalone proofs are not yet production classifications. Next join the
+height batch using existing scalar infrastructure after export reconciliation;
+do not repeat the source survey or infer used-size equivalence from omission.
+
 Accepted typography generation:
 `e25dab5fef84be5038dc83bff954f0681c3661c86bb0dd546dd118876d842760`.
 The complete-input cold export from 60df658 finished in **2,370.75 s**; exit 1
