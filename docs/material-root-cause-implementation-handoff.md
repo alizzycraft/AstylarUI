@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 27
 
+**Button overflow population bound:** all 716 retained native button instances
+(12 owners, 24 pending scalar groups / 1,432 observations) have exactly the two
+active `.mdc-button` visible-axis requests. Candidate authoring, applicable rules,
+and all captured local stages omit overflow. Direct native/candidate button
+identity, scalar/tree correspondence and full counts are checked; incomplete
+rules, wrong owner kinds, altered axes, hidden inline overflow and candidate reset
+requests are rejected. Full `control-overflow-observation.spec.mjs` passes 4/4 in
+49.10 s, preserving the previously accepted ordinary-owner/clipping proposals.
+This establishes population applicability only, not core clipping or rendering
+equivalence. No new classification is integrated yet.
+
+Reduced-memory Angular retry **session 97109**, Angular PID **4168**, esbuild
+PID **10076**, is live at the latest poll. Command adds `--source-map=false` to
+the focused ButtonManager test. Build still has not reached assertions; esbuild
+was 5.27 GB with 1,689,260 KiB free physical memory. Check the same handle rather
+than restarting. If it again exhausts memory, change compilation scope/approach
+instead of repeating either previous command. The existing overlay audit runner
+is package-bound and specific to overlay/radius reductions; it is not a drop-in
+runner for this private control spec. The uncommitted control spec remains
+unverified. Accepted canonical stays ef6da409 / 1,096 unresolved.
+
 **Next typography binding verified:** the existing scalar bridge now proves six
 additional toolbar/disabled-button groups (99 observations) against independently
 replayed control evidence in accepted ef6da409. Each scalar native button host

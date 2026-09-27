@@ -8,8 +8,42 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { clippingOwners, proveControlClippingRequests, applyControlClippingRequests,
   validateControlClippingRequests, proveMappedVisibleOverflow, applyMappedVisibleOverflow,
-  validateMappedVisibleOverflow } from './control-overflow-observation.mjs';
+  validateMappedVisibleOverflow, visibleButtonOwners, proveVisibleButtonOverflowInputs } from './control-overflow-observation.mjs';
 import { applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
+
+test('716 native button owners request visible axes while candidates omit overflow at every captured stage', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const captured = JSON.parse(bytes);
+  const cases = [...captured.results.map(e => ({ ...e, kind: 'static' })),
+    ...captured.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => visibleButtonOwners[e.family]);
+  const inventory = collectFullTreeInventory(cases), counts = {}, samples = new Map();
+  assert.deepEqual(inventory.errors, []);
+  for (const entry of cases) for (const element of visibleButtonOwners[entry.family]) {
+    if (!entry.styleInputs.some(i => i.id === element)) continue; // Closed dialog actions are absent.
+    const pair = modalInventoryTrees(inventory,
+      `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+    const proof = proveVisibleButtonOverflowInputs(entry, ...pair, element);
+    assert.equal(proof.inputEquivalent, false); assert.equal(proof.clippingVerified, false);
+    counts[element] = (counts[element] ?? 0) + 1;
+    if (!samples.has(element)) samples.set(element, { entry, pair, proof });
+  }
+  assert.deepEqual(counts, { 'toolbar-action': 52, 'card-open': 52, 'button-disabled': 60,
+    'button-primary': 60, 'button-secondary': 60, 'menu-primary': 94, 'bottom-sheet-primary': 63,
+    'dialog-primary': 78, 'dialog-cancel': 32, 'dialog-save': 32, 'snack-bar-primary': 71, 'tooltip-primary': 62 });
+  for (const [element, { entry, pair, proof }] of samples) for (const mutate of [
+    ([r]) => { r.ruleEvidenceComplete = false; },
+    ([r]) => { r.nodes.find(n => n.key === proof.referenceNode).type = 'span'; },
+    ([r]) => { r.styles[r.nodes.find(n => n.key === proof.referenceNode).style].overflowX = 'hidden'; },
+    ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.overflow = 'clip'; },
+    ([, a]) => { a.rules.push({ selector: '[unknown]', overflowInline: 'hidden' }); },
+    ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).authored.attributes = { style: 'overflow: hidden' }; },
+  ]) {
+    const changed = structuredClone(pair); mutate(changed);
+    assert.throws(() => proveVisibleButtonOverflowInputs(entry, ...changed, element), undefined, element);
+  }
+});
 
 test('265 mapped ordinary owners satisfy the retained initial-overflow proof prerequisites, not rendering equivalence', () => {
   // Reuse the existing browser/core sensitivity proof, but require its owning

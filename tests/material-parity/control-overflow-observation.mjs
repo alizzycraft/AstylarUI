@@ -10,6 +10,53 @@ export const mappedVisibleOwners = Object.freeze({
   'bottom-sheet': ['bottom-sheet-overlay'], 'snack-bar': ['snack-bar-overlay', 'snack-bar-surface'],
 });
 
+export const visibleButtonOwners = Object.freeze({
+  toolbar: ['toolbar-action'], card: ['card-open'],
+  button: ['button-disabled', 'button-primary', 'button-secondary'], menu: ['menu-primary'],
+  'bottom-sheet': ['bottom-sheet-primary'], dialog: ['dialog-primary', 'dialog-cancel', 'dialog-save'],
+  'snack-bar': ['snack-bar-primary'], tooltip: ['tooltip-primary'],
+});
+
+// Establish the exact original population before extending an initial-value
+// proof to controls. This alone does not prove their clipping implementation.
+export function proveVisibleButtonOverflowInputs(entry, r, a, element) {
+  assert.ok(visibleButtonOwners[entry.family]?.includes(element));
+  for (const tree of [r, a]) { assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []); }
+  const unique = values => { assert.equal(values.length, 1); return values[0]; };
+  const input = unique(entry.styleInputs.filter(i => i.id === element));
+  const ref = unique(r.nodes.filter(n => (n.attributes?.['data-parity-id'] ?? n.attributes?.id) === element));
+  const ast = unique(a.nodes.filter(n => n.authored?.id === element));
+  assert.equal(ref.type, 'button'); assert.equal(ast.authored.type, 'button');
+  const affects = key => /^(overflow[\w-]*|all)$/i.test(key);
+  for (const node of [ref, ast]) assert.doesNotMatch(
+    node.attributes?.style ?? node.authored?.attributes?.style ?? '', /(?:overflow(?:-[\w-]+)?|all)\s*:/i);
+  assert.ok(!Object.keys(ref.inline ?? {}).some(affects));
+  const requests = ref.rules.map(i => r.rules[i]).filter(rule => rule.active).flatMap(rule => {
+    assert.ok(!rule.cssText.includes('\\'));
+    assert.doesNotMatch(rule.cssText, /(?:^|[;{])\s*(?:overflow-(?:inline|block)[\w-]*|all)\s*:/i);
+    return Object.entries(rule.declarations).filter(([key]) => affects(key))
+      .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value }));
+  });
+  assert.deepEqual(requests, ['overflow-x', 'overflow-y'].map(key => ({
+    selector: '.mdc-button', conditions: [], key, value: 'visible', important: false,
+  })));
+  for (const key of ['overflowX', 'overflowY']) {
+    assert.equal(r.styles[ref.style][key], 'visible'); assert.equal(input.reference[key], 'visible');
+  }
+  for (const style of [ast.authored.style ?? {}, ast.normalResolvedStyle, ast.resolvedStyle, ast.interactionResolvedStyle]) {
+    assert.ok(style && typeof style === 'object'); assert.ok(!Object.keys(style).some(affects));
+  }
+  for (const [scalar, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'],
+    ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']]) assert.deepEqual(input[scalar], ast[stage]);
+  assert.equal(input.astylarResolvedStyleEvidenceVersion, 2);
+  assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, ast.authored))
+    .flatMap(rule => Object.keys(rule).filter(affects)), []);
+  assert.ok(Array.isArray(input.astylarAuthored));
+  assert.ok(input.astylarAuthored.every(rule => rule.declarations && !Object.keys(rule.declarations).some(affects)));
+  return { element, referenceNode: ref.key, astylarNode: ast.key, referenceRequests: requests,
+    candidateAxes: 'omitted', inputEquivalent: false, clippingVerified: false, renderingEquivalent: false };
+}
+
 // Applicability of the existing initial-overflow proof, not a fresh rendering
 // experiment. Invalidate reuse if any owning implementation or sensitivity test changes.
 const initialOverflowSources = Object.freeze({
