@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 27
 
+- Remaining explicit line-height host requests are now prepared: **three groups /
+  124 observations** (toolbar 52, paginator 52, spinner 20). Original nodes are
+  textless; toolbar/paginator own active typography tokens computing 28px/16px,
+  spinner explicitly requests zero. Candidate host stages/rules omit line-height;
+  possible font/all resets are checked rather than assumed absent. Proofs retain
+  full native rules, including spinner transition declarations. No descendant
+  consumption, token sensitivity, motion activity or graphic text-placement effect
+  is inferred. Existing population suite passed **1/1, 27.50 s**, including a
+  candidate font-shorthand negative control and raw/unrelated-row conservation.
+  Nine line-height groups / **532 observations** now have prepared logic; the
+  remaining **36 groups / 1,813 observations** are normal-versus-omitted and need
+  the existing ancestry/observation-stage review, not a repeated value census.
+  These helpers remain outside production while corrected wrapping export PID
+  4632 runs (1,195 CPU seconds at this checkpoint). Canonical counts are unchanged.
 - Button-toggle host line-height distinction is now proved across **136 original
   observations**: native textless hosts and nested buttons compute 20px; label
   rules override this with control-height tokens, producing 40px (102 observations)

@@ -13,6 +13,7 @@ import { applyToggleTrackingHosts, proveToggleTrackingHost, trackingHostAttribut
 import { proveZeroTrackingToken } from './tracking-input-review.mjs';
 import { applyComponentLineHeights, componentLineHeightAttribution } from './tracking-input-review.mjs';
 import { applyToggleLineHeights, proveToggleLineHeightHost, toggleLineHeightAttribution } from './tracking-input-review.mjs';
+import { applyExplicitHostLineHeights, explicitHostLineHeightAttribution, proveExplicitHostLineHeight } from './tracking-input-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
@@ -213,6 +214,20 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
   assert.equal(zeroProofs.length, 112);
   assert.equal(zeroProofs.filter(p => p.request.node !== p.referenceNode).length, 40);
   assert.equal(zeroProofs.filter(p => p.trace.hasMotionRequest).length, 32);
+  const hostRows = ['toolbar', 'paginator', 'progress-spinner'].flatMap(family =>
+    queryFindings('artifacts/material-parity/working-audit', family, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const hostReviewed = applyExplicitHostLineHeights(hostRows, cases, inventory, normalize);
+  const explicitHosts = hostReviewed.filter(r => r.attribution === explicitHostLineHeightAttribution);
+  assert.equal(explicitHosts.length, 3); assert.equal(explicitHosts.reduce((sum, r) => sum + r.occurrences, 0), 124);
+  assert.deepEqual(hostReviewed.map(rawRow), hostRows.map(rawRow));
+  for (let i = 0; i < hostRows.length; i++) if (!explicitHosts.includes(hostReviewed[i])) assert.deepEqual(hostReviewed[i], hostRows[i]);
+  const spinner = cases.find(e => e.family === 'progress-spinner');
+  const si = one(spinner.styleInputs.filter(i => i.id === 'progress-spinner-primary'));
+  const [sr, sa] = modalInventoryTrees(inventory, keyOf(spinner));
+  const alteredHost = structuredClone(sa);
+  alteredHost.rules.push({ selector: '#progress-spinner-primary', font: '16px/20px Arial' });
+  assert.throws(() => proveExplicitHostLineHeight(spinner, si, sr, alteredHost));
   // No classification mutation: equal leaf zeros do not establish host token,
   // inheritance, current glyph paint or rendering equivalence.
 });

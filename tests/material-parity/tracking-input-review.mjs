@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
+import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
@@ -175,6 +176,48 @@ const zeroTokens = {
   'card-title': 'var(--mat-card-title-text-tracking, var(--mat-sys-title-large-tracking))',
   'dialog-title': 'var(--mat-dialog-subhead-tracking, var(--mat-sys-headline-small-tracking, 0.03125em))',
 };
+
+export const explicitHostLineHeightAttribution = 'reviewed-textless-host-line-height-request';
+const hostLineHeights = {
+  'toolbar-primary': ['toolbar', 'mat-toolbar', 'div', '28px', 'var(--mat-toolbar-title-text-line-height, var(--mat-sys-title-large-line-height))'],
+  'paginator-primary': ['paginator', 'mat-paginator', 'div', '16px', 'var(--mat-paginator-container-text-line-height, var(--mat-sys-body-small-line-height))'],
+  'progress-spinner-primary': ['progress-spinner', 'mat-progress-spinner', 'showcase.material:circular-progress', '0px', '0'],
+};
+export function proveExplicitHostLineHeight(entry, input, reference, candidate) {
+  const [family, nativeType, candidateType, computed, token] = hostLineHeights[input.id];
+  assert.equal(entry.family, family);
+  const native = one(reference.nodes.filter(n => n.attributes?.id === input.id));
+  const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));
+  assert.equal(native.type, nativeType); assert.equal(ast.authored.type, candidateType);
+  assert.equal(native.ownText, ''); assert.equal(ast.authored.textContent, undefined); assert.equal(ast.retainedText, undefined);
+  assert.equal(input.reference.lineHeight, computed);
+  for (const [property, value] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][property], value);
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(ast[stage], input[scalar]); assert.equal(ast[stage].lineHeight, undefined);
+  }
+  const requests = native.rules.map(i => reference.rules[i]).filter(r => r.active && r.declarations['line-height']);
+  assert.equal(requests.length, 1); assert.deepEqual(requests[0].declarations['line-height'], { value: token, important: false });
+  const relevant = key => ['lineheight', 'font', 'all'].includes(key.replaceAll('-', '').toLowerCase());
+  assert.ok(Object.keys(ast.authored.style ?? {}).every(key => !relevant(key)));
+  assert.equal(ast.authored.attributes?.style, undefined);
+  for (const rule of candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, ast.authored)))
+    assert.ok(Object.keys(rule).every(key => !relevant(key)));
+  return { case: keyOf(entry), element: input.id, referenceNode: native.key, astylarNode: ast.key,
+    referenceComputed: computed, candidateLocalDeclaration: '<omitted>', requests,
+    hostHasOwnText: false, descendantConsumptionVerified: false, tokenSensitivityMeasured: false,
+    motionActivityVerified: false, candidateComputedVerified: false, rendererCauseProven: false,
+    inputEquivalent: false, renderingEquivalent: false };
+}
+export function applyExplicitHostLineHeights(rows, cases, inventory, normalize) {
+  return Object.entries(hostLineHeights).reduce((values, [element, [family]]) => applyModalBoxReview(values, cases, inventory, normalize, {
+    family, element, properties: ['lineHeight'], attribution: explicitHostLineHeightAttribution,
+    owner: 'showcase Material container line-height requests',
+    justification: 'The exact textless native host has an active Material line-height request (toolbar/paginator typography token or spinner zero); candidate host rules and captured stages omit it. Preserve the host request and original rule including motion, without copying it to descendants, assuming candidate computed defaults, claiming a text-placement effect for a graphic or inferring renderer causality.',
+    prove: (entry, reference, candidate) => proveExplicitHostLineHeight(entry,
+      one(entry.styleInputs.filter(i => i.id === element)), reference, candidate),
+  }), rows);
+}
 // Identity is independently established by the original scalar/tree mapping.
 // Preserve the token even when the current computed value normalizes to zero.
 export function proveZeroTrackingToken(entry, input, reference, candidate, identity) {
