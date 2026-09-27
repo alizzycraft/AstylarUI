@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 27
 
+- Isolated native-browser check resolves the table default hypothesis for
+  **Chrome 153.0.8010.53**, at 800x600 CSS pixels and DPR 1/2. A plain `table`
+  computes `border-box`; a `div` with `display: table` computes `content-box`.
+  Chrome DevTools Protocol `CSS.getMatchedStylesForNode` identifies the exact
+  `table { box-sizing: border-box }` rule as **user-agent** origin. Explicit
+  `initial` and `unset` produce content-box; `revert` restores border-box.
+  All assertions passed in the isolated Playwright stdin diagnostic; contexts
+  and browser were closed, with no capture artifacts or source changes.
+  The first diagnostic failed before assertions because it read `rule.cssStyle`
+  instead of CDP's `rule.style`; the corrected diagnostic exited 0.
+  This supplies a native default explanation consistent with table-primary's
+  52 historical observations, not proof of the historical browser's rule or
+  candidate used-box behavior. Preserve that boundary: do not classify the
+  omitted candidate field as equivalent, nor invent a missing Material rule.
+  Next bind the historical browser version/default evidence and candidate table
+  defaults through the existing box-sizing review after export reconciliation.
+  Export PID 380 has advanced to `validate-audit` (901.80 s elapsed at entry)
+  and was independently verified live at 1,246.50 CPU seconds. No export
+  dependency or canonical classification changed during this investigation.
 - Remaining box-sizing omission census now covers **39 groups / 2,036
   observations**, all mapped with scalar/native box values and complete three-
   stage candidate snapshots checked against authenticated original inventory.
