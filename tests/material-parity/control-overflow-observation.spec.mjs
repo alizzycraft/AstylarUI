@@ -8,7 +8,8 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { clippingOwners, proveControlClippingRequests, applyControlClippingRequests,
   validateControlClippingRequests, proveMappedVisibleOverflow, applyMappedVisibleOverflow,
-  validateMappedVisibleOverflow, visibleButtonOwners, proveVisibleButtonOverflowInputs } from './control-overflow-observation.mjs';
+  validateMappedVisibleOverflow, visibleButtonOwners, proveVisibleButtonOverflowInputs,
+  applyVisibleButtonOverflow, validateVisibleButtonOverflow, visibleButtonOverflowAttribution } from './control-overflow-observation.mjs';
 import { applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
 
 test('716 native button owners request visible axes while candidates omit overflow at every captured stage', () => {
@@ -32,6 +33,25 @@ test('716 native button owners request visible axes while candidates omit overfl
   assert.deepEqual(counts, { 'toolbar-action': 52, 'card-open': 52, 'button-disabled': 60,
     'button-primary': 60, 'button-secondary': 60, 'menu-primary': 94, 'bottom-sheet-primary': 63,
     'dialog-primary': 78, 'dialog-cancel': 32, 'dialog-save': 32, 'snack-bar-primary': 71, 'tooltip-primary': 62 });
+  const normalize = bindPreciseAuditNormalization();
+  const rows = Object.keys(visibleButtonOwners).flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: 'ef6da409ae1162433b0419814fe7e7e33b7659805d8e672f407d8b4c84878145',
+    indexSha256: 'a25ffe1f2d083f23fafe6e615566544a9aedf7b9559e2084309551568982cca9',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyVisibleButtonOverflow(rows, cases, inventory, normalize);
+  const changed = applied.filter(r => r.attribution === visibleButtonOverflowAttribution);
+  assert.equal(changed.length, 24); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 1432);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (applied[i].attribution !== visibleButtonOverflowAttribution)
+    assert.deepEqual(applied[i], rows[i]);
+  assert.deepEqual(validateVisibleButtonOverflow(applied, rows, cases, inventory, normalize), []);
+  for (const mutate of [r => r.reviewedCases.pop(), r => { r.reviewEvidence.observations[0].renderingEquivalent = true; },
+    r => { r.reviewEvidence.observations[0].buttonOverflowSources['src/app/services/dom/input/button.manager.ts'] = 'forged'; }]) {
+    const forged = structuredClone(applied); mutate(forged.find(r => r.attribution === visibleButtonOverflowAttribution));
+    assert.equal(validateVisibleButtonOverflow(forged, rows, cases, inventory, normalize).length, 1);
+  }
   for (const [element, { entry, pair, proof }] of samples) for (const mutate of [
     ([r]) => { r.ruleEvidenceComplete = false; },
     ([r]) => { r.nodes.find(n => n.key === proof.referenceNode).type = 'span'; },

@@ -68,6 +68,38 @@ const initialOverflowSources = Object.freeze({
   'src/lib/astylar-scroll-runtime.spec.ts': '91a1f492f15e6a2d27844655b8a017a6d632f8698450bb9ab20f09a24a461e8e',
 });
 
+const buttonOverflowSources = Object.freeze({ ...initialOverflowSources,
+  'src/app/services/dom/input/button.manager.ts': '270c57f672c2f54bd5bd6b0e255e0207912fa9fa8bedbf983b765e6a3f207aa5',
+  'src/app/services/dom/input/button.manager.spec.ts': '3b15c52a96e5743268e09a4a83cafb8d24aa22034a0503cd0a3f6fdcfad93a02',
+  'scripts/audit-button-overflow-core.mjs': '0c1656115a99f0854ad8f04e594c55193f5870bbc218a6a768ee9b195202228c',
+  'tests/material-parity/button-overflow-initial.spec.mjs': 'e1072e113e2621af7861c05f7366cb141ce6b951c32ba012c71a7d801c5cd80d',
+});
+export const visibleButtonOverflowAttribution = 'reviewed-button-visible-overflow-initial-value';
+
+export function applyVisibleButtonOverflow(rows, cases, inventory, normalize) {
+  for (const [file, expected] of Object.entries(buttonOverflowSources)) assert.equal(createHash('sha256')
+    .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
+  let result = rows;
+  for (const [family, owners] of Object.entries(visibleButtonOwners)) for (const element of owners)
+    result = applyModalBoxReview(result, cases, inventory, normalize, {
+      family, element, properties: ['overflowX', 'overflowY'],
+      classification: 'equivalent-representation', attribution: visibleButtonOverflowAttribution, owner: 'none',
+      justification: 'The exact native button requests visible overflow on both axes while the candidate omits overflow in authoring and all captured stages. Dependency-pinned browser and actual ButtonManager/shared-clip tests establish the same initial no-own-clipping branch for omission and visible, with hidden/mixed/ancestor negative controls kept distinct. This explains only the scalar initial value, not equal structure, inherited clipping, scrolling, hit regions, Angular compilation or final raster.',
+      prove: (entry, r, a) => ({ ...proveVisibleButtonOverflowInputs(entry, r, a, element),
+        buttonOverflowSources, initialValueEquivalent: true, ownClippingBranchVerified: true,
+        ancestorClippingVerified: false, scrollingVerified: false, structuralEquivalenceVerified: false }),
+    });
+  return result;
+}
+
+export function validateVisibleButtonOverflow(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === visibleButtonOverflowAttribution);
+    assert.deepEqual(select(rows), select(applyVisibleButtonOverflow(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`button initial overflow lacks original population and dependency-bound proof: ${error.message}`]; }
+}
+
 export function proveMappedVisibleOverflow(entry, r, a, element) {
   assert.ok(mappedVisibleOwners[entry.family]?.includes(element));
   for (const tree of [r, a]) { assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []); }

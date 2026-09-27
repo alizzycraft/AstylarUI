@@ -7,6 +7,7 @@ import { collectFullTreeInventory, collectControlTypographyEvidence } from './in
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { applyTabScalarTypography, validateTabScalarTypography, tabScalarTypographyAttribution } from './tab-scalar-typography.mjs';
 import { applyButtonAuthoredTypography, validateButtonAuthoredTypography, buttonAuthoredTypographyAttribution } from './normal-line-box-scalar.mjs';
+import { applyVisibleButtonOverflow, validateVisibleButtonOverflow, visibleButtonOverflowAttribution } from './control-overflow-observation.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 test('tab and button typography scalars retain exact existing control proofs and owner bindings', () => {
@@ -120,18 +121,29 @@ test('tab and button typography scalars retain exact existing control proofs and
   const start = source.indexOf("  const authoredTypographyDiscrepancies = ownerInitialStyleBinding.status === 'bound'");
   const end = source.indexOf('  const beforeNormalLineBoxScalars =', start);
   assert.ok(start > 0 && end > start);
-  const functions = { applyTabScalarTypography, applyButtonAuthoredTypography };
+  const functions = { applyTabScalarTypography, applyButtonAuthoredTypography, applyVisibleButtonOverflow };
   const run = new Function('ownerInitialStyleBinding', 'modalDiscrepancies', 'cases', 'elementInventory',
     'controlTypography', 'canonicalStyle', ...Object.keys(functions), source.slice(start, end) + '\nreturn authoredTypographyDiscrepancies;');
-  const combinedRows = [...scalarRows, ...originals];
+  const combinedRows = [...new Set(cases.map(c => c.family))].flatMap(family =>
+    queryFindings('artifacts/material-parity/working-audit', family, current))
+    .filter(r => r.evidence.section === 'discrepancies').sort((a, b) => a.evidence.ordinal - b.evidence.ordinal)
+    .map(({ id, evidence, ...row }) => row);
+  assert.equal(combinedRows.length, 8483);
   const combinedControl = collectControlTypographyEvidence(cases.filter(c => ['tabs', 'toolbar', 'button'].includes(c.family)), inventory);
   const proposal = run({ status: 'bound' }, combinedRows, cases, inventory, combinedControl, normalize, ...Object.values(functions));
-  assert.deepEqual(proposal, [...applied, ...joined]);
+  assert.deepEqual(proposal, applyVisibleButtonOverflow(applyButtonAuthoredTypography(
+    applyTabScalarTypography(combinedRows, cases, inventory, combinedControl, normalize),
+    cases, inventory, combinedControl, normalize), cases, inventory, normalize));
+  const batch = proposal.filter(r => [tabScalarTypographyAttribution, buttonAuthoredTypographyAttribution, visibleButtonOverflowAttribution].includes(r.attribution));
+  assert.equal(batch.length, 36); assert.equal(batch.reduce((n, r) => n + r.occurrences, 0), 1951);
+  assert.equal(proposal.filter(r => r.attribution === 'unresolved').length, 1060);
+  assert.deepEqual(proposal.map(raw), combinedRows.map(raw));
+  for (let i = 0; i < proposal.length; i++) if (!batch.includes(proposal[i])) assert.deepEqual(proposal[i], combinedRows[i]);
   assert.equal(run({ status: 'unbound' }, combinedRows, cases, inventory, combinedControl, normalize, ...Object.values(functions)), combinedRows);
   const validationStart = source.indexOf('      const authoredControlReplay =');
   const validationEnd = source.indexOf('      errors.push(...validateNormalLineBoxScalar(', validationStart);
   assert.ok(validationStart > 0 && validationEnd > validationStart);
-  const validators = { validateTabScalarTypography, validateButtonAuthoredTypography, collectControlTypographyEvidence };
+  const validators = { validateTabScalarTypography, validateButtonAuthoredTypography, validateVisibleButtonOverflow, collectControlTypographyEvidence };
   const validateProduction = new Function('report', 'replayedRows', 'cases', 'canonicalStyle',
     ...Object.keys(validators), 'const errors = [];\n' + source.slice(validationStart, validationEnd) + '\nreturn errors;');
   const validate = values => validateProduction({ discrepancies: values, elementInventory: inventory, controlTypography: combinedControl },
@@ -141,7 +153,7 @@ test('tab and button typography scalars retain exact existing control proofs and
   forgedControls.differences.find(d => d.attribution === 'reviewed-tab-label-typography-input').values.painted = 'forged';
   assert.ok(validateProduction({ discrepancies: proposal, elementInventory: inventory, controlTypography: forgedControls },
     combinedRows, cases, normalize, ...Object.values(validators)).length);
-  for (const attribution of [tabScalarTypographyAttribution, buttonAuthoredTypographyAttribution]) {
+  for (const attribution of [tabScalarTypographyAttribution, buttonAuthoredTypographyAttribution, visibleButtonOverflowAttribution]) {
     const changed = structuredClone(proposal);
     changed.find(r => r.attribution === attribution).reviewedCases.pop();
     assert.equal(validate(changed).length, 1);

@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { applyVisibleButtonOverflow, validateVisibleButtonOverflow, visibleButtonOverflowAttribution } from './control-overflow-observation.mjs';
 import { applyTabScalarTypography, validateTabScalarTypography, tabScalarTypographyAttribution } from './tab-scalar-typography.mjs';
 import { applyButtonAuthoredTypography, validateButtonAuthoredTypography, buttonAuthoredTypographyAttribution } from './normal-line-box-scalar.mjs';
 import { applyNormalLineBoxScalar, validateNormalLineBoxScalar, normalLineBoxScalarAttribution } from './normal-line-box-scalar.mjs';
@@ -287,7 +288,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     ? applyBottomSheetScalarTypography(applyDialogScalarTypography(applyDialogActionBox(applyDialogPanelConstraints(applyBottomSheetPanelConstraints(applyBottomSheetPanelFlow(applyBottomSheetPanelPaint(applyBottomSheetActionLayout(applyBottomSheetContrastCorners(overlaySurfaceDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, retainedTypography, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)
     : overlaySurfaceDiscrepancies;
   const authoredTypographyDiscrepancies = ownerInitialStyleBinding.status === 'bound'
-    ? applyButtonAuthoredTypography(applyTabScalarTypography(modalDiscrepancies, cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, controlTypography, canonicalStyle)
+    ? applyVisibleButtonOverflow(applyButtonAuthoredTypography(applyTabScalarTypography(modalDiscrepancies, cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)
     : modalDiscrepancies;
   const beforeNormalLineBoxScalars = ownerInitialStyleBinding.status === 'bound'
     ? applyTabControlStage(applyDialogTextFlow(authoredTypographyDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
@@ -650,6 +651,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.elementInventory, authoredControlReplay, canonicalStyle));
       errors.push(...validateButtonAuthoredTypography(report.discrepancies, replayedRows, cases,
         report.elementInventory, authoredControlReplay, canonicalStyle));
+      errors.push(...validateVisibleButtonOverflow(report.discrepancies, replayedRows, cases,
+        report.elementInventory, canonicalStyle));
       errors.push(...validateNormalLineBoxScalar(report.discrepancies, replayedRows, cases,
         report.elementInventory, report.controlTypography));
       errors.push(...validateRetainedFontScalar(report.discrepancies, replayedRows, cases,
@@ -718,7 +721,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))
     errors.push('button-host line-height attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>
-      [tabScalarTypographyAttribution, buttonAuthoredTypographyAttribution].includes(d.attribution)))
+      [tabScalarTypographyAttribution, buttonAuthoredTypographyAttribution, visibleButtonOverflowAttribution].includes(d.attribution)))
     errors.push('authored typography scalar attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === retainedFontScalarAttribution))
     errors.push('component font scalar attribution lacks bound original cases');
@@ -9006,6 +9009,9 @@ function sourceFingerprints(root) {
     'tests/material-parity/normal-line-box-scalar.spec.mjs',
     'tests/material-parity/tab-scalar-typography.mjs',
     'tests/material-parity/tab-scalar-typography-reuse.spec.mjs',
+    'tests/material-parity/button-overflow-initial.spec.mjs',
+    'scripts/audit-button-overflow-core.mjs',
+    'src/app/services/dom/input/button.manager.spec.ts',
     'tests/material-parity/retained-font-scalar.mjs',
     'tests/material-parity/retained-font-scalar.spec.mjs',
     'tests/material-parity/normal-line-box-evidence.mjs',

@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 27
 
+**Combined batch ready for cold export:** production application/validation now
+includes 24 button initial-overflow groups (1,432 observations) and 12 typography
+groups (519). Full original-membership replay preserves all 8,483 raw scalar
+rows and unrelated metadata; proposed unresolved count is **1,060**. Accepted
+canonical remains **ef6da409 / 1,096** until export and reconciliation complete.
+The overflow conclusion is limited to initial value/no-own-clipping branch, not
+structural, scrolling, ancestor-clip or raster equivalence. All ten applicable
+source/spec/runner fingerprints are pinned and checked before reuse.
+
+Verification: production replay + complete predecessor checks **16/16**, 24.28 s;
+extended conservation negative controls **21/21**, 62.25 s; browser button
+overflow sensitivity **1/1**, 1.35 s; exact core NullEngine clipping test **1/1**.
+The existing conservation command now supports `--authored-typography` for this
+36-group / 1,951-observation batch against ef6da409. After cold export: run it,
+compare all sections, explain refreshed control/normalization/source receipts,
+verify source fingerprints, then import/verify the new compact snapshot. Do not
+mark a generated snapshot accepted merely because its expected unresolved count
+is 1,060. No final browser gate or full audit completion is claimed.
+
 **Button core clipping question answered:** `node scripts/audit-button-overflow-core.mjs`
 passes the exact new Jasmine/NullEngine test (one test, 2.85 s on retained runner
 replay). It bundles only local spec dependencies in memory and imports installed

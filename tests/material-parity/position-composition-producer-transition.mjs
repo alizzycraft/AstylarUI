@@ -36,6 +36,18 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreAuthoredTypographyProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('visibleButtonOverflowAttribution')) {
+    for (const [from, to] of [
+      ["import { applyVisibleButtonOverflow, validateVisibleButtonOverflow, visibleButtonOverflowAttribution } from './control-overflow-observation.mjs';\n", ''],
+      ['applyVisibleButtonOverflow(applyButtonAuthoredTypography(applyTabScalarTypography(modalDiscrepancies, cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)', 'applyButtonAuthoredTypography(applyTabScalarTypography(modalDiscrepancies, cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, controlTypography, canonicalStyle)'],
+      ['      errors.push(...validateVisibleButtonOverflow(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n', ''],
+      ['[tabScalarTypographyAttribution, buttonAuthoredTypographyAttribution, visibleButtonOverflowAttribution]', '[tabScalarTypographyAttribution, buttonAuthoredTypographyAttribution]'],
+      ["    'tests/material-parity/button-overflow-initial.spec.mjs',\n    'scripts/audit-button-overflow-core.mjs',\n    'src/app/services/dom/input/button.manager.spec.ts',\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated button initial overflow integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   for (const [from, to] of [
     ["import { applyTabScalarTypography, validateTabScalarTypography, tabScalarTypographyAttribution } from './tab-scalar-typography.mjs';\n", ''],
     ["import { applyButtonAuthoredTypography, validateButtonAuthoredTypography, buttonAuthoredTypographyAttribution } from './normal-line-box-scalar.mjs';\n", ''],
