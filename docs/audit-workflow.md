@@ -63,6 +63,23 @@ These remain separate expensive milestone commands. Documentation-only work does
 not justify recapture. Renderer, fixture or capture-environment changes invalidate
 affected rendering evidence and still require the applicable final gates.
 
+For the retained **current-ancestry** baseline, use the named launcher instead of
+passing only `--parity-report` to the general exporter:
+
+```powershell
+node scripts/export-material-input-audit-current-ancestry.mjs --dry-run
+node scripts/export-material-input-audit-current-ancestry.mjs
+```
+
+It checks that all five required paths exist and supplies the original capture,
+three line-box reports, and supplemental root together. `--check` selects the
+existing canonical check instead of export. Cold/progress environment settings
+are forwarded unchanged. The dry run only checks invocation/path completeness;
+the existing collectors and validators still authenticate evidence. Do not use
+this historical baseline launcher for a different capture. A partial invocation
+has repeatedly produced expensive, incomplete reports; such output must never
+be imported as accepted evidence.
+
 ## Validated reuse
 
 Composition and followup position reviews share an evidence session: collect once,

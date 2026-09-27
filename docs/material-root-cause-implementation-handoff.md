@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 27
 
+**c8b3ceb export rejected; invocation failure, not renderer regression:** session
+96508 / PID 5144 is terminal (exit 1, 1,992.22 s). It omitted the three line-box
+reports and supplemental root, repeating the previously recorded incomplete-
+invocation failure. Result: 1,072 unresolved groups, 791 unclassified control
+observations, missing 120 static / 671 interactive normal-line-box observations,
+13 computed contexts, and unbound supplemental evidence. Its manifest/payload/
+Markdown are preserved under
+`artifacts/material-parity/authored-typography-export-c8b3ceb-missing-inputs/`;
+compressed SHA is `19b21ace12f21ea3d0c2d064bfc83aa8ab7461dadfe834fd981163895b673db3`.
+The log remains `artifacts/material-parity/authored-typography-export-c8b3ceb.log`.
+The accepted pointer remains ef6da409; do not import the rejected docs output.
+
+Use `node scripts/export-material-input-audit-current-ancestry.mjs` for the
+corrected run. This small launcher fixes the complete five-path invocation,
+checks file/directory existence before expensive work, forwards cold/progress
+settings and failure status, and offers `--dry-run` / `--check`. It does not
+weaken validation or authenticate inputs by existence alone. Syntax and dry-run
+checks pass; all required paths exist. After a corrected terminal result, inspect
+all errors before `--authored-typography` conservation and section/source
+reconciliation. The intended result is 1,060 unresolved, not audit completion.
+
 **Explicit nowrap history resolved:** card title/copy, paginator size/range,
 and slide-toggle label already authored nowrap in the original showcase commit
 `2f440115740ff76fa9e55b3f4a11568207b2af5a`. Checkbox label nowrap was introduced
