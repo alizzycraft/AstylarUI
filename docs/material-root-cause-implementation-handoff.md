@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 27
 
+- Cold complete-input typography export from **60df658** is running (session
+  **8290**, exporter PID **380**, log
+  `artifacts/material-parity/typography-export-60df658-complete-inputs.log`).
+  Live process checks show CPU advancing from 55.95 to 210.56 seconds while in
+  `build-audit`; do not restart it or accept partial output. Source/evidence
+  dependencies have not been edited during this run.
+  Read-only prioritization against accepted `462dddc7`: remaining box-sizing
+  splits into **10 explicit content-box/border-box groups / 621 observations**,
+  **32 content-box/omitted / 1,694**, and **7 border-box/omitted / 342**. Investigate
+  explicit authored differences first, then distinguish declarations, defaults,
+  measurement owners and used boxes for omissions; do not assume omitted means
+  content-box. Grid templates split into **59 none/omitted groups / 2,856
+  property observations** and **one explicit two-column substitution / 52**.
+  Reusing `proveGridPositionSubstitution` on all 52 hash-authenticated original
+  tree pairs confirms the latter belongs to the already-proven positioned-block
+  versus zero-gap-grid authoring mismatch. Native root computed templates are
+  both none; candidate columns are `1fr 1fr`. Ordered proof digest:
+  `b4d3f5ba15600b5c36b230e69b39c1d3b31fcbc9bbce8564e46cbd552589fdda`.
+  Reuse that ownership proof for future scalar classification; do not start a
+  new grid-renderer investigation for this row. No canonical count changed.
 - Existing canonical conservation checker now supports `--typography`, pinned
   to accepted `462dddc7` and the original capture hash. It independently rebuilds
   this batch from original trees and retained typography, requires the exact
