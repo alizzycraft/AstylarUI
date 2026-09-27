@@ -2,6 +2,37 @@
 
 ## Current audit checkpoint — September 27
 
+**Remaining normal/omitted wrapping review routed:** the existing conservative
+owner survey does not directly accept any of the 16 groups / 634 observations.
+This is not evidence of 634 renderer defects. Chips (152) are gated only by
+captured 1ms animation/transition declarations; table (52) explicitly declares
+`white-space-collapse: collapse` / `text-wrap-mode: wrap`; tab panel (70) has
+ancestor motion declarations and the already-proven competing plugin text path.
+Use the existing motion review and plugin finding, rather than repeat either
+investigation or broaden the default survey to ignore these distinctions.
+
+The other 360 observations belong to twelve overlay owners. Reusing the existing
+alias and declaration-path inspectors establishes native normal throughout the
+captured ancestry and candidate local omission at all captured non-synthetic
+stages. No wrapping/reset request appears on those reference paths. Nine
+bottom-sheet/dialog owners plus snackbar surface map without rule gaps (301
+observations); bottom-sheet-overlay (25) and snack-bar-overlay (34) retain the
+explicit scalar/tree rule gap for `.cdk-global-overlay-wrapper { z-index: 1000 }`.
+Do not erase that unrelated gap or treat missing candidate computed values as
+verified normal. Outer bottom-sheet anchor values also do not establish its
+nested nowrap label's equivalence to the flattened candidate button.
+
+Checks: read-only Node survey over the hash-pinned original capture (3.09 s),
+followed by the existing full-tree inventory/owner-path join (5.14 s, inventory
+errors empty). The first join deliberately requiring gap-free identity failed
+on bottom-sheet-overlay; the second retained and reported both rule-gap
+populations instead of discarding them. No canonical classification changed.
+Next: reuse these exact owner populations in the wrapping batch, retaining
+motion, nested-label and plugin obligations separately. No new framework or
+capture is needed. Export session 96508 / PID 5144 was confirmed live in
+validate-audit (CPU 1161.80 s, RSS 3.80 GB); reconciliation still waits for its
+terminal result.
+
 **Next wrapping batch scope established read-only:** the accepted compact index
 contains 30 unresolved whiteSpace groups / 1,478 observations. Original-tree
 checks separate six explicit candidate-nowrap substitutions (344 observations)
