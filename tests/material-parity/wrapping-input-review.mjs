@@ -87,6 +87,44 @@ const ancestry = (tree, node) => {
 const wrappingRequest = key => ['whitespace', 'whitespacecollapse', 'textwrap',
   'textwrapmode', 'textwrapstyle', 'all'].includes(key.replaceAll('-', '').toLowerCase());
 
+// A host's computed normal value does not describe its nested text owner.
+// Prove the missing label request without approving the host's motion/defaults.
+export function proveChipLabelWrapping(entry, input, reference, candidate, inventory) {
+  assert.equal(entry.family, 'chips');
+  assert.ok(['chip-0', 'chip-1'].includes(input.id));
+  const host = one(reference.nodes.filter(n => n.attributes?.id === input.id));
+  const astHost = one(candidate.nodes.filter(n => n.authored?.id === input.id));
+  const native = one(reference.nodes.filter(n => n.key.startsWith(host.key + '/') &&
+    String(n.attributes?.class).split(/\s+/).includes('mdc-evolution-chip__text-label')));
+  const label = one(candidate.nodes.filter(n => n.parent === astHost.key && n.authored?.id === `${input.id}-label`));
+  assert.equal(native.type, 'span'); assert.equal(label.authored.type, 'span');
+  assert.equal(native.ownText.trim(), label.authored.textContent);
+  assert.equal(reference.styles[native.style].whiteSpace, 'nowrap');
+  const rule = one(native.rules.map(i => reference.rules[i]).filter(r => r.active &&
+    r.selector === '.mdc-evolution-chip__text-label'));
+  assert.equal(rule.declarations['white-space-collapse']?.value, 'collapse');
+  assert.equal(rule.declarations['text-wrap-mode']?.value, 'nowrap');
+  const path = ancestry(candidate, label).filter(n => n.key !== 'root');
+  for (const n of path) {
+    for (const style of [n.authored.style ?? {}, n.resolvedStyle, n.normalResolvedStyle, n.interactionResolvedStyle]) {
+      assert.ok(style); assert.ok(!Object.keys(style).some(wrappingRequest));
+    }
+    assert.ok(!/(?:^|;)\s*(?:white-space(?:-collapse)?|text-wrap(?:-mode|-style)?|all)\s*:/i.test(n.authored.attributes?.style ?? ''));
+    for (const applicable of candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, n.authored)))
+      assert.ok(!Object.keys(applicable).some(wrappingRequest));
+  }
+  assert.equal(label.retainedText?.source, 'core-text-registry');
+  const retained = inventory.styles[label.retainedText.style];
+  assert.equal(retained.side, 'astylar'); assert.equal(retained.value.whiteSpace, undefined);
+  assert.equal(label.paintedControlText, undefined);
+  return { case: keyOf(entry), element: label.authored.id, referenceNode: native.key,
+    astylarNode: label.key, selector: rule.selector, text: label.authored.textContent,
+    reference: 'nowrap', candidateLocalDeclaration: '<omitted>',
+    candidateCapturedPath: path.map(n => n.key), classification: 'application-plugin-authoring-defect',
+    candidateComputedVerified: false, externalInheritanceVerified: false,
+    hostMotionReviewed: false, rendererCauseProven: false, renderingEquivalent: false };
+}
+
 export function proveOmittedNowrap(entry, input, reference, candidate, inventory) {
   assert.equal(entry.family, omittedNowrapTargets[input.id][0]);
   const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));

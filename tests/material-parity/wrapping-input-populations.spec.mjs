@@ -11,7 +11,8 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNowrap,
   validateExplicitNowrap, explicitNowrapAttribution, applyOmittedNowrap,
   validateOmittedNowrap, omittedNowrapAttribution, proveOmittedNowrap,
-  applyOverlayNormal, validateOverlayNormal, overlayNormalAttribution, proveOverlayNormal } from './wrapping-input-review.mjs';
+  applyOverlayNormal, validateOverlayNormal, overlayNormalAttribution, proveOverlayNormal,
+  proveChipLabelWrapping } from './wrapping-input-review.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
@@ -231,10 +232,24 @@ test('chip host normal values do not conceal nested native nowrap labels in 152 
       assert.equal(label.retainedText?.source, 'core-text-registry');
       assert.equal(inventory.styles[label.retainedText.style].value.whiteSpace, undefined);
       assert.equal(label.paintedControlText, undefined);
+      const proof = proveChipLabelWrapping(entry, input, r, a, inventory);
+      assert.equal(proof.classification, 'application-plugin-authoring-defect');
+      assert.equal(proof.hostMotionReviewed, false);
       labels++;
     }
   }
   assert.equal(labels, 152);
+  const entry = cases[0], input = one(entry.styleInputs.filter(i => i.id === 'chip-0'));
+  const [reference, candidate] = modalInventoryTrees(inventory, keyOf(entry));
+  for (const property of ['whiteSpace', 'text-wrap-mode', 'all']) {
+    const altered = structuredClone(candidate);
+    altered.rules.push({ selector: '.chip-label', [property]: 'nowrap' });
+    assert.throws(() => proveChipLabelWrapping(entry, input, reference, altered, inventory));
+  }
+  const altered = structuredClone(reference);
+  const rule = altered.rules.find(r => r.selector === '.mdc-evolution-chip__text-label');
+  rule.declarations['text-wrap-mode'].value = 'wrap';
+  assert.throws(() => proveChipLabelWrapping(entry, input, altered, candidate, inventory));
 });
 
 test('360 overlay host observations preserve rule gaps and nested bottom-sheet nowrap text', () => {

@@ -21,6 +21,15 @@
 - Latest focused verification: wrapping suite **5/5, 21.92 s**. No renderer or
   fixture changes. The overall audit still includes other scalar families,
   final canonical reconciliation and enforced full browser acceptance.
+- Chip label boundary strengthened: **152/152** original nested labels explicitly
+  request native collapse/nowrap; candidate captured ancestry, applicable rules,
+  inline declarations and retained label records omit the wrapping request.
+  `node --test --test-name-pattern='chip host normal' tests/material-parity/wrapping-input-populations.spec.mjs`
+  passes **1/1, 4.52 s**, including mutation rejection for candidate requests/resets
+  and a changed native wrapping request. This establishes missing authored label
+  input, not candidate computed normal or a core wrapping defect. It does not
+  classify the two host scalar groups or waive their remaining motion review.
+  Current export session 57045/PID 21308 was revalidated live; do not restart it.
 
 ### Supporting checkpoint history (not current process status)
 
