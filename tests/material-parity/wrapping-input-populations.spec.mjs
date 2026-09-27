@@ -327,7 +327,7 @@ test('360 overlay host observations preserve rule gaps and nested bottom-sheet n
   const normalize = bindPreciseAuditNormalization();
   const applied = applyOverlayNormal(rows, cases, inventory, normalize);
   const changed = applied.filter(r => r.attribution === overlayNormalAttribution);
-  assert.equal(changed.length, 6); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 168);
+  assert.equal(changed.length, 12); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 360);
   assert.deepEqual(validateOverlayNormal(applied, rows, cases, inventory, normalize), []);
   const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
   const rawRow = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
@@ -345,6 +345,19 @@ test('360 overlay host observations preserve rule gaps and nested bottom-sheet n
   const forged = structuredClone(applied);
   forged.find(r => r.attribution === overlayNormalAttribution).reviewEvidence.observations[0].candidateComputedVerified = true;
   assert.equal(validateOverlayNormal(forged, rows, cases, inventory, normalize).length, 1);
+  const dialog = cases.find(e => e.styleInputs.some(i => i.id === 'dialog-save'));
+  const dialogInput = one(dialog.styleInputs.filter(i => i.id === 'dialog-save'));
+  const [dr, da] = modalInventoryTrees(inventory, keyOf(dialog));
+  for (const mutate of [
+    r => { r.rules.find(x => x.selector === '._mat-animation-noopable .mat-mdc-dialog-surface').active = false; },
+    r => { r.rules.find(x => x.selector === '._mat-animation-noopable .mat-mdc-dialog-surface').declarations['transition-property'].value = 'all'; },
+    r => { r.rules.find(x => x.selector === '.mat-mdc-dialog-surface').cssText = 'transition: white-space 1s;'; },
+    r => { r.rules.find(x => x.selector === '._mat-animation-noopable .mat-mdc-dialog-surface').source = 'sheet:999/0'; },
+    r => { r.rules.find(x => x.declarations['animation-name']).declarations['animation-name'].value = 'wrap-change'; },
+  ]) {
+    const altered = structuredClone(dr); mutate(altered);
+    assert.throws(() => proveOverlayNormal(dialog, dialogInput, altered, da));
+  }
 });
 
 test('table normal requests and private tab-panel text remain distinct in 122 host observations', () => {

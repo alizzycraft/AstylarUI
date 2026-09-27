@@ -14,11 +14,11 @@
   compact import/verify. Expected 36-group / 1,951-observation batch and 1,060
   unresolved is an expectation, not acceptance. Keep its dependencies frozen.
 - Wrapping preparation is outside that export: all 30 groups / 1,478 original
-  observations have repeatable checks; **20 groups / 1,012 observations** have
-  classification logic prepared. Ten groups / 466 observations remain: chips
-  152, dialog 192, table 52, private tab panel 70. Investigate these boundaries,
+  observations have repeatable checks; **26 groups / 1,204 observations** have
+  classification logic prepared. Four groups / 274 observations remain: chips
+  152, table 52, private tab panel 70. Investigate these boundaries,
   then integrate a coherent batch; do not rebuild per metadata row.
-- Latest focused verification: wrapping suite **5/5, 21.92 s**. No renderer or
+- Latest focused verification: wrapping suite **5/5, 30.87 s**. No renderer or
   fixture changes. The overall audit still includes other scalar families,
   final canonical reconciliation and enforced full browser acceptance.
 - Chip label boundary strengthened: **152/152** original nested labels explicitly
@@ -30,6 +30,17 @@
   input, not candidate computed normal or a core wrapping defect. It does not
   classify the two host scalar groups or waive their remaining motion review.
   Current export session 57045/PID 21308 was revalidated live; do not restart it.
+- Dialog wrapping motion boundary resolved for **six groups / 192 observations**:
+  empty CSSOM transition longhands retain variable-dependent shorthands in
+  `cssText`. Exact active same-sheet higher-specificity noopable overrides supply
+  `transition: none`; remaining captured targets are none/box-shadow and animation
+  names none. Preserve original declarations and false settlement/indirect-effect
+  flags. The host rows classify only different observation stages, not equivalent
+  rendering or candidate computed defaults. Negative controls reject inactive or
+  changed overrides, changed shorthand, changed sheet/order and named animation.
+  Initial focused attempts rejected unhandled animation longhands; review now
+  admits only the known fields with explicit animation-name none. Full suite
+  passes; no canonical attribution changes until the pending export is reconciled.
 
 ### Supporting checkpoint history (not current process status)
 

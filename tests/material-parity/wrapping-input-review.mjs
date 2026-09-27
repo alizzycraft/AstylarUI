@@ -201,7 +201,65 @@ export const overlayNormalTargets = Object.freeze({
   'bottom-sheet-overlay': 'bottom-sheet', 'bottom-sheet-panel': 'bottom-sheet',
   'bottom-sheet-dismiss': 'bottom-sheet', 'bottom-sheet-copy': 'bottom-sheet',
   'snack-bar-overlay': 'snack-bar', 'snack-bar-surface': 'snack-bar',
+  'dialog-title': 'dialog', 'dialog-copy': 'dialog', 'dialog-cancel': 'dialog',
+  'dialog-save': 'dialog', 'dialog-panel': 'dialog', 'dialog-actions': 'dialog',
 });
+const transitionNone = { 'transition-behavior': 'normal', 'transition-duration': '0s',
+  'transition-timing-function': 'ease', 'transition-delay': '0s', 'transition-property': 'none' };
+const animationFields = new Set(['animation-name', 'animation-duration', 'animation-delay',
+  'animation-timing-function', 'animation-iteration-count', 'animation-direction',
+  'animation-fill-mode', 'animation-play-state', 'animation-timeline', 'animation-range-start', 'animation-range-end']);
+const motionKey = key => /^(animation|transition)/.test(key.replaceAll('-', '').toLowerCase());
+export function proveDialogWrappingMotion(trace, reference) {
+  const overrides = [], disjoint = [];
+  for (const node of trace.candidatePath) {
+    for (const declarations of [node.inline, ...Object.values(node.declarations),
+      ...node.possibleRules.map(r => r.declarations)])
+      assert.ok(!Object.keys(declarations).some(motionKey));
+  }
+  for (const node of trace.referencePath) {
+    assert.ok(!Object.keys(node.inline).some(motionKey));
+    for (const request of node.rules) {
+      const entries = Object.entries(request.declarations).filter(([key]) => motionKey(key));
+      if (!entries.length) continue;
+      assert.equal(request.active, true); assert.deepEqual(request.conditions, []);
+      const rule = reference.rules[request.index];
+      if (entries.some(([, d]) => d.value === '')) {
+        const shorthand = { '.mat-mdc-dialog-inner-container': 'opacity linear var(--mat-dialog-transition-duration, 0ms)',
+          '.mat-mdc-dialog-surface': 'transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1)' }[rule.selector];
+        assert.ok(shorthand);
+        assert.ok(rule.cssText.split(';').map(s => s.trim()).includes(`transition: ${shorthand}`));
+        assert.deepEqual(Object.fromEntries(entries), Object.fromEntries(Object.keys(transitionNone)
+          .map(key => [key, { value: '', important: false }])));
+        const override = one(node.rules.filter(r => r.selector === `._mat-animation-noopable ${rule.selector}`));
+        assert.equal(override.active, true); assert.deepEqual(override.conditions, []);
+        assert.deepEqual(override.declarations, Object.fromEntries(Object.entries(transitionNone)
+          .map(([key, value]) => [key, { value, important: false }])));
+        // Exact class vs descendant-class selectors: 0,1,0 < 0,2,0.
+        // Also bind their original sheet/order rather than relying on list order.
+        const before = /^sheet:(\d+)\/(\d+)$/.exec(rule.source);
+        const after = /^sheet:(\d+)\/(\d+)$/.exec(reference.rules[override.index].source);
+        assert.ok(before && after); assert.equal(before[1], after[1]); assert.ok(+after[2] > +before[2]);
+        overrides.push({ node: node.node, source: rule.source, cssText: rule.cssText,
+          declarations: request.declarations, override: reference.rules[override.index] });
+      } else {
+        for (const [key, value] of entries) {
+          assert.ok(Object.hasOwn(transitionNone, key) || animationFields.has(key), `${request.selector}: ${JSON.stringify(request.declarations)}`);
+          assert.equal(typeof value.important, 'boolean');
+          assert.ok(typeof value.value === 'string' && value.value.trim() && !/var\(|env\(|inherit|initial|revert|unset/.test(value.value));
+        }
+        if (entries.some(([key]) => key.startsWith('transition-')))
+          assert.ok(['none', 'box-shadow'].includes(request.declarations['transition-property']?.value));
+        if (entries.some(([key]) => key.startsWith('animation-')))
+          assert.equal(request.declarations['animation-name']?.value, 'none');
+        disjoint.push({ node: node.node, ...request });
+      }
+    }
+  }
+  assert.ok(overrides.length >= 2);
+  return { overrides, disjoint, disposition: 'captured-wrapping-motion-targets-disjoint',
+    animationSettlementVerified: false, indirectEffectsExcluded: false };
+}
 export const overlayNormalAttribution = 'reviewed-overlay-wrapping-observation-stage';
 export function proveOverlayNormal(entry, input, reference, candidate) {
   assert.equal(entry.family, overlayNormalTargets[input.id]);
@@ -214,7 +272,9 @@ export function proveOverlayNormal(entry, input, reference, candidate) {
   assert.deepEqual(identity.missingRules, gap ? [{ selector: '.cdk-global-overlay-wrapper',
     declarations: { 'z-index': { value: '1000', important: false } } }] : []);
   const trace = inspectOverlayOwnerDeclarations('whiteSpace', identity, reference, candidate);
-  assert.equal(trace.hasRelevantRequest, false); assert.equal(trace.hasMotionRequest, false);
+  assert.equal(trace.hasRelevantRequest, false);
+  const motionReview = entry.family === 'dialog' ? proveDialogWrappingMotion(trace, reference) : undefined;
+  if (!motionReview) assert.equal(trace.hasMotionRequest, false);
   for (const node of trace.candidatePath)
     assert.ok(!/(?:^|;)\s*(?:white-space(?:-collapse)?|text-wrap(?:-mode|-style)?|all|animation[^:;]*|transition[^:;]*)\s*:/i
       .test(node.authored.attributes?.style ?? ''));
@@ -238,6 +298,7 @@ export function proveOverlayNormal(entry, input, reference, candidate) {
   }
   return { case: keyOf(entry), element: input.id, referenceNode: identity.referenceNode,
     astylarNode: identity.candidateNode, identity, trace, ...(nestedText ? { nestedText } : {}),
+    ...(motionReview ? { motionReview } : {}),
     candidateComputedVerified: false, externalInheritanceVerified: false,
     inputEquivalent: false, renderingEquivalent: false };
 }
@@ -248,7 +309,7 @@ export function applyOverlayNormal(rows, cases, inventory, normalize) {
       family, element, properties: ['whiteSpace'], attribution: overlayNormalAttribution,
       classification: 'parity-harness-defect',
       owner: 'input audit computed host wrapping versus local declaration observation stages',
-      justification: 'Exact mapped host scalars compare native computed normal with omitted candidate local declarations. Captured owner ancestry has no wrapping/reset or motion request. This diagnoses different observation stages, not candidate computed normal or equivalent authoring/rendering. Preserve the unrelated z-index scalar-rule gaps and nested bottom-sheet nowrap labels with their existing structure finding. External inheritance, descendants, plugin/control consumption and final raster remain separate obligations.',
+      justification: 'Exact mapped host scalars compare native computed normal with omitted candidate local declarations. Captured owner ancestry has no wrapping/reset request. Non-dialog owners have no motion requests; dialog variable-dependent transition shorthands have exact active higher-specificity noopable overrides, and remaining captured motion targets are none or box-shadow. This diagnoses different observation stages, not candidate computed normal or equivalent authoring/rendering. Preserve motion records without claiming settlement or excluding indirect effects, unrelated z-index scalar-rule gaps, and nested bottom-sheet nowrap labels. External inheritance, descendants, plugin/control consumption and final raster remain separate obligations.',
       prove: (entry, reference, candidate) => proveOverlayNormal(entry,
         one(entry.styleInputs.filter(i => i.id === element)), reference, candidate),
     }), rows);
