@@ -40,6 +40,19 @@ changes were made, and this checkpoint does not establish rendering equivalence.
 
 ### Prepared work and prior checkpoint history
 
+September 28 grid/height producer wiring: the combined join now follows box-sizing,
+requires bound original cases, and independently replays the existing tab-control
+height predecessor. Exact producer restoration authenticates the complete accepted
+box-sizing source (SHA-256 `da1d8d901dbf5ab07bcaddfe3dffb38e8753fb9e50286be10a25d53e05ac862f`)
+and rejects missing guards or unrelated edits. The initial focused run exposed an
+eager attribution-list read through the existing evidence/producer import cycle;
+the combined membership check now runs after initialization. Rerun:
+`node --test tests/material-parity/position-composition-producer-transition.spec.mjs tests/material-parity/mapped-grid-template-review.spec.mjs tests/material-parity/control-height-request-review.spec.mjs`
+passed **21/21 in 77.82 seconds**, including the 103-group/4,322-observation replay.
+Canonical counts remain unchanged. Next extend the existing canonical conservation
+mode for this batch and verify full producer replay/section reconciliation before
+accepting a new export. The focused proof is not full canonical acceptance.
+
 The grid/height batch now has combined replay validation in the existing grid
 review module, tested against the accepted box-sizing compact generation above.
 It prepares exactly **103 groups / 4,322 observations**, preserving every raw

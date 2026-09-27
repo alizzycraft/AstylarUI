@@ -11,6 +11,20 @@ import { restoreAuthoredTypographyProducer } from './position-composition-produc
 import { restoreWrappingProducer } from './position-composition-producer-transition.mjs';
 import { restoreTypographyReviewProducer } from './position-composition-producer-transition.mjs';
 import { restoreBoxSizingReviewProducer } from './position-composition-producer-transition.mjs';
+import { restoreGridHeightReviewProducer } from './position-composition-producer-transition.mjs';
+
+test('grid/height integration restores the complete accepted box-sizing predecessor', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'c74c018:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreGridHeightReviewProducer(current).restoredSource, previous);
+  for (const fragment of ['applyGridHeightReviews(beforeGridHeightReviews, cases',
+    'replayGridHeightPredecessors(replayedRows, cases',
+    "errors.push('grid/height review attribution lacks bound original cases');",
+    "    'tests/material-parity/mapped-grid-template-review.mjs',\n"])
+    assert.throws(() => restoreGridHeightReviewProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreGridHeightReviewProducer(current + '\n// unrelated'));
+});
 
 test('box-sizing integration restores the complete accepted typography predecessor', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

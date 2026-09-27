@@ -3,9 +3,14 @@ import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { inspectOwnerGridInitial } from './owner-grid-initial-evidence.mjs';
-import { applyModalBoxReview, modalInventoryTrees } from './modal-position-inspection.mjs';
+import { applyModalBoxReview, modalInventoryTrees, applyTabControlStage } from './modal-position-inspection.mjs';
 import { proveGridPositionSubstitution } from '../../scripts/audit-material-grid-position-substitution.mjs';
-import { applyHeightRequestReviews } from './control-height-request-review.mjs';
+import { applyHeightRequestReviews, heightReviewAttributions } from './control-height-request-review.mjs';
+
+export function replayGridHeightPredecessors(rows, cases, inventory, normalize) {
+  return applyTabControlStage(rows.filter(r => ['gridTemplateColumns', 'gridTemplateRows', 'height'].includes(r.property)),
+    cases, inventory, normalize);
+}
 
 export function applyGridHeightReviews(rows, cases, inventory, normalize) {
   return applyHeightRequestReviews(applyGridTemplateReviews(rows, cases, inventory, normalize), cases, inventory, normalize);
@@ -27,6 +32,11 @@ export const gridTemplateReviewAttributions = Object.freeze([
   'reviewed-grid-template-layout-substitution', 'reviewed-mapped-grid-template-observation-stage',
   'reviewed-direct-grid-template-motion-boundary',
 ]);
+// Evaluate after module initialization: the existing evidence graph also imports
+// the producer for inventory helpers, so eager cross-module reads are unsafe.
+export function isGridHeightReviewAttribution(value) {
+  return gridTemplateReviewAttributions.includes(value) || heightReviewAttributions.includes(value);
+}
 export function applyGridTemplateReviews(rows, cases, inventory, normalize) {
   return rows.map(row => {
     if (row.attribution !== 'unresolved' || !['gridTemplateColumns', 'gridTemplateRows'].includes(row.property)) return row;

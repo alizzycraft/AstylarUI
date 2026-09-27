@@ -33,9 +33,27 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreBoxSizingReviewProducer(source) {
+export function restoreGridHeightReviewProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyGridHeightReviews, validateGridHeightReviews, replayGridHeightPredecessors, isGridHeightReviewAttribution } from './mapped-grid-template-review.mjs';\n", ''],
+    ["  const beforeGridHeightReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyGridHeightReviews(beforeGridHeightReviews, cases, elementInventory, canonicalStyle)\n    : beforeGridHeightReviews;\n", ''],
+    ["      errors.push(...validateGridHeightReviews(report.discrepancies.filter(r => ['gridTemplateColumns', 'gridTemplateRows', 'height'].includes(r.property)),\n        replayGridHeightPredecessors(replayedRows, cases, report.elementInventory, canonicalStyle),\n        cases, report.elementInventory, canonicalStyle));\n", ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => isGridHeightReviewAttribution(d.attribution)))\n    errors.push('grid/height review attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/mapped-grid-template-review.mjs',\n    'tests/material-parity/mapped-grid-template-review.spec.mjs',\n    'tests/material-parity/control-height-request-review.mjs',\n    'tests/material-parity/control-height-request-review.spec.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated grid/height review integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'da1d8d901dbf5ab07bcaddfe3dffb38e8753fb9e50286be10a25d53e05ac862f',
+    'producer changed beyond reviewed grid/height integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreBoxSizingReviewProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const beforeGridHeightReviews =') ? restoreGridHeightReviewProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyBoxSizingReviews, validateBoxSizingReviews, replayBoxSizingPredecessors, boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';\n", ''],
     ["  const beforeBoxSizingReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
