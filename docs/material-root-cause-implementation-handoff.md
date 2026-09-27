@@ -80,6 +80,26 @@ then paint (62 background-color and 46 color groups), retaining the remaining
 position, interaction and typography coverage rather than treating these as the
 entire scope. No existing investigation has been restarted.
 
+While the box-sizing cold export runs from `6a23c58` (session 17927, exporter
+PID 17000, log `artifacts/material-parity/box-sizing-export-6a23c58.log`), only
+read-only grid triage and this ledger were changed. Reusing
+`inspectOwnerGridInitial` against hash-authenticated original trees and current
+compact membership explains all 59 none/omitted groups / 2,856 observations:
+1,920 reference motion holds, 884 mapping holds, and 52 grid-list row-template
+observations held because the candidate explicitly requests two columns. The
+separate 52 column-template substitutions already have the historical proof.
+`resolveOriginAliasPair` resolves 766 mapping observations and preserves 118
+overlay `mapped-with-scalar-rule-gap` observations; do not erase that gap.
+Motion declaration populations are 1,144 box-shadow + disabled-none, 272 none,
+120 border + disabled-none, 40 opacity, 40 opacity + none, and **304 chips with
+duration 1ms but no explicit transition target**. The last population must not
+be called inactive/disjoint merely from duration. These are declaration records,
+not proof of animation settlement or used-grid equivalence. Ordered triage
+receipt digest: `cabed18667ac23146d5f9ba5b7ad83d84363df42ded9a50edb238279ecdbb739`.
+Next reuse mapped-owner declaration checks and exact motion-target proofs for
+these populations; keep chip target uncertainty and grid-list authoring distinct.
+No new reports or captures were written and no canonical count changed.
+
 ### Earlier preparation notes (historical job statuses)
 
 - Prepared box-sizing proofs now run through existing `applyModalBoxReview`
