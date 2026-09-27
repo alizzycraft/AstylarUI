@@ -144,6 +144,20 @@ The current showcase still has `.progress` height 8px at astylar.component.ts:78
 this corroborates authoring, not the installed plugin's used height. No new
 capture or report was created. Export remains live (CPU 1,061.61 s); no restart.
 
+`control-height-request-review.mjs` now proves the 14 explicit-height groups /
+338 observations using the existing validated inventory, control-width owner
+proofs and private tab-panel boundary. All 89 native scalar fields and three
+candidate stages are joined; full candidate height rules (including tab media
+overrides) and the progress token expression remain visible. Native inline
+height, candidate logical-size and altered normal-stage injections are rejected.
+Focused spec passed 1/1 in 19.99 s. Raw captured trees lack the inventory's
+`ruleEvidenceComplete` assertion expected by the reused width proof, so the test
+uses the existing validated inventory reconstruction rather than inventing that
+flag. This proof is not yet classified in the canonical report and makes no
+used-layout, compensation-intent or renderer-cause claim. New standalone helper/
+spec are outside the running export dependency graph. The export reached
+`validate-audit` at 903.66 seconds; reconciliation is still pending.
+
 ### Earlier preparation notes (historical job statuses)
 
 - Prepared box-sizing proofs now run through existing `applyModalBoxReview`
