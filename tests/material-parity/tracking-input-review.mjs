@@ -62,3 +62,55 @@ export function validateTrackingLabels(rows, originalRows, cases, inventory, ret
     return [];
   } catch (error) { return [`tracking label scalar join does not replay: ${error.message}`]; }
 }
+
+export const trackingHostAttribution = 'reviewed-toggle-host-tracking-boundary';
+export function proveToggleTrackingHost(entry, input, reference, candidate, retained) {
+  assert.equal(entry.family, 'button-toggle');
+  assert.ok(['button-toggle-one', 'button-toggle-two'].includes(input.id));
+  const native = one(reference.nodes.filter(n => n.attributes?.id === input.id));
+  const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));
+  assert.equal(native.type, 'mat-button-toggle'); assert.equal(native.ownText, '');
+  assert.equal(ast.authored.type, 'div'); assert.equal(ast.authored.textContent, undefined);
+  assert.equal(ast.retainedText, undefined);
+  for (const [property, value] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][property], value);
+  assert.equal(input.reference.letterSpacing, '0.096px');
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(ast[stage], input[scalar]); assert.equal(ast[stage].letterSpacing, undefined);
+  }
+  const token = one(native.rules.map(i => reference.rules[i]).filter(rule => rule.active &&
+    rule.selector === '.mat-button-toggle-appearance-standard'));
+  assert.deepEqual(token.declarations['letter-spacing'], {
+    value: 'var(--mat-button-toggle-label-text-tracking, var(--mat-sys-label-large-tracking))', important: false });
+  const label = one(retained.comparisons.filter(c => c.case === keyOf(entry) && c.element === `${input.id}-label`));
+  const leaf = one(reference.nodes.filter(n => n.key === label.referenceNode));
+  const button = one(reference.nodes.filter(n => n.key === leaf.parent));
+  const astLabel = one(candidate.nodes.filter(n => n.key === label.astylarNode));
+  assert.equal(leaf.type, 'span'); assert.equal(button.type, 'button'); assert.equal(button.parent, native.key);
+  for (const node of [button, leaf]) {
+    assert.equal(reference.styles[node.style].letterSpacing, 'normal');
+    assert.ok(!node.rules.map(i => reference.rules[i]).some(rule => rule.active &&
+      Object.keys(rule.declarations).some(k => ['letter-spacing', 'all'].includes(k))));
+  }
+  assert.equal(astLabel.parent, ast.key); assert.equal(astLabel.authored.id, `${input.id}-label`);
+  assert.equal(astLabel.authored.textContent, leaf.ownText);
+  assert.equal(label.source, 'core-text-registry'); assert.equal(label.currentPseudoStatePaintVerified, false);
+  assert.deepEqual(label.properties.letterSpacing, { reference: '0', retained: '0', normal: undefined, effective: undefined });
+  return { case: keyOf(entry), element: input.id, referenceNode: native.key, astylarNode: ast.key,
+    referenceHostToken: token.declarations['letter-spacing'], referenceHostTracking: '0.096px',
+    referenceLabelPath: [native.key, button.key, leaf.key], candidateLabelPath: [ast.key, astLabel.key],
+    labelComparisonSha256: createHash('sha256').update(JSON.stringify(label)).digest('hex'),
+    hostHasOwnText: false, leafTracking: label.properties.letterSpacing,
+    uncapturedResetCauseProven: false, candidateComputedVerified: false,
+    currentPseudoStatePaintVerified: false, rendererCauseProven: false,
+    inputEquivalent: false, renderingEquivalent: false };
+}
+export function applyToggleTrackingHosts(rows, cases, inventory, retained, normalize) {
+  return ['button-toggle-one', 'button-toggle-two'].reduce((values, element) => applyModalBoxReview(values, cases, inventory, normalize, {
+    family: 'button-toggle', element, properties: ['letterSpacing'], attribution: trackingHostAttribution,
+    owner: 'showcase button-toggle host request and nested text ownership',
+    justification: 'The native textless Material host requests a tracking token computing 0.096px; the replacement div omits it. Its nested native button/span compute normal, while the candidate direct span retains zero. Record the unequal host request without transferring its nonzero value to label glyphs or inferring an uncaptured reset cause, current paint equivalence or a renderer defect.',
+    prove: (entry, reference, candidate) => proveToggleTrackingHost(entry,
+      one(entry.styleInputs.filter(i => i.id === element)), reference, candidate, retained),
+  }), rows);
+}

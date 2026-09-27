@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 27
 
+- Button-toggle tracking boundary is now prepared for **two host groups / 136
+  observations**. Both mapped hosts are textless; the native Material host's
+  explicit token computes 0.096px, its nested button/span compute normal, and the
+  candidate direct label retains zero. The unequal host request is classified
+  separately from glyph tracking: copying 0.096px onto the label would not be
+  justified by this evidence. Complete paths and retained comparison hashes are
+  preserved; uncaptured reset cause, candidate computed defaults and current
+  paint remain unproved. The existing tracking population suite passed **1/1,
+  23.11 s**, including controls rejecting host text, changed label tracking and
+  a wrong host ancestry. All raw rows and previous classifications are conserved.
+  Together with the five-label join, this prepares all seven nonzero groups /
+  476 observations without changing canonical counts or exporter dependencies.
+  Next address the 39 zero/omitted groups with the already recorded request/motion
+  boundaries, not a new census; first reconcile the wrapping export when terminal.
 - Tracking scalar/retained join is now prepared for five label groups / **340
   observations**, using the existing `applyModalBoxReview` infrastructure and
   independently replayed retained typography. Exact native/candidate identities,

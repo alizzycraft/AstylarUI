@@ -9,6 +9,7 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { applyTrackingLabels, validateTrackingLabels, trackingLabelAttribution, proveTrackingLabel } from './tracking-input-review.mjs';
+import { applyToggleTrackingHosts, proveToggleTrackingHost, trackingHostAttribution } from './tracking-input-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
@@ -102,6 +103,21 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
   const forged = structuredClone(applied);
   forged.find(r => r.attribution === trackingLabelAttribution).reviewEvidence.observations[0].retainedProofSha256 = 'forged';
   assert.equal(validateTrackingLabels(forged, scalarRows, cases, inventory, retained, normalize).length, 1);
+  const hostApplied = applyToggleTrackingHosts(applied, cases, inventory, retained, normalize);
+  const hostChanges = hostApplied.filter(r => r.attribution === trackingHostAttribution);
+  assert.equal(hostChanges.length, 2); assert.equal(hostChanges.reduce((sum, r) => sum + r.occurrences, 0), 136);
+  assert.deepEqual(hostApplied.map(rawRow), applied.map(rawRow));
+  for (let i = 0; i < applied.length; i++) if (!hostChanges.includes(hostApplied[i])) assert.deepEqual(hostApplied[i], applied[i]);
+  const toggle = selected.find(e => e.family === 'button-toggle');
+  const toggleInput = one(toggle.styleInputs.filter(i => i.id === 'button-toggle-one'));
+  const [tr, ta] = modalInventoryTrees(inventory, keyOf(toggle));
+  for (const mutate of [r => { r.nodes.find(n => n.attributes?.id === toggleInput.id).ownText = 'List'; },
+    r => { const label = retained.comparisons.find(c => c.case === keyOf(toggle) && c.element === `${toggleInput.id}-label`);
+      r.styles[r.nodes.find(n => n.key === label.referenceNode).style].letterSpacing = '0.096px'; },
+    r => { r.nodes.find(n => n.attributes?.id === `${toggleInput.id}-button`).parent = 'wrong-host'; }]) {
+    const altered = structuredClone(tr); mutate(altered);
+    assert.throws(() => proveToggleTrackingHost(toggle, toggleInput, altered, ta, retained));
+  }
   const allRows = [...new Set(cases.map(e => e.family))].flatMap(family =>
     queryFindings('artifacts/material-parity/working-audit', family, snapshot))
     .filter(r => r.evidence.section === 'discrepancies' && r.attribution === 'unresolved' &&
