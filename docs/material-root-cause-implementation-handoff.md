@@ -11,14 +11,22 @@ rows proposes no additional shared-button groups: eight unresolved trigger group
 `docs/material-button-paint-all-states.json` in 9.40 seconds. Within those groups,
 33 activate/open observations have native pseudo-layer opacity zero but a candidate
 interaction background different from its normal background (the authored hover
-color). This is a state-boundary question, not evidence that all 53 observations
-share the active-layer composition diagnosis. Next trace overlay creation and
-hover invalidation versus capture settlement for those exact states; distinguish
-stale candidate hover, intentionally different hit testing and capture timing.
-The replay establishes applicability to the pinned capture, not current runtime
-behavior or a confirmed core cause. No new report or canonical classification was
-generated. Other paint populations still require their own owner/declaration
-proofs; do not apply this trigger diagnosis to tabs, chips or inherited text ink.
+color). Existing historical sections already connect these observations to the
+completed public passive-cover/stationary-hover reduction. Do not reopen that
+investigation: `public-hover-b8b0471-final/result.json` (SHA-256
+`d11c78684fb013027e98eef8510f7d311d40847b89ca23e65d0f30b90476b0d1`)
+and `public-hover-picking-cb547a8/result.json` (SHA-256
+`c7d0ea5498fb156bbdd04b2c34da345dd90cb4224cb2e3bb2ce4013649a007c3`)
+under `artifacts/material-parity/` prove the reduced core picking/revalidation
+defects with public equal-input browser evidence. Both receipts were rehashed.
+The 53-observation applicability receipt and distinct native layer populations
+are already recorded under “Overlay trigger/cancel paint review” below.
+Next implement the guarded scalar attribution join using those existing proofs,
+not another browser or unit reproduction. A redundant new unit characterization
+was removed before commit and its still-building test job deliberately stopped;
+it is not a passing test. The independent canonical export was not interrupted.
+The existing reduction is not proof of every original observation's causal path
+or current-runtime parity. Preserve that scope and the other paint populations.
 
 September 28 prepared height evidence: the existing height proof now covers all
 43 remaining groups / 1,414 original observations. Of these, 29 groups / 1,076
