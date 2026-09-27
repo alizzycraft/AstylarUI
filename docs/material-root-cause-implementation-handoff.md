@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 27
 
+**Deferred focused verification:** `button.manager.spec.ts` now has an uncommitted
+oversized-label test for omitted/visible/hidden overflow, using ButtonManager and
+the shared clip service. Command: `npm test -- --watch=false
+--browsers=ChromeHeadless --include=src/app/services/dom/input/button.manager.spec.ts`.
+Session **62212 was deliberately cancelled**, terminal exit 1, before any test
+result. At 09:08 local, esbuild PID 23356 used 5,139,394,560 bytes working set;
+only 695,740 KiB physical memory was free alongside the canonical export. Ctrl-C
+terminated this test's Angular/esbuild processes (18044/23356), both confirmed
+absent afterward; free memory recovered to 5,543,892 KiB. This is a resource-
+contention avoidance decision, not a test failure or a timeout-based restart.
+Do not run another Angular build alongside this export. Retry the focused command
+once export/reconciliation memory pressure permits, before committing the spec.
+Only the existing spec was edited, not renderer code or export dependencies.
+Export PID **16516** remains live in `validate-audit`, CPU 1,676.94 s. Recheck that
+handle before launching any duplicate. The prior build-audit timestamps include
+wall time and are not equivalent to process CPU time.
+
 **Remaining button-overflow investigation:** a new independent browser probe,
 `tests/material-parity/button-overflow-initial.spec.mjs`, passes **1/1** (1.57 s
 test body). Native button omission and explicit visible X/Y give identical
