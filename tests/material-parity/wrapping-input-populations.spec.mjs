@@ -10,7 +10,8 @@ import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-rev
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNowrap,
   validateExplicitNowrap, explicitNowrapAttribution, applyOmittedNowrap,
-  validateOmittedNowrap, omittedNowrapAttribution, proveOmittedNowrap } from './wrapping-input-review.mjs';
+  validateOmittedNowrap, omittedNowrapAttribution, proveOmittedNowrap,
+  applyOverlayNormal, validateOverlayNormal, overlayNormalAttribution, proveOverlayNormal } from './wrapping-input-review.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
@@ -303,6 +304,32 @@ test('360 overlay host observations preserve rule gaps and nested bottom-sheet n
   }
   assert.deepEqual(counts, expected);
   assert.equal(ruleGaps, 59); assert.equal(nestedLabels, 50);
+  const snapshot = { generation: 'ef6da409ae1162433b0419814fe7e7e33b7659805d8e672f407d8b4c84878145',
+    indexSha256: 'a25ffe1f2d083f23fafe6e615566544a9aedf7b9559e2084309551568982cca9' };
+  const rows = ['bottom-sheet', 'dialog', 'snack-bar'].flatMap(f =>
+    queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const normalize = bindPreciseAuditNormalization();
+  const applied = applyOverlayNormal(rows, cases, inventory, normalize);
+  const changed = applied.filter(r => r.attribution === overlayNormalAttribution);
+  assert.equal(changed.length, 6); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 168);
+  assert.deepEqual(validateOverlayNormal(applied, rows, cases, inventory, normalize), []);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const rawRow = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(rawRow), rows.map(rawRow));
+  for (let i = 0; i < applied.length; i++) if (applied[i].attribution !== overlayNormalAttribution)
+    assert.deepEqual(applied[i], rows[i]);
+  const entry = cases.find(e => e.styleInputs.some(i => i.id === 'bottom-sheet-panel'));
+  const input = one(entry.styleInputs.filter(i => i.id === 'bottom-sheet-panel'));
+  const [reference, candidate] = modalInventoryTrees(inventory, keyOf(entry));
+  for (const property of ['whiteSpace', 'transition', 'all']) {
+    const altered = structuredClone(candidate);
+    altered.rules.push({ selector: '#bottom-sheet-panel', [property]: 'initial' });
+    assert.throws(() => proveOverlayNormal(entry, input, reference, altered));
+  }
+  const forged = structuredClone(applied);
+  forged.find(r => r.attribution === overlayNormalAttribution).reviewEvidence.observations[0].candidateComputedVerified = true;
+  assert.equal(validateOverlayNormal(forged, rows, cases, inventory, normalize).length, 1);
 });
 
 test('table normal requests and private tab-panel text remain distinct in 122 host observations', () => {

@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — September 27
 
+- Accepted canonical: **ef6da409**, 1,096 unresolved groups. Do not import the
+  rejected 19b21ace docs output; it is retained as failed evidence.
+- Live corrected export: **session 57045**, exporter **PID 21308** (launcher
+  22792), source **00f8133**, currently validate-audit. Use the complete-input
+  launcher `node scripts/export-material-input-audit-current-ancestry.mjs`;
+  never substitute a parity-report-only invocation. Log:
+  `artifacts/material-parity/authored-typography-export-complete-inputs-00f8133.log`.
+- Next acceptance step: after terminal completion, inspect every error, then
+  `--authored-typography` conservation, all-section/source reconciliation and
+  compact import/verify. Expected 36-group / 1,951-observation batch and 1,060
+  unresolved is an expectation, not acceptance. Keep its dependencies frozen.
+- Wrapping preparation is outside that export: all 30 groups / 1,478 original
+  observations have repeatable checks; **20 groups / 1,012 observations** have
+  classification logic prepared. Ten groups / 466 observations remain: chips
+  152, dialog 192, table 52, private tab panel 70. Investigate these boundaries,
+  then integrate a coherent batch; do not rebuild per metadata row.
+- Latest focused verification: wrapping suite **5/5, 21.92 s**. No renderer or
+  fixture changes. The overall audit still includes other scalar families,
+  final canonical reconciliation and enforced full browser acceptance.
+
+### Supporting checkpoint history (not current process status)
+
+**Six non-motion overlay host groups prepared:** full original evidence shows
+no captured wrapping/reset or motion requests for 168 bottom-sheet/snackbar
+host observations. The existing scalar review mechanism classifies only the
+computed-host/local-declaration observation-stage discrepancy. It preserves
+59 z-index rule gaps, nested bottom-sheet nowrap label obligations, and false
+candidate-computed/external-inheritance/rendering-equivalence flags. Relevant
+request/reset/motion mutations and forged computed-value claims are rejected.
+Dialog's 192 observations instead contain empty CSSOM transition longhands and
+noopable declarations; they were not swept into this no-motion classification.
+
 **All 30 wrapping populations now have repeatable original-evidence checks:**
 `node --test tests/material-parity/wrapping-input-populations.spec.mjs` passes
 5/5 in 21.41 s, covering 1,478 observations without a new capture. The last

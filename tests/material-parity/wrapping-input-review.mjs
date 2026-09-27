@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 
 export const explicitNowrapTargets = Object.freeze({
   'card-title': ['card', '.card-title', 52],
@@ -156,4 +157,69 @@ export function validateOmittedNowrap(rows, originalRows, cases, inventory, norm
     assert.deepEqual(selected(rows), selected(applyOmittedNowrap(originalRows, cases, inventory, normalize)));
     return [];
   } catch (error) { return [`omitted native nowrap requests do not replay from original owners: ${error.message}`]; }
+}
+
+export const overlayNormalTargets = Object.freeze({
+  'bottom-sheet-overlay': 'bottom-sheet', 'bottom-sheet-panel': 'bottom-sheet',
+  'bottom-sheet-dismiss': 'bottom-sheet', 'bottom-sheet-copy': 'bottom-sheet',
+  'snack-bar-overlay': 'snack-bar', 'snack-bar-surface': 'snack-bar',
+});
+export const overlayNormalAttribution = 'reviewed-overlay-wrapping-observation-stage';
+export function proveOverlayNormal(entry, input, reference, candidate) {
+  assert.equal(entry.family, overlayNormalTargets[input.id]);
+  assert.equal(input.reference.whiteSpace, 'normal');
+  assert.equal(input.astylar.whiteSpace, undefined);
+  const identity = resolveOriginAliasPair(entry, reference, candidate, input);
+  const gap = ['bottom-sheet-overlay', 'snack-bar-overlay'].includes(input.id);
+  assert.equal(identity.status, gap ? 'mapped-with-scalar-rule-gap' : 'mapped');
+  assert.deepEqual(identity.extraRules, []);
+  assert.deepEqual(identity.missingRules, gap ? [{ selector: '.cdk-global-overlay-wrapper',
+    declarations: { 'z-index': { value: '1000', important: false } } }] : []);
+  const trace = inspectOverlayOwnerDeclarations('whiteSpace', identity, reference, candidate);
+  assert.equal(trace.hasRelevantRequest, false); assert.equal(trace.hasMotionRequest, false);
+  for (const node of trace.candidatePath)
+    assert.ok(!/(?:^|;)\s*(?:white-space(?:-collapse)?|text-wrap(?:-mode|-style)?|all|animation[^:;]*|transition[^:;]*)\s*:/i
+      .test(node.authored.attributes?.style ?? ''));
+  assert.ok(trace.referencePath.every(n => n.computed === 'normal'));
+  assert.ok(trace.candidatePath.filter(n => n.node !== 'root')
+    .every(n => Object.values(n.localValues).every(v => v === '<omitted>')));
+  // Native scalar rule omissions are preserved, not silently repaired; they
+  // concern z-index, not a wrapping/reset/motion declaration.
+  let nestedText;
+  if (['bottom-sheet-dismiss', 'bottom-sheet-copy'].includes(input.id)) {
+    const native = one(reference.nodes.filter(n => n.key === identity.referenceNode));
+    const ast = one(candidate.nodes.filter(n => n.key === identity.candidateNode));
+    assert.equal(native.type, 'a'); assert.equal(ast.authored.type, 'button');
+    const leaf = one(reference.nodes.filter(n => n.key.startsWith(native.key + '/') &&
+      String(n.attributes?.class).split(/\s+/).includes('mdc-list-item__primary-text')));
+    assert.equal(reference.styles[leaf.style].whiteSpace, 'nowrap');
+    assert.equal(leaf.ownText.trim(), ast.authored.value);
+    nestedText = { referenceNode: leaf.key, whiteSpace: 'nowrap',
+      sourceFinding: 'fixture-bottom-sheet-list-structure-and-token-substitution',
+      inputEquivalent: false };
+  }
+  return { case: keyOf(entry), element: input.id, referenceNode: identity.referenceNode,
+    astylarNode: identity.candidateNode, identity, trace, ...(nestedText ? { nestedText } : {}),
+    candidateComputedVerified: false, externalInheritanceVerified: false,
+    inputEquivalent: false, renderingEquivalent: false };
+}
+
+export function applyOverlayNormal(rows, cases, inventory, normalize) {
+  return Object.entries(overlayNormalTargets).reduce((values, [element, family]) =>
+    applyModalBoxReview(values, cases, inventory, normalize, {
+      family, element, properties: ['whiteSpace'], attribution: overlayNormalAttribution,
+      classification: 'parity-harness-defect',
+      owner: 'input audit computed host wrapping versus local declaration observation stages',
+      justification: 'Exact mapped host scalars compare native computed normal with omitted candidate local declarations. Captured owner ancestry has no wrapping/reset or motion request. This diagnoses different observation stages, not candidate computed normal or equivalent authoring/rendering. Preserve the unrelated z-index scalar-rule gaps and nested bottom-sheet nowrap labels with their existing structure finding. External inheritance, descendants, plugin/control consumption and final raster remain separate obligations.',
+      prove: (entry, reference, candidate) => proveOverlayNormal(entry,
+        one(entry.styleInputs.filter(i => i.id === element)), reference, candidate),
+    }), rows);
+}
+
+export function validateOverlayNormal(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const selected = values => values.filter(r => r.attribution === overlayNormalAttribution);
+    assert.deepEqual(selected(rows), selected(applyOverlayNormal(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`overlay wrapping stages do not replay from original owners: ${error.message}`]; }
 }
