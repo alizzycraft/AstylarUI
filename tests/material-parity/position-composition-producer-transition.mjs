@@ -43,7 +43,7 @@ export function restoreWrappingProducer(source) {
     ['    : wrappingDiscrepancies;\n', '    : beforeNormalLineBoxScalars;\n'],
     ['      errors.push(...validateWrappingReviews(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n', ''],
     ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => wrappingAttributions.includes(d.attribution)))\n    errors.push('wrapping attribution lacks bound original cases');\n", ''],
-    ["    'tests/material-parity/wrapping-input-review.mjs',\n    'tests/material-parity/wrapping-input-populations.spec.mjs',\n", ''],
+    ["    'tests/material-parity/wrapping-input-review.mjs',\n    'tests/material-parity/wrapping-input-populations.spec.mjs',\n    'examples/material-showcase/src/app/material-plugin/tab-panel-wrapping-audit.spec.ts',\n", ''],
   ]) {
     assert.equal(restored.split(from).length, 2, 'missing or repeated wrapping integration fragment');
     restored = restored.replace(from, to);

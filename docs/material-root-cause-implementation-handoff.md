@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 27
 
+- **Export source-binding failure resolved and independently checked.** The added
+  wrapping browser diagnostic now lives in `tab-panel-wrapping-audit.spec.ts`;
+  its body is byte-identical to the previous test. The historical typography spec
+  again has its original `1d6bf44d…` hash; no frozen evidence or validator was
+  weakened. Wrapping proof references and the producer fingerprint list include
+  the separate diagnostic; predecessor restoration retains its strict full hash.
+  Verification: tab proof + producer transition **18/18, 4.83 s**; reviewed-input
+  source binding **6/6, 110.25 s**, independently restoring all 134 groups / 3,325
+  observations; wrapping integration **6/6, 67.57 s**; both browser diagnostics
+  **2/2** in Chrome Headless 153 / Babylon 8.56.2; showcase development `ng build`
+  passed in **21.88 s**, two prerendered routes. Existing Zone.js and historical
+  font URL warnings remain; the wrapping diagnostic loads its explicit font.
+  Logs: `wrapping-receipt-binding-32f1a71.log`, `wrapping-split-focused-32f1a71.log`,
+  `tab-panel-split-browser-32f1a71.log`, `tab-panel-split-build-32f1a71.log` under
+  `artifacts/material-parity`. No renderer/reference fixture changed. Next run
+  the complete-input export once, then all existing wrapping conservation,
+  section/source reconciliation and compact verification before acceptance.
 - Explicit zero-normalized tracking tokens now have a focused proof for **112
   observations**: toolbar-title 40 inherits its token from an ancestor; card-title
   40 and dialog-title 32 declare theirs directly. Native computed `normal` does

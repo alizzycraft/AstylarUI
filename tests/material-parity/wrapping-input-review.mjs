@@ -396,7 +396,7 @@ export function proveTabPanelWrapping(entry, input, reference, candidate) {
   }
   return { case: keyOf(entry), element: input.id, referenceNode: native.key, astylarNode: ast.key, identity,
     sourceFinding: 'plugin-tab-panel-competing-text-renderer',
-    diagnostic: 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts',
+    diagnostic: 'examples/material-showcase/src/app/material-plugin/tab-panel-wrapping-audit.spec.ts',
     candidateLocalDeclaration: '<omitted>', candidateComputedVerified: false,
     coreRendererCauseProven: false, motionEquivalenceVerified: false, renderingEquivalent: false };
 }

@@ -9018,6 +9018,7 @@ function sourceFingerprints(root) {
     'tests/material-parity/tab-scalar-typography.mjs',
     'tests/material-parity/wrapping-input-review.mjs',
     'tests/material-parity/wrapping-input-populations.spec.mjs',
+    'examples/material-showcase/src/app/material-plugin/tab-panel-wrapping-audit.spec.ts',
     'tests/material-parity/tab-scalar-typography-reuse.spec.mjs',
     'tests/material-parity/button-overflow-initial.spec.mjs',
     'scripts/audit-button-overflow-core.mjs',
