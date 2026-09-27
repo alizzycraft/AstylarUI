@@ -8,7 +8,7 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions } from './control-state-paint-review.mjs';
 
-test('control paint preserves owner boundaries and all 381 captured observations', () => {
+test('control paint preserves owner boundaries and all 397 captured observations', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
@@ -16,15 +16,34 @@ test('control paint preserves owner boundaries and all 381 captured observations
     ...original.interactions.map(e => ({ ...e, kind: 'interaction' }))];
   const snapshot = { generation: 'd25a9078972edf1884a4e56a7c17f4a7b3d249d3ed22933811f69daa4aafda9a',
     indexSha256: 'c1934e90c7ca80ff121da83a6871d10da201f798f37cdb92f8badce7c24529ad' };
-  const rows = ['tabs', 'card', 'dialog', 'toolbar', 'grid-list', 'button-toggle', 'bottom-sheet', 'divider'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+  const rows = ['tabs', 'card', 'dialog', 'toolbar', 'grid-list', 'button-toggle', 'bottom-sheet', 'divider', 'slider'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
     .filter(r => r.evidence.section === 'discrepancies');
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
   assert.deepEqual(inventory.errors, []);
   const result = applyControlStatePaintReview(rows, cases, inventory, normalize);
   const reviewed = result.filter(r => [controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution,
     ...Object.values(specialPaintDefinitions).map(d => d.attribution)].includes(r.attribution));
-  assert.equal(reviewed.length, 52); assert.equal(reviewed.reduce((n, r) => n + r.occurrences, 0), 381);
+  assert.equal(reviewed.length, 54); assert.equal(reviewed.reduce((n, r) => n + r.occurrences, 0), 397);
   const observations = reviewed.flatMap(r => r.reviewEvidence.observations);
+  const ranges = observations.filter(o => o.defaultStageDivergence);
+  assert.equal(ranges.length, 16);
+  assert.ok(ranges.every(o => o.backgroundAuthoringEquivalent && o.originalInputLayersInvisible && !o.visibleThumbCauseProven));
+  assert.equal(hash(readFileSync('artifacts/material-parity/range-background-default-public-5ee5ae4.log')),
+    ranges[0].publicReductionLogSha256);
+  for (const observation of ranges) {
+    const entry = cases.find(e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}/${e.state}` === observation.case);
+    const input = entry.styleInputs.find(i => i.id === observation.element);
+    const [r, a] = modalInventoryTrees(inventory, observation.case);
+    const enabled = structuredClone(a);
+    enabled.nodes.find(n => n.key === observation.astylarNode).authored.disabled = false;
+    assert.throws(() => proveControlStatePaint(entry, input, r, enabled, normalize));
+    const authored = structuredClone(r);
+    authored.nodes.find(n => n.key === observation.referenceNode).inline.background = { value: 'transparent', important: false };
+    assert.throws(() => proveControlStatePaint(entry, input, authored, a, normalize));
+    const visible = structuredClone(input);
+    visible.astylar.opacity = '1';
+    assert.throws(() => proveControlStatePaint(entry, visible, r, a, normalize));
+  }
   const tabs = observations.filter(o => o.element.startsWith('tab-'));
   assert.deepEqual(['0', '0.04', '0.12'].map(opacity => tabs.filter(o => o.nativeLayerOpacity === opacity).length), [8, 26, 8]);
   const cancel = observations.filter(o => o.element === 'dialog-cancel');

@@ -10,11 +10,15 @@ const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 const targets = { tabs: ['tab-overview', 'tab-activity'], card: ['card-open', 'card-primary'], dialog: ['dialog-cancel'],
   toolbar: ['toolbar-action'], 'grid-list': ['grid-tile-one', 'grid-tile-two'], 'button-toggle': ['button-toggle-primary', 'button-toggle-two'],
-  'bottom-sheet': ['bottom-sheet-dismiss', 'bottom-sheet-overlay'], divider: ['divider-primary'] };
+  'bottom-sheet': ['bottom-sheet-dismiss', 'bottom-sheet-overlay'], divider: ['divider-primary'], slider: ['slider-start', 'slider-primary'] };
 export const controlStatePaintAttribution = 'reviewed-control-state-layer-substitution';
 export const cardSurfacePaintAttribution = 'reviewed-card-surface-token-substitution';
 export const opaqueSurfacePaintAttribution = 'reviewed-opaque-surface-fill-substitution';
 export const specialPaintDefinitions = Object.freeze({
+  'slider-start': { attribution: 'reviewed-disabled-range-background-default', classification: 'intentional-documented-limitation',
+    justification: 'Both disabled range owners omit background authoring; native computes transparent while all candidate style stages retain generic input white. The public equal-input reduction isolates disabled-state default selection, with enabled and explicit-transparent controls passing. This default-policy limitation is not same-input rendering parity. Original input opacity is zero; no visible thumb/ring, layout or drag diagnosis follows.' },
+  'slider-primary': { attribution: 'reviewed-disabled-range-background-default', classification: 'intentional-documented-limitation',
+    justification: 'Both disabled range owners omit background authoring; native computes transparent while all candidate style stages retain generic input white. The public equal-input reduction isolates disabled-state default selection, with enabled and explicit-transparent controls passing. This default-policy limitation is not same-input rendering parity. Original input opacity is zero; no visible thumb/ring, layout or drag diagnosis follows.' },
   'button-toggle-two': { attribution: 'reviewed-selected-toggle-paint-layer-substitution', classification: 'application-plugin-authoring-defect',
     justification: 'The native selected host keeps its base color with a separate theme-colored .08 focus overlay and captured ripple descendants. Candidate state rules replace the host background using different fixed blend colors. Preserve the captured layers and profile-dependent foreground; neither equal composition nor ripple timing follows from matching sampled fills.' },
   'bottom-sheet-dismiss': { attribution: 'reviewed-sheet-unconditional-focus-fill', classification: 'application-plugin-authoring-defect',
@@ -53,6 +57,28 @@ export function proveControlStatePaint(entry, input, reference, candidate, norma
   }
   const base = { case: keyOf(entry), element: input.id, referenceNode: native.key, astylarNode: ast.key,
     identity, candidateAuthoredRuleProjectionGaps, inputEquivalent: false, renderingEquivalent: false, rendererCauseProven: false };
+  if (entry.family === 'slider') {
+    assert.equal(entry.state, 'disabled');
+    assert.equal(native.type, 'input'); assert.equal(native.attributes.type, 'range');
+    assert.ok(Object.hasOwn(native.attributes, 'disabled'));
+    assert.equal(ast.authored.type, 'input'); assert.equal(ast.authored.inputType, 'range');
+    assert.equal(ast.authored.disabled, true);
+    const affects = key => /^(background|all$|animation|transition)/i.test(key);
+    assert.deepEqual(Object.keys(native.inline ?? {}).filter(affects), []);
+    for (const index of native.rules) assert.deepEqual(Object.keys(reference.rules[index].declarations).filter(affects), []);
+    for (const rule of input.astylarAuthored) assert.deepEqual(Object.keys(rule.declarations).filter(affects), []);
+    assert.equal(reference.styles[native.style].backgroundColor, 'rgba(0, 0, 0, 0)');
+    assert.equal(reference.styles[native.style].opacity, '0');
+    for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) {
+      assert.equal(ast[stage].background, '#ffffff'); assert.equal(ast[stage].opacity, '0');
+    }
+    return { ...base, backgroundAuthoringEquivalent: true, defaultStageDivergence: true,
+      originalInputLayersInvisible: true, visibleThumbCauseProven: false,
+      publicReduction: 'examples/material-showcase/src/app/range-background-default-audit.spec.ts',
+      publicReductionCommit: '93cbe54',
+      publicReductionLogSha256: '0b44bb9b05ecb484532407f49dfd6f35b1d57e9920ec09402548182f6d629560',
+      defaultOwner: 'src/app/config/browser-defaults.ts; src/app/services/dom/style-defaults.service.ts' };
+  }
   if (input.id === 'divider-primary') {
     const flow = proveFlowPositionSubstitution(reference, candidate, input.id);
     assert.equal(reference.styles[native.style].backgroundColor, 'rgba(0, 0, 0, 0)');
@@ -195,7 +221,8 @@ export function applyControlStatePaintReview(rows, cases, inventory, normalize) 
     const special = specialPaintDefinitions[row.element];
     return { ...row, classification: special?.classification ?? 'application-plugin-authoring-defect',
       attribution: special?.attribution ?? (surface ? cardSurfacePaintAttribution : opaque ? opaqueSurfacePaintAttribution : controlStatePaintAttribution),
-      recommendedOwner: 'Material comparison paint authoring; retain tab measurement-owner distinction',
+      recommendedOwner: row.family === 'slider' ? 'core input defaults and compatibility policy; not visible thumb paint'
+        : 'Material comparison paint authoring; retain tab measurement-owner distinction',
       justification: special?.justification ?? (surface
         ? 'The captured dark card resolves the native surface token to a different color than the candidate fixed surface request. These authored inputs already differ; token ancestry, compensation intent and renderer causation are not inferred.'
         : opaque ? 'The native owner has no own background/reset/motion request and computes transparent; the candidate explicitly requests an opaque surface fill at every captured stage. This is unequal authoring before paint, not a proved renderer conversion defect or historical compensation intent.'

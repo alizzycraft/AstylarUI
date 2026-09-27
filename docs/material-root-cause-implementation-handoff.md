@@ -40,6 +40,25 @@ changes were made, and this checkpoint does not establish rendering equivalence.
 
 ### Prepared work and prior checkpoint history
 
+September 28 background classification preparation is now complete for the
+remaining **62 groups / 450 observations**: 54/397 in the existing control-state
+paint join and 8/53 overlay triggers. The two disabled-range groups now bind all
+16 original owners to the public reduction committed in `93cbe54`. The join
+checks disabled input identity, absent background/reset/motion requests, all
+three candidate stages, matching scalar/tree values and zero input opacity.
+It preserves unequal overall inputs and explicitly denies visible-thumb/raster
+causation. Classification follows the existing documented UA-default limitation
+(`docs/compatibility/html-css.md`, complete browser UA defaults), not an assertion
+that same-input rendering is correct. The owner is core default selection and
+compatibility policy, not showcase styling or plugin paint.
+`node --test tests/material-parity/control-state-paint-review.spec.mjs` passed
+1/1 in 21.33 seconds, including altered disabled state, authored background,
+opacity and the existing raw-evidence/membership negatives. The reduction log
+hash is authenticated by this check. No new framework or browser run was added.
+These classifications remain prepared, not canonical; the grid/height export
+is still live and must be reconciled first. Next join the prepared paint batch,
+then use the existing ledger for the remaining color/layout populations.
+
 September 28 public disabled-range default reduction closes the outstanding
 background diagnosis gap, but is not yet joined into canonical classifications.
 `examples/material-showcase/src/app/range-background-default-audit.spec.ts`
