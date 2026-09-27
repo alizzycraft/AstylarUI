@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 27
 
+**Explicit nowrap history resolved:** card title/copy, paginator size/range,
+and slide-toggle label already authored nowrap in the original showcase commit
+`2f440115740ff76fa9e55b3f4a11568207b2af5a`. Checkbox label nowrap was introduced
+by `c47d589ac2cf1967cc321df38339cb64dabb3732`, alongside replacing the native
+checkbox input with a composed flex control, separate box and label. Later
+card-flow (`1d74a0f1`) and paginator-flex (`7843582d`) changes retained nowrap
+from their absolute-positioned predecessors; switch state-layer (`f566f807`)
+and checkbox typography (`88d1090b`) edits also retained it. Verified using
+selector-filtered Git patch history and the actual introduction diffs, not
+latest-line blame alone. These are persistent unequal fixture inputs; this
+history does not demonstrate that nowrap itself was deliberately introduced
+to conceal a specific renderer failure. Preserve that distinction when binding
+the six wrapping classifications. No fixture changes are authorized here.
+
 **Wrapping population checks are now executable:**
 `node --test tests/material-parity/wrapping-input-populations.spec.mjs` passes
 3/3 in 6.36 s. It authenticates the original capture, reuses the full-tree
