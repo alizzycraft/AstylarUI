@@ -14,7 +14,49 @@ import { restoreSnackbarOverflowProducer } from './position-composition-producer
 import { restoreAuthoredTypographyProducer } from './position-composition-producer-transition.mjs';
 import { restoreWrappingProducer } from './position-composition-producer-transition.mjs';
 import { restoreTypographyReviewProducer } from './position-composition-producer-transition.mjs';
+import { restoreBoxSizingReviewProducer } from './position-composition-producer-transition.mjs';
+import { boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
+
+test('box-sizing canonical conservation rejects forged evidence and unrelated changes', () => {
+  const transition = restoreBoxSizingReviewProducer(currentSource);
+  const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const rows = [], expected = [];
+  for (const [index, [groups, observations]] of [[10, 621], [6, 290], [33, 1746]].entries()) {
+    for (let i = 0; i < groups; i++) {
+      const before = { element: index + '-' + i, property: 'boxSizing', reference: 'content-box',
+        attribution: 'unresolved', occurrences: i ? 1 : observations - groups + 1 };
+      rows.push(before);
+      expected.push({ ...before, attribution: boxSizingReviewAttributions[index],
+        classification: index ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
+        reviewedCases: Array.from({ length: before.occurrences }, (_, j) => 'case-' + j),
+        reviewEvidence: { originalRowSha256: hash(before), inputEquivalent: false, renderingEquivalent: false,
+          observations: Array.from({ length: before.occurrences }, () => ({ usedGeometryVerified: false, rendererCauseProven: false })) } });
+    }
+  }
+  rows.push({ property: 'height', reference: 'auto', attribution: 'unresolved' });
+  expected.push(structuredClone(rows.at(-1)));
+  const previous = { rows, control: { differences: Array.from({ length: 48 }, (_, i) => ({ case: 'control-' + i,
+    attribution: 'reviewed-interactive-normal-line-box-stage-comparison',
+    reviewEvidence: { observation: { normalizationReconciliation: { currentModuleSha256: transition.previousModuleSha256 } } } })) } };
+  const current = { rows: structuredClone(expected), control: structuredClone(previous.control) };
+  for (const c of current.control.differences)
+    c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
+  const compare = (c, e = expected) => compareBorderDefaultCanonical(previous, c, e, currentSource, { boxSizing: true });
+  assert.equal(compare(current).changedGroups, 49); assert.equal(compare(current).changedOccurrences, 2657);
+  for (const mutate of [r => { r.reference = 'forged'; }, r => { r.classification = 'equivalent-representation'; },
+    r => { r.reviewEvidence.originalRowSha256 = 'forged'; }, r => { r.reviewEvidence.observations.pop(); },
+    r => { r.reviewEvidence.inputEquivalent = true; }, r => { r.reviewEvidence.renderingEquivalent = true; },
+    r => { r.reviewEvidence.observations[0].usedGeometryVerified = true; },
+    r => { r.reviewEvidence.observations[0].rendererCauseProven = true; }]) {
+    const c = structuredClone(current), e = structuredClone(expected); mutate(c.rows[0]); mutate(e[0]);
+    assert.throws(() => compare(c, e));
+  }
+  for (const mutate of [c => { c.rows.pop(); }, c => { c.rows.reverse(); },
+    c => { c.rows.at(-1).reference = 'hidden'; }, c => { c.control.differences[0].unexpected = true; }]) {
+    const c = structuredClone(current); mutate(c); assert.throws(() => compare(c));
+  }
+});
 
 for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'control-position', 'width-overflow', 'snackbar-overflow', 'authored-typography', 'wrapping']) test(`scalar conservation (${mode}) rejects changed raw data, unrelated metadata and control values even with forged expected rows`, () => {
   const wrapping = mode === 'wrapping';

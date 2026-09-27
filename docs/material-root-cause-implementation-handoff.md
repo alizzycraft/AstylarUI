@@ -66,6 +66,20 @@ still the 939-unresolved typography report, not a claim that today's producer
 has already been exported. Next extend the existing canonical conservation
 command for this batch and run the complete-input launcher at this milestone.
 
+The existing conservation command now supports `--box-sizing`, pinned to the
+accepted typography package and original capture. It replays all 49 groups and
+permits only the exact producer receipt transition, checking all scalar inputs,
+unrelated rows and 48 control receipts. Its full synthetic conservation suite
+passed 24/24 in 73.13 seconds, including forged expected-data negative controls.
+Launcher `--dry-run` confirmed all five required input paths. Next run the cold
+complete export, then `node scripts/check-material-position-canonical-conservation.mjs --box-sizing`
+and section/source reconciliation before importing or accepting the result.
+Fresh compact queries still find 939 unresolved groups: after the 49 box-sizing
+groups, prioritize shared layout/grid (43 height and 60 grid-template groups),
+then paint (62 background-color and 46 color groups), retaining the remaining
+position, interaction and typography coverage rather than treating these as the
+entire scope. No existing investigation has been restarted.
+
 ### Earlier preparation notes (historical job statuses)
 
 - Prepared box-sizing proofs now run through existing `applyModalBoxReview`
