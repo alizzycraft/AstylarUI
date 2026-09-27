@@ -20,6 +20,16 @@ No new attribution or input/rendering equivalence is claimed by the membership
 check. Keep it separate from the already-accepted tab outer-control geometry
 mapping and from the pending button overflow proof. This investigation did not
 modify the live export's dependencies or create another artifact generation.
+Full replay is now verified: `node --test
+tests/material-parity/tab-scalar-typography-reuse.spec.mjs` passes **1/1**, 8.70 s
+test body. The current production collector regenerates all **280** selected
+control findings from the original globally indexed trees; every complete row
+SHA matches its accepted compact evidence receipt, including source/revision,
+ancestry, rules, values and justification. The same check binds all four scalar
+groups to original case values/counts/sample order. This closes the full-proof
+reuse prerequisite, without applying new classifications or running a browser
+capture. Integrate through the existing scalar-review mechanism after the active
+export, preserving the distinction between local omissions and actual paint.
 
 **Deferred focused verification:** `button.manager.spec.ts` now has an uncommitted
 oversized-label test for omitted/visible/hidden overflow, using ButtonManager and
