@@ -40,6 +40,21 @@ changes were made, and this checkpoint does not establish rendering equivalence.
 
 ### Prepared work and prior checkpoint history
 
+September 28 prepared background coverage now reaches **60/62 groups and 434/450
+observations** (52/381 in control-state paint plus 8/53 overlay triggers). The
+latest six groups / 98 observations bind existing sheet-action, sheet-backdrop,
+divider and selected-toggle proofs. The sheet wrapper's exact missing z-index
+rule remains recorded; matching sibling backdrop RGBA is not composition parity.
+Divider reuses the flow substitution proof. Selected toggle preserves the native
+.08 focus layer, 18 light-foreground / six dark-foreground observations and eight
+captured transient ripple descendants, separate from candidate fixed state fills.
+Expanded control-state-paint spec passed 1/1 in **18.22 seconds**, including changed
+backdrop opacity, focus-layer opacity, source rules and candidate stages. No
+canonical counts changed. Only two background groups / 16 disabled-range owners
+remain unprepared; preserve their public-reduction requirement rather than treating
+invisible white default paint as the visible black-thumb-ring cause.
+The grid/height cold export reached validation at 887.16 seconds; still unaccepted.
+
 September 28 paint expansion: the same prepared control-paint join now covers
 **46 groups / 283 observations**, adding toolbar action 8/24 and explicit opaque
 grid-tile/group fills 12/172 to the prior 26/87. Native transparent-fill owners

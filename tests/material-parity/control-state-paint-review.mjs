@@ -3,23 +3,38 @@ import { createHash } from 'node:crypto';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
+import { proveFlowPositionSubstitution } from '../../scripts/audit-material-flow-position-substitutions.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 const targets = { tabs: ['tab-overview', 'tab-activity'], card: ['card-open', 'card-primary'], dialog: ['dialog-cancel'],
-  toolbar: ['toolbar-action'], 'grid-list': ['grid-tile-one', 'grid-tile-two'], 'button-toggle': ['button-toggle-primary'] };
+  toolbar: ['toolbar-action'], 'grid-list': ['grid-tile-one', 'grid-tile-two'], 'button-toggle': ['button-toggle-primary', 'button-toggle-two'],
+  'bottom-sheet': ['bottom-sheet-dismiss', 'bottom-sheet-overlay'], divider: ['divider-primary'] };
 export const controlStatePaintAttribution = 'reviewed-control-state-layer-substitution';
 export const cardSurfacePaintAttribution = 'reviewed-card-surface-token-substitution';
 export const opaqueSurfacePaintAttribution = 'reviewed-opaque-surface-fill-substitution';
+export const specialPaintDefinitions = Object.freeze({
+  'button-toggle-two': { attribution: 'reviewed-selected-toggle-paint-layer-substitution', classification: 'application-plugin-authoring-defect',
+    justification: 'The native selected host keeps its base color with a separate theme-colored .08 focus overlay and captured ripple descendants. Candidate state rules replace the host background using different fixed blend colors. Preserve the captured layers and profile-dependent foreground; neither equal composition nor ripple timing follows from matching sampled fills.' },
+  'bottom-sheet-dismiss': { attribution: 'reviewed-sheet-unconditional-focus-fill', classification: 'application-plugin-authoring-defect',
+    justification: 'The reference action has a separate .12 focus layer; the candidate substitutes an unconditional opaque fill, including its normal style. Preserve this authoring difference separately from the focus-lifecycle defect and do not equate final pixels.' },
+  'bottom-sheet-overlay': { attribution: 'reviewed-sheet-backdrop-measurement-owner', classification: 'parity-harness-defect',
+    justification: 'The native measurement identifies a transparent wrapper rather than its separate dim backdrop. Candidate wrapper and backdrop are merged. Matching backdrop RGBA does not establish equivalent structure, stacking, hit testing, lifecycle or rendering; the native scalar rule gap remains explicit.' },
+  'divider-primary': { attribution: 'reviewed-divider-border-fill-substitution', classification: 'application-plugin-authoring-defect',
+    justification: 'The existing flow proof identifies a native zero-height block with a 1px top border, replaced by an absolute 1px candidate background strip. Both paint model and requested color differ; this is not an equivalent border-to-fill transformation or a new core diagnosis.' },
+});
 
 export function proveControlStatePaint(entry, input, reference, candidate, normalize) {
   assert.ok(targets[entry.family]?.includes(input.id));
   const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));
   let native, identity;
-  if (input.id === 'dialog-cancel') {
+  if (input.id === 'dialog-cancel' || entry.family === 'bottom-sheet') {
     identity = resolveOriginAliasPair(entry, reference, candidate, input);
-    assert.equal(identity.status, 'mapped'); assert.deepEqual(identity.missingRules, []); assert.deepEqual(identity.extraRules, []);
+    assert.equal(identity.status, input.id === 'bottom-sheet-overlay' ? 'mapped-with-scalar-rule-gap' : 'mapped');
+    assert.deepEqual(identity.missingRules, input.id === 'bottom-sheet-overlay' ? [{ selector: '.cdk-global-overlay-wrapper',
+      declarations: { 'z-index': { value: '1000', important: false } } }] : []);
+    assert.deepEqual(identity.extraRules, []);
     native = one(reference.nodes.filter(n => n.key === identity.referenceNode));
   } else native = one(reference.nodes.filter(n => n.attributes?.id === input.id));
   for (const [key, value] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][key], value);
@@ -38,7 +53,70 @@ export function proveControlStatePaint(entry, input, reference, candidate, norma
   }
   const base = { case: keyOf(entry), element: input.id, referenceNode: native.key, astylarNode: ast.key,
     identity, candidateAuthoredRuleProjectionGaps, inputEquivalent: false, renderingEquivalent: false, rendererCauseProven: false };
-  if (['grid-list', 'button-toggle'].includes(entry.family)) {
+  if (input.id === 'divider-primary') {
+    const flow = proveFlowPositionSubstitution(reference, candidate, input.id);
+    assert.equal(reference.styles[native.style].backgroundColor, 'rgba(0, 0, 0, 0)');
+    assert.equal(reference.styles[native.style].borderTopColor, 'rgb(123, 117, 127)');
+    const nativeRules = native.rules.map(i => reference.rules[i]);
+    assert.ok(nativeRules.some(r => r.cssText.includes('var(--mat-divider-color, var(--mat-sys-outline))')));
+    const request = one(candidate.rules.filter(r => r.selector === '.divider'));
+    assert.equal(request.background, '#cac4d0');
+    for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'])
+      assert.equal(ast[stage].background, '#cac4d0');
+    return { ...base, flow, nativePaintRules: nativeRules, candidatePaintRequest: request };
+  }
+  if (entry.family === 'bottom-sheet') {
+    assert.equal(reference.styles[native.style].backgroundColor, 'rgba(0, 0, 0, 0)');
+    const overlay = input.id === 'bottom-sheet-overlay';
+    const request = one(candidate.rules.filter(r => r.selector === (overlay ? '.modal-overlay' : '#bottom-sheet-dismiss')));
+    for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle'])
+      assert.equal(normalize(ast[stage]).backgroundColor, normalize(request).backgroundColor);
+    if (overlay) {
+      const backdrop = one(reference.nodes.filter(n => n.parent === native.parent &&
+        n.attributes?.class?.split(/\s+/).includes('cdk-overlay-backdrop')));
+      assert.equal(reference.styles[backdrop.style].backgroundColor, 'rgba(0, 0, 0, 0.32)');
+      assert.equal(reference.styles[backdrop.style].opacity, '1');
+      assert.equal(normalize(request).backgroundColor, normalize(reference.styles[backdrop.style]).backgroundColor);
+      return { ...base, nativeBackdrop: backdrop.key, nativeBackdropStyle: reference.styles[backdrop.style],
+        candidatePaintRequest: request, compositionEquivalent: false };
+    }
+    const pseudo = one(native.pseudoElements.filter(p => p.pseudo === '::before'));
+    assert.equal(pseudo.generated, true);
+    const paint = reference.styles[pseudo.style];
+    assert.equal(paint.backgroundColor, 'rgb(29, 27, 30)'); assert.equal(paint.opacity, '0.12');
+    assert.ok(['#e6e1e5', '#312f35'].includes(request.background));
+    assert.equal(candidate.nodes.filter(n => n.key.startsWith(ast.key + '/')).length, 0);
+    return { ...base, nativeLayer: native.key, nativeLayerOpacity: paint.opacity,
+      nativePseudoRules: pseudo.rules.map(i => reference.rules[i]), candidatePaintRequest: request,
+      candidateFillUnconditional: true, focusLifecycleCauseProven: false };
+  }
+  if (input.id === 'button-toggle-two') {
+    assert.equal(native.type, 'mat-button-toggle');
+    assert.equal(reference.styles[native.style].backgroundColor, 'rgb(234, 222, 247)');
+    assert.equal(ast.normalResolvedStyle.background, '#eadef7');
+    const descendants = reference.nodes.filter(n => n.key.startsWith(native.key + '/'));
+    const layer = one(descendants.filter(n => n.attributes?.class?.split(/\s+/).includes('mat-button-toggle-focus-overlay')));
+    const paint = reference.styles[layer.style];
+    assert.equal(paint.opacity, '0.08');
+    assert.ok(['rgb(29, 27, 32)', 'rgb(230, 225, 229)'].includes(paint.backgroundColor));
+    const rules = candidate.rules.filter(r => ['.button-toggle-option.selected:hover', '.button-toggle-option.selected:active'].includes(r.selector));
+    assert.deepEqual(rules.map(r => [r.selector, r.background]), [
+      ['.button-toggle-option.selected:hover', '#ddd2ea'], ['.button-toggle-option.selected:active', '#d7cbe4']]);
+    const effective = normalize(ast.resolvedStyle).backgroundColor;
+    assert.equal(effective, normalize(ast.interactionResolvedStyle).backgroundColor);
+    const matching = rules.filter(r => normalize(r).backgroundColor === effective); assert.equal(matching.length, 1);
+    const candidateDescendants = candidate.nodes.filter(n => n.key.startsWith(ast.key + '/'));
+    assert.deepEqual(candidateDescendants.filter(n => {
+      const background = normalize(n.resolvedStyle ?? {}).backgroundColor;
+      return background !== undefined && background !== normalize({ background: 'transparent' }).backgroundColor;
+    }), []);
+    const ripples = descendants.filter(n => n.attributes?.class?.split(/\s+/).includes('mat-ripple-element'));
+    return { ...base, nativeFocusLayer: layer.key, nativeLayerOpacity: paint.opacity, nativeLayerBackground: paint.backgroundColor,
+      nativeFocusRules: layer.rules.map(i => reference.rules[i]),
+      nativeRipples: ripples.map(n => ({ key: n.key, style: reference.styles[n.style], inline: n.inline })),
+      candidateMatchedStateRules: matching, candidateStateRules: rules, rippleTimingInferred: false };
+  }
+  if (entry.family === 'grid-list' || input.id === 'button-toggle-primary') {
     assert.equal(native.type, entry.family === 'grid-list' ? 'mat-grid-tile' : 'mat-button-toggle-group');
     assert.equal(ast.authored.type, 'div');
     assert.equal(reference.styles[native.style].backgroundColor, 'rgba(0, 0, 0, 0)');
@@ -114,13 +192,14 @@ export function applyControlStatePaintReview(rows, cases, inventory, normalize) 
       return proofs.get(key);
     });
     const surface = row.element === 'card-primary', opaque = ['grid-list', 'button-toggle'].includes(row.family);
-    return { ...row, classification: 'application-plugin-authoring-defect',
-      attribution: surface ? cardSurfacePaintAttribution : opaque ? opaqueSurfacePaintAttribution : controlStatePaintAttribution,
+    const special = specialPaintDefinitions[row.element];
+    return { ...row, classification: special?.classification ?? 'application-plugin-authoring-defect',
+      attribution: special?.attribution ?? (surface ? cardSurfacePaintAttribution : opaque ? opaqueSurfacePaintAttribution : controlStatePaintAttribution),
       recommendedOwner: 'Material comparison paint authoring; retain tab measurement-owner distinction',
-      justification: surface
+      justification: special?.justification ?? (surface
         ? 'The captured dark card resolves the native surface token to a different color than the candidate fixed surface request. These authored inputs already differ; token ancestry, compensation intent and renderer causation are not inferred.'
         : opaque ? 'The native owner has no own background/reset/motion request and computes transparent; the candidate explicitly requests an opaque surface fill at every captured stage. This is unequal authoring before paint, not a proved renderer conversion defect or historical compensation intent.'
-        : 'A separate native translucent state layer is replaced by a childless candidate control with opaque state fill. Tabs additionally compare native label IDs with candidate control IDs. Preserve both differences, captured layer opacity and the matching authored state rule; do not infer focus timing or final pixel equivalence.',
+        : 'A separate native translucent state layer is replaced by a childless candidate control with opaque state fill. Tabs additionally compare native label IDs with candidate control IDs. Preserve both differences, captured layer opacity and the matching authored state rule; do not infer focus timing or final pixel equivalence.'),
       reviewedCases: keys, reviewEvidence: { originalRowSha256: digest(row), observations,
         inputEquivalent: false, renderingEquivalent: false, rendererCauseProven: false } };
   });
