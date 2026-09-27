@@ -142,6 +142,37 @@ test('font-weight generated owners replay every original slider and interactive 
   }
 });
 
+test('tracking and line-height survey modes are opt-in and reject requests rather than infer computed defaults', () => {
+  const before = JSON.stringify(original);
+  for (const [property, option, css] of [['letterSpacing', 'reviewedTracking', 'letter-spacing'], ['lineHeight', 'reviewedLineHeight', 'line-height']]) {
+    assert.equal(Object.hasOwn(ownerInitialValues, property), false);
+    assert.equal(inspect(original, property).disposition, 'requires-specific-review');
+    const review = v => inspectOwnerInitialStyle(v.input, property, v.reference, v.candidate, { [option]: true });
+    const proof = review(original);
+    assert.equal(proof.disposition, 'captured-default-versus-local-omission');
+    assert.equal(proof.referenceComputed, 'normal'); assert.equal(proof.candidateLocalDeclaration, '<omitted>');
+    assert.equal(proof.computedCandidateVerified, false); assert.equal(proof.renderingEquivalent, false);
+    for (const request of [property, css, 'all', ...(property === 'lineHeight' ? ['font'] : [])]) {
+      for (const location of ['reference-inline', 'candidate-inline', 'candidate-attribute', 'candidate-rule']) {
+        const v = structuredClone(original);
+        if (location === 'reference-inline') v.reference.nodes[0].inline[request] = { value: 'inherit', important: false };
+        if (location === 'candidate-inline') v.candidate.nodes[1].authored.style = { [request]: 'inherit' };
+        if (location === 'candidate-attribute') v.candidate.nodes[1].authored.attributes = { style: `${request}: inherit` };
+        if (location === 'candidate-rule') v.candidate.rules.push({ selector: '#page', [request]: 'inherit' });
+        assert.equal(review(v).disposition, 'requires-specific-review', `${property}/${request}/${location}`);
+      }
+    }
+    for (const mutate of [v => { v.input.astylar[property] = 'normal'; },
+      v => { v.candidate.nodes[1].parent = 'missing'; },
+      v => { v.candidate.rules.push({ selector: ':is(#badge-primary)', [property]: 'normal' }); },
+      v => { v.candidate.rules.push({ selector: '#page', transitionProperty: css }); }]) {
+      const v = structuredClone(original); mutate(v);
+      assert.equal(review(v).disposition, 'requires-specific-review');
+    }
+  }
+  assert.equal(JSON.stringify(original), before);
+});
+
 test('owner survey rejects incomplete ancestry, competing requests, unknown selectors, motion and mismatched stages', () => {
   const mutations = [
     v => { v.reference.errors.push('unreadable stylesheet'); },

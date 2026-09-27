@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 27
 
+- Tracking and line-height survey modes are now separately **opt-in**; historical
+  `ownerInitialValues` and production callers are unchanged. Font shorthand is
+  checked for line-height. Focused survey/negative checks passed **5/5, 2.37 s**;
+  a write-free replay of the existing survey reproduced **all 600 groups / 32,144
+  observations / 1,734 cases** with every non-source field identical. Its source
+  fingerprint differences are the edited survey and previously changed border
+  evidence helper; no historical report or receipt was rewritten/waived.
+  All 75 typography routing populations now have executable state-exact checks.
+  Reusing this survey prepares **52 groups / 2,880 observations** as captured
+  computed-versus-local observation boundaries, never candidate computed-default
+  or rendering equivalence. Combined with earlier proofs, **83 disjoint groups /
+  4,470 observations** now compose against all 8,483 accepted scalar rows;
+  every raw field and **8,400 unrelated complete rows** is conserved. Full existing
+  population test passed **1/1, 47.72 s**. The remaining typography population is
+  **eight motion-bearing groups / 392 observations** (six tracking, two line-height),
+  requiring the existing motion-target/owner checks rather than another census.
+  Next: resolve those motion boundaries, add independent combined replay at
+  production integration, and reconcile the survey source transition explicitly.
+  Canonical checkpoint 462dddc7 still has **1,030 unresolved**; these preparations
+  are not yet applied there. The newly edited survey changes a recorded producer
+  dependency, so the checkpoint's historical source receipt must not be described
+  as matching the new worktree until that transition is checked.
 - Corrected wrapping generation **462dddc705e4be1cfb3be863b9707f579782f8c440759c31f59185718acbc651**
   has passed full reconciliation against accepted baf0ccb8. Conservation command
   `node scripts/check-material-position-canonical-conservation.mjs --wrapping`

@@ -9,6 +9,7 @@ const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const normalize = k => k.replaceAll('-', '').toLowerCase();
 const one = xs => xs.length === 1 ? xs[0] : undefined;
 const aliases = { fontStyle: ['font'], fontWeight: ['font', 'fontvariationsettings'], overflowWrap: ['wordwrap'],
+  lineHeight: ['font'],
   appearance: ['webkitappearance', 'mozappearance'],
   whiteSpace: ['whitespacecollapse', 'textwrap', 'textwrapmode', 'textwrapstyle'] };
 
@@ -30,12 +31,15 @@ function pathToRoot(tree, owner) {
 // Root paths stop at the captured surface: document-external inheritance remains
 // unverified even when every captured node computes the same initial keyword.
 export function inspectOwnerInitialStyle(input, property, reference, candidate,
-  { family, reviewedGeneratedOwners = false, reviewedAppearance = false, reviewedFontWeight = false } = {}) {
+  { family, reviewedGeneratedOwners = false, reviewedAppearance = false, reviewedFontWeight = false,
+    reviewedTracking = false, reviewedLineHeight = false } = {}) {
   // Opt in separately: the historical survey and attribution population must
   // not expand merely because a new property is being investigated.
   const initialValues = { ...ownerInitialValues,
     ...(reviewedAppearance ? { appearance: 'none' } : {}),
-    ...(reviewedFontWeight ? { fontWeight: '400' } : {}) };
+    ...(reviewedFontWeight ? { fontWeight: '400' } : {}),
+    ...(reviewedTracking ? { letterSpacing: 'normal' } : {}),
+    ...(reviewedLineHeight ? { lineHeight: 'normal' } : {}) };
   const issues = [];
   const issue = (reason, detail = {}) => issues.push({ reason, ...detail });
   const finish = extra => ({ property, element: input?.id, issues,

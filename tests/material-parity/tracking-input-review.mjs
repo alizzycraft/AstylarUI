@@ -1,13 +1,45 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { applyModalBoxReview } from './modal-position-inspection.mjs';
+import { applyModalBoxReview, modalInventoryTrees } from './modal-position-inspection.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { inspectRangeFontReset } from '../../scripts/audit-material-range-font-reset.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { proveOverlayNormal, proveDialogWrappingMotion } from './wrapping-input-review.mjs';
+import { inspectOwnerInitialStyle } from './owner-initial-style-survey.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
+export const typographyObservationAttribution = 'reviewed-captured-typography-observation-stage';
+export function applyTypographyObservationStages(rows, cases, inventory, normalize) {
+  return rows.map(row => {
+    if (row.attribution !== 'unresolved' || !(row.property === 'letterSpacing' && row.reference === '0' ||
+      row.property === 'lineHeight' && row.reference === 'normal')) return row;
+    const members = cases.filter(e => e.family === row.family && row.states.includes(e.state ?? 'static') &&
+      e.styleInputs.some(i => i.id === row.element && normalize(i.reference)[row.property] === row.reference &&
+        normalize(i.astylar)[row.property] === row.astylar));
+    assert.equal(members.length, row.occurrences); assert.ok(members.length);
+    const proofs = new Map();
+    for (const entry of members) {
+      const [reference, candidate] = modalInventoryTrees(inventory, keyOf(entry));
+      const input = one(entry.styleInputs.filter(i => i.id === row.element));
+      const survey = inspectOwnerInitialStyle(input, row.property, reference, candidate,
+        { family: entry.family, reviewedGeneratedOwners: true, reviewedTracking: true, reviewedLineHeight: true });
+      if (survey.issues.length) return row;
+      const native = survey.mapping ? one(reference.nodes.filter(n => n.key === survey.mapping.referenceNode))
+        : one(reference.nodes.filter(n => n.attributes?.id === row.element));
+      const ast = one(candidate.nodes.filter(n => n.authored?.id === row.element));
+      proofs.set(keyOf(entry), { case: keyOf(entry), element: row.element, referenceNode: native.key, astylarNode: ast.key,
+        survey, candidateComputedVerified: false, externalInheritanceVerified: false,
+        inputEquivalent: false, rendererCauseProven: false, renderingEquivalent: false });
+    }
+    return applyModalBoxReview([row], members, inventory, normalize, {
+      family: row.family, element: row.element, properties: [row.property], attribution: typographyObservationAttribution,
+      classification: 'parity-harness-defect', owner: 'captured computed typography versus local declaration observation stages',
+      justification: 'Every exact original state/owner passes the conservative captured-ancestry survey: native normal versus omitted candidate local declaration, with no captured property/reset/motion request. Different observation stages are not equivalent inputs or proof of a candidate computed default. External inheritance, retained text consumption and rendered typography remain separate obligations.',
+      prove: entry => proofs.get(keyOf(entry)),
+    })[0];
+  });
+}
 export const overlayTypographyAttribution = 'reviewed-overlay-typography-observation-stage';
 export function applyOverlayTypography(rows, cases, inventory, normalize) {
   return rows.map(row => {

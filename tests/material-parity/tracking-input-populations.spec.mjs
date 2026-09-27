@@ -16,6 +16,8 @@ import { applyToggleLineHeights, proveToggleLineHeightHost, toggleLineHeightAttr
 import { applyExplicitHostLineHeights, explicitHostLineHeightAttribution, proveExplicitHostLineHeight } from './tracking-input-review.mjs';
 import { proveRangeLineHeight, applyRangeLineHeights, rangeLineHeightAttribution } from './tracking-input-review.mjs';
 import { proveOverlayTypography, applyOverlayTypography, overlayTypographyAttribution } from './tracking-input-review.mjs';
+import { inspectOwnerInitialStyle } from './owner-initial-style-survey.mjs';
+import { applyTypographyObservationStages, typographyObservationAttribution } from './tracking-input-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
@@ -270,6 +272,32 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
     queryFindings('artifacts/material-parity/working-audit', family, snapshot))
     .filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
   assert.equal(completeRows.length, 8483);
+  const surveyRoutes = {};
+  const surveyRows = completeRows.filter(r => r.attribution === 'unresolved' &&
+    (r.property === 'letterSpacing' && r.reference === '0' || r.property === 'lineHeight' && r.reference === 'normal'));
+  assert.equal(surveyRows.length, 75);
+  for (const row of surveyRows) {
+    const members = cases.filter(e => e.family === row.family && row.states.includes(e.state ?? 'static') &&
+      e.styleInputs.some(i => i.id === row.element && normalize(i.reference)[row.property] === row.reference &&
+        normalize(i.astylar)[row.property] === row.astylar));
+    assert.equal(members.length, row.occurrences); assert.deepEqual(members.slice(0, 12).map(keyOf), row.cases);
+    const reasons = new Set();
+    for (const entry of members) {
+      const [r, a] = modalInventoryTrees(inventory, keyOf(entry));
+      const input = one(entry.styleInputs.filter(i => i.id === row.element));
+      const proof = inspectOwnerInitialStyle(input, row.property, r, a,
+        { family: entry.family, reviewedGeneratedOwners: true, reviewedTracking: true, reviewedLineHeight: true });
+      for (const issue of proof.issues) reasons.add(issue.reason);
+      assert.equal(proof.computedCandidateVerified, false); assert.equal(proof.renderingEquivalent, false);
+    }
+    const route = [...reasons].sort().join(',') || 'pass';
+    const property = surveyRoutes[row.property] ??= {};
+    const count = property[route] ??= [0, 0]; count[0]++; count[1] += members.length;
+  }
+  assert.deepEqual(surveyRoutes, {
+    letterSpacing: { 'explicit-relevant-request': [2, 80], pass: [25, 1470], 'motion-request-needs-review': [6, 302], 'owner-mapping': [4, 125], 'incomplete-surface-ancestry': [2, 64] },
+    lineHeight: { pass: [27, 1410], 'explicit-relevant-request': [2, 156], 'motion-request-needs-review': [2, 90], 'owner-mapping': [4, 125], 'incomplete-surface-ancestry': [1, 32] },
+  });
   const overlayRows = completeRows.filter(r => r.attribution === 'unresolved' &&
     ['letterSpacing', 'lineHeight'].includes(r.property) &&
     ['bottom-sheet-overlay', 'snack-bar-overlay', 'snack-bar-surface', 'dialog-panel', 'dialog-actions'].includes(r.element));
@@ -301,11 +329,12 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
   combined = applyExplicitHostLineHeights(combined, cases, inventory, normalize);
   combined = applyRangeLineHeights(combined, cases, inventory, normalize);
   combined = applyOverlayTypography(combined, cases, inventory, normalize);
+  combined = applyTypographyObservationStages(combined, cases, inventory, normalize);
   const preparedAttributions = new Set([trackingLabelAttribution, trackingHostAttribution,
     zeroTrackingTokenAttribution, componentLineHeightAttribution, toggleLineHeightAttribution,
-    explicitHostLineHeightAttribution, rangeLineHeightAttribution, overlayTypographyAttribution]);
+    explicitHostLineHeightAttribution, rangeLineHeightAttribution, overlayTypographyAttribution, typographyObservationAttribution]);
   const batch = combined.filter(r => preparedAttributions.has(r.attribution));
-  assert.equal(batch.length, 31); assert.equal(batch.reduce((n, r) => n + r.occurrences, 0), 1590);
+  assert.equal(batch.length, 83); assert.equal(batch.reduce((n, r) => n + r.occurrences, 0), 4470);
   assert.deepEqual(combined.map(rawRow), completeRows.map(rawRow));
   for (let i = 0; i < completeRows.length; i++) {
     if (!preparedAttributions.has(combined[i].attribution)) assert.deepEqual(combined[i], completeRows[i]);
