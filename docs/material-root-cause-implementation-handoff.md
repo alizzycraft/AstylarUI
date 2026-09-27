@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 27
 
+**Next reusable typography evidence:** current accepted f86307bd compact queries
+leave four tab scalar groups unresolved (Overview/Activity, lineHeight and
+letterSpacing), while `controlTypography.differences` already contains exactly
+one `reviewed-tab-label-typography-input` authoring-defect proof per matching
+case/property/owner. A read-only join authenticated original capture b07ef154,
+all 70 tab cases, all four scalar pairs, each occurrence count and first-12 case
+sample, and unique control membership: **280/280 matches**. Ordered
+`{case,element,property,proof}` membership SHA-256:
+`0379167d1b9f622d788954f83c1d58f0d920afbfa6156a908a61c9255e7f1460`.
+The source classifier `reviewedTabPaintInput` already checks nested 14px label
+versus 20px control line boxes and the omitted .096px tracking token against
+actual control paint. Do not rerun a new typography experiment for those facts.
+Next bind these scalar rows to the existing complete proof, validating full
+proof contents and current source applicability, not merely this compact join.
+No new attribution or input/rendering equivalence is claimed by the membership
+check. Keep it separate from the already-accepted tab outer-control geometry
+mapping and from the pending button overflow proof. This investigation did not
+modify the live export's dependencies or create another artifact generation.
+
 **Deferred focused verification:** `button.manager.spec.ts` now has an uncommitted
 oversized-label test for omitted/visible/hidden overflow, using ButtonManager and
 the shared clip service. Command: `npm test -- --watch=false
