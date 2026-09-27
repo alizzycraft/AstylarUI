@@ -262,6 +262,36 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
   assert.equal(rangeChanges.reduce((sum, r) => sum + r.occurrences, 0), 156);
   assert.deepEqual(rangeReviewed.map(rawRow), rangeRows.map(rawRow));
   for (let i = 0; i < rangeRows.length; i++) if (!rangeChanges.includes(rangeReviewed[i])) assert.deepEqual(rangeReviewed[i], rangeRows[i]);
+  // Compose the prepared batch against the complete accepted scalar inventory,
+  // not just each helper's family slice. This guards cross-family overlap and
+  // conservation before any production integration or expensive export.
+  const completeRows = [...new Set(cases.map(e => e.family))].flatMap(family =>
+    queryFindings('artifacts/material-parity/working-audit', family, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  assert.equal(completeRows.length, 8483);
+  let combined = applyTrackingLabels(completeRows, cases, inventory, retained, normalize);
+  combined = applyToggleTrackingHosts(combined, cases, inventory, retained, normalize);
+  combined = applyZeroTrackingTokens(combined, cases, inventory, normalize);
+  combined = applyComponentLineHeights(combined, cases, inventory, retained, normalize);
+  combined = applyToggleLineHeights(combined, cases, inventory, retained, normalize);
+  combined = applyExplicitHostLineHeights(combined, cases, inventory, normalize);
+  combined = applyRangeLineHeights(combined, cases, inventory, normalize);
+  const preparedAttributions = new Set([trackingLabelAttribution, trackingHostAttribution,
+    zeroTrackingTokenAttribution, componentLineHeightAttribution, toggleLineHeightAttribution,
+    explicitHostLineHeightAttribution, rangeLineHeightAttribution]);
+  const batch = combined.filter(r => preparedAttributions.has(r.attribution));
+  assert.equal(batch.length, 21); assert.equal(batch.reduce((n, r) => n + r.occurrences, 0), 1276);
+  assert.deepEqual(combined.map(rawRow), completeRows.map(rawRow));
+  for (let i = 0; i < completeRows.length; i++) {
+    if (!preparedAttributions.has(combined[i].attribution)) assert.deepEqual(combined[i], completeRows[i]);
+    else {
+      assert.equal(completeRows[i].attribution, 'unresolved');
+      assert.equal(combined[i].reviewEvidence.originalRowSha256, hash(JSON.stringify(completeRows[i])));
+      assert.equal(combined[i].reviewEvidence.observations.length, completeRows[i].occurrences);
+      assert.equal(combined[i].reviewEvidence.inputEquivalent, false);
+      assert.equal(combined[i].reviewEvidence.renderingEquivalent, false);
+    }
+  }
   // No classification mutation: equal leaf zeros do not establish host token,
   // inheritance, current glyph paint or rendering equivalence.
 });

@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 27
 
+- Prepared typography batch composition now passes against **all 8,483 accepted
+  scalar rows**, not only family slices: exactly **21 disjoint groups / 1,276
+  observations** transition, all raw fields and **8,462 unrelated complete rows**
+  remain unchanged. Every changed row was previously unresolved and retains its
+  exact original-row hash, complete observation count and false input/rendering
+  equivalence flags. Reused the existing population test and seven prepared
+  adapters; **1/1 passed, 36.63 s**. This is pre-integration evidence, not a new
+  canonical generation or a renderer fix. No exporter dependency changed.
+  Corrected wrapping exporter PID 4632 remains live (2,589.28 CPU seconds).
+  Outstanding order: finish/reconcile that export, integrate conservative survey
+  modes with original populations unchanged, classify the remaining motion and
+  overlay boundaries, then integrate the coherent typography batch. Other
+  unresolved properties and complete final gates remain in scope.
 - Explicit tracking-token proofs now feed the existing classification adapter:
   **three groups / 112 observations** (toolbar title 40, card title 40, dialog
   title 32), with raw and unrelated rows conserved. Earlier static title reviews
