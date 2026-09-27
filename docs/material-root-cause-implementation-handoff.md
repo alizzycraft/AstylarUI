@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 27
 
+**Snackbar/overflow export f5b2ece is terminal**, session 50788 exit 1, with only
+the expected **1,096 unresolved groups** error. Do not restart it. Coverage is
+436/436 static and 1,875/1,875 interaction, retaining 8,483 scalar groups / 389,202
+occurrences and 134 source findings. Compressed SHA:
+`ef6da409ae1162433b0419814fe7e7e33b7659805d8e672f407d8b4c84878145`
+(60,359,376 bytes); decoded SHA:
+`fe2ac881252eac7ed09b2f0cbc5119a13aba1fd420aff9428f130c4c2e96e987`
+(2,106,785,756 bytes). It is **not accepted/imported yet**; accepted pointer stays
+f86307bd / 1,127 unresolved until reconciliation completes.
+Reconciliation against f86307bd is live: conservation `--snackbar-overflow`
+session **78262 / PID 7772**, all-section digests **2608 / PID 6876**, and source/
+metadata stream **5212 / PID 18120**. Outputs are
+`artifacts/material-parity/snackbar-overflow-{conservation,sections,metadata}-f5b2ece.json`.
+Revalidate these handles; do not restart quiet streams. Explain all changed
+sections, verify normalized disk fingerprints and independently reconstruct
+changed motion receipts before compact import/acceptance. The deferred Angular
+test remains uncommitted and unverified; avoid overlapping it with reconciliation.
+The older live-export notes below are chronological, not current job state.
+
 **Prepared tab batch now covers six groups / 420 observations**, including both
 font-family groups as well as line-height/tracking. The extended focused replay
 passes **1/1 in 12.37 s** with all 420 complete control-row hashes matching accepted
