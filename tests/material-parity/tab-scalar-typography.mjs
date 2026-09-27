@@ -10,7 +10,7 @@ const one = values => { assert.equal(values.length, 1); return values[0]; };
 export function applyTabScalarTypography(rows, cases, inventory, control, normalize) {
   let result = rows;
   for (const element of ['tab-overview', 'tab-activity']) {
-    for (const property of ['lineHeight', 'letterSpacing']) {
+    for (const property of ['fontFamily', 'lineHeight', 'letterSpacing']) {
       result = applyModalBoxReview(result, cases, inventory, normalize, {
         family: 'tabs', element, properties: [property],
         attribution: tabScalarTypographyAttribution,

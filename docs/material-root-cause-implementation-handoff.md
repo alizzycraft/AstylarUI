@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 27
 
+**Prepared tab batch now covers six groups / 420 observations**, including both
+font-family groups as well as line-height/tracking. The extended focused replay
+passes **1/1 in 12.37 s** with all 420 complete control-row hashes matching accepted
+evidence. It uses the existing canonical normalization for font serialization,
+preserves raw rows and retains the same rejection controls. Still not wired or
+canonically accepted. A broader complete-case compact membership shortlist also
+identified disabled-button ink (four groups / 60) and toolbar action line-height
+(two groups / 39) as possible existing-control-proof joins. Those are separate
+attributions and need full-proof/owner-stage validation before reuse; do not
+merge them solely because compact membership matches.
+Export PID 16516 advanced through validation/render-markdown to
+`encode-canonical` (CPU 2,599.94 s); still live, not yet accepted. Its evidence
+session reverified 1,205 files / 89,151,875 bytes, two collectors, ten memory hits,
+zero disk hits/invalidations. Finish this export and reconciliation before any
+heavy Angular retry or production-wiring edit.
+
 **Next reusable typography evidence:** current accepted f86307bd compact queries
 leave four tab scalar groups unresolved (Overview/Activity, lineHeight and
 letterSpacing), while `controlTypography.differences` already contains exactly

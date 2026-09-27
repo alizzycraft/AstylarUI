@@ -8,7 +8,7 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { applyTabScalarTypography, validateTabScalarTypography, tabScalarTypographyAttribution } from './tab-scalar-typography.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-test('all unresolved tab tracking and line-height scalars retain an exact existing control proof', () => {
+test('all unresolved tab font, tracking and line-height scalars retain an exact existing control proof', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const capture = JSON.parse(bytes);
@@ -22,14 +22,15 @@ test('all unresolved tab tracking and line-height scalars retain an exact existi
   const snapshot = { generation: 'f86307bd22b7699155bc1e28730c1a446c825a214d97c9258555c8b33a265162',
     indexSha256: '9222220df3105817b2f39275395d883ff8201560f00f696320dfec0171339c8a' };
   const rows = queryFindings('artifacts/material-parity/working-audit', 'tabs', snapshot);
-  const properties = ['lineHeight', 'letterSpacing'];
+  const properties = ['fontFamily', 'lineHeight', 'letterSpacing'];
+  const normalize = bindPreciseAuditNormalization();
   const selected = rows.filter(r => r.evidence.section === 'discrepancies' && r.attribution === 'unresolved' &&
     ['tab-overview', 'tab-activity'].includes(r.element) && properties.includes(r.property));
-  assert.equal(selected.length, 4);
+  assert.equal(selected.length, 6);
   const control = collectControlTypographyEvidence(tabs, inventory);
   const proofs = control.differences.filter(r =>
     r.attribution === 'reviewed-tab-label-typography-input' && properties.includes(r.property));
-  assert.equal(proofs.length, 280);
+  assert.equal(proofs.length, 420);
   let matched = 0;
   for (const row of selected) {
     const keys = [];
@@ -37,8 +38,8 @@ test('all unresolved tab tracking and line-height scalars retain an exact existi
       const key = `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`;
       const inputs = entry.styleInputs.filter(i => i.id === row.element);
       assert.equal(inputs.length, 1);
-      assert.equal(inputs[0].reference[row.property], row.reference);
-      assert.equal(inputs[0].astylar[row.property], row.astylar);
+      assert.equal(normalize(inputs[0].reference)[row.property], row.reference);
+      assert.equal(normalize(inputs[0].astylar)[row.property], row.astylar);
       const same = p => p.case === key && p.element === row.element && p.property === row.property;
       const replay = proofs.filter(same);
       const accepted = rows.filter(p => p.evidence.section === 'controlTypography.differences' && same(p));
@@ -51,13 +52,12 @@ test('all unresolved tab tracking and line-height scalars retain an exact existi
     assert.equal(new Set(keys).size, row.occurrences);
     assert.deepEqual(row.cases, keys.slice(0, 12));
   }
-  assert.equal(matched, 280);
+  assert.equal(matched, 420);
   const scalarRows = rows.filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
-  const normalize = bindPreciseAuditNormalization();
   const applied = applyTabScalarTypography(scalarRows, cases, inventory, control, normalize);
   const changed = applied.filter(r => r.attribution === tabScalarTypographyAttribution);
-  assert.equal(changed.length, 4);
-  assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 280);
+  assert.equal(changed.length, 6);
+  assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 420);
   assert.deepEqual(validateTabScalarTypography(applied, scalarRows, cases, inventory, control, normalize), []);
   const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
   const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
