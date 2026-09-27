@@ -40,6 +40,22 @@ changes were made, and this checkpoint does not establish rendering equivalence.
 
 ### Prepared work and prior checkpoint history
 
+September 28 prepared overlay-trigger paint join: the standalone
+`applyOverlayTriggerPaintReview` reuses the complete existing button-paint census
+and its strict group-membership checks, without relaxing the active-only shared
+classifier. It joins eight dialog/bottom-sheet background groups / 53 observations,
+preserving native layer populations **33 zero / 16 .08 / 4 .12** and checking
+candidate normal base, effective/interaction fill and exact authored hover rule.
+Classification is unequal application paint composition; original-case lifecycle
+cause and final rendering equivalence remain explicitly unproved. The existing
+public covered-hover reductions remain separate evidence, not inferred causality
+for every original observation. `node --test tests/material-parity/overlay-trigger-paint-review.spec.mjs`
+passed 1/1 in 12.80 seconds, including full source-census replay, raw/unrelated-row
+conservation, forged rule/base/interaction negatives and incomplete membership.
+These new files are not imported by the running grid/height export. No canonical
+classification changed. After that export is reconciled, integrate this prepared
+join with the remaining existing paint proofs; do not recapture its root cause.
+
 September 28 grid/height producer wiring: the combined join now follows box-sizing,
 requires bound original cases, and independently replays the existing tab-control
 height predecessor. Exact producer restoration authenticates the complete accepted
