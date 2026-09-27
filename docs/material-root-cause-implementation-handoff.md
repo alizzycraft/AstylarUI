@@ -40,6 +40,23 @@ changes were made, and this checkpoint does not establish rendering equivalence.
 
 ### Prepared work and prior checkpoint history
 
+September 28 paint expansion: the same prepared control-paint join now covers
+**46 groups / 283 observations**, adding toolbar action 8/24 and explicit opaque
+grid-tile/group fills 12/172 to the prior 26/87. Native transparent-fill owners
+have no own background/reset/motion request; exact candidate surface requests
+survive all stages. Preserve the different histories documented below (original
+grid fill versus later toggle-group input drift), without claiming intent.
+Toolbar evidence retains the missing scalar `mediaMaxWidth:500px` projection
+on the 64px rule. The first check rejected an unjustified single-rule assumption:
+all eight held captures author identical hover and active fills. The completed
+proof records both matching rules, not an inferred active selector. Focused
+control-state-paint spec passed 1/1 in **15.88 seconds**, including the new absent
+native request and altered rule negatives. Combined with the separate trigger
+join, 54/62 remaining background groups are prepared, not canonical. Eight groups
+remain: divider (1), disabled ranges (2), selected toggle (2), sheet action (2),
+sheet overlay (1). Reuse their historical findings; disabled-range defaults still
+need the explicitly recorded public-reduction limitation respected.
+
 September 28 prepared tab/card/cancel paint join: original-case inventory replay
 now binds **26 groups / 87 observations** to the existing findings below: tabs
 16/42, card action 8/24, dialog cancel 1/8, and dark card surface 1/13. The proof
