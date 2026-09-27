@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 27
 
+**Snackbar reconciliation progress:** conservation session 78262 and metadata
+session 5212 are terminal, exit 0. Exact changes: **31 groups / 1,292 observations**,
+one scalar receipt and 48 control receipts; all raw inputs and non-receipt control
+evidence conserved. Ordered current row SHA:
+`854435231b0f84931a62cb442a3c0195c4a5c4e59ce0f3fd7675133765d05f3c`.
+All **470** LF-normalized source fingerprints match disk: four added review
+module/spec files, four changed main/transition module/spec/control-width-spec
+files matched independently to 8978a4b -> f5b2ece, 462 unchanged, none removed.
+The 55 non-fingerprint changes are 48 control receipts, four summary counts and
+three binding receipts. Both motion-report hashes were independently reconstructed
+from original report contents with refreshed source receipts: before 0c10a57b...
+and after a556f8c8..., matching the metadata transition. All-section comparison
+**2608 / PID 6876 is still live** (CPU 332.05 s); finish it before acceptance/import.
+Do not rerun the passed conservation/source checks or restart the section stream.
+
+Additional safe proof reuse while waiting: current production control collector
+regenerated **39 toolbar line-height and 60 disabled-button ink findings** with
+complete row hashes exactly matching accepted f86307bd control evidence. This is
+not yet a scalar bridge: bind the scalar button host to the proof's child label
+and verify owner/stage correspondence before attribution. Toolbar's explicit
+40/24px line-height substitutes for inherited 28px; disabled ink substitutes
+opaque precomposited color for reference alpha/token input. Reuse these existing
+source findings; no new renderer cause or screenshot equivalence was established.
+
 **Snackbar/overflow export f5b2ece is terminal**, session 50788 exit 1, with only
 the expected **1,096 unresolved groups** error. Do not restart it. Coverage is
 436/436 static and 1,875/1,875 interaction, retaining 8,483 scalar groups / 389,202
