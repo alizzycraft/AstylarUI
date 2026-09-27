@@ -59,6 +59,20 @@
   have identical keys. Classifications remain unchanged pending scalar join and
   separate host-boundary review. This new proof is not yet a producer dependency;
   no capture or source used by the active export was changed.
+  The same test now covers **all 46 groups / 2,517 observations**, passing
+  **1/1, 23.17 s**. The remaining zero/omitted rows split into 28 groups / 1,563
+  observations with no captured tracking/reset or motion requests, eight groups /
+  366 with motion only, two groups / 80 with tracking tokens only, and one group /
+  32 with both. Explicit tokens resolving to zero belong to toolbar-title (40),
+  card-title (40), and dialog-title (32); zero is not evidence of unauthored input.
+  Initial read-only membership matching found 52 badge-count cases against a
+  40-case unresolved row: its 12 static cases are already separately classified.
+  The test binds state membership as well as values and validates the exact case
+  sample/count, preserving those settled static rows. Next reuse the 340 retained
+  label proofs for the scalar join; handle the 112 explicit-zero-token and 136
+  button-toggle host observations separately from the no-request population.
+  Motion and observation-stage signatures remain routing evidence, not approved
+  computed defaults or rendering equivalence. No new export was started.
 - Corrected export **57045 / PID 21308 is terminal**, source **00f8133**.
   Candidate **baf0ccb8** has 1,060 unresolved groups, 8,483 raw groups / 389,202
   observations, 134 source findings, and complete 436 static / 1,875 interaction

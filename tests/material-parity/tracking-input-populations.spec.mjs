@@ -6,12 +6,14 @@ import { collectFullTreeInventory, collectRetainedTypographyEvidence } from './i
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
+import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 
-test('seven nonzero tracking scalar groups distinguish 340 retained label omissions from 136 host tokens', () => {
+test('all 46 tracking populations retain host, label, token and motion boundaries', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const raw = JSON.parse(bytes), cases = [...raw.results.map(e => ({ ...e, kind: 'static' })),
@@ -76,6 +78,55 @@ test('seven nonzero tracking scalar groups distinguish 340 retained label omissi
     }
   }
   assert.equal(labels, 340); assert.equal(hosts, 136);
+  const allRows = [...new Set(cases.map(e => e.family))].flatMap(family =>
+    queryFindings('artifacts/material-parity/working-audit', family, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies' && r.attribution === 'unresolved' &&
+      r.property === 'letterSpacing' && r.reference === '0');
+  assert.equal(allRows.length, 39);
+  const ancestry = (tree, node) => {
+    const keys = [];
+    while (node) {
+      assert.ok(!keys.includes(node.key)); keys.push(node.key);
+      if (node.parent === null) return keys;
+      node = one(tree.nodes.filter(n => n.key === node.parent));
+    }
+    assert.fail('incomplete owner ancestry');
+  };
+  const groups = {}, counts = {}, tokens = {};
+  for (const row of allRows) {
+    // Some owners' static rows are already reviewed; do not re-add those cases
+    // to their unresolved interaction population merely because values match.
+    const members = cases.filter(e => e.family === row.family && row.states.includes(e.state ?? 'static') &&
+      e.styleInputs.some(i => i.id === row.element && normalize(i.reference).letterSpacing === '0' &&
+        normalize(i.astylar).letterSpacing === undefined));
+    assert.equal(members.length, row.occurrences);
+    assert.deepEqual(members.slice(0, 12).map(keyOf), row.cases);
+    const patterns = new Set();
+    for (const entry of members) {
+      const [r, a] = modalInventoryTrees(inventory, keyOf(entry));
+      const input = one(entry.styleInputs.filter(i => i.id === row.element));
+      const native = r.nodes.find(n => n.attributes?.id === row.element);
+      const candidate = one(a.nodes.filter(n => n.authored?.id === row.element));
+      const identity = native ? { status: 'mapped', inputEquivalent: false, referenceNode: native.key,
+        candidateNode: candidate.key, referencePath: ancestry(r, native), candidatePath: ancestry(a, candidate),
+        missingRules: [], extraRules: [] } : resolveOriginAliasPair(entry, r, a, input);
+      const trace = inspectOverlayOwnerDeclarations('letterSpacing', identity, r, a);
+      const signature = `${trace.hasRelevantRequest}/${trace.hasMotionRequest}`;
+      patterns.add(signature); counts[signature] = (counts[signature] ?? 0) + 1;
+      for (const node of trace.referencePath) for (const rule of node.rules) {
+        if (!Object.hasOwn(rule.declarations, 'letter-spacing')) continue;
+        assert.equal(rule.active, true);
+        const token = rule.declarations['letter-spacing'];
+        assert.equal(token.important, false); assert.ok(token.value.startsWith('var(--mat-'));
+        tokens[row.element] = (tokens[row.element] ?? 0) + 1;
+      }
+    }
+    assert.equal(patterns.size, 1);
+    const signature = [...patterns][0]; groups[signature] = (groups[signature] ?? 0) + 1;
+  }
+  assert.deepEqual(groups, { 'true/false': 2, 'false/false': 28, 'false/true': 8, 'true/true': 1 });
+  assert.deepEqual(counts, { 'true/false': 80, 'false/false': 1563, 'false/true': 366, 'true/true': 32 });
+  assert.deepEqual(tokens, { 'toolbar-title': 40, 'card-title': 40, 'dialog-title': 32 });
   // No classification mutation: equal leaf zeros do not establish host token,
   // inheritance, current glyph paint or rendering equivalence.
 });
