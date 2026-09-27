@@ -3,7 +3,9 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
-import { fixedHeightOwners, proveFixedHeightRequest, proveOmittedHeightRequest } from './control-height-request-review.mjs';
+import { fixedHeightOwners, proveFixedHeightRequest, proveOmittedHeightRequest,
+  applyHeightRequestReviews, heightReviewAttributions } from './control-height-request-review.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 
@@ -15,8 +17,9 @@ test('all 43 remaining height groups preserve owner requests and stage boundarie
     ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))];
   const snapshot = { generation: 'e25dab5fef84be5038dc83bff954f0681c3661c86bb0dd546dd118876d842760',
     indexSha256: '230d42b303bfd104b444d5c7e42ad0f69ce79ba943adc5bc144cca89aded585f' };
-  const rows = [...new Set(cases.map(e => e.family))].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
-    .filter(r => r.attribution === 'unresolved' && r.property === 'height');
+  const allRows = [...new Set(cases.map(e => e.family))].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies');
+  const rows = allRows.filter(r => r.attribution === 'unresolved' && r.property === 'height');
   assert.equal(rows.length, 43);
   const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
   const cache = new Map(), read = d => {
@@ -53,4 +56,21 @@ test('all 43 remaining height groups preserve owner requests and stage boundarie
     }
   }
   assert.equal(total, 1414); assert.equal(omitted, 1076); assert.equal(token, 20);
+  const joined = applyHeightRequestReviews(allRows, cases, inventory, bindPreciseAuditNormalization());
+  const metadata = new Set(['classification', 'attribution', 'recommendedOwner', 'justification', 'reviewEvidence', 'reviewedCases']);
+  const rawRow = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  const counts = [[0, 0], [0, 0]];
+  assert.equal(allRows.length, 8483); assert.equal(joined.length, allRows.length);
+  for (let index = 0; index < allRows.length; index++) {
+    const before = allRows[index], after = joined[index];
+    assert.deepEqual(rawRow(after), rawRow(before));
+    const kind = heightReviewAttributions.indexOf(after.attribution);
+    if (kind < 0) { assert.deepEqual(after, before); continue; }
+    counts[kind][0]++; counts[kind][1] += before.occurrences;
+    assert.equal(after.reviewEvidence.originalRowSha256, hash(JSON.stringify(before)));
+    assert.equal(after.reviewEvidence.observations.length, before.occurrences);
+    assert.equal(after.reviewEvidence.inputEquivalent, false);
+    assert.equal(after.reviewEvidence.renderingEquivalent, false);
+  }
+  assert.deepEqual(counts, [[14, 338], [29, 1076]]);
 });

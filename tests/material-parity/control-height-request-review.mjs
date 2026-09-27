@@ -3,6 +3,29 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { proveControlWidthRequest } from './control-width-observation.mjs';
 import { proveTabPanelWrapping } from './wrapping-input-review.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+import { applyModalBoxReview } from './modal-position-inspection.mjs';
+
+export const heightReviewAttributions = Object.freeze([
+  'reviewed-fixed-height-input-substitution', 'reviewed-height-computed-local-observation-stage',
+]);
+export function applyHeightRequestReviews(rows, cases, inventory, normalize) {
+  return rows.map(row => {
+    if (row.attribution !== 'unresolved' || row.property !== 'height') return row;
+    const omitted = row.astylar === undefined;
+    const members = cases.filter(e => e.family === row.family && row.states.includes(e.state ?? 'static'));
+    return applyModalBoxReview([row], members, inventory, normalize, {
+      family: row.family, element: row.element, properties: ['height'],
+      attribution: heightReviewAttributions[omitted ? 1 : 0],
+      classification: omitted ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
+      owner: omitted ? 'height computed/local measurement boundary' : 'showcase control height authoring',
+      justification: omitted
+        ? 'Original owner declarations omit height and logical-size requests while browser computed height is compared with absent candidate local height. Preserve this measurement-stage difference; neither candidate computed height nor used-layout equivalence is demonstrated.'
+        : 'Candidate fixed height requests replace native omission or the progress-bar token request. Exact original owners, declarations and local stages establish different authored requests, not renderer causation or compensation intent.',
+      prove: (entry, r, a) => (omitted ? proveOmittedHeightRequest : proveFixedHeightRequest)(entry,
+        entry.styleInputs.find(i => i.id === row.element), r, a),
+    })[0];
+  });
+}
 
 export const fixedHeightOwners = Object.freeze({
   'divider-primary': ['divider', ['1px']], 'badge-primary': ['badge', ['21px']],

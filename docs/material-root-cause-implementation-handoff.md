@@ -14,9 +14,14 @@ height authoring proof. The expanded focused test passed 1/1 in 33.99 seconds,
 including injected logical-size, native-inline and local-stage negative controls.
 An initial attempt incorrectly sent direct IDs through the alias-only resolver;
 the corrected join requires unique direct owners before falling back to aliases.
-These standalone proofs are not yet production classifications. Next join the
-height batch using existing scalar infrastructure after export reconciliation;
-do not repeat the source survey or infer used-size equivalence from omission.
+The standalone height batch now joins through the existing scalar infrastructure:
+14 groups / 338 observations receive authoring classifications and 29 / 1,076
+receive computed/local measurement-boundary classifications. Its focused test
+passed 1/1 in 35.18 seconds, preserving raw fields across all 8,483 compact scalar
+rows and leaving all 8,440 unrelated rows unchanged. These remain prepared, not
+production/canonical classifications. Next integrate the prepared grid and height
+batches after box-sizing export reconciliation; do not repeat their source surveys
+or infer used-size equivalence from omission.
 
 Accepted typography generation:
 `e25dab5fef84be5038dc83bff954f0681c3661c86bb0dd546dd118876d842760`.
