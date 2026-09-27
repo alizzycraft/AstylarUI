@@ -2,22 +2,48 @@
 
 ## Current audit checkpoint — September 27
 
-- Accepted canonical: **ef6da409**, 1,096 unresolved groups. Do not import the
-  rejected 19b21ace docs output; it is retained as failed evidence.
-- Live corrected export: **session 57045**, exporter **PID 21308** (launcher
-  22792), source **00f8133**, currently validate-audit. Use the complete-input
+- Accepted canonical: **baf0ccb8**, 1,060 unresolved groups (previous ef6da409:
+  1,096). Compact import and verification passed: 8,483 discrepancies, 134 source
+  findings, 39,904 controls, 389,202 occurrences, 70,612,013 compact bytes. Index
+  SHA-256: `00e5b5296d3d4af5ee27086fc41db3fbc21238bb6ee8b6a36315be68d25d60e0`.
+  The standalone manifest is retained beside its immutable working snapshot. The rejected
+  19b21ace output remains retained as failed evidence, not accepted evidence.
+- Corrected export **57045 / PID 21308 is terminal**, source **00f8133**.
+  Candidate **baf0ccb8** has 1,060 unresolved groups, 8,483 raw groups / 389,202
+  observations, 134 source findings, and complete 436 static / 1,875 interaction
+  coverage. Its only validation error is the 1,060 unattributed groups. Evidence
+  session rechecked 1,205 files with zero invalidation. Use the complete-input
   launcher `node scripts/export-material-input-audit-current-ancestry.mjs`;
   never substitute a parity-report-only invocation. Log:
   `artifacts/material-parity/authored-typography-export-complete-inputs-00f8133.log`.
-- Next acceptance step: after terminal completion, inspect every error, then
-  `--authored-typography` conservation, all-section/source reconciliation and
-  compact import/verify. Expected 36-group / 1,951-observation batch and 1,060
-  unresolved is an expectation, not acceptance. Keep its dependencies frozen.
+- Conservation **83965 passed**: exactly 36 groups / 1,951 observations changed,
+  all raw inputs and non-receipt control evidence conserved, one scalar and 48
+  control source receipts refreshed. Metadata comparison **79374 passed**: all
+  **475** LF-normalized source hashes match disk (five added, six changed, 464
+  unchanged, none removed). Added/changed sources belong to the already reviewed
+  typography/overflow batch. Non-source metadata changes are exactly 48 control
+  receipt hashes, four classification/remaining totals, one caret source hash,
+  and two reviewed-source binding hashes. Outputs:
+  `authored-typography-{conservation,sections,metadata}-dd5a1fc.json` under
+  `artifacts/material-parity`. Section comparison **8686 passed**: all 79 sections
+  retained, 72 unchanged; the seven changes are sourceFingerprints,
+  controlLineBoxes, summary, discrepancies, ownerCaretInputs,
+  reviewedSourceBatchInputs and controlTypography, all explained by the checks
+  above. Compact import **2927** and verification are complete. No export or
+  reconciliation process remains active. This is accepted incremental audit
+  evidence, not full audit completion or rendering equivalence.
 - Wrapping preparation is outside that export: all 30 groups / 1,478 original
   observations have repeatable checks; **26 groups / 1,204 observations** have
   classification logic prepared. Four groups / 274 observations remain: chips
   152, table 52, private tab panel 70. Investigate these boundaries,
   then integrate a coherent batch; do not rebuild per metadata row.
+- Table follow-up: all 52 original owner paths have the same pattern: the native
+  table alone explicitly supplies collapse/wrap, all native ancestors compute
+  normal, candidate captured ancestry omits wrapping, and neither side has motion
+  requests. Source inspection locates text inheritance in renderer.service.ts
+  and the normal fallback in TextStyleParserService. This is not yet proof of
+  equivalent table-descendant consumption; do not infer it from a host omission
+  or repeat the completed owner-path census.
 - Latest focused verification: wrapping suite **5/5, 30.87 s**. No renderer or
   fixture changes. The overall audit still includes other scalar families,
   final canonical reconciliation and enforced full browser acceptance.
@@ -29,7 +55,7 @@
   and a changed native wrapping request. This establishes missing authored label
   input, not candidate computed normal or a core wrapping defect. It does not
   classify the two host scalar groups or waive their remaining motion review.
-  Current export session 57045/PID 21308 was revalidated live; do not restart it.
+  Reuse the completed export and reconciliation; do not restart them for this work.
 - Dialog wrapping motion boundary resolved for **six groups / 192 observations**:
   empty CSSOM transition longhands retain variable-dependent shorthands in
   `cssText`. Exact active same-sheet higher-specificity noopable overrides supply
@@ -40,7 +66,8 @@
   changed overrides, changed shorthand, changed sheet/order and named animation.
   Initial focused attempts rejected unhandled animation longhands; review now
   admits only the known fields with explicit animation-name none. Full suite
-  passes; no canonical attribution changes until the pending export is reconciled.
+  passes; wrapping changes still await coherent production integration and a
+  later milestone export. The accepted baf0ccb8 package does not include them.
 
 ### Supporting checkpoint history (not current process status)
 
