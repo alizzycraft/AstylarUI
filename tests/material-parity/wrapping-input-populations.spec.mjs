@@ -13,7 +13,8 @@ import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNow
   validateOmittedNowrap, omittedNowrapAttribution, proveOmittedNowrap,
   applyOverlayNormal, validateOverlayNormal, overlayNormalAttribution, proveOverlayNormal,
   proveChipLabelWrapping, proveTableWrapping, applyTableWrapping, validateTableWrapping,
-  tableWrappingAttribution } from './wrapping-input-review.mjs';
+  tableWrappingAttribution, applyTabPanelWrapping, validateTabPanelWrapping,
+  tabPanelWrappingAttribution, proveTabPanelWrapping } from './wrapping-input-review.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
@@ -425,4 +426,22 @@ test('table normal requests and private tab-panel text remain distinct in 122 ho
   const forged = structuredClone(applied);
   forged.find(r => r.attribution === tableWrappingAttribution).reviewEvidence.observations[0].descendantConsumptionVerified = true;
   assert.equal(validateTableWrapping(forged, rows, cases, inventory, normalize).length, 1);
+  const tabRows = queryFindings('artifacts/material-parity/working-audit', 'tabs', {
+    generation: 'baf0ccb8d7f5adad44efff3a8e165448e550b7455999a182ce138975b2bfff3b',
+    indexSha256: '00e5b5296d3d4af5ee27086fc41db3fbc21238bb6ee8b6a36315be68d25d60e0',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const tabApplied = applyTabPanelWrapping(tabRows, cases, inventory, normalize);
+  const tabChanged = one(tabApplied.filter(r => r.attribution === tabPanelWrappingAttribution));
+  assert.equal(tabChanged.occurrences, 70);
+  assert.deepEqual(validateTabPanelWrapping(tabApplied, tabRows, cases, inventory, normalize), []);
+  for (let index = 0; index < tabRows.length; index++) if (tabApplied[index] !== tabChanged) assert.deepEqual(tabApplied[index], tabRows[index]);
+  const tabEntry = cases.find(e => e.family === 'tabs');
+  const tabInput = one(tabEntry.styleInputs.filter(i => i.id === 'tab-panel'));
+  const [tr, ta] = modalInventoryTrees(inventory, keyOf(tabEntry));
+  const alteredTab = structuredClone(ta);
+  alteredTab.nodes.find(n => n.authored?.id === 'tab-panel').authored.type = 'div';
+  assert.throws(() => proveTabPanelWrapping(tabEntry, tabInput, tr, alteredTab));
+  const tabForged = structuredClone(tabApplied);
+  tabForged.find(r => r.attribution === tabPanelWrappingAttribution).reviewEvidence.observations[0].coreRendererCauseProven = true;
+  assert.equal(validateTabPanelWrapping(tabForged, tabRows, cases, inventory, normalize).length, 1);
 });

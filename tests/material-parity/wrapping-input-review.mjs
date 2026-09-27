@@ -377,3 +377,42 @@ export function validateTableWrapping(rows, originalRows, cases, inventory, norm
     return [];
   } catch (error) { return [`table wrapping stages do not replay from original owners: ${error.message}`]; }
 }
+
+export const tabPanelWrappingAttribution = 'reviewed-private-tab-panel-wrapping-owner';
+export function proveTabPanelWrapping(entry, input, reference, candidate) {
+  assert.equal(entry.family, 'tabs'); assert.equal(input.id, 'tab-panel');
+  const identity = resolveOriginAliasPair(entry, reference, candidate, input);
+  assert.equal(identity.status, 'mapped'); assert.deepEqual(identity.missingRules, []); assert.deepEqual(identity.extraRules, []);
+  const native = one(reference.nodes.filter(n => n.key === identity.referenceNode));
+  const ast = one(candidate.nodes.filter(n => n.key === identity.candidateNode));
+  assert.equal(input.reference.whiteSpace, 'normal'); assert.equal(reference.styles[native.style].whiteSpace, 'normal');
+  assert.equal(ast.authored.type, 'showcase.material:tab-panel');
+  assert.equal(ast.authored.ariaLabel, input.referenceStructure.text);
+  assert.equal(candidate.nodes.filter(n => n.parent === ast.key).length, 0);
+  assert.equal(ast.retainedText, undefined); assert.equal(ast.paintedControlText, undefined);
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(ast[stage], input[scalar]); assert.equal(ast[stage].whiteSpace, undefined);
+  }
+  return { case: keyOf(entry), element: input.id, referenceNode: native.key, astylarNode: ast.key, identity,
+    sourceFinding: 'plugin-tab-panel-competing-text-renderer',
+    diagnostic: 'examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts',
+    candidateLocalDeclaration: '<omitted>', candidateComputedVerified: false,
+    coreRendererCauseProven: false, motionEquivalenceVerified: false, renderingEquivalent: false };
+}
+export function applyTabPanelWrapping(rows, cases, inventory, normalize) {
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'tabs', element: 'tab-panel', properties: ['whiteSpace'], attribution: tabPanelWrappingAttribution,
+    owner: 'showcase Material private tab-panel text renderer',
+    justification: 'The mapped native text owner computes normal; the candidate is a childless plugin leaf with no retained shared text or control paint record. The existing competing-text-renderer finding and its package-root narrow-width diagnostic locate wrapping outside shared CSS text layout: matched native normal text wraps while the private renderer draws the complete label at one baseline for both normal and nowrap. This is plugin ownership failure, not evidence that omitted candidate whiteSpace computes nowrap or that the shared renderer fails equal inputs. Preserve native motion and final raster as separate obligations.',
+    prove: (entry, reference, candidate) => proveTabPanelWrapping(entry,
+      one(entry.styleInputs.filter(i => i.id === 'tab-panel')), reference, candidate),
+  });
+}
+export function validateTabPanelWrapping(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const selected = values => values.filter(r => r.attribution === tabPanelWrappingAttribution);
+    assert.deepEqual(selected(rows), selected(applyTabPanelWrapping(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`private tab wrapping owners do not replay: ${error.message}`]; }
+}

@@ -33,9 +33,9 @@
   reconciliation process remains active. This is accepted incremental audit
   evidence, not full audit completion or rendering equivalence.
 - Wrapping preparation is outside that export: all 30 groups / 1,478 original
-  observations have repeatable checks; **27 groups / 1,256 observations** have
-  classification logic prepared. Three groups / 222 observations remain: chips
-  152 and private tab panel 70. Investigate these boundaries,
+  observations have repeatable checks; **28 groups / 1,326 observations** have
+  classification logic prepared. Two groups / 152 observations remain: chips.
+  Investigate that host/motion boundary,
   then integrate a coherent batch; do not rebuild per metadata row.
 - Table follow-up: all 52 original owner paths have the same pattern: the native
   table alone explicitly supplies collapse/wrap, all native ancestors compute
@@ -48,13 +48,30 @@
   flags. Focused table/tab test passed **1/1, 2.78 s**, including reset/motion,
   changed native wrapping and forged descendant-consumption negative controls.
   Do not repeat the completed owner-path census.
-- Private tab-panel next decisive check: existing package-root diagnostic proves
-  independent font/ink/baseline ownership, but never varies whiteSpace or narrow
-  width. Reuse that test for a matched-font narrow-width wrapping variant rather
-  than claiming its typography observations already prove wrapping behavior.
-  Current source uses a single private canvas fillText call per incoming/outgoing
-  label; that is source evidence, not a fresh browser wrapping result.
-- Latest focused verification: wrapping suite **5/5, 30.87 s**. No renderer or
+- Private tab-panel wrapping ownership now has a package-root browser proof in
+  `examples/material-showcase/src/app/material-plugin/tab-panel-input-audit.spec.ts`.
+  At matched 100px width, loaded Roboto 16px and 20px line height, native normal
+  wraps into two lines and nowrap stays on one. The bound plugin texture receives
+  the complete label at one baseline for both requests; its 200px backing texture
+  uses 32px text whose measured width exceeds the texture. This confirms private
+  plugin wrapping ownership, not shared-renderer failure or raster equivalence.
+  All 70 original mapped childless plugin owners now have guarded classification
+  logic; negative controls reject an ordinary div replacement and a forged core
+  cause. Candidate computed wrapping and motion equivalence remain unverified.
+  Chrome Headless 153 / Babylon 8.56.2 passed **2/2** browser diagnostics, including
+  resource cleanup; the development build passed with two prerendered routes.
+  Commands from `examples/material-showcase` (NG_BUILD_MAX_WORKERS=1):
+  `node node_modules/@angular/cli/bin/ng.js test --watch=false --browsers=ChromeHeadless --include=src/app/material-plugin/tab-panel-input-audit.spec.ts`
+  and `node node_modules/@angular/cli/bin/ng.js build --configuration development --source-map=false`.
+  Logs under `artifacts/material-parity`: `tab-panel-wrapping-font-bound-346f6ff.log`
+  and `tab-panel-wrapping-build-346f6ff.log`. Initial font-loading failure is retained
+  in `tab-panel-wrapping-346f6ff.log`: a missing /base/media font URL, corrected in
+  the diagnostic by loading the existing /audit-fonts asset. Existing Zone/zoneless
+  and Sass warnings remain; no fixture font or renderer was changed. This changed
+  diagnostic's source receipt must be refreshed at the next coherent export; the
+  accepted package's source-hash match above describes its reconciliation time.
+- Latest focused verification: `node --test tests/material-parity/wrapping-input-populations.spec.mjs`
+  passed **5/5, 22.33 s**. No renderer or
   fixture changes. The overall audit still includes other scalar families,
   final canonical reconciliation and enforced full browser acceptance.
 - Chip label boundary strengthened: **152/152** original nested labels explicitly
