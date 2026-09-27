@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 27
 
+- Applicability check for the new omitted-sizing reproduction covers all **32
+  unresolved content-box/omitted groups / 1,694 original observations**, joined
+  by family, element, state and exact raw boxSizing values. Per-group occurrence
+  counts match accepted `462dddc7`; original capture hash remains `b07ef154...`.
+  **1,641 observations** have captured candidate padding/borderWidth zero.
+  The other **53** are card-copy (52, padding `0 16px`) and one checkbox-label
+  observation (padding `0 0 1px`); neither has captured candidate width/height.
+  Thus none directly matches the public diagnostic's combination of declared
+  width/height and nonzero insets. Do not apply its confirmed failure to this
+  whole population or classify these rows as equivalent: intrinsic sizing,
+  source declarations, generated/plugin owners and other used-box effects
+  remain distinct. Ordered case/element/size/display/inset digest:
+  `f616622aade1e5b31669acf94154d6e6195b8c86e672cbde6b5af13559182bff`.
+  The original capture identifies Chromium **152.0.7977.76**, not the diagnostic's
+  Chrome 153; historical UA-rule provenance is still not established merely by
+  the newer browser check. Next prioritize executable authored-request findings
+  (10 explicit candidate groups and six explicit native groups), retaining this
+  omission population as observation-stage uncertainty until independently
+  justified. No additional browser rerun, source change or canonical transition.
 - Public table/block box-sizing reduction now exercises **six equal-authored
   cases** through package-root `Astylar.mount`, reusing the existing button
   diagnostic's CSS serialization and projected-border-box measurement. Command:
