@@ -32,9 +32,9 @@ Decoded payload SHA-256:
 The standalone manifest is retained beside the indexed compressed payload;
 no decoded 2 GB file was created. All reconciliation jobs are complete.
 
-**Next:** integrate the prepared 49-group box-sizing review with independent
-production replay and exact producer-transition checks; do not repeat its
-completed source investigations. Then continue remaining property/state gaps.
+**Next:** reconcile the integrated 49-group box-sizing review through a complete
+canonical export and conservation check; do not repeat its completed source
+investigations. Then continue remaining property/state gaps.
 The 939 unresolved groups and final enforced browser gates still prevent audit
 completion. This checkpoint does not incorporate the separately prepared
 box-sizing classifications or claim input/rendering equivalence.
@@ -52,6 +52,19 @@ canonical conservation. Production wiring must replay the existing modal/tab
 box-sizing precedence before this batch; do not feed the earlier unreviewed
 producer stage directly into it. Exact source-transition checks and canonical
 integration remain next. No renderer or fixture changes were made.
+
+Production integration is now wired after typography, gated on bound original
+cases, with both helper/spec included in source fingerprints. Independent
+validation replays six existing modal/tab box-sizing groups before applying the
+new 49-group batch. Exact six-fragment restoration authenticates the complete
+accepted producer predecessor (`8e47117aace4e449d5da889eff7815fcc15ed5c6e9d98ebd5632f658379c4070`)
+and preserves all earlier source-transition checks. Combined box-sizing and
+producer-transition tests passed 22/22 in 29.04 seconds; production position
+source-binding tests passed 2/2 in 22.20 seconds. The canonical export is now
+intentionally pending source reconciliation: the accepted checkpoint above is
+still the 939-unresolved typography report, not a claim that today's producer
+has already been exported. Next extend the existing canonical conservation
+command for this batch and run the complete-input launcher at this milestone.
 
 ### Earlier preparation notes (historical job statuses)
 

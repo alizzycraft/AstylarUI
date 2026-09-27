@@ -33,9 +33,27 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreTypographyReviewProducer(source) {
+export function restoreBoxSizingReviewProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyBoxSizingReviews, validateBoxSizingReviews, replayBoxSizingPredecessors, boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';\n", ''],
+    ["  const beforeBoxSizingReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyBoxSizingReviews(beforeBoxSizingReviews, cases, elementInventory, canonicalStyle)\n    : beforeBoxSizingReviews;\n", ''],
+    ["      errors.push(...validateBoxSizingReviews(report.discrepancies.filter(r => r.property === 'boxSizing'),\n        replayBoxSizingPredecessors(replayedRows, cases, report.elementInventory, canonicalStyle),\n        cases, report.elementInventory, canonicalStyle));\n", ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => boxSizingReviewAttributions.includes(d.attribution)))\n    errors.push('box-sizing review attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/box-sizing-authoring-review.mjs',\n    'tests/material-parity/box-sizing-authoring-review.spec.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated box-sizing review integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), '8e47117aace4e449d5da889eff7815fcc15ed5c6e9d98ebd5632f658379c4070',
+    'producer changed beyond reviewed box-sizing integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreTypographyReviewProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const beforeBoxSizingReviews =') ? restoreBoxSizingReviewProducer(current).restoredSource : current;
   for (const [from, to] of [
   [
     "import { applyTypographyReviews, validateTypographyReviews, replayTypographyPredecessors, typographyReviewAttributions } from './tracking-input-review.mjs';\n",

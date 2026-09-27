@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { applyBoxSizingReviews, validateBoxSizingReviews, replayBoxSizingPredecessors, boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
 import { applyWrappingReviews, validateWrappingReviews, wrappingAttributions } from './wrapping-input-review.mjs';
 import { applyTypographyReviews, validateTypographyReviews, replayTypographyPredecessors, typographyReviewAttributions } from './tracking-input-review.mjs';
 import { applyVisibleButtonOverflow, validateVisibleButtonOverflow, visibleButtonOverflowAttribution } from './control-overflow-observation.mjs';
@@ -328,9 +329,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforeTypographyReviews = ownerInitialStyleBinding.status === 'bound'
     ? applyMappedVisibleOverflow(applyControlClippingRequests(applySnackbarPositionRequests(beforeSnackbarOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
     : beforeSnackbarOverflowRequests;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforeBoxSizingReviews = ownerInitialStyleBinding.status === 'bound'
     ? applyTypographyReviews(beforeTypographyReviews, cases, elementInventory, retainedTypography, canonicalStyle)
     : beforeTypographyReviews;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyBoxSizingReviews(beforeBoxSizingReviews, cases, elementInventory, canonicalStyle)
+    : beforeBoxSizingReviews;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -651,6 +655,9 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.rootFlowHeightInputs, report.buttonPillRadiusInputs, report.buttonFlexInputs, report.buttonHostRequestInputs,
         report.buttonFixedWidthInputs, report.ownerGridInitialInputs, report.buttonBoxSizingInputs, report.fieldHostLayoutInputs, report.ownerGapInputs, report.explicitGapInputs, report.gapReviewInputs, report.ownerCaretInputs, report.reviewedInputs, report.followupInputs, report.alignmentFontInputs, report.textAlignInputs, report.ltrAlignmentInputs, report.reviewedSourceBatchInputs, report.rootBackgroundInputs);
       const selected = rows => rows.filter(r => r.attribution === ownerInitialStyleAttribution);
+      errors.push(...validateBoxSizingReviews(report.discrepancies.filter(r => r.property === 'boxSizing'),
+        replayBoxSizingPredecessors(replayedRows, cases, report.elementInventory, canonicalStyle),
+        cases, report.elementInventory, canonicalStyle));
       errors.push(...validateTypographyReviews(report.discrepancies,
         replayTypographyPredecessors(replayedRows, cases, report.elementInventory, report.retainedTypography, report.controlTypography, canonicalStyle),
         cases, report.elementInventory, report.retainedTypography, canonicalStyle));
@@ -735,6 +742,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     errors.push('wrapping attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => typographyReviewAttributions.includes(d.attribution)))
     errors.push('typography review attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => boxSizingReviewAttributions.includes(d.attribution)))
+    errors.push('box-sizing review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))
     errors.push('button-host line-height attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>
@@ -9028,6 +9037,8 @@ function sourceFingerprints(root) {
     'tests/material-parity/wrapping-input-review.mjs',
     'tests/material-parity/tracking-input-review.mjs',
     'tests/material-parity/tracking-input-populations.spec.mjs',
+    'tests/material-parity/box-sizing-authoring-review.mjs',
+    'tests/material-parity/box-sizing-authoring-review.spec.mjs',
     'tests/material-parity/wrapping-input-populations.spec.mjs',
     'examples/material-showcase/src/app/material-plugin/tab-panel-wrapping-audit.spec.ts',
     'tests/material-parity/tab-scalar-typography-reuse.spec.mjs',

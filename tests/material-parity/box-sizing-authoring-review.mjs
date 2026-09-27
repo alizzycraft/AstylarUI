@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
-import { applyModalBoxReview } from './modal-position-inspection.mjs';
+import { applyModalBoxReview, applyBottomSheetActionLayout, applyBottomSheetPanelConstraints,
+  applyDialogPanelConstraints, applyTabControlStage } from './modal-position-inspection.mjs';
 
 export const boxSizingReviewAttributions = Object.freeze([
   'reviewed-explicit-box-sizing-input-substitution',
@@ -45,6 +46,15 @@ export function validateBoxSizingReviews(rows, originalRows, cases, inventory, n
   } catch (error) {
     return [`box-sizing review evidence does not replay: ${error.message}`];
   }
+}
+
+// The production validator starts before these established scalar joins.
+// Reproduce their precedence from evidence, not the submitted attribution.
+export function replayBoxSizingPredecessors(rows, cases, inventory, normalize) {
+  return [applyBottomSheetActionLayout, applyBottomSheetPanelConstraints,
+    applyDialogPanelConstraints, applyTabControlStage].reduce(
+    (values, apply) => apply(values, cases, inventory, normalize),
+    rows.filter(row => row.property === 'boxSizing'));
 }
 
 export const explicitBoxSizingTargets = Object.freeze({

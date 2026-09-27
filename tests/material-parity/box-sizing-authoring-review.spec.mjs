@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { proveExplicitBoxSizing, explicitBoxSizingTargets, proveNativeBoxSizingRequest, nativeBoxSizingTargets,
-  proveBoxSizingOmission, applyBoxSizingReviews, validateBoxSizingReviews, boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
+  proveBoxSizingOmission, applyBoxSizingReviews, validateBoxSizingReviews, replayBoxSizingPredecessors, boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 
@@ -160,6 +160,13 @@ test('existing scalar join changes only the 49 prepared groups and preserves eve
   assert.equal(untouched, 8434);
   assert.deepEqual(boxSizingReviewAttributions.map(k => counts.get(k)), [[10, 621], [6, 290], [33, 1746]]);
   const normalize = bindPreciseAuditNormalization();
+  const priorAttributions = ['reviewed-bottom-sheet-action-layout-substitution',
+    'reviewed-bottom-sheet-panel-constraint-omission', 'reviewed-dialog-panel-constraint-omission', 'reviewed-tab-control-stage'];
+  const prior = rows.filter(r => r.property === 'boxSizing' && priorAttributions.includes(r.attribution));
+  assert.equal(prior.length, 6);
+  const replayed = replayBoxSizingPredecessors(prior.map(r => ({ ...r, attribution: 'unresolved' })), cases, inventory, normalize);
+  assert.deepEqual(replayed.map(r => r.attribution), prior.map(r => r.attribution));
+  assert.deepEqual(applyBoxSizingReviews(replayed, cases, inventory, normalize), replayed);
   assert.deepEqual(validateBoxSizingReviews(result, rows, cases, inventory, normalize), []);
   // Each attribution must reject fabricated geometry/equivalence and a missing
   // receipt. Replaying one original group per mutation keeps this focused.

@@ -10,6 +10,20 @@ import { restoreSnackbarOverflowProducer } from './position-composition-producer
 import { restoreAuthoredTypographyProducer } from './position-composition-producer-transition.mjs';
 import { restoreWrappingProducer } from './position-composition-producer-transition.mjs';
 import { restoreTypographyReviewProducer } from './position-composition-producer-transition.mjs';
+import { restoreBoxSizingReviewProducer } from './position-composition-producer-transition.mjs';
+
+test('box-sizing integration restores the complete accepted typography predecessor', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'fd99454:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreBoxSizingReviewProducer(current).restoredSource, previous);
+  for (const fragment of ['applyBoxSizingReviews(beforeBoxSizingReviews, cases',
+    'replayBoxSizingPredecessors(replayedRows, cases',
+    "errors.push('box-sizing review attribution lacks bound original cases');",
+    "    'tests/material-parity/box-sizing-authoring-review.mjs',\n"])
+    assert.throws(() => restoreBoxSizingReviewProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreBoxSizingReviewProducer(current + '\n// unrelated'));
+});
 
 test('typography review restores the full predecessor including precedence and binding guards', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
