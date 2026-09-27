@@ -127,6 +127,23 @@ that correction; negative controls reject explicit grid requests and prevent a
 grid-targeted transition from being called disjoint. This is preparation only,
 not canonical integration. The running export's dependencies remain unchanged.
 
+Read-only height triage covers **43 groups / 1,414 observations** from the same
+authenticated capture/current compact checkpoint. Captured own height/logical
+size/reset declarations split into **29 groups / 1,076 observations** with no
+request on either side, **13 groups / 318** with candidate fixed height and no
+native own height request, and **one progress-bar group / 20** with native
+token-based `max(track-height, active-indicator-height)` versus candidate 8px
+(native computed 4px). Candidate-fixed owners: divider, badge, sort, checkbox,
+radio, button-toggle and private tab-panel. This is declaration triage, not
+used-layout or implicit/default-height equivalence; min/max, descendants,
+formatting contexts and complete local stages still need their existing proofs.
+Ordered receipt digest: `c6c06d06e66092dae7065224c3a1a8a1364749e8d31cff2c015ad8adbeb94985`.
+Reuse `control-width-observation.mjs` owner proofs, the existing sort natural-flow
+border reduction, divider paint substitution and tab-panel ownership/history.
+The current showcase still has `.progress` height 8px at astylar.component.ts:787;
+this corroborates authoring, not the installed plugin's used height. No new
+capture or report was created. Export remains live (CPU 1,061.61 s); no restart.
+
 ### Earlier preparation notes (historical job statuses)
 
 - Prepared box-sizing proofs now run through existing `applyModalBoxReview`
