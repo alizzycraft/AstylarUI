@@ -2,6 +2,12 @@
 
 ## Current audit checkpoint — September 27
 
+- Corrected cold wrapping export launched from **29edf43**, session **25438**,
+  with all five retained evidence inputs through the named launcher. Log:
+  `artifacts/material-parity/wrapping-export-29edf43-complete-inputs.log`.
+  Check the existing process/session before any retry; do not change its producer
+  dependencies while it runs. The baf0ccb8 compact generation is still accepted;
+  no replacement is accepted until conservation and reconciliation complete.
 - **Export source-binding failure resolved and independently checked.** The added
   wrapping browser diagnostic now lives in `tab-panel-wrapping-audit.spec.ts`;
   its body is byte-identical to the previous test. The historical typography spec
