@@ -27,6 +27,28 @@
   SHA-256: `00e5b5296d3d4af5ee27086fc41db3fbc21238bb6ee8b6a36315be68d25d60e0`.
   The standalone manifest is retained beside its immutable working snapshot. The rejected
   19b21ace output remains retained as failed evidence, not accepted evidence.
+- Next typography question narrowed read-only while the wrapping export runs:
+  the accepted compact snapshot has **46 unresolved letter-spacing groups / 2,517
+  observations**, not the older 48-group count. Of these, 39 groups / 2,041
+  observations compare normalized native zero with omitted local declarations;
+  do not infer equivalence from that signature. Seven groups / 476 observations
+  have nonzero host/label tokens. Original-capture replay using the complete
+  inventory and existing `collectRetainedTypographyEvidence` matched all **340**
+  accepted complete-row hashes for five label groups: checkbox-label,
+  radio-solo-label, radio-team-label, slide-toggle-label, expansion-title.
+  They already carry `reviewed-omitted-component-text-metric`: native 0.256px
+  (first four) / 0.144px (expansion), retained zero, normal/effective omitted.
+  No classifications changed. Next extend the existing scalar/retained join
+  with exact owner/stage membership and negative controls, reusing these proofs.
+  The other two nonzero rows are button-toggle hosts (136 observations). Across
+  all 68 captures both nested labels instead have reference/retained zero and
+  omitted normal/effective values. A representative native ancestry explains the
+  distinction: mat-button-toggle computes 0.096px from Material tracking tokens,
+  but its nested button and span compute normal, with no captured author tracking
+  rules on those descendants. Do not join host token values to leaf zero by
+  assumption or call it a core spacing failure; extend this host/leaf boundary
+  check to the full population before classifying. No capture or source used by
+  the active export was changed during this investigation.
 - Corrected export **57045 / PID 21308 is terminal**, source **00f8133**.
   Candidate **baf0ccb8** has 1,060 unresolved groups, 8,483 raw groups / 389,202
   observations, 134 source findings, and complete 436 static / 1,875 interaction
