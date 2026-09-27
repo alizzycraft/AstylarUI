@@ -22,12 +22,13 @@ import { inspectOwnerInitialMotion } from '../../scripts/audit-material-owner-in
 import { inspectMotionDelayTargets } from '../../scripts/audit-material-motion-delay-targets.mjs';
 import { proveComponentTypographyBoundary, applyComponentTypographyBoundaries, chipTypographyBoundaryAttribution,
   tabTypographyBoundaryAttribution } from './tracking-input-review.mjs';
+import { applyTypographyReviews, validateTypographyReviews, typographyReviewAttributions } from './tracking-input-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 
-test('all 46 tracking populations retain host, label, token and motion boundaries', () => {
+test('all 91 typography populations retain host, label, token and motion boundaries', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const raw = JSON.parse(bytes), cases = [...raw.results.map(e => ({ ...e, kind: 'static' })),
@@ -359,6 +360,20 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
     explicitHostLineHeightAttribution, rangeLineHeightAttribution, overlayTypographyAttribution, typographyObservationAttribution,
     chipTypographyBoundaryAttribution, tabTypographyBoundaryAttribution]);
   const batch = combined.filter(r => preparedAttributions.has(r.attribution));
+  assert.deepEqual(new Set(typographyReviewAttributions), preparedAttributions);
+  assert.deepEqual(validateTypographyReviews(combined, completeRows, cases, inventory, retained, normalize), []);
+  // Small negative replay uses authentic evidence for one reviewed population;
+  // it does not rebuild the entire corpus for every receipt mutation.
+  const original = completeRows.find(r => r.family === 'checkbox' && r.property === 'letterSpacing' && r.attribution === 'unresolved');
+  assert.ok(original);
+  const reviewed = applyTypographyReviews([original], cases, inventory, retained, normalize);
+  for (const mutate of [r => { r.reviewEvidence.inputEquivalent = true; },
+    r => { r.reviewEvidence.observations.pop(); }, r => { r.reference = 'forged'; },
+    r => { r.attribution = 'unresolved'; }]) {
+    const changed = structuredClone(reviewed); mutate(changed[0]);
+    assert.ok(validateTypographyReviews(changed, [original], cases, inventory, retained, normalize).length);
+  }
+  assert.ok(validateTypographyReviews([...reviewed, reviewed[0]], [original], cases, inventory, retained, normalize).length);
   assert.equal(batch.length, 91); assert.equal(batch.reduce((n, r) => n + r.occurrences, 0), 4862);
   assert.equal(combined.filter(r => r.attribution === 'unresolved' && ['letterSpacing', 'lineHeight'].includes(r.property)).length, 0);
   const boundaryRows = batch.filter(r => [chipTypographyBoundaryAttribution, tabTypographyBoundaryAttribution].includes(r.attribution));

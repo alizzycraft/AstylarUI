@@ -452,3 +452,26 @@ export function applyZeroTrackingTokens(rows, cases, inventory, normalize) {
         one(entry.styleInputs.filter(i => i.id === element)), reference, candidate),
     })[0]), rows);
 }
+
+export const typographyReviewAttributions = Object.freeze([trackingLabelAttribution, trackingHostAttribution,
+  zeroTrackingTokenAttribution, componentLineHeightAttribution, toggleLineHeightAttribution,
+  explicitHostLineHeightAttribution, rangeLineHeightAttribution, overlayTypographyAttribution,
+  typographyObservationAttribution, chipTypographyBoundaryAttribution, tabTypographyBoundaryAttribution]);
+export function applyTypographyReviews(rows, cases, inventory, retained, normalize) {
+  let result = applyTrackingLabels(rows, cases, inventory, retained, normalize);
+  result = applyToggleTrackingHosts(result, cases, inventory, retained, normalize);
+  result = applyZeroTrackingTokens(result, cases, inventory, normalize);
+  result = applyComponentLineHeights(result, cases, inventory, retained, normalize);
+  result = applyToggleLineHeights(result, cases, inventory, retained, normalize);
+  return [applyExplicitHostLineHeights, applyRangeLineHeights, applyOverlayTypography,
+    applyTypographyObservationStages, applyComponentTypographyBoundaries]
+    .reduce((values, apply) => apply(values, cases, inventory, normalize), result);
+}
+export function validateTypographyReviews(rows, originalRows, cases, inventory, retained, normalize) {
+  try {
+    const selected = values => values.filter(r => typographyReviewAttributions.includes(r.attribution));
+    // Rebuild from original rows and bound evidence, never from submitted receipts.
+    assert.deepEqual(selected(rows), selected(applyTypographyReviews(originalRows, cases, inventory, retained, normalize)));
+    return [];
+  } catch (error) { return [`typography review evidence does not replay: ${error.message}`]; }
+}

@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 27
 
+- The complete typography batch now has one combined apply/replay entry point
+  in the existing `tracking-input-review.mjs`, covering all 11 attribution kinds.
+  Replay reconstructs expected findings from original rows and bound evidence;
+  it rejects forged equivalence, missing observations, altered raw values,
+  removed classifications and duplicate rows. The existing population test
+  passed **1/1, 92.50 s**, including all **91 groups / 4,862 observations** and
+  conservation of all 8,483 raw rows. After that run, one redundant full-corpus
+  apply/equality assertion was removed: combined validation already performs
+  that exact comparison; all negative assertions and validation remain.
+  Production wiring is still pending. Its replay must use the same preceding
+  scalar classifications as the application path so earlier reviewed title
+  states cannot be accidentally reclassified. Next add production wiring,
+  binding guards and exact producer-source restoration together, then verify
+  the bounded transition before the expensive canonical export. No accepted
+  count, renderer behavior, fixture input or historical evidence changed.
 - Typography opt-in source reconciliation now preserves the exact predecessor
   sources for the survey, motion and delay collectors. Unrelated edits, changed
   defaults and repeated fragments are rejected rather than accepted by refreshed
