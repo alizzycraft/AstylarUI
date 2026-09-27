@@ -4,7 +4,9 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { proveExplicitBoxSizing, explicitBoxSizingTargets, proveNativeBoxSizingRequest, nativeBoxSizingTargets,
-  proveBoxSizingOmission } from './box-sizing-authoring-review.mjs';
+  proveBoxSizingOmission, applyBoxSizingReviews, boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
+import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
@@ -122,4 +124,39 @@ test('remaining 33 omission populations keep computed/local and table UA boundar
     }
   }
   assert.equal(total, 1746); assert.equal(table, 52);
+});
+
+test('existing scalar join changes only the 49 prepared groups and preserves every raw value', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes), cases = [...raw.results.map(e => ({ ...e, kind: 'static' })),
+    ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const snapshot = { generation: '462dddc705e4be1cfb3be863b9707f579782f8c440759c31f59185718acbc651',
+    indexSha256: '093a70699e5e2016095ecc92d42a3e77ca2f9964ae7dc493d5829d9111cc2d4c' };
+  const rows = [...new Set(cases.map(e => e.family))].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies');
+  assert.equal(rows.length, 8483);
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const result = applyBoxSizingReviews(rows, cases, inventory, bindPreciseAuditNormalization());
+  const mutable = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const rawRow = r => Object.fromEntries(Object.entries(r).filter(([k]) => !mutable.has(k)));
+  const counts = new Map(); let untouched = 0;
+  for (let i = 0; i < rows.length; i++) {
+    assert.deepEqual(rawRow(result[i]), rawRow(rows[i]));
+    if (!boxSizingReviewAttributions.includes(result[i].attribution)) {
+      assert.deepEqual(result[i], rows[i]); untouched++; continue;
+    }
+    const evidence = result[i].reviewEvidence;
+    assert.equal(evidence.originalRowSha256, hash(JSON.stringify(rows[i])));
+    assert.equal(evidence.observations.length, rows[i].occurrences);
+    assert.equal(result[i].reviewedCases.length, rows[i].occurrences);
+    assert.equal(evidence.inputEquivalent, false); assert.equal(evidence.renderingEquivalent, false);
+    for (const proof of evidence.observations) {
+      assert.equal(proof.rendererCauseProven, false); assert.equal(proof.usedGeometryVerified, false);
+    }
+    const count = counts.get(result[i].attribution) ?? [0, 0]; count[0]++; count[1] += rows[i].occurrences;
+    counts.set(result[i].attribution, count);
+  }
+  assert.equal(untouched, 8434);
+  assert.deepEqual(boxSizingReviewAttributions.map(k => counts.get(k)), [[10, 621], [6, 290], [33, 1746]]);
 });

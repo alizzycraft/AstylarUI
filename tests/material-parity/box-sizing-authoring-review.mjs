@@ -1,6 +1,37 @@
 import assert from 'node:assert/strict';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { applyModalBoxReview } from './modal-position-inspection.mjs';
+
+export const boxSizingReviewAttributions = Object.freeze([
+  'reviewed-explicit-box-sizing-input-substitution',
+  'reviewed-native-box-sizing-request-local-omission',
+  'reviewed-box-sizing-computed-local-observation-stage',
+]);
+
+export function applyBoxSizingReviews(rows, cases, inventory, normalize) {
+  return rows.map(row => {
+    if (row.property !== 'boxSizing' || row.attribution !== 'unresolved') return row;
+    const explicit = Object.hasOwn(explicitBoxSizingTargets, row.element);
+    const native = Object.hasOwn(nativeBoxSizingTargets, row.element);
+    const prove = explicit ? proveExplicitBoxSizing : native ? proveNativeBoxSizingRequest : proveBoxSizingOmission;
+    return applyModalBoxReview([row], cases.filter(e => row.states.includes(e.state ?? 'static')), inventory, normalize, {
+      family: row.family, element: row.element, properties: ['boxSizing'],
+      attribution: boxSizingReviewAttributions[explicit ? 0 : native ? 1 : 2],
+      classification: explicit ? 'application-plugin-authoring-defect' : 'parity-harness-defect',
+      owner: explicit ? 'showcase authored box-sizing inputs' : 'computed browser versus local candidate box-sizing measurement',
+      justification: explicit
+        ? 'Original corresponding owners retain native content-box and one explicit candidate border-box request, verified against all three captured stages. Preserve differing owner structure and overlay mapping gaps. This establishes unequal authored inputs, not deliberate compensation intent, a used-box defect or a renderer cause.'
+        : native
+          ? 'Original native owners carry explicit border-box requests while corresponding candidate owners omit boxSizing in matching rules and all local stages. Preserve generated and private-plugin owners. Computed browser values and local candidate declarations are different measurement stages; no candidate computed default or used-size equivalence is inferred.'
+          : 'Original native computed boxSizing is compared with absent candidate local declarations, with no captured own box-sizing/all request on either owner. Preserve native table border-box separately from content-box observations and retain generated/private owner identity. Neither candidate computed defaults, historical user-agent rules nor used geometry are established by this observation-stage difference.',
+      prove: (entry, r, a) => {
+        const proof = prove(entry, one(entry.styleInputs.filter(i => i.id === row.element)), r, a);
+        return { ...proof, astylarNode: proof.candidateNode };
+      },
+    })[0];
+  });
+}
 
 export const explicitBoxSizingTargets = Object.freeze({
   'bottom-sheet-overlay': ['bottom-sheet', '.modal-overlay', 25],

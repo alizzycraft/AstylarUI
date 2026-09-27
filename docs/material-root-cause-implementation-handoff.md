@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 27
 
+- Prepared box-sizing proofs now run through existing `applyModalBoxReview`
+  via `applyBoxSizingReviews`, without wiring a new production dependency into
+  the live exporter. The focused join checks all **8,483 compact scalar records**:
+  exactly **49 / 2,657 observations** receive the three bounded attributions
+  (10/621 explicit candidate, 6/290 native-request/local-omission, 33/1,746
+  computed/local observation-stage); **8,434 records remain unchanged**.
+  Every raw field, original-row digest, complete observation/reviewed-case count
+  and false input/rendering-equivalence flag is checked. Command
+  `node --test tests/material-parity/box-sizing-authoring-review.spec.mjs`:
+  **4/4 passed, 31.09 s**. This is working-index conservation, not whole canonical
+  payload/source-receipt reconciliation. Next add independent production replay
+  validation and exact producer-transition conservation after the typography
+  export; do not bypass the pending canonical acceptance gates.
 - Box-sizing declaration/observation preparation now covers **all 49 remaining
   groups / 2,657 observations**. The existing helper/spec additionally replays
   the **33 omission groups / 1,746 observations**, including the 52 table cases,
