@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — September 27
 
+- Corrected wrapping generation **462dddc705e4be1cfb3be863b9707f579782f8c440759c31f59185718acbc651**
+  has passed full reconciliation against accepted baf0ccb8. Conservation command
+  `node scripts/check-material-position-canonical-conservation.mjs --wrapping`
+  passed: exactly **30 groups / 1,478 observations**, one scalar receipt and 48
+  control receipts changed; every raw input and unrelated control record is
+  conserved. Whole-report section digests authenticate both compressed/decoded
+  payloads: **79 sections, none added/removed, 72 unchanged**. The seven changes
+  are discrepancies, sourceFingerprints, controlTypography, controlLineBoxes,
+  summary, ownerCaretInputs and reviewedSourceBatchInputs, all explained by the
+  bounded classification or source-receipt transition. Metadata replay verified
+  all **478 LF-normalized source hashes**: three added wrapping proof/test files,
+  three changed producer/transition files, no removals. Remaining metadata changes
+  are producer receipts, reviewed-source report receipt, and summary counts
+  (authoring +15, harness -15, unresolved **1,060 → 1,030**). The historical tab
+  typography proof's source remains unchanged; no receipt waiver was used.
+  Decoded SHA-256: `c1220413b2757c5729d7b53a64ae9aa380453acd639d1639b334e6edce8877d6`.
+  Compact import and `node scripts/audit-findings-store.mjs verify` passed:
+  8,483 groups / 389,202 observations, 134 source findings, 39,904 control records,
+  1,030 unresolved groups; compact shards total 70,690,839 bytes. Current pointer
+  now selects this accepted checkpoint, index SHA-256
+  `093a70699e5e2016095ecc92d42a3e77ca2f9964ae7dc493d5829d9111cc2d4c`.
+  The standalone manifest is preserved beside the indexed payload for future
+  complete-predecessor checks. Original captures and the failed export remain
+  immutable; no 2 GB decoded file was created.
+  The 31-group typography batch is still prepared separately, not included in
+  these canonical counts. Full audit acceptance and final browser gates remain
+  outstanding; this checkpoint does not establish input or rendering equivalence.
 - Overlay typography observation boundaries now have prepared classifications:
   **10 groups / 314 observations** across bottom-sheet overlay, snackbar
   overlay/surface and dialog panel/actions. Reused the exact wrapping owner
