@@ -13,6 +13,7 @@ import { retainedFontScalarAttribution } from './retained-font-scalar.mjs';
 import { restoreSnackbarOverflowProducer } from './position-composition-producer-transition.mjs';
 import { restoreAuthoredTypographyProducer } from './position-composition-producer-transition.mjs';
 import { restoreWrappingProducer } from './position-composition-producer-transition.mjs';
+import { restoreTypographyReviewProducer } from './position-composition-producer-transition.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
 
 for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'control-position', 'width-overflow', 'snackbar-overflow', 'authored-typography', 'wrapping']) test(`scalar conservation (${mode}) rejects changed raw data, unrelated metadata and control values even with forged expected rows`, () => {
@@ -157,6 +158,91 @@ for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'cont
   const changed = structuredClone(current); changed.rows[0].justification = 'unreplayed metadata';
   assert.throws(() => compare(previous, changed, expected, currentSource));
   assert.throws(() => compare(previous, current, expected, currentSource + '\n// changed'));
+});
+
+test('typography conservation rejects changed evidence and false equivalence even with forged expectations', () => {
+  const transition = restoreTypographyReviewProducer(currentSource);
+  const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  const rows = [], expected = [];
+  for (const [attribution, [groups, observations]] of Object.entries({
+  "reviewed-scalar-component-tracking-omission": [
+    5,
+    340
+  ],
+  "reviewed-toggle-host-tracking-boundary": [
+    2,
+    136
+  ],
+  "reviewed-zero-tracking-token-omission": [
+    3,
+    112
+  ],
+  "reviewed-scalar-component-line-height-omission": [
+    4,
+    272
+  ],
+  "reviewed-toggle-host-line-height-boundary": [
+    2,
+    136
+  ],
+  "reviewed-textless-host-line-height-request": [
+    3,
+    124
+  ],
+  "reviewed-range-line-height-inheritance-omission": [
+    2,
+    156
+  ],
+  "reviewed-overlay-typography-observation-stage": [
+    10,
+    314
+  ],
+  "reviewed-captured-typography-observation-stage": [
+    56,
+    2980
+  ],
+  "reviewed-chip-host-tracking-observation-stage": [
+    2,
+    152
+  ],
+  "reviewed-private-tab-panel-typography-owner": [
+    2,
+    140
+  ]
+})) {
+    for (let i = 0; i < groups; i++) {
+      const before = { family: 'test', element: attribution + i, property: 'lineHeight',
+        reference: 'normal', attribution: 'unresolved', occurrences: i ? 1 : observations - groups + 1 };
+      rows.push(before);
+      expected.push({ ...before, attribution,
+        classification: attribution.endsWith('-observation-stage') ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
+        reviewedCases: Array.from({ length: before.occurrences }, (_, j) => 'case-' + j),
+        reviewEvidence: { originalRowSha256: hash(before), inputEquivalent: false, renderingEquivalent: false,
+          observations: Array.from({ length: before.occurrences }, (_, j) => ({ case: 'case-' + j })) } });
+    }
+  }
+  rows.push({ property: 'width', attribution: 'unresolved', reference: 'auto' });
+  expected.push(structuredClone(rows.at(-1)));
+  const previous = { rows, control: { differences: Array.from({ length: 48 }, (_, i) => ({ case: 'control-' + i,
+    attribution: 'reviewed-interactive-normal-line-box-stage-comparison',
+    reviewEvidence: { observation: { normalizationReconciliation: { currentModuleSha256: transition.previousModuleSha256 } } } })) } };
+  const current = { rows: structuredClone(expected), control: structuredClone(previous.control) };
+  for (const c of current.control.differences)
+    c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
+  const compare = (c, e = expected) => compareBorderDefaultCanonical(previous, c, e, currentSource, { typography: true });
+  assert.equal(compare(current).changedGroups, 91); assert.equal(compare(current).changedOccurrences, 4862);
+  for (const mutate of [r => { r.reference = 'forged'; }, r => { r.attribution = 'other'; },
+    r => { r.reviewEvidence.originalRowSha256 = 'forged'; }, r => { r.reviewEvidence.observations.pop(); },
+    r => { r.reviewedCases.pop(); }, r => { r.reviewEvidence.inputEquivalent = true; },
+    r => { r.reviewEvidence.renderingEquivalent = true; }, r => { r.classification = 'equivalent-representation'; }]) {
+    const c = structuredClone(current), e = structuredClone(expected); mutate(c.rows[0]); mutate(e[0]);
+    assert.throws(() => compare(c, e));
+  }
+  for (const mutate of [c => { c.rows.pop(); }, c => { c.rows.reverse(); },
+    c => { c.rows.at(-1).reference = 'hidden'; }, c => { c.control.differences.pop(); },
+    c => { c.control.differences[0].unexpected = true; }]) {
+    const c = structuredClone(current); mutate(c); assert.throws(() => compare(c));
+  }
 });
 
 test('embedded scalar control receipts follow only exact producer transitions', () => {

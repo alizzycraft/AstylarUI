@@ -46,6 +46,8 @@ import { applyButtonAuthoredTypography, buttonAuthoredTypographyAttribution } fr
 import { restoreAuthoredTypographyProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
 import { restoreWrappingProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
 import { applyWrappingReviews, wrappingAttributions } from '../tests/material-parity/wrapping-input-review.mjs';
+import { restoreTypographyReviewProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { applyTypographyReviews, typographyReviewAttributions } from '../tests/material-parity/tracking-input-review.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
@@ -159,9 +161,9 @@ export function replaySnackbarOverflowRows(rows, captured) {
     applySnackbarPositionRequests(rows, cases, inventory, normalize), cases, inventory, normalize), cases, inventory, normalize);
 }
 
-export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false, weight = false, modalPosition = false, controlPosition = false, widthOverflow = false, snackbarOverflow = false, authoredTypography = false, wrapping = false } = {}) {
-  assert.ok(Number(dialogCard) + Number(weight) + Number(modalPosition) + Number(controlPosition) + Number(widthOverflow) + Number(snackbarOverflow) + Number(authoredTypography) + Number(wrapping) <= 1, 'select one scalar batch');
-  const transition = wrapping ? restoreWrappingProducer(source) : authoredTypography ? restoreAuthoredTypographyProducer(source) : snackbarOverflow ? restoreSnackbarOverflowProducer(source) : widthOverflow ? restoreWidthOverflowProducer(source) : controlPosition ? restoreControlPositionProducer(source) : modalPosition ? restoreModalPositionProducer(source) : weight ? restoreInteractiveWeightProducer(source) : dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
+export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false, weight = false, modalPosition = false, controlPosition = false, widthOverflow = false, snackbarOverflow = false, authoredTypography = false, wrapping = false, typography = false } = {}) {
+  assert.ok(Number(dialogCard) + Number(weight) + Number(modalPosition) + Number(controlPosition) + Number(widthOverflow) + Number(snackbarOverflow) + Number(authoredTypography) + Number(wrapping) + Number(typography) <= 1, 'select one scalar batch');
+  const transition = typography ? restoreTypographyReviewProducer(source) : wrapping ? restoreWrappingProducer(source) : authoredTypography ? restoreAuthoredTypographyProducer(source) : snackbarOverflow ? restoreSnackbarOverflowProducer(source) : widthOverflow ? restoreWidthOverflowProducer(source) : controlPosition ? restoreControlPositionProducer(source) : modalPosition ? restoreModalPositionProducer(source) : weight ? restoreInteractiveWeightProducer(source) : dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
   const adjusted = refreshScalarControlReceipts(previous.rows, previous.control, current.control, transition);
   const expected = JSON.parse(JSON.stringify(refreshScalarControlReceipts(expectedRows,
     previous.control, current.control, transition)));
@@ -188,7 +190,15 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     const before = adjusted[i], after = current.rows[i];
     same(raw(previous.rows[i]), raw(after), 'border batch changed raw scalar evidence');
     if (isDeepStrictEqual(before, after)) continue;
-    assert.match(before.property, wrapping ? /^whiteSpace$/ : authoredTypography ? /^(fontFamily|lineHeight|letterSpacing|color|overflowX|overflowY)$/ : snackbarOverflow ? /^(position|right|bottom|overflowX|overflowY)$/ : widthOverflow ? /^(width|overflowX|overflowY)$/ : modalPosition || controlPosition ? /^(position|top|right|bottom|left)$/ : weight ? /^fontWeight$/ : dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    assert.match(before.property, typography ? /^(letterSpacing|lineHeight)$/ : wrapping ? /^whiteSpace$/ : authoredTypography ? /^(fontFamily|lineHeight|letterSpacing|color|overflowX|overflowY)$/ : snackbarOverflow ? /^(position|right|bottom|overflowX|overflowY)$/ : widthOverflow ? /^(width|overflowX|overflowY)$/ : modalPosition || controlPosition ? /^(position|top|right|bottom|left)$/ : weight ? /^fontWeight$/ : dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    if (typography) {
+      assert.equal(before.attribution, 'unresolved'); assert.ok(typographyReviewAttributions.includes(after.attribution));
+      assert.equal(after.classification, after.attribution.endsWith('-observation-stage') ? 'parity-harness-defect' : 'application-plugin-authoring-defect');
+      assert.equal(after.reviewEvidence.inputEquivalent, false); assert.equal(after.reviewEvidence.renderingEquivalent, false);
+      assert.equal(after.reviewedCases.length, before.occurrences);
+      assert.equal(after.reviewEvidence.observations.length, before.occurrences);
+      assert.equal(after.reviewEvidence.originalRowSha256, digest(previous.rows[i]));
+    }
     if (wrapping) {
       assert.equal(before.attribution, 'unresolved'); assert.ok(wrappingAttributions.includes(after.attribution));
       const stage = after.attribution.endsWith('-observation-stage');
@@ -297,7 +307,19 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
       existingProofRows.push(i);
     }
   }
-  same(Object.fromEntries(totals), wrapping ? {
+  same(Object.fromEntries(totals), typography ? {
+    'reviewed-scalar-component-tracking-omission': { groups: 5, observations: 340 },
+    'reviewed-toggle-host-tracking-boundary': { groups: 2, observations: 136 },
+    'reviewed-zero-tracking-token-omission': { groups: 3, observations: 112 },
+    'reviewed-scalar-component-line-height-omission': { groups: 4, observations: 272 },
+    'reviewed-toggle-host-line-height-boundary': { groups: 2, observations: 136 },
+    'reviewed-textless-host-line-height-request': { groups: 3, observations: 124 },
+    'reviewed-range-line-height-inheritance-omission': { groups: 2, observations: 156 },
+    'reviewed-overlay-typography-observation-stage': { groups: 10, observations: 314 },
+    'reviewed-captured-typography-observation-stage': { groups: 56, observations: 2980 },
+    'reviewed-chip-host-tracking-observation-stage': { groups: 2, observations: 152 },
+    'reviewed-private-tab-panel-typography-owner': { groups: 2, observations: 140 },
+  } : wrapping ? {
     'reviewed-explicit-nowrap-input-substitution': { groups: 6, observations: 344 },
     'reviewed-native-nowrap-request-omission': { groups: 8, observations: 500 },
     'reviewed-overlay-wrapping-observation-stage': { groups: 12, observations: 360 },
@@ -343,7 +365,7 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     'reviewed-material-outline-token-substitution': { groups: 3, observations: 204 },
     'reviewed-mapped-border-initial-color-divergence': { groups: 52, observations: 1432 },
   }, 'border batch changed unexpected classification membership');
-  return { previous: previous.manifest, current: current.manifest, changedGroups: wrapping ? 30 : authoredTypography ? 36 : snackbarOverflow ? 31 : widthOverflow ? 51 : controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83, changedOccurrences: wrapping ? 1478 : authoredTypography ? 1951 : snackbarOverflow ? 1292 : widthOverflow ? 1764 : controlPosition ? 3160 : modalPosition ? 1125 : weight ? 1502 : dialogCard ? 896 : 2596,
+  return { previous: previous.manifest, current: current.manifest, changedGroups: typography ? 91 : wrapping ? 30 : authoredTypography ? 36 : snackbarOverflow ? 31 : widthOverflow ? 51 : controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83, changedOccurrences: typography ? 4862 : wrapping ? 1478 : authoredTypography ? 1951 : snackbarOverflow ? 1292 : widthOverflow ? 1764 : controlPosition ? 3160 : modalPosition ? 1125 : weight ? 1502 : dialogCard ? 896 : 2596,
     existingProofRows, scalarReceiptRows: adjusted.filter((r, i) => !isDeepStrictEqual(r, previous.rows[i])).length,
     controlReceiptRecords: receiptCases.length, allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
     orderedCurrentRowsSha256: digest(current.rows), inputEquivalent: false, renderingEquivalent: false };
@@ -616,7 +638,22 @@ function replayAppearanceRows(rows, captured, { colorMotion = false, originMotio
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--wrapping') {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--typography') {
+  assert.equal(process.argv.length, 3);
+  const previous = await readAudit('artifacts/material-parity/working-audit/462dddc705e4be1cfb3be863b9707f579782f8c440759c31f59185718acbc651');
+  assert.equal(previous.manifest.uncompressedSha256, 'c1220413b2757c5729d7b53a64ae9aa380453acd639d1639b334e6edce8877d6');
+  const current = await readAudit('docs');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const captured = JSON.parse(bytes);
+  const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })), ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const retained = collectRetainedTypographyEvidence(cases.filter(c => ['checkbox', 'radio', 'slide-toggle', 'expansion', 'button-toggle'].includes(c.family)), inventory);
+  const expected = applyTypographyReviews(previous.rows, cases, inventory, retained, normalize);
+  console.log(JSON.stringify(compareBorderDefaultCanonical(previous, current, expected,
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), { typography: true }), null, 2));
+} else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--wrapping') {
   assert.equal(process.argv.length, 3);
   const previous = await readAudit('artifacts/material-parity/working-audit/baf0ccb8d7f5adad44efff3a8e165448e550b7455999a182ce138975b2bfff3b');
   assert.equal(previous.manifest.uncompressedSha256, '941c646768709baffeb48502f6bd0f5cdf3a88984cf5cb66b1318e7c79b00d98');

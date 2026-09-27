@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 27
 
+- Existing canonical conservation checker now supports `--typography`, pinned
+  to accepted `462dddc7` and the original capture hash. It independently rebuilds
+  this batch from original trees and retained typography, requires the exact
+  11 attribution totals (**91 groups / 4,862 observations**), preserves every
+  raw row and unrelated finding, and permits only the established scalar/control
+  producer-receipt transition. Original-row hashes, complete observation counts
+  and false equivalence flags are enforced. All **23 conservation tests passed,
+  72.23 s**, including joint forged-output/expected-row negative controls.
+  This verifies the checker, not a new export. Next run the complete-input
+  exporter from this committed source, then `node scripts/check-material-position-canonical-conservation.mjs --typography`,
+  whole-report section/source reconciliation and compact import/verify. Do not
+  accept a new checkpoint or reduce the 1,030 unresolved count before those pass.
 - Typography review is wired into the production audit after existing scalar
   reviews, with original-capture binding guards and source fingerprints. Its
   validator replays the five existing typography predecessor joins instead of
