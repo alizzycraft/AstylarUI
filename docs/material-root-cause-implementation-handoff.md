@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — September 27
 
+**Next wrapping batch scope established read-only:** the accepted compact index
+contains 30 unresolved whiteSpace groups / 1,478 observations. Original-tree
+checks separate six explicit candidate-nowrap substitutions (344 observations)
+from eight native-nowrap/local-candidate-omission groups (500). The remaining
+16 normal/omitted groups (634) require separate owner/default review; do not
+infer equivalence for plugin text, flattened controls or containers collectively.
+
+The six explicit substitutions are card-title/copy (52 each), paginator-range/
+size (52 each), checkbox-label and slide-toggle-label (68 each). All original
+scalar/tree pairs retain native normal and candidate nowrap at all three local
+stages. Captured author rules are `.card-title`, `.card-copy`,
+`#paginator-size, #paginator-page-size, #paginator-range`, `.checkbox-label`, and
+`.switch-label`. Paginator owners use the existing exact mapped alias proof;
+others use direct measurement IDs. Unequal element types remain explicit.
+
+The eight native-nowrap groups are tab-overview/activity (70 each), toolbar-
+action/primary (52 each), badge-count (52), and button-toggle one/two/primary
+(68 each). Beyond the tab proof below, full populations show collapse/nowrap
+declarations in `.mat-toolbar-row, .mat-toolbar-single-row`, `.mat-badge-content`,
+`.mat-button-toggle`, and `.mat-button-toggle-standalone, .mat-button-toggle-group`.
+Toolbar action additionally has 52 actual control-paint normal observations.
+Badge uses the existing mapped alias; toggle/root wrappers do not have direct
+control-paint records, so no paint value is invented for them. Next: turn these
+original population/source checks into guarded wrapping classifications after
+the live export closes, reusing the existing owner-declaration and scalar review
+helpers. No fresh capture, full report, or parallel framework is required.
+
 **Cold export in progress:** session **96508**, Node PID **5144**, from pushed
 commit **c8b3ceb**. Log: `artifacts/material-parity/authored-typography-export-c8b3ceb.log`.
 Latest live check remains build-audit, CPU 286.625 s / RSS 2.67 GB. Keep source
