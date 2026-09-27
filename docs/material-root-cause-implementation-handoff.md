@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 27
 
+- Box-sizing declaration/observation preparation now covers **all 49 remaining
+  groups / 2,657 observations**. The existing helper/spec additionally replays
+  the **33 omission groups / 1,746 observations**, including the 52 table cases,
+  with authenticated trees, full scalar joins, all candidate stages, exact
+  accepted memberships/samples, absent own rules/inline declarations and explicit
+  generated-owner identities. Unknown browser-UA provenance and candidate
+  computed/used geometry remain false/unverified in each proof; the table's
+  native border-box value is not normalized to content-box. An injected
+  candidate declaration is rejected for every group. Command:
+  `node --test tests/material-parity/box-sizing-authoring-review.spec.mjs`:
+  **3/3 passed, 14.85 s**. This completes bounded source-proof preparation,
+  not canonical classification or full rendering equivalence. Next apply the
+  prepared proofs through the existing scalar join, with raw/unrelated-row
+  conservation, after the live typography exporter completes reconciliation.
 - The same box-sizing helper/spec now verifies the reverse declaration
   population: **six groups / 290 observations** with explicit native border-box
   requests and absent candidate local declarations. Exact selector, value,

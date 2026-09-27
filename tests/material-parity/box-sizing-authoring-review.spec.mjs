@@ -3,7 +3,8 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
-import { proveExplicitBoxSizing, explicitBoxSizingTargets, proveNativeBoxSizingRequest, nativeBoxSizingTargets } from './box-sizing-authoring-review.mjs';
+import { proveExplicitBoxSizing, explicitBoxSizingTargets, proveNativeBoxSizingRequest, nativeBoxSizingTargets,
+  proveBoxSizingOmission } from './box-sizing-authoring-review.mjs';
 
 const hash = b => createHash('sha256').update(b).digest('hex');
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
@@ -85,4 +86,40 @@ test('six native border-box requests retain all 290 omitted candidate observatio
     }
   }
   assert.equal(total, 290);
+});
+
+test('remaining 33 omission populations keep computed/local and table UA boundaries', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes), cases = [...raw.results.map(e => ({ ...e, kind: 'static' })),
+    ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const snapshot = { generation: '462dddc705e4be1cfb3be863b9707f579782f8c440759c31f59185718acbc651',
+    indexSha256: '093a70699e5e2016095ecc92d42a3e77ca2f9964ae7dc493d5829d9111cc2d4c' };
+  const families = [...new Set(cases.map(e => e.family))];
+  const rows = families.flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+    .filter(r => r.property === 'boxSizing' && r.attribution === 'unresolved' && r.astylar === undefined &&
+      (r.reference === 'content-box' || r.element === 'table-primary'));
+  assert.equal(rows.length, 33);
+  const cache = new Map();
+  const read = d => { if (!cache.has(d.file)) { const b = readFileSync(d.file); cache.set(d.file, { hash: hash(b), tree: JSON.parse(b) }); }
+    const item = cache.get(d.file); assert.equal(item.hash, d.sha256); return item.tree; };
+  let total = 0, table = 0;
+  for (const row of rows) {
+    const members = cases.filter(e => e.family === row.family && row.states.includes(e.state ?? 'static') &&
+      e.styleInputs.some(i => i.id === row.element && i.reference.boxSizing === row.reference && i.astylar.boxSizing === undefined));
+    assert.equal(members.length, row.occurrences); assert.ok(members.length);
+    assert.deepEqual(members.slice(0, 12).map(keyOf), row.cases);
+    for (const entry of members) {
+      const input = entry.styleInputs.find(i => i.id === row.element), r = read(entry.inputTrees.reference), a = read(entry.inputTrees.astylar);
+      const proof = proveBoxSizingOmission(entry, input, r, a); total++;
+      if (row.element === 'table-primary') table++;
+      assert.equal(proof.inputEquivalent, false); assert.equal(proof.candidateComputedVerified, false);
+      assert.equal(proof.nativeUserAgentRuleCaptured, false);
+      if (entry === members[0]) {
+        const changed = structuredClone(a); changed.rules.push({ selector: `#${row.element}`, boxSizing: 'content-box' });
+        assert.throws(() => proveBoxSizingOmission(entry, input, r, changed));
+      }
+    }
+  }
+  assert.equal(total, 1746); assert.equal(table, 52);
 });

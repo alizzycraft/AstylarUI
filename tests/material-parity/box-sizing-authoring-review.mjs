@@ -99,3 +99,41 @@ export function proveExplicitBoxSizing(entry, input, reference, candidate) {
     firstDivergence: 'candidate-authored-box-sizing-request', inputEquivalent: false,
     usedGeometryVerified: false, compensationIntentProven: false, rendererCauseProven: false, renderingEquivalent: false };
 }
+
+// No own request on either side is an observation boundary, not evidence that
+// the renderer consumed the browser's computed default.
+export function proveBoxSizingOmission(entry, input, reference, candidate) {
+  const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));
+  const direct = reference.nodes.filter(n => n.attributes?.id === input.id || n.attributes?.['data-parity-id'] === input.id);
+  let native, identity;
+  if (direct.length === 1) native = direct[0];
+  else {
+    identity = resolveOriginAliasPair(entry, reference, candidate, input);
+    assert.equal(identity.status, 'mapped'); assert.equal(identity.candidateNode, ast.key);
+    native = one(reference.nodes.filter(n => n.key === identity.referenceNode));
+  }
+  assert.equal(native.type, input.referenceStructure.type);
+  assert.equal(ast.authored.type, input.astylarStructure.type);
+  const expected = input.id === 'table-primary' ? 'border-box' : 'content-box';
+  if (input.id === 'table-primary') {
+    assert.equal(entry.family, 'table'); assert.equal(native.type, 'table'); assert.equal(ast.authored.type, 'table');
+  }
+  for (const [key, value] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][key], value);
+  assert.equal(input.reference.boxSizing, expected);
+  for (const n of [native, ast]) {
+    assert.equal(relevant(n.inline ?? n.authored?.style), false);
+    assert.ok(!/(?:^|;)\s*(?:box-sizing|all)\s*:/i.test(n.attributes?.style ?? n.authored?.attributes?.style ?? ''));
+  }
+  assert.deepEqual(native.rules.map(i => reference.rules[i]).filter(r => r.active && relevant(r.declarations)), []);
+  assert.deepEqual(candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, ast.authored) && relevant(r)), []);
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(ast[stage], input[scalar]); assert.equal(Object.hasOwn(ast[stage], 'boxSizing'), false);
+  }
+  return { element: input.id, referenceNode: native.key, candidateNode: ast.key,
+    referenceType: native.type, candidateType: ast.authored.type, identity: identity ?? { status: 'direct-id' },
+    referenceComputed: expected, candidateBoxSizing: '<omitted>',
+    classification: 'computed-browser-versus-local-omission', inputEquivalent: false,
+    nativeUserAgentRuleCaptured: false, candidateComputedVerified: false, usedGeometryVerified: false,
+    rendererCauseProven: false, renderingEquivalent: false };
+}
