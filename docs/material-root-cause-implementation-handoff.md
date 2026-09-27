@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 27
 
+- Wrapping milestone export is **running**, source commit **9a7f2d7**, session
+  **35804**, child PID **3780** (revalidated live during this checkpoint).
+  Command: `ASTYLAR_AUDIT_COLD=1 node scripts/export-material-input-audit-current-ancestry.mjs`.
+  All five required capture/line-box/supplemental inputs are present. Log:
+  `artifacts/material-parity/wrapping-export-b99f957-integration.log`.
+  Do not start a duplicate or change exporter dependencies while it runs.
+  The accepted snapshot below remains authoritative until reconciliation.
+  The existing conservation command now supports `--wrapping`, authenticating
+  baf0ccb8 as predecessor, replaying original cases, and permitting exactly the
+  six wrapping attribution populations (30 groups / 1,478 observations), plus
+  independently checked producer-only control receipt changes. Its negative
+  controls reject joint raw-input forgery, membership changes, unrelated metadata,
+  false equivalence and changed controls. Full conservation unit suite passed
+  **22/22, 73.93 s** (`node --test tests/material-parity/position-canonical-conservation.spec.mjs`).
+  Next, after the exporter terminates: run
+  `node scripts/check-material-position-canonical-conservation.mjs --wrapping`,
+  existing section-digest and source/metadata reconciliation, then compact import
+  and verification only if those checks explain every change. The conservation
+  command/spec are not exporter dependencies; no running inputs were edited.
 - Accepted canonical: **baf0ccb8**, 1,060 unresolved groups (previous ef6da409:
   1,096). Compact import and verification passed: 8,483 discrepancies, 134 source
   findings, 39,904 controls, 389,202 occurrences, 70,612,013 compact bytes. Index

@@ -12,17 +12,26 @@ import { ownerInitialStyleAttribution } from './owner-initial-style-attribution.
 import { retainedFontScalarAttribution } from './retained-font-scalar.mjs';
 import { restoreSnackbarOverflowProducer } from './position-composition-producer-transition.mjs';
 import { restoreAuthoredTypographyProducer } from './position-composition-producer-transition.mjs';
+import { restoreWrappingProducer } from './position-composition-producer-transition.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
 
-for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'control-position', 'width-overflow', 'snackbar-overflow', 'authored-typography']) test(`scalar conservation (${mode}) rejects changed raw data, unrelated metadata and control values even with forged expected rows`, () => {
+for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'control-position', 'width-overflow', 'snackbar-overflow', 'authored-typography', 'wrapping']) test(`scalar conservation (${mode}) rejects changed raw data, unrelated metadata and control values even with forged expected rows`, () => {
+  const wrapping = mode === 'wrapping';
   const authoredTypography = mode === 'authored-typography';
   const snackbarOverflow = mode === 'snackbar-overflow';
   const widthOverflow = mode === 'width-overflow';
   const controlPosition = mode === 'control-position';
   const dialogCard = mode === 'dialog/card', weight = mode === 'weight', modalPosition = mode === 'modal-position';
-  const transition = authoredTypography ? restoreAuthoredTypographyProducer(currentSource) : snackbarOverflow ? restoreSnackbarOverflowProducer(currentSource) : widthOverflow ? restoreWidthOverflowProducer(currentSource) : controlPosition ? restoreControlPositionProducer(currentSource) : modalPosition ? restoreModalPositionProducer(currentSource) : weight ? restoreInteractiveWeightProducer(currentSource) : dialogCard ? restoreMappedButtonResetProducer(currentSource) : restoreToggleSideColorProducer(currentSource), rows = [], expected = [];
-  const compare = (p, c, e, s) => compareBorderDefaultCanonical(p, c, e, s, { dialogCard, weight, modalPosition, controlPosition, widthOverflow, snackbarOverflow, authoredTypography });
-  for (const [attribution, groups, observations] of authoredTypography ? [
+  const transition = wrapping ? restoreWrappingProducer(currentSource) : authoredTypography ? restoreAuthoredTypographyProducer(currentSource) : snackbarOverflow ? restoreSnackbarOverflowProducer(currentSource) : widthOverflow ? restoreWidthOverflowProducer(currentSource) : controlPosition ? restoreControlPositionProducer(currentSource) : modalPosition ? restoreModalPositionProducer(currentSource) : weight ? restoreInteractiveWeightProducer(currentSource) : dialogCard ? restoreMappedButtonResetProducer(currentSource) : restoreToggleSideColorProducer(currentSource), rows = [], expected = [];
+  const compare = (p, c, e, s) => compareBorderDefaultCanonical(p, c, e, s, { dialogCard, weight, modalPosition, controlPosition, widthOverflow, snackbarOverflow, authoredTypography, wrapping });
+  for (const [attribution, groups, observations] of wrapping ? [
+    ['reviewed-explicit-nowrap-input-substitution', 6, 344],
+    ['reviewed-native-nowrap-request-omission', 8, 500],
+    ['reviewed-overlay-wrapping-observation-stage', 12, 360],
+    ['reviewed-table-wrapping-observation-stage', 1, 52],
+    ['reviewed-private-tab-panel-wrapping-owner', 1, 70],
+    ['reviewed-chip-host-wrapping-observation-stage', 2, 152],
+  ] : authoredTypography ? [
     ['reviewed-tab-scalar-typography-owner', 6, 420], ['reviewed-button-host-authored-typography', 6, 99],
     ['reviewed-button-visible-overflow-initial-value', 24, 1432],
   ] : snackbarOverflow ? [
@@ -108,12 +117,13 @@ for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'cont
       before.property = attribution.includes('overflow') ? 'overflowX' : 'lineHeight';
       if (attribution.includes('overflow')) { before.reference = 'visible'; delete before.astylar; }
     }
+    if (wrapping) { before.property = 'whiteSpace'; before.reference = 'normal'; delete before.astylar; }
     rows.push(before); expected.push({ ...before, attribution,
       classification: snackbarOverflow ? (attribution.includes('initial-value') ? 'equivalent-representation' : attribution.includes('computed-') ? 'parity-harness-defect' : 'application-plugin-authoring-defect') : widthOverflow ? (['reviewed-omitted-width-observation-stage', 'reviewed-dialog-overflow-computed-axis'].includes(attribution) ? 'parity-harness-defect' : 'application-plugin-authoring-defect') : modalPosition || controlPosition ? (before.property === 'position' ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : weight ? (attribution === retainedFontScalarAttribution ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : 'reviewed',
       ...(snackbarOverflow || widthOverflow || weight || modalPosition || controlPosition ? { reviewEvidence: { renderingEquivalent: false, inputEquivalent: false,
         currentPseudoStatePaintVerified: false, computedCandidateVerified: false } } : {}) });
-    if (authoredTypography) Object.assign(expected.at(-1), {
-      classification: attribution.includes('overflow') ? 'equivalent-representation' : 'application-plugin-authoring-defect',
+    if (authoredTypography || wrapping) Object.assign(expected.at(-1), {
+      classification: wrapping ? (attribution.endsWith('-observation-stage') ? 'parity-harness-defect' : 'application-plugin-authoring-defect') : attribution.includes('overflow') ? 'equivalent-representation' : 'application-plugin-authoring-defect',
       reviewEvidence: { inputEquivalent: false, renderingEquivalent: false },
       reviewedCases: Array.from({ length: before.occurrences }, (_, i) => `case-${i}`),
     });
@@ -125,12 +135,12 @@ for (const mode of ['defaults', 'dialog/card', 'weight', 'modal-position', 'cont
   const current = { rows: structuredClone(expected), control: structuredClone(previous.control) };
   for (const c of current.control.differences)
     c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
-  assert.equal(compare(previous, current, expected, currentSource).changedGroups, authoredTypography ? 36 : snackbarOverflow ? 31 : widthOverflow ? 51 : controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83);
+  assert.equal(compare(previous, current, expected, currentSource).changedGroups, wrapping ? 30 : authoredTypography ? 36 : snackbarOverflow ? 31 : widthOverflow ? 51 : controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83);
   for (const mutate of [
     r => { r.reference = 'forged'; }, r => { r.cases = ['forged']; },
     r => { r.occurrences++; }, r => { r.property = 'fontSize'; },
     r => { r.attribution = 'unreviewed'; },
-    ...(authoredTypography || snackbarOverflow || widthOverflow || weight || modalPosition || controlPosition ? [r => { r.reviewEvidence.renderingEquivalent = true; }, r => { r.classification = 'equivalent'; }] : []),
+    ...(wrapping || authoredTypography || snackbarOverflow || widthOverflow || weight || modalPosition || controlPosition ? [r => { r.reviewEvidence.renderingEquivalent = true; }, r => { r.classification = 'equivalent'; }] : []),
   ]) {
     const changed = structuredClone(current), forged = structuredClone(expected);
     mutate(changed.rows[0]); mutate(forged[0]);
