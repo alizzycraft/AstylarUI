@@ -40,6 +40,22 @@ changes were made, and this checkpoint does not establish rendering equivalence.
 
 ### Prepared work and prior checkpoint history
 
+September 28 prepared tab/card/cancel paint join: original-case inventory replay
+now binds **26 groups / 87 observations** to the existing findings below: tabs
+16/42, card action 8/24, dialog cancel 1/8, and dark card surface 1/13. The proof
+reuses tab-control and dialog alias mappings, matches every captured scalar field
+and all candidate style stages, authenticates authored rule indices, and retains
+native generated-layer rules/opacities separately from candidate opaque fills.
+Tab layer counts remain 8 zero / 26 .04 / 8 .12; cancel remains 3 .08 / 5 .12.
+The card surface preserves its explicit native token versus candidate fixed color
+without asserting reconstructed token ancestry or historical compensation intent.
+`node --test tests/material-parity/control-state-paint-review.spec.mjs` passed
+1/1 in 15.00 seconds, including wrong stages/rules/layer opacity, incomplete
+membership, raw-field and unrelated-row checks. This standalone prepared batch
+is not imported by the running export and changes no canonical counts. Integrate
+it with the eight prepared overlay-trigger groups after grid/height acceptance;
+remaining paint populations still need their own existing proofs joined.
+
 September 28 prepared overlay-trigger paint join: the standalone
 `applyOverlayTriggerPaintReview` reuses the complete existing button-paint census
 and its strict group-membership checks, without relaxing the active-only shared
