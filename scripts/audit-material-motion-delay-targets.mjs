@@ -19,10 +19,12 @@ const disjoint = new Set(['none', 'transform', 'box-shadow', 'border', 'opacity'
 // A second-pass declaration review, not a cascade or motion-state evaluator.
 // A delay-only rule cannot supply a transition target. Require explicit,
 // unconditional target witnesses on the SAME node; never borrow from ancestors.
-export function inspectMotionDelayTargets(review, { reviewedAppearance = false } = {}) {
+export function inspectMotionDelayTargets(review,
+  { reviewedAppearance = false, reviewedTracking = false, reviewedLineHeight = false } = {}) {
   const retained = reason => ({ disposition: 'requires-specific-review', reason,
     inputEquivalent: false, computedCandidateVerified: false, renderingEquivalent: false });
-  if (!(properties.has(review?.proof?.property) || reviewedAppearance && review?.proof?.property === 'appearance') || review.proof.source !== 'core-style-inspection' ||
+  if (!(properties.has(review?.proof?.property) || reviewedAppearance && review?.proof?.property === 'appearance' ||
+      reviewedTracking && review?.proof?.property === 'letterSpacing' || reviewedLineHeight && review?.proof?.property === 'lineHeight') || review.proof.source !== 'core-style-inspection' ||
       review.proof.candidateLocalDeclaration !== '<omitted>' ||
       ['inputEquivalent', 'computedCandidateVerified', 'renderingEquivalent'].some(k => review[k] !== false) ||
       review.proof.computedCandidateVerified !== false || review.proof.renderingEquivalent !== false ||

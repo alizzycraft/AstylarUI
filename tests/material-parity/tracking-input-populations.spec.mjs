@@ -18,6 +18,8 @@ import { proveRangeLineHeight, applyRangeLineHeights, rangeLineHeightAttribution
 import { proveOverlayTypography, applyOverlayTypography, overlayTypographyAttribution } from './tracking-input-review.mjs';
 import { inspectOwnerInitialStyle } from './owner-initial-style-survey.mjs';
 import { applyTypographyObservationStages, typographyObservationAttribution } from './tracking-input-review.mjs';
+import { inspectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
+import { inspectMotionDelayTargets } from '../../scripts/audit-material-motion-delay-targets.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
@@ -273,6 +275,7 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
     .filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
   assert.equal(completeRows.length, 8483);
   const surveyRoutes = {};
+  const motionCounts = { proved: 0, retained: 0 };
   const surveyRows = completeRows.filter(r => r.attribution === 'unresolved' &&
     (r.property === 'letterSpacing' && r.reference === '0' || r.property === 'lineHeight' && r.reference === 'normal'));
   assert.equal(surveyRows.length, 75);
@@ -289,6 +292,23 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
         { family: entry.family, reviewedGeneratedOwners: true, reviewedTracking: true, reviewedLineHeight: true });
       for (const issue of proof.issues) reasons.add(issue.reason);
       assert.equal(proof.computedCandidateVerified, false); assert.equal(proof.renderingEquivalent, false);
+      if (proof.issues.length && proof.issues.every(i => i.reason === 'motion-request-needs-review' && i.side === 'reference')) {
+        assert.throws(() => inspectOwnerInitialMotion(input, row.property, r, a, entry.family));
+        const options = { reviewedTracking: true, reviewedLineHeight: true };
+        const motion = inspectOwnerInitialMotion(input, row.property, r, a, entry.family, options);
+        const delay = inspectMotionDelayTargets(motion, options);
+        const passes = motion.disposition === 'captured-motion-targets-disjoint' || delay.disposition === 'captured-owner-target-set-disjoint';
+        assert.equal(passes, ['badge-count', 'progress-bar-primary', 'progress-spinner-primary'].includes(row.element));
+        motionCounts[passes ? 'proved' : 'retained']++;
+        if (passes) {
+          const changed = structuredClone(r);
+          for (const request of motion.requests) if (request.declarations['transition-property'])
+            changed.rules[request.index].declarations['transition-property'].value = row.property === 'letterSpacing' ? 'letter-spacing' : 'line-height';
+          const negative = inspectOwnerInitialMotion(input, row.property, changed, a, entry.family, options);
+          assert.equal(negative.disposition, 'requires-specific-review');
+          assert.equal(inspectMotionDelayTargets(negative, options).disposition, 'requires-specific-review');
+        }
+      }
     }
     const route = [...reasons].sort().join(',') || 'pass';
     const property = surveyRoutes[row.property] ??= {};
@@ -298,6 +318,7 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
     letterSpacing: { 'explicit-relevant-request': [2, 80], pass: [25, 1470], 'motion-request-needs-review': [6, 302], 'owner-mapping': [4, 125], 'incomplete-surface-ancestry': [2, 64] },
     lineHeight: { pass: [27, 1410], 'explicit-relevant-request': [2, 156], 'motion-request-needs-review': [2, 90], 'owner-mapping': [4, 125], 'incomplete-surface-ancestry': [1, 32] },
   });
+  assert.deepEqual(motionCounts, { proved: 100, retained: 292 });
   const overlayRows = completeRows.filter(r => r.attribution === 'unresolved' &&
     ['letterSpacing', 'lineHeight'].includes(r.property) &&
     ['bottom-sheet-overlay', 'snack-bar-overlay', 'snack-bar-surface', 'dialog-panel', 'dialog-actions'].includes(r.element));
@@ -334,7 +355,7 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
     zeroTrackingTokenAttribution, componentLineHeightAttribution, toggleLineHeightAttribution,
     explicitHostLineHeightAttribution, rangeLineHeightAttribution, overlayTypographyAttribution, typographyObservationAttribution]);
   const batch = combined.filter(r => preparedAttributions.has(r.attribution));
-  assert.equal(batch.length, 83); assert.equal(batch.reduce((n, r) => n + r.occurrences, 0), 4470);
+  assert.equal(batch.length, 87); assert.equal(batch.reduce((n, r) => n + r.occurrences, 0), 4570);
   assert.deepEqual(combined.map(rawRow), completeRows.map(rawRow));
   for (let i = 0; i < completeRows.length; i++) {
     if (!preparedAttributions.has(combined[i].attribution)) assert.deepEqual(combined[i], completeRows[i]);

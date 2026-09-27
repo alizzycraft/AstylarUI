@@ -7,6 +7,8 @@ import { inspectRangeFontReset } from '../../scripts/audit-material-range-font-r
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { proveOverlayNormal, proveDialogWrappingMotion } from './wrapping-input-review.mjs';
 import { inspectOwnerInitialStyle } from './owner-initial-style-survey.mjs';
+import { inspectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
+import { inspectMotionDelayTargets } from '../../scripts/audit-material-motion-delay-targets.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 export const typographyObservationAttribution = 'reviewed-captured-typography-observation-stage';
@@ -24,18 +26,25 @@ export function applyTypographyObservationStages(rows, cases, inventory, normali
       const input = one(entry.styleInputs.filter(i => i.id === row.element));
       const survey = inspectOwnerInitialStyle(input, row.property, reference, candidate,
         { family: entry.family, reviewedGeneratedOwners: true, reviewedTracking: true, reviewedLineHeight: true });
-      if (survey.issues.length) return row;
+      let motion, delay;
+      if (survey.issues.length) {
+        if (!survey.issues.every(i => i.reason === 'motion-request-needs-review' && i.side === 'reference')) return row;
+        const options = { reviewedTracking: true, reviewedLineHeight: true };
+        motion = inspectOwnerInitialMotion(input, row.property, reference, candidate, entry.family, options);
+        delay = inspectMotionDelayTargets(motion, options);
+        if (motion.disposition !== 'captured-motion-targets-disjoint' && delay.disposition !== 'captured-owner-target-set-disjoint') return row;
+      }
       const native = survey.mapping ? one(reference.nodes.filter(n => n.key === survey.mapping.referenceNode))
         : one(reference.nodes.filter(n => n.attributes?.id === row.element));
       const ast = one(candidate.nodes.filter(n => n.authored?.id === row.element));
       proofs.set(keyOf(entry), { case: keyOf(entry), element: row.element, referenceNode: native.key, astylarNode: ast.key,
-        survey, candidateComputedVerified: false, externalInheritanceVerified: false,
+        survey, ...(motion ? { motion, delay } : {}), candidateComputedVerified: false, externalInheritanceVerified: false,
         inputEquivalent: false, rendererCauseProven: false, renderingEquivalent: false });
     }
     return applyModalBoxReview([row], members, inventory, normalize, {
       family: row.family, element: row.element, properties: [row.property], attribution: typographyObservationAttribution,
       classification: 'parity-harness-defect', owner: 'captured computed typography versus local declaration observation stages',
-      justification: 'Every exact original state/owner passes the conservative captured-ancestry survey: native normal versus omitted candidate local declaration, with no captured property/reset/motion request. Different observation stages are not equivalent inputs or proof of a candidate computed default. External inheritance, retained text consumption and rendered typography remain separate obligations.',
+      justification: 'Every exact original state/owner passes the conservative captured-ancestry survey or its explicit disjoint-motion-target review: native normal versus omitted candidate local declaration, with no captured typography/reset request. Motion records are preserved; disjoint declared targets do not prove settlement or exclude indirect effects. Different observation stages are not equivalent inputs or proof of a candidate computed default. External inheritance, retained text consumption and rendered typography remain separate obligations.',
       prove: entry => proofs.get(keyOf(entry)),
     })[0];
   });

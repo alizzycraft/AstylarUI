@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 27
 
+- Existing motion/owner-target checks now accept tracking and line-height only
+  through explicit opt-ins. All **392** remaining observations were checked:
+  **four groups / 100 observations** (badge/progress tracking and progress-bar
+  line-height) have captured disjoint motion targets; changing their exact
+  target declarations to typography is rejected. **Four groups / 292 observations**
+  remain separate: chip-0/chip-1 tracking and tab-panel tracking/line-height.
+  Duration-only/other incomplete motion evidence does not establish inactive
+  motion, settlement or absence of indirect effects. Next reuse the existing
+  chip host-versus-label and private tab-panel ownership proofs for these
+  observation boundaries instead of weakening the motion checker.
+  Combined prepared batch: **87 groups / 4,570 observations**, all raw fields and
+  **8,396 unrelated rows** conserved; population test **1/1, 65.11 s**. Existing
+  appearance motion opt-in check passed **1/1, 4.70 s**. Read-only replay of all
+  **121 historical motion groups / 7,254 observations** matched every non-source
+  field exactly; changed source fingerprints remain explicit and unreconciled
+  until production integration. The initial typography negative test used pooled
+  rules with unrelated shapes; corrected it to the bound motion request indices.
+  No renderer, fixture, historical report, threshold or canonical count changed.
 - Tracking and line-height survey modes are now separately **opt-in**; historical
   `ownerInitialValues` and production callers are unchanged. Font shorthand is
   checked for line-height. Focused survey/negative checks passed **5/5, 2.37 s**;

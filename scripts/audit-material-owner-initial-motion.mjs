@@ -11,14 +11,17 @@ const transitionFields = new Set(['transition-property', 'transition-duration', 
 const animationFields = new Set(['animation-name', 'animation-duration', 'animation-delay',
   'animation-timing-function', 'animation-iteration-count', 'animation-direction',
   'animation-fill-mode', 'animation-play-state', 'animation-timeline', 'animation-range-start', 'animation-range-end']);
-// Each target is disjoint from every one of the eight audited properties.
+// Targets are disjoint from the original eight properties and the explicit
+// appearance/tracking/line-height opt-ins; height is not line-height.
 // This does not claim these transitions have no indirect layout/paint effect.
 const disjointTargets = new Set(['none', 'transform', 'box-shadow', 'border', 'opacity', 'color', 'height']);
 
-export function inspectOwnerInitialMotion(input, property, reference, candidate, family, { reviewedAppearance = false } = {}) {
-  assert.ok(Object.hasOwn(ownerInitialValues, property) || reviewedAppearance && property === 'appearance');
+export function inspectOwnerInitialMotion(input, property, reference, candidate, family,
+  { reviewedAppearance = false, reviewedTracking = false, reviewedLineHeight = false } = {}) {
+  assert.ok(Object.hasOwn(ownerInitialValues, property) || reviewedAppearance && property === 'appearance' ||
+    reviewedTracking && property === 'letterSpacing' || reviewedLineHeight && property === 'lineHeight');
   const proof = inspectOwnerInitialStyle(input, property, reference, candidate,
-    { family, reviewedGeneratedOwners: true, reviewedAppearance });
+    { family, reviewedGeneratedOwners: true, reviewedAppearance, reviewedTracking, reviewedLineHeight });
   const reasons = [], requests = [];
   if (!proof.issues.length || proof.issues.some(i => i.reason !== 'motion-request-needs-review' || i.side !== 'reference')) {
     return { proof, disposition: 'requires-specific-review', reasons: ['not-reference-motion-only'], requests,
