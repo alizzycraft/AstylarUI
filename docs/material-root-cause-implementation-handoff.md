@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 27
 
+September 28 next paint question: compact queries retain 62 background-color
+groups / 450 observations and 46 color groups / 1,090 observations. Reusing
+`planButtonPaintAttribution` with precise normalization and the accepted compact
+rows proposes no additional shared-button groups: eight unresolved trigger groups
+(bottom-sheet/dialog, 53 observations) mix active and inactive native layers.
+`collectButtonPaintAllStates()` freshly replayed exactly against the retained
+`docs/material-button-paint-all-states.json` in 9.40 seconds. Within those groups,
+33 activate/open observations have native pseudo-layer opacity zero but a candidate
+interaction background different from its normal background (the authored hover
+color). This is a state-boundary question, not evidence that all 53 observations
+share the active-layer composition diagnosis. Next trace overlay creation and
+hover invalidation versus capture settlement for those exact states; distinguish
+stale candidate hover, intentionally different hit testing and capture timing.
+The replay establishes applicability to the pinned capture, not current runtime
+behavior or a confirmed core cause. No new report or canonical classification was
+generated. Other paint populations still require their own owner/declaration
+proofs; do not apply this trigger diagnosis to tabs, chips or inherited text ink.
+
 September 28 prepared height evidence: the existing height proof now covers all
 43 remaining groups / 1,414 original observations. Of these, 29 groups / 1,076
 observations have no own height, logical-size or reset declaration in captured
