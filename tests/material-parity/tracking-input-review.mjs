@@ -9,6 +9,9 @@ import { proveOverlayNormal, proveDialogWrappingMotion, proveChipHostWrapping, p
 import { inspectOwnerInitialStyle } from './owner-initial-style-survey.mjs';
 import { inspectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
 import { inspectMotionDelayTargets } from '../../scripts/audit-material-motion-delay-targets.mjs';
+import { applyDialogScalarTypography, applyBottomSheetScalarTypography } from './modal-position-inspection.mjs';
+import { applyTabScalarTypography } from './tab-scalar-typography.mjs';
+import { applyButtonAuthoredTypography, applyNormalLineBoxScalar } from './normal-line-box-scalar.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 export const chipTypographyBoundaryAttribution = 'reviewed-chip-host-tracking-observation-stage';
@@ -469,9 +472,21 @@ export function applyTypographyReviews(rows, cases, inventory, retained, normali
 }
 export function validateTypographyReviews(rows, originalRows, cases, inventory, retained, normalize) {
   try {
-    const selected = values => values.filter(r => typographyReviewAttributions.includes(r.attribution));
+    // JSON persistence omits undefined keys; it must not synthesize CSS defaults.
+    const selected = values => JSON.parse(JSON.stringify(values.filter(r => typographyReviewAttributions.includes(r.attribution))));
     // Rebuild from original rows and bound evidence, never from submitted receipts.
     assert.deepEqual(selected(rows), selected(applyTypographyReviews(originalRows, cases, inventory, retained, normalize)));
     return [];
   } catch (error) { return [`typography review evidence does not replay: ${error.message}`]; }
+}
+
+// The production validator starts before these existing scalar joins. Replay
+// their typography precedence from validated evidence, not submitted row labels.
+export function replayTypographyPredecessors(rows, cases, inventory, retained, control, normalize) {
+  const typography = rows.filter(r => ['letterSpacing', 'lineHeight'].includes(r.property));
+  let result = applyDialogScalarTypography(typography, cases, inventory, retained, control, normalize);
+  result = applyBottomSheetScalarTypography(result, cases, inventory, normalize);
+  result = applyTabScalarTypography(result, cases, inventory, control, normalize);
+  result = applyButtonAuthoredTypography(result, cases, inventory, control, normalize);
+  return applyNormalLineBoxScalar(result, cases, inventory, control);
 }

@@ -9,6 +9,20 @@ import { restoreWidthOverflowProducer } from './position-composition-producer-tr
 import { restoreSnackbarOverflowProducer } from './position-composition-producer-transition.mjs';
 import { restoreAuthoredTypographyProducer } from './position-composition-producer-transition.mjs';
 import { restoreWrappingProducer } from './position-composition-producer-transition.mjs';
+import { restoreTypographyReviewProducer } from './position-composition-producer-transition.mjs';
+
+test('typography review restores the full predecessor including precedence and binding guards', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '2281c37:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreTypographyReviewProducer(current).restoredSource, previous);
+  for (const fragment of ['applyTypographyReviews(beforeTypographyReviews, cases',
+    'replayTypographyPredecessors(replayedRows, cases',
+    "errors.push('typography review attribution lacks bound original cases');",
+    "    'tests/material-parity/tracking-input-review.mjs',\n"])
+    assert.throws(() => restoreTypographyReviewProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreTypographyReviewProducer(current + '\n// unrelated'));
+});
 
 test('wrapping integration restores the complete accepted typography producer', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

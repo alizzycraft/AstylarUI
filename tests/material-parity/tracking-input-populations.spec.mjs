@@ -22,7 +22,7 @@ import { inspectOwnerInitialMotion } from '../../scripts/audit-material-owner-in
 import { inspectMotionDelayTargets } from '../../scripts/audit-material-motion-delay-targets.mjs';
 import { proveComponentTypographyBoundary, applyComponentTypographyBoundaries, chipTypographyBoundaryAttribution,
   tabTypographyBoundaryAttribution } from './tracking-input-review.mjs';
-import { applyTypographyReviews, validateTypographyReviews, typographyReviewAttributions } from './tracking-input-review.mjs';
+import { applyTypographyReviews, validateTypographyReviews, typographyReviewAttributions, replayTypographyPredecessors } from './tracking-input-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
@@ -361,7 +361,9 @@ test('all 91 typography populations retain host, label, token and motion boundar
     chipTypographyBoundaryAttribution, tabTypographyBoundaryAttribution]);
   const batch = combined.filter(r => preparedAttributions.has(r.attribution));
   assert.deepEqual(new Set(typographyReviewAttributions), preparedAttributions);
-  assert.deepEqual(validateTypographyReviews(combined, completeRows, cases, inventory, retained, normalize), []);
+  const predecessorRows = replayTypographyPredecessors(completeRows, cases, inventory, retained, { differences: [] }, normalize);
+  assert.deepEqual(predecessorRows, completeRows.filter(r => ['letterSpacing', 'lineHeight'].includes(r.property)));
+  assert.deepEqual(validateTypographyReviews(JSON.parse(JSON.stringify(combined)), predecessorRows, cases, inventory, retained, normalize), []);
   // Small negative replay uses authentic evidence for one reviewed population;
   // it does not rebuild the entire corpus for every receipt mutation.
   const original = completeRows.find(r => r.family === 'checkbox' && r.property === 'letterSpacing' && r.attribution === 'unresolved');

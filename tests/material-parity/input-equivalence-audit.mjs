@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { applyWrappingReviews, validateWrappingReviews, wrappingAttributions } from './wrapping-input-review.mjs';
+import { applyTypographyReviews, validateTypographyReviews, replayTypographyPredecessors, typographyReviewAttributions } from './tracking-input-review.mjs';
 import { applyVisibleButtonOverflow, validateVisibleButtonOverflow, visibleButtonOverflowAttribution } from './control-overflow-observation.mjs';
 import { applyTabScalarTypography, validateTabScalarTypography, tabScalarTypographyAttribution } from './tab-scalar-typography.mjs';
 import { applyButtonAuthoredTypography, validateButtonAuthoredTypography, buttonAuthoredTypographyAttribution } from './normal-line-box-scalar.mjs';
@@ -324,9 +325,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforeSnackbarOverflowRequests = ownerInitialStyleBinding.status === 'bound'
     ? applyOverlayOverflowRequests(applyExplicitWidthCompositions(applyOmittedWidthObservations(applyControlWidthRequests(beforeWidthOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
     : beforeWidthOverflowRequests;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforeTypographyReviews = ownerInitialStyleBinding.status === 'bound'
     ? applyMappedVisibleOverflow(applyControlClippingRequests(applySnackbarPositionRequests(beforeSnackbarOverflowRequests, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
     : beforeSnackbarOverflowRequests;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyTypographyReviews(beforeTypographyReviews, cases, elementInventory, retainedTypography, canonicalStyle)
+    : beforeTypographyReviews;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -647,6 +651,9 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.rootFlowHeightInputs, report.buttonPillRadiusInputs, report.buttonFlexInputs, report.buttonHostRequestInputs,
         report.buttonFixedWidthInputs, report.ownerGridInitialInputs, report.buttonBoxSizingInputs, report.fieldHostLayoutInputs, report.ownerGapInputs, report.explicitGapInputs, report.gapReviewInputs, report.ownerCaretInputs, report.reviewedInputs, report.followupInputs, report.alignmentFontInputs, report.textAlignInputs, report.ltrAlignmentInputs, report.reviewedSourceBatchInputs, report.rootBackgroundInputs);
       const selected = rows => rows.filter(r => r.attribution === ownerInitialStyleAttribution);
+      errors.push(...validateTypographyReviews(report.discrepancies,
+        replayTypographyPredecessors(replayedRows, cases, report.elementInventory, report.retainedTypography, report.controlTypography, canonicalStyle),
+        cases, report.elementInventory, report.retainedTypography, canonicalStyle));
       errors.push(...validateWrappingReviews(report.discrepancies, replayedRows, cases,
         report.elementInventory, canonicalStyle));
       const authoredControlReplay = collectControlTypographyEvidence(cases.filter(c => ['tabs', 'toolbar', 'button'].includes(c.family)), report.elementInventory);
@@ -726,6 +733,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   }
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => wrappingAttributions.includes(d.attribution)))
     errors.push('wrapping attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => typographyReviewAttributions.includes(d.attribution)))
+    errors.push('typography review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))
     errors.push('button-host line-height attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>
@@ -9017,6 +9026,8 @@ function sourceFingerprints(root) {
     'tests/material-parity/normal-line-box-scalar.spec.mjs',
     'tests/material-parity/tab-scalar-typography.mjs',
     'tests/material-parity/wrapping-input-review.mjs',
+    'tests/material-parity/tracking-input-review.mjs',
+    'tests/material-parity/tracking-input-populations.spec.mjs',
     'tests/material-parity/wrapping-input-populations.spec.mjs',
     'examples/material-showcase/src/app/material-plugin/tab-panel-wrapping-audit.spec.ts',
     'tests/material-parity/tab-scalar-typography-reuse.spec.mjs',

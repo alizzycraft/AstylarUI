@@ -33,9 +33,45 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreWrappingProducer(source) {
+export function restoreTypographyReviewProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+  [
+    "import { applyTypographyReviews, validateTypographyReviews, replayTypographyPredecessors, typographyReviewAttributions } from './tracking-input-review.mjs';\n",
+    ""
+  ],
+  [
+    "  const beforeTypographyReviews = ownerInitialStyleBinding.status === 'bound'",
+    "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"
+  ],
+  [
+    "  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyTypographyReviews(beforeTypographyReviews, cases, elementInventory, retainedTypography, canonicalStyle)\n    : beforeTypographyReviews;\n",
+    ""
+  ],
+  [
+    "      errors.push(...validateTypographyReviews(report.discrepancies,\n        replayTypographyPredecessors(replayedRows, cases, report.elementInventory, report.retainedTypography, report.controlTypography, canonicalStyle),\n        cases, report.elementInventory, report.retainedTypography, canonicalStyle));\n",
+    ""
+  ],
+  [
+    "  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => typographyReviewAttributions.includes(d.attribution)))\n    errors.push('typography review attribution lacks bound original cases');\n",
+    ""
+  ],
+  [
+    "    'tests/material-parity/tracking-input-review.mjs',\n    'tests/material-parity/tracking-input-populations.spec.mjs',\n",
+    ""
+  ]
+]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated typography review integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'c295dd6b865d549dac69d26482f6887fb2837a3b3b37cb5f83a70a8bd36909ea',
+    'producer changed beyond reviewed typography integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreWrappingProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const beforeTypographyReviews =') ? restoreTypographyReviewProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyWrappingReviews, validateWrappingReviews, wrappingAttributions } from './wrapping-input-review.mjs';\n", ''],
     ["  const wrappingDiscrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyWrappingReviews(beforeNormalLineBoxScalars, cases, elementInventory, canonicalStyle)\n    : beforeNormalLineBoxScalars;\n", ''],

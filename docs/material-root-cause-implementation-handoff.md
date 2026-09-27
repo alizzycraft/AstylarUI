@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 27
 
+- Typography review is wired into the production audit after existing scalar
+  reviews, with original-capture binding guards and source fingerprints. Its
+  validator replays the five existing typography predecessor joins instead of
+  trusting submitted classifications. Persisted JSON comparison omits undefined
+  keys only; no CSS defaults are introduced. Existing population proof passed
+  **1/1, 103.59 s**, retaining all 91 groups / 4,862 observations, raw rows,
+  prior accepted typography classifications and mutation controls. All **17
+  producer-transition tests passed, 3.64 s**: exact fragment removal restores
+  the complete `2281c37` producer and every older transition still validates.
+  Motion conservation also passed **2/2** alongside the earlier population run.
+  The export launcher dry run confirms all five required inputs. Source-batch
+  preflight has reproduced 146 groups / 6,295 observations and its historical
+  transition preserved 8,193 unrelated rows; final subset check is still running
+  (session 57717), so the complete suite is not yet reported as passed.
+  Next finish that preflight and extend the existing canonical conservation
+  checker for this 91-group batch before export/reconciliation. Accepted
+  `462dddc7` remains at 1,030 unresolved; production wiring is not canonical
+  acceptance. No renderer, fixture, original capture or historical report changed.
 - The complete typography batch now has one combined apply/replay entry point
   in the existing `tracking-input-review.mjs`, covering all 11 attribution kinds.
   Replay reconstructs expected findings from original rows and bound evidence;
