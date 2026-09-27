@@ -12,19 +12,25 @@ export const trackingLabelAttribution = 'reviewed-scalar-component-tracking-omis
 // Caller supplies authenticated original inventory and independently replayed
 // retained typography. This join cannot authenticate a detached retained report.
 export function proveTrackingLabel(entry, input, reference, candidate, retained) {
+  return proveComponentTextMetric(entry, input, reference, candidate, retained, 'letterSpacing');
+}
+function proveComponentTextMetric(entry, input, reference, candidate, retained, property) {
   assert.equal(entry.family, targets[input.id]);
+  assert.ok(['letterSpacing', 'lineHeight'].includes(property));
+  if (property === 'lineHeight') assert.notEqual(entry.family, 'expansion');
   const native = one(reference.nodes.filter(n => n.attributes?.id === input.id));
   const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));
-  const expected = entry.family === 'expansion' ? '0.144px' : '0.256px';
-  assert.equal(input.reference.letterSpacing, expected);
+  const expected = property === 'lineHeight' ? '20px' : entry.family === 'expansion' ? '0.144px' : '0.256px';
+  const retainedValue = property === 'lineHeight' ? 'normal' : '0';
+  assert.equal(input.reference[property], expected);
   assert.equal(Object.keys(input.reference).length, 89);
   for (const [key, value] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][key], value);
   for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
     ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
-    assert.deepEqual(ast[stage], input[scalar]); assert.equal(ast[stage].letterSpacing, undefined);
+    assert.deepEqual(ast[stage], input[scalar]); assert.equal(ast[stage][property], undefined);
   }
   const key = keyOf(entry);
-  const proof = one(retained.differences.filter(d => d.case === key && d.element === input.id && d.property === 'letterSpacing'));
+  const proof = one(retained.differences.filter(d => d.case === key && d.element === input.id && d.property === property));
   const comparison = one(retained.comparisons.filter(d => d.case === key && d.element === input.id));
   for (const value of [proof, comparison]) {
     assert.equal(value.referenceNode, native.key); assert.equal(value.astylarNode, ast.key);
@@ -33,19 +39,30 @@ export function proveTrackingLabel(entry, input, reference, candidate, retained)
   assert.equal(proof.revision, comparison.revision);
   assert.equal(proof.attribution, 'reviewed-omitted-component-text-metric');
   assert.equal(proof.classification, 'application-plugin-authoring-defect'); assert.equal(proof.inputEquivalent, false);
-  assert.deepEqual(proof.values, { reference: expected, retained: '0', normal: undefined, effective: undefined });
-  assert.deepEqual(comparison.properties.letterSpacing, proof.values);
+  assert.deepEqual(proof.values, { reference: expected, retained: retainedValue, normal: undefined, effective: undefined });
+  assert.deepEqual(comparison.properties[property], proof.values);
   const evidence = proof.reviewEvidence;
   assert.equal(evidence.sourceFinding, 'fixture-retained-component-text-metrics-omitted');
-  assert.equal(evidence.property, 'letterSpacing'); assert.equal(evidence.referenceComputed, expected);
-  assert.equal(evidence.candidateRetained, '0');
+  assert.equal(evidence.property, property); assert.equal(evidence.referenceComputed, expected);
+  assert.equal(evidence.candidateRetained, retainedValue);
   assert.equal(evidence.referenceChain[0].node, native.key); assert.equal(evidence.candidateChain[0].node, ast.key);
   assert.equal(evidence.referenceRule.active, true);
-  assert.ok(evidence.referenceRule.declarations['letter-spacing'].value.startsWith('var(--mat-'));
+  assert.ok(evidence.referenceRule.declarations[property === 'lineHeight' ? 'line-height' : 'letter-spacing'].value.startsWith('var(--mat-'));
   return { case: key, element: input.id, referenceNode: native.key, astylarNode: ast.key,
     sourceAttribution: proof.attribution, retainedProofSha256: createHash('sha256').update(JSON.stringify(proof)).digest('hex'),
     candidateComputedVerified: false, currentPseudoStatePaintVerified: false,
     rendererCauseProven: false, inputEquivalent: false, renderingEquivalent: false };
+}
+export const componentLineHeightAttribution = 'reviewed-scalar-component-line-height-omission';
+export function applyComponentLineHeights(rows, cases, inventory, retained, normalize) {
+  return Object.entries(targets).filter(([, family]) => family !== 'expansion').reduce((values, [element, family]) =>
+    applyModalBoxReview(values, cases, inventory, normalize, {
+      family, element, properties: ['lineHeight'], attribution: componentLineHeightAttribution,
+      owner: 'showcase Material component line-height token translation',
+      justification: 'Each scalar label maps to its independently replayed retained omitted-component-text-metric proof. The active native token computes 20px; candidate normal/effective declarations omit line-height and the text registry retains normal. Preserve that unequal request without substituting a computed pixel default, claiming current glyph placement or attributing a renderer defect.',
+      prove: (entry, reference, candidate) => proveComponentTextMetric(entry,
+        one(entry.styleInputs.filter(i => i.id === element)), reference, candidate, retained, 'lineHeight'),
+    }), rows);
 }
 export function applyTrackingLabels(rows, cases, inventory, retained, normalize) {
   return Object.entries(targets).reduce((values, [element, family]) => applyModalBoxReview(values, cases, inventory, normalize, {

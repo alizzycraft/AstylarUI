@@ -11,6 +11,7 @@ import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { applyTrackingLabels, validateTrackingLabels, trackingLabelAttribution, proveTrackingLabel } from './tracking-input-review.mjs';
 import { applyToggleTrackingHosts, proveToggleTrackingHost, trackingHostAttribution } from './tracking-input-review.mjs';
 import { proveZeroTrackingToken } from './tracking-input-review.mjs';
+import { applyComponentLineHeights, componentLineHeightAttribution } from './tracking-input-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
@@ -104,6 +105,21 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
   const forged = structuredClone(applied);
   forged.find(r => r.attribution === trackingLabelAttribution).reviewEvidence.observations[0].retainedProofSha256 = 'forged';
   assert.equal(validateTrackingLabels(forged, scalarRows, cases, inventory, retained, normalize).length, 1);
+  const metricRows = applyComponentLineHeights(applied, cases, inventory, retained, normalize);
+  const metricChanges = metricRows.filter(r => r.attribution === componentLineHeightAttribution);
+  assert.equal(metricChanges.length, 4); assert.equal(metricChanges.reduce((sum, r) => sum + r.occurrences, 0), 272);
+  assert.deepEqual(metricRows.map(rawRow), applied.map(rawRow));
+  for (let i = 0; i < applied.length; i++) if (!metricChanges.includes(metricRows[i])) assert.deepEqual(metricRows[i], applied[i]);
+  for (const row of metricChanges) for (const observation of row.reviewEvidence.observations) {
+    const receipt = one(accepted.filter(r => r.evidence.section === 'retainedTypography.differences' &&
+      r.case === observation.case && r.element === row.element && r.property === 'lineHeight'));
+    assert.equal(observation.retainedProofSha256, receipt.evidence.completeRowSha256);
+  }
+  const alteredMetric = { ...retained, differences: [...retained.differences] };
+  const metricIndex = alteredMetric.differences.findIndex(d => d.element === 'checkbox-label' && d.property === 'lineHeight');
+  assert.ok(metricIndex >= 0); alteredMetric.differences[metricIndex] = structuredClone(alteredMetric.differences[metricIndex]);
+  alteredMetric.differences[metricIndex].values.retained = '20px';
+  assert.throws(() => applyComponentLineHeights(applied, cases, inventory, alteredMetric, normalize));
   const hostApplied = applyToggleTrackingHosts(applied, cases, inventory, retained, normalize);
   const hostChanges = hostApplied.filter(r => r.attribution === trackingHostAttribution);
   assert.equal(hostChanges.length, 2); assert.equal(hostChanges.reduce((sum, r) => sum + r.occurrences, 0), 136);

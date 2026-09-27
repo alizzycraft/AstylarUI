@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 27
 
+- Line-height scope refreshed from accepted baf0ccb8: **45 unresolved groups /
+  2,345 observations**, not the historical 49 / 2,524. Signatures are normal /
+  omitted (36 / 1,813), 20px / omitted (6 / 408), 28px / omitted (1 / 52), 16px /
+  omitted (1 / 52), and zero / omitted (1 / 20). Four labels (checkbox, both radio
+  labels, slide-toggle) already have independently replayed retained omission
+  proofs; their **272** complete hashes now bind prepared scalar classifications.
+  Reused the existing tracking metric join with a property parameter, not another
+  collector. Native token 20px versus retained normal remains an unequal request,
+  not a normal-to-pixel conversion or glyph-paint diagnosis. Raw/unrelated rows
+  stay unchanged; a forged retained 20px is rejected. Existing population suite
+  passed **1/1, 28.64 s**, including all earlier tracking checks. New helper remains
+  outside production and does not alter the running export. Next handle the two
+  button-toggle host line-height rows, toolbar/paginator hosts and spinner zero
+  separately from the 36 normal/omitted groups, reusing captured owners. Do not
+  repeat the completed scalar census. Canonical classifications remain unchanged.
 - Corrected cold wrapping export launched from **29edf43**, session **25438**,
   with all five retained evidence inputs through the named launcher. Log:
   `artifacts/material-parity/wrapping-export-29edf43-complete-inputs.log`.
