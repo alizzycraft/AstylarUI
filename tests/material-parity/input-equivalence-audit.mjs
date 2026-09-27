@@ -1,4 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { applyTabScalarTypography, validateTabScalarTypography, tabScalarTypographyAttribution } from './tab-scalar-typography.mjs';
+import { applyButtonAuthoredTypography, validateButtonAuthoredTypography, buttonAuthoredTypographyAttribution } from './normal-line-box-scalar.mjs';
 import { applyNormalLineBoxScalar, validateNormalLineBoxScalar, normalLineBoxScalarAttribution } from './normal-line-box-scalar.mjs';
 import { applyRetainedFontScalar, validateRetainedFontScalar, retainedFontScalarAttribution } from './retained-font-scalar.mjs';
 import { applyDialogScalarTypography, validateDialogScalarTypography, applyBottomSheetScalarTypography, validateBottomSheetScalarTypography, applyDialogActionBox, validateDialogActionBox, applyDialogPanelConstraints, validateDialogPanelConstraints, applyBottomSheetPanelConstraints, validateBottomSheetPanelConstraints, applyBottomSheetPanelFlow, validateBottomSheetPanelFlow, applyBottomSheetPanelPaint, validateBottomSheetPanelPaint, applyBottomSheetActionLayout, validateBottomSheetActionLayout, applyBottomSheetContrastCorners, validateBottomSheetContrastCorners, applyDialogTextFlow, validateDialogTextFlow, applyTabControlStage, validateTabControlStage } from './modal-position-inspection.mjs';
@@ -284,9 +286,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const modalDiscrepancies = ownerInitialStyleBinding.status === 'bound'
     ? applyBottomSheetScalarTypography(applyDialogScalarTypography(applyDialogActionBox(applyDialogPanelConstraints(applyBottomSheetPanelConstraints(applyBottomSheetPanelFlow(applyBottomSheetPanelPaint(applyBottomSheetActionLayout(applyBottomSheetContrastCorners(overlaySurfaceDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle), cases, elementInventory, retainedTypography, controlTypography, canonicalStyle), cases, elementInventory, canonicalStyle)
     : overlaySurfaceDiscrepancies;
-  const beforeNormalLineBoxScalars = ownerInitialStyleBinding.status === 'bound'
-    ? applyTabControlStage(applyDialogTextFlow(modalDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+  const authoredTypographyDiscrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyButtonAuthoredTypography(applyTabScalarTypography(modalDiscrepancies, cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, controlTypography, canonicalStyle)
     : modalDiscrepancies;
+  const beforeNormalLineBoxScalars = ownerInitialStyleBinding.status === 'bound'
+    ? applyTabControlStage(applyDialogTextFlow(authoredTypographyDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : authoredTypographyDiscrepancies;
   const beforeRetainedFontScalars = ownerInitialStyleBinding.status === 'bound'
     ? applyNormalLineBoxScalar(beforeNormalLineBoxScalars, cases, elementInventory, controlTypography)
     : beforeNormalLineBoxScalars;
@@ -637,6 +642,14 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.rootFlowHeightInputs, report.buttonPillRadiusInputs, report.buttonFlexInputs, report.buttonHostRequestInputs,
         report.buttonFixedWidthInputs, report.ownerGridInitialInputs, report.buttonBoxSizingInputs, report.fieldHostLayoutInputs, report.ownerGapInputs, report.explicitGapInputs, report.gapReviewInputs, report.ownerCaretInputs, report.reviewedInputs, report.followupInputs, report.alignmentFontInputs, report.textAlignInputs, report.ltrAlignmentInputs, report.reviewedSourceBatchInputs, report.rootBackgroundInputs);
       const selected = rows => rows.filter(r => r.attribution === ownerInitialStyleAttribution);
+      const authoredControlReplay = collectControlTypographyEvidence(cases.filter(c => ['tabs', 'toolbar', 'button'].includes(c.family)), report.elementInventory);
+      const authoredControlRows = control => control.differences.filter(d => ['reviewed-tab-label-typography-input', 'reviewed-toolbar-button-line-height-input', 'reviewed-disabled-button-ink'].includes(d.attribution));
+      if (JSON.stringify(authoredControlRows(report.controlTypography)) !== JSON.stringify(authoredControlRows(authoredControlReplay)))
+        errors.push('authored typography controls differ from original inventory replay');
+      errors.push(...validateTabScalarTypography(report.discrepancies, replayedRows, cases,
+        report.elementInventory, authoredControlReplay, canonicalStyle));
+      errors.push(...validateButtonAuthoredTypography(report.discrepancies, replayedRows, cases,
+        report.elementInventory, authoredControlReplay, canonicalStyle));
       errors.push(...validateNormalLineBoxScalar(report.discrepancies, replayedRows, cases,
         report.elementInventory, report.controlTypography));
       errors.push(...validateRetainedFontScalar(report.discrepancies, replayedRows, cases,
@@ -704,6 +717,9 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
   }
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))
     errors.push('button-host line-height attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>
+      [tabScalarTypographyAttribution, buttonAuthoredTypographyAttribution].includes(d.attribution)))
+    errors.push('authored typography scalar attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === retainedFontScalarAttribution))
     errors.push('component font scalar attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === sidenavBackgroundAttribution))
@@ -8988,6 +9004,8 @@ function sourceFingerprints(root) {
     'tests/material-parity/normal-line-box-report.spec.mjs',
     'tests/material-parity/normal-line-box-scalar.mjs',
     'tests/material-parity/normal-line-box-scalar.spec.mjs',
+    'tests/material-parity/tab-scalar-typography.mjs',
+    'tests/material-parity/tab-scalar-typography-reuse.spec.mjs',
     'tests/material-parity/retained-font-scalar.mjs',
     'tests/material-parity/retained-font-scalar.spec.mjs',
     'tests/material-parity/normal-line-box-evidence.mjs',

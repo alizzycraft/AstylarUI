@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 27
 
+**Typography pipeline integrated, not exported:** twelve pending groups / 519
+observations (tabs 420, toolbar/disabled buttons 99) now use the verified bridges
+in production application and validation. Validation independently regenerates
+the original control proofs before scalar replay and rejects altered stored
+paint evidence. Focused production-fragment replay and all predecessor transition
+checks pass **16/16 in 18.88 s**. The predecessor is byte-identical to accepted
+9e90a85 after removing only the reviewed additions. One old negative-control
+expression was updated to target the new variable; its failure condition remains.
+Fingerprint/export reconciliation is now pending for these code changes; accepted
+canonical stays ef6da409 / 1,096 until a coherent batch export is conserved.
+
+**Button core-test build issue:** session 97109 was cancelled before assertions
+at 7.77 GB esbuild / 383,680 KiB free memory. A genuinely narrower retry used
+`tsconfig.button-audit.json` (extends spec config, includes only the button spec),
+session 79982 / Angular 16060 / esbuild 19120. It also reached 8.12 GB before
+assertions and was cancelled; both processes are absent. No Angular pass/fail
+claim. Retain the tiny failed config and unverified spec for diagnosis. Do not
+repeat either build path. An in-memory esbuild diagnostic now externalizes
+installed dependencies and runs the exact new NullEngine Jasmine test under Node;
+session **85211**, 40,970-byte bundle, is live at the latest poll. This narrower
+diagnostic cannot establish browser compilation, font raster or Angular DI parity.
+
 **Button overflow population bound:** all 716 retained native button instances
 (12 owners, 24 pending scalar groups / 1,432 observations) have exactly the two
 active `.mdc-button` visible-axis requests. Candidate authoring, applicable rules,

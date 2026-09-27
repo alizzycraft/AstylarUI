@@ -7,6 +7,21 @@ import { restoreMappedButtonResetProducer, restoreInteractiveWeightProducer, res
 import { restoreControlPositionProducer } from './position-composition-producer-transition.mjs';
 import { restoreWidthOverflowProducer } from './position-composition-producer-transition.mjs';
 import { restoreSnackbarOverflowProducer } from './position-composition-producer-transition.mjs';
+import { restoreAuthoredTypographyProducer } from './position-composition-producer-transition.mjs';
+
+test('authored typography integration restores the complete accepted snackbar producer', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '9e90a85:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreAuthoredTypographyProducer(current).restoredSource, previous);
+  for (const fragment of ['applyButtonAuthoredTypography(applyTabScalarTypography(modalDiscrepancies, cases',
+    'validateTabScalarTypography(report.discrepancies, replayedRows, cases,',
+    'validateButtonAuthoredTypography(report.discrepancies, replayedRows, cases,',
+    "errors.push('authored typography scalar attribution lacks bound original cases');",
+    "    'tests/material-parity/tab-scalar-typography.mjs',\n"])
+    assert.throws(() => restoreAuthoredTypographyProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreAuthoredTypographyProducer(current + '\n// unrelated'));
+});
 
 test('snackbar and overflow integration restores the entire accepted width producer', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -191,7 +206,7 @@ test('position producer integration preserves every prior byte outside the exact
   assert.equal(restorePositionProducer(current, { followupOnly: true }).restoredSource, beforeFollowup);
   assert.throws(() => restorePositionProducer(beforeFollowup, { followupOnly: true }));
   for (const mutated of [
-    current.replace('applyTabControlStage(applyDialogTextFlow(modalDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)', 'modalDiscrepancies'),
+    current.replace('applyTabControlStage(applyDialogTextFlow(authoredTypographyDiscrepancies, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)', 'authoredTypographyDiscrepancies'),
     current.replace('validateDialogTextFlow(report.discrepancies, replayedRows, cases,', 'validateDialogTextFlow(report.discrepancies, report.discrepancies, cases,'),
     current.replace('validateTabControlStage(report.discrepancies, replayedRows, cases,', 'validateTabControlStage(report.discrepancies, report.discrepancies, cases,'),
     current + '\n// unrelated change\n',
@@ -231,7 +246,7 @@ test('position producer integration preserves every prior byte outside the exact
     current.replace('applyBottomSheetScalarTypography(applyDialogScalarTypography', 'unreviewedSheetClassification(applyDialogScalarTypography'),
     current.replace("    'tests/material-parity/modal-position-inspection.mjs',\n", ''),
   ]) {
-    assert.notEqual(mutated, current);
+    assert.ok(mutated !== current, 'negative control must change the current producer');
     assert.throws(() => restorePositionProducer(mutated));
   }
 });

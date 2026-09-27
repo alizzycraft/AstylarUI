@@ -33,9 +33,30 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreSnackbarOverflowProducer(source) {
+export function restoreAuthoredTypographyProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyTabScalarTypography, validateTabScalarTypography, tabScalarTypographyAttribution } from './tab-scalar-typography.mjs';\n", ''],
+    ["import { applyButtonAuthoredTypography, validateButtonAuthoredTypography, buttonAuthoredTypographyAttribution } from './normal-line-box-scalar.mjs';\n", ''],
+    ["  const authoredTypographyDiscrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyButtonAuthoredTypography(applyTabScalarTypography(modalDiscrepancies, cases, elementInventory, controlTypography, canonicalStyle), cases, elementInventory, controlTypography, canonicalStyle)\n    : modalDiscrepancies;\n", ''],
+    ['applyDialogTextFlow(authoredTypographyDiscrepancies, cases', 'applyDialogTextFlow(modalDiscrepancies, cases'],
+    ['    : authoredTypographyDiscrepancies;\n', '    : modalDiscrepancies;\n'],
+    ["      const authoredControlReplay = collectControlTypographyEvidence(cases.filter(c => ['tabs', 'toolbar', 'button'].includes(c.family)), report.elementInventory);\n      const authoredControlRows = control => control.differences.filter(d => ['reviewed-tab-label-typography-input', 'reviewed-toolbar-button-line-height-input', 'reviewed-disabled-button-ink'].includes(d.attribution));\n      if (JSON.stringify(authoredControlRows(report.controlTypography)) !== JSON.stringify(authoredControlRows(authoredControlReplay)))\n        errors.push('authored typography controls differ from original inventory replay');\n      errors.push(...validateTabScalarTypography(report.discrepancies, replayedRows, cases,\n        report.elementInventory, authoredControlReplay, canonicalStyle));\n      errors.push(...validateButtonAuthoredTypography(report.discrepancies, replayedRows, cases,\n        report.elementInventory, authoredControlReplay, canonicalStyle));\n", ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>\n      [tabScalarTypographyAttribution, buttonAuthoredTypographyAttribution].includes(d.attribution)))\n    errors.push('authored typography scalar attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/tab-scalar-typography.mjs',\n    'tests/material-parity/tab-scalar-typography-reuse.spec.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated authored typography integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'dd0aac918933ee9aa60c9e0bae371d4f42aabe123791e95d6c4b17be49cf9ffa',
+    'producer changed beyond reviewed authored typography integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+
+export function restoreSnackbarOverflowProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const authoredTypographyDiscrepancies =') ? restoreAuthoredTypographyProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';\n", ''],
     ["import { applyControlClippingRequests, validateControlClippingRequests, applyMappedVisibleOverflow, validateMappedVisibleOverflow } from './control-overflow-observation.mjs';\n", ''],

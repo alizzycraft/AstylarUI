@@ -116,5 +116,35 @@ test('tab and button typography scalars retain exact existing control proofs and
   const forged = structuredClone(joined);
   forged.find(r => r.attribution === buttonAuthoredTypographyAttribution).reviewedCases.pop();
   assert.equal(validateButtonAuthoredTypography(forged, originals, cases, inventory, buttonControl, normalize).length, 1);
+  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const start = source.indexOf("  const authoredTypographyDiscrepancies = ownerInitialStyleBinding.status === 'bound'");
+  const end = source.indexOf('  const beforeNormalLineBoxScalars =', start);
+  assert.ok(start > 0 && end > start);
+  const functions = { applyTabScalarTypography, applyButtonAuthoredTypography };
+  const run = new Function('ownerInitialStyleBinding', 'modalDiscrepancies', 'cases', 'elementInventory',
+    'controlTypography', 'canonicalStyle', ...Object.keys(functions), source.slice(start, end) + '\nreturn authoredTypographyDiscrepancies;');
+  const combinedRows = [...scalarRows, ...originals];
+  const combinedControl = collectControlTypographyEvidence(cases.filter(c => ['tabs', 'toolbar', 'button'].includes(c.family)), inventory);
+  const proposal = run({ status: 'bound' }, combinedRows, cases, inventory, combinedControl, normalize, ...Object.values(functions));
+  assert.deepEqual(proposal, [...applied, ...joined]);
+  assert.equal(run({ status: 'unbound' }, combinedRows, cases, inventory, combinedControl, normalize, ...Object.values(functions)), combinedRows);
+  const validationStart = source.indexOf('      const authoredControlReplay =');
+  const validationEnd = source.indexOf('      errors.push(...validateNormalLineBoxScalar(', validationStart);
+  assert.ok(validationStart > 0 && validationEnd > validationStart);
+  const validators = { validateTabScalarTypography, validateButtonAuthoredTypography, collectControlTypographyEvidence };
+  const validateProduction = new Function('report', 'replayedRows', 'cases', 'canonicalStyle',
+    ...Object.keys(validators), 'const errors = [];\n' + source.slice(validationStart, validationEnd) + '\nreturn errors;');
+  const validate = values => validateProduction({ discrepancies: values, elementInventory: inventory, controlTypography: combinedControl },
+    combinedRows, cases, normalize, ...Object.values(validators));
+  assert.deepEqual(validate(proposal), []);
+  const forgedControls = structuredClone(combinedControl);
+  forgedControls.differences.find(d => d.attribution === 'reviewed-tab-label-typography-input').values.painted = 'forged';
+  assert.ok(validateProduction({ discrepancies: proposal, elementInventory: inventory, controlTypography: forgedControls },
+    combinedRows, cases, normalize, ...Object.values(validators)).length);
+  for (const attribution of [tabScalarTypographyAttribution, buttonAuthoredTypographyAttribution]) {
+    const changed = structuredClone(proposal);
+    changed.find(r => r.attribution === attribution).reviewedCases.pop();
+    assert.equal(validate(changed).length, 1);
+  }
   // This is proof reuse, not canonical classification or rendering acceptance.
 });
