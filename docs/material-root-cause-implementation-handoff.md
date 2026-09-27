@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 27
 
+**Snackbar/overflow batch accepted:** all reconciliation and import jobs are now
+terminal. Section session 2608 exited 0: all 79 sections retained, 72 unchanged,
+seven changes explained by the scalar review and independently checked source/
+control receipts; none added or removed. Compact import session 70356 and
+`npm run audit:findings:verify` pass. Accepted generation is **ef6da409** (full SHA
+below), index SHA
+`a25ffe1f2d083f23fafe6e615566544a9aedf7b9559e2084309551568982cca9`.
+Counts: **1,096 unresolved**, 8,483 scalar groups / 389,202 occurrences, 134 source
+findings, 39,904 control differences; coverage remains 436 static / 1,875
+interaction cases. Compact shards total 70,519,280 bytes. Retained gzip has its
+standalone manifest, without duplicating payload bytes. Do not restart any of the
+completed export/reconciliation/import sessions. This accepts an evidence batch,
+not equal rendering inputs or final audit completion.
+Next: run the deferred ButtonManager test now that heavy export work is finished;
+then combine the pending button-overflow and six-group tab proof bridges in a
+coherent next review batch, subject to their remaining validation. Reuse the
+99 toolbar/disabled-ink control proofs only after scalar host/label binding.
+
 **Snackbar reconciliation progress:** conservation session 78262 and metadata
 session 5212 are terminal, exit 0. Exact changes: **31 groups / 1,292 observations**,
 one scalar receipt and 48 control receipts; all raw inputs and non-receipt control
