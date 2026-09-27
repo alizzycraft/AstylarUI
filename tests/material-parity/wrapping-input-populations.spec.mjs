@@ -6,50 +6,12 @@ import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNowrap,
+  validateExplicitNowrap, explicitNowrapAttribution } from './wrapping-input-review.mjs';
 
-const targets = {
-  'card-title': ['card', '.card-title', 52],
-  'card-copy': ['card', '.card-copy', 52],
-  'paginator-range': ['paginator', '#paginator-size, #paginator-page-size, #paginator-range', 52],
-  'paginator-size': ['paginator', '#paginator-size, #paginator-page-size, #paginator-range', 52],
-  'checkbox-label': ['checkbox', '.checkbox-label', 68],
-  'slide-toggle-label': ['slide-toggle', '.switch-label', 68],
-};
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
-
-// An authored mismatch, not a claim about used width, visible wrapping, or a
-// renderer failure. Preserve the unequal owner types and the local style stages.
-function proveExplicitNowrap(entry, input, reference, candidate) {
-  const [family, selector] = targets[input.id];
-  assert.equal(entry.family, family);
-  const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));
-  let native;
-  if (family === 'paginator') {
-    const identity = resolveOriginAliasPair(entry, reference, candidate, input);
-    assert.equal(identity.status, 'mapped');
-    assert.deepEqual(identity.missingRules, []); assert.deepEqual(identity.extraRules, []);
-    assert.equal(identity.candidateNode, ast.key);
-    native = one(reference.nodes.filter(n => n.key === identity.referenceNode));
-  } else native = one(reference.nodes.filter(n => n.attributes?.id === input.id));
-  assert.equal(native.type, input.referenceStructure.type);
-  assert.equal(ast.authored.type, input.astylarStructure.type);
-  assert.equal(reference.styles[native.style].whiteSpace, 'normal');
-  assert.equal(input.reference.whiteSpace, 'normal');
-  for (const [stage, scalar] of [
-    ['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
-    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle'],
-  ]) {
-    assert.deepEqual(ast[stage], input[scalar]);
-    assert.equal(ast[stage].whiteSpace, 'nowrap');
-  }
-  assert.ok(candidate.rules.some(r => r.selector === selector && r.whiteSpace === 'nowrap'));
-  return { case: keyOf(entry), element: input.id, referenceNode: native.key,
-    candidateNode: ast.key, referenceType: native.type, candidateType: ast.authored.type,
-    selector, reference: 'normal', candidate: 'nowrap',
-    classification: 'application-plugin-authoring-defect',
-    inputEquivalent: false, rendererCauseProven: false, renderingEquivalent: false };
-}
 
 test('six explicit nowrap substitutions retain all 344 original owner/state observations', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -92,6 +54,25 @@ test('six explicit nowrap substitutions retain all 344 original owner/state obse
     total += count;
   }
   assert.equal(total, 344);
+  const originalRows = rows.filter(r => r.evidence.section === 'discrepancies')
+    .map(({ id, evidence, ...row }) => row);
+  const normalize = bindPreciseAuditNormalization();
+  const applied = applyExplicitNowrap(originalRows, cases, inventory, normalize);
+  const changed = applied.filter(r => r.attribution === explicitNowrapAttribution);
+  assert.equal(changed.length, 6);
+  assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 344);
+  assert.deepEqual(validateExplicitNowrap(applied, originalRows, cases, inventory, normalize), []);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const rawRow = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(rawRow), originalRows.map(rawRow));
+  for (let i = 0; i < applied.length; i++) if (applied[i].attribution !== explicitNowrapAttribution)
+    assert.deepEqual(applied[i], originalRows[i]);
+  for (const mutate of [r => r.reviewedCases.pop(), r => { r.reviewEvidence.inputEquivalent = true; },
+    r => { r.reviewEvidence.observations[0].selector = '#forged'; }]) {
+    const forged = structuredClone(applied);
+    mutate(forged.find(r => r.attribution === explicitNowrapAttribution));
+    assert.equal(validateExplicitNowrap(forged, originalRows, cases, inventory, normalize).length, 1);
+  }
 });
 
 test('native nowrap ancestry is retained for 500 omitted local candidate observations', () => {

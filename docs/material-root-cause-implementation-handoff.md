@@ -2,6 +2,17 @@
 
 ## Current audit checkpoint — September 27
 
+**Six explicit wrapping groups prepared for integration:** the already-tested
+owner proof was moved (not duplicated) into `wrapping-input-review.mjs` and
+connected to existing `applyModalBoxReview` application/replay validation.
+The focused population suite passes 3/3 in 8.01 s: exactly six groups / 344
+observations receive unequal-authoring metadata; raw rows and unrelated rows
+remain unchanged. Mutations of membership, equivalence flags, and selector
+evidence are rejected. This preparation is not imported by the production
+exporter and does not change the accepted canonical count. After the live
+complete-input export is reconciled, integrate this with the remaining wrapping
+batch rather than launch another canonical build for six metadata rows alone.
+
 **Corrected cold export is live:** session **57045**, launcher PID **22792**,
 exporter PID **21308**, launched from **00f8133** with all five evidence arguments.
 Log: `artifacts/material-parity/authored-typography-export-complete-inputs-00f8133.log`.
