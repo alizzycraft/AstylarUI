@@ -42,13 +42,23 @@
   with exact owner/stage membership and negative controls, reusing these proofs.
   The other two nonzero rows are button-toggle hosts (136 observations). Across
   all 68 captures both nested labels instead have reference/retained zero and
-  omitted normal/effective values. A representative native ancestry explains the
+  omitted normal/effective values. The full native ancestry population explains the
   distinction: mat-button-toggle computes 0.096px from Material tracking tokens,
   but its nested button and span compute normal, with no captured author tracking
   rules on those descendants. Do not join host token values to leaf zero by
-  assumption or call it a core spacing failure; extend this host/leaf boundary
-  check to the full population before classifying. No capture or source used by
-  the active export was changed during this investigation.
+  assumption or call it a core spacing failure. The new focused regression
+  `node --test tests/material-parity/tracking-input-populations.spec.mjs` passed
+  **1/1, 15.58 s**: all seven groups / 476 observations bind exact scalar member
+  counts, owner identities, every scalar style field, the three candidate stages,
+  accepted retained-proof hashes, and actual host-to-button-to-label ancestry.
+  All 136 native host token rules remain explicit; no captured active author rule
+  supplies tracking or an all-reset on the nested button/span. This does not infer
+  an uncaptured UA rule or glyph paint equivalence. The first run failed because
+  the full-tree style record contains extra properties beyond the 89-field scalar
+  view; the test now binds every scalar field without requiring those schemas to
+  have identical keys. Classifications remain unchanged pending scalar join and
+  separate host-boundary review. This new proof is not yet a producer dependency;
+  no capture or source used by the active export was changed.
 - Corrected export **57045 / PID 21308 is terminal**, source **00f8133**.
   Candidate **baf0ccb8** has 1,060 unresolved groups, 8,483 raw groups / 389,202
   observations, 134 source findings, and complete 436 static / 1,875 interaction
