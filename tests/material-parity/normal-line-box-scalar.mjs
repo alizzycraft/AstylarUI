@@ -1,5 +1,58 @@
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
+import assert from 'node:assert/strict';
+import { applyModalBoxReview } from './modal-position-inspection.mjs';
+
+export const buttonAuthoredTypographyAttribution = 'reviewed-button-host-authored-typography';
+
+// As with the natural-line-box bridge below, the caller must independently
+// replay control evidence. Match the host to its direct label, not just an ID.
+export function applyButtonAuthoredTypography(rows, cases, inventory, control, normalize) {
+  let result = rows;
+  for (const [family, element, property, attribution, sourceFinding] of [
+    ['toolbar', 'toolbar-action', 'lineHeight', 'reviewed-toolbar-button-line-height-input', 'fixture-toolbar-button-height-replaces-inherited-line-height'],
+    ['button', 'button-disabled', 'color', 'reviewed-disabled-button-ink', 'fixture-disabled-button-ink-precomposited'],
+  ]) {
+    result = applyModalBoxReview(result, cases, inventory, normalize, {
+      family, element, properties: [property], attribution: buttonAuthoredTypographyAttribution,
+      owner: 'showcase button inherited typography and disabled alpha authoring',
+      justification: 'Every original scalar member joins its native button host to a direct label with the same computed property and to the exact independently replayed candidate control proof. Existing source evidence identifies substituted toolbar line-height or precomposited disabled ink. This does not establish a core defect or equivalent compositing, geometry or raster.',
+      prove: (entry, reference, candidate) => {
+        const unique = values => { assert.equal(values.length, 1); return values[0]; };
+        const key = keyOf(entry);
+        const host = unique(reference.nodes.filter(n => (n.attributes?.['data-parity-id'] ?? n.attributes?.id) === element));
+        const ast = unique(candidate.nodes.filter(n => n.authored?.id === element));
+        assert.equal(host.type, 'button'); assert.equal(ast.authored.type, 'button');
+        const label = unique(reference.nodes.filter(n => n.parent === host.key && n.type === 'span' &&
+          (n.attributes?.class ?? '').split(/\s+/).includes('mdc-button__label')));
+        const proof = unique(control.differences.filter(p => p.case === key && p.family === family &&
+          p.element === element && p.property === property));
+        assert.equal(proof.attribution, attribution);
+        assert.equal(proof.classification, 'application-plugin-authoring-defect');
+        assert.equal(proof.source, 'core-control-texture');
+        assert.equal(proof.reviewEvidence.sourceFinding, sourceFinding);
+        assert.equal(proof.referenceNode, label.key); assert.equal(proof.astylarNode, ast.key);
+        for (const node of [host, label])
+          assert.equal(normalize(reference.styles[node.style])[property], proof.values.reference);
+        for (const [value, stage] of [['normal', 'normalResolvedStyle'], ['effective', 'interactionResolvedStyle']])
+          assert.equal(normalize(ast[stage])[property], proof.values[value]);
+        return { case: key, element, property, referenceNode: host.key, referenceLabel: label.key,
+          astylarNode: ast.key, sourceAttribution: attribution,
+          controlProofSha256: createHash('sha256').update(JSON.stringify(proof)).digest('hex'),
+          inputEquivalent: false, renderingEquivalent: false, rendererCauseProven: false };
+      },
+    });
+  }
+  return result;
+}
+
+export function validateButtonAuthoredTypography(rows, originalRows, cases, inventory, control, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === buttonAuthoredTypographyAttribution);
+    assert.deepEqual(select(rows), select(applyButtonAuthoredTypography(originalRows, cases, inventory, control, normalize)));
+    return [];
+  } catch (error) { return [`button scalar typography lacks exact host/label control replay: ${error.message}`]; }
+}
 
 const one = values => values.length === 1 ? values[0] : undefined;
 const keyOf = c => `${c.kind ?? (c.state ? 'interaction' : 'static')}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}`;

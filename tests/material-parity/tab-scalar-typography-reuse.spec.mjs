@@ -6,9 +6,10 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory, collectControlTypographyEvidence } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { applyTabScalarTypography, validateTabScalarTypography, tabScalarTypographyAttribution } from './tab-scalar-typography.mjs';
+import { applyButtonAuthoredTypography, validateButtonAuthoredTypography, buttonAuthoredTypographyAttribution } from './normal-line-box-scalar.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-test('all unresolved tab font, tracking and line-height scalars retain an exact existing control proof', () => {
+test('tab and button typography scalars retain exact existing control proofs and owner bindings', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const capture = JSON.parse(bytes);
@@ -78,5 +79,42 @@ test('all unresolved tab font, tracking and line-height scalars retain an exact 
   assert.throws(() => applyTabScalarTypography(scalarRows, cases, inventory, missing, normalize));
   const duplicate = { ...control, differences: [...control.differences, proofs[0]] };
   assert.throws(() => applyTabScalarTypography(scalarRows, cases, inventory, duplicate, normalize));
+  const current = { generation: 'ef6da409ae1162433b0419814fe7e7e33b7659805d8e672f407d8b4c84878145',
+    indexSha256: 'a25ffe1f2d083f23fafe6e615566544a9aedf7b9559e2084309551568982cca9' };
+  const buttonRows = ['toolbar', 'button'].flatMap(family =>
+    queryFindings('artifacts/material-parity/working-audit', family, current));
+  const buttonControl = collectControlTypographyEvidence(cases.filter(c => ['toolbar', 'button'].includes(c.family)), inventory);
+  const selectedProofs = buttonControl.differences.filter(p =>
+    ['reviewed-toolbar-button-line-height-input', 'reviewed-disabled-button-ink'].includes(p.attribution));
+  assert.equal(selectedProofs.length, 99);
+  for (const proof of selectedProofs) {
+    const accepted = buttonRows.filter(p => p.evidence.section === 'controlTypography.differences' &&
+      p.case === proof.case && p.element === proof.element && p.property === proof.property);
+    assert.equal(accepted.length, 1);
+    assert.equal(hash(JSON.stringify(proof)), accepted[0].evidence.completeRowSha256);
+  }
+  const originals = buttonRows.filter(r => r.evidence.section === 'discrepancies')
+    .map(({ id, evidence, ...row }) => row);
+  const joined = applyButtonAuthoredTypography(originals, cases, inventory, buttonControl, normalize);
+  const changes = joined.filter(r => r.attribution === buttonAuthoredTypographyAttribution);
+  assert.equal(changes.length, 6);
+  assert.equal(changes.reduce((sum, r) => sum + r.occurrences, 0), 99);
+  assert.deepEqual(joined.map(raw), originals.map(raw));
+  for (let i = 0; i < joined.length; i++) if (joined[i].attribution !== buttonAuthoredTypographyAttribution)
+    assert.deepEqual(joined[i], originals[i]);
+  assert.deepEqual(validateButtonAuthoredTypography(joined, originals, cases, inventory, buttonControl, normalize), []);
+  for (const mutate of [
+    p => { p.referenceNode = 'wrong-label'; },
+    p => { p.values.reference = 'forged'; },
+    p => { p.astylarNode = 'wrong-control'; },
+    p => { p.reviewEvidence.sourceFinding = 'wrong-source'; },
+  ]) {
+    const forged = structuredClone(buttonControl);
+    mutate(forged.differences.find(p => p.attribution === selectedProofs[0].attribution));
+    assert.throws(() => applyButtonAuthoredTypography(originals, cases, inventory, forged, normalize));
+  }
+  const forged = structuredClone(joined);
+  forged.find(r => r.attribution === buttonAuthoredTypographyAttribution).reviewedCases.pop();
+  assert.equal(validateButtonAuthoredTypography(forged, originals, cases, inventory, buttonControl, normalize).length, 1);
   // This is proof reuse, not canonical classification or rendering acceptance.
 });

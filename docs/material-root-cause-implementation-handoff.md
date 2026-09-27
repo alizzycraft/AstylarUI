@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 27
 
+**Next typography binding verified:** the existing scalar bridge now proves six
+additional toolbar/disabled-button groups (99 observations) against independently
+replayed control evidence in accepted ef6da409. Each scalar native button host
+joins its direct label with the same computed property and the exact candidate
+control owner. All 99 complete control-row hashes match; raw scalar values and
+unrelated rows are conserved. Wrong label/control, altered values/source finding,
+and lost case membership are rejected. Combined tab/button focused replay passes
+1/1 (54.04 s body, 57.90 s total); existing normal-line-box bridge tests pass 3/3.
+This explains existing authoring substitutions, not new renderer causes. The new
+bridge is not production-wired or canonically accepted: unresolved remains 1,096.
+Batch it with the prepared six tab groups after remaining verification.
+
+Accepted commit 9e90a85 is confirmed on the remote integration branch. Deferred
+Angular test session 92832 was explicitly cancelled before assertions: esbuild
+grew to 7.39 GB with only 666,304 KiB free physical memory. This is not a test
+failure or pass. Its processes terminated. A retry disables source maps to lower
+build memory without changing test assertions; revalidate the live session before
+starting any replacement. Do not repeat the same memory-exhausting command.
+
 **Snackbar/overflow batch accepted:** all reconciliation and import jobs are now
 terminal. Section session 2608 exited 0: all 79 sections retained, 72 unchanged,
 seven changes explained by the scalar review and independently checked source/
