@@ -14,6 +14,7 @@ import { proveZeroTrackingToken } from './tracking-input-review.mjs';
 import { applyComponentLineHeights, componentLineHeightAttribution } from './tracking-input-review.mjs';
 import { applyToggleLineHeights, proveToggleLineHeightHost, toggleLineHeightAttribution } from './tracking-input-review.mjs';
 import { applyExplicitHostLineHeights, explicitHostLineHeightAttribution, proveExplicitHostLineHeight } from './tracking-input-review.mjs';
+import { proveRangeLineHeight, applyRangeLineHeights, rangeLineHeightAttribution } from './tracking-input-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
@@ -26,6 +27,24 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
     ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))];
   // Global ordering is necessary to replay accepted retained-proof hashes.
   const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  let rangeLineHeights = 0;
+  for (const entry of cases.filter(e => e.family === 'slider')) {
+    const [r, a] = modalInventoryTrees(inventory, keyOf(entry));
+    for (const id of ['slider-start', 'slider-primary']) {
+      const input = one(entry.styleInputs.filter(i => i.id === id));
+      const proof = proveRangeLineHeight(entry, input, r, a);
+      assert.equal(proof.inputEquivalent, false); rangeLineHeights++;
+      if (rangeLineHeights === 1) {
+        const changed = structuredClone(r);
+        changed.rules.find(rule => rule.selector === 'button, input, select' && rule.declarations['line-height']).declarations['line-height'].value = 'normal';
+        assert.throws(() => proveRangeLineHeight(entry, input, changed, a));
+        const ancestor = structuredClone(a);
+        ancestor.rules.push({ selector: '#page', lineHeight: 'normal' });
+        assert.throws(() => proveRangeLineHeight(entry, input, r, ancestor));
+      }
+    }
+  }
+  assert.equal(rangeLineHeights, 156);
   const families = ['checkbox', 'radio', 'slide-toggle', 'expansion', 'button-toggle'];
   const selected = cases.filter(e => families.includes(e.family));
   const retained = collectRetainedTypographyEvidence(selected, inventory);
@@ -228,6 +247,14 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
   const alteredHost = structuredClone(sa);
   alteredHost.rules.push({ selector: '#progress-spinner-primary', font: '16px/20px Arial' });
   assert.throws(() => proveExplicitHostLineHeight(spinner, si, sr, alteredHost));
+  const rangeRows = queryFindings('artifacts/material-parity/working-audit', 'slider', snapshot)
+    .filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const rangeReviewed = applyRangeLineHeights(rangeRows, cases, inventory, normalize);
+  const rangeChanges = rangeReviewed.filter(r => r.attribution === rangeLineHeightAttribution);
+  assert.equal(rangeChanges.length, 2);
+  assert.equal(rangeChanges.reduce((sum, r) => sum + r.occurrences, 0), 156);
+  assert.deepEqual(rangeReviewed.map(rawRow), rangeRows.map(rawRow));
+  for (let i = 0; i < rangeRows.length; i++) if (!rangeChanges.includes(rangeReviewed[i])) assert.deepEqual(rangeReviewed[i], rangeRows[i]);
   // No classification mutation: equal leaf zeros do not establish host token,
   // inheritance, current glyph paint or rendering equivalence.
 });

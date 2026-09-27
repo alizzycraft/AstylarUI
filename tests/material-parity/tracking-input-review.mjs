@@ -3,8 +3,57 @@ import { createHash } from 'node:crypto';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { inspectRangeFontReset } from '../../scripts/audit-material-range-font-reset.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
+export const rangeLineHeightAttribution = 'reviewed-range-line-height-inheritance-omission';
+export function applyRangeLineHeights(rows, cases, inventory, normalize) {
+  return ['slider-start', 'slider-primary'].reduce((values, element) => applyModalBoxReview(values, cases, inventory, normalize, {
+    family: 'slider', element, properties: ['lineHeight'], attribution: rangeLineHeightAttribution,
+    owner: 'Material control font reset translation',
+    justification: 'The native range input explicitly requests inherited line-height and computes normal. The candidate captured owner-to-root path omits that request. Preserve the authoring mismatch without treating omitted as computed normal, deriving pixel line boxes, or attributing slider gesture/paint defects to typography.',
+    prove: (entry, reference, candidate) => proveRangeLineHeight(entry,
+      one(entry.styleInputs.filter(i => i.id === element)), reference, candidate),
+  }), rows);
+}
+export function proveRangeLineHeight(entry, input, reference, candidate) {
+  assert.equal(entry.family, 'slider');
+  // Reuse the independently established input/range owner paths and reset
+  // boundary; the earlier proof's font-size conclusion is not a line-height proof.
+  const owners = inspectRangeFontReset(input, reference, candidate);
+  const relevant = key => ['lineheight', 'font', 'all'].includes(key.replaceAll('-', '').toLowerCase());
+  const referencePath = owners.referencePath.map(({ key }) => {
+    const node = one(reference.nodes.filter(n => n.key === key));
+    assert.equal(reference.styles[node.style].lineHeight, 'normal');
+    assert.ok(Object.keys(node.inline).every(k => !relevant(k)));
+    const requests = node.rules.map(i => reference.rules[i]).filter(r => r.active && Object.keys(r.declarations).some(relevant));
+    if (key === owners.referencePath[0].key) {
+      assert.equal(requests.length, 1);
+      assert.equal(requests[0].selector, 'button, input, select');
+      assert.deepEqual(requests[0].declarations['line-height'], { value: 'inherit', important: false });
+      assert.equal(requests[0].declarations.font, undefined); assert.equal(requests[0].declarations.all, undefined);
+    } else assert.equal(requests.length, 0);
+    return { key, computed: 'normal', requests };
+  });
+  for (const { key } of owners.candidatePath) {
+    const node = one(candidate.nodes.filter(n => n.key === key));
+    assert.equal(node.authored.style, undefined); assert.equal(node.authored.attributes?.style, undefined);
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'])
+      assert.ok(Object.keys(node[stage]).every(k => !relevant(k)));
+    for (const rule of candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, node.authored)))
+      assert.ok(Object.keys(rule).every(k => !relevant(k)));
+  }
+  assert.equal(input.reference.lineHeight, 'normal');
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'], ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    const node = one(candidate.nodes.filter(n => n.key === owners.candidatePath[0].key));
+    assert.deepEqual(node[stage], input[scalar]);
+  }
+  return { case: keyOf(entry), element: input.id, referenceNode: referencePath[0].key,
+    astylarNode: owners.candidatePath[0].key, referencePath, candidatePath: owners.candidatePath.map(n => n.key),
+    classification: 'application-plugin-authoring-defect', owner: 'Material control font reset translation',
+    candidateComputedVerified: false, rendererCauseProven: false, inputEquivalent: false, renderingEquivalent: false,
+    limitation: 'Explicit inherited line-height is absent from the candidate captured path; normal is not a pixel line box or proof of current slider paint/gesture causality.' };
+}
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 const targets = { 'checkbox-label': 'checkbox', 'radio-solo-label': 'radio', 'radio-team-label': 'radio',
   'slide-toggle-label': 'slide-toggle', 'expansion-title': 'expansion' };

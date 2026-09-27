@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 27
 
+- Slider line-height request omission now has a focused executable proof and
+  prepared classification for **two groups / 156 observations**. Reused the
+  existing range font-reset owner paths; separately proved native active
+  `line-height: inherit`, normal computed ancestry, and absent candidate
+  line-height/font/all requests across every captured owner-to-page path and
+  all three style stages. Negative controls reject replacing native inherit
+  with normal and adding an ancestor candidate line-height request. Existing
+  population suite passed **1/1, 27.69 s**; all raw and unrelated slider rows
+  are conserved. Prepared line-height coverage is now **11 groups / 688
+  observations**, leaving **34 / 1,657** for ancestry/observation-stage review.
+  This establishes an application/plugin input omission, not the cause of
+  black-ring, swapped-handle, travel or gesture symptoms. No candidate computed
+  line box or rendering equivalence is inferred. Helpers remain outside the
+  production exporter; canonical counts are unchanged. Export PID 4632 was
+  live at 2,139.30 CPU seconds; next reconcile its terminal output before
+  changing shared producer dependencies or accepting a new generation.
 - Normal line-height follow-up: authenticated all **156 slider-thumb observations**
   (78 per owner) and both original tree hashes per case. Every native thumb has
   the active `button, input, select` reset with explicit `line-height: inherit`;
