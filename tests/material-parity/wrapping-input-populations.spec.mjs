@@ -120,7 +120,7 @@ test('native nowrap ancestry is retained for 500 omitted local candidate observa
     }
     assert.fail('incomplete ancestry');
   };
-  let total = 0;
+  let total = 0, paintedNormal = 0;
   for (const [element, [family, count]] of Object.entries(targets)) {
     const row = one(rows.filter(r => r.evidence.section === 'discrepancies' &&
       r.element === element && r.property === 'whiteSpace' && r.attribution === 'unresolved'));
@@ -155,6 +155,22 @@ test('native nowrap ancestry is retained for 500 omitted local candidate observa
           assert.ok(node[stage]); assert.equal(node[stage].whiteSpace, undefined);
         }
       }
+      if (['tab-overview', 'tab-activity', 'toolbar-action'].includes(element)) {
+        assert.equal(ast.paintedControlText?.source, 'core-control-texture');
+        assert.equal(ast.paintedControlText.text, ast.authored.value);
+        // modalInventoryTrees expands local declarations, but the separate
+        // paint record still refers to the inventory-global style index.
+        const paint = inventory.styles[ast.paintedControlText.style];
+        assert.equal(paint.side, 'astylar'); assert.equal(paint.value.whiteSpace, 'normal');
+        paintedNormal++;
+      } else {
+        assert.equal(ast.paintedControlText, undefined);
+        // Badge retained text is a distinct stage, not a control paint value.
+        if (element === 'badge-count') {
+          assert.equal(ast.retainedText?.source, 'core-text-registry');
+          assert.equal(inventory.styles[ast.retainedText.style].value.whiteSpace, undefined);
+        }
+      }
       keys.push(keyOf(entry));
     }
     assert.equal(keys.length, count); assert.equal(new Set(keys).size, count);
@@ -162,4 +178,50 @@ test('native nowrap ancestry is retained for 500 omitted local candidate observa
     total += count;
   }
   assert.equal(total, 500);
+  assert.equal(paintedNormal, 192);
+});
+
+test('chip host normal values do not conceal nested native nowrap labels in 152 observations', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes);
+  const cases = [...raw.results.map(e => ({ ...e, kind: 'static' })),
+    ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => e.family === 'chips');
+  assert.equal(cases.length, 76);
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  let labels = 0;
+  for (const entry of cases) {
+    const [r, a] = modalInventoryTrees(inventory, keyOf(entry));
+    for (const id of ['chip-0', 'chip-1']) {
+      const input = one(entry.styleInputs.filter(i => i.id === id));
+      const native = one(r.nodes.filter(n => n.attributes?.id === id));
+      const ast = one(a.nodes.filter(n => n.authored?.id === id));
+      assert.equal(input.reference.whiteSpace, 'normal');
+      assert.equal(r.styles[native.style].whiteSpace, 'normal');
+      assert.equal(input.astylar.whiteSpace, undefined);
+      const leaf = one(r.nodes.filter(n => n.key.startsWith(native.key + '/') &&
+        String(n.attributes?.class).split(/\s+/).includes('mdc-evolution-chip__text-label')));
+      const label = one(a.nodes.filter(n => n.parent === ast.key && n.authored.id === `${id}-label`));
+      assert.equal(leaf.type, 'span'); assert.equal(label.authored.type, 'span');
+      assert.equal(leaf.ownText.trim(), label.authored.textContent);
+      assert.equal(r.styles[leaf.style].whiteSpace, 'nowrap');
+      assert.ok(leaf.rules.map(i => r.rules[i]).some(rule => rule.active &&
+        rule.selector === '.mdc-evolution-chip__text-label' &&
+        rule.declarations['white-space-collapse']?.value === 'collapse' &&
+        rule.declarations['text-wrap-mode']?.value === 'nowrap'));
+      for (const [stage, scalar] of [
+        ['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+        ['interactionResolvedStyle', 'astylarInteractionResolvedStyle'],
+      ]) {
+        assert.deepEqual(ast[stage], input[scalar]);
+        assert.equal(label[stage].whiteSpace, undefined);
+      }
+      assert.equal(label.retainedText?.source, 'core-text-registry');
+      assert.equal(inventory.styles[label.retainedText.style].value.whiteSpace, undefined);
+      assert.equal(label.paintedControlText, undefined);
+      labels++;
+    }
+  }
+  assert.equal(labels, 152);
 });

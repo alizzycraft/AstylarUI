@@ -4,15 +4,33 @@
 
 **Wrapping population checks are now executable:**
 `node --test tests/material-parity/wrapping-input-populations.spec.mjs` passes
-2/2 in 5.20 s. It authenticates the original capture, reuses the full-tree
+3/3 in 6.36 s. It authenticates the original capture, reuses the full-tree
 inventory and mapped aliases, and checks complete membership against accepted
 ef6da409 compact rows: six explicit substitutions / 344 observations and eight
 native-nowrap/local-omission groups / 500 observations. The explicit-substitution
 check rejects removed author rules, forged normal-stage values, and altered
 reference computed values. The omission check preserves all captured ancestry
-and excludes the unstyled synthetic root from inherited-value claims. Neither
-test treats local omission as computed normal or proves a responsive raster
-failure. No new capture or canonical classification was made; this closes the
+and excludes the unstyled synthetic root from inherited-value claims. It now
+also checks actual core-control-texture whiteSpace normal for all 192 tab and
+toolbar-action labels, using the inventory-global paint-style index. The other
+308 owners have no direct control-paint record; badge retained-text omission
+remains a separate stage. The initial text-identity assertion used textContent
+and correctly failed; these buttons author their label through value, and the
+corrected identity check passes for the full population.
+
+**Nested chips wrapping is not captured by host defaults:** all 152 chip hosts
+compute normal natively, but their nested `.mdc-evolution-chip__text-label`
+spans declare collapse/nowrap and compute nowrap. Each corresponding candidate
+`chip-0-label` / `chip-1-label` is a direct span child with identical text but
+omits whiteSpace in all three local stages and retained core-text-registry
+styles. There is no direct control-paint record for those spans. The third test
+checks the complete 76-case population and native rule/owner/text identity.
+Thus even a future host initial-value classification must retain this nested
+label translation gap; it cannot establish chip wrapping equivalence. Actual
+long-text wrapping/raster consequences remain unproven. This is not a new
+confirmed renderer defect.
+
+No new capture or canonical classification was made; this closes the
 repeatability gap in the previous read-only population investigation. The new
 spec is not an input to the live c8b3ceb export. Next: integrate guarded
 classifications after that export and reconciliation finish, then handle the
