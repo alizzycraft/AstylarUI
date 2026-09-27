@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 27
 
+**Cold export in progress:** session **96508**, Node PID **5144**, from pushed
+commit **c8b3ceb**. Log: `artifacts/material-parity/authored-typography-export-c8b3ceb.log`.
+Latest live check remains build-audit, CPU 286.625 s / RSS 2.67 GB. Keep source
+inputs unchanged during this evidence session; quiet output is not termination.
+After it finishes, use `--authored-typography` conservation, all-section/source
+reconciliation and compact import/verify. Accepted pointer remains ef6da409.
+
+**Read-only next-question result (not in this export): tab nowrap omission.** All
+70 original tab cases / 140 label instances have a native span three ancestors
+below role=tab. The `.mdc-tab` active rule contributes `white-space-collapse:
+collapse` and `text-wrap-mode: nowrap`; the role owner and leaf compute `nowrap`.
+Every captured candidate ancestor style stage omits whiteSpace (synthetic root
+has no style evidence and is explicitly excluded from that claim). All 140
+candidate labels have core-control-texture paint evidence with whiteSpace
+`normal`, not nowrap. Thus these two unresolved scalar groups are not an initial
+value equivalence or merely differently measured boxes. Current source agrees:
+`TextStyleParserService` defaults to normal; ButtonManager passes the unbounded
+three-argument text call. Short single-line output cannot establish equivalent
+wrapping behavior. This extends the known tab-label flattening investigation;
+no fresh core cause or responsive wrapping failure is claimed. Next: bind the
+complete ancestry/rule/paint population and negative controls using existing
+tab scalar review infrastructure after the active export closes. No new capture,
+canonical classification, or renderer/fixture edit was made for this check.
+
 **Combined batch ready for cold export:** production application/validation now
 includes 24 button initial-overflow groups (1,432 observations) and 12 typography
 groups (519). Full original-membership replay preserves all 8,483 raw scalar
