@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 27
 
+- Overlay typography observation boundaries now have prepared classifications:
+  **10 groups / 314 observations** across bottom-sheet overlay, snackbar
+  overlay/surface and dialog panel/actions. Reused the exact wrapping owner
+  mappings and dialog motion-override proof; separately checked tracking and
+  line-height ancestry and rejected font resets. Native computed normal versus
+  absent local declarations is an observation-stage mismatch, not a claim that
+  candidate computed typography or popup placement is correct. Known scalar
+  z-index rule gaps, external inheritance, indirect motion effects and descendant
+  typography remain explicit. Full prepared composition now changes **31 groups /
+  1,590 observations**, preserving all raw fields and **8,452 unrelated rows**.
+  Existing population suite passed **1/1, 29.86 s**, including font-reset rejection.
+  No renderer/fixture or active-export dependency was edited.
+- Corrected wrapping export is **terminal**. Evidence-session verification:
+  1,205 files, zero invalidations. Its only reported error is the expected
+  **1,030 unresolved groups**; full coverage is 436 static / 1,875 interaction,
+  8,483 scalar groups / 389,202 observations and 134 source findings. The old
+  independent-source-binding failure is absent. Acceptance is still pending:
+  full wrapping conservation, section digests and source/metadata reconciliation
+  are running before compact import. Do not start another export.
 - Prepared typography batch composition now passes against **all 8,483 accepted
   scalar rows**, not only family slices: exactly **21 disjoint groups / 1,276
   observations** transition, all raw fields and **8,462 unrelated complete rows**

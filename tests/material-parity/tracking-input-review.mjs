@@ -5,8 +5,52 @@ import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-rev
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { inspectRangeFontReset } from '../../scripts/audit-material-range-font-reset.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+import { proveOverlayNormal, proveDialogWrappingMotion } from './wrapping-input-review.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
+export const overlayTypographyAttribution = 'reviewed-overlay-typography-observation-stage';
+export function applyOverlayTypography(rows, cases, inventory, normalize) {
+  return rows.map(row => {
+    if (row.attribution !== 'unresolved' || !['letterSpacing', 'lineHeight'].includes(row.property) ||
+      !['bottom-sheet-overlay', 'snack-bar-overlay', 'snack-bar-surface', 'dialog-panel', 'dialog-actions'].includes(row.element)) return row;
+    return applyModalBoxReview([row], cases.filter(e => row.states.includes(e.state ?? 'static')), inventory, normalize, {
+      family: row.family, element: row.element, properties: [row.property], attribution: overlayTypographyAttribution,
+      classification: 'parity-harness-defect', owner: 'computed overlay typography versus local declaration observation stages',
+      justification: 'The existing exact overlay mapping binds native computed normal and omitted candidate local declarations. Captured ancestry has no relevant typography/reset request; preserve scalar z-index rule gaps and exact dialog motion overrides. This is an observation-stage mismatch, not evidence of candidate computed normal, external inheritance, descendant typography, motion settlement or equal rendering.',
+      prove: (entry, reference, candidate) => proveOverlayTypography(entry,
+        one(entry.styleInputs.filter(i => i.id === row.element)), reference, candidate, row.property),
+    })[0];
+  });
+}
+export function proveOverlayTypography(entry, input, reference, candidate, property) {
+  assert.ok(['letterSpacing', 'lineHeight'].includes(property));
+  assert.ok(['bottom-sheet-overlay', 'snack-bar-overlay', 'snack-bar-surface', 'dialog-panel', 'dialog-actions'].includes(input.id));
+  const boundary = proveOverlayNormal(entry, input, reference, candidate);
+  const trace = inspectOverlayOwnerDeclarations(property, boundary.identity, reference, candidate);
+  assert.equal(trace.hasRelevantRequest, false);
+  assert.ok(trace.referencePath.every(n => n.computed === 'normal'));
+  assert.ok(trace.candidatePath.filter(n => n.node !== 'root').every(n => Object.values(n.localValues).every(v => v === '<omitted>')));
+  // The existing declaration tracer does not yet expand font aliases for
+  // lineHeight. Reject them explicitly instead of treating that absence as proof.
+  for (const { node: key } of trace.referencePath) {
+    const node = one(reference.nodes.filter(n => n.key === key));
+    assert.equal(node.inline.font, undefined);
+    for (const index of node.rules) assert.equal(reference.rules[index].declarations.font, undefined);
+  }
+  for (const { node: key } of trace.candidatePath) {
+    const node = one(candidate.nodes.filter(n => n.key === key));
+    assert.equal(node.authored.style?.font, undefined);
+    assert.ok(!/(?:^|;)\s*(?:font|line-height|letter-spacing|all)\s*:/i.test(node.authored.attributes?.style ?? ''));
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.equal(node[stage]?.font, undefined);
+    for (const rule of candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, node.authored))) assert.equal(rule.font, undefined);
+  }
+  const motion = entry.family === 'dialog' ? proveDialogWrappingMotion(trace, reference) : undefined;
+  if (!motion) assert.equal(trace.hasMotionRequest, false);
+  return { case: keyOf(entry), element: input.id, property, referenceNode: boundary.referenceNode,
+    astylarNode: boundary.astylarNode, identity: boundary.identity, trace, motion,
+    candidateComputedVerified: false, externalInheritanceVerified: false,
+    inputEquivalent: false, rendererCauseProven: false, renderingEquivalent: false };
+}
 export const rangeLineHeightAttribution = 'reviewed-range-line-height-inheritance-omission';
 export function applyRangeLineHeights(rows, cases, inventory, normalize) {
   return ['slider-start', 'slider-primary'].reduce((values, element) => applyModalBoxReview(values, cases, inventory, normalize, {
