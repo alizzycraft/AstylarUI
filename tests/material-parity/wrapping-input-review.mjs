@@ -322,3 +322,58 @@ export function validateOverlayNormal(rows, originalRows, cases, inventory, norm
     return [];
   } catch (error) { return [`overlay wrapping stages do not replay from original owners: ${error.message}`]; }
 }
+
+export const tableWrappingAttribution = 'reviewed-table-wrapping-observation-stage';
+export function proveTableWrapping(entry, input, reference, candidate) {
+  assert.equal(entry.family, 'table'); assert.equal(input.id, 'table-primary');
+  const native = one(reference.nodes.filter(n => n.attributes?.id === input.id));
+  const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));
+  assert.equal(native.type, 'table'); assert.equal(input.referenceStructure.type, native.type);
+  assert.equal(ast.authored.type, 'table'); assert.equal(input.astylarStructure.type, ast.authored.type);
+  assert.equal(input.reference.whiteSpace, 'normal');
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) assert.deepEqual(ast[stage], input[scalar]);
+  const identity = { status: 'mapped', inputEquivalent: false, referenceNode: native.key,
+    candidateNode: ast.key, referencePath: ancestry(reference, native).map(n => n.key),
+    candidatePath: ancestry(candidate, ast).map(n => n.key), missingRules: [], extraRules: [] };
+  const trace = inspectOverlayOwnerDeclarations('whiteSpace', identity, reference, candidate);
+  assert.equal(trace.hasMotionRequest, false);
+  for (const [index, node] of trace.referencePath.entries()) {
+    assert.equal(node.computed, 'normal'); assert.deepEqual(node.inline, {});
+    if (index) assert.deepEqual(node.rules, []);
+    else {
+      const rule = one(node.rules); assert.equal(rule.selector, '.mat-mdc-table');
+      assert.equal(rule.active, true); assert.deepEqual(rule.conditions, []);
+      assert.deepEqual(rule.declarations, {
+        'white-space-collapse': { value: 'collapse', important: false },
+        'text-wrap-mode': { value: 'wrap', important: false },
+      });
+    }
+  }
+  for (const node of trace.candidatePath) {
+    assert.deepEqual(node.inline, {}); assert.deepEqual(node.possibleRules, []);
+    assert.ok(Object.values(node.declarations).every(d => Object.keys(d).length === 0));
+    assert.ok(Object.values(node.localValues).every(v => v === '<omitted>'));
+    assert.ok(!/(?:^|;)\s*(?:white-space(?:-collapse)?|text-wrap(?:-mode|-style)?|all|animation[^:;]*|transition[^:;]*)\s*:/i.test(node.authored.attributes?.style ?? ''));
+  }
+  return { case: keyOf(entry), element: input.id, referenceNode: native.key, astylarNode: ast.key, trace,
+    referenceExplicitRequestRetained: true, candidateComputedVerified: false,
+    descendantConsumptionVerified: false, externalInheritanceVerified: false,
+    inputEquivalent: false, renderingEquivalent: false };
+}
+export function applyTableWrapping(rows, cases, inventory, normalize) {
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'table', element: 'table-primary', properties: ['whiteSpace'], attribution: tableWrappingAttribution,
+    classification: 'parity-harness-defect', owner: 'input audit computed table wrapping versus local declaration stage',
+    justification: 'The native table explicitly requests collapse/wrap and computes normal; candidate captured ancestry omits wrapping requests and local values. Preserve that native declaration rather than relabeling it unauthored or copying normal into the fixture. The scalar compares different observation stages. This does not establish candidate computed defaults, descendant inheritance/consumption, equal input semantics or renderer correctness.',
+    prove: (entry, reference, candidate) => proveTableWrapping(entry,
+      one(entry.styleInputs.filter(i => i.id === 'table-primary')), reference, candidate),
+  });
+}
+export function validateTableWrapping(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const selected = values => values.filter(r => r.attribution === tableWrappingAttribution);
+    assert.deepEqual(selected(rows), selected(applyTableWrapping(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`table wrapping stages do not replay from original owners: ${error.message}`]; }
+}

@@ -12,7 +12,8 @@ import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNow
   validateExplicitNowrap, explicitNowrapAttribution, applyOmittedNowrap,
   validateOmittedNowrap, omittedNowrapAttribution, proveOmittedNowrap,
   applyOverlayNormal, validateOverlayNormal, overlayNormalAttribution, proveOverlayNormal,
-  proveChipLabelWrapping } from './wrapping-input-review.mjs';
+  proveChipLabelWrapping, proveTableWrapping, applyTableWrapping, validateTableWrapping,
+  tableWrappingAttribution } from './wrapping-input-review.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
@@ -399,4 +400,29 @@ test('table normal requests and private tab-panel text remain distinct in 122 ho
     counts[entry.family]++;
   }
   assert.deepEqual(counts, { table: 52, tabs: 70 });
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'table', {
+    generation: 'baf0ccb8d7f5adad44efff3a8e165448e550b7455999a182ce138975b2bfff3b',
+    indexSha256: '00e5b5296d3d4af5ee27086fc41db3fbc21238bb6ee8b6a36315be68d25d60e0',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const normalize = bindPreciseAuditNormalization();
+  const applied = applyTableWrapping(rows, cases, inventory, normalize);
+  const changed = one(applied.filter(r => r.attribution === tableWrappingAttribution));
+  assert.equal(changed.occurrences, 52);
+  assert.deepEqual(validateTableWrapping(applied, rows, cases, inventory, normalize), []);
+  for (let index = 0; index < rows.length; index++) if (applied[index] !== changed) assert.deepEqual(applied[index], rows[index]);
+  for (const key of ['family', 'element', 'property', 'reference', 'astylar', 'states', 'cases', 'occurrences'])
+    assert.deepEqual(changed[key], rows.find(r => r.element === 'table-primary' && r.property === 'whiteSpace')[key]);
+  const entry = cases.find(e => e.family === 'table');
+  const input = one(entry.styleInputs.filter(i => i.id === 'table-primary'));
+  const [reference, candidate] = modalInventoryTrees(inventory, keyOf(entry));
+  for (const property of ['whiteSpace', 'all', 'transition']) {
+    const altered = structuredClone(candidate); altered.rules.push({ selector: '#table-primary', [property]: 'initial' });
+    assert.throws(() => proveTableWrapping(entry, input, reference, altered));
+  }
+  const altered = structuredClone(reference);
+  altered.rules.find(r => r.selector === '.mat-mdc-table').declarations['text-wrap-mode'].value = 'nowrap';
+  assert.throws(() => proveTableWrapping(entry, input, altered, candidate));
+  const forged = structuredClone(applied);
+  forged.find(r => r.attribution === tableWrappingAttribution).reviewEvidence.observations[0].descendantConsumptionVerified = true;
+  assert.equal(validateTableWrapping(forged, rows, cases, inventory, normalize).length, 1);
 });

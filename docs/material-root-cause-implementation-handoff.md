@@ -33,17 +33,27 @@
   reconciliation process remains active. This is accepted incremental audit
   evidence, not full audit completion or rendering equivalence.
 - Wrapping preparation is outside that export: all 30 groups / 1,478 original
-  observations have repeatable checks; **26 groups / 1,204 observations** have
-  classification logic prepared. Four groups / 274 observations remain: chips
-  152, table 52, private tab panel 70. Investigate these boundaries,
+  observations have repeatable checks; **27 groups / 1,256 observations** have
+  classification logic prepared. Three groups / 222 observations remain: chips
+  152 and private tab panel 70. Investigate these boundaries,
   then integrate a coherent batch; do not rebuild per metadata row.
 - Table follow-up: all 52 original owner paths have the same pattern: the native
   table alone explicitly supplies collapse/wrap, all native ancestors compute
   normal, candidate captured ancestry omits wrapping, and neither side has motion
   requests. Source inspection locates text inheritance in renderer.service.ts
   and the normal fallback in TextStyleParserService. This is not yet proof of
-  equivalent table-descendant consumption; do not infer it from a host omission
-  or repeat the completed owner-path census.
+  equivalent table-descendant consumption; do not infer it from a host omission.
+  The 52 host rows now have a guarded observation-stage classification preserving
+  the explicit native request and false computed/inheritance/descendant/equivalence
+  flags. Focused table/tab test passed **1/1, 2.78 s**, including reset/motion,
+  changed native wrapping and forged descendant-consumption negative controls.
+  Do not repeat the completed owner-path census.
+- Private tab-panel next decisive check: existing package-root diagnostic proves
+  independent font/ink/baseline ownership, but never varies whiteSpace or narrow
+  width. Reuse that test for a matched-font narrow-width wrapping variant rather
+  than claiming its typography observations already prove wrapping behavior.
+  Current source uses a single private canvas fillText call per incoming/outgoing
+  label; that is source evidence, not a fresh browser wrapping result.
 - Latest focused verification: wrapping suite **5/5, 30.87 s**. No renderer or
   fixture changes. The overall audit still includes other scalar families,
   final canonical reconciliation and enforced full browser acceptance.
