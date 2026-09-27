@@ -100,6 +100,19 @@ Next reuse mapped-owner declaration checks and exact motion-target proofs for
 these populations; keep chip target uncertainty and grid-list authoring distinct.
 No new reports or captures were written and no canonical count changed.
 
+Mapped grid review now has a focused executable proof in
+`tests/material-parity/mapped-grid-template-review.mjs` and its spec. All **884**
+original mapped observations pass own-node grid/reset absence checks, including
+shorthands, inline declarations, possible candidate rules and all three local
+stages. Existing alias/path and declaration tracing preserve all **118** scalar
+rule gaps and motion records. Native inline grid and candidate grid/template/all
+injections fail. Focused test passed 1/1 in 11.47 seconds. This proves only the
+computed/local measurement boundary; candidate computed values, motion targets,
+settlement, implicit tracks and rendering equivalence remain unverified. These
+standalone files are not imported by the running exporter, and no existing
+export dependency was changed. Integrate only after the box-sizing checkpoint
+is reconciled. Export PID 17000 remained live with CPU advancing to 347.73 s.
+
 ### Earlier preparation notes (historical job statuses)
 
 - Prepared box-sizing proofs now run through existing `applyModalBoxReview`
