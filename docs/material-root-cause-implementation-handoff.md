@@ -40,6 +40,46 @@ changes were made, and this checkpoint does not establish rendering equivalence.
 
 ### Prepared work and prior checkpoint history
 
+September 28 public disabled-range default reduction closes the outstanding
+background diagnosis gap, but is not yet joined into canonical classifications.
+`examples/material-showcase/src/app/range-background-default-audit.spec.ts`
+uses package-root APIs and one shared rule source for an isolated native iframe
+and Astylar canvas (320 x 180 CSS pixels, DPR 1). The four cases distinguish
+disabled state from an explicitly authored transparent background. Command:
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/range-background-default-audit.spec.ts`.
+TypeScript/browser compilation succeeded; **3 passed, 1 failed**. The sole failing
+case is disabled + omitted background: Chrome computes `rgba(0, 0, 0, 0)` while
+both normal and effective Astylar stages retain `#ffffff`. Enabled + omitted is
+white on both sides; both explicitly transparent controls pass. Equality
+assertions remain failing, not inverted to accept the defect. All cases report
+empty renderer diagnostics, unchanged SiteData and zero meshes/materials/textures
+after disposal. This narrows the first divergence to disabled-input defaults,
+not a general inability to accept transparent paint.
+
+Runtime: installed AstylarUI 0.2.0, Angular 20.3.31, Babylon 8.56.2,
+Chrome Headless 153.0.0.0. This is new reduction evidence, not a replacement for
+the original Chrome 152 capture. The original 16 observations remain separately
+bound below and their zero-opacity owners do not explain the visible black ring.
+No geometry, native range artwork, or final-pixel equivalence is claimed.
+Generic `input.background` and type-only default merging remain the source
+boundary; no renderer or Material fixture was modified.
+Test log: `artifacts/material-parity/range-background-default-public-5ee5ae4.log`,
+SHA-256 `0b44bb9b05ecb484532407f49dfd6f35b1d57e9920ec09402548182f6d629560`.
+The existing zoneless/Zone.js NG0914 test-host warning remains; it is not a
+renderer diagnostic or an explanation for the state-specific comparison failure.
+Installed default-config JS SHA-256:
+`5a0f4ced0db345b5a26b3b8606d5198c3462dfcfbd3ed842105d697bfde8530b`;
+installed default-service JS:
+`a11515a342f8fb441f775a16b7ad7480e711934d046084d686c0ef098ae4cafa`.
+Consumer `ng build --output-path <audit-scratch>` passed in 53.593 seconds,
+including browser/server bundles and two prerendered routes, without reported
+warnings. Log: `artifacts/material-parity/range-background-build-5ee5ae4.log`.
+The existing `withAuditScratch` helper removed successful output; absence of
+`range-background-build-4swiaQ` was checked. The diagnostic failure log is retained.
+Next: bind this narrow conclusion to the two original groups without expanding
+its claim to visible thumb paint; reconcile the still-running grid/height export
+before importing any new canonical snapshot.
+
 September 28 prepared background coverage now reaches **60/62 groups and 434/450
 observations** (52/381 in control-state paint plus 8/53 overlay triggers). The
 latest six groups / 98 observations bind existing sheet-action, sheet-backdrop,
