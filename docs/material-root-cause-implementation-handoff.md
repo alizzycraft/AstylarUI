@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 27
 
+- Tracking scalar/retained join is now prepared for five label groups / **340
+  observations**, using the existing `applyModalBoxReview` infrastructure and
+  independently replayed retained typography. Exact native/candidate identities,
+  all scalar fields, three declaration stages and complete retained-proof hashes
+  bind each classification. Negative controls reject wrong owners/ancestors,
+  altered retained tracking, invented current-paint verification and forged proof
+  hashes. Focused population suite passed **1/1, 24.50 s** (no skips):
+  `node --test tests/material-parity/tracking-input-populations.spec.mjs`.
+  Raw rows and unrelated classifications are conserved. This closes the scalar
+  join question for these labels, not the host-boundary or zero-token questions.
+  `tracking-input-review.mjs` is not a production dependency yet; integration
+  waits for the active wrapping export and its reconciliation. Canonical counts
+  remain unchanged. Prioritize that reconciliation, then remaining tracking
+  host/token boundaries, followed by shared box-sizing/line-height/grid gaps;
+  preserve the final complete coverage and enforced-browser requirements.
 - Wrapping milestone export is **running**, source commit **9a7f2d7**, session
   **35804**, child PID **3780** (revalidated live during this checkpoint).
   Command: `ASTYLAR_AUDIT_COLD=1 node scripts/export-material-input-audit-current-ancestry.mjs`.

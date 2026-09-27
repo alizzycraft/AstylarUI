@@ -8,6 +8,7 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+import { applyTrackingLabels, validateTrackingLabels, trackingLabelAttribution, proveTrackingLabel } from './tracking-input-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
@@ -78,6 +79,29 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
     }
   }
   assert.equal(labels, 340); assert.equal(hosts, 136);
+  const scalarRows = accepted.filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyTrackingLabels(scalarRows, cases, inventory, retained, normalize);
+  const changed = applied.filter(r => r.attribution === trackingLabelAttribution);
+  assert.equal(changed.length, 5); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 340);
+  assert.deepEqual(validateTrackingLabels(applied, scalarRows, cases, inventory, retained, normalize), []);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const rawRow = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(rawRow), scalarRows.map(rawRow));
+  for (let i = 0; i < scalarRows.length; i++) if (!changed.includes(applied[i])) assert.deepEqual(applied[i], scalarRows[i]);
+  const entry = selected.find(e => e.family === 'checkbox'), input = one(entry.styleInputs.filter(i => i.id === 'checkbox-label'));
+  const [reference, candidate] = modalInventoryTrees(inventory, keyOf(entry));
+  const chosen = retained.differences.findIndex(d => d.case === keyOf(entry) && d.element === input.id && d.property === 'letterSpacing');
+  assert.ok(chosen >= 0);
+  for (const mutate of [d => { d.astylarNode = 'wrong-owner'; }, d => { d.values.retained = '0.256px'; },
+    d => { d.reviewEvidence.referenceChain[0].node = 'wrong-ancestor'; },
+    d => { d.currentPseudoStatePaintVerified = true; }]) {
+    const altered = { ...retained, differences: [...retained.differences] };
+    altered.differences[chosen] = structuredClone(altered.differences[chosen]); mutate(altered.differences[chosen]);
+    assert.throws(() => proveTrackingLabel(entry, input, reference, candidate, altered));
+  }
+  const forged = structuredClone(applied);
+  forged.find(r => r.attribution === trackingLabelAttribution).reviewEvidence.observations[0].retainedProofSha256 = 'forged';
+  assert.equal(validateTrackingLabels(forged, scalarRows, cases, inventory, retained, normalize).length, 1);
   const allRows = [...new Set(cases.map(e => e.family))].flatMap(family =>
     queryFindings('artifacts/material-parity/working-audit', family, snapshot))
     .filter(r => r.evidence.section === 'discrepancies' && r.attribution === 'unresolved' &&
