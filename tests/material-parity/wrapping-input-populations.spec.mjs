@@ -8,7 +8,8 @@ import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNowrap,
-  validateExplicitNowrap, explicitNowrapAttribution } from './wrapping-input-review.mjs';
+  validateExplicitNowrap, explicitNowrapAttribution, applyOmittedNowrap,
+  validateOmittedNowrap, omittedNowrapAttribution, proveOmittedNowrap } from './wrapping-input-review.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
@@ -160,6 +161,33 @@ test('native nowrap ancestry is retained for 500 omitted local candidate observa
   }
   assert.equal(total, 500);
   assert.equal(paintedNormal, 192);
+  const originalRows = rows.filter(r => r.evidence.section === 'discrepancies')
+    .map(({ id, evidence, ...row }) => row);
+  const normalize = bindPreciseAuditNormalization();
+  const applied = applyOmittedNowrap(originalRows, cases, inventory, normalize);
+  const changed = applied.filter(r => r.attribution === omittedNowrapAttribution);
+  assert.equal(changed.length, 8);
+  assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 500);
+  assert.deepEqual(validateOmittedNowrap(applied, originalRows, cases, inventory, normalize), []);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const rawRow = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(rawRow), originalRows.map(rawRow));
+  for (let i = 0; i < applied.length; i++) if (applied[i].attribution !== omittedNowrapAttribution)
+    assert.deepEqual(applied[i], originalRows[i]);
+  for (const mutate of [r => r.reviewedCases.pop(), r => { r.reviewEvidence.inputEquivalent = true; },
+    r => { r.reviewEvidence.observations[0].requests = []; }]) {
+    const forged = structuredClone(applied);
+    mutate(forged.find(r => r.attribution === omittedNowrapAttribution));
+    assert.equal(validateOmittedNowrap(forged, originalRows, cases, inventory, normalize).length, 1);
+  }
+  const entry = cases.find(e => e.family === 'tabs');
+  const input = one(entry.styleInputs.filter(i => i.id === 'tab-overview'));
+  const [reference, candidate] = modalInventoryTrees(inventory, keyOf(entry));
+  for (const property of ['whiteSpace', 'text-wrap-mode', 'all']) {
+    const altered = structuredClone(candidate);
+    altered.rules.push({ selector: '#tab-overview', [property]: 'nowrap' });
+    assert.throws(() => proveOmittedNowrap(entry, input, reference, altered, inventory));
+  }
 });
 
 test('chip host normal values do not conceal nested native nowrap labels in 152 observations', () => {

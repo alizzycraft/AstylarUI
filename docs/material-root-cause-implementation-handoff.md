@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 27
 
+**Native-nowrap omission batch prepared:** `wrapping-input-review.mjs` now
+reuses the same scalar application/replay mechanism for eight groups / 500
+observations. Original native ancestor collapse/nowrap rules, exact owner types,
+all local stages, and candidate ancestry are checked; relevant candidate inline,
+alias, reset, or possible-rule requests reject an omission claim. The synthetic
+root is excluded from computed/default claims. Only the 192 tab/toolbar-action
+observations carry independently checked normal control-paint values. The
+other 308 keep paint/computed/inherited behavior unverified. All raw and unrelated
+rows remain unchanged; mutation checks reject forged membership, equivalence,
+native requests and newly introduced candidate wrapping/reset rules.
+Focused suite: 3/3, 14.47 s. Combined with explicit substitutions, fourteen
+groups / 844 observations are prepared, not canonically integrated. The live
+00f8133 export does not import this module or its test. Continue the remaining
+normal/omitted wrapping review without treating host defaults as label parity.
+
 **Six explicit wrapping groups prepared for integration:** the already-tested
 owner proof was moved (not duplicated) into `wrapping-input-review.mjs` and
 connected to existing `applyModalBoxReview` application/replay validation.
