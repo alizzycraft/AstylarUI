@@ -113,6 +113,20 @@ standalone files are not imported by the running exporter, and no existing
 export dependency was changed. Integrate only after the box-sizing checkpoint
 is reconciled. Export PID 17000 remained live with CPU advancing to 347.73 s.
 
+The same grid helper now prepares **all 60 groups / 2,908 observations** through
+the existing scalar join: 2 grid-list composition groups / 104 observations,
+24 mapped-owner groups / 884, and 34 direct-motion groups / 1,920. Direct motion
+retains 1,616 observations with explicitly disjoint declared targets and 304 chip
+observations with unverified targets; settlement and indirect effects remain
+unproved in both. The full compact join preserves all raw fields and every
+unrelated row; per-group original-row hashes and observation counts are checked.
+An initial routing failure exposed multiple stepper measurement aliases: using
+the existing inspector's uniqueness decision (not any matching ID) fixes the
+join without weakening the owner proof. Focused test passed 1/1 in 34.74 s after
+that correction; negative controls reject explicit grid requests and prevent a
+grid-targeted transition from being called disjoint. This is preparation only,
+not canonical integration. The running export's dependencies remain unchanged.
+
 ### Earlier preparation notes (historical job statuses)
 
 - Prepared box-sizing proofs now run through existing `applyModalBoxReview`
