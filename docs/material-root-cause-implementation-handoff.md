@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 27
 
+**Button core clipping question answered:** `node scripts/audit-button-overflow-core.mjs`
+passes the exact new Jasmine/NullEngine test (one test, 2.85 s on retained runner
+replay). It bundles only local spec dependencies in memory and imports installed
+packages normally. Actual ButtonManager preserves the oversized label mesh and
+does not constrain its text call; omitted/visible overflow introduce no own clip
+planes, while hidden does. Shared clip projection is exercised, not mocked away.
+The earlier in-memory session 85211 also passed and is terminal. This is focused
+core evidence, not Angular compilation, DI, browser clipping raster, ancestor
+clipping or full rendering equivalence. The standard build attempts remain
+cancelled, not passing. No generated bundle or successful scratch is retained.
+Next: bind this unchanged implementation/spec/runner and the browser initial-value
+proof to the verified 716-button population, then integrate the pending 24
+overflow groups alongside the 12 typography groups before canonical export.
+
 **Typography pipeline integrated, not exported:** twelve pending groups / 519
 observations (tabs 420, toolbar/disabled buttons 99) now use the verified bridges
 in production application and validation. Validation independently regenerates

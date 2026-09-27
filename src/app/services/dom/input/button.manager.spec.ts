@@ -3,8 +3,65 @@ import { BabylonMeshService } from '../../babylon-mesh.service';
 import { TextRenderingService } from '../../text/text-rendering.service';
 import { Button } from '../../../types/input-types';
 import { ButtonManager } from './button.manager';
+import { OverflowClipService } from '../elements/overflow-clip.service';
+import { StyleDefaultsService } from '../style-defaults.service';
+import { createCssLayoutBox } from '../../css-layout-geometry';
+import type { StyleRule } from '../../../types/style-rule';
 
 describe('ButtonManager', () => {
+  it('does not introduce an own clipping boundary for omitted or visible overflow', () => {
+    const engine = new BABYLON.NullEngine();
+    const scene = new BABYLON.Scene(engine);
+    try {
+      for (const overflow of [undefined, 'visible', 'hidden'] as const) {
+        const renderTextToTexture = jasmine.createSpy('renderTextToTexture').and.returnValue({});
+        const manager = new ButtonManager(
+          { renderTextToTexture, getLogicalTextureSize: () => ({ width: 120, height: 80 }) } as unknown as TextRenderingService,
+          { parseBorderRadius: () => 0 } as never,
+          { createTextMesh: (name: string, _texture: unknown, width: number, height: number) => {
+            const mesh = BABYLON.MeshBuilder.CreatePlane(name, { width, height }, scene);
+            mesh.material = new BABYLON.StandardMaterial(`${name}-material`, scene);
+            return mesh;
+          } } as unknown as BabylonMeshService,
+        );
+        const style: StyleRule = { ...new StyleDefaultsService().getElementTypeDefaults('button'),
+          selector: '#overflow-button', ...(overflow ? { overflow } : {}) };
+        const button = manager.createButton(
+          { type: 'button', id: `overflow-${overflow}`, value: 'Oversized label' },
+          { scene, actions: {
+            camera: { projectCssSize: (size: { width: number; height: number }) => size },
+            style: { parseOpacity: () => 1 },
+            mesh: { createPolygon: (name: string, _shape: string, width: number, height: number) =>
+              BABYLON.MeshBuilder.CreatePlane(name, { width, height }, scene) },
+          } } as never,
+          style, { width: 60, height: 40 },
+        );
+        const label = button.labelMesh!;
+        const material = label.material!;
+        expect(label.parent).toBe(button.mesh);
+        expect(label.getBoundingInfo().boundingBox.extendSize.x * 2).toBe(120);
+        expect(renderTextToTexture.calls.mostRecent().args.length).toBe(3);
+        expect(material.clipPlane).toBeUndefined();
+        const project = jasmine.createSpy('project').and.callFake(({ x, y }: { x: number; y: number }) => ({ x, y, z: 0 }));
+        new OverflowClipService().apply(button.mesh, style, new Map([[button.mesh.name, {
+          parentId: null, box: createCssLayoutBox({ x: 0, y: 0, width: 60, height: 40 }),
+        }]]), project);
+        if (overflow === 'hidden') {
+          expect(project).toHaveBeenCalledTimes(2);
+          expect(material.clipPlane).toBeTruthy();
+          expect(material.clipPlane4).toBeTruthy();
+        } else {
+          expect(project).not.toHaveBeenCalled();
+          expect(material.clipPlane).toBeUndefined();
+          expect(material.clipPlane4).toBeUndefined();
+        }
+        manager.disposeButton(button);
+      }
+    } finally {
+      engine.dispose();
+    }
+  });
+
   it('supports aria-labelled icon buttons without inventing a visual label', () => {
     const engine = new BABYLON.NullEngine();
     const scene = new BABYLON.Scene(engine);
