@@ -53,6 +53,17 @@ Canonical counts remain unchanged. Next extend the existing canonical conservati
 mode for this batch and verify full producer replay/section reconciliation before
 accepting a new export. The focused proof is not full canonical acceptance.
 
+The existing conservation command now accepts `--grid-height`, pins the accepted
+box-sizing package, and replays the batch against original captures. Its checks
+require the exact five attribution populations (103 groups / 4,322 observations),
+unchanged raw scalar values and unrelated evidence, scoped equivalence claims,
+and only the authenticated producer receipt refreshes. The existing conservation
+spec passed **25/25 in 77.64 seconds**, including forged expected-row, lost-row,
+raw-input and unrelated-control negative controls. Launcher `--dry-run` confirms
+all five retained inputs exist. Next run the complete-input cold export, then
+`node scripts/check-material-position-canonical-conservation.mjs --grid-height`
+and reconcile section/source hashes before accepting or importing that output.
+
 The grid/height batch now has combined replay validation in the existing grid
 review module, tested against the accepted box-sizing compact generation above.
 It prepares exactly **103 groups / 4,322 observations**, preserving every raw

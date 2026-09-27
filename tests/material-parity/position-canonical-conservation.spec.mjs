@@ -16,7 +16,49 @@ import { restoreWrappingProducer } from './position-composition-producer-transit
 import { restoreTypographyReviewProducer } from './position-composition-producer-transition.mjs';
 import { restoreBoxSizingReviewProducer } from './position-composition-producer-transition.mjs';
 import { boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
+import { restoreGridHeightReviewProducer } from './position-composition-producer-transition.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
+
+test('grid/height conservation preserves raw inputs, scope limits and unrelated controls', () => {
+  const transition = restoreGridHeightReviewProducer(currentSource), rows = [], expected = [];
+  for (const [attribution, property, groups, observations] of [
+    ['reviewed-grid-template-layout-substitution', 'gridTemplateColumns', 2, 104],
+    ['reviewed-mapped-grid-template-observation-stage', 'gridTemplateRows', 24, 884],
+    ['reviewed-direct-grid-template-motion-boundary', 'gridTemplateColumns', 34, 1920],
+    ['reviewed-fixed-height-input-substitution', 'height', 14, 338],
+    ['reviewed-height-computed-local-observation-stage', 'height', 29, 1076],
+  ]) for (let i = 0; i < groups; i++) {
+    const before = { element: attribution + i, property, reference: 'none', attribution: 'unresolved',
+      occurrences: i ? 1 : observations - groups + 1 };
+    rows.push(before);
+    expected.push({ ...before, attribution,
+      classification: attribution.endsWith('-substitution') ? 'application-plugin-authoring-defect' : 'parity-harness-defect',
+      reviewedCases: Array.from({ length: before.occurrences }, (_, j) => 'case-' + j),
+      reviewEvidence: { originalRowSha256: createHash('sha256').update(JSON.stringify(before)).digest('hex'),
+        inputEquivalent: false, renderingEquivalent: false,
+        observations: Array.from({ length: before.occurrences }, () => ({ evidence: 'test' })) } });
+  }
+  rows.push({ property: 'color', reference: 'red', attribution: 'unresolved' });
+  expected.push(structuredClone(rows.at(-1)));
+  const previous = { rows, control: { differences: Array.from({ length: 48 }, (_, i) => ({ case: 'control-' + i,
+    attribution: 'reviewed-interactive-normal-line-box-stage-comparison',
+    reviewEvidence: { observation: { normalizationReconciliation: { currentModuleSha256: transition.previousModuleSha256 } } } })) } };
+  const current = { rows: structuredClone(expected), control: structuredClone(previous.control) };
+  for (const c of current.control.differences)
+    c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
+  const compare = (c, e = expected) => compareBorderDefaultCanonical(previous, c, e, currentSource, { gridHeight: true });
+  assert.equal(compare(current).changedGroups, 103); assert.equal(compare(current).changedOccurrences, 4322);
+  for (const mutate of [r => { r.reference = 'forged'; }, r => { r.classification = 'equivalent-representation'; },
+    r => { r.reviewEvidence.originalRowSha256 = 'forged'; }, r => { r.reviewEvidence.observations.pop(); },
+    r => { r.reviewEvidence.inputEquivalent = true; }, r => { r.reviewEvidence.renderingEquivalent = true; }]) {
+    const c = structuredClone(current), e = structuredClone(expected); mutate(c.rows[0]); mutate(e[0]);
+    assert.throws(() => compare(c, e));
+  }
+  for (const mutate of [c => { c.rows.pop(); }, c => { c.rows.reverse(); },
+    c => { c.rows.at(-1).reference = 'hidden'; }, c => { c.control.differences[0].unexpected = true; }]) {
+    const c = structuredClone(current); mutate(c); assert.throws(() => compare(c));
+  }
+});
 
 test('box-sizing canonical conservation rejects forged evidence and unrelated changes', () => {
   const transition = restoreBoxSizingReviewProducer(currentSource);
