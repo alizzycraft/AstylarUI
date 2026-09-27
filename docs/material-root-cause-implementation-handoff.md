@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 27
 
+- Explicit tracking-token proofs now feed the existing classification adapter:
+  **three groups / 112 observations** (toolbar title 40, card title 40, dialog
+  title 32), with raw and unrelated rows conserved. Earlier static title reviews
+  remain untouched. Initial adapter replay rejected 40-versus-52 membership;
+  the caller now uses each accepted row's state boundary before the existing
+  semantic join. No shared production adapter or exporter dependency changed.
+  Population suite passed **1/1, 28.42 s**, including previous negative controls.
+  Together with label and toggle-host proofs, **10 tracking groups / 588
+  observations** have prepared logic; candidate computed tracking, token
+  sensitivity and rendering equivalence remain unproved.
+- Corrected state-filtered, read-only survey replay completed for all **75
+  groups / 3,854 observations** of zero tracking and normal line-height. Tracking
+  routes remain 25/1,470 captured-no-request, 6/302 motion, 2/80 explicit request,
+  4/125 owner mapping and 2/64 incomplete ancestry. Line-height routes are
+  27/1,410 captured-no-request, 2/156 explicit inheritance (now separately proved),
+  2/90 motion, 4/125 owner mapping and 1/32 incomplete ancestry. This supersedes
+  the failed divider membership recheck; neither values nor state coverage were
+  normalized away. These are routing results, not candidate computed-style or
+  rendering-equivalence findings. Next add separately opt-in tracking/line-height
+  modes to the existing survey after the active export terminates, with negative
+  controls and original survey population preserved. Keep overlay owner/ancestry
+  and motion exceptions separate. Export PID 4632 remains live (2,429.03 CPU
+  seconds); canonical acceptance still requires reconciliation.
 - Slider line-height request omission now has a focused executable proof and
   prepared classification for **two groups / 156 observations**. Reused the
   existing range font-reset owner paths; separately proved native active

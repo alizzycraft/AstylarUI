@@ -10,7 +10,7 @@ import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-rev
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { applyTrackingLabels, validateTrackingLabels, trackingLabelAttribution, proveTrackingLabel } from './tracking-input-review.mjs';
 import { applyToggleTrackingHosts, proveToggleTrackingHost, trackingHostAttribution } from './tracking-input-review.mjs';
-import { proveZeroTrackingToken } from './tracking-input-review.mjs';
+import { proveZeroTrackingToken, applyZeroTrackingTokens, zeroTrackingTokenAttribution } from './tracking-input-review.mjs';
 import { applyComponentLineHeights, componentLineHeightAttribution } from './tracking-input-review.mjs';
 import { applyToggleLineHeights, proveToggleLineHeightHost, toggleLineHeightAttribution } from './tracking-input-review.mjs';
 import { applyExplicitHostLineHeights, explicitHostLineHeightAttribution, proveExplicitHostLineHeight } from './tracking-input-review.mjs';
@@ -233,6 +233,13 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
   assert.equal(zeroProofs.length, 112);
   assert.equal(zeroProofs.filter(p => p.request.node !== p.referenceNode).length, 40);
   assert.equal(zeroProofs.filter(p => p.trace.hasMotionRequest).length, 32);
+  const tokenRows = ['toolbar', 'card', 'dialog'].flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const tokenReviewed = applyZeroTrackingTokens(tokenRows, cases, inventory, normalize);
+  const tokenChanges = tokenReviewed.filter(r => r.attribution === zeroTrackingTokenAttribution);
+  assert.equal(tokenChanges.length, 3); assert.equal(tokenChanges.reduce((sum, r) => sum + r.occurrences, 0), 112);
+  assert.deepEqual(tokenReviewed.map(rawRow), tokenRows.map(rawRow));
+  for (let i = 0; i < tokenRows.length; i++) if (!tokenChanges.includes(tokenReviewed[i])) assert.deepEqual(tokenReviewed[i], tokenRows[i]);
   const hostRows = ['toolbar', 'paginator', 'progress-spinner'].flatMap(family =>
     queryFindings('artifacts/material-parity/working-audit', family, snapshot))
     .filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);

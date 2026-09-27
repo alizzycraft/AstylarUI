@@ -4,6 +4,7 @@ import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { inspectRangeFontReset } from '../../scripts/audit-material-range-font-reset.mjs';
+import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 export const rangeLineHeightAttribution = 'reviewed-range-line-height-inheritance-omission';
@@ -270,6 +271,25 @@ export function applyExplicitHostLineHeights(rows, cases, inventory, normalize) 
 // Identity is independently established by the original scalar/tree mapping.
 // Preserve the token even when the current computed value normalizes to zero.
 export function proveZeroTrackingToken(entry, input, reference, candidate, identity) {
+  if (!identity) {
+    const native = reference.nodes.filter(n => n.attributes?.id === input.id);
+    if (!native.length) identity = resolveOriginAliasPair(entry, reference, candidate, input);
+    else {
+      const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));
+      const ancestry = (tree, node) => {
+        const result = [];
+        while (node) {
+          assert.ok(!result.includes(node.key)); result.push(node.key);
+          if (node.parent === null) return result;
+          node = one(tree.nodes.filter(n => n.key === node.parent));
+        }
+        assert.fail('incomplete tracking owner ancestry');
+      };
+      const owner = one(native);
+      identity = { status: 'mapped', inputEquivalent: false, referenceNode: owner.key, candidateNode: ast.key,
+        referencePath: ancestry(reference, owner), candidatePath: ancestry(candidate, ast), missingRules: [], extraRules: [] };
+    }
+  }
   assert.ok(Object.hasOwn(zeroTokens, input.id));
   assert.equal(input.reference.letterSpacing, 'normal');
   const native = one(reference.nodes.filter(n => n.key === identity.referenceNode));
@@ -300,4 +320,15 @@ export function proveZeroTrackingToken(entry, input, reference, candidate, ident
     tokenSensitivityMeasured: false, motionActivityVerified: false,
     candidateComputedVerified: false, rendererCauseProven: false,
     inputEquivalent: false, renderingEquivalent: false };
+}
+export const zeroTrackingTokenAttribution = 'reviewed-zero-tracking-token-omission';
+export function applyZeroTrackingTokens(rows, cases, inventory, normalize) {
+  return [['toolbar', 'toolbar-title'], ['card', 'card-title'], ['dialog', 'dialog-title']].reduce((values, [family, element]) =>
+    values.map(row => applyModalBoxReview([row], cases.filter(entry => row.states.includes(entry.state ?? 'static')), inventory, normalize, {
+      family, element, properties: ['letterSpacing'], attribution: zeroTrackingTokenAttribution,
+      owner: 'Material typography tracking-token translation',
+      justification: 'The native owner or captured ancestor explicitly requests a Material tracking token while candidate captured paths omit tracking. A current computed normal/zero value does not erase that request. Preserve motion declarations and owner identity; token sensitivity, candidate computed tracking, current paint and rendering equivalence remain unproved.',
+      prove: (entry, reference, candidate) => proveZeroTrackingToken(entry,
+        one(entry.styleInputs.filter(i => i.id === element)), reference, candidate),
+    })[0]), rows);
 }
