@@ -5,7 +5,8 @@ import { createHash } from 'node:crypto';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { inspectOwnerGridInitial } from './owner-grid-initial-evidence.mjs';
 import { proveMappedGridTemplateOmission, proveDirectGridTemplateMotionBoundary, applyGridTemplateReviews,
-  gridTemplateReviewAttributions } from './mapped-grid-template-review.mjs';
+  gridTemplateReviewAttributions, applyGridHeightReviews, validateGridHeightReviews } from './mapped-grid-template-review.mjs';
+import { heightReviewAttributions } from './control-height-request-review.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 
@@ -15,8 +16,8 @@ test('grid omission boundaries preserve mapped owners and direct motion uncertai
   assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const raw = JSON.parse(bytes), cases = [...raw.results.map(e => ({ ...e, kind: 'static' })),
     ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))];
-  const snapshot = { generation: 'e25dab5fef84be5038dc83bff954f0681c3661c86bb0dd546dd118876d842760',
-    indexSha256: '230d42b303bfd104b444d5c7e42ad0f69ce79ba943adc5bc144cca89aded585f' };
+  const snapshot = { generation: 'd25a9078972edf1884a4e56a7c17f4a7b3d249d3ed22933811f69daa4aafda9a',
+    indexSha256: 'c1934e90c7ca80ff121da83a6871d10da201f798f37cdb92f8badce7c24529ad' };
   const rows = [...new Set(cases.map(e => e.family))].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
     .filter(r => r.attribution === 'unresolved' && ['gridTemplateColumns', 'gridTemplateRows'].includes(r.property) && r.astylar === undefined);
   const cache = new Map();
@@ -88,4 +89,21 @@ test('grid omission boundaries preserve mapped owners and direct motion uncertai
   }
   assert.equal(changed, 60);
   assert.deepEqual(gridTemplateReviewAttributions.map(k => counts.get(k)), [[2, 104], [24, 884], [34, 1920]]);
+  const normalize = bindPreciseAuditNormalization();
+  const combined = applyGridHeightReviews(allRows, cases, inventory, normalize);
+  const attributions = [...gridTemplateReviewAttributions, ...heightReviewAttributions];
+  let reviewed = 0, observations = 0;
+  for (let index = 0; index < allRows.length; index++) {
+    const before = allRows[index], after = combined[index];
+    assert.deepEqual(rawRow(after), rawRow(before));
+    if (!attributions.includes(after.attribution)) assert.deepEqual(after, before);
+    else { reviewed++; observations += after.occurrences; }
+  }
+  assert.equal(reviewed, 103); assert.equal(observations, 4322);
+  const persisted = JSON.parse(JSON.stringify(combined));
+  assert.deepEqual(validateGridHeightReviews(persisted, allRows, cases, inventory, normalize), []);
+  const target = persisted.find(r => attributions.includes(r.attribution));
+  target.reviewEvidence.inputEquivalent = true;
+  assert.ok(validateGridHeightReviews(persisted, allRows, cases, inventory, normalize).length);
+  assert.ok(validateGridHeightReviews(combined.slice(1), allRows, cases, inventory, normalize).length);
 });

@@ -40,6 +40,16 @@ changes were made, and this checkpoint does not establish rendering equivalence.
 
 ### Prepared work and prior checkpoint history
 
+The grid/height batch now has combined replay validation in the existing grid
+review module, tested against the accepted box-sizing compact generation above.
+It prepares exactly **103 groups / 4,322 observations**, preserving every raw
+field and unrelated scalar row. JSON-persisted receipts replay from independent
+predecessor rows; fabricated equivalence and missing rows are rejected. Combined
+grid/height focused specs passed 2/2 in 73.82 seconds. No production classifier
+or canonical counts changed in this step. Next wire the combined join after
+box-sizing, reproduce existing tab-height precedence in independent validation,
+and authenticate the exact producer transition before canonical integration.
+
 September 28 next paint question: compact queries retain 62 background-color
 groups / 450 observations and 46 color groups / 1,090 observations. Reusing
 `planButtonPaintAttribution` with precise normalization and the accepted compact

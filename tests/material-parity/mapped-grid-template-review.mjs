@@ -5,6 +5,23 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { inspectOwnerGridInitial } from './owner-grid-initial-evidence.mjs';
 import { applyModalBoxReview, modalInventoryTrees } from './modal-position-inspection.mjs';
 import { proveGridPositionSubstitution } from '../../scripts/audit-material-grid-position-substitution.mjs';
+import { applyHeightRequestReviews } from './control-height-request-review.mjs';
+
+export function applyGridHeightReviews(rows, cases, inventory, normalize) {
+  return applyHeightRequestReviews(applyGridTemplateReviews(rows, cases, inventory, normalize), cases, inventory, normalize);
+}
+
+// Replay from independently validated predecessors, not submitted review labels.
+// JSON persistence omits undefined keys; it never supplies a computed default.
+export function validateGridHeightReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const persisted = value => JSON.parse(JSON.stringify(value));
+    assert.deepEqual(persisted(rows), persisted(applyGridHeightReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) {
+    return [`grid/height review evidence does not replay: ${error.message}`];
+  }
+}
 
 export const gridTemplateReviewAttributions = Object.freeze([
   'reviewed-grid-template-layout-substitution', 'reviewed-mapped-grid-template-observation-stage',
