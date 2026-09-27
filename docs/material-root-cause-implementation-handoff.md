@@ -13,10 +13,10 @@
   the complete `2281c37` producer and every older transition still validates.
   Motion conservation also passed **2/2** alongside the earlier population run.
   The export launcher dry run confirms all five required inputs. Source-batch
-  preflight has reproduced 146 groups / 6,295 observations and its historical
-  transition preserved 8,193 unrelated rows; final subset check is still running
-  (session 57717), so the complete suite is not yet reported as passed.
-  Next finish that preflight and extend the existing canonical conservation
+  preflight reproduced 146 groups / 6,295 observations and its historical
+  transition preserved 8,193 unrelated rows. The complete source-batch and
+  normalization suites passed **8/8, 243.02 s**, including subset rejection.
+  Next extend the existing canonical conservation
   checker for this 91-group batch before export/reconciliation. Accepted
   `462dddc7` remains at 1,030 unresolved; production wiring is not canonical
   acceptance. No renderer, fixture, original capture or historical report changed.
