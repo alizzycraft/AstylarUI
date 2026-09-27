@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 27
 
+**Wrapping population checks are now executable:**
+`node --test tests/material-parity/wrapping-input-populations.spec.mjs` passes
+2/2 in 5.20 s. It authenticates the original capture, reuses the full-tree
+inventory and mapped aliases, and checks complete membership against accepted
+ef6da409 compact rows: six explicit substitutions / 344 observations and eight
+native-nowrap/local-omission groups / 500 observations. The explicit-substitution
+check rejects removed author rules, forged normal-stage values, and altered
+reference computed values. The omission check preserves all captured ancestry
+and excludes the unstyled synthetic root from inherited-value claims. Neither
+test treats local omission as computed normal or proves a responsive raster
+failure. No new capture or canonical classification was made; this closes the
+repeatability gap in the previous read-only population investigation. The new
+spec is not an input to the live c8b3ceb export. Next: integrate guarded
+classifications after that export and reconciliation finish, then handle the
+634 normal/omitted observations using the owner-specific routes below.
+
 **Remaining normal/omitted wrapping review routed:** the existing conservative
 owner survey does not directly accept any of the 16 groups / 634 observations.
 This is not evidence of 634 renderer defects. Chips (152) are gated only by

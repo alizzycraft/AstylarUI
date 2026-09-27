@@ -1,0 +1,165 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
+import { modalInventoryTrees } from './modal-position-inspection.mjs';
+import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+
+const targets = {
+  'card-title': ['card', '.card-title', 52],
+  'card-copy': ['card', '.card-copy', 52],
+  'paginator-range': ['paginator', '#paginator-size, #paginator-page-size, #paginator-range', 52],
+  'paginator-size': ['paginator', '#paginator-size, #paginator-page-size, #paginator-range', 52],
+  'checkbox-label': ['checkbox', '.checkbox-label', 68],
+  'slide-toggle-label': ['slide-toggle', '.switch-label', 68],
+};
+const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
+const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+// An authored mismatch, not a claim about used width, visible wrapping, or a
+// renderer failure. Preserve the unequal owner types and the local style stages.
+function proveExplicitNowrap(entry, input, reference, candidate) {
+  const [family, selector] = targets[input.id];
+  assert.equal(entry.family, family);
+  const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));
+  let native;
+  if (family === 'paginator') {
+    const identity = resolveOriginAliasPair(entry, reference, candidate, input);
+    assert.equal(identity.status, 'mapped');
+    assert.deepEqual(identity.missingRules, []); assert.deepEqual(identity.extraRules, []);
+    assert.equal(identity.candidateNode, ast.key);
+    native = one(reference.nodes.filter(n => n.key === identity.referenceNode));
+  } else native = one(reference.nodes.filter(n => n.attributes?.id === input.id));
+  assert.equal(native.type, input.referenceStructure.type);
+  assert.equal(ast.authored.type, input.astylarStructure.type);
+  assert.equal(reference.styles[native.style].whiteSpace, 'normal');
+  assert.equal(input.reference.whiteSpace, 'normal');
+  for (const [stage, scalar] of [
+    ['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle'],
+  ]) {
+    assert.deepEqual(ast[stage], input[scalar]);
+    assert.equal(ast[stage].whiteSpace, 'nowrap');
+  }
+  assert.ok(candidate.rules.some(r => r.selector === selector && r.whiteSpace === 'nowrap'));
+  return { case: keyOf(entry), element: input.id, referenceNode: native.key,
+    candidateNode: ast.key, referenceType: native.type, candidateType: ast.authored.type,
+    selector, reference: 'normal', candidate: 'nowrap',
+    classification: 'application-plugin-authoring-defect',
+    inputEquivalent: false, rendererCauseProven: false, renderingEquivalent: false };
+}
+
+test('six explicit nowrap substitutions retain all 344 original owner/state observations', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes), families = new Set(Object.values(targets).map(t => t[0]));
+  const cases = [...raw.results.map(e => ({ ...e, kind: 'static' })),
+    ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.has(e.family));
+  const inventory = collectFullTreeInventory(cases);
+  assert.deepEqual(inventory.errors, []);
+  const snapshot = { generation: 'ef6da409ae1162433b0419814fe7e7e33b7659805d8e672f407d8b4c84878145',
+    indexSha256: 'a25ffe1f2d083f23fafe6e615566544a9aedf7b9559e2084309551568982cca9' };
+  const rows = [...families].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot));
+  let total = 0;
+  for (const [element, [family, selector, count]] of Object.entries(targets)) {
+    const row = one(rows.filter(r => r.evidence.section === 'discrepancies' &&
+      r.element === element && r.property === 'whiteSpace' && r.attribution === 'unresolved'));
+    assert.equal(row.reference, 'normal'); assert.equal(row.astylar, 'nowrap');
+    const proofs = [];
+    for (const entry of cases.filter(e => e.family === family)) {
+      const input = one(entry.styleInputs.filter(i => i.id === element));
+      const [reference, candidate] = modalInventoryTrees(inventory, keyOf(entry));
+      proofs.push(proveExplicitNowrap(entry, input, reference, candidate));
+      if (proofs.length === 1) {
+        const missingRule = { ...candidate, rules: candidate.rules.filter(r =>
+          !(r.selector === selector && r.whiteSpace === 'nowrap')) };
+        assert.throws(() => proveExplicitNowrap(entry, input, reference, missingRule));
+        const forged = structuredClone(input);
+        forged.astylarNormalResolvedStyle.whiteSpace = 'normal';
+        assert.throws(() => proveExplicitNowrap(entry, forged, reference, candidate));
+        const changedReference = structuredClone(reference);
+        const n = changedReference.nodes.find(n => n.key === proofs[0].referenceNode);
+        changedReference.styles[n.style].whiteSpace = 'nowrap';
+        assert.throws(() => proveExplicitNowrap(entry, input, changedReference, candidate));
+      }
+    }
+    assert.equal(proofs.length, count); assert.equal(row.occurrences, count);
+    assert.equal(new Set(proofs.map(p => p.case)).size, count);
+    assert.deepEqual(row.cases, proofs.map(p => p.case).slice(0, 12));
+    total += count;
+  }
+  assert.equal(total, 344);
+});
+
+test('native nowrap ancestry is retained for 500 omitted local candidate observations', () => {
+  const targets = {
+    'tab-overview': ['tabs', 70], 'tab-activity': ['tabs', 70],
+    'toolbar-action': ['toolbar', 52], 'toolbar-primary': ['toolbar', 52],
+    'badge-count': ['badge', 52], 'button-toggle-one': ['button-toggle', 68],
+    'button-toggle-two': ['button-toggle', 68], 'button-toggle-primary': ['button-toggle', 68],
+  };
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes), families = new Set(Object.values(targets).map(t => t[0]));
+  const cases = [...raw.results.map(e => ({ ...e, kind: 'static' })),
+    ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.has(e.family));
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const snapshot = { generation: 'ef6da409ae1162433b0419814fe7e7e33b7659805d8e672f407d8b4c84878145',
+    indexSha256: 'a25ffe1f2d083f23fafe6e615566544a9aedf7b9559e2084309551568982cca9' };
+  const rows = [...families].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot));
+  const ancestry = (tree, node) => {
+    const result = [], seen = new Set();
+    while (node) {
+      assert.ok(!seen.has(node.key)); seen.add(node.key); result.push(node);
+      if (node.parent === null) return result;
+      node = one(tree.nodes.filter(n => n.key === node.parent));
+    }
+    assert.fail('incomplete ancestry');
+  };
+  let total = 0;
+  for (const [element, [family, count]] of Object.entries(targets)) {
+    const row = one(rows.filter(r => r.evidence.section === 'discrepancies' &&
+      r.element === element && r.property === 'whiteSpace' && r.attribution === 'unresolved'));
+    const keys = [];
+    for (const entry of cases.filter(e => e.family === family)) {
+      const input = one(entry.styleInputs.filter(i => i.id === element));
+      const [r, a] = modalInventoryTrees(inventory, keyOf(entry));
+      const ast = one(a.nodes.filter(n => n.authored?.id === element));
+      let native;
+      if (element === 'badge-count') {
+        const identity = resolveOriginAliasPair(entry, r, a, input);
+        assert.equal(identity.status, 'mapped');
+        assert.deepEqual(identity.missingRules, []); assert.deepEqual(identity.extraRules, []);
+        assert.equal(identity.candidateNode, ast.key);
+        native = one(r.nodes.filter(n => n.key === identity.referenceNode));
+      } else native = one(r.nodes.filter(n => n.attributes?.id === element));
+      assert.equal(native.type, input.referenceStructure.type);
+      assert.equal(ast.authored.type, input.astylarStructure.type);
+      assert.equal(input.reference.whiteSpace, 'nowrap');
+      assert.equal(r.styles[native.style].whiteSpace, 'nowrap');
+      const requests = ancestry(r, native).flatMap(n => n.rules.map(i => r.rules[i])).filter(rule => rule.active);
+      assert.ok(requests.some(rule => rule.declarations['white-space-collapse']?.value === 'collapse' &&
+        rule.declarations['text-wrap-mode']?.value === 'nowrap'));
+      for (const [stage, scalar] of [
+        ['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+        ['interactionResolvedStyle', 'astylarInteractionResolvedStyle'],
+      ]) {
+        assert.deepEqual(ast[stage], input[scalar]);
+        // The synthetic root carries no style evidence. Never interpret its
+        // omission as proof of an external/default/inherited computed value.
+        for (const node of ancestry(a, ast).filter(n => n.key !== 'root')) {
+          assert.ok(node[stage]); assert.equal(node[stage].whiteSpace, undefined);
+        }
+      }
+      keys.push(keyOf(entry));
+    }
+    assert.equal(keys.length, count); assert.equal(new Set(keys).size, count);
+    assert.equal(row.occurrences, count); assert.deepEqual(row.cases, keys.slice(0, 12));
+    total += count;
+  }
+  assert.equal(total, 500);
+});
