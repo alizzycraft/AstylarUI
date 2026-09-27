@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 27
 
+**All 30 wrapping populations now have repeatable original-evidence checks:**
+`node --test tests/material-parity/wrapping-input-populations.spec.mjs` passes
+5/5 in 21.41 s, covering 1,478 observations without a new capture. The last
+634 comprise chips (152), twelve overlay hosts (360), table (52), and tab panel
+(70). Overlay checks preserve all 59 exact z-index scalar/tree rule gaps and
+all 50 nested bottom-sheet labels whose nowrap differs from their normal host.
+No relevant wrapping/reset request appears on the captured overlay owner paths;
+motion, external inheritance and computed candidate values remain unapproved.
+Table explicitly declares collapse/wrap on `.mat-mdc-table`; do not describe it
+as an absence of native authoring. Tab panel has private plugin type, no text
+children, no core retained/control paint record and matching semantic content;
+reuse its existing public plugin reduction, not an ordinary-text default proof.
+The first fourteen groups / 844 observations have prepared classifications;
+the other sixteen still need appropriately bounded classification. Tests of
+their observation boundaries are not equivalence or final audit acceptance.
+
 **Native-nowrap omission batch prepared:** `wrapping-input-review.mjs` now
 reuses the same scalar application/replay mechanism for eight groups / 500
 observations. Original native ancestor collapse/nowrap rules, exact owner types,

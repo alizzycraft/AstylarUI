@@ -6,6 +6,7 @@ import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNowrap,
   validateExplicitNowrap, explicitNowrapAttribution, applyOmittedNowrap,
@@ -233,4 +234,114 @@ test('chip host normal values do not conceal nested native nowrap labels in 152 
     }
   }
   assert.equal(labels, 152);
+});
+
+test('360 overlay host observations preserve rule gaps and nested bottom-sheet nowrap text', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes);
+  const expected = { 'bottom-sheet-overlay': 25, 'bottom-sheet-panel': 25,
+    'bottom-sheet-dismiss': 25, 'bottom-sheet-copy': 25, 'dialog-title': 32,
+    'dialog-copy': 32, 'dialog-cancel': 32, 'dialog-save': 32, 'dialog-panel': 32,
+    'dialog-actions': 32, 'snack-bar-overlay': 34, 'snack-bar-surface': 34 };
+  const cases = [...raw.results.map(e => ({ ...e, kind: 'static' })),
+    ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))]
+    .filter(e => ['bottom-sheet', 'dialog', 'snack-bar'].includes(e.family));
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const counts = {}, path = (tree, node) => {
+    const keys = [];
+    while (node) {
+      assert.ok(!keys.includes(node.key)); keys.push(node.key);
+      if (node.parent === null) return keys;
+      node = one(tree.nodes.filter(n => n.key === node.parent));
+    }
+    assert.fail('incomplete overlay ancestry');
+  };
+  let nestedLabels = 0, ruleGaps = 0;
+  for (const entry of cases) {
+    const [r, a] = modalInventoryTrees(inventory, keyOf(entry));
+    for (const input of entry.styleInputs.filter(i => Object.hasOwn(expected, i.id))) {
+      assert.equal(input.reference.whiteSpace, 'normal'); assert.equal(input.astylar.whiteSpace, undefined);
+      const ast = one(a.nodes.filter(n => n.authored?.id === input.id));
+      let identity;
+      if (r.nodes.some(n => n.attributes?.id === input.id)) {
+        const native = one(r.nodes.filter(n => n.attributes?.id === input.id));
+        assert.equal(native.type, input.referenceStructure.type);
+        assert.equal(ast.authored.type, input.astylarStructure.type);
+        assert.equal(r.styles[native.style].whiteSpace, input.reference.whiteSpace);
+        for (const [stage, scalar] of [['resolvedStyle', 'astylar'],
+          ['normalResolvedStyle', 'astylarNormalResolvedStyle'], ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']])
+          assert.deepEqual(ast[stage], input[scalar]);
+        identity = { status: 'mapped', inputEquivalent: false, referenceNode: native.key,
+          candidateNode: ast.key, referencePath: path(r, native), candidatePath: path(a, ast),
+          missingRules: [], extraRules: [] };
+      } else identity = resolveOriginAliasPair(entry, r, a, input);
+      const gap = ['bottom-sheet-overlay', 'snack-bar-overlay'].includes(input.id);
+      assert.equal(identity.status, gap ? 'mapped-with-scalar-rule-gap' : 'mapped');
+      assert.deepEqual(identity.extraRules, []);
+      assert.deepEqual(identity.missingRules, gap ? [{ selector: '.cdk-global-overlay-wrapper',
+        declarations: { 'z-index': { value: '1000', important: false } } }] : []);
+      if (gap) ruleGaps++;
+      const trace = inspectOverlayOwnerDeclarations('whiteSpace', identity, r, a);
+      assert.equal(trace.hasRelevantRequest, false);
+      assert.ok(trace.referencePath.every(n => n.computed === 'normal'));
+      assert.ok(trace.candidatePath.filter(n => n.node !== 'root')
+        .every(n => Object.values(n.localValues).every(v => v === '<omitted>')));
+      assert.equal(trace.inputEquivalent, false); assert.equal(trace.candidateComputedVerified, false);
+      if (['bottom-sheet-dismiss', 'bottom-sheet-copy'].includes(input.id)) {
+        const native = one(r.nodes.filter(n => n.key === identity.referenceNode));
+        assert.equal(native.type, 'a'); assert.equal(ast.authored.type, 'button');
+        const leaf = one(r.nodes.filter(n => n.key.startsWith(native.key + '/') &&
+          String(n.attributes?.class).split(/\s+/).includes('mdc-list-item__primary-text')));
+        assert.equal(r.styles[leaf.style].whiteSpace, 'nowrap');
+        assert.equal(leaf.ownText.trim(), ast.authored.value);
+        nestedLabels++;
+      }
+      counts[input.id] = (counts[input.id] ?? 0) + 1;
+    }
+  }
+  assert.deepEqual(counts, expected);
+  assert.equal(ruleGaps, 59); assert.equal(nestedLabels, 50);
+});
+
+test('table normal requests and private tab-panel text remain distinct in 122 host observations', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const raw = JSON.parse(bytes);
+  const cases = [...raw.results.map(e => ({ ...e, kind: 'static' })),
+    ...raw.interactions.map(e => ({ ...e, kind: 'interaction' }))]
+    .filter(e => ['table', 'tabs'].includes(e.family));
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const counts = { table: 0, tabs: 0 };
+  for (const entry of cases) {
+    const id = entry.family === 'table' ? 'table-primary' : 'tab-panel';
+    const input = one(entry.styleInputs.filter(i => i.id === id));
+    const [r, a] = modalInventoryTrees(inventory, keyOf(entry));
+    const ast = one(a.nodes.filter(n => n.authored?.id === id));
+    const native = entry.family === 'table' ? one(r.nodes.filter(n => n.attributes?.id === id))
+      : one(r.nodes.filter(n => n.key === resolveOriginAliasPair(entry, r, a, input).referenceNode));
+    assert.equal(input.reference.whiteSpace, 'normal'); assert.equal(r.styles[native.style].whiteSpace, 'normal');
+    for (const [stage, scalar] of [['resolvedStyle', 'astylar'],
+      ['normalResolvedStyle', 'astylarNormalResolvedStyle'], ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+      assert.deepEqual(ast[stage], input[scalar]); assert.equal(ast[stage].whiteSpace, undefined);
+    }
+    if (entry.family === 'table') {
+      assert.equal(native.type, 'table'); assert.equal(ast.authored.type, 'table');
+      assert.ok(native.rules.map(i => r.rules[i]).some(rule => rule.active && rule.selector === '.mat-mdc-table' &&
+        rule.declarations['white-space-collapse']?.value === 'collapse' &&
+        rule.declarations['text-wrap-mode']?.value === 'wrap'));
+      assert.deepEqual(a.nodes.filter(n => n.parent === ast.key).map(n => n.authored.type), ['thead', 'tbody']);
+    } else {
+      assert.equal(ast.authored.type, 'showcase.material:tab-panel');
+      assert.equal(ast.authored.ariaLabel, input.referenceStructure.text);
+      assert.equal(a.nodes.filter(n => n.parent === ast.key).length, 0);
+      assert.equal(ast.retainedText, undefined); assert.equal(ast.paintedControlText, undefined);
+      // This host cannot inherit the ordinary-text paint proof. Its private
+      // rendering behavior is covered by the existing public plugin reduction.
+    }
+    counts[entry.family]++;
+  }
+  assert.deepEqual(counts, { table: 52, tabs: 70 });
 });
