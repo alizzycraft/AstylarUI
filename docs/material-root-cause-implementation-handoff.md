@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 27
 
+- History follow-up for the 10 explicit box-sizing groups inspected **102
+  revisions** of `examples/material-showcase/src/app/astylar.component.ts` and
+  the introducing diffs/file lists. `.modal-overlay` and the later of two
+  `.stepper` rules already request border-box in initial showcase **2f440115**
+  (2 groups / 93 observations); do not describe those as later fixes.
+  **c47d589ac2cf1967cc321df38339cb64dabb3732** adds it to toggle group/options,
+  checkbox and chips alongside replacement selection-indicator/layout authoring
+  (6 groups / 424 observations). **7159b1d5266ed4bc03b56581b8034526abae892b**
+  replaces tab-panel top padding with width 100%, height 20px and border-box
+  (1 group / 70). **f3c8254c2aa63197c03e0fb2bd43cc98c0e57fed** replaces the
+  snackbar's 56px fixed/bottom overlay plus `translate(0, 159px)` with a full-size
+  fixed column-flex border-box overlay (1 group / 34). Those three later commits
+  change showcase/plugin/harness files, not renderer-core files. These are
+  demonstrated fixture-input substitutions; the individual box-sizing change's
+  intent and causal contribution to any hidden core defect remain unproved.
+  Preserve separate initial-authoring versus later-adjustment provenance when
+  adding executable classifications. Export dependencies remain unchanged.
 - Read-only explicit box-sizing investigation answers authored-versus-default
   provenance for all **10 groups / 621 observations**. Original capture
   `b07ef154...` and collected tree inventory authenticate the population; exact
