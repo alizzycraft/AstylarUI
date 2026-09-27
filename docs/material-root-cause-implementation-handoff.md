@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 27
 
+- Remaining box-sizing omission census now covers **39 groups / 2,036
+  observations**, all mapped with scalar/native box values and complete three-
+  stage candidate snapshots checked against authenticated original inventory.
+  No candidate owner has a captured matching box-sizing/all request. **Six
+  groups / 290 observations** have explicit native border-box requests:
+  dialog-cancel/save `.mdc-button` (32 each), sidenav `.mat-drawer-container`
+  (62), slider-visual `.mat-mdc-slider` (78), snack-bar-surface
+  `.mat-mdc-snackbar-surface` (34), toolbar `.mat-toolbar-row,
+  .mat-toolbar-single-row` (52). Preserve slider's private range-visual owner
+  and snackbar's generated mapping. **32 groups / 1,694** compute native
+  content-box with no captured own box-sizing/all request on either side;
+  they remain computed-versus-local observations, not proven defaults or used
+  box equivalence. **Table-primary / 52** computes native border-box with no
+  captured author request, requiring a separate browser-default check rather
+  than inventing a missing Material rule. Ordered owner/declaration digest:
+  `b178cc74c852abc6e0c1ace925e191a2a5156ce98eb2c3d4e318fa722a79f779`.
+  Existing button box-sizing proof provides bounded static declared-border-box
+  geometry only; do not extend it automatically to these container/plugin or
+  interaction owners. Next reuse its declaration/geometry separation when
+  making these findings executable after the active export is reconciled.
+  No canonical classification, renderer or exporter dependency changed.
 - History follow-up for the 10 explicit box-sizing groups inspected **102
   revisions** of `examples/material-showcase/src/app/astylar.component.ts` and
   the introducing diffs/file lists. `.modal-overlay` and the later of two
