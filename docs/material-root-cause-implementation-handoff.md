@@ -33,10 +33,10 @@
   reconciliation process remains active. This is accepted incremental audit
   evidence, not full audit completion or rendering equivalence.
 - Wrapping preparation is outside that export: all 30 groups / 1,478 original
-  observations have repeatable checks; **28 groups / 1,326 observations** have
-  classification logic prepared. Two groups / 152 observations remain: chips.
-  Investigate that host/motion boundary,
-  then integrate a coherent batch; do not rebuild per metadata row.
+  observations have repeatable checks; **all 30 groups / 1,478 observations** now
+  have classification logic prepared. Next integrate the coherent wrapping batch;
+  do not rebuild per metadata row. These classifications retain unequal inputs
+  and uncertainty; they do not establish rendering equivalence.
 - Table follow-up: all 52 original owner paths have the same pattern: the native
   table alone explicitly supplies collapse/wrap, all native ancestors compute
   normal, candidate captured ancestry omits wrapping, and neither side has motion
@@ -71,7 +71,7 @@
   diagnostic's source receipt must be refreshed at the next coherent export; the
   accepted package's source-hash match above describes its reconciliation time.
 - Latest focused verification: `node --test tests/material-parity/wrapping-input-populations.spec.mjs`
-  passed **5/5, 22.33 s**. No renderer or
+  passed **5/5, 26.04 s** after adding the chip host review. No renderer or
   fixture changes. The overall audit still includes other scalar families,
   final canonical reconciliation and enforced full browser acceptance.
 - Chip label boundary strengthened: **152/152** original nested labels explicitly
@@ -81,8 +81,20 @@
   passes **1/1, 4.52 s**, including mutation rejection for candidate requests/resets
   and a changed native wrapping request. This establishes missing authored label
   input, not candidate computed normal or a core wrapping defect. It does not
-  classify the two host scalar groups or waive their remaining motion review.
+  independently classify the two host scalar groups or waive motion review.
   Reuse the completed export and reconciliation; do not restart them for this work.
+- Chip host classification now separately binds **two groups / 152 observations**
+  to the computed-native versus local-candidate observation boundary. Exact host
+  ancestry retains the active native noopable rule's transition-duration and
+  animation-duration of 1ms; no transition target or animation name is inferred
+  from duration alone. Motion targets, settlement, indirect effects and candidate
+  computed wrapping remain explicitly unverified. Each host proof embeds the
+  nested-label omission above, so a normal host value cannot conceal that defect.
+  The focused chip test passed **1/1, 5.29 s** with changed duration, added target,
+  inactive rule and forged settlement negative controls. Full original row counts
+  are bound and unrelated compact rows remain unchanged. No new browser capture
+  is needed to establish this observation-stage boundary; no motion or renderer
+  equivalence is claimed. Production integration/export is still pending.
 - Dialog wrapping motion boundary resolved for **six groups / 192 observations**:
   empty CSSOM transition longhands retain variable-dependent shorthands in
   `cssText`. Exact active same-sheet higher-specificity noopable overrides supply

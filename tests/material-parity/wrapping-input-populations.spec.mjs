@@ -14,7 +14,8 @@ import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNow
   applyOverlayNormal, validateOverlayNormal, overlayNormalAttribution, proveOverlayNormal,
   proveChipLabelWrapping, proveTableWrapping, applyTableWrapping, validateTableWrapping,
   tableWrappingAttribution, applyTabPanelWrapping, validateTabPanelWrapping,
-  tabPanelWrappingAttribution, proveTabPanelWrapping } from './wrapping-input-review.mjs';
+  tabPanelWrappingAttribution, proveTabPanelWrapping, proveChipHostWrapping,
+  applyChipHostWrapping, validateChipHostWrapping, chipHostWrappingAttribution } from './wrapping-input-review.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
@@ -252,6 +253,27 @@ test('chip host normal values do not conceal nested native nowrap labels in 152 
   const rule = altered.rules.find(r => r.selector === '.mdc-evolution-chip__text-label');
   rule.declarations['text-wrap-mode'].value = 'wrap';
   assert.throws(() => proveChipLabelWrapping(entry, input, altered, candidate, inventory));
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'chips', {
+    generation: 'baf0ccb8d7f5adad44efff3a8e165448e550b7455999a182ce138975b2bfff3b',
+    indexSha256: '00e5b5296d3d4af5ee27086fc41db3fbc21238bb6ee8b6a36315be68d25d60e0',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const normalize = bindPreciseAuditNormalization();
+  const applied = applyChipHostWrapping(rows, cases, inventory, normalize);
+  const changed = applied.filter(r => r.attribution === chipHostWrappingAttribution);
+  assert.equal(changed.length, 2); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 152);
+  assert.deepEqual(validateChipHostWrapping(applied, rows, cases, inventory, normalize), []);
+  for (let index = 0; index < rows.length; index++) if (!changed.includes(applied[index])) assert.deepEqual(applied[index], rows[index]);
+  for (const mutation of ['duration', 'target', 'inactive']) {
+    const alteredMotion = structuredClone(reference);
+    const motion = alteredMotion.rules.find(r => r.selector.startsWith('.mat-mdc-standard-chip._mat-animation-noopable,'));
+    if (mutation === 'duration') motion.declarations['transition-duration'].value = '200ms';
+    if (mutation === 'target') motion.declarations['transition-property'] = { value: 'all', important: false };
+    if (mutation === 'inactive') motion.active = false;
+    assert.throws(() => proveChipHostWrapping(entry, input, alteredMotion, candidate, inventory));
+  }
+  const forged = structuredClone(applied);
+  forged.find(r => r.attribution === chipHostWrappingAttribution).reviewEvidence.observations[0].animationSettlementVerified = true;
+  assert.equal(validateChipHostWrapping(forged, rows, cases, inventory, normalize).length, 1);
 });
 
 test('360 overlay host observations preserve rule gaps and nested bottom-sheet nowrap text', () => {

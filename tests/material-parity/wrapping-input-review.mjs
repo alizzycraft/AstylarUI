@@ -416,3 +416,60 @@ export function validateTabPanelWrapping(rows, originalRows, cases, inventory, n
     return [];
   } catch (error) { return [`private tab wrapping owners do not replay: ${error.message}`]; }
 }
+
+export const chipHostWrappingAttribution = 'reviewed-chip-host-wrapping-observation-stage';
+export function proveChipHostWrapping(entry, input, reference, candidate, inventory) {
+  const nestedLabel = proveChipLabelWrapping(entry, input, reference, candidate, inventory);
+  const native = one(reference.nodes.filter(n => n.attributes?.id === input.id));
+  const ast = one(candidate.nodes.filter(n => n.authored?.id === input.id));
+  assert.equal(input.reference.whiteSpace, 'normal');
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) assert.deepEqual(ast[stage], input[scalar]);
+  const identity = { status: 'mapped', inputEquivalent: false, referenceNode: native.key,
+    candidateNode: ast.key, referencePath: ancestry(reference, native).map(n => n.key),
+    candidatePath: ancestry(candidate, ast).map(n => n.key), missingRules: [], extraRules: [] };
+  const trace = inspectOverlayOwnerDeclarations('whiteSpace', identity, reference, candidate);
+  assert.equal(trace.hasRelevantRequest, false); assert.equal(trace.hasMotionRequest, true);
+  for (const [index, node] of trace.referencePath.entries()) {
+    assert.equal(node.computed, 'normal'); assert.deepEqual(node.inline, {});
+    if (index) assert.deepEqual(node.rules, []);
+    else {
+      const rule = one(node.rules);
+      assert.equal(rule.selector, '.mat-mdc-standard-chip._mat-animation-noopable, .mat-mdc-standard-chip._mat-animation-noopable .mdc-evolution-chip__graphic, .mat-mdc-standard-chip._mat-animation-noopable .mdc-evolution-chip__checkmark, .mat-mdc-standard-chip._mat-animation-noopable .mdc-evolution-chip__checkmark-path');
+      assert.equal(rule.active, true); assert.deepEqual(rule.conditions, []);
+      assert.deepEqual(rule.declarations, {
+        'transition-duration': { value: '1ms', important: false },
+        'animation-duration': { value: '1ms', important: false },
+      });
+    }
+  }
+  for (const node of trace.candidatePath) {
+    assert.deepEqual(node.inline, {}); assert.deepEqual(node.possibleRules, []);
+    assert.ok(Object.values(node.declarations).every(d => Object.keys(d).length === 0));
+    assert.ok(Object.values(node.localValues).every(v => v === '<omitted>'));
+    assert.ok(!/(?:^|;)\s*(?:white-space(?:-collapse)?|text-wrap(?:-mode|-style)?|all|animation[^:;]*|transition[^:;]*)\s*:/i.test(node.authored.attributes?.style ?? ''));
+  }
+  // Duration-only declarations cannot establish motion targets or settlement.
+  // Classify the observation boundary, not initial-value or motion equivalence.
+  return { case: keyOf(entry), element: input.id, referenceNode: native.key, astylarNode: ast.key,
+    trace, nestedLabel, motionDisposition: 'duration-only-declarations-retained-targets-unverified',
+    animationSettlementVerified: false, indirectEffectsExcluded: false,
+    candidateComputedVerified: false, externalInheritanceVerified: false,
+    rendererCauseProven: false, inputEquivalent: false, renderingEquivalent: false };
+}
+export function applyChipHostWrapping(rows, cases, inventory, normalize) {
+  return ['chip-0', 'chip-1'].reduce((values, element) => applyModalBoxReview(values, cases, inventory, normalize, {
+    family: 'chips', element, properties: ['whiteSpace'], attribution: chipHostWrappingAttribution,
+    classification: 'parity-harness-defect', owner: 'input audit chip host observation stage; separate nested label authoring',
+    justification: 'Native computed host normal and omitted candidate local declarations are different observation stages, not proof of equivalent defaults. Preserve the active native 1ms duration-only motion declarations without inferring targets, settlement or absence of indirect effects. Separately retain the nested native label collapse/nowrap request omitted from candidate ancestry and retained label style. This classifies the host measurement boundary while retaining the label authoring defect; it does not approve equal input, motion, computed candidate wrapping or renderer correctness.',
+    prove: (entry, reference, candidate) => proveChipHostWrapping(entry,
+      one(entry.styleInputs.filter(i => i.id === element)), reference, candidate, inventory),
+  }), rows);
+}
+export function validateChipHostWrapping(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const selected = values => values.filter(r => r.attribution === chipHostWrappingAttribution);
+    assert.deepEqual(selected(rows), selected(applyChipHostWrapping(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`chip host wrapping stages do not replay: ${error.message}`]; }
+}
