@@ -473,3 +473,14 @@ export function validateChipHostWrapping(rows, originalRows, cases, inventory, n
     return [];
   } catch (error) { return [`chip host wrapping stages do not replay: ${error.message}`]; }
 }
+
+export const wrappingAttributions = Object.freeze([explicitNowrapAttribution, omittedNowrapAttribution,
+  overlayNormalAttribution, tableWrappingAttribution, tabPanelWrappingAttribution, chipHostWrappingAttribution]);
+export function applyWrappingReviews(rows, cases, inventory, normalize) {
+  return [applyExplicitNowrap, applyOmittedNowrap, applyOverlayNormal, applyTableWrapping,
+    applyTabPanelWrapping, applyChipHostWrapping].reduce((values, apply) => apply(values, cases, inventory, normalize), rows);
+}
+export function validateWrappingReviews(rows, originalRows, cases, inventory, normalize) {
+  return [validateExplicitNowrap, validateOmittedNowrap, validateOverlayNormal, validateTableWrapping,
+    validateTabPanelWrapping, validateChipHostWrapping].flatMap(validate => validate(rows, originalRows, cases, inventory, normalize));
+}

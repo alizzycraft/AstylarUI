@@ -15,10 +15,55 @@ import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNow
   proveChipLabelWrapping, proveTableWrapping, applyTableWrapping, validateTableWrapping,
   tableWrappingAttribution, applyTabPanelWrapping, validateTabPanelWrapping,
   tabPanelWrappingAttribution, proveTabPanelWrapping, proveChipHostWrapping,
-  applyChipHostWrapping, validateChipHostWrapping, chipHostWrappingAttribution } from './wrapping-input-review.mjs';
+  applyChipHostWrapping, validateChipHostWrapping, chipHostWrappingAttribution,
+  applyWrappingReviews, validateWrappingReviews, wrappingAttributions } from './wrapping-input-review.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+test('production wrapping batch conserves all 8483 raw rows and changes only 30 reviewed groups', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })),
+    ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const snapshot = { generation: 'baf0ccb8d7f5adad44efff3a8e165448e550b7455999a182ce138975b2bfff3b',
+    indexSha256: '00e5b5296d3d4af5ee27086fc41db3fbc21238bb6ee8b6a36315be68d25d60e0' };
+  const rows = [...new Set(cases.map(e => e.family))].flatMap(family =>
+    queryFindings('artifacts/material-parity/working-audit', family, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies').sort((a, b) => a.evidence.ordinal - b.evidence.ordinal)
+    .map(({ id, evidence, ...row }) => row);
+  assert.equal(rows.length, 8483);
+  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const start = source.indexOf("  const wrappingDiscrepancies = ownerInitialStyleBinding.status === 'bound'");
+  const end = source.indexOf('  const beforeRetainedFontScalars =', start);
+  assert.ok(start > 0 && end > start);
+  const run = new Function('ownerInitialStyleBinding', 'beforeNormalLineBoxScalars', 'cases', 'elementInventory',
+    'canonicalStyle', 'applyWrappingReviews', source.slice(start, end) + '\nreturn wrappingDiscrepancies;');
+  const normalize = bindPreciseAuditNormalization();
+  const applied = run({ status: 'bound' }, rows, cases, inventory, normalize, applyWrappingReviews);
+  assert.equal(run({ status: 'unbound' }, rows, cases, inventory, normalize, applyWrappingReviews), rows);
+  const batch = applied.filter(r => wrappingAttributions.includes(r.attribution));
+  assert.equal(batch.length, 30); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 1478);
+  assert.equal(applied.filter(r => r.attribution === 'unresolved').length, 1030);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (!batch.includes(applied[i])) assert.deepEqual(applied[i], rows[i]);
+  assert.deepEqual(validateWrappingReviews(applied, rows, cases, inventory, normalize), []);
+  const validation = '      errors.push(...validateWrappingReviews(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));';
+  assert.equal(source.split(validation).length, 2);
+  const errors = [];
+  new Function('errors', 'validateWrappingReviews', 'report', 'replayedRows', 'cases', 'canonicalStyle', validation)(
+    errors, validateWrappingReviews, { discrepancies: applied, elementInventory: inventory }, rows, cases, normalize);
+  assert.deepEqual(errors, []);
+  const guard = "  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => wrappingAttributions.includes(d.attribution)))\n    errors.push('wrapping attribution lacks bound original cases');";
+  assert.equal(source.split(guard).length, 2);
+  new Function('report', 'wrappingAttributions', 'errors', guard)({ discrepancies: applied }, wrappingAttributions, errors);
+  assert.deepEqual(errors, ['wrapping attribution lacks bound original cases']);
+});
 
 test('six explicit nowrap substitutions retain all 344 original owner/state observations', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

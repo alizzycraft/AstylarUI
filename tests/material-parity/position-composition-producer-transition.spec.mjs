@@ -8,6 +8,20 @@ import { restoreControlPositionProducer } from './position-composition-producer-
 import { restoreWidthOverflowProducer } from './position-composition-producer-transition.mjs';
 import { restoreSnackbarOverflowProducer } from './position-composition-producer-transition.mjs';
 import { restoreAuthoredTypographyProducer } from './position-composition-producer-transition.mjs';
+import { restoreWrappingProducer } from './position-composition-producer-transition.mjs';
+
+test('wrapping integration restores the complete accepted typography producer', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'b99f957:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreWrappingProducer(current).restoredSource, previous);
+  for (const fragment of ['applyWrappingReviews(beforeNormalLineBoxScalars, cases',
+    'validateWrappingReviews(report.discrepancies, replayedRows, cases,',
+    "errors.push('wrapping attribution lacks bound original cases');",
+    "    'tests/material-parity/wrapping-input-review.mjs',\n"])
+    assert.throws(() => restoreWrappingProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreWrappingProducer(current + '\n// unrelated'));
+});
 
 test('authored typography integration restores the complete accepted snackbar producer', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -173,10 +187,13 @@ test('scalar line-box integration restores the complete accepted origin producer
   const current=readFileSync(file,'utf8').replaceAll('\r\n','\n');
   const previous=execFileSync('git',['show','868f9de:'+file],{encoding:'utf8',maxBuffer:4000000}).replaceAll('\r\n','\n');
   assert.equal(restoreNormalLineBoxScalarProducer(current).restoredSource,previous);
-  for(const fragment of ['applyNormalLineBoxScalar(beforeNormalLineBoxScalars, cases, elementInventory, controlTypography)',
+  for(const fragment of ['applyNormalLineBoxScalar(wrappingDiscrepancies, cases, elementInventory, controlTypography)',
     'validateNormalLineBoxScalar(report.discrepancies, replayedRows, cases,',
     "    'tests/material-parity/normal-line-box-scalar.spec.mjs',\n"])
-    assert.throws(()=>restoreNormalLineBoxScalarProducer(current.replace(fragment,'')));
+    {
+      assert.ok(current.includes(fragment), 'negative control must mutate current production source');
+      assert.throws(()=>restoreNormalLineBoxScalarProducer(current.replace(fragment,'')));
+    }
   assert.throws(()=>restoreNormalLineBoxScalarProducer(current+'\n// unrelated\n'));
 });
 

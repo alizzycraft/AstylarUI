@@ -33,9 +33,28 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreAuthoredTypographyProducer(source) {
+export function restoreWrappingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyWrappingReviews, validateWrappingReviews, wrappingAttributions } from './wrapping-input-review.mjs';\n", ''],
+    ["  const wrappingDiscrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyWrappingReviews(beforeNormalLineBoxScalars, cases, elementInventory, canonicalStyle)\n    : beforeNormalLineBoxScalars;\n", ''],
+    ['applyNormalLineBoxScalar(wrappingDiscrepancies, cases', 'applyNormalLineBoxScalar(beforeNormalLineBoxScalars, cases'],
+    ['    : wrappingDiscrepancies;\n', '    : beforeNormalLineBoxScalars;\n'],
+    ['      errors.push(...validateWrappingReviews(report.discrepancies, replayedRows, cases,\n        report.elementInventory, canonicalStyle));\n', ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => wrappingAttributions.includes(d.attribution)))\n    errors.push('wrapping attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/wrapping-input-review.mjs',\n    'tests/material-parity/wrapping-input-populations.spec.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated wrapping integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'bc16b5e694461acdc18580fa5fcd1169abc752dd78c80d841fb170a9587fe3cc',
+    'producer changed beyond reviewed wrapping integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreAuthoredTypographyProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const wrappingDiscrepancies =') ? restoreWrappingProducer(current).restoredSource : current;
   if (restored.includes('visibleButtonOverflowAttribution')) {
     for (const [from, to] of [
       ["import { applyVisibleButtonOverflow, validateVisibleButtonOverflow, visibleButtonOverflowAttribution } from './control-overflow-observation.mjs';\n", ''],

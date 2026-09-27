@@ -34,8 +34,12 @@
   evidence, not full audit completion or rendering equivalence.
 - Wrapping preparation is outside that export: all 30 groups / 1,478 original
   observations have repeatable checks; **all 30 groups / 1,478 observations** now
-  have classification logic prepared. Next integrate the coherent wrapping batch;
-  do not rebuild per metadata row. These classifications retain unequal inputs
+  have classification logic integrated behind bound original-capture provenance.
+  The production-boundary replay changes exactly 30 groups / 1,478 observations,
+  conserves all 8,483 raw rows and every unrelated row, and yields 1,030 unresolved
+  groups. This is a tested proposal, not yet an accepted canonical export.
+  Next export/reconcile this coherent batch; do not rebuild per metadata row.
+  These classifications retain unequal inputs
   and uncertainty; they do not establish rendering equivalence.
 - Table follow-up: all 52 original owner paths have the same pattern: the native
   table alone explicitly supplies collapse/wrap, all native ancestors compute
@@ -71,7 +75,15 @@
   diagnostic's source receipt must be refreshed at the next coherent export; the
   accepted package's source-hash match above describes its reconciliation time.
 - Latest focused verification: `node --test tests/material-parity/wrapping-input-populations.spec.mjs`
-  passed **5/5, 26.04 s** after adding the chip host review. No renderer or
+  passed **6/6, 47.55 s** after production integration. The new test executes the
+  actual production wiring with bound/unbound inputs, replays validators, checks
+  the missing-provenance rejection and preserves all raw values/occurrences.
+  `node --test tests/material-parity/position-composition-producer-transition.spec.mjs`
+  passed **16/16, 3.23 s**: reversing only the exact wrapping additions reproduces
+  the complete accepted producer hash `bc16b5e694461acdc18580fa5fcd1169abc752dd78c80d841fb170a9587fe3cc`.
+  Initial run was 15/16: an old line-box negative control still targeted the old
+  argument name and therefore mutated nothing. It now targets the current call
+  and explicitly asserts the target exists before mutation. No renderer or
   fixture changes. The overall audit still includes other scalar families,
   final canonical reconciliation and enforced full browser acceptance.
 - Chip label boundary strengthened: **152/152** original nested labels explicitly
@@ -94,7 +106,7 @@
   inactive rule and forged settlement negative controls. Full original row counts
   are bound and unrelated compact rows remain unchanged. No new browser capture
   is needed to establish this observation-stage boundary; no motion or renderer
-  equivalence is claimed. Production integration/export is still pending.
+  equivalence is claimed. Production integration is tested; export is pending.
 - Dialog wrapping motion boundary resolved for **six groups / 192 observations**:
   empty CSSOM transition longhands retain variable-dependent shorthands in
   `cssText`. Exact active same-sheet higher-specificity noopable overrides supply
@@ -105,8 +117,8 @@
   changed overrides, changed shorthand, changed sheet/order and named animation.
   Initial focused attempts rejected unhandled animation longhands; review now
   admits only the known fields with explicit animation-name none. Full suite
-  passes; wrapping changes still await coherent production integration and a
-  later milestone export. The accepted baf0ccb8 package does not include them.
+  passes; wrapping changes still await the milestone export/reconciliation.
+  The accepted baf0ccb8 package does not include them.
 
 ### Supporting checkpoint history (not current process status)
 
