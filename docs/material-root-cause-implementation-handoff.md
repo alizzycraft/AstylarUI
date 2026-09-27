@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — September 27
 
+- Public table/block box-sizing reduction now exercises **six equal-authored
+  cases** through package-root `Astylar.mount`, reusing the existing button
+  diagnostic's CSS serialization and projected-border-box measurement. Command:
+  `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/table-block-box-sizing-input-audit.spec.ts --progress=false`.
+  TypeScript/browser bundle compiled; **5 passed, 1 failed**, exit 1. The failure
+  is deliberately preserved: omitted boxSizing on a div produces candidate
+  **120x44** versus native **152x60** with the same 120x44 declarations,
+  6px/14px padding and 2px borders. Explicit content-box produces 152x60 on
+  both, and explicit border-box produces 120x44 on both. Table omitted and
+  border-box both produce 120x44; table content-box produces 152x60. Every
+  tested origin is (32,32). This confirms a generic omitted-size policy
+  discrepancy in the installed package, not a table used-size defect in this
+  bounded example. Ownership: core defaults/dimension interpretation before
+  projection; no application plugin participates. The catalog's sizing entry
+  claims content-box as the default, unlike the observed div behavior.
+  Environment: AstylarUI 0.2.0, Angular 20.3.31, Babylon 8.56.2,
+  Chrome Headless 153, 400x180 CSS surfaces, DPR 1. Existing NG0914 warns about
+  zoneless testing with Zone.js loaded. No diagnostic errors were reported.
+  Failure log retained at
+  `artifacts/material-parity/table-block-box-sizing-diagnostic.log`, SHA-256
+  `415dbf55fd8d7528233fcef68204c8e60ba53af46f44adb51a12b149ff4033ba`.
+  Installed dimension JS SHA-256
+  `0a65a1659a51062ab41cda030c4f030b15bcf5328c85fb1a3597628c05cf190c`;
+  installed defaults JS
+  `5a0f4ced0db345b5a26b3b8606d5198c3462dfcfbd3ed842105d697bfde8530b`.
+  Both installed code and current source retain the inspected fallback, but
+  this does not establish complete package/source identity. Do not extrapolate
+  this declared-size diagnostic to auto/intrinsic tables, Material's 52 owners,
+  DPR 2, raster or interactions. Next bind applicable original observations
+  through the existing review machinery; the failing diagnostic remains an
+  implementation regression target, not authorization to fix core now.
+  Export dependencies and canonical classifications remain unchanged.
 - Isolated native-browser check resolves the table default hypothesis for
   **Chrome 153.0.8010.53**, at 800x600 CSS pixels and DPR 1/2. A plain `table`
   computes `border-box`; a `div` with `display: table` computes `content-box`.
