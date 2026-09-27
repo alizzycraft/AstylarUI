@@ -3,7 +3,20 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { collectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
-import { verifyMotionSourceConservation } from './motion-source-conservation.mjs';
+import { verifyMotionSourceConservation, restoreTypographyMotionOptIns } from './motion-source-conservation.mjs';
+
+test('typography opt-ins restore exact predecessors and reject unrelated or duplicated source edits', () => {
+  for (const [kind, file] of [['survey', 'tests/material-parity/owner-initial-style-survey.mjs'],
+    ['motion', 'scripts/audit-material-owner-initial-motion.mjs'], ['delay', 'scripts/audit-material-motion-delay-targets.mjs']]) {
+    const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+    const prior = execFileSync('git', ['show', `082050d:${file}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+    assert.equal(restoreTypographyMotionOptIns(current, kind), prior);
+    assert.equal(restoreTypographyMotionOptIns(prior, kind), prior);
+    assert.throws(() => restoreTypographyMotionOptIns(current + '\n// unrelated edit\n', kind));
+    assert.throws(() => restoreTypographyMotionOptIns(current.replace('reviewedTracking = false', 'reviewedTracking = true'), kind));
+    assert.throws(() => restoreTypographyMotionOptIns(current + current, kind));
+  }
+});
 
 test('motion replay conserves every finding and rejects stale or changed mapping evidence', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

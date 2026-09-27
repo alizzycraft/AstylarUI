@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 27
 
+- Typography opt-in source reconciliation now preserves the exact predecessor
+  sources for the survey, motion and delay collectors. Unrelated edits, changed
+  defaults and repeated fragments are rejected rather than accepted by refreshed
+  historical hashes. `node --test tests/material-parity/motion-source-conservation.spec.mjs`
+  passed **2/2, 35.19 s**. `replayReviewedBatchMotion()` passed: all **121 motion
+  groups / 7,254 observations**, all 12 mapping declarations, and the complete
+  **35 delay groups / 2,546 observations** replay unchanged apart from explicitly
+  checked source receipts. Historical reports were not rewritten. This closes
+  the collector-transition gap, not production integration or rendering parity.
+  Next integrate the prepared 91-group typography batch with independent replay
+  and a bounded production-source transition before exporting. Accepted counts
+  remain 1,030 unresolved; final canonical and browser gates remain outstanding.
 - Prepared tracking/line-height review now accounts for **all 91 previously
   unresolved groups / 4,862 observations** in these two properties. The final
   four groups / 292 observations reuse existing chip host/nested-label and

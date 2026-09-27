@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import ts from 'typescript';
 import { collectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
-import { verifyMotionSourceConservation } from './motion-source-conservation.mjs';
+import { verifyMotionSourceConservation, restoreTypographyMotionOptIns } from './motion-source-conservation.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
@@ -22,6 +22,7 @@ export function replayReviewedBatchMotion() {
   const delay = JSON.parse(readFileSync('docs/material-motion-delay-target-review.json', 'utf8'));
   assert.equal(hash(JSON.stringify(delay, null, 2) + '\n'), delayHash);
   let source = readFileSync(delay.source.file, 'utf8').replaceAll('\r\n', '\n');
+  if (source.includes('reviewedTracking = false')) source = restoreTypographyMotionOptIns(source, 'delay');
   if (hash(source) !== delay.source.sha256) {
     assert.equal(hash(source), '63791d89fdbea7f357911b90af22840f6f1b3b5aefb88d094960a642e69446f2',
       'unreviewed delay appearance opt-in change');

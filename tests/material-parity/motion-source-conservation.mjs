@@ -14,6 +14,37 @@ const historicalModuleHash = '82854bccdaa6ff23fc5f9df987f6ec5cf3e22d0da5dbe64357
 const reportFile = 'docs/material-owner-initial-motion-review.json';
 const reportHash = 'f8f90799191604823875d849fb6ae56de46dd96c37e3f91c8d540bdd48916294';
 
+// Remove only the reviewed optional typography extensions. Authenticate the
+// entire restored predecessor, not just the fragments or observed output.
+export function restoreTypographyMotionOptIns(source, kind) {
+  const definitions = {
+    survey: ['2dbb091d8021d65696cf9efbfa8d1b62cc316103bca2b96e6963f3eb77cd7157', [
+      ["  lineHeight: ['font'],\n", ''],
+      ['reviewedFontWeight = false,\n    reviewedTracking = false, reviewedLineHeight = false', 'reviewedFontWeight = false'],
+      ["    ...(reviewedFontWeight ? { fontWeight: '400' } : {}),\n    ...(reviewedTracking ? { letterSpacing: 'normal' } : {}),\n    ...(reviewedLineHeight ? { lineHeight: 'normal' } : {}) };", "    ...(reviewedFontWeight ? { fontWeight: '400' } : {}) };"],
+    ]],
+    motion: ['612d6fbcb4f92e67dd8c4ee80731348a7677db2dad50611bb42d012c2f70471a', [
+      ['// Targets are disjoint from the original eight properties and the explicit\n// appearance/tracking/line-height opt-ins; height is not line-height.', '// Each target is disjoint from every one of the eight audited properties.'],
+      ['family,\n  { reviewedAppearance = false, reviewedTracking = false, reviewedLineHeight = false } = {})', 'family, { reviewedAppearance = false } = {})'],
+      [" ||\n    reviewedTracking && property === 'letterSpacing' || reviewedLineHeight && property === 'lineHeight'", ''],
+      ['reviewedGeneratedOwners: true, reviewedAppearance, reviewedTracking, reviewedLineHeight', 'reviewedGeneratedOwners: true, reviewedAppearance'],
+    ]],
+    delay: ['63791d89fdbea7f357911b90af22840f6f1b3b5aefb88d094960a642e69446f2', [
+      ['inspectMotionDelayTargets(review,\n  { reviewedAppearance = false, reviewedTracking = false, reviewedLineHeight = false } = {})', 'inspectMotionDelayTargets(review, { reviewedAppearance = false } = {})'],
+      [" ||\n      reviewedTracking && review?.proof?.property === 'letterSpacing' || reviewedLineHeight && review?.proof?.property === 'lineHeight'", ''],
+    ]],
+  };
+  assert.ok(Object.hasOwn(definitions, kind));
+  const [expected, fragments] = definitions[kind];
+  let restored = lf(source.toString());
+  if (restored.includes('reviewedTracking = false')) for (const [from, to] of fragments) {
+    assert.equal(restored.split(from).length, 2, `missing or repeated typography ${kind} opt-in fragment`);
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), expected, `unreviewed typography ${kind} source change`);
+  return restored;
+}
+
 // This is a deliberately conservative named-declaration dependency closure.
 // Property/local identifiers may over-include declarations, never justify
 // skipping one. A newly reachable import fails rather than silently escaping
@@ -88,7 +119,7 @@ export function verifyMotionSourceConservation(saved, fresh, historicalSource, c
       // never opts in. The complete evidence equality above must still hold;
       // this exact source transition does not permit arbitrary reader changes.
       assert.equal(old.sha256, '77ea9fd39297f31e067f83b262f33a466b6b9a4b501071a178d993be170b731c');
-      let survey = actual;
+      let survey = restoreTypographyMotionOptIns(actual, 'survey');
       if (survey.includes('reviewedFontWeight = false')) {
         for (const [from, to] of [
           ["fontStyle: ['font'], fontWeight: ['font', 'fontvariationsettings'],", "fontStyle: ['font'],"],
@@ -105,7 +136,7 @@ export function verifyMotionSourceConservation(saved, fresh, historicalSource, c
       changes.push({ file: old.file, historicalSha256: old.sha256, currentSha256: current.sha256 });
     } else if (old.file === 'scripts/audit-material-owner-initial-motion.mjs' && current.sha256 !== old.sha256) {
       assert.equal(old.sha256, 'c0bc61f1cbc6b81b403d231e36efdaa1b8ceb79705df08b0c7f34da2c613b4b1');
-      assert.equal(current.sha256, '612d6fbcb4f92e67dd8c4ee80731348a7677db2dad50611bb42d012c2f70471a',
+      assert.equal(hash(restoreTypographyMotionOptIns(actual, 'motion')), '612d6fbcb4f92e67dd8c4ee80731348a7677db2dad50611bb42d012c2f70471a',
         'unreviewed motion appearance opt-in change');
       // Historical calls do not opt in; complete non-receipt equality above
       // remains mandatory, rather than inferring conservation from this hash.
