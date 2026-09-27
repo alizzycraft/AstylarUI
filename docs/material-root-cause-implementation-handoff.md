@@ -2,6 +2,45 @@
 
 ## Current audit checkpoint — September 27
 
+Accepted typography generation:
+`e25dab5fef84be5038dc83bff954f0681c3661c86bb0dd546dd118876d842760`.
+The complete-input cold export from 60df658 finished in **2,370.75 s**; exit 1
+reports **939 unresolved groups**, not an export/validation error. Coverage
+remains 436/436 static and 1,875/1,875 interaction cases. Session verification
+reported zero invalidated dependencies (1,205 files / 89,151,875 bytes checked).
+
+`node scripts/check-material-position-canonical-conservation.mjs --typography`
+passed: exactly **91 groups / 4,862 observations**, one scalar producer receipt
+and 48 control producer receipts changed; every raw input and unrelated control
+record is conserved. `material-audit-section-digests.mjs` authenticated both
+packages: **79 sections, 72 unchanged, none added/removed**. The seven changed
+sections are discrepancies, sourceFingerprints, summary, controlTypography,
+controlLineBoxes, ownerCaretInputs and reviewedSourceBatchInputs. Metadata
+replay verified **480 current LF-normalized source hashes** (two added, eight
+changed, no removals). Remaining metadata changes are the reviewed producer/
+motion source receipts and summary counts: authoring +23, harness -23,
+unresolved **1,030 → 939**. Evidence logs are
+`artifacts/material-parity/typography-{conservation,metadata}-60df658.log`
+and `artifacts/material-parity/typography-sections-60df658.json`.
+
+Compact import and `node scripts/audit-findings-store.mjs verify` passed:
+8,483 scalar groups / 389,202 observations, 134 source findings, 39,904 control
+records; compact shards total 70,933,071 bytes. Current index SHA-256:
+`230d42b303bfd104b444d5c7e42ad0f69ce79ba943adc5bc144cca89aded585f`.
+Decoded payload SHA-256:
+`db9b27d78de724ba1c7b36aaf7f64de7ea7f0e3965356c9b3afaceedfca11db4`.
+The standalone manifest is retained beside the indexed compressed payload;
+no decoded 2 GB file was created. All reconciliation jobs are complete.
+
+**Next:** integrate the prepared 49-group box-sizing review with independent
+production replay and exact producer-transition checks; do not repeat its
+completed source investigations. Then continue remaining property/state gaps.
+The 939 unresolved groups and final enforced browser gates still prevent audit
+completion. This checkpoint does not incorporate the separately prepared
+box-sizing classifications or claim input/rendering equivalence.
+
+### Earlier preparation notes (historical job statuses)
+
 - Prepared box-sizing proofs now run through existing `applyModalBoxReview`
   via `applyBoxSizingReviews`, without wiring a new production dependency into
   the live exporter. The focused join checks all **8,483 compact scalar records**:
