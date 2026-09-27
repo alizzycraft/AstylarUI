@@ -39,6 +39,20 @@ The 939 unresolved groups and final enforced browser gates still prevent audit
 completion. This checkpoint does not incorporate the separately prepared
 box-sizing classifications or claim input/rendering equivalence.
 
+September 28 integration progress: the existing box-sizing helper now validates
+submitted rows by rebuilding from the validated predecessor and original tree
+evidence, comparing every row after JSON persistence (undefined omission only).
+The focused join now uses the accepted typography generation above: the same
+49 groups / 2,657 observations are reviewed and 8,434 compact rows are untouched.
+Negative controls reject fabricated geometry/equivalence, missing observations,
+changed raw values/attributions, dropped/added rows and unrelated metadata edits.
+`node --test tests/material-parity/box-sizing-authoring-review.spec.mjs` passed
+4/4 in 28.07 seconds. This closes the submitted-receipt validation gap, not full
+canonical conservation. Production wiring must replay the existing modal/tab
+box-sizing precedence before this batch; do not feed the earlier unreviewed
+producer stage directly into it. Exact source-transition checks and canonical
+integration remain next. No renderer or fixture changes were made.
+
 ### Earlier preparation notes (historical job statuses)
 
 - Prepared box-sizing proofs now run through existing `applyModalBoxReview`

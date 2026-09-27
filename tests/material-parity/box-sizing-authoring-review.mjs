@@ -33,6 +33,20 @@ export function applyBoxSizingReviews(rows, cases, inventory, normalize) {
   });
 }
 
+// Rebuild from the validated predecessor, never from submitted classifications
+// or receipts. Compare all rows so additions, removals and unrelated edits fail.
+// Persistence may omit undefined keys; it must not manufacture CSS defaults.
+export function validateBoxSizingReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const persisted = value => JSON.parse(JSON.stringify(value));
+    const expected = applyBoxSizingReviews(originalRows, cases, inventory, normalize);
+    assert.deepEqual(persisted(rows), persisted(expected));
+    return [];
+  } catch (error) {
+    return [`box-sizing review evidence does not replay: ${error.message}`];
+  }
+}
+
 export const explicitBoxSizingTargets = Object.freeze({
   'bottom-sheet-overlay': ['bottom-sheet', '.modal-overlay', 25],
   'button-toggle-one': ['button-toggle', '.button-toggle-option', 68],
