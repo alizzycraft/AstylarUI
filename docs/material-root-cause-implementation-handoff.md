@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 27
 
+- Prepared tracking/line-height review now accounts for **all 91 previously
+  unresolved groups / 4,862 observations** in these two properties. The final
+  four groups / 292 observations reuse existing chip host/nested-label and
+  private tab-panel ownership proofs. Chip host tracking is a computed-versus-
+  local observation boundary, not a label-paint conclusion; tab typography is
+  owned by a childless private plugin renderer, not shared retained text.
+  Every receipt retains **false motion-target/settlement/equivalence flags**.
+  Explicit candidate ancestor typography requests are rejected. No motion
+  uncertainty was converted into a passing default-equivalence claim.
+  Existing full population/composition test passed **1/1, 59.39 s**; all raw
+  fields and **8,392 unrelated complete rows** are conserved, with no remaining
+  unresolved tracking/line-height row in the prepared result. This is not yet
+  canonical: accepted 462dddc7 remains at **1,030** unresolved across the full
+  audit. Next integrate this coherent batch with independent replay and exact
+  survey/motion source-receipt conservation before another expensive export.
+  Inspection confirms the existing motion-source-conservation checker uses
+  exact opt-in fragment restoration; extend that bounded transition rather
+  than refreshing historical hashes or weakening the complete-evidence check.
 - Existing motion/owner-target checks now accept tracking and line-height only
   through explicit opt-ins. All **392** remaining observations were checked:
   **four groups / 100 observations** (badge/progress tracking and progress-bar

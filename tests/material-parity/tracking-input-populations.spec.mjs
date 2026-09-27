@@ -20,6 +20,8 @@ import { inspectOwnerInitialStyle } from './owner-initial-style-survey.mjs';
 import { applyTypographyObservationStages, typographyObservationAttribution } from './tracking-input-review.mjs';
 import { inspectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
 import { inspectMotionDelayTargets } from '../../scripts/audit-material-motion-delay-targets.mjs';
+import { proveComponentTypographyBoundary, applyComponentTypographyBoundaries, chipTypographyBoundaryAttribution,
+  tabTypographyBoundaryAttribution } from './tracking-input-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
@@ -351,11 +353,27 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
   combined = applyRangeLineHeights(combined, cases, inventory, normalize);
   combined = applyOverlayTypography(combined, cases, inventory, normalize);
   combined = applyTypographyObservationStages(combined, cases, inventory, normalize);
+  combined = applyComponentTypographyBoundaries(combined, cases, inventory, normalize);
   const preparedAttributions = new Set([trackingLabelAttribution, trackingHostAttribution,
     zeroTrackingTokenAttribution, componentLineHeightAttribution, toggleLineHeightAttribution,
-    explicitHostLineHeightAttribution, rangeLineHeightAttribution, overlayTypographyAttribution, typographyObservationAttribution]);
+    explicitHostLineHeightAttribution, rangeLineHeightAttribution, overlayTypographyAttribution, typographyObservationAttribution,
+    chipTypographyBoundaryAttribution, tabTypographyBoundaryAttribution]);
   const batch = combined.filter(r => preparedAttributions.has(r.attribution));
-  assert.equal(batch.length, 87); assert.equal(batch.reduce((n, r) => n + r.occurrences, 0), 4570);
+  assert.equal(batch.length, 91); assert.equal(batch.reduce((n, r) => n + r.occurrences, 0), 4862);
+  assert.equal(combined.filter(r => r.attribution === 'unresolved' && ['letterSpacing', 'lineHeight'].includes(r.property)).length, 0);
+  const boundaryRows = batch.filter(r => [chipTypographyBoundaryAttribution, tabTypographyBoundaryAttribution].includes(r.attribution));
+  assert.equal(boundaryRows.length, 4);
+  for (const row of boundaryRows) {
+    for (const proof of row.reviewEvidence.observations) {
+      assert.equal(proof.motionTargetsVerified, false); assert.equal(proof.animationSettlementVerified, false);
+    }
+    const entry = cases.find(e => keyOf(e) === row.reviewedCases[0]);
+    const [r, a] = modalInventoryTrees(inventory, keyOf(entry));
+    const input = one(entry.styleInputs.filter(i => i.id === row.element));
+    const altered = structuredClone(a);
+    altered.rules.push({ selector: '#page', [row.property]: 'normal' });
+    assert.throws(() => proveComponentTypographyBoundary(entry, input, r, altered, inventory, row.property));
+  }
   assert.deepEqual(combined.map(rawRow), completeRows.map(rawRow));
   for (let i = 0; i < completeRows.length; i++) {
     if (!preparedAttributions.has(combined[i].attribution)) assert.deepEqual(combined[i], completeRows[i]);

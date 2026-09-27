@@ -5,12 +5,47 @@ import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-rev
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { inspectRangeFontReset } from '../../scripts/audit-material-range-font-reset.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
-import { proveOverlayNormal, proveDialogWrappingMotion } from './wrapping-input-review.mjs';
+import { proveOverlayNormal, proveDialogWrappingMotion, proveChipHostWrapping, proveTabPanelWrapping } from './wrapping-input-review.mjs';
 import { inspectOwnerInitialStyle } from './owner-initial-style-survey.mjs';
 import { inspectOwnerInitialMotion } from '../../scripts/audit-material-owner-initial-motion.mjs';
 import { inspectMotionDelayTargets } from '../../scripts/audit-material-motion-delay-targets.mjs';
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
+export const chipTypographyBoundaryAttribution = 'reviewed-chip-host-tracking-observation-stage';
+export const tabTypographyBoundaryAttribution = 'reviewed-private-tab-panel-typography-owner';
+export function proveComponentTypographyBoundary(entry, input, reference, candidate, inventory, property) {
+  const chip = entry.family === 'chips';
+  assert.ok(chip ? ['chip-0', 'chip-1'].includes(input.id) && property === 'letterSpacing'
+    : entry.family === 'tabs' && input.id === 'tab-panel' && ['letterSpacing', 'lineHeight'].includes(property));
+  const survey = inspectOwnerInitialStyle(input, property, reference, candidate,
+    { family: entry.family, reviewedGeneratedOwners: true, reviewedTracking: true, reviewedLineHeight: true });
+  assert.ok(survey.issues.length);
+  assert.ok(survey.issues.every(i => i.reason === 'motion-request-needs-review' && i.side === 'reference'));
+  const boundary = chip ? proveChipHostWrapping(entry, input, reference, candidate, inventory)
+    : proveTabPanelWrapping(entry, input, reference, candidate);
+  return { case: keyOf(entry), element: input.id, property, referenceNode: boundary.referenceNode,
+    astylarNode: boundary.astylarNode, survey, boundary,
+    candidateComputedVerified: false, motionTargetsVerified: false, animationSettlementVerified: false,
+    indirectEffectsExcluded: false, rendererCauseProven: false, inputEquivalent: false, renderingEquivalent: false };
+}
+export function applyComponentTypographyBoundaries(rows, cases, inventory, normalize) {
+  return rows.map(row => {
+    const chip = row.family === 'chips' && ['chip-0', 'chip-1'].includes(row.element) && row.property === 'letterSpacing';
+    const tab = row.family === 'tabs' && row.element === 'tab-panel' && ['letterSpacing', 'lineHeight'].includes(row.property);
+    if (row.attribution !== 'unresolved' || !chip && !tab) return row;
+    return applyModalBoxReview([row], cases.filter(e => row.states.includes(e.state ?? 'static')), inventory, normalize, {
+      family: row.family, element: row.element, properties: [row.property],
+      attribution: chip ? chipTypographyBoundaryAttribution : tabTypographyBoundaryAttribution,
+      classification: chip ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
+      owner: chip ? 'chip host versus nested label typography measurement' : 'private tab-panel text renderer ownership',
+      justification: chip
+        ? 'The computed native chip host and omitted candidate local tracking are different observation stages. Reuse the exact host/nested-label proof without attributing label paint to host normal. Duration-only motion declarations remain target/settlement uncertainty, not evidence of equal defaults, inactive motion or rendering equivalence.'
+        : 'The mapped native text owner is compared with a childless private tab-panel plugin leaf, with no shared retained text/control paint owner. Reuse the established competing-renderer ownership proof; omitted local typography is not candidate computed normal or proof of a shared core typography defect. Preserve motion target/settlement uncertainty and current raster as separate obligations.',
+      prove: (entry, reference, candidate) => proveComponentTypographyBoundary(entry,
+        one(entry.styleInputs.filter(i => i.id === row.element)), reference, candidate, inventory, row.property),
+    })[0];
+  });
+}
 export const typographyObservationAttribution = 'reviewed-captured-typography-observation-stage';
 export function applyTypographyObservationStages(rows, cases, inventory, normalize) {
   return rows.map(row => {
