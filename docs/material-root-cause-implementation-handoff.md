@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 27
 
+- The same box-sizing helper/spec now verifies the reverse declaration
+  population: **six groups / 290 observations** with explicit native border-box
+  requests and absent candidate local declarations. Exact selector, value,
+  importance and conditions are checked, together with complete native scalars,
+  three candidate stages, inline absence, accepted membership/counts and samples.
+  Snackbar's generated `mapped` identity and slider's private
+  `showcase.material:range-visual` owner remain explicit. Negative controls
+  reject a new candidate declaration and a changed native request.
+  `node --test tests/material-parity/box-sizing-authoring-review.spec.mjs`:
+  **2/2 passed, 7.10 s**, covering this population plus all 621 explicit
+  candidate observations. These 911 observations have reproducible declaration
+  provenance, not synthesized candidate computed styles or used-box equivalence.
+  Canonical integration still awaits the existing typography export; no exporter
+  dependency was changed and no renderer/fixture fix was made.
 - The 10 explicit candidate box-sizing groups now have an executable original-
   population proof in `tests/material-parity/box-sizing-authoring-review.mjs`
   and its focused spec. **621 observations** replay from authenticated original
