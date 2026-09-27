@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 27
 
+- The 10 explicit candidate box-sizing groups now have an executable original-
+  population proof in `tests/material-parity/box-sizing-authoring-review.mjs`
+  and its focused spec. **621 observations** replay from authenticated original
+  trees; exact accepted counts, states and first-12 samples are conserved.
+  The proof checks every native scalar against its tree, all three candidate
+  stages, exact matching authored border-box requests, absent native own
+  box-sizing/all requests and inline declarations, owner types, and both overlay
+  `mapped-with-scalar-rule-gap` identities. Negative controls reject an added
+  candidate override, changed normal stage and new native request. Command:
+  `node --test tests/material-parity/box-sizing-authoring-review.spec.mjs`:
+  **1/1 passed, 4.11 s**, including all population and negative assertions.
+  This is a focused declaration proof, not a production classification change;
+  no used geometry, deliberate compensation intent or core cause is inferred.
+  Keep the running export's dependencies frozen. Next reuse this helper in the
+  existing scalar review join only after typography export reconciliation.
 - Applicability check for the new omitted-sizing reproduction covers all **32
   unresolved content-box/omitted groups / 1,694 original observations**, joined
   by family, element, state and exact raw boxSizing values. Per-group occurrence
