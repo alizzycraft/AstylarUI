@@ -133,6 +133,43 @@ export function applyToggleTrackingHosts(rows, cases, inventory, retained, norma
   }), rows);
 }
 
+export const toggleLineHeightAttribution = 'reviewed-toggle-host-line-height-boundary';
+export function proveToggleLineHeightHost(entry, input, reference, candidate, retained) {
+  const host = proveToggleTrackingHost(entry, input, reference, candidate, retained);
+  assert.equal(input.reference.lineHeight, '20px');
+  for (const stage of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'])
+    assert.equal(input[stage].lineHeight, undefined);
+  const [nativeHost, button, leaf] = host.referenceLabelPath.map(key => one(reference.nodes.filter(n => n.key === key)));
+  const astLeaf = one(candidate.nodes.filter(n => n.key === host.candidateLabelPath[1]));
+  const comparison = one(retained.comparisons.filter(c => c.case === host.case && c.element === `${input.id}-label`));
+  assert.equal(reference.styles[button.style].lineHeight, '20px');
+  const height = reference.styles[leaf.style].lineHeight;
+  assert.ok(['24px', '40px'].includes(height));
+  assert.deepEqual(comparison.properties.lineHeight, { reference: height, normal: height, effective: height, retained: height });
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.equal(astLeaf[stage].lineHeight, height);
+  const requests = [nativeHost, button, leaf].map(node => ({ node: node.key,
+    rules: node.rules.map(index => reference.rules[index]).filter(rule => rule.active && rule.declarations['line-height'])
+      .map(rule => ({ selector: rule.selector, declaration: rule.declarations['line-height'] })) }));
+  assert.ok(requests[0].rules.some(r => r.declaration.value === 'var(--mat-button-toggle-label-text-line-height, var(--mat-sys-label-large-line-height))'));
+  assert.ok(requests[1].rules.length > 0); assert.ok(requests[1].rules.every(r => r.declaration.value === 'inherit'));
+  assert.ok(requests[2].rules.some(r => r.declaration.value === 'var(--mat-button-toggle-height, 40px)'));
+  return { case: host.case, element: input.id, referenceNode: host.referenceNode, astylarNode: host.astylarNode,
+    referenceLabelPath: host.referenceLabelPath, candidateLabelPath: host.candidateLabelPath,
+    referenceHostLineHeight: '20px', candidateHostLineHeight: '<omitted>', leafLineHeight: height,
+    requests, labelComparisonSha256: host.labelComparisonSha256,
+    candidateComputedVerified: false, currentPseudoStatePaintVerified: false,
+    rendererCauseProven: false, inputEquivalent: false, renderingEquivalent: false };
+}
+export function applyToggleLineHeights(rows, cases, inventory, retained, normalize) {
+  return ['button-toggle-one', 'button-toggle-two'].reduce((values, element) => applyModalBoxReview(values, cases, inventory, normalize, {
+    family: 'button-toggle', element, properties: ['lineHeight'], attribution: toggleLineHeightAttribution,
+    owner: 'showcase button-toggle host request and nested line-height ownership',
+    justification: 'The textless Material host computes its 20px line-height token while the replacement host omits it. Native nested label rules override the inherited button value with the 40px/24px control-height line box, matching candidate label declarations and retained values. Preserve the unequal host request without applying its 20px to labels, equating token authoring or claiming current glyph placement/rendering equivalence.',
+    prove: (entry, reference, candidate) => proveToggleLineHeightHost(entry,
+      one(entry.styleInputs.filter(i => i.id === element)), reference, candidate, retained),
+  }), rows);
+}
+
 const zeroTokens = {
   'toolbar-title': 'var(--mat-toolbar-title-text-tracking, var(--mat-sys-title-large-tracking))',
   'card-title': 'var(--mat-card-title-text-tracking, var(--mat-sys-title-large-tracking))',

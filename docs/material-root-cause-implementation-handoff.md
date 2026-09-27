@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 27
 
+- Button-toggle host line-height distinction is now proved across **136 original
+  observations**: native textless hosts and nested buttons compute 20px; label
+  rules override this with control-height tokens, producing 40px (102 observations)
+  or 24px (34). Candidate label normal/effective/retained values match those label
+  values, while candidate hosts omit the host request. Prepared two scalar host
+  classifications retain both rule sets, complete owner paths and label proof
+  hashes. They do not approve fixed authoring as token equivalence or infer glyph
+  placement. Copying host 20px onto the label is explicitly rejected by a negative
+  control. Reused the existing host/metric helper and full population test:
+  **1/1 passed, 27.28 s**, with raw/unrelated rows conserved. Together with the four
+  component labels this prepares six line-height groups / 408 observations;
+  canonical counts remain unchanged. Next prioritize toolbar/paginator host
+  tokens and spinner zero, then the 36 normal/omitted groups. Export PID 4632 is
+  still live; no producer dependencies changed.
 - Line-height scope refreshed from accepted baf0ccb8: **45 unresolved groups /
   2,345 observations**, not the historical 49 / 2,524. Signatures are normal /
   omitted (36 / 1,813), 20px / omitted (6 / 408), 28px / omitted (1 / 52), 16px /

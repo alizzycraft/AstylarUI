@@ -12,6 +12,7 @@ import { applyTrackingLabels, validateTrackingLabels, trackingLabelAttribution, 
 import { applyToggleTrackingHosts, proveToggleTrackingHost, trackingHostAttribution } from './tracking-input-review.mjs';
 import { proveZeroTrackingToken } from './tracking-input-review.mjs';
 import { applyComponentLineHeights, componentLineHeightAttribution } from './tracking-input-review.mjs';
+import { applyToggleLineHeights, proveToggleLineHeightHost, toggleLineHeightAttribution } from './tracking-input-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
@@ -128,6 +129,17 @@ test('all 46 tracking populations retain host, label, token and motion boundarie
   const toggle = selected.find(e => e.family === 'button-toggle');
   const toggleInput = one(toggle.styleInputs.filter(i => i.id === 'button-toggle-one'));
   const [tr, ta] = modalInventoryTrees(inventory, keyOf(toggle));
+  const lineHosts = applyToggleLineHeights(metricRows, cases, inventory, retained, normalize);
+  const lineChanges = lineHosts.filter(r => r.attribution === toggleLineHeightAttribution);
+  assert.equal(lineChanges.length, 2); assert.equal(lineChanges.reduce((sum, r) => sum + r.occurrences, 0), 136);
+  assert.deepEqual(lineHosts.map(rawRow), metricRows.map(rawRow));
+  for (let i = 0; i < metricRows.length; i++) if (!lineChanges.includes(lineHosts[i])) assert.deepEqual(lineHosts[i], metricRows[i]);
+  const lineObservations = lineChanges.flatMap(r => r.reviewEvidence.observations);
+  assert.equal(lineObservations.filter(o => o.leafLineHeight === '40px').length, 102);
+  assert.equal(lineObservations.filter(o => o.leafLineHeight === '24px').length, 34);
+  const changedLabel = structuredClone(ta);
+  changedLabel.nodes.find(n => n.authored?.id === 'button-toggle-one-label').normalResolvedStyle.lineHeight = '20px';
+  assert.throws(() => proveToggleLineHeightHost(toggle, toggleInput, tr, changedLabel, retained));
   for (const mutate of [r => { r.nodes.find(n => n.attributes?.id === toggleInput.id).ownText = 'List'; },
     r => { const label = retained.comparisons.find(c => c.case === keyOf(toggle) && c.element === `${toggleInput.id}-label`);
       r.styles[r.nodes.find(n => n.key === label.referenceNode).style].letterSpacing = '0.096px'; },
