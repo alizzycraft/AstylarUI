@@ -13,6 +13,7 @@ import { proveChipSpacingComposition, applyChipSpacingReviews, validateChipSpaci
 import { proveChoiceSpacingComposition, applyChoiceSpacingReviews, validateChoiceSpacingReviews } from './display-request-review.mjs';
 import { proveToolbarSpacingComposition, applyToolbarSpacingReviews, validateToolbarSpacingReviews } from './display-request-review.mjs';
 import { proveDialogActionSpacing, applyDialogActionSpacingReviews, validateDialogActionSpacingReviews } from './display-request-review.mjs';
+import { proveDialogPanelGap, applyDialogPanelGapReview, validateDialogPanelGapReview } from './display-request-review.mjs';
 
 test('dialog action spacing binds 416 observations to omitted Material requests', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -37,6 +38,26 @@ test('dialog action spacing binds 416 observations to omitted Material requests'
   const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-dialog-action-spacing-request-omission').reviewedCases.pop();
   assert.equal(validateDialogActionSpacingReviews(forged, rows, cases, inventory, normalize).length, 1);
   const key = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+  const gaps = applyDialogPanelGapReview(rows, cases, inventory, normalize);
+  const gapChanges = gaps.filter((r, i) => r !== rows[i]);
+  assert.equal(gapChanges.length, 2); assert.equal(gapChanges.reduce((n, r) => n + r.occurrences, 0), 64);
+  assert.ok(gapChanges.every(r => r.classification === 'parity-harness-defect' && r.astylar === undefined));
+  assert.deepEqual(gaps.map(raw), rows.map(raw));
+  gaps.forEach((r, i) => { if (!gapChanges.includes(r)) assert.deepEqual(r, rows[i]); });
+  assert.deepEqual(validateDialogPanelGapReview(gaps, rows, cases, inventory, normalize), []);
+  const forgedGap = structuredClone(gaps); forgedGap.find(r => r.attribution === 'reviewed-dialog-panel-gap-observation-stage').reviewedCases.pop();
+  assert.equal(validateDialogPanelGapReview(forgedGap, rows, cases, inventory, normalize).length, 1);
+  assert.throws(() => applyDialogPanelGapReview(rows, cases.filter(e => key(e) !== gapChanges[0].reviewedCases[0]), inventory, normalize));
+  const gapEntry = cases.find(e => key(e) === gapChanges[0].reviewedCases[0]);
+  const gapPair = modalInventoryTrees(inventory, key(gapEntry));
+  const gapProof = proveDialogPanelGap(gapEntry, ...gapPair);
+  for (const mutate of [
+    ([r]) => { r.rules.find(q => q.selector === '.mat-mdc-dialog-surface').cssText += ' gap: 5px;'; },
+    ([r]) => { const q = r.rules.find(q => q.selector === '.mat-mdc-dialog-surface'); q.cssText = q.cssText.replace('transition: transform ', 'transition: gap '); },
+    ([r]) => { r.rules.find(q => q.selector === '._mat-animation-noopable .mat-mdc-dialog-surface').active = false; },
+    ([, a]) => { a.rules.push({ selector: '.dialog-panel', rowGap: '4px' }); },
+    ([, a]) => { a.nodes.find(n => n.key === gapProof.astylarNode).interactionResolvedStyle.gap = '0'; },
+  ]) { const altered = structuredClone(gapPair); mutate(altered); assert.throws(() => proveDialogPanelGap(gapEntry, ...altered)); }
   assert.throws(() => applyDialogActionSpacingReviews(rows, cases.filter(e => key(e) !== changed[0].reviewedCases[0]), inventory, normalize));
   for (const row of changed) {
     const entry = cases.find(e => row.cases.includes(key(e)));

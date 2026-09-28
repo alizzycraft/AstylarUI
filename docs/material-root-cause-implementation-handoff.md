@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 29
 
+**Dialog panel gap ambiguity resolved; integration pending:** two groups / 64
+observations across all 32 panel cases retain browser-computed `normal` versus
+omitted candidate local gaps. The prior gap survey stopped at empty CSSOM
+transition longhands. Exact preserved CSS text names `transform` in the base
+transition, followed by an active `transition:none` rule. Neither directly
+requests gap motion. Reuses the original gap inspector and generated-owner
+mapping without editing their earlier limited conclusions or inventing a computed
+candidate zero/normal. Indirect transform effects and whole-panel rendering
+equivalence remain unproven. Shared modal review adds a separate, narrowly scoped
+observation-stage attribution; it is not yet wired into production.
+The existing dialog population test now checks these 64 observations alongside
+the 416 action-spacing observations, conserving raw/unrelated records. Missing
+cases, forged membership, added gaps, a changed transition target, inactive noop
+rule and modified candidate stages are rejected.
+`node --test --test-name-pattern="dialog action spacing binds" tests/material-parity/display-request-review.spec.mjs`
+passes **1/1**, 3,930.6722 ms total. No captures or renderer/fixture changes.
+Canonical remains **95 unresolved**, integrated batches project **31** until this
+proof is integrated. Next: bound-tail integration, remaining overlay/state/border
+questions, then coherent source/export reconciliation and final gates.
+
 **Dialog action spacing integrated; export pending:** the proof from `1a411ee`
 now participates in the bound production tail, replay validation and explicit
 unbound-attribution rejection. The actual tail changes 44 groups / 2,315

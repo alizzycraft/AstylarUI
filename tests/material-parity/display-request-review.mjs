@@ -7,6 +7,56 @@ import { proveChipPositionInspection } from './chip-position-inspection.mjs';
 import { proveChoiceLabelStacking } from './choice-label-stacking-substitution.mjs';
 import { proveRadioPositionSubstitution } from './radio-position-substitution.mjs';
 import { proveToolbarPositionInspection } from './toolbar-position-inspection.mjs';
+import { inspectOwnerGapInput } from './owner-gap-input-evidence.mjs';
+
+export function proveDialogPanelGap(entry, reference, candidate) {
+  assert.equal(entry.family, 'dialog');
+  assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);
+  const inputs = entry.styleInputs.filter(i => i.id === 'dialog-panel'); assert.equal(inputs.length, 1);
+  const proofs = ['rowGap', 'columnGap'].map(property => inspectOwnerGapInput(inputs[0], property, reference, candidate, { family: 'dialog' }));
+  for (const proof of proofs) {
+    assert.equal(proof.disposition, 'requires-specific-review');
+    assert.deepEqual(proof.issues, [{ reason: 'relevant-authored-request', side: 'reference' }]);
+    assert.equal(proof.generatedIdentity.status, 'mapped');
+    assert.equal(proof.referenceComputed, 'normal'); assert.equal(proof.candidateLocal, '<omitted>');
+    assert.deepEqual(proof.requests.astylar, []);
+    assert.deepEqual(proof.candidateStages, { resolvedStyle: {}, normalResolvedStyle: {}, interactionResolvedStyle: {} });
+    assert.deepEqual(proof.requests.reference, [
+      { source: '.mat-mdc-dialog-surface', declarations: Object.fromEntries(['property', 'duration', 'timing-function', 'delay', 'behavior'].map(k => ['transition-' + k, { value: '', important: false }])) },
+      { source: '._mat-animation-noopable .mat-mdc-dialog-surface', declarations: Object.fromEntries(Object.entries({ behavior: 'normal', duration: '0s', 'timing-function': 'ease', delay: '0s', property: 'none' }).map(([k, value]) => ['transition-' + k, { value, important: false }])) },
+    ]);
+  }
+  const r = reference.nodes.find(n => n.key === proofs[0].referenceNode);
+  const rules = r.rules.map(i => reference.rules[i]);
+  assert.ok(rules.every(q => q.active && q.conditions.length === 0));
+  const serialized = rules.flatMap(q => [...q.cssText.matchAll(/(?:^|;)\s*(transition(?:-[\w-]+)?|animation(?:-[\w-]+)?|(?:grid-)?(?:row-|column-)?gap|all)\s*:\s*([^;]*)(?=;|$)/gi)]
+    .map(([, key, value]) => ({ selector: q.selector, key, value: value.trim() })));
+  assert.deepEqual(serialized, [
+    { selector: '.mat-mdc-dialog-surface', key: 'transition', value: 'transform var(--mat-dialog-transition-duration, 0ms) cubic-bezier(0, 0, 0.2, 1)' },
+    { selector: '._mat-animation-noopable .mat-mdc-dialog-surface', key: 'transition', value: 'none' },
+  ]);
+  return { referenceNode: proofs[0].referenceNode, astylarNode: proofs[0].astylarNode, proofs, serialized,
+    firstDivergence: 'browser computed normal compared to omitted local gap; serialized transform transition resolves empty CSSOM evidence',
+    inputEquivalent: false, renderingEquivalent: null, candidateComputedGapProven: false, usedGapProven: false,
+    directGapMotionRequested: false, indirectMotionEffectsExcluded: false };
+}
+
+export function applyDialogPanelGapReview(rows, cases, inventory, normalize) {
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'dialog', element: 'dialog-panel', properties: ['rowGap', 'columnGap'], prove: proveDialogPanelGap,
+    attribution: 'reviewed-dialog-panel-gap-observation-stage', classification: 'parity-harness-defect',
+    owner: 'Material audit computed versus local gap observation and serialized transition evidence',
+    justification: 'Original full-tree mapping and all local stages preserve browser-computed normal versus omitted candidate gap fields. Empty transition longhands belong to a preserved transform-only shorthand followed by an active transition:none rule; neither requests gap motion. This closes the direct motion-request ambiguity without substituting candidate computed normal/zero, accepting whole-panel input equivalence, resolving indirect transform effects or proving used spacing/rendering equivalence.',
+  });
+}
+
+export function validateDialogPanelGapReview(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-dialog-panel-gap-observation-stage');
+    assert.deepEqual(select(rows), select(applyDialogPanelGapReview(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`dialog panel gap lacks original evidence: ${error.message}`]; }
+}
 
 export function proveDialogActionSpacing(entry, reference, candidate, element) {
   assert.equal(entry.family, 'dialog');
