@@ -32,14 +32,20 @@ test('focused interaction capture retains actual boxes and binds target inputs t
     assert.equal(hash(readFileSync(`artifacts/material-parity/tooltip-keyboard-build-813f658/browser/${item.file}`)), item.sha256);
   assert.equal(report.interactions.length, 20);
   let measured = 0, absentDialogActions = 0;
+  const imageReceipts = [], cornerObservations = [];
   for (const entry of report.interactions) {
     assert.deepEqual(entry.runtimeErrors, []);
     const previous = original.interactions.find(e => e.family === entry.family && e.profile === entry.profile &&
       e.viewport.id === entry.viewport.id && e.state === entry.state);
     assert.ok(previous);
+    const images = {};
     for (const side of ['reference', 'astylar']) {
       const tree = entry.inputTrees[side];
       assert.equal(hash(readFileSync(tree.file)), tree.sha256);
+      const file = tree.file.replace(`${side}-input-tree.json`, `${side}.png`);
+      const bytes = readFileSync(file);
+      imageReceipts.push([file, hash(bytes)]);
+      images[side] = PNG.sync.read(bytes);
     }
     const targets = { badge: ['badge-count'], card: ['card-open'], toolbar: ['toolbar-action'],
       dialog: ['dialog-cancel', 'dialog-save'] }[entry.family];
@@ -59,10 +65,50 @@ test('focused interaction capture retains actual boxes and binds target inputs t
       const deltaY = box.actual.top - box.expected.top;
       if (entry.family === 'dialog') assert.ok(Math.abs(deltaY + 1) < 1e-6);
       else assert.ok(Math.abs(deltaY) < 0.014);
+      const edges = {};
+      for (const side of ['reference', 'astylar']) {
+        const png = images[side], b = box[side === 'reference' ? 'expected' : 'actual'];
+        const dpr = entry.viewport.deviceScaleFactor;
+        const pixel = (x, y) => {
+          const px = Math.floor(x * dpr), py = Math.floor(y * dpr);
+          assert.ok(px >= 0 && px < png.width && py >= 0 && py < png.height);
+          const offset = (py * png.width + px) * 4;
+          return [...png.data.slice(offset, offset + 3)];
+        };
+        const fill = pixel(b.left + b.width / 2, b.top + 2), background = pixel(b.left + 0.5, b.top + 0.5);
+        const vector = fill.map((v, i) => v - background[i]);
+        const energy = vector.reduce((sum, v) => sum + v * v, 0);
+        if (!energy) { edges[side] = null; continue; }
+        assert.ok(energy > 100);
+        // Badge lower-left samples overlap label paint; retain only its upper corners.
+        edges[side] = (entry.family === 'badge' ? [0, 1] : [0, 1, 2, 3]).flatMap(corner =>
+          [1, 2, 3].map(y => {
+            for (let x = 0; x < b.height / 2; x++) {
+              const color = pixel(corner % 2 ? b.right - x - 0.5 : b.left + x + 0.5,
+                corner >= 2 ? b.bottom - y - 0.5 : b.top + y + 0.5);
+              if (color.reduce((sum, v, i) => sum + (v - background[i]) * vector[i], 0) / energy > 0.5) return x;
+            }
+            assert.fail('visible interaction edge missing');
+          }));
+      }
+      cornerObservations.push({ id, profile: entry.profile, dpr: entry.viewport.deviceScaleFactor,
+        maximumSampleDelta: edges.reference && edges.astylar ?
+          Math.max(...edges.reference.map((v, i) => Math.abs(v - edges.astylar[i]))) : null });
     }
   }
   assert.equal(measured, 20);
   assert.equal(absentDialogActions, 8);
+  assert.equal(hash(JSON.stringify(imageReceipts)), 'e57b3cb5f00cd134c0d9d68bb525f2e657aa73b1ace6dbfb2e8a9df9fff30364');
+  assert.equal(cornerObservations.filter(e => e.maximumSampleDelta === null).length, 4);
+  assert.ok(cornerObservations.filter(e => e.maximumSampleDelta === null).every(e => e.id === 'dialog-cancel'));
+  // Preserve observed discrepancies; these assertions are not a parity tolerance.
+  assert.deepEqual(cornerObservations.filter(e => e.maximumSampleDelta > 1), [
+    { id: 'toolbar-action', profile: 'contrast', dpr: 1, maximumSampleDelta: 2 },
+    { id: 'card-open', profile: 'contrast', dpr: 1, maximumSampleDelta: 3 },
+    { id: 'card-open', profile: 'contrast', dpr: 2, maximumSampleDelta: 3 },
+    { id: 'dialog-save', profile: 'light', dpr: 1, maximumSampleDelta: 2 },
+    { id: 'dialog-save', profile: 'contrast', dpr: 1, maximumSampleDelta: 2 },
+  ]);
   const producer = readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8');
   assert.ok(producer.includes('geometry: compareGeometry(referenceMeasurement.elements, astylarMeasurement.elements)'));
 });

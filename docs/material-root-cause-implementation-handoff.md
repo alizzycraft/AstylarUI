@@ -30,10 +30,28 @@ removing only CSSOM sheetIndex/rulePath locations from ordered authored rules.
 Focused `focused interaction capture` test in `authored-anchor-review.spec.mjs`
 passes 1/1, authenticating report/tree hashes and all frozen browser asset bytes.
 
-Next use these measured boxes with the new retained corner rasters. Remaining
-profiles/states are not covered by this sample. Runner/spec fingerprint changes
-must join pending export reconciliation. Canonical unresolved count stays 180;
-the 10-group stacking batch is still pending. No renderer or fixture fix.
+**Corner raster followup completed for this cohort:** the same focused test now
+authenticates all 40 PNGs and samples color-normalized edges relative to each
+side's measured box. Sixteen controls have paired visible fill edges; four
+dialog Cancel controls lack candidate contrast and cannot establish shape.
+Badge uses only upper corners because neighboring label paint contaminates its
+lower-left region. Other observable controls use all four corners.
+
+Five maximum sample deltas exceed 1 CSS px: contrast card 3px at DPR1 and DPR2;
+contrast toolbar 2px at DPR1; light/contrast dialog Save 2px at DPR1. Eleven other
+paired controls have deltas at most 1px. These are recorded observations, not
+new acceptance tolerances. The card case is consistent with the established
+12-vs-9 CSS-radius mismatch. The toolbar/Save residual is not yet attributable
+between tessellation, raster phase and other paint behavior. Box-relative
+sampling separates it from the dialog's 1px whole-control vertical offset.
+Focused test passes 1/1 in 6.69s while explicitly retaining those discrepancies.
+
+Do not repeat this cohort's capture or corner scan. Next investigate the
+toolbar/Save residual at the paint boundary using the existing radius kernel
+proof, and integrate only classifications justified by the supported population.
+Remaining profiles/states are not covered by this sample. Runner/spec fingerprint
+changes must join pending export reconciliation. Canonical unresolved count
+stays 180; the 10-group stacking batch is still pending. No renderer/fixture fix.
 
 **Static badge/action corner evidence bounded without recapture.** The focused
 `retained static badge` test in `authored-anchor-review.spec.mjs` authenticates
