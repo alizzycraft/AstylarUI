@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 28
 
+Table border reset now has full-state proof: 52 captured cases / eight groups /
+208 color observations. The native `.mat-mdc-table` explicitly requests
+`border: 0px` (four none styles/currentcolor colors plus border-image reset),
+whereas candidate `.material-table` authors only `borderWidth: 0`. Exact captured
+requests and all three local candidate stages establish an authoring mismatch,
+not a visible paint defect or a reason to copy computed theme colors. Existing
+custom-owner proof/test infrastructure now covers 32 groups / 880 observations;
+focused test passes (1/1, 4.97 s overall), retaining raw/unrelated rows and
+rejecting altered reset color or removed candidate width in addition to the
+existing declaration/type mutations. No producer integration yet.
+Export session 91866 progressed to validate-audit at elapsed 906.14 s; it remains
+live. Do not restart. Full export/source/section reconciliation is still pending.
+
 Prepared custom-host border review closes the omission question for 24 groups /
 672 observations: icon-primary 80, slider-visual 312, tab-panel 280. Exact native
 and candidate types, scalar/tree identity, all three candidate stages, complete

@@ -6,6 +6,7 @@ const owners = {
   icon: ['icon-primary', 'mat-icon', 'img'],
   slider: ['slider-visual', 'mat-slider', 'showcase.material:range-visual'],
   tabs: ['tab-panel', 'span', 'showcase.material:tab-panel'],
+  table: ['table-primary', 'table', 'table'],
 };
 const relevant = k => /^(border|all$|animation|transition)/.test(k.replaceAll('-', '').toLowerCase());
 const sides = ['Top', 'Right', 'Bottom', 'Left'];
@@ -30,12 +31,28 @@ export function proveCustomOwnerBorder(entry, reference, candidate, normalize) {
     assert.deepEqual(input[scalar], a[stage]);
   assert.ok(!Object.keys(r.inline).some(relevant));
   const nativeRules = r.rules.map(i => reference.rules[i]);
-  assert.ok(nativeRules.every(rule => !Object.keys(rule.declarations).some(relevant)));
+  if (entry.family === 'table') {
+    const resets = nativeRules.filter(rule => Object.keys(rule.declarations).some(relevant));
+    assert.equal(resets.length, 1);
+    const reset = resets[0];
+    assert.equal(reset.selector, '.mat-mdc-table'); assert.equal(reset.active, true);
+    assert.deepEqual(reset.conditions, []);
+    assert.match(reset.cssText, /(?:^|;)\s*border: 0px;/);
+    const expected = {};
+    for (const side of ['top', 'right', 'bottom', 'left']) for (const [property, value] of [['width', '0px'], ['style', 'none'], ['color', 'currentcolor']])
+      expected[`border-${side}-${property}`] = { value, important: false };
+    for (const [property, value] of [['source', 'none'], ['slice', '100%'], ['width', '1'], ['outset', '0'], ['repeat', 'stretch']])
+      expected[`border-image-${property}`] = { value, important: false };
+    assert.deepEqual(Object.fromEntries(Object.entries(reset.declarations).filter(([k]) => relevant(k))), expected);
+  } else assert.ok(nativeRules.every(rule => !Object.keys(rule.declarations).some(relevant)));
   assert.equal(a.authored.attributes?.style, undefined);
   assert.ok(!Object.keys(a.authored.style ?? {}).some(relevant));
   assert.ok(candidate.rules.every(rule => Object.values(rule).every(v => v === null || typeof v !== 'object')));
   const ownRules = candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, a.authored));
-  assert.ok(ownRules.every(rule => !Object.keys(rule).some(relevant)));
+  const candidateRequests = ownRules.flatMap(rule => Object.entries(rule).filter(([k]) => relevant(k))
+    .map(([property, value]) => ({ selector: rule.selector, property, value })));
+  assert.deepEqual(candidateRequests, entry.family === 'table'
+    ? [{ selector: '.material-table', property: 'borderWidth', value: '0' }] : []);
   const native = normalize(input.reference);
   assert.match(native.color, /^rgba\(\d+,\d+,\d+,1\)$/);
   for (const side of sides) {
@@ -49,7 +66,7 @@ export function proveCustomOwnerBorder(entry, reference, candidate, normalize) {
     for (const side of sides) assert.equal(normalized[`border${side}Color`], 'rgba(0,0,0,0)');
   }
   return { referenceNode: r.key, astylarNode: a.key, nativeType, candidateType,
-    nativeRules, candidateRules: ownRules, referenceColor: native.color,
+    nativeRules, candidateRules: ownRules, candidateRequests, referenceColor: native.color,
     inputEquivalent: false, renderingEquivalent: false, generatedChildPaintVerified: false,
     scope: 'Captured host-only initial border color; zero/none borders do not establish contextual-color paint equivalence.' };
 }
@@ -57,10 +74,13 @@ export function proveCustomOwnerBorder(entry, reference, candidate, normalize) {
 export function applyCustomOwnerBorderReviews(rows, cases, inventory, normalize) {
   for (const [family, [element]] of Object.entries(owners)) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
     family, element, properties: sides.map(s => `border${s}Color`),
-    classification: 'intentional-documented-limitation', attribution: 'reviewed-custom-host-border-initial-divergence',
+    classification: family === 'table' ? 'application-plugin-authoring-defect' : 'intentional-documented-limitation',
+    attribution: family === 'table' ? 'reviewed-table-border-reset-omission' : 'reviewed-custom-host-border-initial-divergence',
     owner: 'core border initial-color contract and measured host identity',
     prove: (e, r, a) => proveCustomOwnerBorder(e, r, a, normalize),
-    justification: 'Authenticated native/custom host pairs omit authored border and motion requests locally. Native zero/none borders compute their color from currentcolor; all three candidate host stages expose transparent initial borders. This extends the existing initial-color limitation to explicit host pairs, not generated icon/plugin children. Structure, inherited ink, future visible borders and final raster remain separate; no compensation or rendering equivalence is approved.',
+    justification: family === 'table'
+      ? 'The native table explicitly requests border: 0px, including none styles and currentcolor colors; the candidate authors only borderWidth: 0. All three candidate stages retain transparent defaults. This is an unequal reset request at authoring, despite both captured hosts having invisible zero/none borders. Do not copy computed theme colors as compensation. Table cells, collapsed-border behavior, inherited ink and final raster remain separate.'
+      : 'Authenticated native/custom host pairs omit authored border and motion requests locally. Native zero/none borders compute their color from currentcolor; all three candidate host stages expose transparent initial borders. This extends the existing initial-color limitation to explicit host pairs, not generated icon/plugin children. Structure, inherited ink, future visible borders and final raster remain separate; no compensation or rendering equivalence is approved.',
   });
   return rows;
 }
