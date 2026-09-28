@@ -12,6 +12,7 @@ import { applySliderPointerRequestReview, proveSliderPointerRequest, collectSlid
 import { applyOmittedPointerBoundaryReviews, proveOmittedPointerBoundary } from './component-pointer-events-review.mjs';
 import { applyOverlayPointerPolicyReviews, proveOverlayPointerPolicy } from './component-pointer-events-review.mjs';
 import { applyTabPointerBoundaryReviews, proveTabPointerBoundary } from './component-pointer-events-review.mjs';
+import { applyComponentPointerReviews, validateComponentPointerReviews, isComponentPointerReviewRow } from './component-pointer-events-review.mjs';
 
 test('pointer reviews distinguish sheet ownership, badge requests and disabled ancestor suppression', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -163,4 +164,19 @@ test('pointer reviews distinguish sheet ownership, badge requests and disabled a
   const population = [changed, badges, changedDisabled, changedSlider, changedOmitted, changedOverlays, changedTabs].flat();
   assert.equal(population.length, 23); assert.equal(population.reduce((n, r) => n + r.occurrences, 0), 824);
   assert.equal(new Set(population.map(r => `${r.family}/${r.element}/${r.property}`)).size, 23);
+  const currentRows = ['badge', 'button', 'checkbox', 'radio', 'slider', 'chips', 'tabs', 'dialog', 'bottom-sheet', 'tooltip']
+    .flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+      generation: '7ffd3a4832d90e185be9d234b3d022f276db113767a6fcb0c3c965c51c14d592',
+      indexSha256: 'b37363024107a9aeca949a701837764fdfe96e17b0aedca1549e187573dc8df4',
+    }).filter(r => r.evidence.section === 'discrepancies'));
+  const fullReview = applyComponentPointerReviews(currentRows, cases, inventory, normalize);
+  assert.equal(fullReview.filter(isComponentPointerReviewRow).length, 23);
+  fullReview.forEach((r, i) => assert.deepEqual(raw(r), raw(currentRows[i])));
+  const persisted = JSON.parse(JSON.stringify(fullReview));
+  assert.deepEqual(validateComponentPointerReviews(persisted, currentRows, cases, inventory, normalize), []);
+  const at = persisted.findIndex(isComponentPointerReviewRow);
+  const dropped = persisted.filter((r, i) => i !== at);
+  assert.equal(validateComponentPointerReviews(dropped, currentRows, cases, inventory, normalize).length, 1);
+  persisted[at].reviewEvidence.observations[0].renderingEquivalent = true;
+  assert.equal(validateComponentPointerReviews(persisted, currentRows, cases, inventory, normalize).length, 1);
 });

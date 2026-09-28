@@ -10,6 +10,30 @@ import { createHash } from 'node:crypto';
 import { proveChipPositionInspection } from './chip-position-inspection.mjs';
 import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
 
+const pointerAttributions = new Set([
+  'reviewed-sheet-pointer-measurement-owner', 'reviewed-badge-pointer-request-omission',
+  'reviewed-disabled-pointer-request-omission', 'reviewed-slider-held-pointer-request-omission',
+  'reviewed-pointer-computed-local-boundary', 'reviewed-overlay-pointer-policy-substitution',
+  'reviewed-tab-pointer-owner-stage-boundary',
+]);
+export const isComponentPointerReviewRow = row => row.property === 'pointerEvents' && pointerAttributions.has(row.attribution);
+
+export function applyComponentPointerReviews(rows, cases, inventory, normalize) {
+  return [applySheetPointerOwnerReview, applyBadgePointerRequestReview, applyDisabledPointerRequestReviews,
+    applySliderPointerRequestReview, applyOmittedPointerBoundaryReviews, applyOverlayPointerPolicyReviews,
+    applyTabPointerBoundaryReviews].reduce((result, apply) => apply(result, cases, inventory, normalize), rows);
+}
+
+// Replay from original observations, never from already classified report rows.
+export function validateComponentPointerReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const expected = applyComponentPointerReviews(originalRows, cases, inventory, normalize).filter(isComponentPointerReviewRow);
+    assert.ok(JSON.stringify(rows.filter(isComponentPointerReviewRow)) === JSON.stringify(expected),
+      'pointer reviews differ from original-source replay');
+    return [];
+  } catch (error) { return [`component pointer evidence does not replay: ${error.message}`]; }
+}
+
 export function proveTabPointerBoundary(entry, reference, candidate, element) {
   assert.equal(entry.family, 'tabs');
   const composition = proveTabControlStage(reference, candidate, element);

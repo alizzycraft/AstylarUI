@@ -165,8 +165,16 @@ resolved none. No candidate computed default, actual picked mesh, event delivery
 modal scope/dismissal cause, swapped-drag cause or rendering equivalence is
 claimed by these scalar reviews.
 
-Next: replay/validate this coherent pointer batch with the prepared cursor batch,
-then integrate through the existing producer and conservation gates. These
+Combined replay validation now passes: **42 groups / 1,587 observations** (19
+cursor, 23 pointer). The pointer validator rebuilds expectations from original
+cases/inventory rather than trusting proposed classifications; JSON-persisted
+reviews pass, while a dropped finding or forged rendering-equivalence claim is
+rejected. The composed batch preserves raw values and unrelated rows.
+Command: `node --test tests/material-parity/component-pointer-events-review.spec.mjs tests/material-parity/component-cursor-request-review.spec.mjs`;
+**2/2 passed in 43.89 s**. This is a focused replay, not canonical acceptance.
+
+Next: integrate the coherent cursor/pointer batch through the existing producer
+and conservation gates, including complete predecessor source restoration. These
 prepared classifications are **not yet included** in the accepted 679 count.
 Caret and the remaining positioning/typography/border populations stay open.
 No renderer/fixture changes or new browser captures were made.
