@@ -40,8 +40,19 @@ caused the scalar caret difference or that computed caret/rendering is equivalen
 missing-row/false-equivalence rejection and candidate-request negative controls.
 No fresh-motion capture is treated as historical/current proof: this review uses
 the original 362 observation boundaries directly. Not yet wired into the producer.
-The remaining 13 caret groups / 378 observations need overlay/root-context review.
-Keep all these groups distinct from editable-input caret bugs.
+Prepared overlay-caret review covers the remaining 13 groups / 378 observations:
+seven dialog/tooltip groups (210) have unequal captured motion requests; six
+sheet/snackbar groups (168) have computed-versus-local observation boundaries.
+The two wrapper groups retain all 59 scalar/tree z-index rule-gap observations.
+Existing alias checks authenticate original owners, 89 scalar properties and
+candidate stages; original paths, raw inline declarations and unknown external
+inheritance remain explicit. No fresh external-context evidence is retroactively
+treated as historical truth. Both tests in `component-motion-caret-review.spec.mjs`
+pass (15.82 s), preserving raw rows and rejecting candidate caret injections.
+All 27 caret groups / 896 observations now have prepared reviews, not accepted
+canonical classifications. Next add exact combined replay validation using these
+existing apply functions, then integrate a coherent batch after the running
+cursor/pointer export is reconciled. Keep these distinct from editable-input bugs.
 
 Cursor/pointer integration guard is ready: the existing canonical conservation
 checker now supports `--component-interaction`, pinned to the accepted color

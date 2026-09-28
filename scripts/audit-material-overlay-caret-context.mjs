@@ -10,6 +10,59 @@ import { rootInitialSelectorCanApply } from '../tests/material-parity/root-initi
 import { collectTooltipCaretContext } from './audit-material-tooltip-caret-context.mjs';
 import { collectOriginalOverlayContextSurvey } from '../tests/material-parity/original-overlay-context-survey.mjs';
 import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { applyModalBoxReview } from '../tests/material-parity/modal-position-inspection.mjs';
+
+const caretOwners = {
+  'bottom-sheet': ['bottom-sheet-copy', 'bottom-sheet-dismiss', 'bottom-sheet-overlay', 'bottom-sheet-panel'],
+  dialog: ['dialog-actions', 'dialog-cancel', 'dialog-copy', 'dialog-panel', 'dialog-save', 'dialog-title'],
+  'snack-bar': ['snack-bar-overlay', 'snack-bar-surface'], tooltip: ['tooltip-popup'],
+};
+export function proveOverlayCaretBoundary(entry, reference, candidate, element) {
+  assert.ok(caretOwners[entry.family]?.includes(element));
+  const inputs = entry.styleInputs.filter(i => i.id === element); assert.equal(inputs.length, 1);
+  const identity = resolveOriginAliasPair(entry, reference, candidate, inputs[0]);
+  const trace = inspectOverlayCaretRequests(identity, reference, candidate);
+  assert.equal(trace.hasDirectCaretOrResetRequest, false);
+  assert.deepEqual(trace.requests.filter(r => r.side === 'astylar'), []);
+  assert.deepEqual(trace.editableOwners, []);
+  for (const a of trace.rawStyleAttributes) {
+    assert.equal(a.side, 'reference'); assert.equal(typeof a.raw, 'string');
+    for (const declaration of a.raw.split(';').filter(d => d.trim())) {
+      const property = declaration.slice(0, declaration.indexOf(':')).trim();
+      assert.match(property, /^[a-z-]+$/); assert.equal(relevant(property), false);
+    }
+  }
+  const motion = ['dialog', 'tooltip'].includes(entry.family);
+  assert.equal(trace.hasMotionRequest, motion);
+  for (const request of trace.requests)
+    assert.ok(Object.keys(request.declarations).every(k => /^(animation|transition)/.test(k)));
+  const wrapper = element === 'bottom-sheet-overlay' || element === 'snack-bar-overlay';
+  assert.equal(trace.scalarRuleGap, wrapper);
+  assert.deepEqual(trace.ruleGapEvidence, wrapper ? {
+    missing: [{ selector: '.cdk-global-overlay-wrapper', declarations: { 'z-index': { value: '1000', important: false } } }], extra: [],
+  } : { missing: [], extra: [] });
+  assert.ok(trace.candidatePath.every(n => n.syntheticRoot || Object.values(n.localValues).every(s => s.caretColor === '<omitted>')));
+  return { referenceNode: identity.referenceNode, astylarNode: identity.candidateNode, identity, trace,
+    inputEquivalent: false, renderingEquivalent: false, caretEffectProven: false,
+    historicalExternalInheritanceVerified: false, candidateComputedCaretVerified: false,
+    limitation: 'Captured owner paths only. External document inheritance and resolved motion effects remain unknown. The z-index rule gap is retained, not interpreted as caret equivalence or a renderer cause.' };
+}
+export function applyOverlayCaretReviews(rows, cases, inventory, normalize) {
+  for (const [family, elements] of Object.entries(caretOwners)) for (const element of elements) {
+    const motion = ['dialog', 'tooltip'].includes(family);
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+      family, element, properties: ['caretColor'],
+      attribution: motion ? 'reviewed-overlay-motion-caret-request-omission' : 'reviewed-overlay-caret-local-observation-boundary',
+      classification: motion ? 'application-plugin-authoring-defect' : 'parity-harness-defect',
+      owner: 'overlay motion authoring and computed-versus-local caret measurement boundary',
+      justification: motion
+        ? 'Original mapped overlay ancestry contains motion declarations missing from candidate authoring and local stages. Variable-based transitions and competing animations remain intact; their effect on caret color is not inferred. Native computed caret and omitted candidate local caret are not comparable computed values. External inheritance and rendered caret correctness remain unproven.'
+        : 'Exact original mapped overlay paths contain no captured caret/reset/motion requests, but the audit compares native computed caret with omitted candidate local declarations. The wrapper z-index scalar/tree rule gap, where present, remains explicit. This classifies the measurement boundary, not equal authoring, external inheritance, computed caret or rendering.',
+      prove: (entry, reference, candidate) => proveOverlayCaretBoundary(entry, reference, candidate, element),
+    });
+  }
+  return rows;
+}
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const normalize = key => key.replaceAll('-', '').toLowerCase();
