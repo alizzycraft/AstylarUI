@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 28
 
+**Shadow batch producer-integrated:** both reducers and validators now run only
+with bound original evidence; an explicit guard rejects unbound shadow
+attributions. The existing combined-tail test executes the actual producer
+fragment against two authenticated baselines: exactly 40 groups / 2,296
+observations change against 0a30, and 20 / 1,169 against current 8fbd. Raw
+observations and unrelated rows are conserved. Reverse-order replay, all
+individual validators and the unbound execution control pass. Focused
+`omitted owner paint` test passes 1/1 (15.13s body). Exact historical producer
+restoration still authenticates `a986934f...`; new producer SHA256 is
+`7f88bd78cc0a82e69ec234b52986c4f098488e2b7e7e06668a6e342983ce28d1`.
+No full export was run for this bounded classification batch. Canonical/index
+still reports 130 unresolved; expected 110 after source-receipt reconciliation
+and the next export. All previously unresolved box-shadow groups now have scoped
+producer classifications, not full paint-parity acceptance. Continue remaining
+appearance and spacing ownership; preserve the pending receipt reconciliation
+for changed review code/tests and additive core tests at the milestone.
+
 **Eight shadow groups prepared from original owners:** new reducers in the
 existing paint review classify 7 focus groups / 265 observations as an
 outline-to-shadow authoring substitution, and 1 card group / 52 observations as
