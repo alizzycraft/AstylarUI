@@ -2,6 +2,39 @@
 
 ## Current audit checkpoint — September 28
 
+**Stacking production integration wired and narrowly verified, not exported.**
+The main builder applies the 10-group/608-observation batch after prepared
+followups only when `ownerInitialStyleBinding` is bound. Validation independently
+replays it and rejects stacking attributions without that binding. Added source
+fingerprints cover the stacking proof/spec, overlay reduction, tooltip spec and
+three new supplemental capture producers. This registers source dependencies;
+it does not promote supplemental browser samples to full canonical coverage.
+
+The existing checkbox/radio structural proof is reused for the three applicable
+owners, preserving their associated-label versus custom-layer distinction.
+`restoreStackingProducer` removes only the reviewed integration/fingerprint
+fragments and reconstructs the exact accepted producer LF SHA
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+previous producer-transition checks chain through it without weakened hashes.
+
+Verification: `node --test tests/material-parity/stacking-input-review.spec.mjs`
+passes 1/1 in 11.55s. It exercises the actual production tail on retained inputs,
+bound/unbound behavior, all 608 observations, unchanged compact raw fields,
+independent validator replay and mutation rejection. It does not run the entire
+main builder or prove full-payload export conservation. Historical
+`node --test --test-name-pattern="preparedFollowup"
+tests/material-parity/position-canonical-conservation.spec.mjs` passes 1/1 in
+1.51s. Syntax and scoped diff checks pass. Accepted canonical remains 180;
+prepared stacking result is 170, not accepted yet.
+
+Next consolidate remaining shared box/paint attribution before paying for the
+next full export (last export took about 49 minutes). Forty unresolved corner
+groups are the largest coherent next population. Preserve the pending stacking
+batch and supplemental/source reconciliation; full-payload conservation, cold
+milestone replay, complete state/history coverage and final browser gates are
+still required. Do not rerun the same short-surface captures or export merely
+for a metadata checkpoint.
+
 **Complete remaining z-index batch prepared: 10 groups /608 observations.**
 Six owner-addition groups (376 observations: card surface/action, checkbox label,
 two radio labels, slide-toggle label) compare native auto with candidate explicit

@@ -6,7 +6,8 @@ import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
-import { stackingOwners, proveStackingOwner, applyStackingOwnerReviews, applyStackingReviews } from './stacking-input-review.mjs';
+import { restoreStackingProducer } from './position-composition-producer-transition.mjs';
+import { stackingOwners, proveStackingOwner, applyStackingOwnerReviews, applyStackingReviews, validateStackingReviews } from './stacking-input-review.mjs';
 
 test('nine stacking groups preserve added versus omitted owner requests across 590 observations', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -42,4 +43,25 @@ test('nine stacking groups preserve added versus omitted owner requests across 5
   assert.equal(allChanged.length, 10); assert.equal(allChanged.reduce((n, r) => n + r.occurrences, 0), 608);
   combined.forEach((r, i) => assert.deepEqual(raw(r), raw(rows[i])));
   assert.equal(allChanged.find(r => r.family === 'tooltip').reviewEvidence.observations.length, 18);
+  assert.deepEqual(validateStackingReviews(combined, rows, cases, inventory, normalize), []);
+  for (const mutate of [r => { r.reviewEvidence.renderingEquivalent = true; }, r => { r.reviewedCases.pop(); },
+    r => { r.reference = 'forged'; }, r => { r.reviewEvidence.observations[0].rendererCauseProven = true; }]) {
+    const copy = structuredClone(combined); mutate(copy.find(r => r.attribution === 'reviewed-stacking-owner-request-addition'));
+    assert.ok(validateStackingReviews(copy, rows, cases, inventory, normalize).length);
+  }
+  // Exercise the actual new production tail, not a second handwritten pipeline.
+  // Existing preceding stages already produced the accepted input rows here.
+  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const transition = restoreStackingProducer(source);
+  assert.equal(transition.previousModuleSha256, 'a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393');
+  assert.throws(() => restoreStackingProducer(source + '\n// unreviewed producer change'));
+  const start = source.indexOf('  const beforeStackingReviews ='), end = source.indexOf('  const classifications =', start);
+  assert.ok(start > 0 && end > start);
+  const tail = new Function('ownerInitialStyleBinding', 'beforePreparedInputFollowups', 'cases', 'elementInventory', 'canonicalStyle',
+    'applyPreparedInputFollowups', 'applyStackingReviews', source.slice(start, end) + '\nreturn discrepancies;');
+  assert.deepEqual(tail({ status: 'bound' }, rows, cases, inventory, normalize, values => values, applyStackingReviews), combined);
+  assert.equal(tail({ status: 'unbound' }, rows, cases, inventory, normalize,
+    () => assert.fail('unbound followup ran'), () => assert.fail('unbound stacking ran')), rows);
+  assert.ok(source.includes('validateStackingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle)'));
+  assert.ok(source.includes("report.discrepancies?.some(isStackingReviewRow)"));
 });

@@ -33,9 +33,28 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restorePreparedInputFollowupProducer(source) {
+export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyStackingReviews, validateStackingReviews, isStackingReviewRow } from './stacking-input-review.mjs';\n", ''],
+    ["  const beforeStackingReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyStackingReviews(beforeStackingReviews, cases, elementInventory, canonicalStyle)\n    : beforeStackingReviews;\n", ''],
+    ["      errors.push(...validateStackingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n", ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isStackingReviewRow))\n    errors.push('stacking owner review attribution lacks bound original cases');\n", ''],
+    ["    'src/parity/overlay-layout-stage.audit.spec.ts',\n    'scripts/audit-material-tooltip-keyboard.mjs',\n    'scripts/audit-material-tooltip-boundary.mjs',\n    'scripts/audit-material-snackbar-boundary.mjs',\n    'tests/material-parity/tooltip-position-composition.spec.mjs',\n    'tests/material-parity/stacking-input-review.mjs',\n    'tests/material-parity/stacking-input-review.spec.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated stacking integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393',
+    'producer changed beyond reviewed stacking integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+
+export function restorePreparedInputFollowupProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const beforeStackingReviews =') ? restoreStackingProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyPreparedInputFollowups, validatePreparedInputFollowups, isPreparedInputFollowupRow } from './authored-anchor-review.mjs';\n", ''],
     ["  const beforePreparedInputFollowups = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { proveTooltipStackingComposition } from './tooltip-position-composition.mjs';
+import { proveChoiceLabelStacking } from './choice-label-stacking-substitution.mjs';
+
+const attributions = new Set(['reviewed-stacking-owner-request-omission', 'reviewed-stacking-owner-request-addition', 'reviewed-tooltip-stacking-owner-substitution']);
+export const isStackingReviewRow = row => attributions.has(row.attribution);
 
 export const stackingOwners = [
   ['card', 'card-open', '.text-button', 'auto', '2', 52],
@@ -48,6 +52,8 @@ export function proveStackingOwner(entry, reference, candidate, element) {
     assert.deepEqual(candidateRequests, [{ selector, property: 'zIndex', value: candidateZ }]);
   }
   return { element, referenceNode: r.key, astylarNode: a.key,
+    ...(['checkbox-label', 'radio-solo-label', 'radio-team-label'].includes(element)
+      ? { existingChoiceOwnerProof: proveChoiceLabelStacking(reference, candidate, element) } : {}),
     referenceType: r.type, candidateType: a.authored.type, nativeRequests, candidateRequests,
     reference: nativeZ, candidate: candidateZ ?? '<omitted>',
     classification: 'application-plugin-authoring-defect',
@@ -80,4 +86,12 @@ export function applyStackingReviews(rows, cases, inventory, normalize) {
         astylarNode: one(a.nodes.filter(n => n.authored?.id === 'tooltip-popup')).key };
     },
   });
+}
+
+export function validateStackingReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const expected = applyStackingReviews(originalRows, cases, inventory, normalize).filter(isStackingReviewRow);
+    assert.equal(JSON.stringify(rows.filter(isStackingReviewRow)), JSON.stringify(expected));
+    return [];
+  } catch (error) { return [`stacking owner review does not replay: ${error.message}`]; }
 }
