@@ -2,6 +2,44 @@
 
 ## Current audit checkpoint — September 28
 
+**Remaining overflow cohort narrowed (read-only while cold check runs):** the
+authenticated accepted index has 18 unresolved overflow-axis groups / 1,160
+occurrences. Original report b07ef154... and full trees identify 580 owners:
+card-title 52 (`mat-card-title`→h2), dialog-title 32 (h2→h2), table-primary
+52 (table→table), slider-start/primary 78 each (input→input), slider-visual
+78 (`mat-slider`→range-visual plugin), tab labels 70 each (span→button),
+tab-panel 70 (span→tab-panel plugin). All native axes are visible, no active
+own overflow/reset declarations were found, and candidate authored plus all
+three captured style stages omit the axes. Direct-ID populations matched the
+scalar stages exactly; existing alias mapping identifies dialog and plugins.
+An initial alias-only lookup returned unresolved for direct-ID owners; that
+was an inappropriate lookup, not missing evidence, and direct identity checks
+resolved it. The 18 groups are not newly classified.
+
+Next extend existing `control-overflow-observation.mjs` only after proving
+applicability by renderer kind: headings/table, native inputs, text-to-button
+composition, and plugins are separate ownership questions. Its current
+div/span whitelist cannot simply be broadened to all types. The tab-panel
+plugin draws text into its own size-bounded texture/plane (plugin lines 338–386),
+already covered by `plugin-tab-panel-competing-text-renderer`; omitted CSS
+overflow does not prove ordinary text overflow or clipping equivalence there.
+Do not infer equal rendering from matching initial scalar values.
+
+**Badge ellipsis question answered, classification pending:** all 52 original
+badge owners pass existing `proveControlClippingRequests` (including alias and
+full-tree validation). `.mat-badge-content` explicitly requests
+`text-overflow: ellipsis`, hidden axes, and computes nowrap. Candidate authored
+and all three style stages omit these requests, as do captured scalar rules.
+This explains the one remaining textOverflow group / 52 occurrences as unequal
+authoring, not a core failure to render an equivalent ellipsis request. The
+initial showcase commit 2f44011 and current `.badge-bubble` both omit ellipsis;
+current location is astylar.component.ts:689. Short text `4` is not an overflow
+stress proof. Reuse the existing badge clipping proof for focused classification;
+do not add compensation or assert that current core ellipsis output is verified.
+
+Cold session 4560 reached **validate-audit at 949,378ms** and remains live.
+No cold-run input sources were modified during these investigations.
+
 **Whole-report reconciliation completed; cold check running:** streaming section
 comparison session 2868 ended exit 0. Authenticated predecessor decoded SHA
 757fce0f... and current f4d0e6c... cover 79 sections: 70 identical, 9 changed.
