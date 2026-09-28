@@ -11,10 +11,78 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
 import { proveFlowPositionSubstitution } from '../../scripts/audit-material-flow-position-substitutions.mjs';
+import { proveChipPositionInspection } from './chip-position-inspection.mjs';
+import { proveTabPanelWrapping } from './wrapping-input-review.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+export function proveAppearanceOwnerBoundary(entry, r, a, element) {
+  assert.ok(entry.family === 'chips' ? ['chip-0', 'chip-1'].includes(element) : entry.family === 'tabs' && element === 'tab-panel');
+  for (const tree of [r, a]) { assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []); }
+  assert.equal(a.resolvedStyleSource, 'core-style-inspection'); assert.equal(a.resolvedStyleEvidenceVersion, 2);
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  const candidate = one(a.nodes.filter(n => n.authored?.id === element));
+  let boundary, native, nativeAction;
+  if (entry.family === 'chips') {
+    boundary = proveChipPositionInspection(r, a);
+    native = one(r.nodes.filter(n => n.attributes?.id === element));
+    assert.equal(native.type, 'mat-chip-option'); assert.equal(candidate.authored.type, 'div');
+    const cell = one(r.nodes.filter(n => n.parent === native.key && n.attributes.class?.split(/\s+/).includes('mdc-evolution-chip__cell')));
+    nativeAction = one(r.nodes.filter(n => n.parent === cell.key && n.type === 'button'));
+    assert.equal(nativeAction.attributes.role, 'option'); assert.equal(candidate.authored.role, 'option');
+    assert.equal(r.styles[nativeAction.style].appearance, 'auto');
+  } else {
+    boundary = proveTabPanelWrapping(entry, input, r, a);
+    native = one(r.nodes.filter(n => n.key === boundary.referenceNode));
+    assert.equal(native.type, 'span'); assert.equal(candidate.authored.type, 'showcase.material:tab-panel');
+  }
+  const affects = key => /^(appearance|webkitappearance|mozappearance|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  for (const node of [native, ...(nativeAction ? [nativeAction] : [])]) {
+    assert.deepEqual(Object.keys(node.inline ?? {}).filter(affects), []);
+    assert.doesNotMatch(node.attributes.style ?? '', /(?:^|;)\s*(?:(?:-webkit-|-moz-)?appearance|all)\s*:/i);
+    for (const rule of node.rules.map(i => r.rules[i])) assert.deepEqual(Object.keys(rule.declarations).filter(affects), []);
+  }
+  assert.equal(r.styles[native.style].appearance, 'none');
+  assert.equal(Object.keys(input.reference).length, 89);
+  for (const [key, value] of Object.entries(input.reference)) assert.equal(r.styles[native.style][key], value);
+  assert.deepEqual(Object.keys(candidate.authored.style ?? {}).filter(affects), []);
+  assert.doesNotMatch(candidate.authored.attributes?.style ?? '', /(?:^|;)\s*(?:(?:-webkit-|-moz-)?appearance|all)\s*:/i);
+  assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.keys(rule).filter(affects)), []);
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(candidate[stage], input[scalar]); assert.deepEqual(Object.keys(candidate[stage]).filter(affects), []);
+  }
+  const motion = native.rules.map(i => r.rules[i]).flatMap(rule => Object.entries(rule.declarations)
+    .filter(([key]) => /^(animation|transition)/.test(key)).map(([key, value]) =>
+      ({ selector: rule.selector, conditions: rule.conditions, active: rule.active, key, ...value })));
+  return { case: keyOf(entry), element, referenceNode: native.key, astylarNode: candidate.key,
+    referenceType: native.type, candidateType: candidate.authored.type, boundary, motion,
+    ...(nativeAction ? { referenceActionNode: nativeAction.key, referenceActionAppearance: 'auto' } : {}),
+    inputEquivalent: false, renderingEquivalent: false, candidateComputedAppearanceInferred: false,
+    pluginAppearanceSupportProven: false, motionEquivalenceProven: false };
+}
+
+export function applyAppearanceOwnerBoundaries(rows, cases, inventory, normalize) {
+  return [['chips', 'chip-0'], ['chips', 'chip-1'], ['tabs', 'tab-panel']].reduce((values, [family, element]) =>
+    applyModalBoxReview(values, cases, inventory, normalize, { family, element, properties: ['appearance'],
+      prove: (e, r, a) => proveAppearanceOwnerBoundary(e, r, a, element),
+      classification: 'parity-harness-defect', attribution: 'reviewed-appearance-owner-boundary',
+      owner: 'comparison appearance observation ownership; separate chip flattening and competing tab text renderer',
+      justification: family === 'chips'
+        ? 'The native measurement is a mat-chip-option non-widget host computing none; its nested role=option button computes auto. Candidate measurement is a flattened div with role=option, combining the host and action responsibilities without a nested native button. Existing full chip structure/selection evidence binds this owner mismatch. Appearance requests are absent, but native motion declarations are retained, not waived. The semantic role does not turn the div into a native button; do not infer its computed appearance or certify flattened chip paint/semantics.'
+        : 'The measured native span computes none; candidate is a childless custom tab-panel plugin that owns a private text renderer, as established by the existing wrapping/ownership proof. This local observation mismatch is not an equivalent non-widget appearance comparison. Keep the plugin defect and motion obligations separate; no candidate computed appearance, plugin appearance support or shared-core fault is inferred.',
+    }), rows);
+}
+
+export function validateAppearanceOwnerBoundaries(rows, originals, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-appearance-owner-boundary');
+    assert.deepEqual(select(rows), select(applyAppearanceOwnerBoundaries(originals, cases, inventory, normalize))); return [];
+  } catch (error) { return [`appearance owner boundary lacks original inputs: ${error.message}`]; }
+}
 
 export function proveRangeAppearanceInitial(entry, r, a, element) {
   assert.equal(entry.family, 'slider'); assert.ok(['slider-start', 'slider-primary'].includes(element));

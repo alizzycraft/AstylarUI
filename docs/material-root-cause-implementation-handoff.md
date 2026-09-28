@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 28
 
+**Chip/tab appearance owner review prepared, not producer-integrated:** the focused
+original-evidence check passes for three groups / 222 observations (two chip
+owners, 76 each; tab panel, 70). The unfinished proof initially assumed the
+candidate chip was a button; the captured authoring disproved that assumption.
+It is a `div` with `role=option`, whereas the native `mat-chip-option` host contains
+a separate role=option button. The host computes appearance none and its nested
+button auto. The candidate semantic role must not be mistaken for a native
+button or used to infer computed appearance. The existing chip composition proof
+and tab private-text-renderer proof bind the differing observation owners.
+Native motion declarations remain evidence, not waived obligations.
+
+`node --test --test-name-pattern="chip and tab appearance binds" tests/material-parity/control-state-paint-review.spec.mjs`
+passes 1/1 (4.31s total), covering all original observations, raw/unrelated-row
+conservation and rejection of altered owner/request/provenance/membership.
+No renderer or fixture changes, new captures, or canonical export. Canonical
+unresolved count remains 130; the already integrated batch still projects 104.
+Next: integrate this prepared review into the existing production pipeline and
+combined conservation check, then investigate the six remaining modal appearance
+groups and spacing/layout gaps. Source-fingerprint reconciliation remains pending
+at the next coherent export milestone; this preparation is not canonical acceptance.
+
 **Range initial appearance integrated; explicit-none support gap isolated:** the
 root-package range reduction compares omitted/auto/none at DPR 1 and 2, plus an
 opacity-zero sensitivity control. One equal declaration map feeds both renderers.

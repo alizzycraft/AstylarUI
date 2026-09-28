@@ -21,6 +21,52 @@ import { proveFocusShadowSubstitution, applyFocusShadowSubstitutions, validateFo
 import { proveCardShadowSyntax, applyCardShadowSyntax, validateCardShadowSyntax } from './control-state-paint-review.mjs';
 import { proveMappedNonwidgetAppearance, applyMappedNonwidgetAppearance, validateMappedNonwidgetAppearance } from './control-state-paint-review.mjs';
 import { proveRangeAppearanceInitial, applyRangeAppearanceInitial, validateRangeAppearanceInitial } from './control-state-paint-review.mjs';
+import { proveAppearanceOwnerBoundary, applyAppearanceOwnerBoundaries, validateAppearanceOwnerBoundaries } from './control-state-paint-review.mjs';
+
+test('chip and tab appearance binds distinct observation owners across all 222 cases', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = JSON.parse(bytes), families = ['chips', 'tabs'];
+  const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
+    ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const rows = families.flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '8fbd2e22dfd801587ce6c1dce90e6daba668171ae26eae0a9c834142a8bd0a43',
+    indexSha256: '6f86d55a6ea6be0f1533ac893579bf517769061ed25a13812b0370c46b7c06e6',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyAppearanceOwnerBoundaries(rows, cases, inventory, normalize);
+  const changed = applied.filter(r => r.attribution === 'reviewed-appearance-owner-boundary');
+  assert.deepEqual(changed.map(r => [r.element, r.occurrences]), [['chip-0', 76], ['chip-1', 76], ['tab-panel', 70]]);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (!changed.includes(applied[i])) assert.deepEqual(applied[i], rows[i]);
+  assert.deepEqual(validateAppearanceOwnerBoundaries(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied);
+  forged.find(r => r.attribution === 'reviewed-appearance-owner-boundary').reviewedCases.pop();
+  assert.equal(validateAppearanceOwnerBoundaries(forged, rows, cases, inventory, normalize).length, 1);
+  for (const row of changed) {
+    const key = row.reviewedCases[0], entry = cases.find(e =>
+      `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === key);
+    const original = modalInventoryTrees(inventory, key), proof = proveAppearanceOwnerBoundary(entry, ...original, row.element);
+    assert.equal(proof.inputEquivalent, false); assert.equal(proof.renderingEquivalent, false);
+    if (row.family === 'chips') {
+      assert.equal(proof.motion.length, 2); assert.equal(proof.referenceActionAppearance, 'auto');
+      const altered = structuredClone(original);
+      altered[0].styles[altered[0].nodes.find(n => n.key === proof.referenceActionNode).style].appearance = 'none';
+      assert.throws(() => proveAppearanceOwnerBoundary(entry, ...altered, row.element));
+    }
+    for (const mutate of [
+      (r, a) => { a.nodes.find(n => n.key === proof.astylarNode).authored.type = 'section'; },
+      (r, a) => { a.rules.push({ selector: '#' + row.element, appearance: 'none' }); },
+      r => { r.ruleEvidenceComplete = false; },
+    ]) {
+      const pair = structuredClone(original); mutate(...pair);
+      assert.throws(() => proveAppearanceOwnerBoundary(entry, ...pair, row.element));
+    }
+  }
+});
 
 test('range initial appearance binds all 156 hidden original range owners without claiming none support', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
