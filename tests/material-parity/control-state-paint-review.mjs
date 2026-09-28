@@ -4,7 +4,9 @@ import { readFileSync } from 'node:fs';
 import { collectButtonPaintAllStates } from '../../scripts/audit-material-button-paint-all-states.mjs';
 import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
 import { applyOverlayTriggerPaintReview, overlayTriggerPaintAttribution } from './overlay-trigger-paint-review.mjs';
-import { modalInventoryTrees } from './modal-position-inspection.mjs';
+import { modalInventoryTrees, applyModalBoxReview, proveBottomSheetPanelPaint } from './modal-position-inspection.mjs';
+import { proveControlClippingRequests } from './control-overflow-observation.mjs';
+import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
 import { proveFlowPositionSubstitution } from '../../scripts/audit-material-flow-position-substitutions.mjs';
@@ -12,6 +14,72 @@ import { proveFlowPositionSubstitution } from '../../scripts/audit-material-flow
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+const omittedPaintRequests = {
+  badge: { element: 'badge-count', property: 'textOverflow', css: 'text-overflow',
+    selector: '.mat-badge-content', value: 'ellipsis' },
+  'bottom-sheet': { element: 'bottom-sheet-panel', property: 'boxShadow', css: 'box-shadow',
+    selector: '.mat-bottom-sheet-container',
+    value: 'rgba(0, 0, 0, 0.2) 0px 8px 10px -5px, rgba(0, 0, 0, 0.14) 0px 16px 24px 2px, rgba(0, 0, 0, 0.12) 0px 6px 30px 5px' },
+};
+
+export function proveOmittedOwnerPaintRequest(entry, r, a) {
+  const specification = omittedPaintRequests[entry.family]; assert.ok(specification);
+  for (const tree of [r, a]) {
+    assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []);
+  }
+  assert.equal(a.resolvedStyleSource, 'core-style-inspection');
+  assert.equal(a.resolvedStyleEvidenceVersion, 2);
+  const { element, property, css, selector, value } = specification;
+  const mapping = entry.family === 'badge' ? proveControlClippingRequests(entry, r, a, element)
+    : proveBottomSheetPanelPaint(entry, r, a);
+  const reference = one(r.nodes.filter(n => n.key === mapping.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === mapping.astylarNode));
+  const relevant = key => [property.toLowerCase(), 'all'].includes(key.replaceAll('-', '').toLowerCase());
+  assert.deepEqual(Object.keys(reference.inline ?? {}).filter(relevant), []);
+  const inlineRequest = new RegExp(`(?:^|;)\\s*(?:${css}|all)\\s*:`, 'i');
+  assert.doesNotMatch(reference.attributes.style ?? '', inlineRequest);
+  assert.doesNotMatch(candidate.authored.attributes?.style ?? '', inlineRequest);
+  const requests = reference.rules.map(i => r.rules[i]).filter(rule => rule.active).flatMap(rule => {
+    assert.ok(!rule.cssText.includes('\\'));
+    return Object.entries(rule.declarations).filter(([key]) => relevant(key))
+      .map(([key, declaration]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...declaration }));
+  });
+  assert.deepEqual(requests, [{ selector, conditions: [], key: css, value, important: false }]);
+  assert.equal(r.styles[reference.style][property], value);
+  for (const style of [candidate.authored.style ?? {}, candidate.normalResolvedStyle,
+    candidate.resolvedStyle, candidate.interactionResolvedStyle]) {
+    assert.ok(style && typeof style === 'object');
+    assert.deepEqual(Object.keys(style).filter(relevant), []);
+  }
+  assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.keys(rule).filter(relevant)), []);
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  assert.equal(input.reference[property], value);
+  for (const [field, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'],
+    ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']]) assert.deepEqual(input[field], candidate[stage]);
+  return { element, referenceNode: reference.key, astylarNode: candidate.key, mapping,
+    referenceRequests: requests, candidateRequests: [], inputEquivalent: false, renderingEquivalent: false,
+    firstDivergence: 'explicit native owner paint request omitted from candidate authoring',
+    coreDefectProven: false, originalRasterCauseProven: false };
+}
+
+export function applyOmittedOwnerPaintRequests(rows, cases, inventory, normalize) {
+  return Object.entries(omittedPaintRequests).reduce((values, [family, { element, property }]) =>
+    applyModalBoxReview(values, cases, inventory, normalize, { family, element, properties: [property],
+      prove: proveOmittedOwnerPaintRequest, attribution: 'reviewed-owner-paint-request-omission',
+      owner: 'showcase badge clipping and bottom-sheet elevation authoring',
+      justification: 'The original native owner explicitly requests this paint property; candidate authoring, potentially applicable rules and all three inspected local stages omit it. Existing owner-mapping evidence is retained. This is unequal input before rendering, not evidence that core ignored an equivalent request. Actual truncation, shadow pixels and the cause of the original visible symptom remain unproved.',
+    }), rows);
+}
+
+export function validateOmittedOwnerPaintRequests(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-owner-paint-request-omission');
+    assert.deepEqual(select(rows), select(applyOmittedOwnerPaintRequests(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`omitted owner paint requests lack original evidence: ${error.message}`]; }
+}
 
 export function collectPaintReviewSources() {
   const buttons = collectButtonPaintAllStates(), disabled = collectDisabledLabelColorStages();

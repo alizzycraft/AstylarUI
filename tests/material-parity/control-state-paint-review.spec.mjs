@@ -10,6 +10,59 @@ import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaint
 import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
 import { collectPaintReviewSources, applyPaintReviews, validatePaintReviews, isPaintReviewRow } from './control-state-paint-review.mjs';
 import { paintPopulation } from '../../scripts/check-material-position-canonical-conservation.mjs';
+import { proveOmittedOwnerPaintRequest, applyOmittedOwnerPaintRequests, validateOmittedOwnerPaintRequests } from './control-state-paint-review.mjs';
+
+test('omitted owner paint requests preserve all 77 original observations and reject competing inputs', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = JSON.parse(bytes), owners = { badge: 'badge-count', 'bottom-sheet': 'bottom-sheet-panel' };
+  const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
+    ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))]
+    .filter(e => owners[e.family] && e.styleInputs.some(i => i.id === owners[e.family]));
+  const inventory = collectFullTreeInventory(cases), counts = {}, samples = new Map();
+  assert.deepEqual(inventory.errors, []);
+  for (const entry of cases) {
+    const pair = modalInventoryTrees(inventory,
+      `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+    const proof = proveOmittedOwnerPaintRequest(entry, ...pair);
+    assert.equal(proof.inputEquivalent, false); assert.equal(proof.coreDefectProven, false);
+    assert.equal(proof.originalRasterCauseProven, false);
+    counts[entry.family] = (counts[entry.family] ?? 0) + 1;
+    if (!samples.has(entry.family)) samples.set(entry.family, { entry, pair, proof });
+  }
+  assert.deepEqual(counts, { badge: 52, 'bottom-sheet': 25 });
+  const rows = Object.keys(owners).flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '0a30ca894170b342e4521c01e4fcb23ed990d70cea789fe89bd4eba0baf663fb',
+    indexSha256: 'edf9c2de34728dc874460796853460dd5d39bafd71d4db41cba257366ec50cc0',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const normalize = bindPreciseAuditNormalization();
+  const applied = applyOmittedOwnerPaintRequests(rows, cases, inventory, normalize);
+  const changed = applied.filter(r => r.attribution === 'reviewed-owner-paint-request-omission');
+  assert.equal(changed.length, 2); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 77);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (!changed.includes(applied[i])) assert.deepEqual(applied[i], rows[i]);
+  const validate = values => validateOmittedOwnerPaintRequests(values, rows, cases, inventory, normalize);
+  assert.deepEqual(validate(applied), []);
+  const forged = structuredClone(applied);
+  forged.find(r => r.attribution === 'reviewed-owner-paint-request-omission').reviewedCases.pop();
+  assert.equal(validate(forged).length, 1);
+  for (const [family, { entry, pair, proof }] of samples) {
+    const property = family === 'badge' ? 'textOverflow' : 'boxShadow';
+    for (const mutate of [
+      ([r]) => { r.ruleEvidenceComplete = false; },
+      ([r]) => { r.styles[r.nodes.find(n => n.key === proof.referenceNode).style][property] = 'none'; },
+      ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle[property] = 'none'; },
+      ([, a]) => { a.rules.push({ selector: '#' + owners[family], [property]: 'none' }); },
+      ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).authored.style = { all: 'initial' }; },
+    ]) {
+      const altered = structuredClone(pair); mutate(altered);
+      assert.throws(() => proveOmittedOwnerPaintRequest(entry, ...altered));
+    }
+  }
+});
 
 test('disabled label colors reuse all 32 retained-stage proofs without filling omitted locals', () => {
   const evidence = collectDisabledLabelColorStages();

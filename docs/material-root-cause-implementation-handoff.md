@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 28
 
+**Prepared owner-paint omission batch:** existing paint-review module now proves
+badge text-overflow:ellipsis omission (52 original owners) and bottom-sheet
+three-layer box-shadow omission (25). Reuses clipping/modal owner mappings;
+checks complete rule evidence, exact native declarations, candidate authoring,
+potentially applicable rules and all three captured stages. Two groups are
+classified as unequal authoring, with no core/raster-cause claim. Focused test
+passes1/1 (2.74s), including raw-row conservation, replay and negative controls.
+Combined new proof and existing 397-observation control-paint regression pass2/2
+(34.18s); no full aggregation or browser recapture was invoked.
+The first negative-control run exposed a missing completeness precondition;
+the new proof now rejects incomplete rule evidence explicitly. No fixture or
+renderer edits. Like max-width below, this is prepared, not yet hooked into the
+aggregator or exported. Current canonical count remains150 unresolved. Combine
+both batches at the next integration milestone; do not rerun full export for
+this metadata increment. Remaining high-impact work is shared spacing/owner
+composition, overflow/appearance semantics and focus-paint behavior, not a new
+survey of already settled projection/slider causes.
+
 **Prepared max-width classification batch:** extended existing
 control-width-observation.mjs with `proveOwnerMaximumWidth`,
 `applyOwnerMaximumWidths`, and replay validator. Exactly3 groups /222 original
