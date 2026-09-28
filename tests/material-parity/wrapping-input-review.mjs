@@ -3,6 +3,7 @@ import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
+import { inspectRangeFontReset } from '../../scripts/audit-material-range-font-reset.mjs';
 
 export const explicitNowrapTargets = Object.freeze({
   'card-title': ['card', '.card-title', 52],
@@ -501,9 +502,14 @@ export const omittedFontOwners = [
   ['snack-bar', 'snack-bar-overlay', 'fontWeight'], ['snack-bar', 'snack-bar-surface', 'fontWeight'],
   ['tabs', 'tab-panel', 'fontWeight'],
 ];
+export const weightRequestOwners = [
+  ['bottom-sheet', 'bottom-sheet-copy'], ['bottom-sheet', 'bottom-sheet-dismiss'], ['bottom-sheet', 'bottom-sheet-panel'],
+  ['dialog', 'dialog-copy'], ['slider', 'slider-primary'], ['slider', 'slider-start'],
+];
 export function proveInheritedLocalOmission(entry, reference, candidate, element, property) {
   const font = ['fontStyle', 'fontWeight'].includes(property);
-  if (font) assert.ok(omittedFontOwners.some(([family, id, key]) => family === entry.family && id === element && key === property));
+  const weightRequest = property === 'fontWeight' && weightRequestOwners.some(([family, id]) => family === entry.family && id === element);
+  if (font) assert.ok(weightRequest || omittedFontOwners.some(([family, id, key]) => family === entry.family && id === element && key === property));
   else {
     assert.ok(inheritedWordOwners[entry.family]?.includes(element));
     assert.ok(['wordBreak', 'overflowWrap', 'wordSpacing'].includes(property));
@@ -536,14 +542,23 @@ export function proveInheritedLocalOmission(entry, reference, candidate, element
   for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'], ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) assert.deepEqual(ast[stage], input[scalar]);
   const rp = ancestry(reference, native), ap = ancestry(candidate, ast), nativeRequests = [];
   const explicit = element === 'tooltip-popup' && property === 'wordBreak';
+  const requestOwner = weightRequest ? entry.family === 'bottom-sheet'
+    ? one(rp.filter(n => n.type === 'mat-bottom-sheet-container')) : native : undefined;
+  const requestSelector = entry.family === 'bottom-sheet' ? '.mat-bottom-sheet-container'
+    : entry.family === 'dialog' ? '.mat-mdc-dialog-container .mat-mdc-dialog-content' : 'button, input, select';
+  const requestValue = entry.family === 'bottom-sheet' ? 'var(--mat-bottom-sheet-container-text-weight, var(--mat-sys-body-large-weight))'
+    : entry.family === 'dialog' ? 'var(--mat-dialog-supporting-text-weight, var(--mat-sys-body-medium-weight, 400))' : 'inherit';
+  const rangeContext = weightRequest && entry.family === 'slider' ? inspectRangeFontReset(input, reference, candidate) : undefined;
   for (const n of rp) {
     assert.deepEqual(select(n.inline), {});
     const active = n.rules.map(i => reference.rules[i]).filter(rule => rule.active);
-    const expected = n === native && explicit ? [{ selector: '.mat-mdc-tooltip-surface', conditions: [], declarations: { 'word-break': { value: 'normal', important: false } } }] : [];
+    const expected = n === native && explicit ? [{ selector: '.mat-mdc-tooltip-surface', conditions: [], declarations: { 'word-break': { value: 'normal', important: false } } }]
+      : n === requestOwner ? [{ selector: requestSelector, conditions: [], declarations: { 'font-weight': { value: requestValue, important: false } } }] : [];
     const requests = active.map(rule => ({ selector: rule.selector, conditions: rule.conditions, declarations: select(rule.declarations) })).filter(rule => Object.keys(rule.declarations).length);
     assert.deepEqual(requests, expected);
     const serialized = active.flatMap(rule => [...rule.cssText.matchAll(/(?:^|;)\s*([\w-]+)\s*:\s*([^;]*)(?=;|$)/g)].filter(([, key]) => affects(key)).map(([, key, value]) => ({ selector: rule.selector, key, value: value.trim() })));
-    assert.deepEqual(serialized, explicit && n === native ? [{ selector: '.mat-mdc-tooltip-surface', key: 'word-break', value: 'normal' }] : []);
+    assert.deepEqual(serialized, explicit && n === native ? [{ selector: '.mat-mdc-tooltip-surface', key: 'word-break', value: 'normal' }]
+      : n === requestOwner ? [{ selector: requestSelector, key: entry.family === 'slider' ? 'font' : 'font-weight', value: requestValue }] : []);
     nativeRequests.push(...requests.map(rule => ({ node: n.key, ...rule })));
   }
   for (const n of ap) {
@@ -553,7 +568,8 @@ export function proveInheritedLocalOmission(entry, reference, candidate, element
   }
   return { referenceNode: native.key, astylarNode: ast.key, identity, property, nativeRequests,
     nativeComputed: input.reference[property], referencePath: rp.map(n => n.key), candidatePath: ap.map(n => n.key),
-    ownerTypes: { reference: native.type, candidate: ast.authored.type }, explicitNativeRequest: explicit,
+    ownerTypes: { reference: native.type, candidate: ast.authored.type }, explicitNativeRequest: explicit || weightRequest,
+    rangeContext: rangeContext ? { originalSizeResetReplayed: true, referenceFontSize: rangeContext.referenceFontSize, candidateFontSize: rangeContext.candidateFontSize, visibleTextVerified: false } : undefined,
     publicSupportCheckRequired: explicit,
     candidateComputedVerified: false, descendantConsumptionVerified: false, inputEquivalent: false, renderingEquivalent: false };
 }
@@ -581,5 +597,20 @@ export function applyOmittedFontReviews(rows, cases, inventory, normalize) {
     owner: 'computed inherited font versus local declaration measurement',
     justification: 'Native computed normal style or 400 weight has no corresponding request, font shorthand or reset on the captured ancestry; candidate ancestry and local stages omit the field. Preserve actual owners and all explicit font/token, plugin and descendant findings. This establishes unlike measurement stages, not computed candidate defaults, equivalent inherited response, descendant consumption or rendering parity.',
   });
+  return rows;
+}
+export function applyWeightRequestReviews(rows, cases, inventory, normalize) {
+  for (const [family, element] of weightRequestOwners) {
+    const range = family === 'slider';
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+      family, element, properties: ['fontWeight'], prove: (entry, r, a) => proveInheritedLocalOmission(entry, r, a, element, 'fontWeight'),
+      classification: range ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
+      attribution: range ? 'reviewed-range-weight-inherit-observation-boundary' : 'reviewed-overlay-weight-token-request-omission',
+      owner: range ? 'native inherited control weight versus local stage measurement' : 'overlay component weight token authoring',
+      justification: range
+        ? 'Native range input explicitly inherits weight through font:inherit and computes 400; candidate ancestry/local stages omit weight. Reuse the original range-owner/size-reset proof, preserving its independent authoring defect. This classifies the weight observation boundary only: it neither approves missing size reset nor proves candidate inherited weight, visible text or rendering equivalence.'
+        : 'Native sheet/body or dialog supporting-text weight is explicitly requested through a component token on the mapped owner/ancestor; candidate ancestry and all local stages omit any corresponding weight request. Preserve the token rather than substituting current computed 400. This establishes unequal authoring, not token resolution under untested themes, candidate consumed weight or a core rendering defect.',
+    });
+  }
   return rows;
 }

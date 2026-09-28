@@ -11,6 +11,7 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { inheritedWordOwners, omittedFontOwners, proveInheritedLocalOmission, applyInheritedWordReviews, applyOmittedFontReviews } from './wrapping-input-review.mjs';
+import { weightRequestOwners, applyWeightRequestReviews } from './wrapping-input-review.mjs';
 import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNowrap,
   validateExplicitNowrap, explicitNowrapAttribution, applyOmittedNowrap,
   validateOmittedNowrap, omittedNowrapAttribution, proveOmittedNowrap,
@@ -23,6 +24,47 @@ import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNow
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+test('explicit weight requests distinguish overlay token omissions from range inherited-weight observations', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes), cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const snapshot = { generation: '4880964fc1018a1fd6409f7c7af2ddaa5fc21a82e45dab3a0cc5fce5a6019156', indexSha256: '5e86f89a05cd88843d7dd6130ed13c88cdb6371efb389d73a934c8d9f953511b' };
+  const rows = [...new Set(weightRequestOwners.map(([f]) => f))].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot)).filter(r => r.evidence.section === 'discrepancies');
+  const reviewed = applyWeightRequestReviews(rows, cases, inventory, bindPreciseAuditNormalization()), changed = reviewed.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 6); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 263);
+  assert.equal(changed.filter(r => r.classification === 'application-plugin-authoring-defect').length, 4);
+  assert.equal(changed.filter(r => r.family === 'slider').reduce((n, r) => n + r.occurrences, 0), 156);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  reviewed.forEach((r, i) => {
+    assert.deepEqual(raw(r), raw(rows[i]));
+    if (r !== rows[i]) {
+      assert.equal(rows[i].attribution, 'unresolved'); assert.equal(r.reviewEvidence.observations.length, r.occurrences);
+      for (const p of r.reviewEvidence.observations) {
+        assert.equal(p.explicitNativeRequest, true); assert.equal(p.nativeRequests.length, 1);
+        assert.equal(p.candidateComputedVerified, false); assert.equal(p.descendantConsumptionVerified, false); assert.equal(p.renderingEquivalent, false);
+        if (r.family === 'slider') assert.equal(p.rangeContext.originalSizeResetReplayed, true);
+      }
+    }
+  });
+  for (const [family, element] of weightRequestOwners) {
+    const entry = cases.find(e => e.family === family && e.styleInputs.some(i => i.id === element && i.reference));
+    const [r, a] = modalInventoryTrees(inventory, keyOf(entry)), proof = proveInheritedLocalOmission(entry, r, a, element, 'fontWeight');
+    const altered = structuredClone(r), request = proof.nativeRequests[0];
+    const owner = altered.nodes.find(n => n.key === request.node);
+    altered.rules[owner.rules.find(i => altered.rules[i].active && altered.rules[i].selector === request.selector)].declarations['font-weight'].value = '400';
+    assert.throws(() => proveInheritedLocalOmission(entry, altered, a, element, 'fontWeight'));
+    const stage = structuredClone(a); stage.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.fontWeight = '400';
+    assert.throws(() => proveInheritedLocalOmission(entry, r, stage, element, 'fontWeight'));
+    const ancestor = structuredClone(a), child = ancestor.nodes.find(n => n.key === proof.astylarNode);
+    ancestor.nodes.find(n => n.key === child.parent).authored.style = { fontWeight: '400' };
+    assert.throws(() => proveInheritedLocalOmission(entry, r, ancestor, element, 'fontWeight'));
+    const shorthand = structuredClone(a); shorthand.rules.push({ selector: '*', font: 'inherit' });
+    assert.throws(() => proveInheritedLocalOmission(entry, r, shorthand, element, 'fontWeight'));
+  }
+});
 
 test('public word-property support boundary rejects wordBreak without inventing a fixture workaround', () => {
   const filename = path.resolve('examples/material-showcase/src/app/__word_support_probe__.ts');

@@ -2,6 +2,39 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared explicit-weight followup adds six groups / 263 observations. Four
+overlay groups (sheet copy/dismiss/panel and dialog copy; 107 observations) retain
+the exact Material component weight token requested by the owner or sheet ancestor,
+while candidate ancestry and all local stages omit weight/font/reset requests.
+They are authoring-request omissions, not proof that untested themes resolve to
+400 or that candidate painted weight is wrong. Two range-input groups (156
+observations) instead retain native font:inherit, its decomposed weight request
+and computed 400 versus candidate local omission. They are measurement-boundary
+attributions, not an assertion that inheritance is missing or correct in core.
+
+The range cases reuse inspectRangeFontReset, replaying the original range owners,
+types, ancestry, candidate control size and explicit size-reset omission for all
+156 observations. That independent size authoring defect is preserved rather
+than erased by this weight disposition. The generic inherited-local proof now
+retains explicit weight requests without changing its earlier no-request scopes.
+Mutation checks reject replacing tokens/inherit with literal 400, inserting a
+local stage value, ancestor weight request or wildcard font shorthand.
+`node --test --test-name-pattern="explicit weight requests" tests/material-parity/wrapping-input-populations.spec.mjs`
+passes 1/1 in 15.78 s; scoped diff checks pass. Reference reset source is
+examples/material-showcase/src/styles.scss:22. TextInputManager's weight parser
+at :1246-1251 has a normal fallback, but this is not a used range-text inheritance
+proof and is not cited as one.
+
+Prepared followups now total 94 groups / 4016 observations; canonical remains
+286 unresolved until batch integration. All remaining font-style and weight
+scalar groups have prepared attributions, with their consumption/equivalence
+limits explicit. Next: the twelve font-family groups / 619 observations, separating
+page inheritance, overlay external context and toggle component token requests;
+then integrate this coherent display/word/font batch. No fixture/core changes,
+fresh browser pass or complete audit acceptance is claimed.
+
+### Initial font-value followup
+
 Prepared font followup adds 24 groups / 955 observations: 14 fontStyle groups
 (536 observations) and ten fontWeight groups (419). The inherited-local-omission
 proof shared with the word-property followup now rejects font shorthand as well
