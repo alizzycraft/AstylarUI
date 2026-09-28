@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+**Remaining appearance triage:** accepted index has 15 groups / 660 observations.
+Pinned raw style inputs confirm: slider start/primary are input-to-input native
+`auto` (78 each), not the non-widget `none` case; tab-panel is span-to-plugin
+(70); chips are mat-chip-option-to-div (76 each) with 1ms noop animation rules;
+sheet panel is custom-element-to-section (25), sheet actions a-to-button (25
+each), dialog copy/actions custom-element-to-p/div (32 each), and dialog panel
+div-to-section (32) with transition/none override rules. Bottom-sheet-overlay
+(25), snackbar overlay/surface (34 each), tooltip-popup (18) are div-to-div with
+no appearance/reset request in mapped scalar authored rules. The existing
+`appearance-input-evidence.mjs` deliberately requires exact matching built-in
+types/IDs and rejects motion/reset rules. Do not blanket-promote these rows:
+reuse alias mapping proofs for the four div-to-div cohorts, and independently
+assess widget/plugin/type substitutions. Full rule/inline ancestry verification
+and focused classification integration are still pending; this scan is triage,
+not new equivalence evidence. The report bytes were authenticated to b07ef154....
+
 **Cold integration export active from 764e59f:** launched September 28 15:54:50
 local with `ASTYLAR_AUDIT_COLD=1`, `ASTYLAR_AUDIT_PROGRESS=1`, and the named
 current-ancestry launcher (all five required inputs). Unified session 72739,
