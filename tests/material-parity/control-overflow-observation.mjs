@@ -64,7 +64,7 @@ const initialOverflowSources = Object.freeze({
   'src/app/services/dom/style-defaults.service.ts': '379775839024538bcd2a6acc69528039e24fc58b849e52841ba9d6c88f4da7d0',
   'src/app/services/dom/elements/overflow-clip.service.ts': 'f66a26a20844e471cf7db4a4e6e9cf6f197f97a0d4eb9cad3cb23bc3892f802a',
   'src/lib/astylar-scroll-runtime.ts': '2c7f0667264471b12315c5619e446dde65c6bb266d0bf114f84688f76f5288ac',
-  'src/app/services/dom/elements/overflow-clip.service.spec.ts': '1a1b9cf370ee02e9c7fa9f77cac2050cf36504f14f832f5239d7b9301f34fbf4',
+  'src/app/services/dom/elements/overflow-clip.service.spec.ts': '53b6723c8b7d241afdc8b610b81a9158d9f5720c79a5926f51aa0b7cbb37fac8',
   'src/lib/astylar-scroll-runtime.spec.ts': '91a1f492f15e6a2d27844655b8a017a6d632f8698450bb9ab20f09a24a461e8e',
 });
 

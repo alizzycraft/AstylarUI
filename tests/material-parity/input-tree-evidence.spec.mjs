@@ -123,11 +123,11 @@ test('browser omitted overflow equals visible only when both axes retain their i
   try {
     const page = await browser.newPage({ viewport: { width: 640, height: 360 } });
     const observations = await page.evaluate(() => {
-      const observe = (overflow, parentClips = false) => {
-        const parent = document.createElement('div'), box = document.createElement('div'), child = document.createElement('div');
+      const observe = (overflow, parentClips = false, type = 'div') => {
+        const parent = document.createElement('div'), box = document.createElement(type), child = document.createElement('div');
         Object.assign(parent.style, { position: 'absolute', left: '20px', top: '20px', width: '60px', height: '40px',
           overflow: parentClips ? 'hidden' : 'visible' });
-        Object.assign(box.style, { width: '60px', height: '40px', ...overflow });
+        Object.assign(box.style, { width: '60px', height: '40px', margin: '0', ...overflow });
         Object.assign(child.style, { width: '120px', height: '120px', background: 'red' });
         box.append(child); parent.append(box); document.body.append(parent);
         const style = getComputedStyle(box);
@@ -144,7 +144,9 @@ test('browser omitted overflow equals visible only when both axes retain their i
         auto: observe({ overflow: 'auto' }), scroll: observe({ overflow: 'scroll' }),
         mixedX: observe({ overflowX: 'visible', overflowY: 'hidden' }),
         mixedY: observe({ overflowX: 'hidden', overflowY: 'visible' }),
-        ancestorClips: observe({}, true) };
+        ancestorClips: observe({}, true),
+        headingOmitted: observe({}, false, 'h2'), headingVisible: observe({ overflow: 'visible' }, false, 'h2'),
+        headingHidden: observe({ overflow: 'hidden' }, false, 'h2'), headingAncestor: observe({}, true, 'h2') };
     });
     assert.deepEqual(observations.omitted, { x: 'visible', y: 'visible', hitOutsideX: true, hitOutsideY: true, scrollTop: 0, scrollLeft: 0 });
     assert.deepEqual(observations.visible, observations.omitted);
@@ -155,6 +157,10 @@ test('browser omitted overflow equals visible only when both axes retain their i
     assert.equal(observations.mixedX.x, 'auto');
     assert.equal(observations.mixedY.y, 'auto');
     assert.deepEqual(observations.ancestorClips, { x: 'visible', y: 'visible', hitOutsideX: false, hitOutsideY: false, scrollTop: 0, scrollLeft: 0 });
+    assert.deepEqual(observations.headingOmitted, observations.omitted);
+    assert.deepEqual(observations.headingVisible, observations.visible);
+    assert.deepEqual(observations.headingHidden, observations.hidden);
+    assert.deepEqual(observations.headingAncestor, observations.ancestorClips);
   } finally { await browser.close(); }
 });
 

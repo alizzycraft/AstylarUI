@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 28
 
+**Heading-overflow applicability question answered, row binding pending:** the
+original initial-overflow proof covered11 ordinary types but not candidate h2.
+Extended its existing core spec to check h2 defaults and exercise both div/h2
+through actual OverflowClipService.apply with omitted/visible overflow; both
+bypass projection and leave descendants unclipped. Ran that persisted Jasmine
+spec with the existing audit-button-overflow-core.mjs runner adapted in memory
+to the overflow-clip spec/name (no extra script/artifact):1 passed. Extended the
+existing browser omitted-overflow test with h2 omitted/visible/hidden/ancestor
+controls:1/1 passed (1.30s). Existing265 mapped-owner prerequisite check also
+passes1/1 (3.27s). No renderer implementation changed.
+The only dependency receipt change is the additive shared overflow spec hash
+1a1b9cf...→53b6723c8b7d241afdc8b610b81a9158d9f5720c79a5926f51aa0b7cbb37fac8;
+live review/test pins updated, historical documents left immutable. Next export
+must account for this receipt-only change in existing mapped/button observations.
+Next decisive step: bind card-title52/dialog-title32 original heading owners,
+their complete declarations and all three candidate stages before classifying
+the four overflow rows. No heading rows classified yet. Do not extend this
+conclusion to table, input, tab button or custom-plugin overflow without their
+own applicability evidence; this proves no heading text/raster equivalence.
+
 **Current integration status:** the9 spacing groups below now join the5 owner
 omission groups in the bound-evidence production tail:14 groups /819 observations.
 Four focused checks pass4/4 (13.12s), including actual-tail execution against the

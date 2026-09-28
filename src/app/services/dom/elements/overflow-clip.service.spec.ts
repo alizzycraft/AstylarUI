@@ -90,16 +90,16 @@ describe('OverflowClipService', () => {
 
   it('omitted and visible overflow take the same unclipped branch without projecting geometry', () => {
     const defaults = new StyleDefaultsService();
-    for (const type of ['div', 'section', 'article', 'header', 'footer', 'nav', 'main', 'aside', 'span', 'p', 'label']) {
+    for (const type of ['div', 'section', 'article', 'header', 'footer', 'nav', 'main', 'aside', 'span', 'p', 'label', 'h2']) {
       expect(defaults.getElementTypeDefaults(type).overflow).toBeUndefined();
     }
-    for (const overflow of [undefined, 'visible'] as const) {
+    for (const type of ['div', 'h2']) for (const overflow of [undefined, 'visible'] as const) {
       const parent = BABYLON.MeshBuilder.CreatePlane(`parent-${overflow}`, { width: 4, height: 2 }, scene);
       const child = BABYLON.MeshBuilder.CreatePlane(`child-${overflow}`, { width: 8, height: 8 }, scene);
       child.parent = parent;
       child.material = new BABYLON.StandardMaterial(`material-${overflow}`, scene);
       const project = jasmine.createSpy('project').and.throwError('visible overflow must not project a clipping boundary');
-      const style: StyleRule = { ...defaults.getElementTypeDefaults('div'), selector: '#parent',
+      const style: StyleRule = { ...defaults.getElementTypeDefaults(type), selector: '#parent',
         ...(overflow ? { overflow } : {}) };
       service.apply(parent, style, layoutBoxes, project);
       expect(project).not.toHaveBeenCalled();
