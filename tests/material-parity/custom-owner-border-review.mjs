@@ -8,6 +8,8 @@ const owners = {
   tabs: ['tab-panel', 'span', 'showcase.material:tab-panel'],
   table: ['table-primary', 'table', 'table'],
   divider: ['divider-primary', 'mat-divider', 'div'],
+  'progress-bar': ['progress-bar-primary', 'mat-progress-bar', 'showcase.material:linear-progress'],
+  'progress-spinner': ['progress-spinner-primary', 'mat-progress-spinner', 'showcase.material:circular-progress'],
 };
 const relevant = k => /^(border|all$|animation|transition)/.test(k.replaceAll('-', '').toLowerCase());
 const sides = ['Top', 'Right', 'Bottom', 'Left'];
@@ -59,6 +61,25 @@ export function proveCustomOwnerBorder(entry, reference, candidate, normalize) {
     for (const stage of [a.resolvedStyle, a.normalResolvedStyle, a.interactionResolvedStyle]) {
       assert.equal(stage.background, '#cac4d0'); assert.equal(stage.height, '1px');
     }
+  } else if (entry.family.startsWith('progress-')) {
+    const motion = nativeRules.filter(rule => Object.keys(rule.declarations).some(relevant));
+    const spinner = entry.family === 'progress-spinner';
+    assert.equal(motion.length, spinner ? 2 : 1);
+    const expectedSelectors = spinner ? ['.mat-mdc-progress-spinner',
+      '.mat-mdc-progress-spinner._mat-animation-noopable, .mat-mdc-progress-spinner._mat-animation-noopable .mdc-circular-progress__determinate-circle']
+      : ['.mdc-linear-progress'];
+    motion.forEach((rule, index) => {
+      assert.equal(rule.selector, expectedSelectors[index]); assert.equal(rule.active, true);
+      assert.deepEqual(rule.conditions, []);
+      const stop = index === 1;
+      const values = { 'transition-behavior': 'normal', 'transition-duration': stop ? '0s' : '250ms',
+        'transition-timing-function': stop ? 'ease' : 'cubic-bezier(0.4, 0, 0.6, 1)',
+        'transition-delay': spinner ? '0s' : '0ms', 'transition-property': stop ? 'none' : 'opacity' };
+      assert.deepEqual(Object.fromEntries(Object.entries(rule.declarations).filter(([k]) => relevant(k))),
+        Object.fromEntries(Object.entries(values).map(([k, value]) => [k, { value, important: stop }])));
+      const serialized = [...rule.cssText.matchAll(/(?:^|;)\s*transition\s*:\s*([^;]+)(?=;|$)/g)].map(m => m[1].trim());
+      assert.deepEqual(serialized, [stop ? 'none !important' : 'opacity 250ms cubic-bezier(0.4, 0, 0.6, 1)']);
+    });
   } else assert.ok(nativeRules.every(rule => !Object.keys(rule.declarations).some(relevant)));
   assert.equal(a.authored.attributes?.style, undefined);
   assert.ok(!Object.keys(a.authored.style ?? {}).some(relevant));
@@ -88,6 +109,7 @@ export function proveCustomOwnerBorder(entry, reference, candidate, normalize) {
   return { referenceNode: r.key, astylarNode: a.key, nativeType, candidateType,
     nativeRules, candidateRules: ownRules, candidateRequests, referenceColor: native.color,
     inputEquivalent: false, renderingEquivalent: false, generatedChildPaintVerified: false,
+    motionSettlementVerified: false,
     scope: entry.family === 'divider' ? 'Explicit top-border/background substitution; three other native sides retain zero/none initial colors. No paint equivalence.'
       : 'Captured host-only initial border color; zero/none borders do not establish contextual-color paint equivalence.' };
 }
@@ -105,7 +127,9 @@ export function applyCustomOwnerBorderReviews(rows, cases, inventory, normalize)
     attribution: family === 'table' ? 'reviewed-table-border-reset-omission' : 'reviewed-custom-host-border-initial-divergence',
     owner: 'core border initial-color contract and measured host identity',
     prove: (e, r, a) => proveCustomOwnerBorder(e, r, a, normalize),
-    justification: family === 'divider'
+    justification: family.startsWith('progress-')
+      ? 'The explicitly mapped progress hosts omit border requests. Captured native motion is restricted to opacity (plus spinner transition:none !important), not border or color; candidate motion remains omitted. Zero/none native border colors use currentcolor while candidate host stages use transparent defaults. This scoped initial-color limitation neither accepts the unequal motion inputs nor proves opacity settlement, generated progress paint, inherited ink or final raster.'
+      : family === 'divider'
       ? 'Only the three non-top sides are covered: no native side requests exist and zero/none colors compute from currentcolor, while candidate stages retain transparent initial borders. The explicit native top border and candidate background replacement are preserved by a separate authoring classification. This is not a claim that the whole divider omits borders or that paint/layout inputs are equivalent.'
       : family === 'table'
       ? 'The native table explicitly requests border: 0px, including none styles and currentcolor colors; the candidate authors only borderWidth: 0. All three candidate stages retain transparent defaults. This is an unequal reset request at authoring, despite both captured hosts having invisible zero/none borders. Do not copy computed theme colors as compensation. Table cells, collapsed-border behavior, inherited ink and final raster remain separate.'

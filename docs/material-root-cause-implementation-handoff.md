@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 28
 
+Progress-host border omission review now covers both hosts' 40 captured cases /
+16 groups / 160 observations. Native motion is exactly opacity 250ms; spinner
+also captures transition:none !important. Neither requests border/color motion.
+Candidate border/motion requests are absent and all three stages retain transparent
+initial borders. This closes the local border exclusion question, not unequal
+opacity behavior, settlement or generated progress paint. Existing custom-owner
+review totals 55 groups / 1136 observations. Focused test passes (1/1, 5.79 s),
+including rejection of transition-property:all and an appended border-color
+transition. The latter negative control initially exposed a consumed-semicolon
+gap in the new serializer check; a non-consuming terminator now rejects adjacent
+declarations. No producer dependency edits or canonical classification changes.
+Remaining border owners: badge alias and tab controls. Export 91866 is still live
+in validation; poll the same handle, then perform the pending reconciliation.
+
 Divider paint substitution is now bound across all 24 captured cases: native
 solid 1px top border uses the Material outline token; candidate instead paints a
 1px-high background with literal #cac4d0. The single top-color group / 24
