@@ -456,3 +456,20 @@ export function applyAuthoredAnchorReviews(rows, cases, inventory, normalize) {
   });
   return rows;
 }
+
+export function applyBadgeMarginReviews(rows, cases, inventory, normalize) {
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'badge', element: 'badge-count', properties: ['marginTop', 'marginRight', 'marginBottom', 'marginLeft'],
+    prove: proveAuthoredAnchor, attribution: 'reviewed-badge-anchor-margin-substitution',
+    owner: 'badge anchor/margin composition; existing intrinsic-width and margin-box core findings',
+    justification: 'The existing authored-anchor proof binds the native token-based negative margin shorthand and percentage anchors to the original badge owner. Candidate rules instead use top/right:-4px and all local stages report zero margin. These margins belong to the already demonstrated compound anchor substitution, not an independent inferred core margin failure or an equivalent representation. Preserve sampled computed offsets without promoting them to authored requests.',
+  });
+}
+
+export function validateBadgeMarginReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-badge-anchor-margin-substitution');
+    assert.deepEqual(select(rows), select(applyBadgeMarginReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`badge margin substitution lacks original anchor evidence: ${error.message}`]; }
+}

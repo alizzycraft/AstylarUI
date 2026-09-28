@@ -4,6 +4,65 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 
 const relevant = key => /^(all|position|top|right|bottom|left)$|^inset/.test(key.replaceAll('-', '').toLowerCase());
+export function proveSliderMarginOwner(entry, reference, candidate) {
+  const identity = proveSliderPositionRequests(entry, reference, candidate, 'slider-visual');
+  for (const tree of [reference, candidate]) assert.deepEqual(tree.errors, []);
+  const r = reference.nodes.find(n => n.key === identity.referenceNode);
+  const a = candidate.nodes.find(n => n.key === identity.astylarNode);
+  const parents = candidate.nodes.filter(n => n.key === a.parent); assert.equal(parents.length, 1);
+  const parent = parents[0];
+  assert.deepEqual(parent.authored, { type: 'div', id: 'slider-pair', class: 'range-stack' });
+  const children = candidate.nodes.filter(n => n.parent === parent.key);
+  assert.deepEqual(children.map(n => n.authored.id), ['slider-visual', 'slider-start', 'slider-primary']);
+  for (const id of ['slider-start', 'slider-primary']) {
+    const native = reference.nodes.filter(n => n.attributes?.id === id); assert.equal(native.length, 1);
+    assert.equal(native[0].parent, r.key); assert.equal(native[0].type, 'input');
+    assert.equal(children.find(n => n.authored.id === id).authored.type, 'input');
+  }
+  const affects = key => /^(margin.*|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  const requests = r.rules.map(i => reference.rules[i]).filter(rule => rule.active).flatMap(rule => {
+    assert.doesNotMatch(rule.cssText, /\\/);
+    return Object.entries(rule.declarations).filter(([key]) => affects(key))
+      .map(([key, declaration]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...declaration }));
+  });
+  assert.deepEqual(requests, ['top', 'right', 'bottom', 'left'].map(side => ({ selector: '.mat-mdc-slider',
+    conditions: [], key: 'margin-' + side, value: ['left', 'right'].includes(side) ? '8px' : '0px', important: false })));
+  const candidateRequests = node => candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, node.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key))
+      .map(([key, value]) => ({ selector: rule.selector, mediaMaxWidth: rule.mediaMaxWidth, key, value })));
+  assert.deepEqual(candidateRequests(a), []);
+  assert.deepEqual(candidateRequests(parent), [{ selector: '.range-stack', mediaMaxWidth: undefined, key: 'margin', value: '0 8px' }]);
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    assert.deepEqual(Object.fromEntries(Object.entries(a[stage]).filter(([key]) => affects(key))), { margin: '0' });
+    assert.deepEqual(Object.fromEntries(Object.entries(parent[stage]).filter(([key]) => affects(key))), { margin: '0 8px' });
+    assert.equal(parent[stage].position, 'relative'); assert.equal(parent[stage].width, '100%');
+    assert.equal(parent[stage].height, '48px');
+  }
+  assert.equal(reference.styles[r.style].marginLeft, '8px'); assert.equal(reference.styles[r.style].marginRight, '8px');
+  return { referenceNode: r.key, astylarNode: a.key, candidateSpacingOwner: parent.key,
+    referenceRequests: requests, candidateParentRequests: candidateRequests(parent),
+    childIds: children.map(n => n.authored.id), localOwnerIdentity: identity.identity,
+    inputEquivalent: false, renderingEquivalent: false, compoundPlacementEquivalenceProven: false,
+    dragCauseProven: false, coreDefectProven: false,
+    limitation: 'Eight-pixel margins exist on the candidate composition parent, not the measured visual plugin. This proves owner relocation, not equivalent sizing, containing blocks, plugin painting or hit testing.' };
+}
+
+export function applySliderMarginReviews(rows, cases, inventory, normalize) {
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'slider', element: 'slider-visual', properties: ['marginLeft', 'marginRight'], prove: proveSliderMarginOwner,
+    attribution: 'reviewed-slider-margin-owner-boundary', classification: 'parity-harness-defect',
+    owner: 'slider host versus visual-plugin measurement boundary',
+    justification: 'The scalar compares the native mat-slider host with a child visual plugin, while the candidate puts the same horizontal margin request on its enclosing range-stack parent shared with both inputs. Local zero versus 8px therefore does not establish an omitted component margin or core margin failure. The owner relocation is proved, but equivalence of the decomposed layout, painting and hit testing is not; retain those separate findings.',
+  });
+}
+
+export function validateSliderMarginReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-slider-margin-owner-boundary');
+    assert.deepEqual(select(rows), select(applySliderMarginReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`slider margin owner boundary lacks original evidence: ${error.message}`]; }
+}
 export function proveSliderPositionRequests(entry, reference, candidate, element) {
   assert.equal(entry.family, 'slider');
   const inputs = entry.styleInputs.filter(i => i.id === element); assert.equal(inputs.length, 1);

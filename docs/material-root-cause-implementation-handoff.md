@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 28
 
+**Prepared margin-owner batch:** six groups /364 observations are now covered by
+focused reusable proofs, not yet hooked into production. Slider left/right
+margins (78 each) are a measurement-owner boundary: native mat-slider requests
+8px, while the candidate visual plugin has zero and its range-stack parent
+requests0 8px at all three stages. Both inputs and plugin are children of that
+parent; native inputs belong to the measured native host. Classify these scalar
+rows as harness owner-boundary observations, not an omitted component margin.
+Compound sizing/paint/hit-test equivalence remains unproved. History3dcbdd9
+added the parent margin while renaming the visual measurement target.
+Badge four margins (52 each) reuse the existing authored-anchor proof: native
+token-based -12px margins/percentage anchors versus candidate zero margins and
+fixed top/right:-4px. They are part of the existing authoring substitution,
+not new core margin diagnoses. History7945a42 changed bubble offsets -10→-4
+alongside size20→16 and text offsets; it does not prove a renderer cause.
+`node --test tests/material-parity/slider-position-request-review.spec.mjs`
+passes2/2 (6.52s), retaining all78 original slider-position states plus new
+row conservation, exact populations, replay and missing-parent/rule controls.
+No new captures, framework, fixture or renderer changes. Next integrate this
+with the next spacing batch; canonical150 and producer-pending five-group
+transition below remain distinct from these six prepared groups.
+
 **Owner omissions integrated into producer; export pending:** five groups /299
 original observations now pass through the bound-evidence production tail and
 independent replay validation: max-width100% on chip0/1 (76 each) and tabs (70),

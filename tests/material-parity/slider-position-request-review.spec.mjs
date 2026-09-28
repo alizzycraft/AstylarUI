@@ -7,6 +7,52 @@ import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { applySliderPositionReviews, proveSliderPositionRequests } from './slider-position-request-review.mjs';
+import { applySliderMarginReviews, proveSliderMarginOwner, validateSliderMarginReviews } from './slider-position-request-review.mjs';
+import { applyBadgeMarginReviews, validateBadgeMarginReviews } from './authored-anchor-review.mjs';
+
+test('spacing reviews distinguish slider parent relocation from badge anchor substitution', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes), families = ['slider', 'badge'];
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })),
+    ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const rows = families.flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '0a30ca894170b342e4521c01e4fcb23ed990d70cea789fe89bd4eba0baf663fb',
+    indexSha256: 'edf9c2de34728dc874460796853460dd5d39bafd71d4db41cba257366ec50cc0',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const result = applyBadgeMarginReviews(applySliderMarginReviews(rows, cases, inventory, normalize), cases, inventory, normalize);
+  const changed = result.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 6); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 364);
+  assert.equal(changed.filter(r => r.classification === 'parity-harness-defect').length, 2);
+  assert.equal(changed.filter(r => r.classification === 'application-plugin-authoring-defect').length, 4);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(result.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (!changed.includes(result[i])) assert.deepEqual(result[i], rows[i]);
+  assert.deepEqual(validateSliderMarginReviews(result, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateBadgeMarginReviews(result, rows, cases, inventory, normalize), []);
+  for (const row of changed) {
+    assert.equal(row.reviewEvidence.inputEquivalent, false); assert.equal(row.reviewEvidence.renderingEquivalent, false);
+    const altered = structuredClone(result); altered.find(r => r.element === row.element && r.property === row.property).reviewedCases.pop();
+    const validate = row.family === 'slider' ? validateSliderMarginReviews : validateBadgeMarginReviews;
+    assert.equal(validate(altered, rows, cases, inventory, normalize).length, 1);
+  }
+  const entry = cases.find(e => e.family === 'slider');
+  const pair = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+  const proof = proveSliderMarginOwner(entry, ...pair);
+  for (const mutate of [
+    ([r]) => { r.ruleEvidenceComplete = false; },
+    ([, a]) => { a.nodes.find(n => n.key === proof.candidateSpacingOwner).normalResolvedStyle.margin = '0'; },
+    ([, a]) => { a.rules.push({ selector: '.range-stack', marginLeft: '9px' }); },
+    ([, a]) => { a.nodes.find(n => n.authored?.id === 'slider-start').parent = a.nodes[0].key; },
+    ([r]) => { r.nodes.find(n => n.attributes?.id === 'slider-start').parent = r.nodes[0].key; },
+  ]) {
+    const altered = structuredClone(pair); mutate(altered);
+    assert.throws(() => proveSliderMarginOwner(entry, ...altered));
+  }
+});
 
 test('slider positions separate authored edges from computed auto offsets across all 78 states', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
