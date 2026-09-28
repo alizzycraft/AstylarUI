@@ -2,6 +2,51 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared inherited-word followup covers 46 groups / 1764 original observations
+in the existing wrapping-input-review module and population spec. It checks all
+89 native scalar fields, complete ancestry, inline/active/serialized requests,
+candidate applicable rules and all three local stages. These rows compare native
+word-break/overflow-wrap normal or word-spacing 0px with omitted candidate local
+fields, without relevant requests on either captured ancestry. Classify the
+observation-stage boundary only; do not assert candidate computed defaults,
+descendant/plugin consumption, inherited response or rendering equivalence.
+Overlay z-index scalar-rule gaps remain exact and explicit. Negative controls
+reject native ancestor requests, candidate resets/inherited fields, incomplete
+ancestry, serialized-only requests and wordWrap aliases.
+
+Tooltip wordBreak is deliberately NOT included: its 18 observations have an
+explicit native .mat-mdc-tooltip-surface word-break:normal request. A fixture-only
+omission classification would overlook the public support boundary. An in-memory
+TypeScript probe importing SiteData from package-root astylarui proves wordWrap
+is admitted, while wordBreak is rejected (TS2353) and overflowWrap is rejected
+(TS2561). The installed declaration and current StyleRule agree on these fields.
+No temporary source file or renderer/fixture edit is made. This proves typed
+admission only: wordWrap may represent overflow-wrap semantics; absence of a
+wordBreak field does not itself demonstrate a runtime normal-breaking failure.
+Keep this scalar unresolved pending an equivalent-input support/consumption
+reduction; do not substitute a wrapping style to match its screenshot. The prior
+tooltip overflow-wrap:anywhere/nowrap findings remain separate and unchanged.
+
+Source trace: renderer.service.ts:543-592 inherits wordSpacing/wordWrap;
+text-style-parser.service.ts:41-43 supplies zero/normal defaults and :106-116
+parses wordSpacing/wordWrap; text-canvas-renderer.service.ts:432 assigns canvas
+wordSpacing; multi-line-text-renderer.service.ts:246 branches on break-word/anywhere.
+StyleRule at src/app/types/style-rule.ts:82-86 exposes wordWrap but not wordBreak
+or overflowWrap. These paths support the stage distinction, not a blanket claim
+that all controls/plugins consume inherited values correctly.
+
+Verification commands (no full exporter or browser recapture):
+`node --test --test-name-pattern="inherited word properties" tests/material-parity/wrapping-input-populations.spec.mjs`
+passes 1/1 in 44.91 s, preserving every prior row/classification and leaving the
+tooltip request unresolved; `node --test --test-name-pattern="public word-property support" tests/material-parity/wrapping-input-populations.spec.mjs`
+passes 1/1 in 14.39 s. Scoped diff checks pass. Prepared followups now total
+64 groups / 2798 observations (18 display plus 46 word-property groups); accepted
+canonical remains 286 unresolved. Next inspect remaining font-style/weight/family
+owner/inheritance differences, preserving the explicit tooltip support question,
+then integrate a coherent batch rather than regenerate for this metadata increment.
+
+### Display followup
+
 The three remaining display groups now have focused boundary proofs in the same
 display-request-review module: radio (68 observations) substitutes an inline
 mat-radio-group with two static mat-radio-button children for a locally block div

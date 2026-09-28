@@ -484,3 +484,80 @@ export function validateWrappingReviews(rows, originalRows, cases, inventory, no
   return [validateExplicitNowrap, validateOmittedNowrap, validateOverlayNormal, validateTableWrapping,
     validateTabPanelWrapping, validateChipHostWrapping].flatMap(validate => validate(rows, originalRows, cases, inventory, normalize));
 }
+
+// Prepared followup, deliberately separate from the already integrated batch.
+export const inheritedWordOwners = {
+  'bottom-sheet': ['bottom-sheet-copy', 'bottom-sheet-dismiss', 'bottom-sheet-overlay', 'bottom-sheet-panel'],
+  chips: ['chip-0', 'chip-1'],
+  dialog: ['dialog-actions', 'dialog-cancel', 'dialog-copy', 'dialog-panel', 'dialog-save', 'dialog-title'],
+  'snack-bar': ['snack-bar-overlay', 'snack-bar-surface'], tabs: ['tab-panel'], tooltip: ['tooltip-popup'],
+};
+export function proveInheritedWordBoundary(entry, reference, candidate, element, property) {
+  assert.ok(inheritedWordOwners[entry.family]?.includes(element));
+  assert.ok(['wordBreak', 'overflowWrap', 'wordSpacing'].includes(property));
+  assert.ok(element !== 'tooltip-popup' || property !== 'overflowWrap'); // Existing explicit anywhere proof.
+  const affects = key => ['all', property.toLowerCase(), ...(property === 'overflowWrap' ? ['wordwrap'] : [])].includes(key.replaceAll('-', '').toLowerCase());
+  const select = style => Object.fromEntries(Object.entries(style ?? {}).filter(([key]) => affects(key)));
+  for (const tree of [reference, candidate]) {
+    assert.deepEqual(tree.errors, []); assert.equal(tree.ruleEvidenceComplete, true);
+    assert.equal(new Set(tree.nodes.map(n => n.key)).size, tree.nodes.length);
+  }
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  const ast = one(candidate.nodes.filter(n => n.authored?.id === element));
+  let native = reference.nodes.filter(n => n.attributes?.id === element || n.attributes?.['data-parity-id'] === element), identity;
+  if (!native.length) {
+    identity = resolveOriginAliasPair(entry, reference, candidate, input);
+    const gap = ['bottom-sheet-overlay', 'snack-bar-overlay'].includes(element);
+    assert.equal(identity.status, gap ? 'mapped-with-scalar-rule-gap' : 'mapped');
+    assert.deepEqual(identity.extraRules, []);
+    assert.deepEqual(identity.missingRules, gap ? [{ selector: '.cdk-global-overlay-wrapper', declarations: { 'z-index': { value: '1000', important: false } } }] : []);
+    native = reference.nodes.filter(n => n.key === identity.referenceNode);
+  }
+  native = one(native);
+  assert.equal(native.type, input.referenceStructure.type); assert.equal(ast.authored.type, input.astylarStructure.type);
+  assert.equal(Object.keys(input.reference).length, 89);
+  for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[native.style][key], value);
+  assert.equal(input.reference[property], property === 'wordSpacing' ? '0px' : 'normal');
+  assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+  assert.equal(input.astylarResolvedStyleEvidenceVersion, 2);
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'], ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) assert.deepEqual(ast[stage], input[scalar]);
+  const rp = ancestry(reference, native), ap = ancestry(candidate, ast), nativeRequests = [];
+  const explicit = element === 'tooltip-popup' && property === 'wordBreak';
+  for (const n of rp) {
+    assert.deepEqual(select(n.inline), {});
+    const active = n.rules.map(i => reference.rules[i]).filter(rule => rule.active);
+    const expected = n === native && explicit ? [{ selector: '.mat-mdc-tooltip-surface', conditions: [], declarations: { 'word-break': { value: 'normal', important: false } } }] : [];
+    const requests = active.map(rule => ({ selector: rule.selector, conditions: rule.conditions, declarations: select(rule.declarations) })).filter(rule => Object.keys(rule.declarations).length);
+    assert.deepEqual(requests, expected);
+    const serialized = active.flatMap(rule => [...rule.cssText.matchAll(/(?:^|;)\s*([\w-]+)\s*:\s*([^;]*)(?=;|$)/g)].filter(([, key]) => affects(key)).map(([, key, value]) => ({ selector: rule.selector, key, value: value.trim() })));
+    assert.deepEqual(serialized, explicit && n === native ? [{ selector: '.mat-mdc-tooltip-surface', key: 'word-break', value: 'normal' }] : []);
+    nativeRequests.push(...requests.map(rule => ({ node: n.key, ...rule })));
+  }
+  for (const n of ap) {
+    assert.deepEqual(select(n.authored), {}); assert.deepEqual(select(n.authored.style), {}); assert.equal(n.authored.attributes?.style, undefined);
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.deepEqual(select(n[stage]), {});
+    for (const rule of candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, n.authored))) assert.deepEqual(select(rule), {});
+  }
+  return { referenceNode: native.key, astylarNode: ast.key, identity, property, nativeRequests,
+    nativeComputed: input.reference[property], referencePath: rp.map(n => n.key), candidatePath: ap.map(n => n.key),
+    ownerTypes: { reference: native.type, candidate: ast.authored.type }, explicitNativeRequest: explicit,
+    publicSupportCheckRequired: explicit,
+    candidateComputedVerified: false, descendantConsumptionVerified: false, inputEquivalent: false, renderingEquivalent: false };
+}
+export function applyInheritedWordReviews(rows, cases, inventory, normalize) {
+  for (const [family, elements] of Object.entries(inheritedWordOwners)) for (const element of elements)
+    for (const property of element === 'tooltip-popup' ? ['wordBreak', 'wordSpacing'] : ['wordBreak', 'overflowWrap', 'wordSpacing']) {
+      const explicit = element === 'tooltip-popup' && property === 'wordBreak';
+      // StyleRule/parser currently expose wordWrap, not wordBreak. Do not turn
+      // this native request into a fixture-only defect without a support proof.
+      if (explicit) continue;
+      rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+        family, element, properties: [property], prove: (entry, r, a) => proveInheritedWordBoundary(entry, r, a, element, property),
+        classification: 'parity-harness-defect',
+        attribution: 'reviewed-inherited-word-computed-local-boundary',
+        owner: 'computed inherited word properties versus local measurement',
+        justification: 'The exact native owner computes normal or zero word spacing without a relevant request/reset on its captured ancestry; candidate local stages and ancestry omit the field. This is an observation-stage boundary, not proof of candidate computed defaults, descendant/plugin consumption, inherited response or rendering equivalence. Preserve original owners, overlay rule gaps and all other typography/wrapping findings.',
+      });
+    }
+  return rows;
+}

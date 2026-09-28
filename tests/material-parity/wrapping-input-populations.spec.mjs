@@ -2,12 +2,15 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import path from 'node:path';
+import ts from 'typescript';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { inheritedWordOwners, proveInheritedWordBoundary, applyInheritedWordReviews } from './wrapping-input-review.mjs';
 import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNowrap,
   validateExplicitNowrap, explicitNowrapAttribution, applyOmittedNowrap,
   validateOmittedNowrap, omittedNowrapAttribution, proveOmittedNowrap,
@@ -20,6 +23,86 @@ import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNow
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+test('public word-property support boundary rejects wordBreak without inventing a fixture workaround', () => {
+  const filename = path.resolve('examples/material-showcase/src/app/__word_support_probe__.ts');
+  const members = source => {
+    const node = ts.createSourceFile('probe.ts', source, ts.ScriptTarget.ES2022, true).statements.find(n => ts.isInterfaceDeclaration(n) && n.name.text === 'StyleRule');
+    assert.ok(node); return new Set(node.members.map(m => m.name?.getText()));
+  };
+  const current = members(readFileSync('src/app/types/style-rule.ts', 'utf8'));
+  for (const property of ['wordWrap', 'wordBreak', 'overflowWrap']) {
+    const options = { noEmit: true, skipLibCheck: true, strict: true, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.Preserve, moduleResolution: ts.ModuleResolutionKind.Bundler, types: [] };
+    const host = ts.createCompilerHost(options), original = host.getSourceFile.bind(host);
+    host.getSourceFile = (file, language, ...rest) => path.resolve(file) === filename
+      ? ts.createSourceFile(file, `import type { SiteData } from 'astylarui'; const site: SiteData = { root: { children: [] }, styles: [{ selector: '#probe', ${property}: 'normal' }] };`, language, true)
+      : original(file, language, ...rest);
+    const program = ts.createProgram([filename], options, host);
+    const declaration = program.getSourceFiles().filter(f => f.fileName.replaceAll('\\', '/').includes('/node_modules/astylarui/') && f.fileName.endsWith('/style-rule.d.ts'));
+    assert.equal(declaration.length, 1); const installed = members(declaration[0].text);
+    const diagnostics = ts.getPreEmitDiagnostics(program);
+    assert.equal(installed.has(property), current.has(property), 'Installed/current public support differs');
+    if (property === 'wordWrap') { assert.equal(diagnostics.length, 0); assert.ok(current.has(property)); }
+    else {
+      assert.equal(current.has(property), false); assert.equal(diagnostics.length, 1);
+      assert.equal(diagnostics[0].code, property === 'wordBreak' ? 2353 : 2561);
+      assert.ok(ts.flattenDiagnosticMessageText(diagnostics[0].messageText, ' ').includes(`'${property}' does not exist in type 'StyleRule'`));
+    }
+  }
+  // Typed admission only: wordWrap may express overflow-wrap semantics, but
+  // neither successful compilation nor absence of a field proves runtime paint.
+});
+
+test('inherited word properties separate 46 observation boundaries from the tooltip explicit request', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes), cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const snapshot = { generation: '4880964fc1018a1fd6409f7c7af2ddaa5fc21a82e45dab3a0cc5fce5a6019156', indexSha256: '5e86f89a05cd88843d7dd6130ed13c88cdb6371efb389d73a934c8d9f953511b' };
+  const rows = Object.keys(inheritedWordOwners).flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot)).filter(r => r.evidence.section === 'discrepancies');
+  const reviewed = applyInheritedWordReviews(rows, cases, inventory, bindPreciseAuditNormalization()), changed = reviewed.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 46); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 1764);
+  const explicit = rows.find(r => r.element === 'tooltip-popup' && r.property === 'wordBreak');
+  assert.ok(explicit); assert.equal(explicit.occurrences, 18);
+  assert.equal(reviewed[rows.indexOf(explicit)], explicit); assert.equal(explicit.attribution, 'unresolved');
+  assert.equal(changed.filter(r => r.classification === 'parity-harness-defect').length, 46);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  reviewed.forEach((r, i) => {
+    assert.deepEqual(raw(r), raw(rows[i]));
+    if (r !== rows[i]) {
+      assert.equal(rows[i].attribution, 'unresolved'); assert.equal(r.reviewEvidence.renderingEquivalent, false);
+      assert.equal(r.reviewEvidence.observations.length, r.occurrences);
+      for (const proof of r.reviewEvidence.observations) { assert.equal(proof.candidateComputedVerified, false); assert.equal(proof.descendantConsumptionVerified, false); }
+    }
+  });
+  for (const row of [...changed, explicit]) {
+    const { family, element, property } = row;
+    const entry = cases.find(e => e.family === family && e.styleInputs.some(i => i.id === element && i.reference));
+    const [r, a] = modalInventoryTrees(inventory, keyOf(entry)), proof = proveInheritedWordBoundary(entry, r, a, element, property);
+    assert.equal(proof.publicSupportCheckRequired, row === explicit);
+    const css = property.replace(/[A-Z]/g, c => '-' + c.toLowerCase());
+    const ancestor = structuredClone(r), owner = ancestor.nodes.find(n => n.key === proof.referenceNode);
+    ancestor.nodes.find(n => n.key === owner.parent).inline[css] = { value: 'inherit', important: false };
+    assert.throws(() => proveInheritedWordBoundary(entry, ancestor, a, element, property));
+    const reset = structuredClone(a); reset.rules.push({ selector: '*', all: 'initial' });
+    assert.throws(() => proveInheritedWordBoundary(entry, r, reset, element, property));
+    const inherited = structuredClone(a), child = inherited.nodes.find(n => n.key === proof.astylarNode);
+    inherited.nodes.find(n => n.key === child.parent).resolvedStyle[property] = 'normal';
+    assert.throws(() => proveInheritedWordBoundary(entry, r, inherited, element, property));
+    const incomplete = structuredClone(a); incomplete.nodes = incomplete.nodes.filter(n => n.key !== child.parent);
+    assert.throws(() => proveInheritedWordBoundary(entry, r, incomplete, element, property));
+    const serialized = structuredClone(r), n = serialized.nodes.find(n => n.key === proof.referenceNode);
+    const index = n.rules.find(i => serialized.rules[i].active);
+    if (index === undefined) { n.rules.push(serialized.rules.length); serialized.rules.push({ active: true, selector: '#injected', conditions: [], declarations: {}, cssText: `${css}: inherit;` }); }
+    else serialized.rules[index].cssText += ` ${css}: inherit;`;
+    assert.throws(() => proveInheritedWordBoundary(entry, serialized, a, element, property));
+    if (property === 'overflowWrap') {
+      const alias = structuredClone(a); alias.rules.push({ selector: '#' + element, wordWrap: 'break-word' });
+      assert.throws(() => proveInheritedWordBoundary(entry, r, alias, element, property));
+    }
+  }
+});
 
 test('production wrapping batch conserves all 8483 raw rows and changes only 30 reviewed groups', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
