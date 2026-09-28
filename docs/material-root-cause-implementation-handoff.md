@@ -2,19 +2,20 @@
 
 ## Current audit checkpoint — September 28
 
-Grid-offset triage (not yet canonical): the accepted-color compact index has
-16 unresolved inset groups / 624 observations across 52 grid-list cases.
-A read-only replay authenticated every original tree pair by its recorded SHA-256
-and reran `proveGridPositionSubstitution` for all 52 cases. All cases share three
-owner request signatures: the native root requests relative positioning without
-insets; native absolute tiles request inline top=0 and left=0 / calc(50% + 0.5px).
-Candidate local styles omit those insets and use relative tiles in a grid.
-Thus tile top/left rows include explicit authoring omissions, while root offsets
-and tile right/bottom are browser-computed observations, not authored pixel values
-that should be copied into candidate styles. This reuses the existing composition
-cause; it does not demonstrate an additional renderer coordinate defect. Next:
-bind these requests to exact scalar membership and inspect candidate authored
-rules before classifying the 16 rows. No classifications or fixtures changed.
+Prepared grid-offset review: 16 groups / 624 observations across 52 original cases.
+Existing composition proof plus exact scalar/tree and three-stage identity checks
+distinguish six authored top/left omission groups (208 observations) from ten
+computed-versus-local inset groups (416). All original tree hashes authenticate;
+native inline requests, active rules and potentially applicable candidate rules
+are checked, including reset/logical-inset/motion exclusions. The native root has
+no authored insets; absolute tiles request top=0 and left=0 / calc(50% + 0.5px).
+Relative candidate grid items omit those requests. Computed right/bottom values
+are not literal styles to copy. No additional renderer coordinate cause is proven.
+`node --test tests/material-parity/grid-position-request-review.spec.mjs` passes
+(1/1, 3.82 s), preserving all raw/unrelated rows and rejecting injected logical
+insets, native bottom requests and scalar/tree disagreement for all three owners.
+Next batch this with the prepared slider-position review after export reconciliation.
+Neither review is wired into the producer yet; no canonical classifications changed.
 The outstanding cursor/pointer export remains live (session 15635, Node PID 9660,
 validation phase); do not restart it or accept its output before reconciliation.
 
