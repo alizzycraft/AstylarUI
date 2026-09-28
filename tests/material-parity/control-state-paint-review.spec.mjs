@@ -226,11 +226,11 @@ test('range initial appearance binds all 156 hidden original range owners withou
   }
 });
 
-test('mapped nonwidget appearance retains alias gaps and unchanged public evidence for all 111 observations', () => {
+test('mapped nonwidget appearance retains alias gaps and unchanged public evidence for all 232 observations', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'),
     'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
-  const report = JSON.parse(bytes), families = ['bottom-sheet', 'snack-bar', 'tooltip'];
+  const report = JSON.parse(bytes), families = ['bottom-sheet', 'snack-bar', 'tooltip', 'dialog'];
   const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
     ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
@@ -241,7 +241,8 @@ test('mapped nonwidget appearance retains alias gaps and unchanged public eviden
   const applied = applyMappedNonwidgetAppearance(rows, cases, inventory, normalize);
   const changed = applied.filter(r => r.attribution === 'reviewed-mapped-nonwidget-appearance-initial-request');
   assert.deepEqual(changed.map(r => [r.element, r.occurrences]), [
-    ['bottom-sheet-overlay', 25], ['snack-bar-overlay', 34], ['snack-bar-surface', 34], ['tooltip-popup', 18],
+    ['bottom-sheet-overlay', 25], ['bottom-sheet-panel', 25], ['snack-bar-overlay', 34], ['snack-bar-surface', 34], ['tooltip-popup', 18],
+    ['dialog-actions', 32], ['dialog-copy', 32], ['dialog-panel', 32],
   ]);
   const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
   const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
@@ -256,6 +257,13 @@ test('mapped nonwidget appearance retains alias gaps and unchanged public eviden
       `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === key);
     const original = modalInventoryTrees(inventory, key), proof = proveMappedNonwidgetAppearance(entry, ...original, row.element);
     assert.equal(proof.inputEquivalent, false); assert.equal(proof.renderingEquivalent, false);
+    if (row.element === 'dialog-panel') {
+      assert.equal(proof.motion.length, 10); assert.equal(proof.motionEquivalenceProven, false);
+      const changedMotion = structuredClone(original);
+      changedMotion[0].rules.find(rule => rule.selector === '._mat-animation-noopable .mat-mdc-dialog-surface')
+        .declarations['transition-property'].value = 'all';
+      assert.throws(() => proveMappedNonwidgetAppearance(entry, ...changedMotion, row.element));
+    }
     for (const mutation of [
       (r, a) => { a.nodes.find(n => n.key === proof.astylarNode).authored.type = 'button'; },
       (r, a) => { a.rules.push({ selector: '#' + row.element, appearance: 'none' }); },
@@ -596,7 +604,7 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   const combined = tail({ status: 'bound' }, rows, cases, inventory, normalize, ...applies);
   assert.deepEqual(combined, [...applies].reverse().reduce((values, apply) => apply(values, cases, inventory, normalize), rows));
   const batch = combined.filter((r, i) => r !== rows[i]);
-  assert.equal(batch.length, 51); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 2835);
+  assert.equal(batch.length, 55); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 2956);
   assert.deepEqual(combined.map(raw), rows.map(raw));
   for (let i = 0; i < rows.length; i++) if (!batch.includes(combined[i])) assert.deepEqual(combined[i], rows[i]);
   assert.deepEqual(validate(combined), []);
@@ -622,7 +630,7 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
   const currentApplied = tail({ status: 'bound' }, currentRows, cases, inventory, normalize, ...applies);
   const currentBatch = currentApplied.filter((r, i) => r !== currentRows[i]);
-  assert.equal(currentBatch.length, 31); assert.equal(currentBatch.reduce((n, r) => n + r.occurrences, 0), 1708);
+  assert.equal(currentBatch.length, 35); assert.equal(currentBatch.reduce((n, r) => n + r.occurrences, 0), 1829);
   assert.deepEqual(currentApplied.map(raw), currentRows.map(raw));
   currentApplied.forEach((r, i) => { if (!currentBatch.includes(r)) assert.deepEqual(r, currentRows[i]); });
   for (const [family, { entry, pair, proof }] of samples) {

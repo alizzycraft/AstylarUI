@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 28
 
+**Remaining four modal appearance groups integrated through the existing mapper:**
+all 121 original observations join native/candidate owners and retained styles;
+their omitted appearance/reset requests receive only initial non-widget request
+equivalence. All ten dialog transition declarations remain in evidence, including
+empty CSSOM expansions and the explicit noop override. Altering that override,
+owner type, appearance/reset authoring, provenance or membership rejects the proof.
+Independent layout/structure, motion, text and raster findings remain unchanged.
+The existing retained public proof's seven dependencies are still authenticated.
+
+Native mapped-tag browser checks, all 232 mapped non-widget observations, and the
+actual combined production-fragment check pass 3/3 (34.02s). Against current 8fbd,
+35 groups / 1,829 observations now have pending classifications; against 0a30,
+55 / 2,956. Raw/unrelated records are conserved. No appearance groups remain
+unresolved in the pending pipeline; canonical/index remains 130 unresolved, with
+**95** projected after source-receipt reconciliation/export. No new capture files,
+renderer or production fixture edits. Next: reconcile the accumulated source
+receipts at the coherent appearance/paint milestone, then remaining spacing/layout
+coverage; do not count the pending classifications as canonical acceptance.
+
 **Native modal non-widget appearance gap tested:** a focused real-Chrome test now
 covers mat-dialog-actions, mat-dialog-content, mat-bottom-sheet-container, div, p
 and section with content, explicit equal CSS boxes, DPR 1/2 and both ordinary and

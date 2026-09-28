@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { collectButtonPaintAllStates } from '../../scripts/audit-material-button-paint-all-states.mjs';
 import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
 import { applyOverlayTriggerPaintReview, overlayTriggerPaintAttribution } from './overlay-trigger-paint-review.mjs';
-import { modalInventoryTrees, applyModalBoxReview, proveBottomSheetPanelPaint, proveBottomSheetActionLayout } from './modal-position-inspection.mjs';
+import { modalInventoryTrees, applyModalBoxReview, proveBottomSheetPanelPaint, proveBottomSheetActionLayout, proveModalPositionInspection } from './modal-position-inspection.mjs';
 import { proveControlClippingRequests } from './control-overflow-observation.mjs';
 import { proveRemainingControlOverflowInputs } from './control-overflow-observation.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
@@ -163,7 +163,11 @@ export function validateRangeAppearanceInitial(rows, originals, cases, inventory
   } catch (error) { return [`range initial appearance lacks original inputs: ${error.message}`]; }
 }
 
-const mappedNonwidgetAppearance = { 'bottom-sheet': ['bottom-sheet-overlay'],
+const modalNonwidgetTypes = { 'dialog-actions': ['mat-dialog-actions', 'div'],
+  'dialog-copy': ['mat-dialog-content', 'p'], 'dialog-panel': ['div', 'section'],
+  'bottom-sheet-panel': ['mat-bottom-sheet-container', 'section'] };
+const mappedNonwidgetAppearance = { 'bottom-sheet': ['bottom-sheet-overlay', 'bottom-sheet-panel'],
+  dialog: ['dialog-actions', 'dialog-copy', 'dialog-panel'],
   'snack-bar': ['snack-bar-overlay', 'snack-bar-surface'], tooltip: ['tooltip-popup'] };
 export function proveMappedNonwidgetAppearance(entry, r, a, element) {
   assert.ok(mappedNonwidgetAppearance[entry.family]?.includes(element));
@@ -171,7 +175,8 @@ export function proveMappedNonwidgetAppearance(entry, r, a, element) {
     assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []);
   }
   const input = one(entry.styleInputs.filter(i => i.id === element));
-  const mapping = resolveOriginAliasPair(entry, r, a, input);
+  const modal = Object.hasOwn(modalNonwidgetTypes, element);
+  const mapping = modal ? proveModalPositionInspection(entry, r, a, element).mapping : resolveOriginAliasPair(entry, r, a, input);
   const gap = element.endsWith('-overlay');
   assert.equal(mapping.status, gap ? 'mapped-with-scalar-rule-gap' : 'mapped');
   assert.deepEqual(mapping.missingRules, gap ? [{ selector: '.cdk-global-overlay-wrapper',
@@ -179,7 +184,8 @@ export function proveMappedNonwidgetAppearance(entry, r, a, element) {
   assert.deepEqual(mapping.extraRules, []);
   const native = one(r.nodes.filter(n => n.key === mapping.referenceNode));
   const candidate = one(a.nodes.filter(n => n.key === mapping.candidateNode));
-  assert.equal(native.type, 'div'); assert.equal(candidate.authored.type, 'div');
+  const [nativeType, candidateType] = modalNonwidgetTypes[element] ?? ['div', 'div'];
+  assert.equal(native.type, nativeType); assert.equal(candidate.authored.type, candidateType);
   assert.equal(candidate.authored.inputType, undefined);
   const affects = key => /^(appearance|webkitappearance|mozappearance|all)$/.test(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
   for (const raw of [native.attributes.style, candidate.authored.attributes?.style]) {
@@ -188,15 +194,31 @@ export function proveMappedNonwidgetAppearance(entry, r, a, element) {
   }
   for (const style of [native.inline ?? {}, candidate.authored.style ?? {}, candidate.normalResolvedStyle,
     candidate.resolvedStyle, candidate.interactionResolvedStyle]) assert.deepEqual(Object.keys(style).filter(affects), []);
+  const motion = [];
   for (const rule of native.rules.map(i => r.rules[i])) {
     assert.ok(!rule.cssText.includes('\\'));
-    assert.deepEqual(Object.keys(rule.declarations).filter(affects), []);
+    const keys = Object.keys(rule.declarations).filter(affects);
+    if (element === 'dialog-panel') {
+      assert.ok(keys.every(key => key.startsWith('transition-')));
+      motion.push(...keys.map(key => ({ selector: rule.selector, conditions: rule.conditions,
+        active: rule.active, key, ...rule.declarations[key], cssText: rule.cssText })));
+    } else assert.deepEqual(keys, []);
+  }
+  if (element === 'dialog-panel') {
+    assert.equal(motion.length, 10);
+    assert.deepEqual(motion.filter(d => d.selector === '.mat-mdc-dialog-surface').map(d => d.value), ['', '', '', '', '']);
+    assert.deepEqual(motion.filter(d => d.selector === '._mat-animation-noopable .mat-mdc-dialog-surface')
+      .map(d => [d.key, d.value]), [['transition-behavior', 'normal'], ['transition-duration', '0s'],
+        ['transition-timing-function', 'ease'], ['transition-delay', '0s'], ['transition-property', 'none']]);
+    assert.ok(motion.every(d => d.active && d.conditions.length === 0));
   }
   assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
     .flatMap(rule => Object.keys(rule).filter(affects)), []);
   assert.equal(r.styles[native.style].appearance, 'none');
   return { case: keyOf(entry), element, mapping, referenceNode: native.key, astylarNode: candidate.key,
     referenceAppearance: 'none', candidateDeclaration: '<omitted>', initialRequestEquivalent: true,
+    ...(modal ? { referenceType: nativeType, candidateType, motion, motionEquivalenceProven: false,
+      nativeAppearanceProof: 'modal non-widget native appearance is invariant across mapped tags and noop transition context' } : {}),
     inputEquivalent: false, renderingEquivalent: false, ancestorClippingOrOverlayPlacementProven: false };
 }
 
@@ -223,7 +245,9 @@ export function applyMappedNonwidgetAppearance(rows, cases, inventory, normalize
       prove: (e, r, a) => ({ ...proveMappedNonwidgetAppearance(e, r, a, element), publicProof }),
       classification: 'equivalent-representation', attribution: 'reviewed-mapped-nonwidget-appearance-initial-request',
       owner: 'none for initial non-widget appearance; retain independent overlay ownership findings',
-      justification: 'The independently mapped native and candidate owners are div non-widgets. Complete own authoring, rules and candidate stages omit appearance/reset/motion inputs; native computed none is an initial-value observation, not missing candidate authoring. The existing public non-widget proof is reused only with unchanged source/package fingerprints. Original overlay z-index scalar-rule gaps remain recorded. No candidate computed value, complete input equivalence, placement, clipping, focus or final raster parity is inferred.',
+      justification: Object.hasOwn(modalNonwidgetTypes, element)
+        ? 'Original mapped owners are non-widgets with omitted appearance/reset requests, despite separately documented structural/layout differences. Native mapped-tag tests at DPR 1/2 retain pixels across omitted/auto/none with content and noop transition context; unchanged public-package evidence covers the candidate div/p/section initial request. Original dialog transition declarations, including empty CSSOM expansions, remain recorded and are not motion-parity evidence. This classifies only the initial appearance request, never candidate computed style, complete modal input equivalence or final rendering.'
+        : 'The independently mapped native and candidate owners are div non-widgets. Complete own authoring, rules and candidate stages omit appearance/reset/motion inputs; native computed none is an initial-value observation, not missing candidate authoring. The existing public non-widget proof is reused only with unchanged source/package fingerprints. Original overlay z-index scalar-rule gaps remain recorded. No candidate computed value, complete input equivalence, placement, clipping, focus or final raster parity is inferred.',
     }), values), rows);
 }
 
