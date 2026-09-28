@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 29
 
+**Toolbar spacing proof verified; production integration pending:** seven groups /
+364 observations across all 52 retained toolbar cases distinguish native host
+padding (16px sides) and a growing spacer from candidate fixed-width,
+nonshrinking children with child margins and no spacer. Reuses the existing
+toolbar position proof and shared modal review machinery. Native declarations,
+all 89 scalar reference fields, and all three candidate style stages are joined
+to original trees. Missing cases, forged membership, extra relevant rules,
+changed padding and spacer ownership are rejected; raw/unrelated rows conserved.
+Historical `3bf5b4d` replaced absolute action placement with auto margin and
+nonshrinking children; it does not prove a core flex defect or the motivation
+for every earlier fixed dimension. Rendering equivalence remains unknown, not
+asserted false merely because authored inputs differ.
+`node --test --test-name-pattern="toolbar spacing preserves" tests/material-parity/display-request-review.spec.mjs`
+passes **1/1**, 3,216.7082 ms total.
+`node --test --test-name-pattern="all 52 toolbar|toolbar inspection rejects" tests/material-parity/toolbar-position-inspection.spec.mjs`
+passes **2/2**, 491.1029 ms total. No captures or renderer/fixture edits.
+Canonical remains **95 unresolved**; previously integrated batches still project
+**51**. This toolbar proof is not yet in the production reducer tail and does not
+change those counts. Next: wire its reducer/validator into the bound production
+tail, preserve historical producer replay and verify the combined batch; then
+dialog/overlay flow and remaining state/border differences. Source/export
+reconciliation and full final gates remain outstanding. Current changes classify
+the pinned baseline; they do not certify newer runtime output.
+
 **Radio/checkbox spacing integrated; export pending:** seven groups / 341
 observations distinguish nested native control/associated-label padding from
 candidate host padding, density-dependent top margin and label left margin.

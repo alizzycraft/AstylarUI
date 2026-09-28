@@ -11,6 +11,46 @@ import { proveListSpacingComposition, applyListSpacingReviews, validateListSpaci
 import { proveStepperSpacingComposition, applyStepperSpacingReviews, validateStepperSpacingReviews } from './display-request-review.mjs';
 import { proveChipSpacingComposition, applyChipSpacingReviews, validateChipSpacingReviews } from './display-request-review.mjs';
 import { proveChoiceSpacingComposition, applyChoiceSpacingReviews, validateChoiceSpacingReviews } from './display-request-review.mjs';
+import { proveToolbarSpacingComposition, applyToolbarSpacingReviews, validateToolbarSpacingReviews } from './display-request-review.mjs';
+
+test('toolbar spacing preserves seven groups and all 364 observations', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => e.family === 'toolbar');
+  assert.equal(cases.length, 52);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'toolbar', {
+    generation: '9b827bb2b09ae9d20d35e1640f987c9a4972aeab04676d595d7dd5f7d6ee01ab',
+    indexSha256: 'cd3d3c45aab1db7095753132870a660f456dc80e5334787f6f4508e8d30d9486',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyToolbarSpacingReviews(rows, cases, inventory, normalize);
+  const changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 7); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 364);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
+  assert.deepEqual(validateToolbarSpacingReviews(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-toolbar-spacing-composition-substitution').reviewedCases.pop();
+  assert.equal(validateToolbarSpacingReviews(forged, rows, cases, inventory, normalize).length, 1);
+  assert.throws(() => applyToolbarSpacingReviews(rows, cases.slice(1), inventory, normalize));
+  for (const row of changed) {
+    const entry = cases.find(e => row.cases.includes(`${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`));
+    assert.ok(entry);
+    const pair = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+    const proof = proveToolbarSpacingComposition(entry, ...pair, row.element);
+    assert.equal(proof.renderingEquivalent, null);
+    for (const mutate of [
+      ([r]) => { r.ruleEvidenceComplete = false; },
+      ([r]) => { r.styles[r.nodes.find(n => n.key === proof.referenceNode).style].padding = '50px'; },
+      ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.padding = '50px'; },
+      ([, a]) => { a.rules.push({ selector: '#' + row.element, [row.element === 'toolbar-primary' ? 'paddingLeft' : 'marginLeft']: '8px' }); },
+      ([r]) => { r.nodes.find(n => n.key === proof.composition.reference.spacer).parent = null; },
+    ]) { const altered = structuredClone(pair); mutate(altered); assert.throws(() => proveToolbarSpacingComposition(entry, ...altered, row.element)); }
+  }
+});
 
 test('choice spacing preserves all 341 observations including the custom mobile label exception', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

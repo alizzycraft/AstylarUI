@@ -6,6 +6,75 @@ import { proveStepperPositionSubstitution } from '../../scripts/audit-material-s
 import { proveChipPositionInspection } from './chip-position-inspection.mjs';
 import { proveChoiceLabelStacking } from './choice-label-stacking-substitution.mjs';
 import { proveRadioPositionSubstitution } from './radio-position-substitution.mjs';
+import { proveToolbarPositionInspection } from './toolbar-position-inspection.mjs';
+
+export function proveToolbarSpacingComposition(entry, reference, candidate, element) {
+  assert.equal(entry.family, 'toolbar');
+  assert.ok(['toolbar-primary', 'toolbar-title', 'toolbar-action'].includes(element));
+  assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);
+  assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+  const composition = proveToolbarPositionInspection(reference, candidate);
+  const one = ns => { assert.equal(ns.length, 1); return ns[0]; };
+  const r = one(reference.nodes.filter(n => n.attributes?.id === element));
+  const a = one(candidate.nodes.filter(n => n.authored?.id === element));
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  assert.equal(Object.keys(input.reference).length, 89);
+  for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[r.style][key], value);
+  for (const [scalar, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']])
+    assert.deepEqual(input[scalar], a[stage]);
+  const host = element === 'toolbar-primary';
+  const relevant = key => (host ? /^(padding.*|all)$/ : /^(margin.*|flex.*|all)$/).test(key.replaceAll('-', '').toLowerCase());
+  assert.deepEqual(Object.keys(r.inline).filter(relevant), []);
+  const referenceRequests = r.rules.map(i => reference.rules[i]).filter(q => q.active).flatMap(q =>
+    Object.entries(q.declarations).filter(([key]) => relevant(key)).map(([key, value]) => ({ selector: q.selector, key, ...value })));
+  assert.deepEqual(referenceRequests, host ? ['top', 'right', 'bottom', 'left'].map(side => ({
+    selector: '.mat-toolbar-row, .mat-toolbar-single-row', key: 'padding-' + side,
+    value: ['left', 'right'].includes(side) ? '16px' : '0px', important: false,
+  })) : []);
+  assert.equal(a.authored.style, undefined); assert.equal(a.authored.attributes?.style, undefined);
+  const candidateRequests = candidate.rules.filter(q => rootInitialSelectorCanApply(q.selector, a.authored)).flatMap(q =>
+    Object.entries(q).filter(([key]) => relevant(key)).map(([key, value]) => ({ selector: q.selector, key, value })));
+  const title = element === 'toolbar-title';
+  assert.deepEqual(candidateRequests, host ? [] : [
+    { selector: title ? '.toolbar-title' : '.toolbar-action', key: title ? 'marginLeft' : 'margin', value: title ? '16px' : '0 16px 0 auto' },
+    { selector: title ? '.toolbar-title' : '.toolbar-action', key: 'flexShrink', value: '0' },
+  ]);
+  const native = reference.styles[r.style];
+  if (host) assert.equal(native.padding, '0px 16px');
+  else { assert.equal(native.margin, '0px'); assert.equal(native.flexShrink, '1'); }
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    if (host) assert.equal(a[stage].padding, '0');
+    else {
+      assert.equal(a[stage].flexShrink, '0');
+      assert.equal(a[stage].margin, title ? '0' : '0 16px 0 auto');
+      if (title) assert.equal(a[stage].marginLeft, '16px');
+    }
+  }
+  return { referenceNode: r.key, astylarNode: a.key, composition, referenceRequests, candidateRequests,
+    firstDivergence: 'padded toolbar and growing spacer replaced by fixed-width nonshrinking children and child margins',
+    inputEquivalent: false, renderingEquivalent: null, coreDefectProven: false, compensationIntentProven: false,
+    constrainedWidthEquivalenceProven: false };
+}
+
+export function applyToolbarSpacingReviews(rows, cases, inventory, normalize) {
+  for (const [element, properties] of [
+    ['toolbar-primary', ['paddingLeft', 'paddingRight']], ['toolbar-title', ['marginLeft', 'flexShrink']],
+    ['toolbar-action', ['marginLeft', 'marginRight', 'flexShrink']],
+  ]) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'toolbar', element, properties, prove: (entry, reference, candidate) => proveToolbarSpacingComposition(entry, reference, candidate, element),
+    attribution: 'reviewed-toolbar-spacing-composition-substitution', owner: 'showcase toolbar flex structure, sizing and spacing authoring',
+    justification: 'The native toolbar owns 16px side padding and a growing spacer between shrinking title/action items. Candidate omits that spacer and host padding, using fixed widths, flex-shrink:0 and child margins including an auto left action margin. Auto margin and a spacer may align on some unconstrained boxes, but these different shrink/sizing and padding owners do not establish equivalent inputs under constraint. Preserve the authoring substitution without blaming core flex or claiming historical intent or whole-toolbar rendering equivalence.',
+  });
+  return rows;
+}
+
+export function validateToolbarSpacingReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-toolbar-spacing-composition-substitution');
+    assert.deepEqual(select(rows), select(applyToolbarSpacingReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`toolbar spacing lacks original evidence: ${error.message}`]; }
+}
 
 export function proveChoiceSpacingComposition(entry, reference, candidate, element) {
   const checkbox = entry.family === 'checkbox';
