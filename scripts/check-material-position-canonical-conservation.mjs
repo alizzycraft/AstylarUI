@@ -64,6 +64,26 @@ import { restoreCaretPositionProducer } from '../tests/material-parity/position-
 import { applyCaretPositionReviews, isCaretPositionReviewRow } from '../tests/material-parity/overlay-position-request-review.mjs';
 import { restoreOwnerBoundaryProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
 import { applyOwnerBoundaryReviews, isOwnerBoundaryReviewRow } from '../tests/material-parity/custom-owner-border-review.mjs';
+import { restorePreparedInputProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { applyPreparedInputReviews, isPreparedInputReviewRow } from '../tests/material-parity/authored-anchor-review.mjs';
+
+export const preparedInputPopulation = Object.freeze({
+  'reviewed-authored-anchor-substitution': { groups: 10, observations: 344 },
+  'reviewed-core-anchor-substitution': { groups: 2, observations: 104 },
+  'reviewed-core-transform-request-omission': { groups: 1, observations: 52 },
+  'reviewed-core-computed-offset-boundary': { groups: 2, observations: 104 },
+  'reviewed-relative-owner-position-omission': { groups: 2, observations: 114 },
+  'reviewed-relative-owner-computed-insets': { groups: 20, observations: 1144 },
+  'reviewed-static-owner-relative-substitution': { groups: 2, observations: 112 },
+  'reviewed-static-owner-observation-boundary': { groups: 14, observations: 806 },
+  'reviewed-chip-toggle-radius-token-substitution': { groups: 28, observations: 576 },
+  'reviewed-card-contrast-radius-substitution': { groups: 4, observations: 52 },
+  'reviewed-minimum-size-request-omission': { groups: 8, observations: 402 },
+  'reviewed-minimum-size-observation-boundary': { groups: 33, observations: 1795 },
+  'reviewed-text-transform-computed-local-boundary': { groups: 27, observations: 1304 },
+});
+export const preparedInputClassification = attribution => /substitution$|omission$/.test(attribution)
+  ? 'application-plugin-authoring-defect' : 'parity-harness-defect';
 
 export const ownerBoundaryPopulation = Object.freeze({
   'reviewed-custom-host-border-initial-divergence': { groups: 54, observations: 1112 },
@@ -250,9 +270,9 @@ export function replaySnackbarOverflowRows(rows, captured) {
     applySnackbarPositionRequests(rows, cases, inventory, normalize), cases, inventory, normalize), cases, inventory, normalize);
 }
 
-export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false, weight = false, modalPosition = false, controlPosition = false, widthOverflow = false, snackbarOverflow = false, authoredTypography = false, wrapping = false, typography = false, boxSizing = false, gridHeight = false, paint = false, componentColor = false, componentInteraction = false, caretPosition = false, ownerBoundary = false } = {}) {
-  assert.ok(Number(dialogCard) + Number(weight) + Number(modalPosition) + Number(controlPosition) + Number(widthOverflow) + Number(snackbarOverflow) + Number(authoredTypography) + Number(wrapping) + Number(typography) + Number(boxSizing) + Number(gridHeight) + Number(paint) + Number(componentColor) + Number(componentInteraction) + Number(caretPosition) + Number(ownerBoundary) <= 1, 'select one scalar batch');
-  const transition = ownerBoundary ? restoreOwnerBoundaryProducer(source) : caretPosition ? restoreCaretPositionProducer(source) : componentInteraction ? restoreComponentInteractionProducer(source) : componentColor ? restoreComponentColorProducer(source) : paint ? restorePaintReviewProducer(source) : gridHeight ? restoreGridHeightReviewProducer(source) : boxSizing ? restoreBoxSizingReviewProducer(source) : typography ? restoreTypographyReviewProducer(source) : wrapping ? restoreWrappingProducer(source) : authoredTypography ? restoreAuthoredTypographyProducer(source) : snackbarOverflow ? restoreSnackbarOverflowProducer(source) : widthOverflow ? restoreWidthOverflowProducer(source) : controlPosition ? restoreControlPositionProducer(source) : modalPosition ? restoreModalPositionProducer(source) : weight ? restoreInteractiveWeightProducer(source) : dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
+export function compareBorderDefaultCanonical(previous, current, expectedRows, source, { dialogCard = false, weight = false, modalPosition = false, controlPosition = false, widthOverflow = false, snackbarOverflow = false, authoredTypography = false, wrapping = false, typography = false, boxSizing = false, gridHeight = false, paint = false, componentColor = false, componentInteraction = false, caretPosition = false, ownerBoundary = false, preparedInput = false } = {}) {
+  assert.ok(Number(dialogCard) + Number(weight) + Number(modalPosition) + Number(controlPosition) + Number(widthOverflow) + Number(snackbarOverflow) + Number(authoredTypography) + Number(wrapping) + Number(typography) + Number(boxSizing) + Number(gridHeight) + Number(paint) + Number(componentColor) + Number(componentInteraction) + Number(caretPosition) + Number(ownerBoundary) + Number(preparedInput) <= 1, 'select one scalar batch');
+  const transition = preparedInput ? restorePreparedInputProducer(source) : ownerBoundary ? restoreOwnerBoundaryProducer(source) : caretPosition ? restoreCaretPositionProducer(source) : componentInteraction ? restoreComponentInteractionProducer(source) : componentColor ? restoreComponentColorProducer(source) : paint ? restorePaintReviewProducer(source) : gridHeight ? restoreGridHeightReviewProducer(source) : boxSizing ? restoreBoxSizingReviewProducer(source) : typography ? restoreTypographyReviewProducer(source) : wrapping ? restoreWrappingProducer(source) : authoredTypography ? restoreAuthoredTypographyProducer(source) : snackbarOverflow ? restoreSnackbarOverflowProducer(source) : widthOverflow ? restoreWidthOverflowProducer(source) : controlPosition ? restoreControlPositionProducer(source) : modalPosition ? restoreModalPositionProducer(source) : weight ? restoreInteractiveWeightProducer(source) : dialogCard ? restoreMappedButtonResetProducer(source) : restoreToggleSideColorProducer(source);
   const adjusted = refreshScalarControlReceipts(previous.rows, previous.control, current.control, transition);
   const expected = JSON.parse(JSON.stringify(refreshScalarControlReceipts(expectedRows,
     previous.control, current.control, transition)));
@@ -279,7 +299,15 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     const before = adjusted[i], after = current.rows[i];
     same(raw(previous.rows[i]), raw(after), 'border batch changed raw scalar evidence');
     if (isDeepStrictEqual(before, after)) continue;
-    assert.match(before.property, ownerBoundary ? /^(border(Top|Right|Bottom|Left)(Color|Style)|position|top|right|bottom|left|transform|transformOrigin)$/ : caretPosition ? /^(caretColor|position|top|right|bottom|left)$/ : componentInteraction ? /^(cursor|pointerEvents)$/ : componentColor ? /^color$/ : paint ? /^(color|backgroundColor)$/ : gridHeight ? /^(gridTemplateColumns|gridTemplateRows|height)$/ : boxSizing ? /^boxSizing$/ : typography ? /^(letterSpacing|lineHeight)$/ : wrapping ? /^whiteSpace$/ : authoredTypography ? /^(fontFamily|lineHeight|letterSpacing|color|overflowX|overflowY)$/ : snackbarOverflow ? /^(position|right|bottom|overflowX|overflowY)$/ : widthOverflow ? /^(width|overflowX|overflowY)$/ : modalPosition || controlPosition ? /^(position|top|right|bottom|left)$/ : weight ? /^fontWeight$/ : dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    assert.match(before.property, preparedInput ? /^(position|top|right|bottom|left|transform|border(Top|Bottom)(Left|Right)Radius|minWidth|minHeight|textTransform)$/ : ownerBoundary ? /^(border(Top|Right|Bottom|Left)(Color|Style)|position|top|right|bottom|left|transform|transformOrigin)$/ : caretPosition ? /^(caretColor|position|top|right|bottom|left)$/ : componentInteraction ? /^(cursor|pointerEvents)$/ : componentColor ? /^color$/ : paint ? /^(color|backgroundColor)$/ : gridHeight ? /^(gridTemplateColumns|gridTemplateRows|height)$/ : boxSizing ? /^boxSizing$/ : typography ? /^(letterSpacing|lineHeight)$/ : wrapping ? /^whiteSpace$/ : authoredTypography ? /^(fontFamily|lineHeight|letterSpacing|color|overflowX|overflowY)$/ : snackbarOverflow ? /^(position|right|bottom|overflowX|overflowY)$/ : widthOverflow ? /^(width|overflowX|overflowY)$/ : modalPosition || controlPosition ? /^(position|top|right|bottom|left)$/ : weight ? /^fontWeight$/ : dialogCard ? /^border(Top|Right|Bottom|Left)(Color|Style)$/ : /^border(Top|Right|Bottom|Left)Color$/);
+    if (preparedInput) {
+      assert.equal(before.attribution, 'unresolved'); assert.ok(isPreparedInputReviewRow(after));
+      assert.equal(after.classification, preparedInputClassification(after.attribution));
+      assert.equal(after.reviewEvidence.inputEquivalent, false); assert.equal(after.reviewEvidence.renderingEquivalent, false);
+      assert.equal(after.reviewedCases.length, before.occurrences);
+      assert.equal(after.reviewEvidence.observations.length, before.occurrences);
+      assert.equal(after.reviewEvidence.originalRowSha256, digest(previous.rows[i]));
+    }
     if (ownerBoundary) {
       assert.equal(before.attribution, 'unresolved'); assert.ok(isOwnerBoundaryReviewRow(after));
       assert.equal(after.classification, ownerBoundaryClassification(after.attribution));
@@ -468,7 +496,7 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
       existingProofRows.push(i);
     }
   }
-  same(Object.fromEntries(totals), ownerBoundary ? ownerBoundaryPopulation : caretPosition ? caretPositionPopulation : componentInteraction ? componentInteractionPopulation : componentColor ? componentColorPopulation : paint ? paintPopulation : gridHeight ? {
+  same(Object.fromEntries(totals), preparedInput ? preparedInputPopulation : ownerBoundary ? ownerBoundaryPopulation : caretPosition ? caretPositionPopulation : componentInteraction ? componentInteractionPopulation : componentColor ? componentColorPopulation : paint ? paintPopulation : gridHeight ? {
     'reviewed-grid-template-layout-substitution': { groups: 2, observations: 104 },
     'reviewed-mapped-grid-template-observation-stage': { groups: 24, observations: 884 },
     'reviewed-direct-grid-template-motion-boundary': { groups: 34, observations: 1920 },
@@ -536,7 +564,7 @@ export function compareBorderDefaultCanonical(previous, current, expectedRows, s
     'reviewed-material-outline-token-substitution': { groups: 3, observations: 204 },
     'reviewed-mapped-border-initial-color-divergence': { groups: 52, observations: 1432 },
   }, 'border batch changed unexpected classification membership');
-  return { previous: previous.manifest, current: current.manifest, changedGroups: ownerBoundary ? 134 : caretPosition ? 64 : componentInteraction ? 42 : componentColor ? 36 : paint ? 72 : gridHeight ? 103 : boxSizing ? 49 : typography ? 91 : wrapping ? 30 : authoredTypography ? 36 : snackbarOverflow ? 31 : widthOverflow ? 51 : controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83, changedOccurrences: ownerBoundary ? 3948 : caretPosition ? 2441 : componentInteraction ? 1587 : componentColor ? 922 : paint ? 618 : gridHeight ? 4322 : boxSizing ? 2657 : typography ? 4862 : wrapping ? 1478 : authoredTypography ? 1951 : snackbarOverflow ? 1292 : widthOverflow ? 1764 : controlPosition ? 3160 : modalPosition ? 1125 : weight ? 1502 : dialogCard ? 896 : 2596,
+  return { previous: previous.manifest, current: current.manifest, changedGroups: preparedInput ? 153 : ownerBoundary ? 134 : caretPosition ? 64 : componentInteraction ? 42 : componentColor ? 36 : paint ? 72 : gridHeight ? 103 : boxSizing ? 49 : typography ? 91 : wrapping ? 30 : authoredTypography ? 36 : snackbarOverflow ? 31 : widthOverflow ? 51 : controlPosition ? 46 : modalPosition ? 38 : weight ? 26 : dialogCard ? 23 : 83, changedOccurrences: preparedInput ? 6909 : ownerBoundary ? 3948 : caretPosition ? 2441 : componentInteraction ? 1587 : componentColor ? 922 : paint ? 618 : gridHeight ? 4322 : boxSizing ? 2657 : typography ? 4862 : wrapping ? 1478 : authoredTypography ? 1951 : snackbarOverflow ? 1292 : widthOverflow ? 1764 : controlPosition ? 3160 : modalPosition ? 1125 : weight ? 1502 : dialogCard ? 896 : 2596,
     existingProofRows, scalarReceiptRows: adjusted.filter((r, i) => !isDeepStrictEqual(r, previous.rows[i])).length,
     controlReceiptRecords: receiptCases.length, allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
     orderedCurrentRowsSha256: digest(current.rows), inputEquivalent: false, renderingEquivalent: false };
@@ -809,7 +837,21 @@ function replayAppearanceRows(rows, captured, { colorMotion = false, originMotio
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--owner-boundary') {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--prepared-input') {
+  assert.equal(process.argv.length, 3);
+  const previous = await readAudit('artifacts/material-parity/working-audit/a593d4c7e804b6cf5ba863163122fde6cb31774c88c5fe6f97f6504cee2fa948');
+  assert.equal(previous.manifest.uncompressedSha256, 'd278ff1faf4d3389db64eef2cba515072a1f55b27f787ce5664acff1287cdc46');
+  const current = await readAudit('docs');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const captured = JSON.parse(bytes);
+  const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })), ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const expected = applyPreparedInputReviews(previous.rows, cases, inventory, normalize);
+  console.log(JSON.stringify(compareBorderDefaultCanonical(previous, current, expected,
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs'), { preparedInput: true }), null, 2));
+} else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--owner-boundary') {
   assert.equal(process.argv.length, 3);
   const previous = await readAudit('artifacts/material-parity/working-audit/fca6a4354e9c006e21066f0d19ea9435afacf436d226cda1c78f5ee420bea137');
   assert.equal(previous.manifest.uncompressedSha256, '37b37fbe835a9e277dc4a550b4a49433ad6a29fb2e4b9b055172f36e3c3149f4');

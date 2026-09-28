@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 28
 
+The existing canonical-conservation command now accepts `--prepared-input` and
+pins the accepted a593d4c7 predecessor. Its independent population table requires
+exactly 153 groups / 6909 observations in thirteen attribution categories, honest
+classification/equivalence flags, original-row hashes and complete observation
+membership. It retains the existing all-raw, row-order, unrelated-metadata and
+48-control-receipt checks. `node --test tests/material-parity/position-canonical-conservation.spec.mjs`
+passes 31/31 in 102.24 s, including forged expectations, changed raw/control data,
+missing observations and false equivalence. Scoped diff checks and the named
+current-ancestry export dry run pass. Actual exported-payload conservation and
+source/section reconciliation have not yet run for this batch. Next launch one
+cold export with the complete named baseline; do not accept its output until
+`node scripts/check-material-position-canonical-conservation.mjs --prepared-input`
+and source/section reconciliation pass. No final acceptance claim is made.
+
 Producer integration now wires the 153-group / 6909-observation prepared batch
 through the existing apply/validate/bound-case guard and source-fingerprint list.
 The existing authored-anchor module composes the eight existing review functions;
