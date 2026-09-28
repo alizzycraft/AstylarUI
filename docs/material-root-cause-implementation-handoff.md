@@ -2,7 +2,18 @@
 
 ## Current audit checkpoint — September 28
 
-**Heading-overflow applicability question answered, row binding pending:** the
+**Heading-overflow proof now bound to original owners; integration pending:**
+card-title52 and dialog-title32 original owners pass complete declaration,
+identity, native-axis and all-three-candidate-stage checks. Four groups /168
+scalar observations receive equivalent-initial-value attribution only; all raw
+and unrelated rows remain unchanged. `node --test --test-name-pattern="84 original
+heading owners" tests/material-parity/control-overflow-observation.spec.mjs`
+passes1/1 (2.68s), including replay and malformed-rule/type/style/coverage negative
+controls. Existing defaults/clip/scroll dependencies plus the heading browser
+test and generic element-creation clipping call are hash-bound. No renderer or
+fixture edits. Producer integration/export of these four rows remains pending.
+
+**Heading applicability evidence:** the
 original initial-overflow proof covered11 ordinary types but not candidate h2.
 Extended its existing core spec to check h2 defaults and exercise both div/h2
 through actual OverflowClipService.apply with omitted/visible overflow; both
@@ -16,9 +27,7 @@ The only dependency receipt change is the additive shared overflow spec hash
 1a1b9cf...→53b6723c8b7d241afdc8b610b81a9158d9f5720c79a5926f51aa0b7cbb37fac8;
 live review/test pins updated, historical documents left immutable. Next export
 must account for this receipt-only change in existing mapped/button observations.
-Next decisive step: bind card-title52/dialog-title32 original heading owners,
-their complete declarations and all three candidate stages before classifying
-the four overflow rows. No heading rows classified yet. Do not extend this
+Original heading binding is completed above. Do not extend this
 conclusion to table, input, tab button or custom-plugin overflow without their
 own applicability evidence; this proves no heading text/raster equivalence.
 

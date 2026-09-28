@@ -150,6 +150,62 @@ export function validateMappedVisibleOverflow(rows, originalRows, cases, invento
   } catch (error) { return [`mapped visible overflow does not replay from original owners: ${error.message}`]; }
 }
 
+export function proveHeadingVisibleOverflow(entry, r, a) {
+  const element = { card: 'card-title', dialog: 'dialog-title' }[entry.family]; assert.ok(element);
+  for (const tree of [r, a]) { assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []); }
+  assert.equal(a.resolvedStyleSource, 'core-style-inspection'); assert.equal(a.resolvedStyleEvidenceVersion, 2);
+  const one = values => { assert.equal(values.length, 1); return values[0]; };
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  const ref = one(r.nodes.filter(n => (n.attributes?.['data-parity-id'] ?? n.attributes?.id) === element));
+  const ast = one(a.nodes.filter(n => n.authored?.id === element));
+  assert.equal(ref.type, entry.family === 'card' ? 'mat-card-title' : 'h2'); assert.equal(ast.authored.type, 'h2');
+  const affects = key => /^(overflow.*|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  assert.deepEqual(Object.keys(ref.inline ?? {}).filter(affects), []);
+  for (const value of [ref.attributes?.style, ast.authored.attributes?.style])
+    assert.doesNotMatch(value ?? '', /(?:overflow(?:-[\w-]+)?|all)\s*:/i);
+  for (const rule of ref.rules.map(i => r.rules[i]).filter(rule => rule.active)) {
+    assert.ok(!rule.cssText.includes('\\'));
+    assert.deepEqual(Object.keys(rule.declarations).filter(affects), []);
+  }
+  for (const key of ['overflowX', 'overflowY']) {
+    assert.equal(r.styles[ref.style][key], 'visible'); assert.equal(input.reference[key], 'visible');
+  }
+  for (const style of [ast.authored.style ?? {}, ast.normalResolvedStyle, ast.resolvedStyle, ast.interactionResolvedStyle]) {
+    assert.ok(style && typeof style === 'object'); assert.deepEqual(Object.keys(style).filter(affects), []);
+  }
+  for (const [field, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'],
+    ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']]) assert.deepEqual(input[field], ast[stage]);
+  assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, ast.authored))
+    .flatMap(rule => Object.keys(rule).filter(affects)), []);
+  assert.ok(Array.isArray(input.astylarAuthored));
+  assert.ok(input.astylarAuthored.every(rule => rule.declarations && !Object.keys(rule.declarations).some(affects)));
+  return { element, referenceNode: ref.key, astylarNode: ast.key, referenceAxes: 'visible', candidateAxes: 'omitted',
+    initialValueEquivalent: true, inputEquivalent: false, ownClippingBranchVerified: true,
+    structuralEquivalenceVerified: false, ancestorClippingVerified: false, renderingEquivalent: false };
+}
+
+export function applyHeadingVisibleOverflow(rows, cases, inventory, normalize) {
+  const sources = { ...initialOverflowSources,
+    'tests/material-parity/input-tree-evidence.spec.mjs': 'e442a49c26b916eed34300e22a1897d977b723df83a31da3c955421e52d95c5e',
+    'src/app/services/dom/elements/element-creation.service.ts': 'bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a' };
+  for (const [file, expected] of Object.entries(sources)) assert.equal(createHash('sha256')
+    .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
+  return [['card', 'card-title'], ['dialog', 'dialog-title']].reduce((values, [family, element]) =>
+    applyModalBoxReview(values, cases, inventory, normalize, { family, element, properties: ['overflowX', 'overflowY'],
+      prove: (entry, r, a) => ({ ...proveHeadingVisibleOverflow(entry, r, a), sources }),
+      classification: 'equivalent-representation', attribution: 'reviewed-heading-visible-overflow-initial-value', owner: 'none',
+      justification: 'Exact original heading owners omit own overflow/reset requests; both native axes compute visible and all three candidate h2 stages omit overflow. Dependency-pinned heading-default/shared-clip and browser sensitivity tests establish the same initial own-clipping branch for omission and visible. This explains only the overflow scalar representation, not heading structure, text raster, ancestor clipping or full rendering equivalence. Controls, tables and custom plugins are excluded.',
+    }), rows);
+}
+
+export function validateHeadingVisibleOverflow(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-heading-visible-overflow-initial-value');
+    assert.deepEqual(select(rows), select(applyHeadingVisibleOverflow(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`heading initial overflow lacks bound original owners: ${error.message}`]; }
+}
+
 export const clippingOwners = Object.freeze({
   core: { 'core-primary': ['button', 'button', '.mat-ripple'] },
   sidenav: { 'sidenav-primary': ['mat-sidenav-container', 'div', '.mat-drawer-container'] },

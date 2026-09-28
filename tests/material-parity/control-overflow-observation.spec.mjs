@@ -11,6 +11,44 @@ import { clippingOwners, proveControlClippingRequests, applyControlClippingReque
   validateMappedVisibleOverflow, visibleButtonOwners, proveVisibleButtonOverflowInputs,
   applyVisibleButtonOverflow, validateVisibleButtonOverflow, visibleButtonOverflowAttribution } from './control-overflow-observation.mjs';
 import { applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
+import { proveHeadingVisibleOverflow, applyHeadingVisibleOverflow, validateHeadingVisibleOverflow } from './control-overflow-observation.mjs';
+
+test('84 original heading owners satisfy the dependency-bound initial overflow proof', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes), owners = { card: 'card-title', dialog: 'dialog-title' };
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))]
+    .filter(e => owners[e.family] && e.styleInputs.some(i => i.id === owners[e.family]));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []); assert.equal(cases.length, 84);
+  const rows = Object.keys(owners).flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '0a30ca894170b342e4521c01e4fcb23ed990d70cea789fe89bd4eba0baf663fb',
+    indexSha256: 'edf9c2de34728dc874460796853460dd5d39bafd71d4db41cba257366ec50cc0',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyHeadingVisibleOverflow(rows, cases, inventory, normalize), changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 4); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 168);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (!changed.includes(applied[i])) assert.deepEqual(applied[i], rows[i]);
+  assert.deepEqual(validateHeadingVisibleOverflow(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-heading-visible-overflow-initial-value').reviewedCases.pop();
+  assert.equal(validateHeadingVisibleOverflow(forged, rows, cases, inventory, normalize).length, 1);
+  for (const family of Object.keys(owners)) {
+    const entry = cases.find(e => e.family === family), pair = modalInventoryTrees(inventory,
+      `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+    const proof = proveHeadingVisibleOverflow(entry, ...pair);
+    assert.equal(proof.initialValueEquivalent, true); assert.equal(proof.renderingEquivalent, false);
+    for (const mutate of [
+      ([r]) => { r.ruleEvidenceComplete = false; },
+      ([r]) => { r.styles[r.nodes.find(n => n.key === proof.referenceNode).style].overflowY = 'hidden'; },
+      ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).authored.type = 'input'; },
+      ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.overflow = 'clip'; },
+      ([, a]) => { a.rules.push({ selector: '#' + owners[family], overflowInline: 'hidden' }); },
+      ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).authored.attributes = { style: 'all:initial' }; },
+    ]) { const altered = structuredClone(pair); mutate(altered); assert.throws(() => proveHeadingVisibleOverflow(entry, ...altered)); }
+  }
+});
 
 test('716 native button owners request visible axes while candidates omit overflow at every captured stage', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
