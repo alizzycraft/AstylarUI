@@ -9,6 +9,7 @@ import { applyHeadingVisibleOverflow, validateHeadingVisibleOverflow, applyTabPa
 import { applyTableVisibleOverflow, validateTableVisibleOverflow, applyControlOverflowOwnerBoundaries, validateControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, validateRangeVisibleOverflow } from './control-overflow-observation.mjs';
 import { applyFocusShadowSubstitutions, validateFocusShadowSubstitutions, applyCardShadowSyntax, validateCardShadowSyntax } from './control-state-paint-review.mjs';
 import { applyMappedNonwidgetAppearance, validateMappedNonwidgetAppearance } from './control-state-paint-review.mjs';
+import { applyRangeAppearanceInitial, validateRangeAppearanceInitial } from './control-state-paint-review.mjs';
 import { applyComponentColorReviews, validateComponentColorReviews, isComponentColorReviewRow } from './component-color-request-review.mjs';
 import { applyExplicitComponentCursors, validateComponentCursorReviews, isComponentCursorReviewRow } from './component-cursor-request-review.mjs';
 import { applyComponentPointerReviews, validateComponentPointerReviews, isComponentPointerReviewRow } from './component-pointer-events-review.mjs';
@@ -386,7 +387,7 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     ? applyFullRadiusActionReview(beforeFullRadiusReviews, cases, elementInventory, canonicalStyle)
     : beforeFullRadiusReviews;
   const discrepancies = ownerInitialStyleBinding.status === 'bound'
-    ? [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, applyFocusShadowSubstitutions, applyCardShadowSyntax, applyMappedNonwidgetAppearance]
+    ? [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, applyFocusShadowSubstitutions, applyCardShadowSyntax, applyMappedNonwidgetAppearance, applyRangeAppearanceInitial]
       .reduce((rows, apply) => apply(rows, cases, elementInventory, canonicalStyle), beforeOwnerOmissionReviews)
     : beforeOwnerOmissionReviews;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
@@ -730,6 +731,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
       errors.push(...validateFocusShadowSubstitutions(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateCardShadowSyntax(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateMappedNonwidgetAppearance(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
+      errors.push(...validateRangeAppearanceInitial(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateComponentColorReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
         collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), report.elementInventory), canonicalStyle));
       errors.push(...validatePaintReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
@@ -859,6 +861,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     errors.push('shadow attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-mapped-nonwidget-appearance-initial-request'))
     errors.push('mapped non-widget appearance attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-range-appearance-initial-request'))
+    errors.push('range appearance attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => ['reviewed-badge-anchor-margin-substitution', 'reviewed-slider-margin-owner-boundary', 'reviewed-list-spacing-composition-substitution'].includes(row.attribution)))
     errors.push('spacing composition review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))

@@ -2,6 +2,42 @@
 
 ## Current audit checkpoint — September 28
 
+**Range initial appearance integrated; explicit-none support gap isolated:** the
+root-package range reduction compares omitted/auto/none at DPR 1 and 2, plus an
+opacity-zero sensitivity control. One equal declaration map feeds both renderers.
+Omitted and auto produce identical pixels within each renderer; opacity changes
+both, rejecting a blank/invisible-test false pass. Native none changes pixels,
+while candidate none retains the auto pixels despite public normal/effective
+inspection retaining `none`. The actual installed `createRange` method matches
+transpiled current source and does not branch on appearance. This confirms a
+separate explicit-none paint-support gap, not a diagnosis of Material drag/hit
+testing, an assertion of full native-widget parity, or a violated catalog promise
+(the existing appearance assessment scopes indicator handling to select/checkbox).
+
+Diagnostic variants use equal explicit z-index 1 and transparent background to
+isolate range paint from the already identified paint-composition problem. They
+are not edits to canonical fixtures or suggested compensations. The original
+156 Material input owners are independently verified as type=range/inputType=range,
+with omitted appearance/reset/motion requests and opacity 0 on both sides. Their
+computed-native auto versus omitted-local difference is classified only as an
+equivalent initial request. Neither candidate computed appearance nor complete
+slider equivalence is fabricated; explicit-none support remains a separate core
+implementation obligation. After a general core implementation, preserve this
+equal-input reduction and require native/candidate none behavior to agree.
+
+Focused public test `public range appearance separates` passes 1/1 (21.49s
+total); it verifies the defect observation rather than declaring support fixed.
+Original population and combined production-tail tests pass 2/2 (21.87s total),
+including altered type/request/stage/opacity, missing provenance and forged
+membership controls. All raw/unrelated rows remain conserved: 46 groups / 2,563
+observations against 0a30 and 26 / 1,436 against current 8fbd. Bound-only guards
+and exact historical producer restoration pass. New producer SHA256 is
+`d9557d6000a33412a966c1d01cc0241c59f9a7803e5e6917446776253444ecc4`.
+Canonical/index still 130 unresolved; expected **104** after milestone export.
+Nine appearance groups involving changed owner types/plugins remain. No renderer
+or production fixture changes; no new disk captures. Continue ownership/spacing
+investigations before the pending source-receipt reconciliation/export milestone.
+
 **Four mapped non-widget appearance groups integrated:** all 111 observations
 (sheet overlay 25, snackbar overlay/surface 34 each, tooltip popup 18) independently
 map to native/candidate `div` owners. Complete own rules, inline inputs and all

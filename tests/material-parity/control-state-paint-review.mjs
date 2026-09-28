@@ -6,6 +6,7 @@ import { collectDisabledLabelColorStages } from '../../scripts/audit-material-di
 import { applyOverlayTriggerPaintReview, overlayTriggerPaintAttribution } from './overlay-trigger-paint-review.mjs';
 import { modalInventoryTrees, applyModalBoxReview, proveBottomSheetPanelPaint } from './modal-position-inspection.mjs';
 import { proveControlClippingRequests } from './control-overflow-observation.mjs';
+import { proveRemainingControlOverflowInputs } from './control-overflow-observation.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
@@ -14,6 +15,50 @@ import { proveFlowPositionSubstitution } from '../../scripts/audit-material-flow
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+export function proveRangeAppearanceInitial(entry, r, a, element) {
+  assert.equal(entry.family, 'slider'); assert.ok(['slider-start', 'slider-primary'].includes(element));
+  const identity = proveRemainingControlOverflowInputs(entry, r, a, element);
+  const native = one(r.nodes.filter(n => n.key === identity.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === identity.astylarNode));
+  const affects = key => /^(appearance|webkitappearance|mozappearance|all)$/.test(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
+  for (const raw of [native.attributes.style, candidate.authored.attributes?.style]) {
+    assert.doesNotMatch(raw ?? '', /[\\/]/);
+    assert.doesNotMatch(raw ?? '', /(?:^|;)\s*(?:(?:-webkit-|-moz-)?appearance|all|animation[^:]*|transition[^:]*)\s*:/i);
+  }
+  for (const style of [native.inline ?? {}, candidate.authored.style ?? {}, candidate.normalResolvedStyle,
+    candidate.resolvedStyle, candidate.interactionResolvedStyle]) assert.deepEqual(Object.keys(style).filter(affects), []);
+  for (const rule of native.rules.map(i => r.rules[i])) assert.deepEqual(Object.keys(rule.declarations).filter(affects), []);
+  assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.keys(rule).filter(affects)), []);
+  assert.equal(r.styles[native.style].appearance, 'auto');
+  assert.equal(r.styles[native.style].opacity, '0');
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) assert.equal(candidate[stage].opacity, '0');
+  const source = 'src/app/services/dom/input/range.manager.ts';
+  const sha256 = createHash('sha256').update(readFileSync(source, 'utf8').replaceAll('\r\n', '\n')).digest('hex');
+  assert.equal(sha256, '5300fd18403ff659f4ef415df796f0e9ea0260e7c591004fa407fd99ec24b4db');
+  return { case: keyOf(entry), element, ...identity, source: { file: source, sha256 },
+    referenceAppearance: 'auto', candidateDeclaration: '<omitted>', originalOpacity: '0',
+    initialRequestEquivalent: true, candidateComputedAppearanceInferred: false,
+    inputEquivalent: false, renderingEquivalent: false,
+    separateSupportGap: 'public reduction: explicit none changes native range paint but not core range paint' };
+}
+
+export function applyRangeAppearanceInitial(rows, cases, inventory, normalize) {
+  return ['slider-start', 'slider-primary'].reduce((values, element) => applyModalBoxReview(values, cases, inventory, normalize, {
+    family: 'slider', element, properties: ['appearance'], prove: (e, r, a) => proveRangeAppearanceInitial(e, r, a, element),
+    classification: 'equivalent-representation', attribution: 'reviewed-range-appearance-initial-request',
+    owner: 'none for omitted initial appearance; core owns separately demonstrated explicit none support gap',
+    justification: 'Both original type=range owners omit appearance/reset/motion requests; native auto is the computed initial keyword and candidate local stages remain omitted. Both original controls request opacity zero. The root-package reduction at DPR 1/2 proves omitted versus explicit auto pixel equality within each renderer with opacity sensitivity, while independently exposing ignored explicit none in core. This classification covers the initial request only, not native-widget raster parity, core none support, hit testing, hidden-input composition or complete slider equivalence.',
+  }), rows);
+}
+
+export function validateRangeAppearanceInitial(rows, originals, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-range-appearance-initial-request');
+    assert.deepEqual(select(rows), select(applyRangeAppearanceInitial(originals, cases, inventory, normalize))); return [];
+  } catch (error) { return [`range initial appearance lacks original inputs: ${error.message}`]; }
+}
 
 const mappedNonwidgetAppearance = { 'bottom-sheet': ['bottom-sheet-overlay'],
   'snack-bar': ['snack-bar-overlay', 'snack-bar-surface'], tooltip: ['tooltip-popup'] };
