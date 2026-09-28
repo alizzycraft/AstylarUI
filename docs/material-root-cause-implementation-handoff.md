@@ -8,6 +8,34 @@ current-ancestry launcher (all five required inputs). Unified session 72739,
 worker PID 16712, launcher PID 2044; last observed phase `build-audit`. Re-poll
 the live handle before any restart. Prior failed output remains unaccepted.
 
+**Remaining spacing population triage (read-only during export):** pinned report
+b07ef154... was authenticated; every listed candidate value was checked in
+painted, normal-resolved and interaction-resolved stages. No source evidence was
+changed. Pending classification/proof integration:
+
+- Checkbox: 68 owners, native padding 0, candidate authored `#checkbox-primary`
+  padding `0 11px`, unchanged through all stages. This establishes authored
+  substitution, not equivalent composition; native inner-control spacing still
+  needs the existing wrapper mapping before assigning the two scalar groups.
+- Snackbar: 34 owners, native overlay padding 0, candidate `.snack-overlay`
+  explicitly requests `0 0 8px` with fixed full-surface flex-end positioning.
+  Join to the existing overlay placement proof; do not infer equivalence or
+  conflate this with the separately proved camera-depth defect.
+- Tabs: 70 cases / 140 label observations. Contrast's 17 cases / 34 labels
+  request candidate `1px 0 0`, versus native 0; all other 106 label observations
+  request zero. Git bc4d442 changes `.tab` padding from 0 to this density-specific
+  adjustment. This is an authored historical compensation candidate, not proof
+  of a remaining core typography cause.
+- Slider: 78 owners preserve native `.mat-mdc-slider` authored side margins
+  8px, versus candidate zero at all stages and no captured own spacing rule.
+  Candidate is `showcase.material:range-visual` inside a different composition;
+  join the existing range ownership proof before classifying omitted margins.
+- Badge: 52 owners / 208 side observations have computed native -12px versus
+  candidate zero; candidate uses absolute top/right -4px and 16px dimensions.
+  Captured native medium/overlap rule margin fields are empty strings, so this
+  scan does NOT establish the native authored margin expression. Resolve it
+  through retained stylesheet/token evidence instead of treating empty as zero.
+
 **Additional read-only spacing evidence queued:** all 68 original expansion
 cases retain reference title margin-right 16px from the authored Material title
 rule, versus candidate shorthand margin 0 and absent marginRight in all three
