@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 28
 
+**Prepared overflow groups now producer-integrated:** the six heading/tab-panel
+groups below join the earlier14 groups in the bound-evidence producer tail.
+Combined verification changes exactly20 groups /1,127 observations, preserves raw
+and unrelated rows, passes reverse-order replay and all seven validators, and
+rejects unbound application. Three focused tests pass3/3 (8.62s):
+`node --test --test-name-pattern="omitted owner paint|84 original heading|70 original tab panels"
+tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/control-overflow-observation.spec.mjs`.
+Exact historical producer restoration still authenticates a986934f...; scoped
+diff check passes. No full export yet: canonical/index remain150 unresolved,
+expected130 after this batch if no additional changes. The next integration
+milestone must reconcile the shared heading-test receipt change described below,
+the icon finding, all source fingerprints and independent cold replay. Earlier
+“integration pending” notes below describe proof preparation; producer integration
+is now complete, canonical publication is not.
+
 **Tab-panel overflow boundary now bound; integration pending:** all70 original
 tab-panel owners reuse the existing wrapping/alias proof and the unchanged plugin
 source fingerprint. Two groups /140 observations are measurement-owner boundary

@@ -15,13 +15,14 @@ import { applyOwnerMaximumWidths, validateOwnerMaximumWidths } from './control-w
 import { applyBadgeMarginReviews, validateBadgeMarginReviews } from './authored-anchor-review.mjs';
 import { applySliderMarginReviews, validateSliderMarginReviews } from './slider-position-request-review.mjs';
 import { applyListSpacingReviews, validateListSpacingReviews } from './display-request-review.mjs';
+import { applyHeadingVisibleOverflow, validateHeadingVisibleOverflow, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
 
 test('omitted owner paint requests preserve all 77 original observations and reject competing inputs', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'),
     'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const report = JSON.parse(bytes), owners = { badge: 'badge-count', 'bottom-sheet': 'bottom-sheet-panel' };
-  const families = [...Object.keys(owners), 'chips', 'tabs', 'slider', 'list'];
+  const families = [...Object.keys(owners), 'chips', 'tabs', 'slider', 'list', 'card', 'dialog'];
   const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
     ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))]
     .filter(e => families.includes(e.family));
@@ -61,24 +62,25 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   assert.ok(start > 0 && end > start);
   const tail = new Function('ownerInitialStyleBinding', 'beforeOwnerOmissionReviews', 'cases', 'elementInventory',
     'canonicalStyle', 'applyOwnerMaximumWidths', 'applyOmittedOwnerPaintRequests', 'applyBadgeMarginReviews',
-    'applySliderMarginReviews', 'applyListSpacingReviews', source.slice(start, end) + '\nreturn discrepancies;');
-  const applies = [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews];
+    'applySliderMarginReviews', 'applyListSpacingReviews', 'applyHeadingVisibleOverflow', 'applyTabPanelOverflowBoundary', source.slice(start, end) + '\nreturn discrepancies;');
+  const applies = [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary];
   const combined = tail({ status: 'bound' }, rows, cases, inventory, normalize, ...applies);
   assert.deepEqual(combined, [...applies].reverse().reduce((values, apply) => apply(values, cases, inventory, normalize), rows));
   const batch = combined.filter((r, i) => r !== rows[i]);
-  assert.equal(batch.length, 14); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 819);
+  assert.equal(batch.length, 20); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 1127);
   assert.deepEqual(combined.map(raw), rows.map(raw));
   for (let i = 0; i < rows.length; i++) if (!batch.includes(combined[i])) assert.deepEqual(combined[i], rows[i]);
   assert.deepEqual(validate(combined), []);
   assert.deepEqual(validateOwnerMaximumWidths(combined, rows, cases, inventory, normalize), []);
-  for (const validate of [validateBadgeMarginReviews, validateSliderMarginReviews, validateListSpacingReviews])
+  for (const validate of [validateBadgeMarginReviews, validateSliderMarginReviews, validateListSpacingReviews, validateHeadingVisibleOverflow, validateTabPanelOverflowBoundary])
     assert.deepEqual(validate(combined, rows, cases, inventory, normalize), []);
   assert.equal(tail({ status: 'unbound' }, rows, cases, inventory, normalize,
     ...applies.map(() => () => assert.fail('unbound owner review ran'))), rows);
-  for (const name of ['validateOwnerMaximumWidths', 'validateOmittedOwnerPaintRequests', 'validateBadgeMarginReviews', 'validateSliderMarginReviews', 'validateListSpacingReviews'])
+  for (const name of ['validateOwnerMaximumWidths', 'validateOmittedOwnerPaintRequests', 'validateBadgeMarginReviews', 'validateSliderMarginReviews', 'validateListSpacingReviews', 'validateHeadingVisibleOverflow', 'validateTabPanelOverflowBoundary'])
     assert.ok(source.includes(`errors.push(...${name}(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));`));
   assert.ok(source.includes("errors.push('owner omission review attribution lacks bound original cases')"));
   assert.ok(source.includes("errors.push('spacing composition review attribution lacks bound original cases')"));
+  assert.ok(source.includes("errors.push('heading and tab overflow attribution lacks bound original cases')"));
   for (const [family, { entry, pair, proof }] of samples) {
     const property = family === 'badge' ? 'textOverflow' : 'boxShadow';
     for (const mutate of [

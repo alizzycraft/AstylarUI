@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyHeadingVisibleOverflow,')) {
+    for (const [from, to] of [
+      ["import { applyHeadingVisibleOverflow, validateHeadingVisibleOverflow, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';\n", ''],
+      ['applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary]', 'applyListSpacingReviews]'],
+      ...['validateHeadingVisibleOverflow', 'validateTabPanelOverflowBoundary'].map(name => [`      errors.push(...${name}(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n`, '']),
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => ['reviewed-heading-visible-overflow-initial-value', 'reviewed-tab-panel-overflow-owner-boundary'].includes(row.attribution)))\n    errors.push('heading and tab overflow attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated overflow integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyBadgeMarginReviews,')) {
     for (const [from, to] of [
       ["import { applyBadgeMarginReviews, validateBadgeMarginReviews } from './authored-anchor-review.mjs';\n", ''],
