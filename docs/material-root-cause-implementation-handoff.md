@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+**Cold export 72739 finished (not running):** terminal exit 1 after
+2,204,549ms (36.74 min). The three evidence-binding errors are gone. The ONLY
+reported error is 150 unresolved scalar groups; full audit acceptance therefore
+still fails. Coverage is 436/436 static, 1,875/1,875 interactions, 8,483 groups,
+389,202 occurrences, 134 source findings. Evidence-session verification:
+1,205 files / 89,154,859 bytes, 2 collectors, 10 memory hits, 0 disk hits,
+0 invalidations. Current docs payload is 62,480,189 compressed bytes, SHA
+0a30ca894170b342e4521c01e4fcb23ed990d70cea789fe89bd4eba0baf663fb;
+decoded 2,208,243,072 bytes, SHA
+f4d0e6c60d2440d7f5f0f002c6e382190f7beb6d04ab31c9fc213b40fc831442.
+This remains an UNACCEPTED working snapshot; the accepted compact index is still
+6f0a4c.... `node scripts/check-material-position-canonical-conservation.mjs
+--stacking-radius` is now running as unified session 65414. Poll it rather than
+restarting. Its scope is scalar/control evidence, not every report section;
+full-payload/source-fingerprint comparison and independent cold check remain.
+
 **Remaining appearance triage:** accepted index has 15 groups / 660 observations.
 Pinned raw style inputs confirm: slider start/primary are input-to-input native
 `auto` (78 each), not the non-widget `none` case; tab-panel is span-to-plugin
@@ -18,11 +34,11 @@ assess widget/plugin/type substitutions. Full rule/inline ancestry verification
 and focused classification integration are still pending; this scan is triage,
 not new equivalence evidence. The report bytes were authenticated to b07ef154....
 
-**Cold integration export active from 764e59f:** launched September 28 15:54:50
+**Historical launch details, now terminal:** export from 764e59f launched September 28 15:54:50
 local with `ASTYLAR_AUDIT_COLD=1`, `ASTYLAR_AUDIT_PROGRESS=1`, and the named
 current-ancestry launcher (all five required inputs). Unified session 72739,
-worker PID 16712, launcher PID 2044; last observed phase `build-audit`. Re-poll
-the live handle before any restart. Prior failed output remains unaccepted.
+worker PID 16712, launcher PID 2044. See terminal outcome above; do not poll the
+completed export handle. Prior failed output remains unaccepted.
 
 **Remaining spacing population triage (read-only during export):** pinned report
 b07ef154... was authenticated; every listed candidate value was checked in
