@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared custom-host border review closes the omission question for 24 groups /
+672 observations: icon-primary 80, slider-visual 312, tab-panel 280. Exact native
+and candidate types, scalar/tree identity, all three candidate stages, complete
+local rules and absent authored border/motion requests are verified for each
+member. Native zero/none borders compute currentcolor; candidate host stages
+contain transparent initial borders. This extends the existing initial-color
+limitation to explicitly admitted custom/img hosts, not their generated children.
+`node --test tests/material-parity/custom-owner-border-review.spec.mjs` passes
+(1/1, 3.79 s overall). Raw/unrelated rows are conserved; all three owners reject
+native border injection, candidate border injection and candidate type changes.
+New proof files only; no running-export dependency or canonical classification
+changed. Next border priorities: divider painted edge versus omitted sides,
+table explicit reset, badge alias, tab controls and progress motion exclusions.
+
 Border triage (accepted interaction snapshot, not new classifications): compact
 authenticated queries find 79 unresolved color groups across ten owners, totaling
 1904 observations. Smallest decisive first check used the hash-pinned original
