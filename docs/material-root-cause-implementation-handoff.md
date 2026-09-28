@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — September 28
 
+Text-transform triage (after 87f8f69): authenticated original capture SHA
+`b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a` and compact
+generation/index below. All 27 pending groups total 1304 observations. Read-only
+inventory replay followed native/candidate parent chains, active native
+text-transform/all declarations, conservatively applicable candidate rules and
+all three candidate local stages. Thirteen button-owner groups / 768 observations
+have native filled/outlined/text-button `var(--mat-button-*-label-text-transform)`
+requests. Twelve other groups / 477 observations have no local or ancestral
+native request. Neither population has candidate local/ancestral requests; native
+owners compute none. These are not yet classifications or rendering proof.
+Two groups / 59 observations (bottom-sheet-overlay and snack-bar-overlay) were
+deliberately excluded from that replay on alias rule-gap status. Existing mapping
+identifies the gap as `.cdk-global-overlay-wrapper` z-index:1000; preserve it in
+the eventual proof rather than relaxing mapping assertions globally. Tooltip
+inputs also include absent-root cases outside its 18 pending observations;
+future classification must bind exact row occurrences, not every styleInputs ID.
+
+Important competing explanation: a native token request is not necessarily an
+explicit reset omitted by the candidate. A sampled button capture has no token
+definitions in its rule inventory; installed Material `_m3-button.scss` declares
+these transform tokens null, whereas `_m2-button.scss` declares none. The core
+text-style parser defaults textTransform to none (text-style-parser.service.ts:46).
+None of these facts alone proves the captured token's effective value or the
+complete candidate text pipeline. Next bind the reference theme/token provenance
+and candidate inherited-text consumption before choosing authoring defect versus
+computed/local observation boundary. Do not classify all thirteen token requests
+as omissions merely because var(...) differs from a missing field. This triage
+reuses existing inventory/alias helpers, creates no scratch capture/report, and
+changes no canonical classification. The 126-group prepared batch and all final
+browser/root-cause acceptance gaps remain unchanged. HEAD/upstream were both
+87f8f69 before this documentation increment; no producer dependency was edited.
+
 Radius proof now prepares 28 chip/toggle groups / 576 observations; 44
 badge/action-pill groups remain separate. The existing authored-anchor review
 and spec were extended rather than adding another report or validation layer.
