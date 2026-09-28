@@ -87,6 +87,24 @@ mutations. The complete-input export launcher dry run passed. Next run the cold
 batched export, then `check-material-position-canonical-conservation.mjs --paint`,
 section/source-fingerprint reconciliation and compact import/verification. Do not
 accept a new snapshot until these checks complete; canonical unresolved remains 787.
+
+While the `f9ab31c` cold export runs (`paint-export-f9ab31c.log`), read-only
+original-case replay resolved the next two color-owner questions. The source
+capture SHA is the pinned `b07ef154...`, inventory errors are empty, and exact
+compact-row membership/order matches **15 sort** and **62 sidenav** observations.
+For every sort case, the reference measured header is in the already-proved
+frame-inheritance chain, while the candidate measured `.sort-header` explicitly
+requests `#000000`; measured and normal owner colors are black. The existing
+sort-label proof concerns its immediate `.sort-trigger`, not this header, so the
+scalar join must authenticate the header's own declaration separately.
+For every sidenav case, the reference measured container is in the existing
+content-token chain and the candidate is exactly the content proof's parent.
+The container's measured/normal local color is omitted with no measured authored
+color rule; the child retains `rgba(29,27,32,1)`. Do not use that child value as
+the container's local/computed color. Next bind owner declarations and all three
+candidate stages with negative controls, retaining the existing label findings.
+These are applicability observations, not newly accepted classifications or
+proof of core color conversion. No source dependency was edited during export.
 Prepared coverage includes 62 background groups / 450 observations and ten color
 groups / 168 observations. The remaining 36 color groups need applicability work;
 the existing retained-label proofs must not be generalized to container owners.
