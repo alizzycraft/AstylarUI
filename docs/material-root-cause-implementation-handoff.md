@@ -52,16 +52,27 @@ rule sharing its selector. No renderer/reference input was changed.
 The card formula `densityHeight / 2 * theme.cornerScale` originated in 7945a42
 (`fix(example): audit Material text and card`), and persists at showcase source
 line 648. The commit also added profile offsets; history proves origin, not the
-motivation for each change or a core paint diagnosis. Next: badge-pill input
-evidence and remaining conditional paint gaps at a justified browser milestone.
+motivation for each change or a core paint diagnosis. Authenticated read-only badge
+replay reuses the existing custom-owner/alias proof for all 52 owners: native
+9999px and candidate 8px radii accompany 16x16 native/computed and candidate local
+dimensions. Twelve static cases supply paired measured boxes (maximum size error
+4.33e-11 CSS px); interaction cases do not supply those boxes. Do not generalize
+static geometry into interaction paint equivalence. The remaining conditional
+paint gaps require evidence at a justified browser milestone, not guessed closure.
 
 Owner-boundary export 23967 completed in 2414.21 s: all 436 static / 1875 interaction
 cases, 8483 scalar groups / 389202 occurrences, 134 source findings; its only
 reported error is 439 unattributed groups. All 519 current source fingerprints
 match, including producer LF SHA 887cc07d4c7ddb92f5b548c5df90e8168045ff4f23a1d254ee40958959c180d0.
 Prepared authored-anchor/corner files are correctly outside that export's source
-set. Full conservation (session 37035) and 79-section reconciliation (15642) are
-running; do not import or accept the generation until they pass. Current payload
+set. Full conservation passed: exactly 134 groups / 3948 observations, one scalar
+receipt and 48 control receipts updated, all raw inputs and other control evidence
+conserved. Source reconciliation confirms four expected additions, three expected
+changes, and no removals (519 verified fingerprints). Logs:
+`owner-boundary-conservation-818e2a8.log` and `owner-boundary-fingerprints-818e2a8.log`
+under `artifacts/material-parity`. The all-section scan (session 15642, PID 7768)
+is confirmed live; do not restart it or import/accept the generation until its
+section changes are accounted for. Current payload
 SHA is a593d4c7e804b6cf5ba863163122fde6cb31774c88c5fe6f97f6504cee2fa948;
 decoded SHA d278ff1faf4d3389db64eef2cba515072a1f55b27f787ce5664acff1287cdc46.
 
