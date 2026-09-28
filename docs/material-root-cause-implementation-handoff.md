@@ -149,6 +149,20 @@ inheritance. Do not substitute disabled activation guards for proof of equivalen
 CSS hit suppression. These source-level findings do not establish the actual picked
 mesh or event delivery in the Material cases; no new scalar classification yet.
 
+Prepared sheet pointer-owner review (not yet canonical): the existing overlay
+identity/paint proof binds all **25 observations** to a non-picking native CDK
+wrapper (`pointer-events: none`) and a separate backdrop explicitly requesting
+`auto`. The candidate combines those owners and omits pointer-events throughout
+its captured ancestry and three style stages. This scalar therefore measures
+different interaction owners; classify this one group as a harness measurement
+defect, not evidence that the candidate needs `none`. Actual picking, dismissal
+and window-wide modal scope remain unproven. The focused command
+`node --test tests/material-parity/component-pointer-events-review.spec.mjs`
+passed 1/1 in 13.71 s, preserving raw/unrelated rows and rejecting altered/missing
+backdrops and an added candidate pointer request. Integrate with the prepared
+cursor/pointer batch after color reconciliation; the remaining pointer population
+is 22 groups / 799 observations. No renderer or fixture changes were made.
+
 Color producer/validator integration is now wired and focused-verified against
 the accepted paint compact snapshot. Validation starts from original rows and
 fresh sort/sidenav retained ancestry; unbound color attributions are rejected.
