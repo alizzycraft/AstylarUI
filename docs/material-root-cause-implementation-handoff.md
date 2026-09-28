@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — September 28
 
+**Transparent focus shadow now has public behavioral evidence:** the focused
+`public button focus distinguishes` test reuses the existing root-package button
+reduction in memory, adding only an equal authored focus-shadow rule and equal
+z-index variants. Real Tab input focuses the first button on both sides at DPR
+1/2. Native `none` and alpha-zero shadow retain identical outlines and pixels.
+Astylar `none` creates eight visible-flagged fallback meshes; alpha-zero creates
+none. At equal z-index 1 the candidate pixels differ, demonstrating an observable
+behavioral effect without Material code. At equal z-index 0 both candidate
+captures remain identical: the ring is at Z=-0.02, behind the root plane. At
+z-index 1 the owner is Z=0.25 and ring Z=0.23. This sensitivity exposes why mesh
+presence alone was insufficient; it is not permission to add z-index to fixtures.
+The initial pixel-difference expectation failed at the original zero-depth setup;
+waiting the existing 250ms capture delay did not change it. The two-depth
+experiment retains that observation instead of calling it rendering equivalence.
+
+The package is imported from `astylarui`, never source/deep imports. Installed
+`dist/lib/lib/astylar.js` SHA256 is
+`6ad4f51ca47a9e1956a66b6e724105a66aaff582c53b0b30374fb6051723f5f8`;
+the test authenticates it and compares its complete `configureFocusIndicator`
+method against transpiled current source (whitespace only normalized). It does
+not claim full installed/source package equivalence. History `25e1893` explicitly
+replaced `.material-button:focus` shadow `none` with transparent shadow and added
+the latter to another rule set. This is a real behavioral substitution, not
+harmless no-paint syntax. Native outline-reset authoring and complete original
+seven-group membership still need binding before canonical attribution. The
+reduction intentionally keeps the browser's native outline; it does not yet prove
+the exact Material focus presentation or diagnose all focus-depth behavior.
+No captures were written, no production fixtures or renderer changed. Keep this
+additive test receipt in the pending milestone reconciliation batch.
+Focused command `node --test --test-name-pattern="public button focus distinguishes|card shadow serialization" tests/material-parity/control-state-paint-review.spec.mjs`
+passed 2/2 in 23.34s (focus body 20.16s, card body 2.04s).
+
 **Card shadow syntax question answered, classification not yet integrated:** the
 focused `card shadow serialization` test in `control-state-paint-review.spec.mjs`
 authenticates the retained capture and checks all 52 card owners. Reference

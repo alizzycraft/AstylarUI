@@ -18,6 +18,92 @@ import { applyListSpacingReviews, validateListSpacingReviews } from './display-r
 import { applyHeadingVisibleOverflow, validateHeadingVisibleOverflow, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
 import { applyTableVisibleOverflow, validateTableVisibleOverflow, applyControlOverflowOwnerBoundaries, validateControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, validateRangeVisibleOverflow } from './control-overflow-observation.mjs';
 
+test('public button focus distinguishes none from transparent shadow without changing native outline', async () => {
+  const { build } = await import('esbuild');
+  const { createServer } = await import('node:http');
+  const { resolve } = await import('node:path');
+  const { chromium } = await import('playwright-core');
+  const { PNG } = await import('pngjs');
+  const { default: ts } = await import('typescript');
+  const installedPath = 'examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar.js';
+  const installed = readFileSync(installedPath, 'utf8');
+  assert.equal(createHash('sha256').update(installed).digest('hex'),
+    '6ad4f51ca47a9e1956a66b6e724105a66aaff582c53b0b30374fb6051723f5f8');
+  const compiled = ts.transpileModule(readFileSync('src/lib/astylar.ts', 'utf8'),
+    { compilerOptions: { target: ts.ScriptTarget.ES2022, experimentalDecorators: true } }).outputText;
+  const focusMethod = value => {
+    const start = value.indexOf('    configureFocusIndicator(elementId, siteData) {');
+    const end = value.indexOf('    setElementPseudoState(', start);
+    assert.ok(start > 0 && end > start);
+    return value.slice(start, end).replace(/\s+/g, ' ').trim();
+  };
+  assert.equal(focusMethod(compiled), focusMethod(installed), 'installed focus decision matches source');
+  let source = readFileSync('examples/material-showcase/audit/button-pointer-focus.mjs', 'utf8');
+  const replace = (from, to) => {
+    assert.equal(source.split(from).length, 2, `unique public reduction anchor: ${from}`);
+    source = source.replace(from, to);
+  };
+  replace('const children =', "styles.push({ selector: 'button:focus', boxShadow: new URLSearchParams(location.search).get('shadow') });\nconst children =");
+  replace("display: 'block', boxSizing:", "zIndex: new URLSearchParams(location.search).get('z'), display: 'block', boxSizing:");
+  replace('return { mode, authored: site,', `return { meshEvidence: surface?.scene.meshes.map(m => ({ name:m.name, enabled:m.isEnabled(), visible:m.isVisible, position:m.getAbsolutePosition().asArray(), color:m.material?.emissiveColor?.asArray() })), indicators: surface?.scene.meshes.filter(m => m.name.startsWith('focusIndicator_first_') && m.isVisible).map(m => ({ name: m.name, alpha: m.material?.alpha })),
+      nativeOutline: mode === 'reference' ? getComputedStyle(document.getElementById('first')).outline : null,
+      authored: site, mode,`);
+  const built = await build({ stdin: { contents: source, resolveDir: resolve('examples/material-showcase/audit'),
+    sourcefile: 'focus-shadow-diagnostic.mjs' }, bundle: true, write: false, format: 'esm',
+    platform: 'browser', target: 'es2022', metafile: true });
+  const packageInputs = Object.keys(built.metafile.inputs).filter(p => p.includes('node_modules/astylarui/'));
+  assert.ok(packageInputs.length > 0, 'public root import must resolve the installed package');
+  assert.ok(!Object.keys(built.metafile.inputs).some(p => /^src\//.test(p)), 'no renderer source deep imports');
+  const bundle = built.outputFiles[0].contents;
+  const server = createServer((req, res) => {
+    res.setHeader('Content-Type', req.url === '/audit.js' ? 'text/javascript' : 'text/html');
+    res.end(req.url === '/audit.js' ? bundle : '<!doctype html><script type="module" src="/audit.js"></script>');
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let browser;
+  try {
+    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    for (const dpr of [1, 2]) for (const z of ['0', '1']) {
+      const samples = {};
+      for (const mode of ['reference', 'astylar']) {
+        samples[mode] = [];
+        for (const shadow of ['none', '0 0 0 1px rgba(0,0,0,0)']) {
+          const page = await browser.newPage({ viewport: { width: 440, height: 200 }, deviceScaleFactor: dpr });
+          const errors = []; page.on('pageerror', error => errors.push(error.message));
+          try {
+            await page.goto(`http://127.0.0.1:${server.address().port}/?mode=${mode}&z=${z}&shadow=${encodeURIComponent(shadow)}`);
+            await page.waitForFunction(() => !!window.buttonFocusAudit);
+            await page.evaluate(() => window.buttonFocusAudit.settle());
+            await page.keyboard.press('Tab');
+            await page.evaluate(() => window.buttonFocusAudit.settle());
+            await page.waitForTimeout(250); // Match the existing public focus reduction's capture boundary.
+            const snapshot = await page.evaluate(() => window.buttonFocusAudit.snapshot());
+            assert.deepEqual(errors, []); assert.equal(snapshot.authoredUnchanged, true);
+            assert.equal(snapshot.activeButton, 'first');
+            assert.ok(snapshot.nativeEvents.some(e => e.type === 'keydown' && e.key === 'Tab' && e.trusted));
+            if (mode === 'astylar') assert.deepEqual(snapshot.diagnostics.messages.filter(m => m.severity === 'error'), []);
+            samples[mode].push({ snapshot, pixels: PNG.sync.read(await page.screenshot()).data });
+            await page.evaluate(() => window.buttonFocusAudit.dispose());
+          } finally { await page.close(); }
+        }
+      }
+      const [rn, rt] = samples.reference, [an, at] = samples.astylar;
+      for (let i = 0; i < 2; i++) assert.deepEqual(samples.reference[i].snapshot.authored, samples.astylar[i].snapshot.authored);
+      assert.equal(rn.snapshot.nativeOutline, rt.snapshot.nativeOutline);
+      assert.doesNotMatch(rn.snapshot.nativeOutline, /\bnone\b/);
+      assert.equal(rn.pixels.equals(rt.pixels), true, 'native focus pixels retain the same outline');
+      assert.equal(an.snapshot.indicators.length, 8, 'none retains the two four-edge core fallback rings');
+      assert.deepEqual(at.snapshot.indicators, [], 'transparent shadow disables fallback');
+      const owner = an.snapshot.meshEvidence.find(m => m.name === 'first');
+      const ring = an.snapshot.meshEvidence.find(m => m.name.startsWith('focusIndicator_'));
+      assert.ok(Math.abs(ring.position[2] - owner.position[2] + .02) < 1e-6);
+      console.log(JSON.stringify({ dpr, z, equalPixels: an.pixels.equals(at.pixels),
+        focusDepth: ring.position[2], ownerDepth: owner.position[2] }));
+      assert.equal(an.pixels.equals(at.pixels), z === '0', 'explicit stacking separates focus paint from the baseline occlusion');
+    }
+  } finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); }
+});
+
 test('card shadow serialization preserves all original layers and browser pixels', async () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'),
