@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared anchor batch now totals 15 groups / 604 observations. Five core-demo
+groups (260 observations) reuse `inspectButtonHostRequests`: native relative
+button has no authored insets and requests `.mat-ripple:not(:empty)`
+`translateZ(0px)`; candidate `#core-primary` explicitly requests absolute
+top/left 28px and omits transform in all local stages. Top/left and transform
+are authoring differences; right/bottom zero-versus-omitted is a computed/local
+observation boundary. The existing relative-to-absolute host and fixed-width
+findings remain the owning context. No used containing-block or coordinate
+equivalence is claimed. Focused anchor test passes 1/1 in 15.72 s, preserving
+raw/prior rows and rejecting injected native offsets or candidate transforms.
+An initial test failed because the new proof omitted the existing adapter's
+direct node-key fields; adding those fields corrected the integration without
+changing the evidence or assertions. Export 23967 is still active; these review
+files remain outside its dependencies and canonical classifications.
+
 Prepared followup: `authored-anchor-review.mjs` attaches the existing slide-toggle
 flow proof and badge mapped-owner proof to 10 pending inset groups / 344
 observations (2/136 slide-toggle, 8/208 badge). It checks original scalar values,

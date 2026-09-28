@@ -3,6 +3,50 @@ import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { proveFlowPositionSubstitution } from '../../scripts/audit-material-flow-position-substitutions.mjs';
 import { proveBadgePointerRequest } from './component-pointer-events-review.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { inspectButtonHostRequests } from './button-host-request-evidence.mjs';
+
+export function proveCoreAnchor(entry, reference, candidate) {
+  assert.equal(entry.family, 'core');
+  const input = entry.styleInputs.find(i => i.id === 'core-primary');
+  const identity = inspectButtonHostRequests(input, reference, candidate);
+  const r = reference.nodes.find(n => n.key === identity.referenceNode), a = candidate.nodes.find(n => n.key === identity.candidateNode);
+  const selected = key => /^(all|position|top|right|bottom|left|transform)$|^inset/.test(key.replaceAll('-', '').toLowerCase());
+  const select = value => Object.fromEntries(Object.entries(value ?? {}).filter(([key]) => selected(key)));
+  assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);
+  assert.deepEqual(select(r.inline), {});
+  const requests = r.rules.map(i => reference.rules[i]).filter(rule => rule.active)
+    .map(rule => ({ selector: rule.selector, declarations: select(rule.declarations) })).filter(rule => Object.keys(rule.declarations).length);
+  assert.deepEqual(requests, [
+    { selector: '.mdc-button', declarations: { position: { value: 'relative', important: false } } },
+    { selector: '.mat-ripple', declarations: { position: { value: 'relative', important: false } } },
+    { selector: '.mat-ripple:not(:empty)', declarations: { transform: { value: 'translateZ(0px)', important: false } } },
+  ]);
+  const candidateRequests = candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, a.authored))
+    .map(({ selector, ...declarations }) => ({ selector, declarations: select(declarations) })).filter(rule => Object.keys(rule.declarations).length);
+  assert.deepEqual(candidateRequests, [{ selector: '#core-primary', declarations: { position: 'absolute', top: '28px', left: '28px' } }]);
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'])
+    assert.deepEqual(select(a[stage]), { position: 'absolute', top: '28px', left: '28px' });
+  for (const property of ['top', 'right', 'bottom', 'left']) assert.equal(reference.styles[r.style][property], '0px');
+  assert.equal(reference.styles[r.style].transform, 'matrix(1, 0, 0, 1, 0, 0)');
+  return { identity, referenceNode: r.key, astylarNode: a.key, referenceRequests: requests, candidateRequests,
+    referenceRules: r.rules.map(i => reference.rules[i]), inputEquivalent: false, renderingEquivalent: false,
+    candidateUsedOffsetsVerified: false, containingBlockEquivalenceProven: false };
+}
+
+export function applyCoreAnchorReviews(rows, cases, inventory, normalize) {
+  for (const [properties, classification, attribution, justification] of [
+    [['top', 'left'], 'application-plugin-authoring-defect', 'reviewed-core-anchor-substitution',
+      'The existing relative-to-absolute host substitution also introduces top/left 28px, absent from native authoring. Native CSSOM zeros are not literal input. Preserve the existing fixed-width and host findings; no renderer coordinate cause is established.'],
+    [['transform'], 'application-plugin-authoring-defect', 'reviewed-core-transform-request-omission',
+      'Native ripple host explicitly requests translateZ(0px); candidate authoring and all local stages omit transform. Its identity computed matrix is not proof that omitting the request preserves containing blocks, stacking or rendering.'],
+    [['right', 'bottom'], 'parity-harness-defect', 'reviewed-core-computed-offset-boundary',
+      'Neither owner authors right/bottom; the native relative host computes zero while candidate local declarations omit them. Keep this observation boundary separate from the explicit absolute-position/top/left substitution. Candidate used offsets and containing blocks remain unproven.'],
+  ]) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'core', element: 'core-primary', properties, prove: proveCoreAnchor, classification, attribution,
+    owner: 'core demo button fixture positioning and computed/local offset inspection', justification,
+  });
+  return rows;
+}
 
 const relevant = key => /^(all|position|top|right|bottom|left)$|^(inset|margin)/.test(key.replaceAll('-', '').toLowerCase());
 const pick = value => Object.fromEntries(Object.entries(value ?? {}).filter(([key]) => relevant(key)));
