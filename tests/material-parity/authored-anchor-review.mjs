@@ -49,13 +49,17 @@ export function proveSheetCornerBoxEvidence(entry, reference, candidate, element
 // may reduce distinct radii to the same shape on a sufficiently short box.
 export function proveAuthoredCornerRequests(entry, reference, candidate, element) {
   const chip = entry.family === 'chips';
-  assert.ok(chip ? ['chip-0', 'chip-1'].includes(element) : entry.family === 'button-toggle' && element === 'button-toggle-primary');
+  const actionSelector = ({ 'card-open': '.text-button', 'toolbar-action': '.toolbar-action',
+    'dialog-cancel': '.dialog-action', 'dialog-save': '.dialog-action' })[element];
+  const action = Boolean(actionSelector);
+  assert.ok(action ? ({ 'card-open': 'card', 'toolbar-action': 'toolbar', 'dialog-cancel': 'dialog', 'dialog-save': 'dialog' })[element] === entry.family
+    : chip ? ['chip-0', 'chip-1'].includes(element) : entry.family === 'button-toggle' && element === 'button-toggle-primary');
   const inputs = entry.styleInputs.filter(input => input.id === element); assert.equal(inputs.length, 1);
-  const native = reference.nodes.filter(node => node.attributes?.id === element);
+  const native = reference.nodes.filter(node => node.attributes?.id === element || node.attributes?.['data-parity-id'] === element);
   const candidates = candidate.nodes.filter(node => node.authored?.id === element);
   assert.equal(native.length, 1); assert.equal(candidates.length, 1);
   const r = native[0], a = candidates[0], input = inputs[0];
-  assert.equal(r.type, chip ? 'mat-chip-option' : 'mat-button-toggle-group'); assert.equal(a.authored.type, 'div');
+  assert.equal(r.type, action ? 'button' : chip ? 'mat-chip-option' : 'mat-button-toggle-group'); assert.equal(a.authored.type, action ? 'button' : 'div');
   assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);
   assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
   assert.equal(input.astylarResolvedStyleEvidenceVersion, 2); assert.equal(Object.keys(input.reference).length, 89);
@@ -68,27 +72,64 @@ export function proveAuthoredCornerRequests(entry, reference, candidate, element
     assert.deepEqual(radiusFields(rule.declarations), Object.fromEntries(cornerProperties.map(key => [key.replace(/[A-Z]/g, c => '-' + c.toLowerCase()), { value: '', important: false }])));
     return [{ selector: rule.selector, declarations }];
   });
-  assert.deepEqual(requests, chip ? [
+  const filled = element === 'dialog-save';
+  assert.deepEqual(requests, action ? [{
+    selector: filled ? '.mat-mdc-unelevated-button, .mat-mdc-unelevated-button .mdc-button__ripple' : '.mat-mdc-button, .mat-mdc-button .mdc-button__ripple',
+    declarations: [['border-radius', `var(--mat-button-${filled ? 'filled' : 'text'}-container-shape, var(--mat-sys-corner-full))`]],
+  }] : chip ? [
     { selector: '.mat-mdc-standard-chip', declarations: [['border-radius', 'var(--mat-chip-container-shape-radius, 8px)']] },
   ] : [
     { selector: '.mat-button-toggle-standalone, .mat-button-toggle-group', declarations: [['border-radius', 'var(--mat-button-toggle-legacy-shape)']] },
     { selector: '.mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard', declarations: [['border-radius', 'var(--mat-button-toggle-shape, var(--mat-sys-corner-extra-large))']] },
   ]);
-  const nativeRadius = chip ? '8px' : { light: '28px', dark: '28px', contrast: '21px', custom: '42px' }[entry.profile];
-  const candidateRadius = (chip ? { light: '8px', dark: '8px', contrast: '6px', custom: '12px' }
+  const nativeRadius = action ? '9999px' : chip ? '8px' : { light: '28px', dark: '28px', contrast: '21px', custom: '42px' }[entry.profile];
+  const candidateRadius = action ? (element === 'card-open' ? { light: '20px', dark: '20px', contrast: '9px', custom: '21px' }[entry.profile] : '20px') : (chip ? { light: '8px', dark: '8px', contrast: '6px', custom: '12px' }
     : { light: '21px', dark: '21px', contrast: '9.75px', custom: '31.5px' })[entry.profile];
   assert.ok(nativeRadius && candidateRadius);
   for (const property of cornerProperties) assert.equal(reference.styles[r.style][property], nativeRadius);
   assert.deepEqual(radiusFields(a.authored.style), {}); assert.equal(a.authored.attributes?.style, undefined);
   const candidateRequests = candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, a.authored))
     .map(({ selector, ...style }) => ({ selector, declarations: radiusFields(style) })).filter(rule => Object.keys(rule.declarations).length);
-  assert.deepEqual(candidateRequests, [{ selector: chip ? '.chip' : '#button-toggle-primary', declarations: { borderRadius: candidateRadius } }]);
+  assert.deepEqual(candidateRequests, [{ selector: actionSelector ?? (chip ? '.chip' : '#button-toggle-primary'), declarations: { borderRadius: candidateRadius } }]);
   for (const [field, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']]) {
     assert.deepEqual(input[field], a[stage]); assert.deepEqual(radiusFields(a[stage]), { borderRadius: candidateRadius });
   }
   return { referenceNode: r.key, astylarNode: a.key, referenceRequests: requests, candidateRequests,
     nativeRadius, candidateRadius, usedCornerEquivalenceProven: false, clippingCauseProven: false,
     attributableProperties: cornerProperties };
+}
+
+export function proveActionCornerBoxInputs(entry, reference, candidate, element) {
+  const proof = proveAuthoredCornerRequests(entry, reference, candidate, element);
+  const height = entry.family === 'dialog' ? '40px' : ({ light: '40px', dark: '40px', contrast: '24px', custom: '28px' })[entry.profile];
+  const r = reference.nodes.find(node => node.key === proof.referenceNode), a = candidate.nodes.find(node => node.key === proof.astylarNode);
+  assert.equal(reference.styles[r.style].height, height);
+  for (const stage of ['normalResolvedStyle', 'resolvedStyle', 'interactionResolvedStyle']) assert.equal(a[stage].height, height);
+  const halfHeight = Number.parseFloat(height) / 2;
+  const cssRadiusOnEqualWideBoxes = Math.min(Number.parseFloat(proof.candidateRadius), halfHeight);
+  // State the required width condition; dialog captures do not contain action
+  // border boxes, and declared height alone is not proof of used geometry.
+  const sameShapeOnEqualWideBoxes = cssRadiusOnEqualWideBoxes === halfHeight;
+  assert.equal(sameShapeOnEqualWideBoxes, !(element === 'card-open' && entry.profile === 'contrast'));
+  return { ...proof, nativeComputedHeight: height, candidateHeightDeclaration: height,
+    referenceRadiusOnEqualWideBoxes: halfHeight, candidateRadiusOnEqualWideBoxes: cssRadiusOnEqualWideBoxes,
+    sameShapeOnEqualWideBoxes, candidateUsedLayoutMeasured: false,
+    renderingEquivalent: null, limitation: 'Uniform corner reduction is conditional on equal used boxes at least as wide as high. This does not establish candidate painting or structural equivalence.' };
+}
+
+export function applyCardContrastCornerReview(rows, cases, inventory, normalize) {
+  const selected = rows.filter(row => row.family === 'card' && row.element === 'card-open' && row.astylar === '9px');
+  const reviewed = applyModalBoxReview(selected, cases, inventory, normalize, {
+    family: 'card', element: 'card-open', properties: cornerProperties,
+    prove: (entry, reference, candidate) => {
+      assert.equal(entry.profile, 'contrast');
+      return proveActionCornerBoxInputs(entry, reference, candidate, 'card-open');
+    },
+    attribution: 'reviewed-card-contrast-radius-substitution', owner: 'card action shape-token authoring',
+    justification: 'The native full-pill token resolves to 9999px on a 24px-high button, whereas candidate .text-button explicitly requests 9px in all three stages. Even on equal wide 24px-high boxes those requests reduce to 12px versus 9px; preserve the other profiles as conditional cases. This proves an authoring difference, not its original motivation or a renderer paint defect.',
+  });
+  const replacements = new Map(selected.map((row, index) => [row, reviewed[index]]));
+  return rows.map(row => replacements.get(row) ?? row);
 }
 
 export function applyAuthoredCornerReviews(rows, cases, inventory, normalize) {

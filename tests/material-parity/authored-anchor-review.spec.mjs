@@ -12,8 +12,9 @@ import { applyRelativeOwnerOffsetReviews, proveRelativeOwnerOffsets } from './au
 import { applyStaticOwnerPositionReviews, proveStaticOwnerPosition } from './authored-anchor-review.mjs';
 import { applyAuthoredCornerReviews, proveAuthoredCornerRequests } from './authored-anchor-review.mjs';
 import { proveSheetCornerBoxEvidence } from './authored-anchor-review.mjs';
+import { proveActionCornerBoxInputs, applyCardContrastCornerReview } from './authored-anchor-review.mjs';
 
-test('authored anchor and corner reviews retain 3356 observations and reject altered requests', () => {
+test('authored anchor and corner reviews retain 3408 observations and reject altered requests', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const capture = JSON.parse(bytes), families = ['slide-toggle', 'badge', 'core', 'card', 'checkbox', 'sidenav', 'toolbar', 'chips', 'icon', 'list', 'tree', 'paginator', 'tabs', 'stepper', 'expansion', 'sort', 'button-toggle'];
@@ -88,6 +89,30 @@ test('authored anchor and corner reviews retain 3356 observations and reject alt
     }
   }
   assert.equal(sheetOwners, 50); assert.equal(equalSheetCorners, 38);
+  let actionOwners = 0, unequalActionCorners = 0;
+  for (const entry of cases.filter(e => ['card', 'toolbar', 'dialog'].includes(e.family))) {
+    const elements = (entry.styleInputs ?? []).map(input => input.id).filter(id => ['card-open', 'toolbar-action', 'dialog-cancel', 'dialog-save'].includes(id));
+    if (!elements.length) continue;
+    const [r, a] = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+    for (const element of elements) {
+      const proof = proveActionCornerBoxInputs(entry, r, a, element); actionOwners++;
+      if (!proof.sameShapeOnEqualWideBoxes) unequalActionCorners++;
+      assert.equal(proof.renderingEquivalent, null); assert.equal(proof.candidateUsedLayoutMeasured, false);
+      const altered = structuredClone(a); altered.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.height = '100px';
+      assert.throws(() => proveActionCornerBoxInputs(entry, r, altered, element));
+      const native = structuredClone(r);
+      const owner = native.nodes.find(node => node.key === proof.referenceNode);
+      const ruleIndex = owner.rules.find(index => native.rules[index].active && native.rules[index].selector === proof.referenceRequests[0].selector);
+      assert.notEqual(ruleIndex, undefined);
+      native.rules[ruleIndex].cssText += ' border-radius: 0;';
+      assert.throws(() => proveActionCornerBoxInputs(entry, native, a, element));
+    }
+  }
+  assert.equal(actionOwners, 168); assert.equal(unequalActionCorners, 13);
+  const cardCorners = applyCardContrastCornerReview(corners, cases, inventory, bindPreciseAuditNormalization());
+  const cardCornerChanges = cardCorners.filter((r, i) => r !== corners[i]);
+  assert.equal(cardCornerChanges.length, 4); assert.equal(cardCornerChanges.reduce((n, r) => n + r.occurrences, 0), 52);
+  cardCorners.forEach((r, i) => { assert.deepEqual(raw(r), raw(rows[i])); if (r !== corners[i]) assert.equal(corners[i].attribution, 'unresolved'); });
   for (const row of staticChanges) {
     const entry = cases.find(e => e.family === row.family);
     const [r, a] = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}`);

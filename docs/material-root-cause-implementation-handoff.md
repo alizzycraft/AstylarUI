@@ -36,11 +36,34 @@ existing proof is reused, not weakened. Altered dimensions and swapped owner
 order are rejected. Focused row rasters are absent, so actual corner paint and
 rendering equivalence remain unproved; no pending scalar is reclassified by this
 geometry-only extension. The final combined focused spec passes 1/1 in 40.56 s.
-Next resolve badge/card/dialog/toolbar pill inputs and retain this precise sheet
-paint gap for a justified browser milestone rather than recapturing now.
-Export session 23967 / Node PID 12020 remains live with advancing CPU time
-(2639.73 s at last process check); do not restart it. Reconcile it before
-integrating the prepared followup.
+Action-pill input replay now covers 168 card/toolbar/dialog owners. All retain
+native full-corner text/filled-button tokens. Candidate card radii are 20/20/9/21px
+at 40/40/24/28px declared heights; toolbar uses 20px at those heights, and dialog
+actions use 20px at 40px. The contrast card's 9px request is not a full pill even
+on equal wide 24px-high boxes (native reduction: 12px). Four groups / 52 observations
+are prepared as authoring defects; the other action profiles remain conditional,
+not paint-equivalent. Prepared followup totals 85 groups / 3408 observations.
+The shared radius proof checks exact tokens, native scalar joins, three candidate
+stages, and mutated declarations/heights. Focused spec passes 1/1 in 74.84 s while
+two full reconciliation scans run concurrently. Initial negative checks exposed
+two test-adapter mistakes, now corrected: native dialog IDs use data-parity-id,
+and a mutation must target the owner's active rule index, not the first global
+rule sharing its selector. No renderer/reference input was changed.
+The card formula `densityHeight / 2 * theme.cornerScale` originated in 7945a42
+(`fix(example): audit Material text and card`), and persists at showcase source
+line 648. The commit also added profile offsets; history proves origin, not the
+motivation for each change or a core paint diagnosis. Next: badge-pill input
+evidence and remaining conditional paint gaps at a justified browser milestone.
+
+Owner-boundary export 23967 completed in 2414.21 s: all 436 static / 1875 interaction
+cases, 8483 scalar groups / 389202 occurrences, 134 source findings; its only
+reported error is 439 unattributed groups. All 519 current source fingerprints
+match, including producer LF SHA 887cc07d4c7ddb92f5b548c5df90e8168045ff4f23a1d254ee40958959c180d0.
+Prepared authored-anchor/corner files are correctly outside that export's source
+set. Full conservation (session 37035) and 79-section reconciliation (15642) are
+running; do not import or accept the generation until they pass. Current payload
+SHA is a593d4c7e804b6cf5ba863163122fde6cb31774c88c5fe6f97f6504cee2fa948;
+decoded SHA d278ff1faf4d3389db64eef2cba515072a1f55b27f787ce5664acff1287cdc46.
 
 Prepared anchor/position followup now totals 53 groups / 2780 observations.
 The last 16 static-owner position groups add 918 observations. Fourteen are
