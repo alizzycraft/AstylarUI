@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — September 28
 
+**Four mapped non-widget appearance groups integrated:** all 111 observations
+(sheet overlay 25, snackbar overlay/surface 34 each, tooltip popup 18) independently
+map to native/candidate `div` owners. Complete own rules, inline inputs and all
+candidate stages omit appearance/reset/motion declarations. This is the narrow
+initial non-widget request equivalence already established by the retained public
+proof, whose report hash and all seven declared source/package fingerprints still
+match. Dependencies are checked once per reducer call, not once per observation.
+The 59 overlay mappings retain their exact missing scalar z-index rule; it is
+not discarded or reinterpreted as an appearance request. No candidate computed
+style or overlay placement/clipping/raster equivalence is invented.
+
+The focused original-population test passes and rejects changed owner types,
+explicit appearance, motion, reset, incomplete rule evidence and forged mapping
+gaps. The existing public-proof replay also passes, including checkbox/select
+indicator sensitivity controls. Production integration includes a bound-evidence
+guard and exact historical producer restoration. Combined-tail conservation now
+checks 44 groups / 2,407 observations against 0a30 and 24 / 1,280 against 8fbd;
+all raw/unrelated records remain unchanged. Command
+`node --test --test-name-pattern="omitted owner paint|mapped nonwidget appearance" tests/material-parity/control-state-paint-review.spec.mjs`
+passes 2/2 (21.19s). The selected legacy `appearance public proof preserves control sensitivity`
+test passes 1/1 (1.24s total). Current producer SHA256 is
+`48eabe1022ef16510eeed8aa29c689196888fb82c4e56d5033e04d535cd6d2f6`.
+Canonical/index still 130 unresolved; expected **106** after milestone export.
+Eleven appearance groups remain: range controls, changed owner types and custom
+plugin owners require separate evidence; do not extend non-widget equivalence
+to them. Continue those and spacing while batching source-receipt reconciliation.
+
 **Shadow batch producer-integrated:** both reducers and validators now run only
 with bound original evidence; an explicit guard rejects unbound shadow
 attributions. The existing combined-tail test executes the actual producer

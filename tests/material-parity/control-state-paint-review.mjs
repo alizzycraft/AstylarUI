@@ -15,6 +15,77 @@ const digest = value => createHash('sha256').update(JSON.stringify(value)).diges
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 
+const mappedNonwidgetAppearance = { 'bottom-sheet': ['bottom-sheet-overlay'],
+  'snack-bar': ['snack-bar-overlay', 'snack-bar-surface'], tooltip: ['tooltip-popup'] };
+export function proveMappedNonwidgetAppearance(entry, r, a, element) {
+  assert.ok(mappedNonwidgetAppearance[entry.family]?.includes(element));
+  for (const tree of [r, a]) {
+    assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []);
+  }
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  const mapping = resolveOriginAliasPair(entry, r, a, input);
+  const gap = element.endsWith('-overlay');
+  assert.equal(mapping.status, gap ? 'mapped-with-scalar-rule-gap' : 'mapped');
+  assert.deepEqual(mapping.missingRules, gap ? [{ selector: '.cdk-global-overlay-wrapper',
+    declarations: { 'z-index': { value: '1000', important: false } } }] : []);
+  assert.deepEqual(mapping.extraRules, []);
+  const native = one(r.nodes.filter(n => n.key === mapping.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === mapping.candidateNode));
+  assert.equal(native.type, 'div'); assert.equal(candidate.authored.type, 'div');
+  assert.equal(candidate.authored.inputType, undefined);
+  const affects = key => /^(appearance|webkitappearance|mozappearance|all)$/.test(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
+  for (const raw of [native.attributes.style, candidate.authored.attributes?.style]) {
+    assert.doesNotMatch(raw ?? '', /[\\/]/);
+    assert.doesNotMatch(raw ?? '', /(?:^|;)\s*(?:(?:-webkit-|-moz-)?appearance|all|animation[^:]*|transition[^:]*)\s*:/i);
+  }
+  for (const style of [native.inline ?? {}, candidate.authored.style ?? {}, candidate.normalResolvedStyle,
+    candidate.resolvedStyle, candidate.interactionResolvedStyle]) assert.deepEqual(Object.keys(style).filter(affects), []);
+  for (const rule of native.rules.map(i => r.rules[i])) {
+    assert.ok(!rule.cssText.includes('\\'));
+    assert.deepEqual(Object.keys(rule.declarations).filter(affects), []);
+  }
+  assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.keys(rule).filter(affects)), []);
+  assert.equal(r.styles[native.style].appearance, 'none');
+  return { case: keyOf(entry), element, mapping, referenceNode: native.key, astylarNode: candidate.key,
+    referenceAppearance: 'none', candidateDeclaration: '<omitted>', initialRequestEquivalent: true,
+    inputEquivalent: false, renderingEquivalent: false, ancestorClippingOrOverlayPlacementProven: false };
+}
+
+function bindNonwidgetAppearanceEvidence() {
+  const proofFile = 'docs/material-appearance-input-audit.json';
+  const bytes = readFileSync(proofFile, 'utf8').replaceAll('\r\n', '\n');
+  const publicProofSha256 = createHash('sha256').update(bytes).digest('hex');
+  assert.equal(publicProofSha256, 'a6cb4ca97c8428402c738af53808f5ff1a931eb07c2b0ea7595c512b24ecebcb');
+  const evidence = JSON.parse(bytes);
+  // Reuse the checked public non-widget reduction only while all seven of its
+  // declared source/package dependencies match, rather than refreshing hashes.
+  assert.equal(evidence.sourceFingerprints.length, 7);
+  for (const source of evidence.sourceFingerprints) assert.equal(createHash('sha256')
+    .update(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), source.sha256, source.file);
+  return { file: proofFile, sha256: publicProofSha256, dependencies: evidence.sourceFingerprints };
+}
+
+export function applyMappedNonwidgetAppearance(rows, cases, inventory, normalize) {
+  if (!rows.some(r => r.attribution === 'unresolved' && r.property === 'appearance' &&
+    mappedNonwidgetAppearance[r.family]?.includes(r.element))) return rows;
+  const publicProof = bindNonwidgetAppearanceEvidence();
+  return Object.entries(mappedNonwidgetAppearance).reduce((values, [family, elements]) => elements.reduce((items, element) =>
+    applyModalBoxReview(items, cases, inventory, normalize, { family, element, properties: ['appearance'],
+      prove: (e, r, a) => ({ ...proveMappedNonwidgetAppearance(e, r, a, element), publicProof }),
+      classification: 'equivalent-representation', attribution: 'reviewed-mapped-nonwidget-appearance-initial-request',
+      owner: 'none for initial non-widget appearance; retain independent overlay ownership findings',
+      justification: 'The independently mapped native and candidate owners are div non-widgets. Complete own authoring, rules and candidate stages omit appearance/reset/motion inputs; native computed none is an initial-value observation, not missing candidate authoring. The existing public non-widget proof is reused only with unchanged source/package fingerprints. Original overlay z-index scalar-rule gaps remain recorded. No candidate computed value, complete input equivalence, placement, clipping, focus or final raster parity is inferred.',
+    }), values), rows);
+}
+
+export function validateMappedNonwidgetAppearance(rows, originals, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-mapped-nonwidget-appearance-initial-request');
+    assert.deepEqual(select(rows), select(applyMappedNonwidgetAppearance(originals, cases, inventory, normalize))); return [];
+  } catch (error) { return [`mapped non-widget appearance lacks original inputs: ${error.message}`]; }
+}
+
 const focusShadowFamilies = ['core', 'button', 'menu', 'bottom-sheet', 'dialog', 'snack-bar', 'tooltip'];
 const transparentFocusShadow = '0 0 0 1px rgba(0,0,0,0)';
 export function proveCardShadowSyntax(entry, r, a, normalize) {

@@ -19,6 +19,50 @@ import { applyHeadingVisibleOverflow, validateHeadingVisibleOverflow, applyTabPa
 import { applyTableVisibleOverflow, validateTableVisibleOverflow, applyControlOverflowOwnerBoundaries, validateControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, validateRangeVisibleOverflow } from './control-overflow-observation.mjs';
 import { proveFocusShadowSubstitution, applyFocusShadowSubstitutions, validateFocusShadowSubstitutions } from './control-state-paint-review.mjs';
 import { proveCardShadowSyntax, applyCardShadowSyntax, validateCardShadowSyntax } from './control-state-paint-review.mjs';
+import { proveMappedNonwidgetAppearance, applyMappedNonwidgetAppearance, validateMappedNonwidgetAppearance } from './control-state-paint-review.mjs';
+
+test('mapped nonwidget appearance retains alias gaps and unchanged public evidence for all 111 observations', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = JSON.parse(bytes), families = ['bottom-sheet', 'snack-bar', 'tooltip'];
+  const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
+    ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const rows = families.flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '8fbd2e22dfd801587ce6c1dce90e6daba668171ae26eae0a9c834142a8bd0a43',
+    indexSha256: '6f86d55a6ea6be0f1533ac893579bf517769061ed25a13812b0370c46b7c06e6',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyMappedNonwidgetAppearance(rows, cases, inventory, normalize);
+  const changed = applied.filter(r => r.attribution === 'reviewed-mapped-nonwidget-appearance-initial-request');
+  assert.deepEqual(changed.map(r => [r.element, r.occurrences]), [
+    ['bottom-sheet-overlay', 25], ['snack-bar-overlay', 34], ['snack-bar-surface', 34], ['tooltip-popup', 18],
+  ]);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (!changed.includes(applied[i])) assert.deepEqual(applied[i], rows[i]);
+  assert.deepEqual(validateMappedNonwidgetAppearance(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied); forged.find(r => changed.some(c => c.element === r.element && c.property === r.property))
+    .reviewEvidence.observations[0].mapping.missingRules = [];
+  assert.equal(validateMappedNonwidgetAppearance(forged, rows, cases, inventory, normalize).length, 1);
+  for (const row of changed) {
+    const key = row.reviewedCases[0], entry = cases.find(e =>
+      `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === key);
+    const original = modalInventoryTrees(inventory, key), proof = proveMappedNonwidgetAppearance(entry, ...original, row.element);
+    assert.equal(proof.inputEquivalent, false); assert.equal(proof.renderingEquivalent, false);
+    for (const mutation of [
+      (r, a) => { a.nodes.find(n => n.key === proof.astylarNode).authored.type = 'button'; },
+      (r, a) => { a.rules.push({ selector: '#' + row.element, appearance: 'none' }); },
+      (r, a) => { a.rules.push({ selector: '#' + row.element, transition: 'all 1s' }); },
+      r => { r.ruleEvidenceComplete = false; },
+      r => { r.nodes.find(n => n.key === proof.referenceNode).inline.all = { value: 'initial', important: false }; },
+    ]) {
+      const pair = structuredClone(original); mutation(...pair);
+      assert.throws(() => proveMappedNonwidgetAppearance(entry, ...pair, row.element));
+    }
+  }
+});
 
 test('focus shadow substitution binds every original owner and rejects altered outline or state evidence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -273,34 +317,35 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   const tail = new Function('ownerInitialStyleBinding', 'beforeOwnerOmissionReviews', 'cases', 'elementInventory',
     'canonicalStyle', 'applyOwnerMaximumWidths', 'applyOmittedOwnerPaintRequests', 'applyBadgeMarginReviews',
     'applySliderMarginReviews', 'applyListSpacingReviews', 'applyHeadingVisibleOverflow', 'applyTabPanelOverflowBoundary',
-    'applyTableVisibleOverflow', 'applyControlOverflowOwnerBoundaries', 'applyRangeVisibleOverflow', 'applyFocusShadowSubstitutions', 'applyCardShadowSyntax', source.slice(start, end) + '\nreturn discrepancies;');
-  const applies = [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, applyFocusShadowSubstitutions, applyCardShadowSyntax];
+    'applyTableVisibleOverflow', 'applyControlOverflowOwnerBoundaries', 'applyRangeVisibleOverflow', 'applyFocusShadowSubstitutions', 'applyCardShadowSyntax', 'applyMappedNonwidgetAppearance', source.slice(start, end) + '\nreturn discrepancies;');
+  const applies = [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, applyFocusShadowSubstitutions, applyCardShadowSyntax, applyMappedNonwidgetAppearance];
   const combined = tail({ status: 'bound' }, rows, cases, inventory, normalize, ...applies);
   assert.deepEqual(combined, [...applies].reverse().reduce((values, apply) => apply(values, cases, inventory, normalize), rows));
   const batch = combined.filter((r, i) => r !== rows[i]);
-  assert.equal(batch.length, 40); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 2296);
+  assert.equal(batch.length, 44); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 2407);
   assert.deepEqual(combined.map(raw), rows.map(raw));
   for (let i = 0; i < rows.length; i++) if (!batch.includes(combined[i])) assert.deepEqual(combined[i], rows[i]);
   assert.deepEqual(validate(combined), []);
   assert.deepEqual(validateOwnerMaximumWidths(combined, rows, cases, inventory, normalize), []);
-  for (const validate of [validateBadgeMarginReviews, validateSliderMarginReviews, validateListSpacingReviews, validateHeadingVisibleOverflow, validateTabPanelOverflowBoundary, validateTableVisibleOverflow, validateControlOverflowOwnerBoundaries, validateRangeVisibleOverflow, validateFocusShadowSubstitutions, validateCardShadowSyntax])
+  for (const validate of [validateBadgeMarginReviews, validateSliderMarginReviews, validateListSpacingReviews, validateHeadingVisibleOverflow, validateTabPanelOverflowBoundary, validateTableVisibleOverflow, validateControlOverflowOwnerBoundaries, validateRangeVisibleOverflow, validateFocusShadowSubstitutions, validateCardShadowSyntax, validateMappedNonwidgetAppearance])
     assert.deepEqual(validate(combined, rows, cases, inventory, normalize), []);
   assert.equal(tail({ status: 'unbound' }, rows, cases, inventory, normalize,
     ...applies.map(() => () => assert.fail('unbound owner review ran'))), rows);
-  for (const name of ['validateOwnerMaximumWidths', 'validateOmittedOwnerPaintRequests', 'validateBadgeMarginReviews', 'validateSliderMarginReviews', 'validateListSpacingReviews', 'validateHeadingVisibleOverflow', 'validateTabPanelOverflowBoundary', 'validateTableVisibleOverflow', 'validateControlOverflowOwnerBoundaries', 'validateRangeVisibleOverflow', 'validateFocusShadowSubstitutions', 'validateCardShadowSyntax'])
+  for (const name of ['validateOwnerMaximumWidths', 'validateOmittedOwnerPaintRequests', 'validateBadgeMarginReviews', 'validateSliderMarginReviews', 'validateListSpacingReviews', 'validateHeadingVisibleOverflow', 'validateTabPanelOverflowBoundary', 'validateTableVisibleOverflow', 'validateControlOverflowOwnerBoundaries', 'validateRangeVisibleOverflow', 'validateFocusShadowSubstitutions', 'validateCardShadowSyntax', 'validateMappedNonwidgetAppearance'])
     assert.ok(source.includes(`errors.push(...${name}(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));`));
   assert.ok(source.includes("errors.push('owner omission review attribution lacks bound original cases')"));
   assert.ok(source.includes("errors.push('spacing composition review attribution lacks bound original cases')"));
   assert.ok(source.includes("errors.push('heading and tab overflow attribution lacks bound original cases')"));
   assert.ok(source.includes("errors.push('table and control overflow attribution lacks bound original cases')"));
   assert.ok(source.includes("errors.push('shadow attribution lacks bound original cases')"));
+  assert.ok(source.includes("errors.push('mapped non-widget appearance attribution lacks bound original cases')"));
   const currentRows = families.flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
     generation: '8fbd2e22dfd801587ce6c1dce90e6daba668171ae26eae0a9c834142a8bd0a43',
     indexSha256: '6f86d55a6ea6be0f1533ac893579bf517769061ed25a13812b0370c46b7c06e6',
   })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
   const currentApplied = tail({ status: 'bound' }, currentRows, cases, inventory, normalize, ...applies);
   const currentBatch = currentApplied.filter((r, i) => r !== currentRows[i]);
-  assert.equal(currentBatch.length, 20); assert.equal(currentBatch.reduce((n, r) => n + r.occurrences, 0), 1169);
+  assert.equal(currentBatch.length, 24); assert.equal(currentBatch.reduce((n, r) => n + r.occurrences, 0), 1280);
   assert.deepEqual(currentApplied.map(raw), currentRows.map(raw));
   currentApplied.forEach((r, i) => { if (!currentBatch.includes(r)) assert.deepEqual(r, currentRows[i]); });
   for (const [family, { entry, pair, proof }] of samples) {

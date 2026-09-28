@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyMappedNonwidgetAppearance,')) {
+    for (const [from, to] of [
+      ["import { applyMappedNonwidgetAppearance, validateMappedNonwidgetAppearance } from './control-state-paint-review.mjs';\n", ''],
+      ['applyCardShadowSyntax, applyMappedNonwidgetAppearance]', 'applyCardShadowSyntax]'],
+      ['      errors.push(...validateMappedNonwidgetAppearance(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-mapped-nonwidget-appearance-initial-request'))\n    errors.push('mapped non-widget appearance attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated mapped appearance integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyFocusShadowSubstitutions,')) {
     for (const [from, to] of [
       ["import { applyFocusShadowSubstitutions, validateFocusShadowSubstitutions, applyCardShadowSyntax, validateCardShadowSyntax } from './control-state-paint-review.mjs';\n", ''],
