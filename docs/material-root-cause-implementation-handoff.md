@@ -9,15 +9,20 @@ Share has measurable fill/background contrast in both surfaces; Copy link has
 zero contrast at the same corner/interior probes in all cases. Do not use the
 transparent Copy link samples to claim corner-shape equivalence.
 
-Color-normalized upper-left edge samples at six heights differ by at most 1 CSS
-pixel in the 19 non-contrast cases. All six contrast cases differ by at least 5
-CSS pixels at the first sample, consistent with the already established 18-vs-24
-used-radius mismatch. This is local edge evidence, not all-corner, input, color,
-or whole-control equivalence, and introduces no new canonical classification.
+Color-normalized edge samples at six heights on **all four corners** differ by
+at most 1 CSS pixel in the 19 non-contrast cases (76 corners). All six contrast
+cases differ by at least 4 CSS pixels at the first sample on every corner (24
+corners); upper-left remains at least 5 pixels. This is consistent with the
+already established 18-vs-24 used-radius mismatch. Reference first-edge samples
+are also at least 13 pixels from the side, rejecting a square-edge explanation.
+This is sampled corner evidence, not input, color, antialiasing, or whole-control
+equivalence, and introduces no new canonical classification.
 Verification: `node --test --test-name-pattern="retained sheet corner pixels"
-tests/material-parity/modal-position-inspection.spec.mjs` passes 1/1 (6.42s).
+tests/material-parity/modal-position-inspection.spec.mjs` passes 1/1 (5.78s for
+the four-corner extension).
 
-Next use retained images for the remaining observable corners/owners; a state
+The Share corner sampling is complete; do not repeat it. Next examine other
+owners' retained images and used boxes (badge and action controls); a state
 with visible corner paint is still needed for transparent controls if their
 actual corner rendering is to be established. Do not repeat the existing generic
 oversized-radius core proof. Accepted unresolved count remains 180, pending

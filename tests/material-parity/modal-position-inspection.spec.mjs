@@ -69,24 +69,30 @@ test('retained sheet corner pixels distinguish observable Share from transparent
           continue;
         }
         assert.ok(energy > 400);
-        // Compare coverage rather than theme colors; only the upper-left edge
-        // is sampled. This does not assert all corners, text, or whole-row parity.
+        // Compare coverage rather than theme colors. Six samples per corner
+        // establish local edges, not text, color, or whole-row parity.
         const coverage = color => color.reduce((sum, v, i) =>
           sum + (v - background[i]) * vector[i], 0) / energy;
-        edges[side] = [2, 4, 8, 12, 16, 20].map(y => {
+        edges[side] = [0, 1, 2, 3].map(corner => [2, 4, 8, 12, 16, 20].map(y => {
           for (let x = 0; x < 30; x++)
-            if (coverage(pixel(box.left + x + 0.5, box.top + y + 0.5)) > 0.5) return x;
+            if (coverage(pixel(corner % 2 ? box.right - x - 0.5 : box.left + x + 0.5,
+              corner >= 2 ? box.bottom - y - 0.5 : box.top + y + 0.5)) > 0.5) return x;
           assert.fail('observable Share corner edge missing');
-        });
+        }));
       }
     }
-    const delta = edges.reference.map((x, i) => Math.abs(x - edges.astylar[i]));
-    differences[entry.profile === 'contrast' ? 'contrast' : 'other'].push(delta);
+    for (let corner = 0; corner < 4; corner++) {
+      const delta = edges.reference[corner].map((x, i) => Math.abs(x - edges.astylar[corner][i]));
+      if (entry.profile === 'contrast' && corner === 0) assert.ok(delta[0] >= 5);
+      differences[entry.profile === 'contrast' ? 'contrast' : 'other'].push(delta);
+      // A square would begin at x=0; each reference corner must be distinguishable.
+      assert.ok(edges.reference[corner][0] >= 13);
+    }
   }
   assert.equal(hash(JSON.stringify(receipts)), 'de6f2710b874d857968643ed77ac09d2e98bc1cf6c57fe8824765407954a2703');
-  assert.equal(differences.contrast.length, 6);
-  assert.equal(differences.other.length, 19);
-  assert.ok(differences.contrast.every(delta => delta[0] >= 5));
+  assert.equal(differences.contrast.length, 24);
+  assert.equal(differences.other.length, 76);
+  assert.ok(differences.contrast.every(delta => delta[0] >= 4));
   assert.ok(differences.other.every(delta => delta.every(value => value <= 1)));
 });
 
