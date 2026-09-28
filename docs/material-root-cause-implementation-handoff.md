@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 28
 
+Next-batch replay is verified against the accepted cursor/pointer snapshot:
+`applyCaretPositionReviews` composes existing caret, slider, grid and overlay
+proofs; `validateCaretPositionReviews` checks exact serialized membership.
+64 groups / 2441 observations (27 caret, 37 position) preserve all raw/unrelated
+rows. Full original inventory order is retained. Missing members and fabricated
+rendering equivalence are rejected in all ten attribution categories. Mutation
+checks replay each category's exact original member after full-batch validation,
+avoiding repeated whole-batch work without removing rejection coverage.
+Six tests across component-motion-caret, slider/grid/overlay-position review specs
+pass (35.31 s; combined replay 23.77 s). Producer integration remains next;
+canonical unresolved count is still 637 (expected 573 only after accepted export).
+
 Cursor/pointer export completed (source 864a53f, 2362.05 s, exit 1 solely for
 637 unresolved groups). Coverage remains 436 static / 1875 interaction cases,
 8483 scalar differences / 389202 observations and 134 source findings.

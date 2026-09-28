@@ -2,6 +2,28 @@ import assert from 'node:assert/strict';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
+import { applySliderPositionReviews } from './slider-position-request-review.mjs';
+import { applyGridOffsetReviews } from './grid-position-request-review.mjs';
+import { applyComponentCaretReviews, isComponentCaretReviewRow } from '../../scripts/audit-material-overlay-caret-context.mjs';
+
+const positionAttributions = new Set(['reviewed-slider-position-request-substitution',
+  'reviewed-slider-computed-offset-boundary', 'reviewed-grid-inset-request-substitution',
+  'reviewed-grid-computed-inset-boundary', 'reviewed-sheet-overlay-position-substitution',
+  'reviewed-overlay-position-observation-boundary']);
+export const isCaretPositionReviewRow = row => isComponentCaretReviewRow(row) ||
+  ['position', 'top', 'right', 'bottom', 'left'].includes(row.property) && positionAttributions.has(row.attribution);
+export function applyCaretPositionReviews(rows, cases, inventory, normalize) {
+  return [applyComponentCaretReviews, applySliderPositionReviews, applyGridOffsetReviews, applyOverlayPositionReviews]
+    .reduce((values, apply) => apply(values, cases, inventory, normalize), rows);
+}
+export function validateCaretPositionReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const expected = applyCaretPositionReviews(originalRows, cases, inventory, normalize).filter(isCaretPositionReviewRow);
+    assert.equal(JSON.stringify(rows.filter(isCaretPositionReviewRow)), JSON.stringify(expected),
+      'complete caret/position review differs');
+    return [];
+  } catch (error) { return [`caret/position review does not replay: ${error.message}`]; }
+}
 
 const selected = key => /^(all|position|top|right|bottom|left)$|^(inset|animation|transition)/.test(key.replaceAll('-', '').toLowerCase());
 const pick = value => Object.fromEntries(Object.entries(value ?? {}).filter(([k]) => selected(k)));
