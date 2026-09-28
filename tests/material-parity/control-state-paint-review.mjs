@@ -15,6 +15,142 @@ const digest = value => createHash('sha256').update(JSON.stringify(value)).diges
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 
+const focusShadowFamilies = ['core', 'button', 'menu', 'bottom-sheet', 'dialog', 'snack-bar', 'tooltip'];
+const transparentFocusShadow = '0 0 0 1px rgba(0,0,0,0)';
+export function proveCardShadowSyntax(entry, r, a, normalize) {
+  assert.equal(entry.family, 'card');
+  for (const tree of [r, a]) {
+    assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []);
+  }
+  assert.equal(a.resolvedStyleSource, 'core-style-inspection'); assert.equal(a.resolvedStyleEvidenceVersion, 2);
+  const native = one(r.nodes.filter(n => n.attributes?.id === 'card-primary'));
+  const candidate = one(a.nodes.filter(n => n.authored?.id === 'card-primary'));
+  assert.equal(native.type, 'mat-card'); assert.equal(candidate.authored.type, 'div');
+  const affects = key => ['boxshadow', 'all'].includes(key.replaceAll('-', '').toLowerCase());
+  for (const style of [native.inline ?? {}, candidate.authored.style ?? {}]) assert.deepEqual(Object.keys(style).filter(affects), []);
+  for (const raw of [native.attributes.style, candidate.authored.attributes?.style])
+    assert.doesNotMatch(raw ?? '', /(?:^|;)\s*(?:box-shadow|all)\s*:/i);
+  const requests = native.rules.map(i => r.rules[i]).filter(rule => rule.active).flatMap(rule =>
+    Object.entries(rule.declarations).filter(([key]) => affects(key)).map(([key, value]) =>
+      ({ selector: rule.selector, conditions: rule.conditions, key, ...value })));
+  assert.deepEqual(requests, [{ selector: '.mat-mdc-card', conditions: [], key: 'box-shadow',
+    value: 'var(--mat-card-elevated-container-elevation, var(--mat-sys-level1))', important: false }]);
+  const expected = '0 2px 1px -1px rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 1px 3px 0 rgba(0,0,0,0.12)';
+  const candidateRequests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key)).map(([key, value]) =>
+      ({ selector: rule.selector, key, value: normalize({ [key]: value })[key] })));
+  assert.deepEqual(candidateRequests, [{ selector: '.material-card', key: 'boxShadow', value: expected }]);
+  const input = one(entry.styleInputs.filter(i => i.id === 'card-primary'));
+  assert.equal(input.reference.boxShadow, r.styles[native.style].boxShadow);
+  assert.equal(normalize(input.reference).boxShadow,
+    'rgba(0,0,0,0.2) 0 2px 1px -1px,rgba(0,0,0,0.14) 0 1px 1px 0,rgba(0,0,0,0.12) 0 1px 3px 0');
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(candidate[stage], input[scalar]); assert.equal(normalize(candidate[stage]).boxShadow, expected);
+  }
+  const parserSha256 = createHash('sha256').update(readFileSync('src/app/services/dom/elements/box-shadow.ts', 'utf8').replaceAll('\r\n', '\n')).digest('hex');
+  assert.equal(parserSha256, 'f8e30403ce764f401524f07900c50c9f1094b72b0da8b7d4334d787897247e8b');
+  return { case: keyOf(entry), referenceNode: native.key, astylarNode: candidate.key, requests, candidateRequests,
+    parserSha256, equivalentShadowRepresentation: true, inputEquivalent: false, renderingEquivalent: false,
+    uncapturedThemeTokenEquivalenceProven: false, webglShadowRasterProven: false };
+}
+
+export function applyCardShadowSyntax(rows, cases, inventory, normalize) {
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'card', element: 'card-primary', properties: ['boxShadow'],
+    prove: (e, r, a) => proveCardShadowSyntax(e, r, a, normalize),
+    classification: 'equivalent-representation', attribution: 'reviewed-card-shadow-layer-serialization',
+    owner: 'none for captured shadow serialization; retain independent paint and token investigations',
+    justification: 'All captured native token results and candidate authored/live requests retain the same three ordered layers with only color-first versus color-last syntax. The pinned core parser and DPR 1/2 browser pixel sensitivity test establish syntax equivalence. This does not certify WebGL shadow pixels, whole-card input equivalence or token behavior outside the captured themes.',
+  });
+}
+
+export function validateCardShadowSyntax(rows, originals, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-card-shadow-layer-serialization');
+    assert.deepEqual(select(rows), select(applyCardShadowSyntax(originals, cases, inventory, normalize))); return [];
+  } catch (error) { return [`card shadow syntax lacks original inputs: ${error.message}`]; }
+}
+
+export function proveFocusShadowSubstitution(entry, r, a) {
+  assert.ok(focusShadowFamilies.includes(entry.family));
+  const element = `${entry.family}-primary`;
+  for (const tree of [r, a]) {
+    assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []);
+  }
+  assert.equal(a.resolvedStyleSource, 'core-style-inspection');
+  assert.equal(a.resolvedStyleEvidenceVersion, 2);
+  const native = one(r.nodes.filter(n => n.attributes?.id === element));
+  const candidate = one(a.nodes.filter(n => n.authored?.id === element));
+  assert.equal(native.type, 'button'); assert.equal(candidate.authored.type, 'button');
+  assert.ok(candidate.authored.class.split(/\s+/).includes('material-button'));
+  const affects = key => /^(boxshadow|outline.*|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  assert.deepEqual(Object.keys(native.inline ?? {}).filter(affects), []);
+  for (const raw of [native.attributes.style, candidate.authored.attributes?.style])
+    assert.doesNotMatch(raw ?? '', /(?:^|;)\s*(?:box-shadow|outline(?:-[a-z]+)?|all)\s*:/i);
+  assert.deepEqual(Object.keys(candidate.authored.style ?? {}).filter(affects), []);
+  const referenceRequests = native.rules.map(i => r.rules[i]).filter(rule => rule.active).flatMap(rule => {
+    assert.ok(!rule.cssText.includes('\\'));
+    return Object.entries(rule.declarations).filter(([key]) => affects(key))
+      .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value }));
+  });
+  const selectors = [...new Set(referenceRequests.map(r => r.selector))];
+  assert.ok(selectors.length === 1 || selectors.length === 2);
+  assert.deepEqual(selectors, selectors.length === 1 ? ['.mdc-button'] : ['.mdc-button', '.mdc-button:active']);
+  assert.deepEqual(referenceRequests, selectors.flatMap(selector =>
+    [['outline-color', 'initial'], ['outline-style', 'none'], ['outline-width', 'initial']]
+      .map(([key, value]) => ({ selector, conditions: [], key, value, important: false }))));
+  const candidateRequests = a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => affects(key))
+      .map(([key, value]) => ({ selector: rule.selector, key, value })));
+  assert.deepEqual(candidateRequests, [0, 1].map(() =>
+    ({ selector: '.material-button:focus', key: 'boxShadow', value: transparentFocusShadow })));
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  assert.equal(input.astylarResolvedStyleEvidenceVersion, 2);
+  assert.equal(r.styles[native.style].boxShadow, 'none');
+  assert.equal(input.reference.boxShadow, 'none');
+  for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(candidate[stage], input[scalar]);
+    assert.equal(candidate[stage].boxShadow, stage === 'normalResolvedStyle' ? undefined : transparentFocusShadow);
+    assert.deepEqual(Object.keys(candidate[stage]).filter(k => /^outline/i.test(k)), []);
+  }
+  return { case: keyOf(entry), element, referenceNode: native.key, astylarNode: candidate.key,
+    referenceRequests, candidateRequests, normalShadowOmitted: true, effectiveShadow: transparentFocusShadow,
+    firstDivergence: 'native outline reset replaced with candidate transparent focus-shadow request',
+    inputEquivalent: false, renderingEquivalent: false, originalFocusTimingProven: false,
+    originalRasterCauseProven: false };
+}
+
+export function applyFocusShadowSubstitutions(rows, cases, inventory, normalize) {
+  return rows.map(row => {
+    if (row.attribution !== 'unresolved' || row.property !== 'boxShadow' ||
+      !focusShadowFamilies.includes(row.family) || row.element !== `${row.family}-primary`) return row;
+    assert.equal(row.reference, 'none'); assert.equal(row.astylar, transparentFocusShadow);
+    const members = cases.filter(e => e.family === row.family && e.styleInputs.some(i => i.id === row.element &&
+      normalize(i.reference).boxShadow === row.reference && normalize(i.astylar).boxShadow === row.astylar));
+    const keys = members.map(keyOf);
+    assert.equal(keys.length, row.occurrences); assert.equal(new Set(keys).size, keys.length);
+    assert.deepEqual(keys.slice(0, 12), row.cases);
+    assert.deepEqual([...new Set(members.map(e => e.state ?? 'static'))], row.states);
+    const observations = members.map(e => proveFocusShadowSubstitution(e, ...modalInventoryTrees(inventory, keyOf(e))));
+    return { ...row, classification: 'application-plugin-authoring-defect',
+      attribution: 'reviewed-focus-outline-shadow-substitution',
+      recommendedOwner: 'comparison focus authoring and core outline/fallback contract',
+      justification: 'The original native button explicitly resets outline and has no shadow request; the candidate omits outline and authors transparent focus shadows. Normal candidate style omits the shadow while both live stages retain it. A public reduction demonstrates that this shadow disables core fallback focus paint, unlike native shadow behavior. This is unequal input, not harmless no-paint serialization. Original focus timing, complete focus presentation and original raster causation remain unproved.',
+      reviewedCases: keys, reviewEvidence: { originalRowSha256: digest(row), observations,
+        inputEquivalent: false, renderingEquivalent: false, originalRasterCauseProven: false } };
+  });
+}
+
+export function validateFocusShadowSubstitutions(rows, originals, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-focus-outline-shadow-substitution');
+    assert.deepEqual(select(rows), select(applyFocusShadowSubstitutions(originals, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`focus outline/shadow substitution lacks original inputs: ${error.message}`]; }
+}
+
 const omittedPaintRequests = {
   badge: { element: 'badge-count', property: 'textOverflow', css: 'text-overflow',
     selector: '.mat-badge-content', value: 'ellipsis' },

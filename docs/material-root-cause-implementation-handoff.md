@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 28
 
+**Eight shadow groups prepared from original owners:** new reducers in the
+existing paint review classify 7 focus groups / 265 observations as an
+outline-to-shadow authoring substitution, and 1 card group / 52 observations as
+equivalent shadow syntax only. All original native outline resets, candidate
+focus rules, normal/live stages, direct identities and complete membership are
+checked; negative controls reject missing cases, duplicate owners, altered
+outline/style/rules, forged membership and incomplete rule evidence. The card
+review binds the native elevation token result, candidate literal and all stages,
+plus the pinned actual parser tested against browser pixels. It does not approve
+whole-card rendering or uncaptured token behavior. Original scalar values and
+unrelated rows remain intact. `node --test --test-name-pattern="card shadow serialization|focus shadow substitution binds" tests/material-parity/control-state-paint-review.spec.mjs`
+passes 2/2 (8.13s). These 8/317 classifications are prepared, not yet invoked by
+the producer. Canonical/index remains 130 unresolved; after the previously
+integrated 12 overflow groups and this shadow batch, expected unresolved is 110.
+Next integrate the two reducers/validators with bound-evidence guards and exact
+producer restoration, then continue remaining appearance and spacing questions
+before the expensive reconciliation/export milestone.
+
 **Transparent focus shadow now has public behavioral evidence:** the focused
 `public button focus distinguishes` test reuses the existing root-package button
 reduction in memory, adding only an equal authored focus-shadow rule and equal

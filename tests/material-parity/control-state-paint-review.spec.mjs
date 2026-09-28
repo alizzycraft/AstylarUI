@@ -17,6 +17,50 @@ import { applySliderMarginReviews, validateSliderMarginReviews } from './slider-
 import { applyListSpacingReviews, validateListSpacingReviews } from './display-request-review.mjs';
 import { applyHeadingVisibleOverflow, validateHeadingVisibleOverflow, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
 import { applyTableVisibleOverflow, validateTableVisibleOverflow, applyControlOverflowOwnerBoundaries, validateControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, validateRangeVisibleOverflow } from './control-overflow-observation.mjs';
+import { proveFocusShadowSubstitution, applyFocusShadowSubstitutions, validateFocusShadowSubstitutions } from './control-state-paint-review.mjs';
+import { proveCardShadowSyntax, applyCardShadowSyntax, validateCardShadowSyntax } from './control-state-paint-review.mjs';
+
+test('focus shadow substitution binds every original owner and rejects altered outline or state evidence', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = JSON.parse(bytes), families = ['core', 'button', 'menu', 'bottom-sheet', 'dialog', 'snack-bar', 'tooltip'];
+  const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
+    ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const rows = families.flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '8fbd2e22dfd801587ce6c1dce90e6daba668171ae26eae0a9c834142a8bd0a43',
+    indexSha256: '6f86d55a6ea6be0f1533ac893579bf517769061ed25a13812b0370c46b7c06e6',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyFocusShadowSubstitutions(rows, cases, inventory, normalize);
+  const changed = applied.filter(r => r.attribution === 'reviewed-focus-outline-shadow-substitution');
+  assert.deepEqual(Object.fromEntries(changed.map(r => [r.family, r.occurrences])),
+    { core: 32, button: 32, menu: 50, 'bottom-sheet': 43, dialog: 16, 'snack-bar': 51, tooltip: 41 });
+  assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 265);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (!changed.includes(applied[i])) assert.deepEqual(applied[i], rows[i]);
+  assert.deepEqual(validateFocusShadowSubstitutions(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied);
+  forged.find(r => r.attribution === 'reviewed-focus-outline-shadow-substitution').reviewedCases.pop();
+  assert.equal(validateFocusShadowSubstitutions(forged, rows, cases, inventory, normalize).length, 1);
+  assert.throws(() => applyFocusShadowSubstitutions(rows, cases.filter(e => e.family !== 'core'), inventory, normalize));
+  const first = changed[0].reviewedCases[0], entry = cases.find(e =>
+    `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === first);
+  const original = modalInventoryTrees(inventory, first);
+  const mutate = change => {
+    const pair = structuredClone(original); change(...pair);
+    assert.throws(() => proveFocusShadowSubstitution(entry, ...pair));
+  };
+  mutate((r, a) => { a.ruleEvidenceComplete = false; });
+  mutate((r, a) => { a.nodes.find(n => n.authored?.id === 'core-primary').normalResolvedStyle.boxShadow = 'none'; });
+  mutate((r, a) => { a.rules.find(rule => rule.selector === '.material-button:focus').boxShadow = 'none'; });
+  mutate((r, a) => { a.rules.push({ selector: '.material-button:focus', outline: 'none' }); });
+  mutate(r => { r.rules.find(rule => rule.selector === '.mdc-button').declarations['outline-style'].value = 'solid'; });
+  mutate(r => { r.nodes.push(structuredClone(r.nodes.find(n => n.attributes?.id === 'core-primary'))); });
+});
 
 test('public button focus distinguishes none from transparent shadow without changing native outline', async () => {
   const { build } = await import('esbuild');
@@ -109,6 +153,25 @@ test('card shadow serialization preserves all original layers and browser pixels
   assert.equal(createHash('sha256').update(bytes).digest('hex'),
     'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const report = JSON.parse(bytes);
+  const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
+    ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => e.family === 'card');
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'card', {
+    generation: '8fbd2e22dfd801587ce6c1dce90e6daba668171ae26eae0a9c834142a8bd0a43',
+    indexSha256: '6f86d55a6ea6be0f1533ac893579bf517769061ed25a13812b0370c46b7c06e6',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyCardShadowSyntax(rows, cases, inventory, normalize);
+  assert.equal(applied.filter((r, i) => r !== rows[i]).length, 1);
+  const changed = applied.find(r => r.attribution === 'reviewed-card-shadow-layer-serialization');
+  assert.equal(changed.occurrences, 52); assert.equal(changed.reviewedCases.length, 52);
+  assert.deepEqual(validateCardShadowSyntax(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied);
+  forged.find(r => r.attribution === 'reviewed-card-shadow-layer-serialization').reviewedCases.pop();
+  assert.equal(validateCardShadowSyntax(forged, rows, cases, inventory, normalize).length, 1);
+  const first = cases[0], pair = modalInventoryTrees(inventory,
+    `${first.kind}:card@${first.profile}/${first.viewport.id}${first.state ? '/' + first.state : ''}`);
+  pair[1].rules.find(r => r.selector === '.material-card').boxShadow = 'none';
+  assert.throws(() => proveCardShadowSyntax(first, ...pair, normalize));
   const inputs = [...report.results, ...report.interactions].filter(e => e.family === 'card')
     .flatMap(e => e.styleInputs.filter(i => i.id === 'card-primary'));
   assert.equal(inputs.length, 52);
