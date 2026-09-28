@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 28
 
+**Cold integration export active from 764e59f:** launched September 28 15:54:50
+local with `ASTYLAR_AUDIT_COLD=1`, `ASTYLAR_AUDIT_PROGRESS=1`, and the named
+current-ancestry launcher (all five required inputs). Unified session 72739,
+worker PID 16712, launcher PID 2044; last observed phase `build-audit`. Re-poll
+the live handle before any restart. Prior failed output remains unaccepted.
+
+**Additional read-only spacing evidence queued:** all 68 original expansion
+cases retain reference title margin-right 16px from the authored Material title
+rule, versus candidate shorthand margin 0 and absent marginRight in all three
+candidate style stages. Each report/tree hash was authenticated against the
+pinned original report b07ef154.... The candidate title is inside the trigger;
+its chevron is a separate shell child with absolute positioning, right 24px,
+width/height 8px. Reference title is a growing flex item; candidate title is an
+inline span. Thus this is unequal authored spacing/structure, not a demonstrated
+renderer margin defect or proven equivalent redistribution. Canonical
+classification and focused regression integration remain pending. Do not repeat
+this population survey; continue with the existing expansion composition proof
+and history (`1f2f2aa`, `354084e`) when integrating the spacing batch.
+
 **All three rejected-export bindings now pass focused replay.** Reviewed-input
 replay binds 3,325 observations in 35.97s via `collectReviewedInputAuditInputs`
 against the pinned original report. The last mismatch was the retained producer's
