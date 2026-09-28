@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared followup: `authored-anchor-review.mjs` attaches the existing slide-toggle
+flow proof and badge mapped-owner proof to 10 pending inset groups / 344
+observations (2/136 slide-toggle, 8/208 badge). It checks original scalar values,
+all three candidate stages, exact authored anchors, and serialized badge margin
+tokens without interpreting empty expanded declarations as absent authoring.
+`node --test tests/material-parity/authored-anchor-review.spec.mjs` passed 1/1
+in 14.80 s; mutation checks reject added native/candidate offsets and changed or
+duplicated margin declarations. Raw compact values and prior classifications are
+conserved. No equivalence or compound renderer cause is claimed. These new files
+are not dependencies of export 23967 and are not yet canonical. Keep them for
+the next coherent batch after the active export is reconciled.
+
 Cold owner-boundary export launched from 818e2a8: session **23967**, log
 `artifacts/material-parity/owner-boundary-export-818e2a8.log`. Last observed phase
 `build-audit` at 1.05 s. Poll this handle; do not restart unless terminal status
