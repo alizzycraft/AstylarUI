@@ -2,6 +2,42 @@
 
 ## Current audit checkpoint — September 28
 
+**Remaining shadow groups investigated (not integrated):** compact accepted
+index identifies 9 groups / 342 occurrences. Read-only checks against original
+report b07ef154... and current source distinguish three populations:
+
+- Card-primary, 52: executing the actual TypeScript `parseBoxShadow` via
+  transpilation yields identical ordered offset/blur/spread/color layers for
+  native color-first and candidate color-last strings (only color whitespace
+  normalized). All 52 matched exactly, three layers each. This supports a narrow
+  equivalent-serialization proof, not paint/raster equivalence. Reuse the existing
+  parser and its tests when integrating rather than inventing string normalization.
+- Bottom-sheet-panel, 25: all pass existing `proveBottomSheetPanelPaint` owner
+  mapping. Native `.mat-bottom-sheet-container` explicitly authors the three
+  computed shadow layers; candidate authored and all three captured style stages
+  omit boxShadow. Extend that existing panel proof to this missing request.
+- Seven focus-control groups / 265: button32, core32, menu50, sheet-trigger43,
+  dialog-trigger16, snackbar-trigger51, tooltip-trigger41. Original scalar rows
+  have native none versus candidate `0 0 0 1px rgba(0,0,0,0)`. Actual parser
+  returns zero layers for none and one transparent spread layer for the candidate.
+  History 25e1893 changed `.material-button:focus` from none to this exact
+  transparent syntax during compact parity alignment. Current `astylar.ts`
+  configureFocusIndicator (around line1249) recognizes that syntax and disables
+  fallback focus paint for alpha0; none instead falls through to the ordinary
+  fallback decision. ef62cbd added the special handling and existing isolation
+  test for transparent focus shadow.
+
+A source-extracted execution of the actual three focus methods
+(`hasAuthoredFocusPaint`, `shouldShowDefaultFocusIndicator`,
+`configureFocusIndicator`) with controlled style/input collaborators confirms
+none→fallback enabled, transparent→disabled for an otherwise unpainted focus
+rule. This is method-level branch evidence, NOT a public browser/raster proof.
+Do not classify the seven groups as harmless zero-alpha normalization. Next
+extend the existing public isolation proof with paired none/transparent and
+reference focus/outline declarations, preserving accessibility semantics; a
+browser's default outline is distinct from box shadow, so the branch difference
+alone does not establish a core defect. No renderer or fixture edits made.
+
 **Remaining overflow cohort narrowed (read-only while cold check runs):** the
 authenticated accepted index has 18 unresolved overflow-axis groups / 1,160
 occurrences. Original report b07ef154... and full trees identify 580 owners:
