@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 28
 
+Producer integration now wires the 153-group / 6909-observation prepared batch
+through the existing apply/validate/bound-case guard and source-fingerprint list.
+The existing authored-anchor module composes the eight existing review functions;
+no new exporter, report or validation framework was added. Combined replay against
+all 8483 accepted scalar records changes exactly those 153 unresolved groups,
+preserves every raw row and prior classification, and rejects altered review
+metadata. The earlier focused anchor/corner mutation checks remain in the same
+test. `node --test tests/material-parity/authored-anchor-review.spec.mjs` passes
+1/1 in 85.34 s. The exact reverse transition restores producer SHA
+887cc07d4c7ddb92f5b548c5df90e8168045ff4f23a1d254ee40958959c180d0;
+`node --test tests/material-parity/position-composition-producer-transition.spec.mjs`
+passes 25/25 in 5.89 s, including all historical transitions and rejected partial
+integration/unrelated changes. Syntax and scoped diff checks pass.
+This is verified pipeline wiring, not a regenerated canonical checkpoint.
+Next extend the existing canonical-conservation command for this batch, then run
+one export and reconcile fingerprints, raw/control conservation and section changes
+before accepting/importing it. The old canonical remains authoritative historical
+evidence (439 unresolved); it is not a current-producer export. Do not launch a
+second exporter or skip receipt reconciliation. Full browser and root-cause gates
+remain open; no renderer or fixture input changed.
+
 Prepared text-transform proof covers 27 groups / 1304 observations, using the
 authenticated original capture and canonical compact generation below. It joins
 all 89 native fields, all three candidate local stages and complete ancestry.

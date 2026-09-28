@@ -17,6 +17,20 @@ import { restoreComponentColorProducer } from './position-composition-producer-t
 import { restoreComponentInteractionProducer } from './position-composition-producer-transition.mjs';
 import { restoreCaretPositionProducer } from './position-composition-producer-transition.mjs';
 import { restoreOwnerBoundaryProducer } from './position-composition-producer-transition.mjs';
+import { restorePreparedInputProducer } from './position-composition-producer-transition.mjs';
+
+test('prepared input integration restores the complete accepted owner-boundary predecessor', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'c8a5fc1:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restorePreparedInputProducer(current).restoredSource, previous);
+  for (const fragment of ['applyPreparedInputReviews(beforePreparedInputReviews',
+    'validatePreparedInputReviews(report.discrepancies',
+    "errors.push('prepared input review attribution lacks bound original cases');",
+    "    'tests/material-parity/authored-anchor-review.mjs',\n"])
+    assert.throws(() => restorePreparedInputProducer(current.replace(fragment, '')));
+  assert.throws(() => restorePreparedInputProducer(current + '\n// unrelated'));
+});
 
 test('owner boundary integration restores the complete accepted caret predecessor', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

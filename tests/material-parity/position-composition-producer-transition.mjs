@@ -33,9 +33,27 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreOwnerBoundaryProducer(source) {
+export function restorePreparedInputProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyPreparedInputReviews, validatePreparedInputReviews, isPreparedInputReviewRow } from './authored-anchor-review.mjs';\n", ''],
+    ["  const beforePreparedInputReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyPreparedInputReviews(beforePreparedInputReviews, cases, elementInventory, canonicalStyle)\n    : beforePreparedInputReviews;\n", ''],
+    ["      errors.push(...validatePreparedInputReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n", ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isPreparedInputReviewRow))\n    errors.push('prepared input review attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/authored-anchor-review.mjs',\n    'tests/material-parity/authored-anchor-review.spec.mjs',\n    'tests/material-parity/minimum-size-request-review.mjs',\n    'tests/material-parity/minimum-size-request-review.spec.mjs',\n    'tests/material-parity/text-transform-boundary-review.mjs',\n    'tests/material-parity/text-transform-boundary-review.spec.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated prepared input integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), '887cc07d4c7ddb92f5b548c5df90e8168045ff4f23a1d254ee40958959c180d0',
+    'producer changed beyond reviewed prepared input integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreOwnerBoundaryProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const beforePreparedInputReviews =') ? restorePreparedInputProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyOwnerBoundaryReviews, validateOwnerBoundaryReviews, isOwnerBoundaryReviewRow } from './custom-owner-border-review.mjs';\n", ''],
     ["  const beforeOwnerBoundaryReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
+import { applyPreparedInputReviews, validatePreparedInputReviews } from './authored-anchor-review.mjs';
 import { createHash } from 'node:crypto';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
@@ -14,12 +15,33 @@ import { applyAuthoredCornerReviews, proveAuthoredCornerRequests } from './autho
 import { proveSheetCornerBoxEvidence } from './authored-anchor-review.mjs';
 import { proveActionCornerBoxInputs, applyCardContrastCornerReview } from './authored-anchor-review.mjs';
 
-test('authored anchor and corner reviews retain 3408 observations and reject altered requests', () => {
+test('prepared 153-group batch conserves all scalar records and retains focused anchor/corner proofs', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const capture = JSON.parse(bytes), families = ['slide-toggle', 'badge', 'core', 'card', 'checkbox', 'sidenav', 'toolbar', 'chips', 'icon', 'list', 'tree', 'paginator', 'tabs', 'stepper', 'expansion', 'sort', 'button-toggle'];
   const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))];
   const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const accepted = [...new Set(cases.map(e => e.family))].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, {
+    generation: 'a593d4c7e804b6cf5ba863163122fde6cb31774c88c5fe6f97f6504cee2fa948',
+    indexSha256: 'c5224eea34da7aa30570bcad482ac04e55c39ba0a8988a0d7ec0b88629f350c1',
+  })).filter(r => r.evidence.section === 'discrepancies');
+  const prepared = applyPreparedInputReviews(accepted, cases, inventory, bindPreciseAuditNormalization());
+  const batch = prepared.filter((r, i) => r !== accepted[i]);
+  assert.equal(accepted.length, 8483); assert.equal(batch.length, 153);
+  assert.equal(batch.reduce((n, r) => n + r.occurrences, 0), 6909);
+  const batchMetadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const batchRaw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !batchMetadata.has(k)));
+  prepared.forEach((r, i) => {
+    assert.deepEqual(batchRaw(r), batchRaw(accepted[i]));
+    if (r !== accepted[i]) {
+      assert.equal(accepted[i].attribution, 'unresolved');
+      assert.equal(r.reviewEvidence.inputEquivalent, false); assert.equal(r.reviewEvidence.renderingEquivalent, false);
+    }
+  });
+  assert.deepEqual(validatePreparedInputReviews(prepared, accepted, cases, inventory, bindPreciseAuditNormalization()), []);
+  const tampered = [...prepared], index = prepared.findIndex((r, i) => r !== accepted[i]);
+  tampered[index] = { ...tampered[index], justification: 'unsupported replacement' };
+  assert.equal(validatePreparedInputReviews(tampered, accepted, cases, inventory, bindPreciseAuditNormalization()).length, 1);
   const rows = families.flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, {
     generation: 'fca6a4354e9c006e21066f0d19ea9435afacf436d226cda1c78f5ee420bea137',
     indexSha256: '5a5e8c8a31681e088f432bfd23d00327cd3757b383e8ccad50d1edc45f5f4472',

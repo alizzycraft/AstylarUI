@@ -5,6 +5,32 @@ import { proveBadgePointerRequest } from './component-pointer-events-review.mjs'
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { inspectButtonHostRequests } from './button-host-request-evidence.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+import { applyMinimumSizeReviews } from './minimum-size-request-review.mjs';
+import { applyTextTransformBoundaryReviews } from './text-transform-boundary-review.mjs';
+
+const preparedAttributions = new Set([
+  'reviewed-authored-anchor-substitution', 'reviewed-core-anchor-substitution',
+  'reviewed-core-transform-request-omission', 'reviewed-core-computed-offset-boundary',
+  'reviewed-relative-owner-position-omission', 'reviewed-relative-owner-computed-insets',
+  'reviewed-static-owner-relative-substitution', 'reviewed-static-owner-observation-boundary',
+  'reviewed-chip-toggle-radius-token-substitution', 'reviewed-card-contrast-radius-substitution',
+  'reviewed-minimum-size-request-omission', 'reviewed-minimum-size-observation-boundary',
+  'reviewed-text-transform-computed-local-boundary',
+]);
+export const isPreparedInputReviewRow = row => preparedAttributions.has(row.attribution);
+export function applyPreparedInputReviews(rows, cases, inventory, normalize) {
+  return [applyAuthoredAnchorReviews, applyCoreAnchorReviews, applyRelativeOwnerOffsetReviews,
+    applyStaticOwnerPositionReviews, applyAuthoredCornerReviews, applyCardContrastCornerReview,
+    applyMinimumSizeReviews, applyTextTransformBoundaryReviews]
+    .reduce((values, apply) => apply(values, cases, inventory, normalize), rows);
+}
+export function validatePreparedInputReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const expected = applyPreparedInputReviews(originalRows, cases, inventory, normalize).filter(isPreparedInputReviewRow);
+    assert.equal(JSON.stringify(rows.filter(isPreparedInputReviewRow)), JSON.stringify(expected));
+    return [];
+  } catch (error) { return [`prepared input review does not replay: ${error.message}`]; }
+}
 
 const cornerProperties = ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius'];
 const radiusProperty = key => key === 'all' || /^border.*radius$/i.test(key.replaceAll('-', ''));
