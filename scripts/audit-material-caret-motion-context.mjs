@@ -5,6 +5,47 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
 import { inspectOwnerCaretInput } from '../tests/material-parity/owner-caret-input-evidence.mjs';
+import { applyModalBoxReview } from '../tests/material-parity/modal-position-inspection.mjs';
+
+export const motionCaretAttribution = 'reviewed-motion-caret-request-omission';
+const motionCaretOwners = { chips: ['chip-0', 'chip-1'], tabs: ['tab-overview', 'tab-activity', 'tab-panel'] };
+export function proveMotionCaretRequests(entry, reference, candidate, element) {
+  assert.ok(motionCaretOwners[entry.family]?.includes(element));
+  const inputs = entry.styleInputs.filter(i => i.id === element); assert.equal(inputs.length, 1);
+  const proof = inspectOwnerCaretInput(inputs[0], reference, candidate, { family: entry.family });
+  assert.equal(proof.disposition, 'requires-specific-review');
+  assert.equal(proof.candidateLocalCaret, '<omitted>');
+  assert.deepEqual(proof.requests.astylar, []);
+  assert.ok(proof.issues.length && proof.issues.every(i =>
+    i.reason === 'authored-caret-reset-or-motion-request' && i.side === 'reference'));
+  assert.ok(proof.requests.reference.length);
+  for (const request of proof.requests.reference) {
+    assert.ok(typeof request.cssText === 'string' && request.cssText.length);
+    const fields = Object.keys(request.declarations);
+    assert.ok(fields.length && fields.every(k => /^(animation|transition)/.test(k)));
+  }
+  return { ...proof, motionInputEquivalent: false, caretEffectProven: false,
+    limitation: 'Unequal captured motion requests are proven, not their resolved effect on caret color. Broad targets, variable-based declarations and competing rules remain intact. No candidate computed caret, historical motion or rendered caret equivalence is inferred.' };
+}
+export function applyMotionCaretReviews(rows, cases, inventory, normalize) {
+  for (const [family, elements] of Object.entries(motionCaretOwners)) for (const element of elements)
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+      family, element, properties: ['caretColor'], attribution: motionCaretAttribution,
+      classification: 'application-plugin-authoring-defect',
+      owner: 'comparison motion authoring and computed-versus-local caret measurement',
+      justification: 'Original reference owner ancestry includes transition/animation declarations absent from candidate authoring and all three local stages. This establishes unequal motion inputs, including unresolved and potentially color-affecting requests; it does not attribute the scalar caret-color difference to motion. Native computed caret versus candidate local omission remains a measurement limitation. Preserve all competing declarations rather than choosing transition:none or treating an idle capture as equivalence.',
+      prove: (entry, reference, candidate) => proveMotionCaretRequests(entry, reference, candidate, element),
+    });
+  return rows;
+}
+export function validateMotionCaretReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === motionCaretAttribution);
+    assert.ok(JSON.stringify(select(rows)) === JSON.stringify(select(applyMotionCaretReviews(originalRows, cases, inventory, normalize))),
+      'complete motion caret review differs');
+    return [];
+  } catch (error) { return [`motion caret review does not replay: ${error.message}`]; }
+}
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 export const caretMotionCaptureFile = 'artifacts/material-parity/caret-motion-context-audit-v1/latest-report.json';

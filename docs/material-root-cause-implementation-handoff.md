@@ -27,8 +27,21 @@ serialized replay and rejects missing rows, false rendering equivalence and a
 fabricated synthetic-root type. The focused `pending range` test passes (10.55 s).
 This is prepared only, not connected to the running cursor/pointer producer;
 canonical classifications remain unresolved until the next coherent caret batch.
-The other 23 groups remain split between motion-sensitive chip/tab ancestry and
-overlay/root-context evidence. Keep these distinct from editable-input caret bugs.
+Prepared chip/tab motion-caret review now covers ten groups / 362 observations
+(152 chips, 210 tabs). Original authenticated trees show reference motion requests
+through owner ancestry and no candidate caret/reset/motion requests in authoring
+or three local stages. Seven request signatures include durations alone, explicit
+color targets, competing `none` rules and unresolved variable-based declarations.
+`applyMotionCaretReviews` in the existing motion-context script records unequal
+motion input as `reviewed-motion-caret-request-omission`; it does not claim motion
+caused the scalar caret difference or that computed caret/rendering is equivalent.
+`node --test tests/material-parity/component-motion-caret-review.spec.mjs` passes
+(10.50 s), including exact raw/unrelated-row conservation, full serialized replay,
+missing-row/false-equivalence rejection and candidate-request negative controls.
+No fresh-motion capture is treated as historical/current proof: this review uses
+the original 362 observation boundaries directly. Not yet wired into the producer.
+The remaining 13 caret groups / 378 observations need overlay/root-context review.
+Keep all these groups distinct from editable-input caret bugs.
 
 Cursor/pointer integration guard is ready: the existing canonical conservation
 checker now supports `--component-interaction`, pinned to the accepted color
