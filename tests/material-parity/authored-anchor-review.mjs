@@ -181,6 +181,41 @@ export function applyCardContrastCornerReview(rows, cases, inventory, normalize)
   return rows.map(row => replacements.get(row) ?? row);
 }
 
+// Keep this separate from the accepted historical batch until its coherent
+// export/conservation milestone. This classifies test-input coverage, not paint.
+export function applyFullRadiusActionReview(rows, cases, inventory, normalize) {
+  const selected = rows.filter(row => row.attribution === 'unresolved' && cornerProperties.includes(row.property) &&
+    ['card-open', 'toolbar-action', 'dialog-cancel', 'dialog-save'].includes(row.element) && row.astylar !== '9px');
+  let reviewed = selected;
+  for (const [family, element] of [['card', 'card-open'], ['toolbar', 'toolbar-action'],
+    ['dialog', 'dialog-cancel'], ['dialog', 'dialog-save']]) {
+    reviewed = applyModalBoxReview(reviewed, cases, inventory, normalize, {
+      family, element, properties: cornerProperties,
+      classification: 'parity-harness-defect', attribution: 'reviewed-full-radius-action-request-coverage-gap',
+      owner: 'comparison request fidelity; core rounded-rectangle sampling owns the independent rendering defect',
+      justification: 'Native full-radius tokens resolve to 9999px while these candidate owners explicitly request 20px or 21px. On equal sufficiently wide boxes the CSS used radius can be identical, so this is not classified as a different intended shape. The comparison nevertheless does not exercise the native full-radius request through AstylarUI; the independent equal-input radius proof demonstrates that this request has a core sampling failure. Classify the missing request coverage, not presumed historical intent or whole-control equivalence. Restore equal requests only alongside a general core correction, never tune the smaller radius against antialiasing pixels.',
+      prove: (entry, reference, candidate) => {
+        const proof = proveActionCornerBoxInputs(entry, reference, candidate, element);
+        assert.equal(proof.sameShapeOnEqualWideBoxes, true);
+        return { ...proof, firstDivergence: 'authored full-radius request replaced before renderer input',
+          sourceFinding: 'core-rounded-radius-sampling-uses-unclamped-request',
+          originalCompensationIntentProven: false, allStatesUsedBoxesMeasured: false,
+          actualCaseRendererCauseProven: false, inputEquivalent: null, renderingEquivalent: null };
+      },
+    });
+  }
+  const replacements = new Map(selected.map((row, index) => [row, reviewed[index]]));
+  return rows.map(row => replacements.get(row) ?? row);
+}
+
+export function validateFullRadiusActionReview(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(row => row.attribution === 'reviewed-full-radius-action-request-coverage-gap');
+    assert.deepEqual(select(rows), select(applyFullRadiusActionReview(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`full-radius action review does not replay: ${error.message}`]; }
+}
+
 export function applyAuthoredCornerReviews(rows, cases, inventory, normalize) {
   for (const [family, element] of [['chips', 'chip-0'], ['chips', 'chip-1'], ['button-toggle', 'button-toggle-primary']]) {
     rows = applyModalBoxReview(rows, cases, inventory, normalize, {

@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+**Pending action-radius coverage classification prepared:** card, toolbar and
+dialog actions account for 20 previously unresolved groups / 620 observations.
+Their native 9999px requests are replaced with explicit 20px/21px requests.
+These can have equivalent CSS used shapes on equal sufficiently wide boxes;
+the finding is missing full-radius renderer-request coverage, not proof of
+different intended shapes, historical compensation intent, or pixel causation.
+The independently demonstrated unclamped-radius sampling defect makes that
+coverage gap material. Input/output equivalence remains unknown, not false.
+`applyFullRadiusActionReview` is deliberately not yet in canonical production
+composition. Its focused test replays all original owners, preserves raw rows,
+and rejects forged metadata and incomplete case coverage (1/1 passed).
+Accepted unresolved count remains 180 until the pending stacking and radius
+batches pass production integration, predecessor conservation and cold replay.
+Next: integrate these coherent batches and reconcile source fingerprints before
+another broad export; do not repeat the completed corner-raster investigation.
+
 **Interaction used-box gap closed for a focused 20-case cohort.** The harness
 already measured interaction border boxes but discarded them from its report.
 It now retains `geometry` using the existing comparison function with no target

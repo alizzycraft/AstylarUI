@@ -16,6 +16,47 @@ import { applyStaticOwnerPositionReviews, proveStaticOwnerPosition } from './aut
 import { applyAuthoredCornerReviews, proveAuthoredCornerRequests } from './authored-anchor-review.mjs';
 import { proveSheetCornerBoxEvidence } from './authored-anchor-review.mjs';
 import { proveActionCornerBoxInputs, applyCardContrastCornerReview } from './authored-anchor-review.mjs';
+import { applyFullRadiusActionReview, validateFullRadiusActionReview } from './authored-anchor-review.mjs';
+
+test('full-radius action requests classify missing renderer-input coverage across original owners', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes), families = ['card', 'toolbar', 'dialog'];
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })),
+    ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const snapshot = { generation: '6f0a4c1c3c214695abe87bb185f6c6c392acd5fa6452d2315891854f85cc9de9',
+    indexSha256: 'a28657efd56dc23b707d09cd3148c55b4974c9385f8d47fd38cfc8cdb5754a96' };
+  const rows = families.flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+    .filter(r => r.evidence.section === 'discrepancies');
+  const before = structuredClone(rows), normalize = bindPreciseAuditNormalization();
+  const reviewed = applyFullRadiusActionReview(rows, cases, inventory, normalize);
+  const changed = reviewed.filter((row, index) => row !== rows[index]);
+  assert.deepEqual(rows, before);
+  assert.equal(changed.length, 20); assert.equal(changed.reduce((n, row) => n + row.occurrences, 0), 620);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  reviewed.forEach((row, index) => {
+    assert.deepEqual(raw(row), raw(rows[index]));
+    if (row !== rows[index]) {
+      assert.equal(rows[index].attribution, 'unresolved');
+      assert.equal(row.classification, 'parity-harness-defect');
+      assert.equal(row.reviewEvidence.observations.length, row.occurrences);
+      for (const observation of row.reviewEvidence.observations) {
+        assert.equal(observation.sameShapeOnEqualWideBoxes, true);
+        assert.equal(observation.originalCompensationIntentProven, false);
+        assert.equal(observation.actualCaseRendererCauseProven, false);
+        assert.equal(observation.inputEquivalent, null);
+        assert.equal(observation.renderingEquivalent, null);
+      }
+    }
+  });
+  assert.deepEqual(validateFullRadiusActionReview(reviewed, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(reviewed);
+  forged.find(r => r.attribution === 'reviewed-full-radius-action-request-coverage-gap').reviewEvidence.renderingEquivalent = true;
+  assert.equal(validateFullRadiusActionReview(forged, rows, cases, inventory, normalize).length, 1);
+  assert.throws(() => applyFullRadiusActionReview(rows, cases.slice(1), inventory, normalize));
+});
 
 test('runtime button paint meshes agree with measured control bounds without background textures', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
