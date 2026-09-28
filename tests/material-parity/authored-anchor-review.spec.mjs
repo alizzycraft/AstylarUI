@@ -17,6 +17,56 @@ import { applyAuthoredCornerReviews, proveAuthoredCornerRequests } from './autho
 import { proveSheetCornerBoxEvidence } from './authored-anchor-review.mjs';
 import { proveActionCornerBoxInputs, applyCardContrastCornerReview } from './authored-anchor-review.mjs';
 
+test('focused interaction capture retains actual boxes and binds target inputs to historical cases', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/action-boxes-79bd3dd/latest-report.json');
+  assert.equal(hash(bytes), '02576edccf740a7dcf5273ea9193ba73a4b045a8ee7558e705853e7bd458b041');
+  const report = JSON.parse(bytes);
+  const originalBytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(hash(originalBytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const original = JSON.parse(originalBytes);
+  const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/tooltip-keyboard-runtime-813f658/checkpoint/manifest.json'));
+  assert.equal(report.browser.version, checkpoint.provenance.browser);
+  assert.deepEqual(report.captureProvenance.browserFiles, checkpoint.provenance.browserFiles);
+  for (const item of report.captureProvenance.browserFiles)
+    assert.equal(hash(readFileSync(`artifacts/material-parity/tooltip-keyboard-build-813f658/browser/${item.file}`)), item.sha256);
+  assert.equal(report.interactions.length, 20);
+  let measured = 0, absentDialogActions = 0;
+  for (const entry of report.interactions) {
+    assert.deepEqual(entry.runtimeErrors, []);
+    const previous = original.interactions.find(e => e.family === entry.family && e.profile === entry.profile &&
+      e.viewport.id === entry.viewport.id && e.state === entry.state);
+    assert.ok(previous);
+    for (const side of ['reference', 'astylar']) {
+      const tree = entry.inputTrees[side];
+      assert.equal(hash(readFileSync(tree.file)), tree.sha256);
+    }
+    const targets = { badge: ['badge-count'], card: ['card-open'], toolbar: ['toolbar-action'],
+      dialog: ['dialog-cancel', 'dialog-save'] }[entry.family];
+    for (const id of targets) {
+      const box = entry.geometry.elements.find(e => e.id === id);
+      if (entry.family === 'dialog' && entry.state === 'hover') {
+        assert.ok(!box || box.missing); absentDialogActions++; continue;
+      }
+      assert.ok(box && !box.missing); measured++;
+      const input = entry.styleInputs.find(i => i.id === id), old = previous.styleInputs.find(i => i.id === id);
+      // Preserve declaration order, selectors and values; only CSSOM locations
+      // moved in the frozen build. Do not normalize authored style differences.
+      const portable = value => ({ ...value, referenceAuthored: value.referenceAuthored.map(
+        ({ sheetIndex, rulePath, ...rule }) => rule) });
+      assert.deepEqual(portable(input), portable(old));
+      for (const key of ['width', 'height']) assert.ok(Math.abs(box.expected[key] - box.actual[key]) < 1e-6);
+      const deltaY = box.actual.top - box.expected.top;
+      if (entry.family === 'dialog') assert.ok(Math.abs(deltaY + 1) < 1e-6);
+      else assert.ok(Math.abs(deltaY) < 0.014);
+    }
+  }
+  assert.equal(measured, 20);
+  assert.equal(absentDialogActions, 8);
+  const producer = readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8');
+  assert.ok(producer.includes('geometry: compareGeometry(referenceMeasurement.elements, astylarMeasurement.elements)'));
+});
+
 test('retained static badge and action boxes bound corner evidence without inferring invisible paint', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

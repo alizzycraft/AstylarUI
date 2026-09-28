@@ -2,6 +2,39 @@
 
 ## Current audit checkpoint — September 28
 
+**Interaction used-box gap closed for a focused 20-case cohort.** The harness
+already measured interaction border boxes but discarded them from its report.
+It now retains `geometry` using the existing comparison function with no target
+exclusions, fixture changes, or changes to acceptance gates. Historical files
+are untouched; never infer these measurements for their unmeasured populations.
+
+Capture `action-boxes-79bd3dd/latest-report.json` (SHA-256
+`02576edccf740a7dcf5273ea9193ba73a4b045a8ee7558e705853e7bd458b041`)
+uses frozen `tooltip-keyboard-build-813f658/browser`, Chrome 153.0.8010.53,
+light/contrast, desktop DPR1/2, badge/card/toolbar hover and dialog hover/open.
+Command: set `ASTYLAR_MATERIAL_BROWSER_ROOT` to that browser directory,
+`ASTYLAR_MATERIAL_ARTIFACTS=artifacts/material-parity/action-boxes-79bd3dd`,
+`ASTYLAR_MATERIAL_FAMILIES=badge,card,toolbar,dialog`,
+`ASTYLAR_MATERIAL_PROFILES=light,contrast`,
+`ASTYLAR_MATERIAL_INTERACTION_VIEWPORTS=desktop-dpr1,desktop-dpr2`,
+`ASTYLAR_MATERIAL_INTERACTION_STATES=hover,open`, then
+`node tests/material-parity/run-material-parity.mjs --skip-build --interaction-only`.
+Report-only capture exited 0; 20/20 existing interaction checks passed, zero
+runtime errors. This is not full acceptance or input-equivalence acceptance.
+
+Twenty target controls have equal paired dimensions within 1e-6 CSS px; eight
+dialog actions are correctly absent before opening. Dialog action tops differ
+by -1 CSS px despite equal dimensions; preserve this observation, not a new
+root-cause diagnosis. Target style records match historical cases exactly after
+removing only CSSOM sheetIndex/rulePath locations from ordered authored rules.
+Focused `focused interaction capture` test in `authored-anchor-review.spec.mjs`
+passes 1/1, authenticating report/tree hashes and all frozen browser asset bytes.
+
+Next use these measured boxes with the new retained corner rasters. Remaining
+profiles/states are not covered by this sample. Runner/spec fingerprint changes
+must join pending export reconciliation. Canonical unresolved count stays 180;
+the 10-group stacking batch is still pending. No renderer or fixture fix.
+
 **Static badge/action corner evidence bounded without recapture.** The focused
 `retained static badge` test in `authored-anchor-review.spec.mjs` authenticates
 36 original cases and 72 PNGs: 12 each badge, card action and toolbar action.

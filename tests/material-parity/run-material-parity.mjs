@@ -422,6 +422,9 @@ async function captureInteractionCase(benchmarkCase) {
     const focusMatches = state !== 'focus' || referenceFocus === astylarFocus;
     return {
       family, profile, viewport, state, screenshotSimilarity, styleInputs, textAlignment, focusedRasters, semantics, eventComparison, interactionState, overlayPlacement, statePaint, cursor,
+      // Retain measured interaction boxes for input/paint diagnosis. This is
+      // diagnostic evidence, not a new acceptance gate or a static-box fallback.
+      geometry: compareGeometry(referenceMeasurement.elements, astylarMeasurement.elements),
       inputTrees: persistInputTrees(directory, referenceMeasurement.inputTree, astylarMeasurement.inputTree),
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,
