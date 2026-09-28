@@ -11,17 +11,37 @@ import { reconcileDisabledInkModuleReceipts } from '../tests/material-parity/dis
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const same = (a, b, message) => assert.ok(isDeepStrictEqual(a, b), message);
-export async function readAudit(directory) {
+// Hash completed values before pruning. Paths and container markers preserve
+// nesting, array order, empty containers and primitive types without retaining
+// the multi-gigabyte report. Object member order is deliberately significant.
+export function fingerprintAuditValue(parser, value, sections) {
+  if (!parser.stack.length) return;
+  const keys = [...parser.stack.slice(1).map(frame => frame.key), parser.key];
+  const section = keys[0];
+  if (!sections.has(section)) sections.set(section, createHash('sha256'));
+  const kind = value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value;
+  sections.get(section).update(JSON.stringify([keys, kind,
+    kind === 'array' || kind === 'object' ? null : value]) + '\n');
+}
+
+export async function readAudit(directory, { sectionsOnly = false } = {}) {
   const manifest = JSON.parse(readFileSync(`${directory}/material-input-equivalence-audit.json`));
   assert.equal(manifest.payload, 'material-input-equivalence-audit.json.gz');
   const path = `${directory}/${manifest.payload}`, compressed = readFileSync(path);
   assert.equal(compressed.length, manifest.compressedBytes);
   assert.equal(hash(compressed), manifest.compressedSha256);
   const parser = new Parser(), digest = createHash('sha256'), rows = [];
-  let control, length = 0, roots = 0, arrays = 0;
+  const sections = new Map();
+  let control, length = 0, roots = 0, arrays = 0, controls = 0;
   parser.onValue = function(value) {
+    if (sectionsOnly) fingerprintAuditValue(this, value, sections);
     const top = this.stack[1]?.key ?? (this.stack.length === 1 ? this.key : undefined);
-    if (this.stack.length === 2 && top === 'discrepancies') {
+    if (sectionsOnly) {
+      if (this.stack.length === 1 && this.key === 'discrepancies') arrays++;
+      if (this.stack.length === 1 && this.key === 'controlTypography') controls++;
+      if (!this.stack.length) roots++;
+      else if (this.value) delete this.value[this.key];
+    } else if (this.stack.length === 2 && top === 'discrepancies') {
       rows.push(value); delete this.value[this.key];
     } else if (this.stack.length === 1) {
       if (this.key === 'controlTypography') control = value;
@@ -36,6 +56,10 @@ export async function readAudit(directory) {
   assert.equal(length, manifest.uncompressedBytes);
   assert.equal(digest.digest('hex'), manifest.uncompressedSha256);
   same([roots, arrays, parser.stack.length], [1, 1, 0], 'incomplete report');
+  if (sectionsOnly) {
+    assert.equal(controls, 1);
+    return { manifest, sectionDigests: Object.fromEntries([...sections].map(([key, digest]) => [key, digest.digest('hex')])) };
+  }
   assert.ok(control && Array.isArray(control.differences));
   return { manifest, rows, control };
 }

@@ -1,6 +1,42 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { compareDisabledInkCanonical } from '../../scripts/check-material-disabled-ink-canonical-conservation.mjs';
+import Parser from 'jsonparse';
+import { compareDisabledInkCanonical, fingerprintAuditValue } from '../../scripts/check-material-disabled-ink-canonical-conservation.mjs';
+
+function sectionHashes(value, chunkSize = 7) {
+  const parser = new Parser(), sections = new Map();
+  parser.onValue = function(value) {
+    fingerprintAuditValue(this, value, sections);
+    if (this.stack.length) delete this.value[this.key];
+  };
+  const bytes = Buffer.from(JSON.stringify(value));
+  for (let i = 0; i < bytes.length; i += chunkSize) parser.write(bytes.subarray(i, i + chunkSize));
+  return Object.fromEntries([...sections].map(([key, digest]) => [key, digest.digest('hex')]));
+}
+
+test('section fingerprints retain values, paths, order and empty structure after pruning', () => {
+  const base = { evidence: { nested: [1, 'é', null, {}, []], empty: '' }, untouched: { x: true } };
+  const expected = sectionHashes(base);
+  assert.deepEqual(sectionHashes(base, 1), expected);
+  assert.deepEqual(sectionHashes(base, 65536), expected);
+  const changes = [
+    v => { v.evidence.nested[0] = '1'; },
+    v => { v.evidence.nested.reverse(); },
+    v => { v.evidence.nested[3] = []; },
+    v => { v.evidence.nested.push({}); },
+    v => { delete v.evidence.empty; },
+    v => { v.evidence.other = v.evidence.nested; delete v.evidence.nested; },
+    v => { v.evidence.nested[2] = false; },
+  ];
+  for (const change of changes) {
+    const copy = structuredClone(base); change(copy);
+    const result = sectionHashes(copy);
+    assert.notEqual(result.evidence, expected.evidence);
+    assert.equal(result.untouched, expected.untouched);
+  }
+  assert.notDeepEqual(sectionHashes({ a: {} }), sectionHashes({ a: [] }));
+  assert.notDeepEqual(sectionHashes({ a: null }), sectionHashes({}));
+});
 
 function sample() {
   const expected = Array.from({ length: 60 }, (_, i) => ({ case: `case-${i}`,

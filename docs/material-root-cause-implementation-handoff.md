@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 28
 
+**Whole-report reconciliation in progress:** the existing `readAudit` reader now
+supports `sectionsOnly: true`, hashing every completed primitive/path/container
+before pruning. Unlike the completed scalar/control check, this covers all
+top-level sections (including empty structures); object member order is significant.
+Focused `disabled-ink-canonical-conservation.spec.mjs`: 3/3 passed, including
+mutation and stream-chunk boundary checks. No classifications or payload changed.
+Session 2868 is comparing accepted `working-audit/6f0a4c...` to current `docs`;
+last poll confirmed it running with no output yet. Poll that handle, do not
+restart the scan. It prints authenticated payload hashes and changed/unchanged
+section names. Next inspect only changed sections, explain source-fingerprint
+transitions, and retain the independent cold canonical check requirement.
+This tooling increment is not a whole-report conservation result or acceptance.
+
 **Cold export 72739 finished (not running):** terminal exit 1 after
 2,204,549ms (36.74 min). The three evidence-binding errors are gone. The ONLY
 reported error is 150 unresolved scalar groups; full audit acceptance therefore
