@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
+import { execFileSync } from 'node:child_process';
 import { collectRangeCaretInputs, inspectRangeCaretInput, rangeCaretSurveyFile } from './audit-material-range-caret-inputs.mjs';
 
 assert.equal(process.argv.length, 2);
@@ -9,7 +10,21 @@ assert.equal(process.argv.length, 2);
 // exact wire representation, without filling omissions with null or a type.
 const actual = JSON.parse(JSON.stringify(collectRangeCaretInputs()));
 const saved = JSON.parse(readFileSync(rangeCaretSurveyFile));
-delete saved.sourceFingerprints; assert.ok(isDeepStrictEqual(actual, saved), 'Complete saved range review differs');
+assert.deepEqual(saved, JSON.parse(execFileSync('git', ['show', `a6c98bdc7c596a3b3d09686f9369f9f91dbc9854:${rangeCaretSurveyFile}`], { maxBuffer: 16 * 1024 * 1024 })),
+  'Retained range survey must remain unchanged');
+// The collector authenticates both known source transitions and executes both
+// pinned normalization contracts. Only their current receipts may differ.
+const reconciled = structuredClone(saved);
+for (const file of ['tests/material-parity/border-initial-input-evidence.mjs',
+  'tests/material-parity/generated-node-mapping-evidence.mjs', 'tests/material-parity/input-equivalence-audit.mjs']) {
+  const before = reconciled.parentSourceChecks.filter(s => s.file === file);
+  const after = actual.parentSourceChecks.filter(s => s.file === file);
+  assert.equal(before.length, 1); assert.equal(after.length, 1);
+  assert.equal(before[0].recorded, after[0].recorded);
+  before[0].current = after[0].current; before[0].verification = after[0].verification;
+}
+delete reconciled.sourceFingerprints;
+delete saved.sourceFingerprints; assert.ok(isDeepStrictEqual(actual, reconciled), 'Complete saved range review differs beyond authenticated receipts');
 assert.equal(actual.originalCasesScanned, 2311); assert.equal(actual.selectedCases, 78);
 assert.equal(actual.groups, 4); assert.equal(actual.observations, 156); assert.equal(actual.originalScalarChecks, 13884);
 assert.deepEqual(actual.controlDifferences, { min: 78, max: 78, step: 156, value: 0, disabled: 0 });
@@ -76,7 +91,7 @@ const conservation = [
   r => { r.findings[0].observations[0].review.originalAncestry.candidate[0].type = 'div'; },
 ];
 for (const [i, mutate] of conservation.entries()) {
-  const r = structuredClone(saved); mutate(r);
+  const r = structuredClone(reconciled); mutate(r);
   assert.throws(() => assert.ok(isDeepStrictEqual(actual, r), 'Full range review changed'), `conservation ${i}`);
 }
 console.log(JSON.stringify({ groups: actual.groups, observations: actual.observations, cases: actual.selectedCases,

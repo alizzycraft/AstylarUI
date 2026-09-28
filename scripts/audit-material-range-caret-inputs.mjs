@@ -4,8 +4,10 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import ts from 'typescript';
+import { bindHistoricalAuditNormalization, bindPreciseAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { inspectOwnerCaretInput } from '../tests/material-parity/owner-caret-input-evidence.mjs';
+import { restoreMappingReadAdapterSource } from '../tests/material-parity/audit-evidence-session.mjs';
+import { borderEvidenceBaseline, verifyBorderEvidenceSourceTransition } from '../tests/material-parity/position-composition-producer-transition.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const digest = value => hash(JSON.stringify(value));
@@ -65,21 +67,22 @@ export function collectRangeCaretInputs() {
   const parentBytes = readFileSync(parentFile), parent = JSON.parse(parentBytes);
   assert.deepEqual(parent, JSON.parse(execFileSync('git', ['show', `${revision}:${parentFile}`], { maxBuffer: 32 * 1024 * 1024 })));
   const parentSourceChecks = parent.sourceFingerprints.map(s => {
-    const current = hash(readFileSync(s.file, 'utf8').replaceAll('\r\n', '\n'));
+    const bytes = readFileSync(s.file), current = hash(bytes.toString('utf8').replaceAll('\r\n', '\n'));
     const normalization = s.file === parent.productionNormalization.module;
-    if (!normalization) assert.equal(current, s.sha256, s.file);
+    const mappingAdapter = s.file === 'tests/material-parity/generated-node-mapping-evidence.mjs' && current !== s.sha256;
+    const borderTransition = s.file === 'tests/material-parity/border-initial-input-evidence.mjs' && current !== s.sha256;
+    if (mappingAdapter) restoreMappingReadAdapterSource(s, bytes);
+    else if (borderTransition) {
+      const historical = execFileSync('git', ['show', `${borderEvidenceBaseline}:${s.file}`]);
+      assert.equal(verifyBorderEvidenceSourceTransition(historical, bytes).historicalSha256, s.sha256);
+    } else if (!normalization) assert.equal(current, s.sha256, s.file);
     return { file: s.file, recorded: s.sha256, current,
-      verification: normalization ? 'exact-executed-normalization-functions' : 'complete-source' };
+      verification: normalization ? 'historical-replay-and-current-caret-value-revalidation'
+        : mappingAdapter ? 'exact-reader-import-transition-with-complete-mapping-source-conserved'
+        : borderTransition ? 'authenticated-border-extension-with-shared-selector-conserved' : 'complete-source' };
   });
-  const source = readFileSync(parent.productionNormalization.module, 'utf8');
-  const parsed = ts.createSourceFile(parent.productionNormalization.module, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
-  assert.equal(parsed.parseDiagnostics.length, 0);
-  const functions = parent.productionNormalization.functions.map(name => {
-    const nodes = parsed.statements.filter(n => ts.isFunctionDeclaration(n) && n.name?.text === name);
-    assert.equal(nodes.length, 1); return nodes[0].getText(parsed);
-  }).join('\n');
-  assert.equal(hash(functions.replaceAll('\r\n', '\n')), parent.productionNormalization.sha256);
-  const canonicalStyle = new Function(functions + '\nreturn canonicalStyle;')();
+  const canonicalStyle = bindHistoricalAuditNormalization(parent.productionNormalization, revision);
+  const currentStyle = bindPreciseAuditNormalization();
   const signature = (family, element, reference) => JSON.stringify([family, element, reference]);
   const groups = parent.groups.filter(g => g.reasonCounts['editable-or-input-owner-needs-separate-proof']);
   assert.equal(groups.length, 4);
@@ -104,6 +107,9 @@ export function collectRangeCaretInputs() {
     if (!selected.length) continue;
     selectedCases.add(key); const r = tree(e.inputTrees.reference), a = tree(e.inputTrees.astylar);
     for (const { input, record } of selected) {
+      for (const side of ['reference', 'astylar'])
+        assert.equal(currentStyle(input[side] ?? {}).caretColor, canonicalStyle(input[side] ?? {}).caretColor,
+          'range caret membership changed under current normalization');
       const o = record.group.observations[record.observations.length]; assert.ok(o);
       assert.equal(o.case, key); assert.equal(o.inputSha256, digest(input)); assert.deepEqual(o.inputTrees, e.inputTrees);
       const review = inspectRangeCaretInput(input, r, a); assert.equal(review.originalProofSha256, o.proofSha256);
@@ -132,12 +138,17 @@ export function collectRangeCaretInputs() {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2); assert.ok(!args.length || args.length === 1 && args[0] === '--check');
+  if (args[0] === '--check') {
+    // Validate immutable historical evidence with explicit current receipts;
+    // never overwrite it merely because the audit producer has advanced.
+    execFileSync(process.execPath, ['scripts/check-material-range-caret-inputs.mjs'], { stdio: 'inherit' });
+    process.exit(0);
+  }
   const report = collectRangeCaretInputs();
   report.sourceFingerprints = ['scripts/audit-material-range-caret-inputs.mjs',
     'tests/material-parity/owner-caret-input-evidence.mjs', 'tests/material-parity/input-equivalence-audit.mjs']
     .map(file => ({ file, sha256: hash(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')) }));
   const output = JSON.stringify(report, null, 2) + '\n';
-  if (args[0] === '--check') assert.equal(readFileSync(rangeCaretSurveyFile, 'utf8').replaceAll('\r\n', '\n'), output);
-  else writeFileSync(rangeCaretSurveyFile, output);
+  writeFileSync(rangeCaretSurveyFile, output);
   const { findings, sourceFingerprints, ...summary } = report; console.log(JSON.stringify(summary));
 }

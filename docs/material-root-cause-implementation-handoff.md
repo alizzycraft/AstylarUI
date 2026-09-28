@@ -13,8 +13,15 @@ all non-normalizer source fingerprints using existing
 then reran `inspectRangeCaretInput` and exactly matched all 156 saved reviews
 (3.63 s). No saved survey or canonical classification was changed. This proves
 the retained range inspection remains reproducible, not computed caret or drag
-equivalence. Next reconcile those two transitions in the existing range collector
-and its saved-receipt comparison before integrating; do not blindly refresh hashes.
+equivalence. The existing range collector now authenticates both transitions,
+executes pinned historical/current normalization and checks unchanged caret values.
+Its check compares every saved field against the immutable `a6c98bd` survey,
+allowing only the three verified current source receipts to advance in memory.
+`node scripts/audit-material-range-caret-inputs.mjs --check` passes (8.30 s),
+as does the existing `pending range` focused test (6.87 s): 18 negative,
+six changed-evidence and 14 conservation controls. No capture or survey rewrite.
+Next bind these four groups into existing scalar-review infrastructure; their
+canonical classifications are still unresolved.
 The other 23 groups remain split between motion-sensitive chip/tab ancestry and
 overlay/root-context evidence. Keep these distinct from editable-input caret bugs.
 
