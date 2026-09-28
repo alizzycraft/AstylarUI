@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — September 28
 
+Cold owner-boundary export launched from 818e2a8: session **23967**, log
+`artifacts/material-parity/owner-boundary-export-818e2a8.log`. Last observed phase
+`build-audit` at 1.05 s. Poll this handle; do not restart unless terminal status
+is established. No result is accepted yet. After successful validation/encoding,
+run `node scripts/check-material-position-canonical-conservation.mjs --owner-boundary`
+and reconcile all sections/source fingerprints before compact import/acceptance.
+
+While export is active, read-only followup confirmed slide-toggle label offsets
+across all 68 authenticated original cases. Reused
+`proveFlowPositionSubstitution` from `scripts/audit-material-flow-position-substitutions.mjs`:
+native label is static inside centered inline-flex flow; no active owner inset,
+position/reset/motion declarations. The sole relevant candidate rule is
+`.switch-label { position: absolute; top: 6px; left: 60px }`, with identical
+captured scalar and all three resolved stages. Both pending groups (136
+observations; compact IDs d9fbb4e9e563c21978ebc76fd37e373decfb1271cea155d3f79f58c610c66774
+and 15166bdf0c536aaf26c8fa4a55c6e336e95233d9a71fcbca5253c8c940a1f99f)
+are an extension of existing authored-flow evidence, not a new renderer cause.
+Source: `examples/material-showcase/src/app/astylar.component.ts:511`; blame
+f566f807 (`fix(core): apply ancestor interaction state layers`). The blame locates
+the declaration's introduction; it does not independently prove its motivation.
+Next attach these offset rows to the existing proof after export; do not rebuild
+the original position investigation. Canonical classifications remain unchanged.
+
+Compact coverage refresh of accepted fca6a435 snapshot confirms 573 unresolved
+groups. Largest remaining areas include 72 corner-radius groups, 27 textTransform,
+21 minWidth, 20 minHeight, 18 display, and shared text/flow defaults. Prioritize
+explicit positioning/composition substitutions (including this label and badge
+anchors), then clipping/corner and sizing constraints, then typography/default
+observation boundaries. The pending 134-group batch includes all 23 remaining
+transformOrigin groups and 79 side-border groups; do not investigate those again
+unless integration evidence contradicts their proofs.
+
 The existing canonical conservation command now supports `--owner-boundary`,
 pinned to the accepted fca6a435 package and original capture. It checks all
 twelve attribution populations (134 groups / 3948 observations), raw scalar
