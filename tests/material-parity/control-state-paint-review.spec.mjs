@@ -8,6 +8,7 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions, applyDisabledLabelColorReview, applyStepperLabelColorReview } from './control-state-paint-review.mjs';
 import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
+import { collectPaintReviewSources, applyPaintReviews, validatePaintReviews, isPaintReviewRow } from './control-state-paint-review.mjs';
 
 test('disabled label colors reuse all 32 retained-stage proofs without filling omitted locals', () => {
   const evidence = collectDisabledLabelColorStages();
@@ -145,4 +146,18 @@ test('control paint preserves owner boundaries and all 397 captured observations
   const incomplete = structuredClone(rows), changedIndex = rows.findIndex(r => r.element === reviewed[0].element && r.property === 'backgroundColor' && r.attribution === 'unresolved');
   incomplete[changedIndex].occurrences++;
   assert.throws(() => applyControlStatePaintReview(incomplete, cases, inventory, normalize));
+  const currentSnapshot = { generation: '04ec615b0e97cdc75f44b817efca421d24a79cb04d7bc1f2f22969b99a4c4240',
+    indexSha256: '7698638b57da8d8c8f4bf50902886f11c3d3304e45078771917b804c6c30a075' };
+  const allRows = [...new Set(cases.map(e => e.family))].flatMap(f =>
+    queryFindings('artifacts/material-parity/working-audit', f, currentSnapshot)).filter(r => r.evidence.section === 'discrepancies');
+  const sources = collectPaintReviewSources();
+  const combined = applyPaintReviews(allRows, cases, inventory, retained, normalize, sources);
+  const changed = combined.filter((r, i) => r !== allRows[i]);
+  assert.equal(changed.length, 72); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 618);
+  combined.forEach((r, i) => { assert.deepEqual(raw(r), raw(allRows[i])); if (!isPaintReviewRow(r)) assert.deepEqual(r, allRows[i]); });
+  assert.deepEqual(validatePaintReviews(JSON.parse(JSON.stringify(combined)), allRows, cases, inventory, retained, normalize, sources), []);
+  assert.ok(validatePaintReviews(combined.filter(r => r !== changed[0]), allRows, cases, inventory, retained, normalize, sources).length);
+  const fabricated = structuredClone(combined);
+  fabricated.find(isPaintReviewRow).reviewEvidence.renderingEquivalent = true;
+  assert.ok(validatePaintReviews(fabricated, allRows, cases, inventory, retained, normalize, sources).length);
 });

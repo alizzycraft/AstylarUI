@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { collectButtonPaintAllStates } from '../../scripts/audit-material-button-paint-all-states.mjs';
+import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
+import { applyOverlayTriggerPaintReview, overlayTriggerPaintAttribution } from './overlay-trigger-paint-review.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
@@ -8,6 +12,38 @@ import { proveFlowPositionSubstitution } from '../../scripts/audit-material-flow
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+export function collectPaintReviewSources() {
+  const buttons = collectButtonPaintAllStates(), disabled = collectDisabledLabelColorStages();
+  assert.deepEqual(buttons, JSON.parse(readFileSync('docs/material-button-paint-all-states.json')));
+  assert.deepEqual(disabled, JSON.parse(readFileSync('docs/material-disabled-label-color-stages.json')));
+  assert.equal(createHash('sha256').update(readFileSync('artifacts/material-parity/range-background-default-public-5ee5ae4.log')).digest('hex'),
+    '0b44bb9b05ecb484532407f49dfd6f35b1d57e9920ec09402548182f6d629560');
+  return { buttons, disabled };
+}
+
+export function isPaintReviewRow(row) {
+  if (!['color', 'backgroundColor'].includes(row.property)) return false;
+  return [overlayTriggerPaintAttribution, controlStatePaintAttribution, cardSurfacePaintAttribution,
+    opaqueSurfacePaintAttribution, ...Object.values(specialPaintDefinitions).map(d => d.attribution),
+    'reviewed-disabled-component-opaque-ink-input', 'reviewed-disabled-choice-label-ink-input',
+    'reviewed-stepper-text-input'].includes(row.attribution);
+}
+
+export function applyPaintReviews(rows, cases, inventory, retained, normalize, sources) {
+  return applyStepperLabelColorReview(applyDisabledLabelColorReview(applyControlStatePaintReview(
+    applyOverlayTriggerPaintReview(rows, sources.buttons, normalize), cases, inventory, normalize),
+    sources.disabled), cases, retained, normalize);
+}
+
+export function validatePaintReviews(rows, originalRows, cases, inventory, retained, normalize, sources) {
+  try {
+    const persisted = value => JSON.parse(JSON.stringify(value));
+    const expected = applyPaintReviews(originalRows, cases, inventory, retained, normalize, sources).filter(isPaintReviewRow);
+    assert.deepEqual(persisted(rows.filter(isPaintReviewRow)), persisted(expected));
+    return [];
+  } catch (error) { return [`paint review evidence does not replay: ${error.message}`]; }
+}
 
 export function applyStepperLabelColorReview(rows, cases, retained, normalize) {
   return rows.map(row => {

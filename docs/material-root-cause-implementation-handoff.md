@@ -59,6 +59,16 @@ The standalone manifest is retained beside the compressed indexed evidence.
 No decoded 2 GB file was written. All checkpoint reconciliation jobs are complete.
 
 **Next:** integrate the prepared paint proofs before starting new investigations.
+The combined paint replay now passes against the accepted grid/height compact
+snapshot: exactly **72 groups / 618 observations** change review metadata, while
+all raw fields and unrelated rows remain unchanged. Fresh source collectors match
+the retained button and disabled-label evidence; the public range reduction log
+is hash-checked. Missing reviewed rows and fabricated rendering-equivalence claims
+are rejected. `node --test tests/material-parity/control-state-paint-review.spec.mjs`
+passed **2/2 in 36.85 s**. This is a focused pre-integration check, not a canonical
+export or a reduction in the 787 canonical unresolved groups. Next bind this replay
+to the producer and independent validator, authenticate the producer transition,
+and extend the existing conservation command before the next batched export.
 Prepared coverage includes 62 background groups / 450 observations and ten color
 groups / 168 observations. The remaining 36 color groups need applicability work;
 the existing retained-label proofs must not be generalized to container owners.
