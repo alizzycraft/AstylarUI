@@ -12,6 +12,20 @@ import { restoreWrappingProducer } from './position-composition-producer-transit
 import { restoreTypographyReviewProducer } from './position-composition-producer-transition.mjs';
 import { restoreBoxSizingReviewProducer } from './position-composition-producer-transition.mjs';
 import { restoreGridHeightReviewProducer } from './position-composition-producer-transition.mjs';
+import { restorePaintReviewProducer } from './position-composition-producer-transition.mjs';
+
+test('paint integration restores the complete accepted grid/height predecessor', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'e7093a8:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restorePaintReviewProducer(current).restoredSource, previous);
+  for (const fragment of ['applyPaintReviews(beforePaintReviews, cases',
+    'validatePaintReviews(report.discrepancies, replayedRows',
+    "errors.push('paint review attribution lacks bound original cases');",
+    "    'tests/material-parity/control-state-paint-review.mjs',\n"])
+    assert.throws(() => restorePaintReviewProducer(current.replace(fragment, '')));
+  assert.throws(() => restorePaintReviewProducer(current + '\n// unrelated'));
+});
 
 test('grid/height integration restores the complete accepted box-sizing predecessor', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

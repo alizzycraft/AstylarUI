@@ -33,9 +33,27 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreGridHeightReviewProducer(source) {
+export function restorePaintReviewProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyPaintReviews, validatePaintReviews, collectPaintReviewSources, isPaintReviewRow } from './control-state-paint-review.mjs';\n", ''],
+    ["  const beforePaintReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyPaintReviews(beforePaintReviews, cases, elementInventory, retainedTypography, canonicalStyle, collectPaintReviewSources())\n    : beforePaintReviews;\n", ''],
+    ["      errors.push(...validatePaintReviews(report.discrepancies, replayedRows, cases, report.elementInventory,\n        collectRetainedTypographyEvidence(cases.filter(e => e.family === 'stepper'), report.elementInventory),\n        canonicalStyle, collectPaintReviewSources()));\n", ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isPaintReviewRow))\n    errors.push('paint review attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/control-state-paint-review.mjs',\n    'tests/material-parity/control-state-paint-review.spec.mjs',\n    'tests/material-parity/overlay-trigger-paint-review.mjs',\n    'tests/material-parity/overlay-trigger-paint-review.spec.mjs',\n    'examples/material-showcase/src/app/range-background-default-audit.spec.ts',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated paint review integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), '44c927d92f6033e3f5e9fe658e89be717d950235c56d4607f84573910ea0762c',
+    'producer changed beyond reviewed paint integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreGridHeightReviewProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const beforePaintReviews =') ? restorePaintReviewProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyGridHeightReviews, validateGridHeightReviews, replayGridHeightPredecessors, isGridHeightReviewAttribution } from './mapped-grid-template-review.mjs';\n", ''],
     ["  const beforeGridHeightReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

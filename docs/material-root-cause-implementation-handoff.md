@@ -69,6 +69,14 @@ passed **2/2 in 36.85 s**. This is a focused pre-integration check, not a canoni
 export or a reduction in the 787 canonical unresolved groups. Next bind this replay
 to the producer and independent validator, authenticate the producer transition,
 and extend the existing conservation command before the next batched export.
+The producer and independent validation path are now wired: source collectors
+replay afresh, stepper retained proofs are recomputed from original cases, unbound
+paint attributions are rejected, and five new evidence/test files enter source
+fingerprinting. Exact producer restoration authenticates the complete `e7093a8`
+predecessor and rejects deleted guards or unrelated edits. Combined paint and
+producer-transition focused suites passed **22/22 in 38.40 s**. These tests do not
+yet prove the full canonical validation path: the existing conservation command
+still needs its paint mode, followed by the batched export and reconciliation.
 Prepared coverage includes 62 background groups / 450 observations and ten color
 groups / 168 observations. The remaining 36 color groups need applicability work;
 the existing retained-label proofs must not be generalized to container owners.
