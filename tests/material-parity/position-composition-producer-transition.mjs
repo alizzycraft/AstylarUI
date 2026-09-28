@@ -36,6 +36,18 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('const beforeFullRadiusReviews =')) {
+    for (const [from, to] of [
+      ["import { applyFullRadiusActionReview, validateFullRadiusActionReview } from './authored-anchor-review.mjs';\n", ''],
+      ["  const beforeFullRadiusReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+      ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyFullRadiusActionReview(beforeFullRadiusReviews, cases, elementInventory, canonicalStyle)\n    : beforeFullRadiusReviews;\n", ''],
+      ["      errors.push(...validateFullRadiusActionReview(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n", ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-full-radius-action-request-coverage-gap'))\n    errors.push('full-radius action review attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated full-radius integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   for (const [from, to] of [
     ["import { applyStackingReviews, validateStackingReviews, isStackingReviewRow } from './stacking-input-review.mjs';\n", ''],
     ["  const beforeStackingReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

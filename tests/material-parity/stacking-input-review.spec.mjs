@@ -8,11 +8,12 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { restoreStackingProducer } from './position-composition-producer-transition.mjs';
 import { stackingOwners, proveStackingOwner, applyStackingOwnerReviews, applyStackingReviews, validateStackingReviews } from './stacking-input-review.mjs';
+import { applyFullRadiusActionReview, validateFullRadiusActionReview } from './authored-anchor-review.mjs';
 
 test('nine stacking groups preserve added versus omitted owner requests across 590 observations', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
-  const report = JSON.parse(bytes), families = [...new Set(stackingOwners.map(r => r[0])), 'tooltip'];
+  const report = JSON.parse(bytes), families = [...new Set([...stackingOwners.map(r => r[0]), 'tooltip', 'card', 'toolbar', 'dialog'])];
   const cases = [...report.results.map(e => ({ ...e, kind: 'static' })), ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
   const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
   const snapshot = { generation: '6f0a4c1c3c214695abe87bb185f6c6c392acd5fa6452d2315891854f85cc9de9', indexSha256: 'a28657efd56dc23b707d09cd3148c55b4974c9385f8d47fd38cfc8cdb5754a96' };
@@ -37,7 +38,10 @@ test('nine stacking groups preserve added versus omitted owner requests across 5
       ([, a]) => { a.rules.push({ selector: '*', zIndex: '999' }); },
     ]) { const copy = structuredClone(pair); mutate(copy); assert.throws(() => proveStackingOwner(entry, ...copy, element)); }
   }
-  assert.throws(() => applyStackingOwnerReviews(rows, cases.slice(1), inventory, normalize));
+  const requiredCase = cases.find(entry => entry.family === stackingOwners[0][0] &&
+    entry.styleInputs.some(input => input.id === stackingOwners[0][1]));
+  assert.ok(requiredCase);
+  assert.throws(() => applyStackingOwnerReviews(rows, cases.filter(entry => entry !== requiredCase), inventory, normalize));
   const combined = applyStackingReviews(rows, cases, inventory, normalize);
   const allChanged = combined.filter((r, i) => r !== rows[i]);
   assert.equal(allChanged.length, 10); assert.equal(allChanged.reduce((n, r) => n + r.occurrences, 0), 608);
@@ -58,10 +62,20 @@ test('nine stacking groups preserve added versus omitted owner requests across 5
   const start = source.indexOf('  const beforeStackingReviews ='), end = source.indexOf('  const classifications =', start);
   assert.ok(start > 0 && end > start);
   const tail = new Function('ownerInitialStyleBinding', 'beforePreparedInputFollowups', 'cases', 'elementInventory', 'canonicalStyle',
-    'applyPreparedInputFollowups', 'applyStackingReviews', source.slice(start, end) + '\nreturn discrepancies;');
-  assert.deepEqual(tail({ status: 'bound' }, rows, cases, inventory, normalize, values => values, applyStackingReviews), combined);
+    'applyPreparedInputFollowups', 'applyStackingReviews', 'applyFullRadiusActionReview', source.slice(start, end) + '\nreturn discrepancies;');
+  const final = tail({ status: 'bound' }, rows, cases, inventory, normalize, values => values, applyStackingReviews, applyFullRadiusActionReview);
+  assert.deepEqual(final, applyFullRadiusActionReview(combined, cases, inventory, normalize));
+  const finalChanged = final.filter((r, i) => r !== rows[i]);
+  assert.equal(finalChanged.length, 30);
+  assert.equal(finalChanged.reduce((n, r) => n + r.occurrences, 0), 1228);
+  final.forEach((r, i) => assert.deepEqual(raw(r), raw(rows[i])));
+  assert.deepEqual(validateFullRadiusActionReview(final, rows, cases, inventory, normalize), []);
+  assert.deepEqual(validateStackingReviews(final, rows, cases, inventory, normalize), []);
   assert.equal(tail({ status: 'unbound' }, rows, cases, inventory, normalize,
-    () => assert.fail('unbound followup ran'), () => assert.fail('unbound stacking ran')), rows);
+    () => assert.fail('unbound followup ran'), () => assert.fail('unbound stacking ran'),
+    () => assert.fail('unbound radius ran')), rows);
+  assert.ok(source.includes('validateFullRadiusActionReview(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle)'));
+  assert.ok(source.includes("errors.push('full-radius action review attribution lacks bound original cases')"));
   assert.ok(source.includes('validateStackingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle)'));
   assert.ok(source.includes("report.discrepancies?.some(isStackingReviewRow)"));
 });
