@@ -20,8 +20,13 @@ allowing only the three verified current source receipts to advance in memory.
 `node scripts/audit-material-range-caret-inputs.mjs --check` passes (8.30 s),
 as does the existing `pending range` focused test (6.87 s): 18 negative,
 six changed-evidence and 14 conservation controls. No capture or survey rewrite.
-Next bind these four groups into existing scalar-review infrastructure; their
-canonical classifications are still unresolved.
+Prepared range review now uses existing `applyModalBoxReview`: four groups / 156
+observations classified as `reviewed-range-caret-observation-stage`, with exact
+raw-row and unrelated-finding conservation. The existing range check passes
+serialized replay and rejects missing rows, false rendering equivalence and a
+fabricated synthetic-root type. The focused `pending range` test passes (10.55 s).
+This is prepared only, not connected to the running cursor/pointer producer;
+canonical classifications remain unresolved until the next coherent caret batch.
 The other 23 groups remain split between motion-sensitive chip/tab ancestry and
 overlay/root-context evidence. Keep these distinct from editable-input caret bugs.
 

@@ -8,12 +8,39 @@ import { bindHistoricalAuditNormalization, bindPreciseAuditNormalization } from 
 import { inspectOwnerCaretInput } from '../tests/material-parity/owner-caret-input-evidence.mjs';
 import { restoreMappingReadAdapterSource } from '../tests/material-parity/audit-evidence-session.mjs';
 import { borderEvidenceBaseline, verifyBorderEvidenceSourceTransition } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { applyModalBoxReview } from '../tests/material-parity/modal-position-inspection.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const digest = value => hash(JSON.stringify(value));
 const flags = { inputEquivalent: false, computedCandidateVerified: false, descendantCaretVerified: false,
   renderingEquivalent: false, rendererCauseProven: false };
 export const rangeCaretSurveyFile = 'docs/material-range-caret-input-survey.json';
+
+export const rangeCaretAttribution = 'reviewed-range-caret-observation-stage';
+export function applyRangeCaretReviews(rows, cases, inventory, normalize) {
+  return ['slider-primary', 'slider-start'].reduce((values, element) =>
+    applyModalBoxReview(values, cases, inventory, normalize, {
+      family: 'slider', element, properties: ['caretColor'],
+      classification: 'parity-harness-defect', attribution: rangeCaretAttribution,
+      owner: 'range owner browser-computed versus candidate local caret measurement boundary',
+      justification: 'Both mapped owners are childless, non-contenteditable range controls. Captured ancestry has no caret/reset/motion request, while native computed caret color is compared to omitted candidate local declarations. This is an observation-stage discrepancy, not equal computed caret, visible caret, control domains or drag behavior. Unequal min/max/step inputs remain independently recorded; no candidate caret value is synthesized.',
+      prove: (entry, reference, candidate) => {
+        const inputs = entry.styleInputs.filter(i => i.id === element); assert.equal(inputs.length, 1);
+        const proof = inspectRangeCaretInput(inputs[0], reference, candidate);
+        return { ...proof, astylarNode: proof.candidateNode };
+      },
+    }), rows);
+}
+
+export function validateRangeCaretReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const selected = values => values.filter(r => r.attribution === rangeCaretAttribution);
+    // Preserve JSON omission of undefined synthetic-root fields, not null/defaults.
+    assert.ok(JSON.stringify(selected(rows)) === JSON.stringify(selected(applyRangeCaretReviews(originalRows, cases, inventory, normalize))),
+      'complete range caret review differs');
+    return [];
+  } catch (error) { return [`range caret review does not replay: ${error.message}`]; }
+}
 
 // Narrow the original input-owner exclusion without pretending that a range is
 // a text editor, synthesizing computed candidate caret, or waiving other input

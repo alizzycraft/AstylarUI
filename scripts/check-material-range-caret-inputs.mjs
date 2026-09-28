@@ -3,6 +3,10 @@ import { readFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import { execFileSync } from 'node:child_process';
 import { collectRangeCaretInputs, inspectRangeCaretInput, rangeCaretSurveyFile } from './audit-material-range-caret-inputs.mjs';
+import { applyRangeCaretReviews, validateRangeCaretReviews, rangeCaretAttribution } from './audit-material-range-caret-inputs.mjs';
+import { queryFindings } from './audit-findings-store.mjs';
+import { collectFullTreeInventory } from '../tests/material-parity/input-equivalence-audit.mjs';
+import { bindPreciseAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 
 assert.equal(process.argv.length, 2);
 // Original proof digests are checked in memory by the collector. At the saved
@@ -93,6 +97,36 @@ const conservation = [
 for (const [i, mutate] of conservation.entries()) {
   const r = structuredClone(reconciled); mutate(r);
   assert.throws(() => assert.ok(isDeepStrictEqual(actual, r), 'Full range review changed'), `conservation ${i}`);
+}
+const captured = JSON.parse(readFileSync(actual.capture.file));
+const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
+  ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))].filter(c => c.family === 'slider');
+const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+assert.deepEqual(inventory.errors, []);
+const rows = queryFindings('artifacts/material-parity/working-audit', 'slider', {
+  generation: '7ffd3a4832d90e185be9d234b3d022f276db113767a6fcb0c3c965c51c14d592',
+  indexSha256: 'b37363024107a9aeca949a701837764fdfe96e17b0aedca1549e187573dc8df4',
+}).filter(r => r.evidence.section === 'discrepancies');
+const reviewed = applyRangeCaretReviews(rows, cases, inventory, normalize);
+const changed = reviewed.filter(r => r.attribution === rangeCaretAttribution);
+assert.equal(changed.length, 4); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 156);
+const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+reviewed.forEach((r, i) => {
+  assert.deepEqual(raw(r), raw(rows[i]));
+  if (r.attribution !== rangeCaretAttribution) assert.deepEqual(r, rows[i]);
+  else {
+    assert.equal(r.reviewEvidence.observations.length, r.occurrences);
+    assert.ok(r.reviewEvidence.observations.every(p => !p.wholeControlInputEquivalent && !p.rendererCauseProven && !p.renderingEquivalent));
+  }
+});
+const persisted = JSON.parse(JSON.stringify(reviewed));
+assert.deepEqual(validateRangeCaretReviews(persisted, rows, cases, inventory, normalize), []);
+for (const mutate of [r => r.splice(r.findIndex(x => x.attribution === rangeCaretAttribution), 1),
+  r => { r.find(x => x.attribution === rangeCaretAttribution).reviewEvidence.renderingEquivalent = true; },
+  r => { r.find(x => x.attribution === rangeCaretAttribution).reviewEvidence.observations[0].originalAncestry.candidate[0].type = null; }]) {
+  const variant = structuredClone(persisted); mutate(variant);
+  assert.equal(validateRangeCaretReviews(variant, rows, cases, inventory, normalize).length, 1);
 }
 console.log(JSON.stringify({ groups: actual.groups, observations: actual.observations, cases: actual.selectedCases,
   originalScalarChecks: actual.originalScalarChecks, negativeControls: negative.length,
