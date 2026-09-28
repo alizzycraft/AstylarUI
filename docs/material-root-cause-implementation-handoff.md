@@ -23,8 +23,21 @@ Angular CLI build passed in 35.170 s, prerendering two routes; log:
 was removed by `withAuditScratch`. Next bind this proof to the four original
 range-color groups / 156 observations with the existing review infrastructure;
 do not infer causation for the opacity-zero input's visible Material thumb.
-The paint export remains live and unreconciled; no canonical count changes are
-claimed by this standalone reduction.
+The original-case join now passes for **4 groups / 156 observations**, using
+`component-color-request-review.mjs` and the existing modal review mechanism.
+It authenticates the public failure log, owner identity, disabled state, absent
+color/reset/motion requests, all three captured candidate stages and zero
+opacity. Conflicting explicit color, changed disabled state and visible-input
+mutations are rejected. The expanded focused test passed **1/1 in 20.32 s**,
+preserving all raw fields across **22 prepared groups / 569 observations**.
+Classification is the documented incomplete browser-UA-default limitation;
+the evidence does not excuse unequal output or authorize fixture compensation.
+The next color gaps are **14 groups / 353 observations**: overlay measurement
+owners (4/123), selected chip hosts (4/120), and motion boundaries (6/110).
+Prioritize overlay owner ancestry because of the repeatedly reported popup
+failures, while keeping color evidence separate from position/visibility proof.
+The paint export remains live and unreconciled; these standalone preparations
+are outside its dependency graph and do not change canonical counts.
 
 Accepted grid/height export: complete-input cold export from `890de9f`
 finished in **2,354.82 seconds**, with 436/436 static and 1,875/1,875 interaction

@@ -8,8 +8,9 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applyComponentColorRequests, proveComponentColorRequest } from './component-color-request-review.mjs';
 import { applyInheritedComponentColors, proveInheritedComponentColor } from './component-color-request-review.mjs';
+import { applyRangeDefaultColors, proveRangeDefaultColor } from './component-color-request-review.mjs';
 
-test('component color requests preserve 413 observations across container and inherited-leaf boundaries', () => {
+test('component color requests preserve 569 observations across container, inherited-leaf and default boundaries', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const captured = JSON.parse(bytes), cases = [...captured.results.map(e => ({ ...e, kind: 'static' })),
@@ -18,7 +19,7 @@ test('component color requests preserve 413 observations across container and in
   const retained = collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), inventory);
   const snapshot = { generation: '04ec615b0e97cdc75f44b817efca421d24a79cb04d7bc1f2f22969b99a4c4240',
     indexSha256: '7698638b57da8d8c8f4bf50902886f11c3d3304e45078771917b804c6c30a075' };
-  const rows = ['sort', 'sidenav', 'toolbar', 'radio', 'expansion', 'icon', 'paginator'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+  const rows = ['sort', 'sidenav', 'toolbar', 'radio', 'expansion', 'icon', 'paginator', 'slider'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
     .filter(r => r.evidence.section === 'discrepancies');
   const result = applyComponentColorRequests(rows, cases, inventory, retained, normalize);
   const changed = result.filter((r, i) => r !== rows[i]);
@@ -48,6 +49,24 @@ test('component color requests preserve 413 observations across container and in
   }
   const incomplete = structuredClone(rows); incomplete.find(r => r.attribution === 'unresolved' && r.property === 'color').occurrences++;
   assert.throws(() => applyComponentColorRequests(incomplete, cases, inventory, retained, normalize));
+  const range = applyRangeDefaultColors(rows, cases, inventory, normalize);
+  const rangeChanged = range.filter((r, i) => r !== rows[i]);
+  assert.equal(rangeChanged.length, 4); assert.equal(rangeChanged.reduce((n, r) => n + r.occurrences, 0), 156);
+  range.forEach((r, i) => assert.deepEqual(raw(r), raw(rows[i])));
+  for (const row of rangeChanged) {
+    const key = row.reviewedCases[0];
+    const entry = cases.find(e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === key);
+    const [reference, candidate] = modalInventoryTrees(inventory, key);
+    const bad = structuredClone(candidate);
+    bad.rules.push({ selector: '#' + row.element, color: '#2c3e50' });
+    assert.throws(() => proveRangeDefaultColor(entry, reference, bad, row.element));
+    const mismatched = structuredClone(entry); mismatched.state = entry.state === 'disabled' ? 'hover' : 'disabled';
+    assert.throws(() => proveRangeDefaultColor(mismatched, reference, candidate, row.element));
+    const visible = structuredClone(candidate);
+    visible.nodes.find(n => n.authored?.id === row.element).resolvedStyle.opacity = '1';
+    assert.throws(() => proveRangeDefaultColor(entry, reference, visible, row.element));
+    assert.ok(row.reviewEvidence.observations.every(o => o.originalInputLayersInvisible && !o.visibleThumbCauseProven && !o.renderingEquivalent));
+  }
   const inherited = applyInheritedComponentColors(rows, cases, inventory, normalize);
   const inheritedChanged = inherited.filter((r, i) => r !== rows[i]);
   assert.equal(inheritedChanged.length, 16); assert.equal(inheritedChanged.reduce((n, r) => n + r.occurrences, 0), 336);

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { reviewedTemplateTextMappings } from './input-equivalence-audit.mjs';
@@ -7,6 +8,52 @@ import { reviewedTemplateTextMappings } from './input-equivalence-audit.mjs';
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const relevant = key => ['color', 'all', 'webkittextfillcolor'].includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
+
+export function proveRangeDefaultColor(entry, reference, candidate, element) {
+  assert.equal(entry.family, 'slider');
+  assert.ok(['slider-start', 'slider-primary'].includes(element));
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  const native = one(reference.nodes.filter(n => n.attributes?.id === element));
+  const owner = one(candidate.nodes.filter(n => n.authored?.id === element));
+  const disabled = entry.state === 'disabled';
+  assert.equal(native.type, 'input'); assert.equal(native.attributes.type, 'range');
+  assert.equal(Object.hasOwn(native.attributes, 'disabled'), disabled);
+  assert.equal(owner.authored.type, 'input'); assert.equal(owner.authored.inputType, 'range');
+  assert.equal(Boolean(owner.authored.disabled), disabled);
+  for (const [key, value] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][key], value);
+  assert.equal(input.reference.color, disabled ? 'rgb(197, 197, 197)' : 'rgb(16, 16, 16)');
+  assert.equal(input.reference.opacity, '0');
+  assert.ok(!Object.keys(native.inline ?? {}).some(relevant));
+  for (const index of native.rules) assert.ok(!Object.keys(reference.rules[index].declarations).some(relevant));
+  assert.ok(!Object.keys(owner.authored.style ?? {}).some(relevant));
+  assert.equal(owner.authored.attributes?.style, undefined);
+  for (const rule of candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, owner.authored)))
+    assert.ok(!Object.keys(rule).some(relevant));
+  for (const [stage, field] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(owner[stage], input[field]);
+    assert.equal(owner[stage].color, '#2c3e50'); assert.equal(owner[stage].opacity, '0');
+  }
+  return { referenceNode: native.key, astylarNode: owner.key, disabled,
+    referenceColor: input.reference.color, candidateColor: '#2c3e50', colorAuthoringOmitted: true,
+    inputEquivalent: false, renderingEquivalent: false, originalInputLayersInvisible: true,
+    visibleThumbCauseProven: false, defaultStageDivergence: true,
+    publicReduction: 'examples/material-showcase/src/app/range-color-default-audit.spec.ts',
+    publicReductionCommit: '1421e34',
+    publicReductionLogSha256: 'd8530e48b61ff0966a64cc88efd030de80131f3b510e226465342f54298eb4ec',
+    defaultOwner: 'src/app/config/browser-defaults.ts; src/app/services/dom/style-defaults.service.ts' };
+}
+
+export function applyRangeDefaultColors(rows, cases, inventory, normalize) {
+  assert.equal(createHash('sha256').update(readFileSync('artifacts/material-parity/range-color-default-public-23e361f.log')).digest('hex'),
+    'd8530e48b61ff0966a64cc88efd030de80131f3b510e226465342f54298eb4ec');
+  return ['slider-start', 'slider-primary'].reduce((result, element) => applyModalBoxReview(result, cases, inventory, normalize, {
+    family: 'slider', element, properties: ['color'], classification: 'intentional-documented-limitation',
+    attribution: 'reviewed-range-color-default-policy', owner: 'core input default selection and browser UA compatibility policy',
+    justification: 'Original range owners omit local color authoring but retain the generic input default in all three candidate stages, unlike native enabled/disabled defaults. The public same-input reduction reproduces both discrepancies while explicit colors pass. This is the documented incomplete-UA-default policy boundary, not equal rendering or a Material fixture correction. Both original input layers are invisible; no visible thumb, ring or drag causation is asserted.',
+    prove: (entry, reference, candidate) => proveRangeDefaultColor(entry, reference, candidate, element),
+  }), rows);
+}
 
 // Bind measured containers to existing, freshly replayed text-owner ancestry.
 // A child's retained ink must never fill a missing container-local declaration.
