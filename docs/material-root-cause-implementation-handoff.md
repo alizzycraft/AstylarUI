@@ -1,6 +1,57 @@
 # Material audit: evidence-led implementation priorities
 
-## Current audit checkpoint — September 28
+## Current audit checkpoint — September 29
+
+**Appearance/paint batch exported and independently cold-checked:** source through
+`d8c7f8f` now has a verified partial canonical checkpoint: **95 unresolved groups**,
+8,483 scalar groups / 389,202 observations, 135 source findings, and unchanged
+436/436 static plus 1,875/1,875 interaction coverage. This is not input equivalence,
+renderer repair, final browser acceptance, or completion of the audit.
+
+`node scripts/export-material-input-audit-current-ancestry.mjs` completed in
+3,204,966.6234 ms. With `ASTYLAR_AUDIT_PROGRESS=1` and `ASTYLAR_AUDIT_COLD=1`, the
+same launcher with `--check` completed in 3,349,370.1796 ms. Both exited 1 solely
+for the 95 unattributed groups; the cold check reported no canonical mismatch or
+binding errors. Cold evidence statistics: 2 collectors, 10 memory hits, 0 disk
+hits, 0 invalidations; 1,205 files / 89,154,859 bytes read and reverified. Neither
+run was restarted. The full final enforced browser matrix remains required.
+
+Conservation against accepted `fc6035d` / compact snapshot `8fbd2e22...`:
+all 8,483 raw rows are identical; exactly 35 newly reviewed groups / 1,829
+observations changed classification. One existing button line-height row changes
+only embedded control-proof hashes: the existing `refreshScalarControlReceipts`
+validator checked complete underlying proofs differ only by the producer receipt.
+All 534 source fingerprints match disk (532 raw, 2 LF-normalized); precisely six
+inventory entries changed with this batch. Of 79 report sections, 72 are identical.
+The seven changed sections are source fingerprints, summary, discrepancies,
+controlLineBoxes, ownerCaretInputs, reviewedSourceBatchInputs and controlTypography.
+The latter four preserve all non-receipt evidence: three match after the exact
+producer-hash transition; reviewedSourceBatchInputs changes only that receipt and
+its derived report hash, independently reproduced from the authenticated historical
+report. Summary changes only classification totals and 130 -> 95 unresolved.
+
+New compressed SHA-256:
+`9b827bb2b09ae9d20d35e1640f987c9a4972aeab04676d595d7dd5f7d6ee01ab`;
+decoded SHA-256:
+`74bf6ec312819cd1ed49df020baa5b0689b9077da54685ead5a65c77e76c708a`.
+Next: import this verified partial snapshot once into the existing compact store;
+then prioritize shared overlay/control spacing and flow, radius/border semantics,
+and remaining state-owner/support gaps. Do not rerun this export for ledger edits.
+
+Read-only preparation for the tooltip wordBreak gap: an in-memory package-root
+TypeScript probe resolves all 87 StyleRule properties and rejects
+`wordBreak: 'normal'` with TS2353, while `wordWrap: 'normal'` passes. Installed and
+current interfaces are identical. Existing `proveInheritedLocalOmission` replays
+all 18 paired tooltip observations: explicit native `.mat-mdc-tooltip-surface`
+word-break:normal versus omitted candidate ancestry/local stages. Eight additional
+open-state records lack native counterparts and remain separate; an initial
+26-versus-18 population assertion exposed this boundary rather than masking it.
+No files/captures were generated or canonical classifications changed for this
+preparation. Next make this a focused, negative-controlled retained proof using
+existing infrastructure. This is a public support gap, not a demonstrated cause
+of tooltip blur, offset, wrapping output, or the missing snackbar.
+
+### Prior source-batch record (superseded counts retained as history)
 
 **Remaining four modal appearance groups integrated through the existing mapper:**
 all 121 original observations join native/candidate owners and retained styles;
