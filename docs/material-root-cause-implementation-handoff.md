@@ -130,6 +130,18 @@ entry. Existing public background/border reductions do **not** assert ink parity
 reuse their minimal input setup for a color assertion rather than claiming that
 adjacent passing checks prove this discrepancy. The existing conservative
 root-inheritance proof remains unchanged; no transition exclusions were relaxed.
+
+The sort/sidenav applicability gap now has a focused executable join in
+`component-color-request-review.mjs`, reusing `applyModalBoxReview`, the existing
+selector guard and freshly replayed retained typography. It prepares **2 groups /
+77 observations**: sort header black-ink substitution and sidenav container token
+omission. All raw fields remain unchanged; the 62 absent sidenav local colors
+remain absent. The focused spec passed **1/1 in 15.28 s**, including missing
+ancestry, conflicting candidate rules, altered native declarations, invented
+container color and incomplete population rejection. This module is deliberately
+not imported by the producer while the paint export is running; it adds no changes
+to that export's dependency graph or accepted counts. Once integrated separately,
+the remaining prepared-color gap is 34 groups / 845 observations.
 Prepared coverage includes 62 background groups / 450 observations and ten color
 groups / 168 observations. The remaining 36 color groups need applicability work;
 the existing retained-label proofs must not be generalized to container owners.
