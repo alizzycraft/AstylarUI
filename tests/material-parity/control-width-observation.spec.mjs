@@ -5,13 +5,60 @@ import { createHash } from 'node:crypto';
 import { controlWidthOwners, proveControlWidthRequest, applyControlWidthRequests,
   validateControlWidthRequests, omittedWidthOwners, autoWidthOwners, proveOmittedWidthObservation,
   applyOmittedWidthObservations, validateOmittedWidthObservations, proveExplicitWidthComposition,
-  applyExplicitWidthCompositions, validateExplicitWidthCompositions } from './control-width-observation.mjs';
+  applyExplicitWidthCompositions, validateExplicitWidthCompositions,
+  proveOwnerMaximumWidth, applyOwnerMaximumWidths, validateOwnerMaximumWidths } from './control-width-observation.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { applyOverlayOverflowRequests, validateOverlayOverflowRequests } from './overlay-overflow-observation.mjs';
 import { restoreSnackbarOverflowProducer } from './position-composition-producer-transition.mjs';
+
+test('owner maximum-width omissions classify exactly 222 observations without changing raw inputs', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const captured = JSON.parse(bytes), owners = { chips: ['chip-0', 'chip-1'], tabs: ['tabs-primary'] };
+  const cases = [...captured.results.map(e => ({ ...e, kind: 'static' })),
+    ...captured.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => owners[e.family]);
+  const inventory = collectFullTreeInventory(cases), counts = {}, samples = new Map();
+  assert.deepEqual(inventory.errors, []);
+  for (const entry of cases) for (const element of owners[entry.family]) {
+    const pair = modalInventoryTrees(inventory,
+      `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+    const proof = proveOwnerMaximumWidth(entry, ...pair, element);
+    assert.equal(proof.inputEquivalent, false); assert.equal(proof.originalRasterCauseProven, false);
+    counts[element] = (counts[element] ?? 0) + 1;
+    if (!samples.has(element)) samples.set(element, { entry, pair, proof });
+  }
+  assert.deepEqual(counts, { 'chip-0': 76, 'chip-1': 76, 'tabs-primary': 70 });
+  const rows = Object.keys(owners).flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '0a30ca894170b342e4521c01e4fcb23ed990d70cea789fe89bd4eba0baf663fb',
+    indexSha256: 'edf9c2de34728dc874460796853460dd5d39bafd71d4db41cba257366ec50cc0',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyOwnerMaximumWidths(rows, cases, inventory, bindPreciseAuditNormalization());
+  const changed = applied.filter(r => r.attribution === 'reviewed-owner-maximum-width-omission');
+  assert.equal(changed.length, 3); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 222);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (!changed.includes(applied[i])) assert.deepEqual(applied[i], rows[i]);
+  const validate = values => validateOwnerMaximumWidths(values, rows, cases, inventory, bindPreciseAuditNormalization());
+  assert.deepEqual(validate(applied), []);
+  const forged = structuredClone(applied);
+  forged.find(r => r.attribution === 'reviewed-owner-maximum-width-omission').reviewedCases.pop();
+  assert.equal(validate(forged).length, 1);
+  for (const [element, { entry, pair, proof }] of samples) for (const mutate of [
+    ([r]) => { r.ruleEvidenceComplete = false; },
+    ([r]) => { r.styles[r.nodes.find(n => n.key === proof.referenceNode).style].maxWidth = 'none'; },
+    ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.maxWidth = '100%'; },
+    ([, a]) => { a.rules.push({ selector: '#' + element, maxInlineSize: '100%' }); },
+    ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).authored.attributes = { style: 'max-width:100%' }; },
+  ]) {
+    const altered = structuredClone(pair); mutate(altered);
+    assert.throws(() => proveOwnerMaximumWidth(entry, ...altered, element));
+  }
+});
 
 test('control fixed-width requests retain all 544 original owners and reject false equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

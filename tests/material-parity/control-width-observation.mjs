@@ -237,3 +237,63 @@ export function validateExplicitWidthCompositions(rows, originalRows, cases, inv
     return [];
   } catch (error) { return [`explicit width composition does not replay from original owners: ${error.message}`]; }
 }
+
+export function proveOwnerMaximumWidth(entry, r, a, element) {
+  const chip = entry.family === 'chips';
+  assert.ok(chip ? ['chip-0', 'chip-1'].includes(element) : entry.family === 'tabs' && element === 'tabs-primary');
+  if (chip) proveControlWidthRequest(entry, r, a, element);
+  for (const tree of [r, a]) {
+    assert.deepEqual(tree.errors, []); assert.equal(tree.ruleEvidenceComplete, true);
+  }
+  assert.equal(a.resolvedStyleSource, 'core-style-inspection');
+  assert.equal(a.resolvedStyleEvidenceVersion, 2);
+  const reference = one(r.nodes.filter(n => n.attributes?.id === element));
+  const candidate = one(a.nodes.filter(n => n.authored?.id === element));
+  assert.equal(reference.type, chip ? 'mat-chip-option' : 'mat-tab-group');
+  assert.equal(candidate.authored.type, 'div');
+  const relevant = key => /^(maxwidth|maxinlinesize|maxblocksize|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  assert.deepEqual(Object.keys(reference.inline ?? {}).filter(relevant), []);
+  assert.doesNotMatch(reference.attributes.style ?? '', /(?:^|;)\s*(?:max-width|max-inline-size|max-block-size|all)\s*:/i);
+  assert.equal(candidate.authored.attributes?.style, undefined);
+  const requests = reference.rules.map(i => r.rules[i]).filter(rule => rule.active).flatMap(rule => {
+    assert.ok(!rule.cssText.includes('\\'));
+    assert.doesNotMatch(rule.cssText, /(?:^|[;{])\s*(?:max-inline-size|max-block-size|all)\s*:/i);
+    return Object.entries(rule.declarations).filter(([key]) => relevant(key))
+      .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value }));
+  });
+  assert.deepEqual(requests, [{ selector: chip ? '.mdc-evolution-chip' : '.mat-mdc-tab-group',
+    conditions: [], key: 'max-width', value: '100%', important: false }]);
+  for (const style of [candidate.authored.style ?? {}, candidate.normalResolvedStyle,
+    candidate.resolvedStyle, candidate.interactionResolvedStyle]) {
+    assert.ok(style && typeof style === 'object');
+    assert.deepEqual(Object.keys(style).filter(relevant), []);
+  }
+  assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.keys(rule).filter(relevant)), []);
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  assert.equal(r.styles[reference.style].maxWidth, '100%');
+  assert.equal(input.reference.maxWidth, '100%');
+  for (const [field, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'],
+    ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']]) assert.deepEqual(input[field], candidate[stage]);
+  return { element, referenceNode: reference.key, astylarNode: candidate.key, referenceRequests: requests,
+    candidateMaximumWidth: '<omitted>', inputEquivalent: false, renderingEquivalent: false,
+    firstDivergence: 'native owner maximum width request is absent from candidate authoring',
+    candidateUsedLayoutVerified: false, originalRasterCauseProven: false };
+}
+
+export function applyOwnerMaximumWidths(rows, cases, inventory, normalize) {
+  return [['chips', 'chip-0'], ['chips', 'chip-1'], ['tabs', 'tabs-primary']]
+    .reduce((values, [family, element]) => applyModalBoxReview(values, cases, inventory, normalize, {
+      family, element, properties: ['maxWidth'], attribution: 'reviewed-owner-maximum-width-omission',
+      owner: 'showcase owner sizing constraints', prove: (entry, r, a) => proveOwnerMaximumWidth(entry, r, a, element),
+      justification: 'Original native component rules explicitly request max-width:100%; the corresponding candidate owner omits maximum-width and logical/reset requests in authoring and all captured stages. Fixed chip widths or tab width:100% are not the same constraint. Preserve the request before evaluating core sizing; this identifies unequal input, not equal geometry, a confirmed renderer max-width defect or equivalent parent composition.',
+    }), rows);
+}
+
+export function validateOwnerMaximumWidths(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-owner-maximum-width-omission');
+    assert.deepEqual(select(rows), select(applyOwnerMaximumWidths(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`owner maximum-width omissions lack original evidence: ${error.message}`]; }
+}

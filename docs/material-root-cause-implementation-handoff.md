@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 28
 
+**Prepared max-width classification batch:** extended existing
+control-width-observation.mjs with `proveOwnerMaximumWidth`,
+`applyOwnerMaximumWidths`, and replay validator. Exactly3 groups /222 original
+observations (chip0=76,chip1=76,tabs=70) receive unequal-authoring attribution;
+raw inputs and unrelated rows remain byte-value equivalent. Proof reuses chip
+width identity and rejects competing inline/logical/reset/max-width inputs,
+changed computed values, missing rule completeness, and tampered coverage.
+The native tab animation custom property is retained but is not a sizing
+request. Existing width suite passed5/5 (38.81s); after adding replay-validator
+coverage, focused new test passed1/1 (4.09s). No production aggregator hook or
+canonical export yet: combine this batch with other prepared classifications
+before the next expensive integration milestone.
+Both checkpoint505835c and icon-definition e3d3693 were successfully pushed;
+push59929 is terminal, as are cold4560 and import13953. No run is pending.
+
 **Current compact index refreshed:** import13953 is terminal exit0; existing
 store verification passes with 8483 groups,389202 occurrences,39904 controls,
 134 source findings,150 unresolved. Current generation
