@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 28
 
+**Prepared list composition batch:** three groups /156 observations (52 each
+for top padding, bottom padding and flex direction) reuse the existing display
+owner proof. Native padded block list is replaced by unpadded column-flex list.
+Both native rows are48px light/dark,40px custom,24px contrast; candidate explicit
+row requests are56/48/40px respectively. Thus larger rows are not an equivalent
+host-padding transfer; contrast inflation is16px per row, not8. Native row
+padding0 16px is replaced with zero padding and candidate label margin-left16px.
+Native computed flex-direction:row has no corresponding authored flex request
+on this block host. Preserve those distinctions as composition authoring, not
+proof of a core padding/flex failure. The list-item recipe originates in2f44011;
+compensation intent and used/raster equivalence remain unproved.
+Focused `node --test --test-name-pattern="list spacing"
+tests/material-parity/display-request-review.spec.mjs` passes1/1 (2.64s), checking
+all52 owners, exact rules/stages, children/text, row conservation, replay and
+negative controls. Uses existing module/test and retained trees, no new report.
+Pending spacing batch now totals9 groups /520 observations including slider/badge
+below. Integrate together; no renderer/fixture changes or full export this turn.
+
 **Prepared margin-owner batch:** six groups /364 observations are now covered by
 focused reusable proofs, not yet hooked into production. Slider left/right
 margins (78 each) are a measurement-owner boundary: native mat-slider requests

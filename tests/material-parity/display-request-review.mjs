@@ -3,6 +3,80 @@ import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 
+export function proveListSpacingComposition(entry, reference, candidate) {
+  assert.equal(entry.family, 'list');
+  const mapping = proveDisplayRequest(entry, reference, candidate, 'list-primary');
+  const r = reference.nodes.find(n => n.key === mapping.referenceNode);
+  const a = candidate.nodes.find(n => n.key === mapping.astylarNode);
+  const relevant = key => /^(padding.*|flexdirection|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  assert.deepEqual(Object.keys(r.inline).filter(relevant), []);
+  assert.equal(a.authored.style, undefined);
+  const requests = r.rules.map(i => reference.rules[i]).filter(rule => rule.active).flatMap(rule => {
+    assert.doesNotMatch(rule.cssText, /\\/);
+    return Object.entries(rule.declarations).filter(([key]) => relevant(key))
+      .map(([key, value]) => ({ selector: rule.selector, conditions: rule.conditions, key, ...value }));
+  });
+  assert.deepEqual(requests, ['top', 'right', 'bottom', 'left'].map(side => ({ selector: '.mdc-list',
+    conditions: [], key: 'padding-' + side, value: ['top', 'bottom'].includes(side) ? '8px' : '0px', important: false })));
+  const ownRequests = node => candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, node.authored))
+    .flatMap(rule => Object.entries(rule).filter(([key]) => relevant(key))
+      .map(([key, value]) => ({ selector: rule.selector, key, value })));
+  assert.deepEqual(ownRequests(a), [{ selector: '.material-list', key: 'flexDirection', value: 'column' }]);
+  const native = reference.styles[r.style];
+  assert.equal(native.paddingTop, '8px'); assert.equal(native.paddingBottom, '8px');
+  assert.equal(native.flexDirection, 'row'); assert.equal(native.display, 'block');
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'])
+    assert.deepEqual(Object.fromEntries(Object.entries(a[stage]).filter(([key]) => relevant(key))), { padding: '0', flexDirection: 'column' });
+  const rc = reference.nodes.filter(n => n.parent === r.key), ac = candidate.nodes.filter(n => n.parent === a.key);
+  assert.equal(rc.length, 2); assert.deepEqual(rc.map(n => n.type), ['mat-list-item', 'mat-list-item']);
+  assert.deepEqual(ac.map(n => n.authored.id), ['list-inbox', 'list-archive']);
+  const expected = { light: ['48px', '56px'], dark: ['48px', '56px'], contrast: ['24px', '40px'], custom: ['40px', '48px'] }[entry.profile];
+  assert.ok(expected);
+  const children = rc.map((rn, index) => {
+    const an = ac[index], rs = reference.styles[rn.style];
+    const text = index === 0 ? 'Inbox' : 'Archive';
+    assert.equal(reference.nodes.filter(n => n.key.startsWith(rn.key + '/')).map(n => n.ownText ?? '').join(''), text);
+    const labels = candidate.nodes.filter(n => n.parent === an.key); assert.equal(labels.length, 1);
+    assert.equal(labels[0].authored.textContent, text); assert.equal(labels[0].authored.type, 'span');
+    assert.equal(an.authored.type, 'div'); assert.equal(an.authored.style, undefined);
+    assert.equal(an.authored.attributes?.style, undefined);
+    const heightRequests = candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, an.authored))
+      .flatMap(rule => Object.entries(rule).filter(([key]) => /^(height|minheight|maxheight|blocksize|minblocksize|maxblocksize|all)$/.test(key.replaceAll('-', '').toLowerCase()))
+        .map(([key, value]) => ({ selector: rule.selector, key, value })));
+    assert.deepEqual(heightRequests, [{ selector: '.list-item', key: 'height', value: expected[1] }]);
+    assert.equal(rs.height, expected[0]); assert.equal(rs.padding, '0px 16px');
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+      assert.equal(an[stage].height, expected[1]); assert.equal(an[stage].padding, '0');
+      assert.equal(an[stage].alignItems, 'center'); assert.equal(labels[0][stage].marginLeft, '16px');
+    }
+    return { referenceNode: rn.key, astylarNode: an.key, text,
+      referenceComputedHeight: rs.height, candidateLocalHeight: expected[1],
+      candidateHeightRequests: heightRequests,
+      referenceComputedPadding: rs.padding, candidatePadding: '0', candidateLabelMarginLeft: '16px' };
+  });
+  return { referenceNode: r.key, astylarNode: a.key, mapping, referenceRequests: requests,
+    candidateHostRequests: ownRequests(a), children, inputEquivalent: false, renderingEquivalent: false,
+    firstDivergence: 'padded block list replaced by unpadded column flex list with different row heights',
+    coreDefectProven: false, compensationIntentProven: false, candidateUsedLayoutVerified: false };
+}
+
+export function applyListSpacingReviews(rows, cases, inventory, normalize) {
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'list', element: 'list-primary', properties: ['paddingTop', 'paddingBottom', 'flexDirection'],
+    prove: proveListSpacingComposition, attribution: 'reviewed-list-spacing-composition-substitution',
+    owner: 'showcase list block-to-flex and row-size authoring',
+    justification: 'Native block list requests 8px top/bottom padding; candidate column flex list omits padding and has larger fixed row heights with label margins instead of native row padding. The native computed flex-direction:row is not an authored flex layout request on this block owner. Matching two-row total height in some themes cannot establish equivalent inputs or internal spacing, and contrast row inflation differs. Preserve this composition substitution without claiming a core padding/flex defect or proving historical compensation intent.',
+  });
+}
+
+export function validateListSpacingReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-list-spacing-composition-substitution');
+    assert.deepEqual(select(rows), select(applyListSpacingReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`list spacing composition lacks original evidence: ${error.message}`]; }
+}
+
 // Explicit requests only. Radio/tab type defaults and toolbar blockification
 // need different proofs; do not classify them by comparing computed strings.
 export const displayRequestOwners = [

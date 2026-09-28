@@ -7,6 +7,42 @@ import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { displayRequestOwners, displayBoundaryOwners, proveDisplayRequest, applyDisplayRequestReviews, applyDisplayBoundaryReviews } from './display-request-review.mjs';
+import { proveListSpacingComposition, applyListSpacingReviews, validateListSpacingReviews } from './display-request-review.mjs';
+
+test('list spacing preserves padded block versus unpadded flex composition across all themes', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))]
+    .filter(e => e.family === 'list');
+  assert.equal(cases.length, 52);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'list', {
+    generation: '0a30ca894170b342e4521c01e4fcb23ed990d70cea789fe89bd4eba0baf663fb',
+    indexSha256: 'edf9c2de34728dc874460796853460dd5d39bafd71d4db41cba257366ec50cc0',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyListSpacingReviews(rows, cases, inventory, normalize), changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 3); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 156);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (!changed.includes(applied[i])) assert.deepEqual(applied[i], rows[i]);
+  assert.deepEqual(validateListSpacingReviews(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-list-spacing-composition-substitution').reviewedCases.pop();
+  assert.equal(validateListSpacingReviews(forged, rows, cases, inventory, normalize).length, 1);
+  const entry = cases.find(e => e.profile === 'contrast');
+  const pair = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+  const proof = proveListSpacingComposition(entry, ...pair);
+  assert.equal(proof.children[0].referenceComputedHeight, '24px'); assert.equal(proof.children[0].candidateLocalHeight, '40px');
+  for (const mutate of [
+    ([r]) => { r.ruleEvidenceComplete = false; },
+    ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.padding = '8px 0'; },
+    ([, a]) => { a.rules.push({ selector: '.material-list', paddingBlock: '8px' }); },
+    ([, a]) => { a.nodes.find(n => n.authored?.id === 'list-inbox').normalResolvedStyle.height = '32px'; },
+    ([, a]) => { a.nodes.find(n => n.authored?.id === 'list-inbox-label').authored.textContent = 'Wrong'; },
+  ]) { const altered = structuredClone(pair); mutate(altered); assert.throws(() => proveListSpacingComposition(entry, ...altered)); }
+});
 
 test('explicit display requests retain all observations and do not infer wrapper or used-display equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
