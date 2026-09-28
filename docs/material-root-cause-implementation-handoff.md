@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+**Table overflow input binding prepared:** all 52 original table owners have
+complete native rule evidence, no own overflow/reset requests, visible native
+axes, and omitted candidate overflow in authored and all three captured stages.
+The existing overflow helper now shares these input checks without extending
+the heading equivalence verdict to tables. Negative controls reject incomplete
+rules, raw inline/reset declarations, hidden axes, incorrect owner type,
+candidate state/rule additions and inconsistent scalar/tree evidence.
+`node --test --test-name-pattern="52 original tables|84 original heading" tests/material-parity/control-overflow-observation.spec.mjs`
+passes 2/2 (4.61s); scoped diff check passes. The two table groups / 104
+observations remain unresolved: next prove table-specific defaults and the
+actual own-clipping path with browser sensitivity controls. No renderer,
+fixture or canonical classification changes. Batch these additive proof-source
+receipt changes into the next justified integration milestone, not a new export.
+Checkpoint fc6035d is pushed; compact index 8fbd2e22 / 6f86d55a now contains
+8,483 groups, 135 source findings, 39,904 controls and 130 unresolved groups.
+
 **Canonical reconciliation completed at a6905e2:** the named current-ancestry
 export completed in 35.67 minutes, and independent `ASTYLAR_AUDIT_COLD=1`
 `node scripts/export-material-input-audit-current-ancestry.mjs --check` completed

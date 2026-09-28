@@ -13,6 +13,38 @@ import { clippingOwners, proveControlClippingRequests, applyControlClippingReque
 import { applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
 import { proveHeadingVisibleOverflow, applyHeadingVisibleOverflow, validateHeadingVisibleOverflow } from './control-overflow-observation.mjs';
 import { proveTabPanelOverflowBoundary, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
+import { proveTableOverflowInputs } from './control-overflow-observation.mjs';
+
+test('52 original tables bind omitted overflow without assuming table clipping equivalence', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })),
+    ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => e.family === 'table');
+  const inventory = collectFullTreeInventory(cases);
+  assert.deepEqual(inventory.errors, []); assert.equal(cases.length, 52);
+  const pairs = cases.map(entry => modalInventoryTrees(inventory,
+    `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`));
+  cases.forEach((entry, i) => {
+    const proof = proveTableOverflowInputs(entry, ...pairs[i]);
+    assert.equal(proof.initialValueEquivalent, false);
+    assert.equal(proof.ownClippingBranchVerified, false);
+    assert.equal(proof.renderingEquivalent, false);
+  });
+  const entry = cases[0], pair = pairs[0], proof = proveTableOverflowInputs(entry, ...pair);
+  for (const mutate of [
+    ([r]) => { r.ruleEvidenceComplete = false; },
+    ([r]) => { r.nodes.find(n => n.key === proof.referenceNode).attributes.style = 'overflow:hidden'; },
+    ([r]) => { r.styles[r.nodes.find(n => n.key === proof.referenceNode).style].overflowX = 'hidden'; },
+    ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).authored.type = 'div'; },
+    ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).authored.attributes = { style: 'all:initial' }; },
+    ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).interactionResolvedStyle.overflow = 'clip'; },
+    ([, a]) => { a.rules.push({ selector: '#table-primary', overflowInline: 'hidden' }); },
+  ]) { const altered = structuredClone(pair); mutate(altered); assert.throws(() => proveTableOverflowInputs(entry, ...altered)); }
+  const alteredEntry = structuredClone(entry);
+  alteredEntry.styleInputs.find(i => i.id === 'table-primary').astylar.overflow = 'hidden';
+  assert.throws(() => proveTableOverflowInputs(alteredEntry, ...pair));
+});
 
 test('70 original tab panels retain the plugin overflow observation boundary', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

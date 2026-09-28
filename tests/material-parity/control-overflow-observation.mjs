@@ -153,13 +153,27 @@ export function validateMappedVisibleOverflow(rows, originalRows, cases, invento
 
 export function proveHeadingVisibleOverflow(entry, r, a) {
   const element = { card: 'card-title', dialog: 'dialog-title' }[entry.family]; assert.ok(element);
+  return { ...proveOmittedOverflowOwner(entry, r, a, element, entry.family === 'card' ? 'mat-card-title' : 'h2', 'h2'),
+    initialValueEquivalent: true, inputEquivalent: false, ownClippingBranchVerified: true,
+    structuralEquivalenceVerified: false, ancestorClippingVerified: false, renderingEquivalent: false };
+}
+
+// Input binding only. Table layout/default/clipping applicability requires its own proof.
+export function proveTableOverflowInputs(entry, r, a) {
+  assert.equal(entry.family, 'table');
+  return { ...proveOmittedOverflowOwner(entry, r, a, 'table-primary', 'table', 'table'),
+    initialValueEquivalent: false, inputEquivalent: false, ownClippingBranchVerified: false,
+    structuralEquivalenceVerified: false, ancestorClippingVerified: false, renderingEquivalent: false };
+}
+
+function proveOmittedOverflowOwner(entry, r, a, element, referenceType, candidateType) {
   for (const tree of [r, a]) { assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []); }
   assert.equal(a.resolvedStyleSource, 'core-style-inspection'); assert.equal(a.resolvedStyleEvidenceVersion, 2);
   const one = values => { assert.equal(values.length, 1); return values[0]; };
   const input = one(entry.styleInputs.filter(i => i.id === element));
   const ref = one(r.nodes.filter(n => (n.attributes?.['data-parity-id'] ?? n.attributes?.id) === element));
   const ast = one(a.nodes.filter(n => n.authored?.id === element));
-  assert.equal(ref.type, entry.family === 'card' ? 'mat-card-title' : 'h2'); assert.equal(ast.authored.type, 'h2');
+  assert.equal(ref.type, referenceType); assert.equal(ast.authored.type, candidateType);
   const affects = key => /^(overflow.*|all)$/.test(key.replaceAll('-', '').toLowerCase());
   assert.deepEqual(Object.keys(ref.inline ?? {}).filter(affects), []);
   for (const value of [ref.attributes?.style, ast.authored.attributes?.style])
@@ -180,9 +194,7 @@ export function proveHeadingVisibleOverflow(entry, r, a) {
     .flatMap(rule => Object.keys(rule).filter(affects)), []);
   assert.ok(Array.isArray(input.astylarAuthored));
   assert.ok(input.astylarAuthored.every(rule => rule.declarations && !Object.keys(rule.declarations).some(affects)));
-  return { element, referenceNode: ref.key, astylarNode: ast.key, referenceAxes: 'visible', candidateAxes: 'omitted',
-    initialValueEquivalent: true, inputEquivalent: false, ownClippingBranchVerified: true,
-    structuralEquivalenceVerified: false, ancestorClippingVerified: false, renderingEquivalent: false };
+  return { element, referenceNode: ref.key, astylarNode: ast.key, referenceAxes: 'visible', candidateAxes: 'omitted' };
 }
 
 export function applyHeadingVisibleOverflow(rows, cases, inventory, normalize) {
