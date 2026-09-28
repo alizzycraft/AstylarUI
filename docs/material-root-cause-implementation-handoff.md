@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 29
 
+**Toolbar spacing integrated; export pending:** the proof from `745c17d` now runs
+in the bound production tail with replay validation and an explicit unbound
+attribution rejection. The actual tail changes 31 groups / 1,899 observations
+against the current checkpoint, or 86 / 4,855 and 66 / 3,728 against the two
+earlier checkpoints. Raw and unrelated records remain unchanged; reverse reducer
+order gives identical results and unbound execution invokes no reducers.
+`node --test --test-name-pattern="omitted owner paint requests preserve|toolbar spacing preserves" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/display-request-review.spec.mjs`
+passes **2/2**, 29,719.9314 ms total. Exact producer restoration returns historical
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+current producer digest is
+`018243354bf42a55453c9c2caf784553d5667e8031c20fdd805addf20963607d`.
+Canonical remains **95 unresolved**, with verified integrated batches projecting
+**44** after export. This is classification coverage, not corrected rendering.
+Next: dialog action defaults/spacing and overlay flow ownership, then remaining
+state/border differences; batch source/export reconciliation and final enforced
+gates remain required. No renderer/fixture changes or new captures.
+
 **Toolbar spacing proof verified; production integration pending:** seven groups /
 364 observations across all 52 retained toolbar cases distinguish native host
 padding (16px sides) and a growing spacer from candidate fixed-width,

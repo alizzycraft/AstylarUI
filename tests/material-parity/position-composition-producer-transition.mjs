@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyToolbarSpacingReviews,')) {
+    for (const [from, to] of [
+      ["import { applyToolbarSpacingReviews, validateToolbarSpacingReviews } from './display-request-review.mjs';\n", ''],
+      ['applyChoiceSpacingReviews, applyToolbarSpacingReviews]', 'applyChoiceSpacingReviews]'],
+      ['      errors.push(...validateToolbarSpacingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-toolbar-spacing-composition-substitution'))\n    errors.push('toolbar spacing attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated toolbar spacing integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyChoiceSpacingReviews,')) {
     for (const [from, to] of [
       ["import { applyChoiceSpacingReviews, validateChoiceSpacingReviews } from './display-request-review.mjs';\n", ''],
