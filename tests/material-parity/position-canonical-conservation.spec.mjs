@@ -18,18 +18,18 @@ import { restoreBoxSizingReviewProducer } from './position-composition-producer-
 import { boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
 import { restoreGridHeightReviewProducer } from './position-composition-producer-transition.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
-import { paintPopulation } from '../../scripts/check-material-position-canonical-conservation.mjs';
-import { restorePaintReviewProducer } from './position-composition-producer-transition.mjs';
+import { paintPopulation, componentColorPopulation } from '../../scripts/check-material-position-canonical-conservation.mjs';
+import { restorePaintReviewProducer, restoreComponentColorProducer } from './position-composition-producer-transition.mjs';
 
-test('paint conservation rejects missing observations, false equivalence and unrelated changes', () => {
-  const transition = restorePaintReviewProducer(currentSource), rows = [], expected = [];
-  for (const [attribution, { groups, observations }] of Object.entries(paintPopulation)) for (let i = 0; i < groups; i++) {
-    const before = { element: attribution + i, property: 'backgroundColor', reference: 'transparent',
+for (const componentColor of [false, true]) test(`${componentColor ? 'component color' : 'paint'} conservation rejects missing observations, false equivalence and unrelated changes`, () => {
+  const transition = (componentColor ? restoreComponentColorProducer : restorePaintReviewProducer)(currentSource), rows = [], expected = [];
+  for (const [attribution, { groups, observations }] of Object.entries(componentColor ? componentColorPopulation : paintPopulation)) for (let i = 0; i < groups; i++) {
+    const before = { element: attribution + i, property: componentColor ? 'color' : 'backgroundColor', reference: 'transparent',
       attribution: 'unresolved', occurrences: i ? 1 : observations - groups + 1 };
     rows.push(before);
     expected.push({ ...before, attribution,
-      classification: attribution === 'reviewed-disabled-range-background-default' ? 'intentional-documented-limitation'
-        : attribution === 'reviewed-sheet-backdrop-measurement-owner' ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
+      classification: ['reviewed-disabled-range-background-default', 'reviewed-range-color-default-policy'].includes(attribution) ? 'intentional-documented-limitation'
+        : attribution === 'reviewed-sheet-backdrop-measurement-owner' || attribution.endsWith('-computed-local-boundary') ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
       reviewedCases: Array.from({ length: before.occurrences }, (_, j) => 'case-' + j),
       reviewEvidence: { originalRowSha256: createHash('sha256').update(JSON.stringify(before)).digest('hex'),
         inputEquivalent: false, renderingEquivalent: false,
@@ -43,8 +43,8 @@ test('paint conservation rejects missing observations, false equivalence and unr
   const current = { rows: structuredClone(expected), control: structuredClone(previous.control) };
   for (const c of current.control.differences)
     c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
-  const compare = (c, e = expected) => compareBorderDefaultCanonical(previous, c, e, currentSource, { paint: true });
-  assert.equal(compare(current).changedGroups, 72); assert.equal(compare(current).changedOccurrences, 618);
+  const compare = (c, e = expected) => compareBorderDefaultCanonical(previous, c, e, currentSource, { paint: !componentColor, componentColor });
+  assert.equal(compare(current).changedGroups, componentColor ? 36 : 72); assert.equal(compare(current).changedOccurrences, componentColor ? 922 : 618);
   for (const mutate of [r => { r.reference = 'forged'; }, r => { r.classification = 'equivalent-representation'; },
     r => { r.reviewEvidence.originalRowSha256 = 'forged'; }, r => { r.reviewEvidence.observations.pop(); },
     r => { r.reviewEvidence.inputEquivalent = true; }, r => { r.reviewEvidence.renderingEquivalent = true; }]) {

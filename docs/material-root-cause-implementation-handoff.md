@@ -41,9 +41,15 @@ fresh sort/sidenav retained ancestry; unbound color attributions are rejected.
 The module, spec and public range-color reduction enter source fingerprints.
 Exact source restoration authenticates the complete `7121d16` producer and rejects
 removed proof/guard fragments or unrelated edits. Color plus producer-transition
-suites passed **22/22 in 34.84 s**. Next extend the existing conservation command
-for this 36-group batch before the next cold export. The full canonical validation
-path has not yet run with this hook; canonical unresolved remains **715**.
+suites passed **22/22 in 34.84 s**. The existing conservation command now supports
+`--component-color`, pinned to the accepted paint predecessor and original capture.
+It requires exactly 36 groups / 922 observations, preserves raw inputs and unrelated
+controls, and rejects false equivalence claims even when expected metadata is forged.
+Combined color replay and conservation tests passed **28/28 in 92.66 s**; the named
+export dry run confirms all five evidence inputs. Next run the cold batched export,
+then conservation, section/source reconciliation and compact import verification.
+The full canonical validation path has not yet run with this hook; canonical
+unresolved remains **715**. No renderer or comparison fixture changes.
 
 ### Prepared color work and preceding checkpoint evidence
 
