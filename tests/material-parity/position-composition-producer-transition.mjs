@@ -33,9 +33,28 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreComponentColorProducer(source) {
+export function restoreComponentInteractionProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyExplicitComponentCursors, validateComponentCursorReviews, isComponentCursorReviewRow } from './component-cursor-request-review.mjs';\n", ''],
+    ["import { applyComponentPointerReviews, validateComponentPointerReviews, isComponentPointerReviewRow } from './component-pointer-events-review.mjs';\n", ''],
+    ["  const beforeComponentInteractionReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyComponentPointerReviews(applyExplicitComponentCursors(beforeComponentInteractionReviews, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)\n    : beforeComponentInteractionReviews;\n", ''],
+    ["      errors.push(...validateComponentCursorReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n      errors.push(...validateComponentPointerReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n", ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isComponentCursorReviewRow))\n    errors.push('component cursor review attribution lacks bound original cases');\n  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isComponentPointerReviewRow))\n    errors.push('component pointer review attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/component-cursor-request-review.mjs',\n    'tests/material-parity/component-cursor-request-review.spec.mjs',\n    'tests/material-parity/component-pointer-events-review.mjs',\n    'tests/material-parity/component-pointer-events-review.spec.mjs',\n    'tests/material-parity/public-cursor-defaults-evidence.mjs',\n    'tests/material-parity/public-cursor-defaults.spec.mjs',\n    'scripts/audit-public-cursor-defaults.mjs',\n    'scripts/audit-material-slider-peer-pointer.mjs',\n    'tests/material-parity/slider-peer-pointer-survey.spec.mjs',\n    'docs/material-slider-peer-pointer-survey.json',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated cursor/pointer integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'ab0fc9df52cd03fba85791508828c8014d18a91952960186f13fa40d8e1b5365',
+    'producer changed beyond reviewed cursor/pointer integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreComponentColorProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const beforeComponentInteractionReviews =') ? restoreComponentInteractionProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyComponentColorReviews, validateComponentColorReviews, isComponentColorReviewRow } from './component-color-request-review.mjs';\n", ''],
     ["  const beforeComponentColorReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

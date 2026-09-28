@@ -173,8 +173,17 @@ rejected. The composed batch preserves raw values and unrelated rows.
 Command: `node --test tests/material-parity/component-pointer-events-review.spec.mjs tests/material-parity/component-cursor-request-review.spec.mjs`;
 **2/2 passed in 43.89 s**. This is a focused replay, not canonical acceptance.
 
-Next: integrate the coherent cursor/pointer batch through the existing producer
-and conservation gates, including complete predecessor source restoration. These
+Producer integration is wired: bound original cases feed both reviews, validation
+replays from original rows, unbound attributions fail, and ten review/source/survey
+files enter source fingerprints. Exact restoration reproduces the complete
+accepted color producer (SHA
+`ab0fc9df52cd03fba85791508828c8014d18a91952960186f13fa40d8e1b5365`),
+rejecting missing hooks/guards or unrelated edits. Historical restoration tests
+remain intact. Combined cursor, pointer and producer-transition tests pass
+**24/24 in 45.38 s**. The named export dry run supplies all five required inputs.
+
+Next: extend the existing conservation checker for this 42-group/1,587-observation
+batch, then cold-export and reconcile sources/sections before compact import. These
 prepared classifications are **not yet included** in the accepted 679 count.
 Caret and the remaining positioning/typography/border populations stay open.
 No renderer/fixture changes or new browser captures were made.

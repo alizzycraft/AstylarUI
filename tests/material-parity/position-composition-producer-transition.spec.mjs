@@ -14,6 +14,22 @@ import { restoreBoxSizingReviewProducer } from './position-composition-producer-
 import { restoreGridHeightReviewProducer } from './position-composition-producer-transition.mjs';
 import { restorePaintReviewProducer } from './position-composition-producer-transition.mjs';
 import { restoreComponentColorProducer } from './position-composition-producer-transition.mjs';
+import { restoreComponentInteractionProducer } from './position-composition-producer-transition.mjs';
+
+test('cursor/pointer integration restores the complete accepted color predecessor', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'f79c9f8:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreComponentInteractionProducer(current).restoredSource, previous);
+  for (const fragment of ['applyExplicitComponentCursors(beforeComponentInteractionReviews',
+    'applyComponentPointerReviews(applyExplicitComponentCursors',
+    'validateComponentCursorReviews(report.discrepancies', 'validateComponentPointerReviews(report.discrepancies',
+    "errors.push('component cursor review attribution lacks bound original cases');",
+    "errors.push('component pointer review attribution lacks bound original cases');",
+    "    'tests/material-parity/component-pointer-events-review.mjs',\n"])
+    assert.throws(() => restoreComponentInteractionProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreComponentInteractionProducer(current + '\n// unrelated'));
+});
 
 test('component color integration restores the complete accepted paint predecessor', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';
