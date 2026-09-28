@@ -18,18 +18,18 @@ import { restoreBoxSizingReviewProducer } from './position-composition-producer-
 import { boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
 import { restoreGridHeightReviewProducer } from './position-composition-producer-transition.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
-import { paintPopulation, componentColorPopulation, componentInteractionPopulation } from '../../scripts/check-material-position-canonical-conservation.mjs';
-import { restorePaintReviewProducer, restoreComponentColorProducer, restoreComponentInteractionProducer } from './position-composition-producer-transition.mjs';
+import { paintPopulation, componentColorPopulation, componentInteractionPopulation, caretPositionPopulation } from '../../scripts/check-material-position-canonical-conservation.mjs';
+import { restorePaintReviewProducer, restoreComponentColorProducer, restoreComponentInteractionProducer, restoreCaretPositionProducer } from './position-composition-producer-transition.mjs';
 
-for (const mode of ['paint', 'componentColor', 'componentInteraction']) test(`${mode} conservation rejects missing observations, false equivalence and unrelated changes`, () => {
-  const componentColor = mode === 'componentColor', componentInteraction = mode === 'componentInteraction';
-  const transition = (componentInteraction ? restoreComponentInteractionProducer : componentColor ? restoreComponentColorProducer : restorePaintReviewProducer)(currentSource), rows = [], expected = [];
-  for (const [attribution, { groups, observations }] of Object.entries(componentInteraction ? componentInteractionPopulation : componentColor ? componentColorPopulation : paintPopulation)) for (let i = 0; i < groups; i++) {
-    const before = { element: attribution + i, property: componentInteraction ? (attribution.includes('cursor') ? 'cursor' : 'pointerEvents') : componentColor ? 'color' : 'backgroundColor', reference: 'transparent',
+for (const mode of ['paint', 'componentColor', 'componentInteraction', 'caretPosition']) test(`${mode} conservation rejects missing observations, false equivalence and unrelated changes`, () => {
+  const componentColor = mode === 'componentColor', componentInteraction = mode === 'componentInteraction', caretPosition = mode === 'caretPosition';
+  const transition = (caretPosition ? restoreCaretPositionProducer : componentInteraction ? restoreComponentInteractionProducer : componentColor ? restoreComponentColorProducer : restorePaintReviewProducer)(currentSource), rows = [], expected = [];
+  for (const [attribution, { groups, observations }] of Object.entries(caretPosition ? caretPositionPopulation : componentInteraction ? componentInteractionPopulation : componentColor ? componentColorPopulation : paintPopulation)) for (let i = 0; i < groups; i++) {
+    const before = { element: attribution + i, property: caretPosition ? (attribution.includes('caret') ? 'caretColor' : 'position') : componentInteraction ? (attribution.includes('cursor') ? 'cursor' : 'pointerEvents') : componentColor ? 'color' : 'backgroundColor', reference: 'transparent',
       attribution: 'unresolved', occurrences: i ? 1 : observations - groups + 1 };
     rows.push(before);
     expected.push({ ...before, attribution,
-      classification: ['reviewed-disabled-range-background-default', 'reviewed-range-color-default-policy', 'reviewed-dialog-button-cursor-default-policy'].includes(attribution) ? 'intentional-documented-limitation'
+      classification: caretPosition ? (/request-(omission|substitution)$|overlay-position-substitution$/.test(attribution) ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : ['reviewed-disabled-range-background-default', 'reviewed-range-color-default-policy', 'reviewed-dialog-button-cursor-default-policy'].includes(attribution) ? 'intentional-documented-limitation'
         : ['reviewed-sheet-backdrop-measurement-owner', 'reviewed-sheet-pointer-measurement-owner', 'reviewed-tab-pointer-owner-stage-boundary'].includes(attribution) || attribution.endsWith('-computed-local-boundary') ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
       reviewedCases: Array.from({ length: before.occurrences }, (_, j) => 'case-' + j),
       reviewEvidence: { originalRowSha256: createHash('sha256').update(JSON.stringify(before)).digest('hex'),
@@ -45,7 +45,7 @@ for (const mode of ['paint', 'componentColor', 'componentInteraction']) test(`${
   for (const c of current.control.differences)
     c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
   const compare = (c, e = expected) => compareBorderDefaultCanonical(previous, c, e, currentSource, { [mode]: true });
-  assert.equal(compare(current).changedGroups, componentInteraction ? 42 : componentColor ? 36 : 72); assert.equal(compare(current).changedOccurrences, componentInteraction ? 1587 : componentColor ? 922 : 618);
+  assert.equal(compare(current).changedGroups, caretPosition ? 64 : componentInteraction ? 42 : componentColor ? 36 : 72); assert.equal(compare(current).changedOccurrences, caretPosition ? 2441 : componentInteraction ? 1587 : componentColor ? 922 : 618);
   for (const mutate of [r => { r.reference = 'forged'; }, r => { r.classification = 'equivalent-representation'; },
     r => { r.reviewEvidence.originalRowSha256 = 'forged'; }, r => { r.reviewEvidence.observations.pop(); },
     r => { r.reviewEvidence.inputEquivalent = true; }, r => { r.reviewEvidence.renderingEquivalent = true; }]) {

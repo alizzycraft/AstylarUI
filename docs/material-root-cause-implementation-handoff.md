@@ -16,9 +16,14 @@ bound-case apply, serialized replay validation, unbound-attribution rejection an
 11 added dependency fingerprints. Exact source restoration reproduces accepted
 producer 348860a, including all earlier historical transitions. Combined focused
 and transition suites pass 29/29 (37.07 s); producer syntax check also passes.
-Next extend the existing canonical conservation mode for this 64-group batch,
-then perform the milestone export/reconciliation. Canonical unresolved count is
-still 637 (expected 573 only after accepted export). No renderer/fixture edits.
+The existing canonical conservation checker now has `--caret-position`, pinned
+to the accepted interaction package. It enforces ten exact category populations,
+64 groups / 2441 observations, original-row digests, false equivalence flags,
+raw-input conservation and the existing 48 control-receipt transition checks.
+All 29 conservation tests pass (92.50 s), including forged expectations, missing
+observations and unrelated changes. Export dry-run confirms all five evidence
+paths. Next perform the milestone export/reconciliation. Canonical unresolved
+count is still 637 (expected 573 only after acceptance). No renderer/fixture edits.
 
 Cursor/pointer export completed (source 864a53f, 2362.05 s, exit 1 solely for
 637 unresolved groups). Coverage remains 436 static / 1875 interaction cases,
