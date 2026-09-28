@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 28
 
+**Icon input substitution uncovered (pending source finding/proof):** the one
+remaining objectFit group / 20 cases is not a like-for-like replaced-element
+comparison. Authenticated b07ef154... full trees show native `mat-icon` wrapper
+24×24, computed objectFit fill, containing inline SVG with viewBox0 0 24 24,
+width/height100%, preserveAspectRatio `xMidYMid meet`. Candidate is an img with
+objectFit contain and width/height24px in all three stages. Its source is a fixed
+24×24 PNG (15 light-mode cases, 5 dark), not the SVG. CurrentColor SVG paint and
+fixed raster pixels are different input contracts; square sizing alone cannot
+establish rendering/DPR/ink equivalence.
+
+History 48825c4 replaced candidate `/icons/favorite.svg` with
+MATERIAL_FAVORITE_ICON_LIGHT/DARK and added the icon raster target. The asset
+file explicitly says the browser raster keeps transparent pixels stable in
+Babylon's texture loader. Original SVG has `path fill="currentColor"`.
+Current source: astylar.component.ts:850, material-assets.ts:1, reference
+registration reference.component.ts:140 and public/icons/favorite.svg.
+No existing dedicated source finding was found in input-equivalence-policy.mjs;
+the earlier custom-owner-border proof expressly excludes generated icon content.
+Add this historical asset substitution to the existing source-finding system;
+reduce original SVG loading/currentColor/DPR/alpha through public APIs before
+claiming a confirmed core defect. Do not replace the reference with the PNG or
+normalize away objectFit without explaining wrapper versus image ownership.
+No producer changed while cold session4560 runs.
+
 **Remaining border-style/width groups tied to existing evidence (pending
 integration):** accepted compact rows contain three toggle style groups (68
 owners each) and divider top-style/top-width groups (24 each). Authenticated
