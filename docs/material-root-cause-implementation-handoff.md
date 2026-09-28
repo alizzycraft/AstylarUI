@@ -2,6 +2,32 @@
 
 ## Current audit checkpoint — September 28
 
+**Remaining border-style/width groups tied to existing evidence (pending
+integration):** accepted compact rows contain three toggle style groups (68
+owners each) and divider top-style/top-width groups (24 each). Authenticated
+original b07ef154... full-tree/direct-ID joins and all three scalar/stage joins
+were checked, without modifying cold-run inputs.
+
+- Divider: all 24 reference `mat-divider` nodes have static positioning,
+  zero content height and a solid 1px top border. Original `.mat-divider`
+  CSS requests border-top-style solid and width `var(--mat-divider-width, 1px)`.
+  All candidate stages instead use an absolute div, height1px, background
+  #cac4d0, borderWidth0 and borderStyle none. This is the already-documented
+  `fixture-divider-replaces-paragraph-flow-with-coordinates` substitution, not
+  a fresh renderer diagnosis. Reuse its existing equal-input paragraph/divider
+  proof and confirmed empty-block intrinsic-height finding when attributing
+  these two remaining groups; do not rerun the settled root-cause investigation.
+- Second toggle: all 68 native owners author only the tokenized left border;
+  top/right/bottom have width0/style none. Candidate authors width `0 0 0 1px`
+  with style solid, unchanged at every stage. The three residual styles concern
+  zero-width, unpainted sides, NOT the left-divider color already covered by
+  `fixture-toggle-divider-literal-replaces-divider-token`. Existing
+  `outlineStyles` in border-initial-input-evidence.mjs explicitly recognizes
+  these zero-width sides but its color attribution does not cover their styles.
+  Extend that exact witness with a narrowly scoped used-border proof if claiming
+  equivalent representation; do not equate full structure, colored left edge,
+  radius/clipping or future width changes from this zero-width observation.
+
 **Remaining shadow groups investigated (not integrated):** compact accepted
 index identifies 9 groups / 342 occurrences. Read-only checks against original
 report b07ef154... and current source distinguish three populations:
