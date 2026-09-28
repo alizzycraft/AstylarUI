@@ -3,6 +3,7 @@ import { applyPaintReviews, validatePaintReviews, collectPaintReviewSources, isP
 import { applyComponentColorReviews, validateComponentColorReviews, isComponentColorReviewRow } from './component-color-request-review.mjs';
 import { applyExplicitComponentCursors, validateComponentCursorReviews, isComponentCursorReviewRow } from './component-cursor-request-review.mjs';
 import { applyComponentPointerReviews, validateComponentPointerReviews, isComponentPointerReviewRow } from './component-pointer-events-review.mjs';
+import { applyCaretPositionReviews, validateCaretPositionReviews, isCaretPositionReviewRow } from './overlay-position-request-review.mjs';
 import { applyBoxSizingReviews, validateBoxSizingReviews, replayBoxSizingPredecessors, boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
 import { applyGridHeightReviews, validateGridHeightReviews, replayGridHeightPredecessors, isGridHeightReviewAttribution } from './mapped-grid-template-review.mjs';
 import { applyWrappingReviews, validateWrappingReviews, wrappingAttributions } from './wrapping-input-review.mjs';
@@ -349,9 +350,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforeComponentInteractionReviews = ownerInitialStyleBinding.status === 'bound'
     ? applyComponentColorReviews(beforeComponentColorReviews, cases, elementInventory, retainedTypography, canonicalStyle)
     : beforeComponentColorReviews;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforeCaretPositionReviews = ownerInitialStyleBinding.status === 'bound'
     ? applyComponentPointerReviews(applyExplicitComponentCursors(beforeComponentInteractionReviews, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
     : beforeComponentInteractionReviews;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyCaretPositionReviews(beforeCaretPositionReviews, cases, elementInventory, canonicalStyle)
+    : beforeCaretPositionReviews;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -674,6 +678,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
       const selected = rows => rows.filter(r => r.attribution === ownerInitialStyleAttribution);
       errors.push(...validateComponentCursorReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateComponentPointerReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
+      errors.push(...validateCaretPositionReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateComponentColorReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
         collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), report.elementInventory), canonicalStyle));
       errors.push(...validatePaintReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
@@ -781,6 +786,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     errors.push('component cursor review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isComponentPointerReviewRow))
     errors.push('component pointer review attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isCaretPositionReviewRow))
+    errors.push('caret/position review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))
     errors.push('button-host line-height attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>
@@ -9089,6 +9096,17 @@ function sourceFingerprints(root) {
     'tests/material-parity/component-color-request-review.spec.mjs',
     'examples/material-showcase/src/app/range-color-default-audit.spec.ts',
     'tests/material-parity/component-cursor-request-review.mjs',
+    'tests/material-parity/overlay-position-request-review.mjs',
+    'tests/material-parity/overlay-position-request-review.spec.mjs',
+    'tests/material-parity/grid-position-request-review.mjs',
+    'tests/material-parity/grid-position-request-review.spec.mjs',
+    'tests/material-parity/slider-position-request-review.mjs',
+    'tests/material-parity/slider-position-request-review.spec.mjs',
+    'tests/material-parity/component-motion-caret-review.spec.mjs',
+    'scripts/audit-material-range-caret-inputs.mjs',
+    'scripts/check-material-range-caret-inputs.mjs',
+    'scripts/audit-material-caret-motion-context.mjs',
+    'scripts/audit-material-overlay-caret-context.mjs',
     'tests/material-parity/component-cursor-request-review.spec.mjs',
     'tests/material-parity/component-pointer-events-review.mjs',
     'tests/material-parity/component-pointer-events-review.spec.mjs',

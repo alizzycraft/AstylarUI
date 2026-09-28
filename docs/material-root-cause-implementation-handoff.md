@@ -11,8 +11,14 @@ rendering equivalence are rejected in all ten attribution categories. Mutation
 checks replay each category's exact original member after full-batch validation,
 avoiding repeated whole-batch work without removing rejection coverage.
 Six tests across component-motion-caret, slider/grid/overlay-position review specs
-pass (35.31 s; combined replay 23.77 s). Producer integration remains next;
-canonical unresolved count is still 637 (expected 573 only after accepted export).
+passed (35.31 s; combined replay 23.77 s). Producer integration is now implemented:
+bound-case apply, serialized replay validation, unbound-attribution rejection and
+11 added dependency fingerprints. Exact source restoration reproduces accepted
+producer 348860a, including all earlier historical transitions. Combined focused
+and transition suites pass 29/29 (37.07 s); producer syntax check also passes.
+Next extend the existing canonical conservation mode for this 64-group batch,
+then perform the milestone export/reconciliation. Canonical unresolved count is
+still 637 (expected 573 only after accepted export). No renderer/fixture edits.
 
 Cursor/pointer export completed (source 864a53f, 2362.05 s, exit 1 solely for
 637 unresolved groups). Coverage remains 436 static / 1875 interaction cases,

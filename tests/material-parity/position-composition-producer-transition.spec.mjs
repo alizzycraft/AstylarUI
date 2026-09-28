@@ -15,6 +15,20 @@ import { restoreGridHeightReviewProducer } from './position-composition-producer
 import { restorePaintReviewProducer } from './position-composition-producer-transition.mjs';
 import { restoreComponentColorProducer } from './position-composition-producer-transition.mjs';
 import { restoreComponentInteractionProducer } from './position-composition-producer-transition.mjs';
+import { restoreCaretPositionProducer } from './position-composition-producer-transition.mjs';
+
+test('caret/position integration restores the complete accepted interaction predecessor', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '348860a:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreCaretPositionProducer(current).restoredSource, previous);
+  for (const fragment of ['applyCaretPositionReviews(beforeCaretPositionReviews',
+    'validateCaretPositionReviews(report.discrepancies',
+    "errors.push('caret/position review attribution lacks bound original cases');",
+    "    'scripts/audit-material-range-caret-inputs.mjs',\n"])
+    assert.throws(() => restoreCaretPositionProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreCaretPositionProducer(current + '\n// unrelated'));
+});
 
 test('cursor/pointer integration restores the complete accepted color predecessor', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

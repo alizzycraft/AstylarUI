@@ -33,9 +33,27 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreComponentInteractionProducer(source) {
+export function restoreCaretPositionProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyCaretPositionReviews, validateCaretPositionReviews, isCaretPositionReviewRow } from './overlay-position-request-review.mjs';\n", ''],
+    ["  const beforeCaretPositionReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyCaretPositionReviews(beforeCaretPositionReviews, cases, elementInventory, canonicalStyle)\n    : beforeCaretPositionReviews;\n", ''],
+    ["      errors.push(...validateCaretPositionReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n", ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isCaretPositionReviewRow))\n    errors.push('caret/position review attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/overlay-position-request-review.mjs',\n    'tests/material-parity/overlay-position-request-review.spec.mjs',\n    'tests/material-parity/grid-position-request-review.mjs',\n    'tests/material-parity/grid-position-request-review.spec.mjs',\n    'tests/material-parity/slider-position-request-review.mjs',\n    'tests/material-parity/slider-position-request-review.spec.mjs',\n    'tests/material-parity/component-motion-caret-review.spec.mjs',\n    'scripts/audit-material-range-caret-inputs.mjs',\n    'scripts/check-material-range-caret-inputs.mjs',\n    'scripts/audit-material-caret-motion-context.mjs',\n    'scripts/audit-material-overlay-caret-context.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated caret/position integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'c9c9d40b11944c40393c092fab2d85abf65fa8e847144a534334db2dc4b31c6c',
+    'producer changed beyond reviewed caret/position integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreComponentInteractionProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const beforeCaretPositionReviews =') ? restoreCaretPositionProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyExplicitComponentCursors, validateComponentCursorReviews, isComponentCursorReviewRow } from './component-cursor-request-review.mjs';\n", ''],
     ["import { applyComponentPointerReviews, validateComponentPointerReviews, isComponentPointerReviewRow } from './component-pointer-events-review.mjs';\n", ''],
