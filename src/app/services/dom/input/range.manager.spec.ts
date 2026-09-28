@@ -1,6 +1,9 @@
 import { NullEngine, Scene } from '@babylonjs/core';
 import { BabylonMeshService } from '../../babylon-mesh.service';
 import { RangeManager } from './range.manager';
+import { OverflowClipService } from '../elements/overflow-clip.service';
+import { StyleDefaultsService } from '../style-defaults.service';
+import { createCssLayoutBox } from '../../css-layout-geometry';
 
 function renderAtScale(scene: Scene, scale = 0.01) {
   return {
@@ -25,6 +28,34 @@ function renderAtScale(scene: Scene, scale = 0.01) {
 }
 
 describe('RangeManager', () => {
+  it('preserves initial visible range paint without an own clipping boundary', () => {
+    const engine = new NullEngine(), scene = new Scene(engine);
+    try {
+      const meshes = new BabylonMeshService(); meshes.initialize(scene);
+      const manager = new RangeManager(meshes), clip = new OverflowClipService();
+      const defaults = new StyleDefaultsService().getElementTypeDefaults('input');
+      expect(defaults.overflow).toBeUndefined();
+      for (const overflow of [undefined, 'visible', 'hidden'] as const) {
+        const style = { ...defaults, selector: '#range', ...(overflow ? { overflow } : {}) };
+        const range = manager.createRange({ type: 'input', inputType: 'range', id: 'range', value: '50' },
+          renderAtScale(scene), style, { width: 100, height: 10 });
+        const paint = [range.trackMesh!, range.activeTrackMesh!, range.thumbMesh!];
+        paint.forEach(mesh => expect(mesh.material?.clipPlane).toBeUndefined());
+        const project = jasmine.createSpy('project').and.callFake((point: { x: number; y: number }) => ({ ...point, z: 0 }));
+        clip.apply(range.mesh, style, new Map([[range.mesh.name, { parentId: null,
+          box: createCssLayoutBox({ x: 0, y: 0, width: 100, height: 10 }) }]]), project);
+        if (overflow === 'hidden') {
+          expect(project).toHaveBeenCalledTimes(2);
+          paint.forEach(mesh => expect(mesh.material?.clipPlane).toBeDefined());
+        } else {
+          expect(project).not.toHaveBeenCalled();
+          paint.forEach(mesh => expect(mesh.material?.clipPlane).toBeUndefined());
+        }
+        manager.dispose(range);
+      }
+    } finally { scene.dispose(); engine.dispose(); }
+  });
+
   it('normalizes values and updates non-pickable presentation meshes', () => {
     const engine = new NullEngine();
     const scene = new Scene(engine);

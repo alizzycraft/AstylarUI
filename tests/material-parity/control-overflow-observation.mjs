@@ -172,7 +172,7 @@ export function applyTableVisibleOverflow(rows, cases, inventory, normalize) {
     'src/app/services/dom/elements/table.service.ts': '0d96f98c3bdcfbba71a1eaa839cfa34d19e5621471b27929574334535e7733c9',
     'src/app/services/dom/elements/element-creation.service.ts': 'bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a',
     'src/app/services/dom/elements/element-creation.service.spec.ts': 'c968bb582c470305f1a83144319d6aaa9d85f6089e19c21c7eff6ca4b09e2830',
-    'tests/material-parity/control-overflow-observation.spec.mjs': 'd9f94882d8098d282535978a4d5d8b1908a220abe2cb10613c91269b9715c6e6' };
+    'tests/material-parity/control-overflow-observation.spec.mjs': '082994aa31d414d82af001b05c88077899f7328c6cfc9248d4f049205c8354a1' };
   for (const [file, expected] of Object.entries(sources)) assert.equal(createHash('sha256')
     .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
   return applyModalBoxReview(rows, cases, inventory, normalize, {

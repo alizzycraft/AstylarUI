@@ -15,8 +15,37 @@ import { proveHeadingVisibleOverflow, applyHeadingVisibleOverflow, validateHeadi
 import { proveTabPanelOverflowBoundary, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
 import { proveTableOverflowInputs, applyTableVisibleOverflow, validateTableVisibleOverflow } from './control-overflow-observation.mjs';
 import { chromium } from 'playwright-core';
+import { PNG } from 'pngjs';
 import { proveRemainingControlOverflowInputs, proveControlOverflowOwnerBoundary,
   applyControlOverflowOwnerBoundaries, validateControlOverflowOwnerBoundaries } from './control-overflow-observation.mjs';
+
+test('native range visible overflow preserves outside thumb pixels with clipping sensitivity', async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 240, height: 180 } });
+    await page.setContent('<style>body{margin:0;background:white}input{position:absolute;left:60px;top:60px;width:100px;height:10px;margin:0;padding:0;border:0;appearance:none;background:transparent}input::-webkit-slider-runnable-track{height:4px;background:blue}input::-webkit-slider-thumb{appearance:none;width:40px;height:40px;margin-top:-18px;background:red;border:0;border-radius:0}</style><input type=range value=50>');
+    const results = [];
+    for (const overflow of ['', 'visible', 'hidden', 'clip']) {
+      const axes = await page.evaluate(value => {
+        const input = document.querySelector('input'); input.style.overflow = value;
+        const s = getComputedStyle(input), r = input.getBoundingClientRect();
+        return { x: s.overflowX, y: s.overflowY, box: [r.x, r.y, r.width, r.height] };
+      }, overflow);
+      const png = PNG.sync.read(await page.screenshot()); let red = 0, outside = 0;
+      for (let y = 0; y < png.height; y++) for (let x = 0; x < png.width; x++) {
+        const i = (y * png.width + x) * 4;
+        if (png.data[i] > 240 && png.data[i + 1] < 10 && png.data[i + 2] < 10) {
+          red++; if (y < 60 || y >= 70 || x < 60 || x >= 160) outside++;
+        }
+      }
+      results.push({ ...axes, red, outside });
+    }
+    assert.deepEqual(results[0], { x: 'visible', y: 'visible', box: [60, 60, 100, 10], red: 1600, outside: 1200 });
+    assert.deepEqual(results[1], results[0]);
+    for (const [i, mode] of [[2, 'hidden'], [3, 'clip']])
+      assert.deepEqual(results[i], { ...results[0], x: mode, y: mode, red: 400, outside: 0 });
+  } finally { await browser.close(); }
+});
 
 test('remaining range and tab overflow inputs retain exact owner boundaries', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 28
 
+**Range initial-overflow applicability demonstrated:** native Chrome range with
+an authored oversized thumb paints 1,600 red pixels, 1,200 outside the 100x10
+input box, identically for omitted/visible overflow. Hidden and clip controls
+retain 400 inside pixels and zero outside; box geometry is unchanged. Persisted
+in the existing control-overflow spec, browser test passes 1/1 (1.84s), no raster
+files retained. Actual RangeManager creates unclipped track/active/thumb meshes
+for the initial modes; actual shared OverflowClipService projects no boundary
+for omitted/visible and installs planes for hidden. Existing range-manager spec
+run via the existing core runner retargeted in memory passes 1/1. This is not
+complete pipeline/raster equivalence, hit-testing parity or swapped-drag diagnosis.
+Next bind the applicability sources to the four original range-input groups;
+canonical count remains 130, with eight other groups prepared for integration.
+
 **Six control-overflow owner groups prepared:** the 78 slider visual cases reuse
 the independently bound composition proof: native host owns both inputs, while
 the measured candidate visual is their sibling under the range-stack parent.
