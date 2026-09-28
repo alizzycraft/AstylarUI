@@ -8,6 +8,73 @@ import { proveChoiceLabelStacking } from './choice-label-stacking-substitution.m
 import { proveRadioPositionSubstitution } from './radio-position-substitution.mjs';
 import { proveToolbarPositionInspection } from './toolbar-position-inspection.mjs';
 
+export function proveDialogActionSpacing(entry, reference, candidate, element) {
+  assert.equal(entry.family, 'dialog');
+  assert.ok(['dialog-cancel', 'dialog-save'].includes(element));
+  const composition = proveDisplayRequest(entry, reference, candidate, element);
+  const r = reference.nodes.find(n => n.key === composition.referenceNode);
+  const a = candidate.nodes.find(n => n.key === composition.astylarNode);
+  const save = element === 'dialog-save';
+  const relevant = key => /^(padding.*|margin.*|alignitems|justifycontent|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  assert.deepEqual(Object.keys(r.inline).filter(relevant), []);
+  assert.equal(a.authored.style, undefined); assert.equal(a.authored.attributes?.style, undefined);
+  const nativeRules = r.rules.map(i => reference.rules[i]).filter(q => q.active);
+  const referenceRequests = nativeRules.flatMap(q => [...q.cssText.matchAll(/(?:^|;)\s*(padding(?:-[\w-]+)?|margin(?:-[\w-]+)?|align-items|justify-content|all)\s*:\s*([^;]*)(?=;|$)/gi)]
+    .map(([, key, value]) => ({ selector: q.selector, key, value: value.trim() })));
+  assert.deepEqual(referenceRequests, [
+    { selector: '.mdc-button', key: 'align-items', value: 'center' },
+    { selector: '.mdc-button', key: 'justify-content', value: 'center' },
+    { selector: '.mdc-button', key: 'padding', value: '0px 8px' },
+    { selector: save ? '.mat-mdc-unelevated-button' : '.mat-mdc-button', key: 'padding',
+      value: save ? '0 var(--mat-button-filled-horizontal-padding, 24px)' : '0 var(--mat-button-text-horizontal-padding, 12px)' },
+    ...(save ? [{ selector: '.mat-mdc-dialog-actions .mat-button-base + .mat-button-base, .mat-mdc-dialog-actions .mat-mdc-button-base + .mat-mdc-button-base', key: 'margin-left', value: '8px' }] : []),
+  ]);
+  // Inspect expanded declarations too: variable-containing padding shorthand
+  // may serialize while its CSSOM longhands are empty.
+  for (const q of nativeRules) for (const [key, value] of Object.entries(q.declarations).filter(([key]) => relevant(key))) {
+    assert.equal(value.important, false);
+    if (key.startsWith('padding')) {
+      assert.ok(q.selector === '.mdc-button' || q.selector === (save ? '.mat-mdc-unelevated-button' : '.mat-mdc-button'));
+      assert.ok(['padding-top', 'padding-right', 'padding-bottom', 'padding-left'].includes(key));
+      assert.equal(value.value, q.selector === '.mdc-button' ? (['padding-left', 'padding-right'].includes(key) ? '8px' : '0px') : '');
+    }
+    else assert.ok(referenceRequests.some(request => request.selector === q.selector && request.key === key && request.value === value.value));
+  }
+  const candidateRequests = candidate.rules.filter(q => rootInitialSelectorCanApply(q.selector, a.authored))
+    .flatMap(q => Object.entries(q).filter(([key]) => relevant(key)).map(([key, value]) => ({ selector: q.selector, key, value })));
+  assert.deepEqual(candidateRequests, []);
+  const native = reference.styles[r.style];
+  for (const [key, value] of Object.entries({ alignItems: 'center', justifyContent: 'center', paddingTop: '0px', paddingBottom: '0px',
+    paddingLeft: save ? '24px' : '12px', paddingRight: save ? '24px' : '12px', marginLeft: save ? '8px' : '0px' })) assert.equal(native[key], value);
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    for (const [key, value] of Object.entries({ alignItems: 'stretch', justifyContent: 'flex-start', padding: '10px 20px', margin: '0' })) assert.equal(a[stage][key], value);
+    for (const key of ['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'marginLeft']) assert.equal(a[stage][key], undefined);
+  }
+  return { referenceNode: r.key, astylarNode: a.key, composition, referenceRequests, candidateRequests,
+    firstDivergence: 'explicit Material button alignment and token padding omitted from candidate dialog action authoring',
+    inputEquivalent: false, renderingEquivalent: null, coreDefectProven: false, originalRasterCauseProven: false,
+    saveMarginScope: save ? 'native sibling margin omitted; candidate parent gap is a separately reviewed substitution' : null };
+}
+
+export function applyDialogActionSpacingReviews(rows, cases, inventory, normalize) {
+  for (const element of ['dialog-cancel', 'dialog-save']) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'dialog', element,
+    properties: ['alignItems', 'justifyContent', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', ...(element === 'dialog-save' ? ['marginLeft'] : [])],
+    prove: (entry, reference, candidate) => proveDialogActionSpacing(entry, reference, candidate, element),
+    attribution: 'reviewed-dialog-action-spacing-request-omission', owner: 'showcase dialog action authoring and shared button input contract',
+    justification: 'Native Material buttons explicitly request centered flex layout and token-based horizontal padding with zero vertical padding; candidate dialog action rules omit these inputs and retain captured local block/default alignment and 10px 20px padding in all three stages. The native Save sibling margin is also absent, while the candidate parent gap remains a separately reviewed substitution. This establishes unequal authoring, not a core alignment failure or proof of the original oversized raster cause. Restore equivalent structure and requests before testing used control layout and text paint.',
+  });
+  return rows;
+}
+
+export function validateDialogActionSpacingReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-dialog-action-spacing-request-omission');
+    assert.deepEqual(select(rows), select(applyDialogActionSpacingReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`dialog action spacing lacks original evidence: ${error.message}`]; }
+}
+
 export function proveToolbarSpacingComposition(entry, reference, candidate, element) {
   assert.equal(entry.family, 'toolbar');
   assert.ok(['toolbar-primary', 'toolbar-title', 'toolbar-action'].includes(element));

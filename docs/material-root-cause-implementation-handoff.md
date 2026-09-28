@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 29
 
+**Dialog action spacing proof verified; integration pending:** 13 groups / 416
+observations across 32 open-dialog cases bind to omitted Material button inputs.
+Native buttons request centered flex layout and zero vertical/token horizontal
+padding (Cancel 12px, Save 24px); candidate action rules omit them and all three
+captured local stages retain block display, stretch/start alignment and 10px/20px
+padding. Native Save sibling margin is 8px; candidate margin is zero, with its
+parent gap already classified separately. Reuses the existing display proof for
+owner/scalar/stage joins and modal review machinery for exact coverage. Preserves
+serialized variable-containing padding when expanded CSSOM fields are empty.
+Initial showcase commit `2f44011` already omitted these action requests; this is
+not evidence that a later alignment fix caused their omission. It does not prove
+the oversized raster's cause, current used control layout, or historical intent.
+`node --test --test-name-pattern="dialog action spacing binds" tests/material-parity/display-request-review.spec.mjs`
+passes **1/1**, 3,765.4366 ms total. Missing cases, forged membership, competing
+rules, altered native declarations and changed candidate stages are rejected;
+raw/unrelated rows are conserved. No renderer/fixture changes or new captures.
+Canonical remains **95 unresolved** and integrated batches project **44**; this
+additional proof is not yet in production and does not change those counts.
+Next: production integration and combined verification, then two dialog panel
+gap groups and remaining overlay/state/border questions. Source/export
+reconciliation and final acceptance gates remain pending.
+
 **Toolbar spacing integrated; export pending:** the proof from `745c17d` now runs
 in the bound production tail with replay validation and an explicit unbound
 attribution rejection. The actual tail changes 31 groups / 1,899 observations
