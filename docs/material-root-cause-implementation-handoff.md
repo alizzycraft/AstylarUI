@@ -2,6 +2,17 @@
 
 ## Current audit checkpoint — September 28
 
+Badge/progress origin proof adds five groups / 92 observations. Exact measured
+owners reuse the border identity/alias proofs; complete captured ancestry excludes
+authored origin, reference-box and reset declarations. Native pixel origins are
+kept distinct from candidate local omission. All ancestor transform/motion
+requests remain in evidence, with settlement/reference-box equality explicitly
+unproven. The finite pixel syntax is not used to synthesize candidate defaults.
+Combined focused test passes (1/1, 8.05 s), retaining raw/unrelated rows and
+rejecting injected native ancestor origins and candidate page origins for all
+three families. No producer integration; prepared batch now totals 107 groups /
+2498 observations including overlay-origin. Export reconciliation remains pending.
+
 Progress position review adds 11 groups / 220 observations across 40 original
 cases. Three groups are explicit relative-position / linear translateZ(0px)
 request omissions; eight are computed-zero-inset versus local-omission boundaries.

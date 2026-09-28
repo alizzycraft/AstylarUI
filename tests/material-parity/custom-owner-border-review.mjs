@@ -230,6 +230,58 @@ export function applyProgressPositionReviews(rows, cases, inventory, normalize) 
   return rows;
 }
 
+export function proveBadgeProgressOrigin(entry, reference, candidate, normalize) {
+  assert.ok(['badge', 'progress-bar', 'progress-spinner'].includes(entry.family));
+  const identity = proveCustomOwnerBorder(entry, reference, candidate, normalize);
+  const origin = k => /^(all|transformorigin|transformbox)$/.test(k.replaceAll('-', '').toLowerCase());
+  const context = k => origin(k) || /^(transform|translate|rotate|scale|animation|transition)/.test(k.replaceAll('-', '').toLowerCase());
+  const walk = (tree, key) => {
+    const result = [], seen = new Set();
+    while (key !== null) {
+      assert.ok(!seen.has(key)); seen.add(key);
+      const nodes = tree.nodes.filter(n => n.key === key); assert.equal(nodes.length, 1);
+      result.push(nodes[0]); key = nodes[0].parent;
+    }
+    return result;
+  };
+  const nativePath = walk(reference, identity.referenceNode).map(node => {
+    assert.ok(!['svg', 'g', 'path', 'circle', 'rect'].includes(node.type));
+    assert.ok(!Object.keys(node.attributes ?? {}).some(origin));
+    const rules = [{ selector: '<inline>', declarations: node.inline, active: true }, ...node.rules.map(i => reference.rules[i])];
+    assert.ok(rules.every(rule => !Object.keys(rule.declarations).some(origin)));
+    return { node: node.key, type: node.type, requests: rules.map(rule => ({ ...rule,
+      declarations: Object.fromEntries(Object.entries(rule.declarations).filter(([k]) => context(k))) }))
+      .filter(rule => Object.keys(rule.declarations).length) };
+  });
+  const candidatePath = walk(candidate, identity.astylarNode).map(node => {
+    assert.ok(!Object.keys(node.authored).some(origin));
+    assert.equal(node.authored.attributes?.style, undefined);
+    const rules = [node.authored.style ?? {}, ...candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, node.authored))];
+    assert.ok(rules.every(rule => !Object.keys(rule).some(origin)));
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+      if (node.parent === null && Object.keys(node.authored).length === 0) assert.equal(node[stage], undefined);
+      else assert.ok(!Object.keys(node[stage]).some(origin));
+    }
+    return { node: node.key, authored: node.authored, possibleRules: rules };
+  });
+  const measured = reference.nodes.find(n => n.key === identity.referenceNode);
+  const referenceOrigin = reference.styles[measured.style].transformOrigin;
+  assert.match(referenceOrigin, /^-?\d+(?:\.\d+)?px -?\d+(?:\.\d+)?px(?: 0px)?$/);
+  return { ...identity, nativePath, candidatePath, referenceOrigin,
+    candidateComputedOriginVerified: false, referenceBoxEqualityVerified: false };
+}
+
+export function applyBadgeProgressOriginReviews(rows, cases, inventory, normalize) {
+  for (const family of ['badge', 'progress-bar', 'progress-spinner']) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family, element: owners[family][0], properties: ['transformOrigin'],
+    classification: 'parity-harness-defect', attribution: 'reviewed-badge-progress-origin-boundary',
+    owner: 'computed transform-origin versus local declaration measurement',
+    prove: (e, r, a) => proveBadgeProgressOrigin(e, r, a, normalize),
+    justification: 'Authenticated host/alias owners report native pixel origins but candidate local stages omit origin. Complete ancestry has no origin/reference-box/reset requests. Native motion and transform requests are preserved, including badge transform transitions and linear translateZ; they are not treated as settled or equal to candidate behavior. Computed pixel centers are not authored offsets to copy. Reference-box equality, candidate computed origin, indirect motion effects and rendered correctness remain unproven.',
+  });
+  return rows;
+}
+
 export function applyCustomOwnerBorderReviews(rows, cases, inventory, normalize) {
   for (const [family, [element]] of Object.entries(owners)) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
     family, element, properties: (family === 'divider' ? sides.slice(1) : sides).map(s => `border${s}Color`),

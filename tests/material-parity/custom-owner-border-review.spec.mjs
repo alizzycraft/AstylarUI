@@ -6,7 +6,7 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
-import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder, applyDividerPositionReviews, proveDividerPositionRequests, applyProgressPositionReviews, proveProgressPositionRequests } from './custom-owner-border-review.mjs';
+import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder, applyDividerPositionReviews, proveDividerPositionRequests, applyProgressPositionReviews, proveProgressPositionRequests, applyBadgeProgressOriginReviews, proveBadgeProgressOrigin } from './custom-owner-border-review.mjs';
 
 test('custom host initial colors retain all observations without claiming generated paint equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -39,6 +39,20 @@ test('custom host initial colors retain all observations without claiming genera
   assert.equal(progressChanges.length, 11); assert.equal(progressChanges.reduce((n, r) => n + r.occurrences, 0), 220);
   assert.equal(progressChanges.filter(r => r.classification === 'application-plugin-authoring-defect').length, 3);
   progress.forEach((r, i) => { assert.deepEqual(raw(r), raw(positioned[i])); if (!progressChanges.includes(r)) assert.deepEqual(r, positioned[i]); });
+  const origins = applyBadgeProgressOriginReviews(progress, cases, inventory, normalize);
+  const originChanges = origins.filter((r, i) => r !== progress[i]);
+  assert.equal(originChanges.length, 5); assert.equal(originChanges.reduce((n, r) => n + r.occurrences, 0), 92);
+  origins.forEach((r, i) => { assert.deepEqual(raw(r), raw(progress[i])); if (!originChanges.includes(r)) assert.deepEqual(r, progress[i]); });
+  for (const family of ['badge', 'progress-bar', 'progress-spinner']) {
+    const e = cases.find(e => e.family === family), key = `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+    const [r, a] = modalInventoryTrees(inventory, key), proof = proveBadgeProgressOrigin(e, r, a, normalize);
+    assert.equal(proof.referenceBoxEqualityVerified, false);
+    const native = structuredClone(r), parentKey = proof.nativePath[1].node;
+    native.nodes.find(n => n.key === parentKey).inline['transform-origin'] = { value: 'center top', important: false };
+    assert.throws(() => proveBadgeProgressOrigin(e, native, a, normalize));
+    const altered = structuredClone(a); altered.rules.push({ selector: '#page', transformOrigin: '50% 50%' });
+    assert.throws(() => proveBadgeProgressOrigin(e, r, altered, normalize));
+  }
   for (const family of ['progress-bar', 'progress-spinner']) {
     const e = cases.find(e => e.family === family), key = `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
     const [r, a] = modalInventoryTrees(inventory, key), proof = proveProgressPositionRequests(e, r, a, normalize);
