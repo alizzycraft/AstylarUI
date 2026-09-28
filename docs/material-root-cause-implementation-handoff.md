@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 29
 
+**Checkpoint published; tooltip support proof expanded:** `dcc6e52` is pushed to
+`origin/codex/material-audit-alignment-integration` (remote hash verified). The
+existing compact import and `npm run audit:findings:verify` preserve 8,483 scalar
+groups, 135 findings, 39,904 controls, 389,202 occurrences and 95 unresolved groups;
+compact shards total 72,496,031 bytes. GitHub accepted the push with its existing
+large-file warning for the 59.72 MiB compressed audit. No capture evidence deleted.
+
+Reused the existing public word-property support test instead of duplicating it.
+Added full-population coverage alongside it in `wrapping-input-populations.spec.mjs`:
+all 18 paired tooltip owners retain explicit word-break:normal and omitted candidate
+requests; all eight unpaired open records remain separately accounted for. Every
+paired case rejects a forged native break-all request and a supplied candidate
+local value. `node --test --test-name-pattern="public word-property support|tooltip word-break request" tests/material-parity/wrapping-input-populations.spec.mjs`
+passes **2/2**, 22,634.8216 ms. This prepares one support-boundary classification;
+it changes no canonical row, renderer or fixture. Canonical remains 95 unresolved.
+The new test-source fingerprint is pending the next coherent integration milestone,
+not a reason to rebuild the complete audit now. Next bind this narrow supported-input
+limitation using the existing review path, preserving separate tooltip placement,
+font and unpaired-state findings; then continue shared spacing/layout coverage.
+
 **Appearance/paint batch exported and independently cold-checked:** source through
 `d8c7f8f` now has a verified partial canonical checkpoint: **95 unresolved groups**,
 8,483 scalar groups / 389,202 observations, 135 source findings, and unchanged

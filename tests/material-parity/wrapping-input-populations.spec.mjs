@@ -144,6 +144,46 @@ test('public word-property support boundary rejects wordBreak without inventing 
   // neither successful compilation nor absence of a field proves runtime paint.
 });
 
+test('tooltip word-break request preserves all 18 paired owners and eight unpaired open records', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const all = [...capture.results.map(e => ({ ...e, kind: 'static' })),
+    ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))]
+    .filter(e => e.family === 'tooltip' && e.styleInputs.some(i => i.id === 'tooltip-popup'));
+  const input = e => one(e.styleInputs.filter(i => i.id === 'tooltip-popup'));
+  const paired = all.filter(e => input(e).reference);
+  const unpaired = all.filter(e => !input(e).reference);
+  assert.equal(paired.length, 18); assert.equal(unpaired.length, 8);
+  assert.ok(unpaired.every(e => e.state === 'open' && input(e).astylar));
+  assert.equal(new Set(paired.map(keyOf)).size, 18);
+  const inventory = collectFullTreeInventory(paired); assert.deepEqual(inventory.errors, []);
+  for (const entry of paired) {
+    assert.equal(input(entry).reference.wordBreak, 'normal');
+    assert.equal(input(entry).astylar.wordBreak, undefined);
+    const [reference, candidate] = modalInventoryTrees(inventory, keyOf(entry));
+    const prove = (r, a) => proveInheritedLocalOmission(entry, r, a, 'tooltip-popup', 'wordBreak');
+    const proof = prove(reference, candidate);
+    assert.equal(proof.explicitNativeRequest, true);
+    assert.equal(proof.publicSupportCheckRequired, true);
+    assert.equal(proof.candidateComputedVerified, false);
+    assert.equal(proof.inputEquivalent, false); assert.equal(proof.renderingEquivalent, false);
+    assert.deepEqual(proof.nativeRequests.map(r => r.declarations), [
+      { 'word-break': { value: 'normal', important: false } },
+    ]);
+    const changed = structuredClone(reference);
+    const owner = changed.nodes.find(n => n.key === proof.referenceNode);
+    const rule = one(owner.rules.map(i => changed.rules[i])
+      .filter(r => r.active && r.declarations?.['word-break']));
+    rule.declarations['word-break'].value = 'break-all';
+    assert.throws(() => prove(changed, candidate));
+    const local = structuredClone(candidate);
+    local.nodes.find(n => n.key === proof.astylarNode).resolvedStyle.wordBreak = 'normal';
+    assert.throws(() => prove(reference, local));
+  }
+});
+
 test('inherited word properties separate 46 observation boundaries from the tooltip explicit request', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
