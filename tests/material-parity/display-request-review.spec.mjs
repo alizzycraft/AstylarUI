@@ -8,6 +8,46 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { displayRequestOwners, displayBoundaryOwners, proveDisplayRequest, applyDisplayRequestReviews, applyDisplayBoundaryReviews } from './display-request-review.mjs';
 import { proveListSpacingComposition, applyListSpacingReviews, validateListSpacingReviews } from './display-request-review.mjs';
+import { proveStepperSpacingComposition, applyStepperSpacingReviews, validateStepperSpacingReviews } from './display-request-review.mjs';
+
+test('stepper spacing preserves all 340 owner substitutions without inferring flex or margin equivalence', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))]
+    .filter(e => e.family === 'stepper');
+  assert.equal(cases.length, 68);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'stepper', {
+    generation: '9b827bb2b09ae9d20d35e1640f987c9a4972aeab04676d595d7dd5f7d6ee01ab',
+    indexSha256: 'cd3d3c45aab1db7095753132870a660f456dc80e5334787f6f4508e8d30d9486',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyStepperSpacingReviews(rows, cases, inventory, normalize);
+  const changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 5); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 340);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
+  assert.deepEqual(validateStepperSpacingReviews(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-stepper-spacing-composition-substitution').reviewedCases.pop();
+  assert.equal(validateStepperSpacingReviews(forged, rows, cases, inventory, normalize).length, 1);
+  assert.throws(() => applyStepperSpacingReviews(rows, cases.slice(1), inventory, normalize));
+  for (const profile of ['light', 'dark', 'contrast', 'custom']) {
+    const entry = cases.find(e => e.profile === profile);
+    const pair = modalInventoryTrees(inventory, `${entry.kind}:stepper@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+    for (const element of ['stepper-primary', 'step-details-text', 'step-review-text']) {
+      const proof = proveStepperSpacingComposition(entry, ...pair, element);
+      for (const mutate of [
+        ([r]) => { r.ruleEvidenceComplete = false; },
+        ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.padding = '50px'; },
+        ([, a]) => { a.rules.push({ selector: '#' + element, marginLeft: '8px' }); },
+        ([r]) => { r.nodes.find(n => n.key === proof.referenceNode).inline['padding-left'] = { value: '1px', important: false }; },
+      ]) { const altered = structuredClone(pair); mutate(altered); assert.throws(() => proveStepperSpacingComposition(entry, ...altered, element)); }
+    }
+  }
+});
 
 test('list spacing preserves padded block versus unpadded flex composition across all themes', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

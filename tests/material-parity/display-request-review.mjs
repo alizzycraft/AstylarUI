@@ -2,6 +2,108 @@ import assert from 'node:assert/strict';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { proveStepperPositionSubstitution } from '../../scripts/audit-material-stepper-position-substitution.mjs';
+
+export function proveStepperSpacingComposition(entry, reference, candidate, element) {
+  assert.equal(entry.family, 'stepper');
+  assert.ok(['stepper-primary', 'step-details-text', 'step-review-text'].includes(element));
+  const mapping = proveDisplayRequest(entry, reference, candidate, 'stepper-primary');
+  const position = proveStepperPositionSubstitution(reference, candidate);
+  const one = nodes => { assert.equal(nodes.length, 1); return nodes[0]; };
+  const r = one(reference.nodes.filter(n => n.attributes?.id === element));
+  const a = one(candidate.nodes.filter(n => n.authored?.id === element));
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[r.style][key], value);
+  assert.equal(Object.keys(input.reference).length, 89);
+  for (const [scalar, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']])
+    assert.deepEqual(input[scalar], a[stage]);
+  const relevant = key => /^(padding.*|margin.*|flexdirection|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  const nativeRequests = node => {
+    assert.deepEqual(Object.keys(node.inline).filter(relevant), []);
+    return node.rules.map(i => reference.rules[i]).filter(rule => rule.active).flatMap(rule =>
+      Object.entries(rule.declarations).filter(([key]) => relevant(key))
+        .map(([key, value]) => ({ selector: rule.selector, key, ...value })));
+  };
+  const candidateRequests = node => {
+    assert.equal(node.authored.style, undefined); assert.equal(node.authored.attributes?.style, undefined);
+    return candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, node.authored)).flatMap(rule =>
+        Object.entries(rule).filter(([key]) => relevant(key)).map(([key, value]) => ({ selector: rule.selector, key, value })));
+  };
+  const headers = reference.nodes.filter(n => n.attributes?.class?.split(/\s+/).includes('mat-horizontal-stepper-header'));
+  assert.equal(headers.length, 2);
+  for (const header of headers) {
+    assert.equal(reference.styles[header.style].padding, '0px 24px');
+    assert.deepEqual(nativeRequests(header), ['top', 'right', 'bottom', 'left'].map(side => ({
+      selector: '.mat-horizontal-stepper-header', key: 'padding-' + side,
+      value: ['left', 'right'].includes(side) ? '24px' : '0px', important: false,
+    })));
+  }
+  for (const id of ['step-details', 'step-review'])
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'])
+      assert.equal(one(candidate.nodes.filter(n => n.authored?.id === id))[stage].padding, '0 24px');
+  assert.deepEqual(nativeRequests(r), []);
+  const host = element === 'stepper-primary';
+  assert.deepEqual(candidateRequests(a), host ? [
+    { selector: '.stepper', key: 'flexDirection', value: 'column' },
+    { selector: '.stepper', key: 'padding', value: '0 24px' },
+  ] : [{ selector: '.step-text', key: 'marginLeft', value: '8px' }]);
+  const native = reference.styles[r.style];
+  if (host) {
+    assert.equal(native.paddingLeft, '0px'); assert.equal(native.paddingRight, '0px');
+    assert.equal(native.flexDirection, 'row'); assert.equal(native.display, 'block');
+    const wrapper = one(reference.nodes.filter(n => n.parent === r.key && n.attributes?.class === 'mat-horizontal-stepper-wrapper'));
+    assert.equal(reference.styles[wrapper.style].display, 'flex');
+    assert.equal(reference.styles[wrapper.style].flexDirection, 'column');
+    assert.deepEqual(nativeRequests(wrapper), [{ selector: '.mat-horizontal-stepper-wrapper', key: 'flex-direction', value: 'column', important: false }]);
+  } else {
+    assert.equal(r.type, 'span'); assert.equal(a.authored.type, 'span');
+    assert.equal(r.ownText, element === 'step-details-text' ? 'Details' : 'Review');
+    assert.equal(a.authored.textContent, r.ownText); assert.equal(native.marginLeft, '0px');
+    const header = one(reference.nodes.filter(n => r.key.startsWith(n.key + '/') &&
+      n.attributes?.class?.split(/\s+/).includes('mat-horizontal-stepper-header')));
+    const icon = one(reference.nodes.filter(n => n.parent === header.key && n.attributes?.class?.split(/\s+/).includes('mat-step-icon')));
+    assert.deepEqual(nativeRequests(icon), [{ selector: '.mat-horizontal-stepper-header .mat-step-icon', key: 'margin-right', value: '8px', important: false }]);
+    assert.equal(reference.styles[icon.style].marginRight, '8px');
+    const parent = one(candidate.nodes.filter(n => n.key === a.parent));
+    assert.equal(parent.authored.id, element.replace('-text', ''));
+    const siblings = candidate.nodes.filter(n => n.parent === parent.key);
+    assert.deepEqual(siblings.map(n => n.authored.id), [element.replace('-text', '-badge'), element]);
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'])
+      assert.equal(siblings[0][stage].margin, '0');
+  }
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(a[stage].padding, host ? '0 24px' : '0');
+    assert.equal(a[stage].margin, '0');
+    assert.equal(a[stage].flexDirection, host ? 'column' : 'row');
+    if (!host) assert.equal(a[stage].marginLeft, '8px');
+  }
+  return { referenceNode: r.key, astylarNode: a.key, mapping, position,
+    referenceRequests: nativeRequests(r), candidateRequests: candidateRequests(a),
+    firstDivergence: host ? 'native block host and column wrapper replaced with padded column host'
+      : 'native icon right margin replaced with text left margin in a flattened positioned header',
+    inputEquivalent: false, renderingEquivalent: false, coreDefectProven: false,
+    compensationIntentProven: false, usedSpacingEquivalenceProven: false };
+}
+
+export function applyStepperSpacingReviews(rows, cases, inventory, normalize) {
+  for (const element of ['stepper-primary', 'step-details-text', 'step-review-text'])
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+      family: 'stepper', element,
+      properties: element === 'stepper-primary' ? ['paddingLeft', 'paddingRight', 'flexDirection'] : ['marginLeft'],
+      prove: (entry, reference, candidate) => proveStepperSpacingComposition(entry, reference, candidate, element),
+      attribution: 'reviewed-stepper-spacing-composition-substitution', owner: 'showcase stepper structure and spacing authoring',
+      justification: 'Native block host contains a column wrapper and in-flow padded headers; candidate adds host padding and uses positioned headers. Native icon right margin becomes a left margin on a flattened label. These are authored owner/composition substitutions, not equal-input evidence of broken padding or flex direction. Equal nominal eight-pixel spacing does not prove whole-header equivalence; retain the independent position and state findings and restore native structure before renderer parity assessment.',
+    });
+  return rows;
+}
+
+export function validateStepperSpacingReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-stepper-spacing-composition-substitution');
+    assert.deepEqual(select(rows), select(applyStepperSpacingReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`stepper spacing composition lacks original evidence: ${error.message}`]; }
+}
 
 export function proveListSpacingComposition(entry, reference, candidate) {
   assert.equal(entry.family, 'list');

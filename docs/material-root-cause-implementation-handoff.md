@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 29
 
+**Stepper spacing integrated; export pending:** five groups / 340 observations
+across all 68 cases now bind to the existing header-position substitution proof.
+Native block host has an unpadded column wrapper; native headers own 24px side
+padding. Candidate moves padding/column flow to the host while retaining padded
+absolute headers at -24px edges. Native icon margin-right:8px becomes margin-left
+on flattened candidate labels. This establishes authored owner substitutions,
+not a core padding/flex defect or proof that nominally equal spacing renders alike.
+The separate stepper visibility/state issue remains open.
+Existing display review, modal membership validation, and production-tail tests
+are reused. The guarded tail changes exactly six groups / 358 observations
+against the current checkpoint (this stepper batch plus tooltip); its earlier
+checkpoint counts are 61 / 3,314 and 41 / 2,187. Raw/unrelated records remain
+unchanged; missing members, forged review membership, changed declarations/local
+stages and unbound execution are rejected. Exact producer restoration retains
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+current producer digest is
+`67255f99d03a665661c48022a27aacd2a97c8c8130413e8157c619acfcd898e3`.
+Verification: `node --test --test-name-pattern="omitted owner paint requests preserve|stepper spacing preserves|all stepper position cases|stepper proof rejects" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/display-request-review.spec.mjs tests/material-parity/stepper-position-substitution.spec.mjs`
+passes **4/4**, 23,130.8698 ms; scoped diff check passes.
+Canonical remains **95 unresolved**, with integrated batches projecting **69**
+after the next source-reconciled export. No renderer/fixture edits or new captures.
+Next: other shared spacing owners (chips, radio, checkbox, dialog and toolbar),
+then remaining flow/state and border semantics. Full acceptance remains open.
+
 **Remaining full-radius input coverage integrated; export pending:** the existing
 full-radius reducer/validator now includes all 20 remaining badge/sheet radius
 groups, 360 scalar observations (52 badge owners and 38 noncontrast sheet actions).

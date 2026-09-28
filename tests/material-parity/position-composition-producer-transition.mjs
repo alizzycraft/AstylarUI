@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyStepperSpacingReviews,')) {
+    for (const [from, to] of [
+      ["import { applyStepperSpacingReviews, validateStepperSpacingReviews } from './display-request-review.mjs';\n", ''],
+      ['applyTooltipWordBreakReview, applyStepperSpacingReviews]', 'applyTooltipWordBreakReview]'],
+      ['      errors.push(...validateStepperSpacingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-stepper-spacing-composition-substitution'))\n    errors.push('stepper spacing attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated stepper spacing integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyTooltipWordBreakReview,')) {
     for (const [from, to] of [
       ["import { applyTooltipWordBreakReview, validateTooltipWordBreakReview } from './wrapping-input-review.mjs';\n", ''],
