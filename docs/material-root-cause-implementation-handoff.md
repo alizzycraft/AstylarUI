@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 28
 
+**Native modal non-widget appearance gap tested:** a focused real-Chrome test now
+covers mat-dialog-actions, mat-dialog-content, mat-bottom-sheet-container, div, p
+and section with content, explicit equal CSS boxes, DPR 1/2 and both ordinary and
+variable-backed/noop transition contexts. For each tag/context, omitted/auto/none
+appearance retains identical native pixels and dimensions; omitted computes none.
+Changing background changes pixels in every case; native checkbox appearance:none
+also changes pixels as a positive control. Test `modal non-widget native appearance`
+passes 1/1 (5.97s), without disk captures or new report infrastructure.
+
+This closes the native tag/motion-context question, not Astylar dynamic motion,
+cross-renderer text/paint equivalence or complete Material input equivalence. The
+retained public Astylar proof separately covers div/p/section appearance requests
+with unchanged dependency receipts. Next: bind these complementary narrow proofs
+to all 121 original modal observations, preserving motion and structural differences,
+then classify only the omitted non-widget appearance request. Canonical 130 /
+projected 99 remain unchanged until that classification is integrated and the
+source-receipt/export milestone is reconciled.
+
 **Bottom-sheet action appearance producer-integrated:** both prepared link-to-button
 classifications now run and replay only with bound original evidence. The existing
 combined production-fragment test preserves all raw/unrelated records and checks

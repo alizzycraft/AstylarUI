@@ -25,6 +25,47 @@ import { proveRangeAppearanceInitial, applyRangeAppearanceInitial, validateRange
 import { proveAppearanceOwnerBoundary, applyAppearanceOwnerBoundaries, validateAppearanceOwnerBoundaries } from './control-state-paint-review.mjs';
 import { proveSheetActionAppearance, applySheetActionAppearance, validateSheetActionAppearance } from './control-state-paint-review.mjs';
 
+test('modal non-widget native appearance is invariant across mapped tags and noop transition context', async () => {
+  const { chromium } = await import('playwright-core');
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    for (const dpr of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 320, height: 180 }, deviceScaleFactor: dpr });
+      try {
+        for (const type of ['mat-dialog-actions', 'mat-dialog-content', 'mat-bottom-sheet-container', 'div', 'p', 'section']) {
+          for (const motion of [false, true]) {
+            await page.setContent(`<style>body{margin:0}#probe{display:block;box-sizing:border-box;position:absolute;left:20px;top:20px;width:220px;height:100px;margin:0;padding:8px;background:#238b45;color:white;font:16px/24px Arial}
+              ${motion ? '#probe{transition:var(--mat-dialog-transition,transform 150ms ease)}.noop #probe{transition:none}' : ''}</style>
+              <div class="noop"><${type} id="probe"><span>Modal content</span></${type}></div>`);
+            const samples = [];
+            for (const appearance of ['', 'auto', 'none']) {
+              const observation = await page.evaluate(value => {
+                const node = document.getElementById('probe'); node.style.appearance = value;
+                const style = getComputedStyle(node), bounds = node.getBoundingClientRect();
+                return { appearance: style.appearance, transition: style.transitionProperty,
+                  width: bounds.width, height: bounds.height, text: node.textContent };
+              }, appearance);
+              assert.equal(observation.appearance, appearance || 'none');
+              assert.equal(observation.width, 220); assert.equal(observation.height, 100);
+              assert.equal(observation.text, 'Modal content');
+              if (motion) assert.equal(observation.transition, 'none');
+              samples.push(await page.screenshot());
+            }
+            assert.ok(samples[0].equals(samples[1]) && samples[0].equals(samples[2]), `${type}/${dpr}/${motion}`);
+            await page.locator('#probe').evaluate(node => { node.style.background = '#ff0000'; });
+            assert.ok(!samples[0].equals(await page.screenshot()), 'visible paint sensitivity');
+          }
+        }
+        // Native-control positive control: the same appearance toggle is observable.
+        await page.setContent('<input type="checkbox" checked style="width:40px;height:40px">');
+        const control = await page.screenshot();
+        await page.locator('input').evaluate(node => { node.style.appearance = 'none'; });
+        assert.ok(!control.equals(await page.screenshot()), 'native appearance sensitivity');
+      } finally { await page.close(); }
+    }
+  } finally { await browser.close(); }
+});
+
 test('remaining modal appearance distinguishes link substitutions from non-widget owners across 171 observations', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'),
