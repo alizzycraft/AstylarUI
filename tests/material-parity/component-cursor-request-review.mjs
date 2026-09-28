@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { validateCursorEvidence } from './public-cursor-defaults-evidence.mjs';
 
 const one = items => { assert.equal(items.length, 1); return items[0]; };
 const relevant = key => ['cursor', 'all'].includes(key.replaceAll('-', '').toLowerCase());
@@ -16,12 +19,37 @@ const definitions = [
     ['bottom-sheet', 'bottom-sheet-primary', '.material-button'], ['dialog', 'dialog-primary', '.material-button'],
     ['snack-bar', 'snack-bar-primary', '.material-button'], ['tooltip', 'tooltip-primary', '.material-button'],
   ].map(([family, element, selector]) => ({ family, element, selector, nativeType: 'button', candidateType: 'button' })),
+  ...['dialog-cancel', 'dialog-save'].map(element => ({ family: 'dialog', element,
+    nativeType: 'button', candidateType: 'button', defaultPolicy: true })),
 ];
+
+export function collectCursorDefaultPolicyEvidence() {
+  const artifactRoot = 'artifacts/material-parity/public-cursor-defaults-4cf733e';
+  const read = file => readFileSync(`${artifactRoot}/${file}`), bytes = read('latest-report.json');
+  const reportSha256 = createHash('sha256').update(bytes).digest('hex');
+  assert.equal(reportSha256, '4773eb64cb37931bfb53e2c3852b7b439eac366e2da51aaf2eb22f0c7133b9a8');
+  const proof = validateCursorEvidence(JSON.parse(bytes), read);
+  const observations = proof.observations.filter(p => p.name === 'button-omitted');
+  assert.equal(observations.length, 4);
+  assert.equal(proof.sourceProof.defaultStyles.button, 'pointer');
+  for (const observation of observations) for (const stage of observation.stages) {
+    assert.equal(stage.referenceOwnerCursor, 'default'); assert.equal(stage.candidateOwnerCursor, 'pointer');
+  }
+  return { artifactRoot, reportSha256, provenance: proof.provenance, sourceCommit: proof.sourceCommit,
+    browser: proof.browser, sourceWitnesses: proof.sourceProof.witnesses, observations,
+    classification: 'intentional-documented-limitation',
+    contract: 'docs/compatibility/html-css.md: Values, units, inheritance, and defaults; Complete browser UA defaults',
+    historicalMaterialHoverCauseProven: false };
+}
 
 // Bind explicit request differences; omitted native button authoring is kept
 // distinct from explicit disabled requests. Neither proves a hovered cursor.
-export function proveExplicitComponentCursor(entry, reference, candidate, element) {
+export function proveExplicitComponentCursor(entry, reference, candidate, element, defaultEvidence) {
   const definition = one(definitions.filter(d => d.family === entry.family && d.element === element));
+  if (definition.defaultPolicy) {
+    assert.equal(defaultEvidence?.reportSha256, '4773eb64cb37931bfb53e2c3852b7b439eac366e2da51aaf2eb22f0c7133b9a8');
+    assert.equal(defaultEvidence.classification, 'intentional-documented-limitation');
+  }
   const input = one(entry.styleInputs.filter(i => i.id === element));
   const direct = reference.nodes.filter(n => n.attributes?.id === element);
   assert.ok(direct.length <= 1);
@@ -62,10 +90,11 @@ export function proveExplicitComponentCursor(entry, reference, candidate, elemen
     assert.ok(!Object.keys(node.authored.style ?? {}).some(relevant));
     assert.equal(node.authored.attributes?.style, undefined);
     const requests = candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, node.authored) && Object.keys(r).some(relevant));
-    if (node === owner && !slider) {
+    if (node === owner && !slider && !definition.defaultPolicy) {
       assert.equal(requests.length, 1); assert.equal(requests[0].selector, definition.selector);
       assert.equal(requests[0].cursor, 'pointer'); assert.equal(requests[0].all, undefined);
     } else assert.deepEqual(requests, []);
+    if (definition.defaultPolicy && node !== owner && node.normalResolvedStyle) assert.equal(node.normalResolvedStyle.cursor, 'default');
     path.push({ node: node.key, authored: node.authored, requests });
   }
   for (const [stage, field] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'], ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
@@ -75,21 +104,27 @@ export function proveExplicitComponentCursor(entry, reference, candidate, elemen
     nativeRequests, nativePath, nativeAuthorCursorOmitted: !definition.nativeSelector,
     candidatePath: path, nativeCursor: expectedReference,
     candidateCursor: owner.normalResolvedStyle.cursor,
+    ...(definition.defaultPolicy ? { defaultPolicyEvidence: defaultEvidence } : {}),
     inputEquivalent: false, renderingEquivalent: false, actualHoverCursorVerified: false,
     limitation: 'Original authored request and owner-stage discrepancy only. Disabled hit suppression, inherited label behavior, plugin mesh cursor and actual canvas hover remain separate questions.' };
 }
 
 export function applyExplicitComponentCursors(rows, cases, inventory, normalize) {
+  const defaultEvidence = rows.some(r => r.family === 'dialog' && ['dialog-cancel', 'dialog-save'].includes(r.element) &&
+    r.property === 'cursor' && r.attribution === 'unresolved') ? collectCursorDefaultPolicyEvidence() : undefined;
   return definitions.reduce((result, d) => applyModalBoxReview(result, cases, inventory, normalize, {
     family: d.family, element: d.element, properties: ['cursor'],
-    attribution: d.family === 'slider' ? 'reviewed-slider-host-cursor-omission' : d.nativeSelector
+    classification: d.defaultPolicy ? 'intentional-documented-limitation' : 'application-plugin-authoring-defect',
+    attribution: d.defaultPolicy ? 'reviewed-dialog-button-cursor-default-policy' : d.family === 'slider' ? 'reviewed-slider-host-cursor-omission' : d.nativeSelector
       ? 'reviewed-disabled-component-cursor-substitution' : 'reviewed-button-cursor-request-substitution',
-    owner: 'Material comparison authored cursor requests and component-owner mapping',
-    justification: d.family === 'slider'
+    owner: d.defaultPolicy ? 'core button cursor defaults; incomplete browser UA baseline policy' : 'Material comparison authored cursor requests and component-owner mapping',
+    justification: d.defaultPolicy
+      ? 'Both mapped dialog actions omit cursor authoring through their captured ancestries; native button default differs from candidate pointer in all three stages. The fresh public equal-input button reduction and matching package/source default methods reproduce this documented incomplete-UA-default boundary. This is not equal rendering, not a fixture offset remedy, and not proof of the historical Material hovered-canvas cursor.'
+      : d.family === 'slider'
       ? 'The native slider host explicitly requests pointer; the corresponding candidate visual owner and captured ancestry omit that request and resolve default in all three stages. This is unequal authoring, not proof of a core hit-test defect or the cursor emitted by plugin meshes.'
       : d.nativeSelector
         ? 'The native disabled component explicitly requests default; the candidate owner explicitly requests pointer and retains it in all three stages. This proves unequal disabled-state authoring, not actual hover behavior or disabled hit suppression.'
         : 'The native button and captured ancestry omit author cursor requests and the native button computes default. The candidate button explicitly requests pointer, retained in all three stages. These are unequal inputs before a core comparison; this does not claim that removing the candidate request would restore browser defaults or prove the actual hovered canvas cursor.',
-    prove: (entry, reference, candidate) => proveExplicitComponentCursor(entry, reference, candidate, d.element),
+    prove: (entry, reference, candidate) => proveExplicitComponentCursor(entry, reference, candidate, d.element, defaultEvidence),
   }), rows);
 }

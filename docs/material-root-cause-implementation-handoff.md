@@ -85,18 +85,25 @@ every remaining Material cursor discrepancy shares it. Retain this 20,510,567-by
 failed-case package and log; no new audit framework or fixture changes were needed.
 
 Prepared cursor review (not yet canonical): existing `applyModalBoxReview` supports
-13 groups / 555 observations through `tests/material-parity/component-cursor-request-review.mjs`.
+15 groups / 611 observations through `tests/material-parity/component-cursor-request-review.mjs`.
 Three groups / 138 observations bind explicit native requests (disabled button 60,
 disabled checkbox 8, slider host 70). Ten button-owner groups / 417 observations
 bind native omitted author requests/default computed cursor against explicit
 candidate pointer declarations (`.material-button`, `.text-button`, `.toolbar-action`).
 Exact owners, ancestor paths and all three captured stages prove unequal authoring;
 they do not prove that removing the request fixes output, since core defaults differ.
-Six cursor groups / 208 observations remain: four inherited labels (152) and two
-dialog default-policy candidates (56), plus actual hovered-canvas attribution remains
-separate. The focused spec passes in 22.46 s, preserves raw values/unrelated rows,
+Two dialog-action groups / 56 observations bind omitted author requests on both
+complete captured paths, native default versus candidate pointer at all three
+stages, and the refreshed public button-default proof. Existing asset/dependency
+validation and package/source projections run once for that evidence. They are
+classified as the documented incomplete-UA-default policy, not equal rendering
+or proven historical Material hover causation. Four inherited-label groups / 152
+observations remain, with actual hovered-canvas attribution separate. The focused
+spec passes in 25.84 s, preserves raw values/unrelated rows,
 and rejects missing native requests, added native/own/ancestor requests, stage
-changes and lost cases. No stale public browser evidence is used by this classifier.
+changes and lost cases. Dialog classification also rejects missing public proof;
+direct positive replay precedes every mutation so missing prerequisites cannot
+make negative controls pass accidentally. No stale public browser evidence is used.
 No producer integration or source-fingerprint changes while color export is live.
 Next combine this with the remaining cursor request/default investigations before
 another canonical batch; accepted unresolved count remains 715.

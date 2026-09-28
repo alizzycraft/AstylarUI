@@ -8,7 +8,7 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applyExplicitComponentCursors, proveExplicitComponentCursor } from './component-cursor-request-review.mjs';
 
-test('component cursor requests bind 555 observations without claiming hover behavior', () => {
+test('component cursor requests and defaults bind 611 observations without claiming Material hover behavior', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const captured = JSON.parse(bytes), cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
@@ -21,7 +21,9 @@ test('component cursor requests bind 555 observations without claiming hover beh
     .filter(r => r.evidence.section === 'discrepancies');
   const reviewed = applyExplicitComponentCursors(rows, cases, inventory, normalize);
   const changed = reviewed.filter((r, i) => r !== rows[i]);
-  assert.equal(changed.length, 13); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 555);
+  assert.equal(changed.length, 15); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 611);
+  const defaults = changed.filter(r => r.attribution === 'reviewed-dialog-button-cursor-default-policy');
+  assert.equal(defaults.length, 2); assert.equal(defaults.reduce((sum, r) => sum + r.occurrences, 0), 56);
   const buttons = changed.filter(r => r.attribution === 'reviewed-button-cursor-request-substitution');
   assert.equal(buttons.length, 10); assert.equal(buttons.reduce((sum, r) => sum + r.occurrences, 0), 417);
   const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
@@ -31,25 +33,28 @@ test('component cursor requests bind 555 observations without claiming hover beh
     if (!changed.includes(r)) assert.deepEqual(r, rows[i]);
   });
   for (const row of changed) {
-    assert.equal(row.classification, 'application-plugin-authoring-defect');
+    assert.equal(row.classification, defaults.includes(row) ? 'intentional-documented-limitation' : 'application-plugin-authoring-defect');
     assert.equal(row.reviewEvidence.inputEquivalent, false); assert.equal(row.reviewEvidence.renderingEquivalent, false);
     assert.ok(row.reviewEvidence.observations.every(p => p.actualHoverCursorVerified === false));
     const key = row.reviewedCases[0], entry = cases.find(c => `${c.kind}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}` === key);
     const [reference, candidate] = modalInventoryTrees(inventory, key);
     const owner = row.reviewEvidence.observations[0];
+    const prove = (r, a) => proveExplicitComponentCursor(entry, r, a, row.element, owner.defaultPolicyEvidence);
+    assert.deepEqual(prove(reference, candidate), owner);
     const missing = structuredClone(reference);
     if (owner.nativeAuthorCursorOmitted) missing.nodes.find(n => n.key === owner.referenceNode).inline.cursor = { value: 'pointer', important: false };
     else missing.nodes.find(n => n.key === owner.referenceNode).rules = [];
-    assert.throws(() => proveExplicitComponentCursor(entry, missing, candidate, row.element));
+    assert.throws(() => prove(missing, candidate));
     const changedCandidate = structuredClone(candidate);
     changedCandidate.rules.push({ selector: '#' + row.element, cursor: 'crosshair' });
-    assert.throws(() => proveExplicitComponentCursor(entry, reference, changedCandidate, row.element));
+    assert.throws(() => prove(reference, changedCandidate));
     const changedAncestor = structuredClone(candidate);
     changedAncestor.nodes.find(n => n.authored?.id === 'page').authored.style = { cursor: 'pointer' };
-    assert.throws(() => proveExplicitComponentCursor(entry, reference, changedAncestor, row.element));
+    assert.throws(() => prove(reference, changedAncestor));
     const wrongStage = structuredClone(candidate);
     wrongStage.nodes.find(n => n.key === owner.astylarNode).normalResolvedStyle.cursor = 'crosshair';
-    assert.throws(() => proveExplicitComponentCursor(entry, reference, wrongStage, row.element));
+    assert.throws(() => prove(reference, wrongStage));
+    if (defaults.includes(row)) assert.throws(() => proveExplicitComponentCursor(entry, reference, candidate, row.element));
   }
   const lost = cases.filter(c => c !== cases.find(c => c.family === 'slider'));
   assert.throws(() => applyExplicitComponentCursors(rows, lost, inventory, normalize));
