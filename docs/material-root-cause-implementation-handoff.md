@@ -111,9 +111,25 @@ Label controls additionally reject altered native parent types and candidate par
 cursor stages. The prepared partition is 17 authoring groups / 707 observations
 and two default-policy groups / 56 observations; none claims rendering equivalence.
 No producer integration or source-fingerprint changes while color export is live.
-Next independently replay/validate the combined cursor batch, then proceed to
-pointer-events/caret gaps before another canonical batch; accepted unresolved count
-remains 715 until the running color export is reconciled.
+Combined cursor validator now independently replays original rows, owners and fresh
+default evidence; it rejects a dropped review and a forged rendering-equivalence
+claim. The expanded focused test passed in 43.66 s. Next integrate this with the
+pointer-events/caret batch after the running color export is reconciled; accepted
+unresolved count remains 715.
+
+Pointer-events routing census: 23 groups / 824 observations, all candidate scalar
+values omitted (not assumed auto). Native none: eight groups / 177 observations
+(badge, disabled checkbox/radio, one slider input, disabled button, sheet wrapper).
+Native auto: 15 groups / 647 observations; three groups / 222 observations have no
+captured requests (chips and tab panel), while 12 / 425 retain tab or CDK overlay
+none/auto ancestry. Hash-checked trees and exact normalized membership support the
+first 22 groups; tooltip separately binds all 18 observations through the existing
+alias proof and verifies zero candidate ancestor requests/stage values. The initial
+survey stopped on a tooltip input lacking a reference object; that absent-popup
+record is not silently normalized into an observed value. No new classifications
+yet. Next distinguish explicit disabled/hit-layer omissions from computed/local
+measurement differences; do not collapse the inherited overlay chain to a default
+or infer actual hit behavior from these scalars.
 
 Color producer/validator integration is now wired and focused-verified against
 the accepted paint compact snapshot. Validation starts from original rows and

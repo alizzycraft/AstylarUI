@@ -8,6 +8,25 @@ import { validateCursorEvidence } from './public-cursor-defaults-evidence.mjs';
 
 const one = items => { assert.equal(items.length, 1); return items[0]; };
 const relevant = key => ['cursor', 'all'].includes(key.replaceAll('-', '').toLowerCase());
+export function isComponentCursorReviewRow(row) {
+  return row.property === 'cursor' && [
+    'reviewed-slider-host-cursor-omission', 'reviewed-disabled-component-cursor-substitution',
+    'reviewed-button-cursor-request-substitution', 'reviewed-dialog-button-cursor-default-policy',
+    'reviewed-choice-label-cursor-ancestry-substitution',
+  ].includes(row.attribution);
+}
+
+// Same original-row replay boundary as the other component reviews. Callers
+// authenticate original capture/inventory; proposed classifications are not input.
+export function validateComponentCursorReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const expected = applyExplicitComponentCursors(originalRows, cases, inventory, normalize).filter(isComponentCursorReviewRow);
+    assert.ok(JSON.stringify(rows.filter(isComponentCursorReviewRow)) === JSON.stringify(expected),
+      'cursor reviews differ from original-source replay');
+    return [];
+  } catch (error) { return [`component cursor evidence does not replay: ${error.message}`]; }
+}
+
 const definitions = [
   { family: 'button', element: 'button-disabled', nativeType: 'button', candidateType: 'button', selector: '.material-button', nativeSelector: '.mdc-button:disabled' },
   { family: 'checkbox', element: 'checkbox-primary', nativeType: 'mat-checkbox', candidateType: 'div', selector: '#checkbox-primary', nativeSelector: '.mdc-checkbox--disabled' },

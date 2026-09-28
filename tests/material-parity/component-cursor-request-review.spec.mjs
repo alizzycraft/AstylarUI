@@ -6,7 +6,7 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
-import { applyExplicitComponentCursors, proveExplicitComponentCursor } from './component-cursor-request-review.mjs';
+import { applyExplicitComponentCursors, proveExplicitComponentCursor, validateComponentCursorReviews } from './component-cursor-request-review.mjs';
 
 test('all 19 unresolved cursor groups bind 763 observations without claiming Material hover behavior', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -68,4 +68,9 @@ test('all 19 unresolved cursor groups bind 763 observations without claiming Mat
   }
   const lost = cases.filter(c => c !== cases.find(c => c.family === 'slider'));
   assert.throws(() => applyExplicitComponentCursors(rows, lost, inventory, normalize));
+  assert.deepEqual(validateComponentCursorReviews(reviewed, rows, cases, inventory, normalize), []);
+  assert.equal(validateComponentCursorReviews(reviewed.filter(r => r !== changed[0]), rows, cases, inventory, normalize).length, 1);
+  const forged = structuredClone(reviewed);
+  forged.find(r => r.attribution === 'reviewed-dialog-button-cursor-default-policy').reviewEvidence.renderingEquivalent = true;
+  assert.equal(validateComponentCursorReviews(forged, rows, cases, inventory, normalize).length, 1);
 });
