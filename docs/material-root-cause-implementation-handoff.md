@@ -105,6 +105,31 @@ the container's local/computed color. Next bind owner declarations and all three
 candidate stages with negative controls, retaining the existing label findings.
 These are applicability observations, not newly accepted classifications or
 proof of core color conversion. No source dependency was edited during export.
+
+Remaining color routing is now explicit: **36 groups / 922 observations** after
+the ten prepared color groups. Read-only original-tree checks authenticated each
+loaded tree, matched group populations, resolved owners with existing ID/template/
+alias mappings, and compared all three captured candidate stages to scalar inputs.
+The checks identify the next decisive proof; they do not classify these groups:
+
+| Owners | Groups / observations | Next proof boundary |
+| --- | --- | --- |
+| Sort, sidenav container | 2 / 77 | Bind the owner distinctions recorded above |
+| Toolbar title, enabled radio labels, enabled expansion title | 8 / 184 | Native component tokens versus candidate ancestor literals; keep omitted leaf color separate |
+| Icon, paginator container/range/size | 8 / 152 | Native token/fallback declarations versus omitted candidate local color; do not invent resolved candidate color |
+| Tab panel, progress bar/spinner | 6 / 110 | Preserve transition declarations and computed/local distinction; observed targets are height/opacity/none, not proof of full animation settlement |
+| Dialog panel/actions, snackbar and sheet overlay | 4 / 123 | Overlay container ancestry/measurement owners, not title or action-label ink |
+| Selected chip hosts | 4 / 120 | Candidate `.chip.selected` fixed `#4b4357` versus native host inheritance; label token proofs do not establish host equivalence |
+| Range inputs | 4 / 156 | Generic input default ink versus native enabled/disabled defaults, separately from visible thumb paint |
+
+For all 156 range owners, original native ink is `rgb(16,16,16)` when enabled
+and `rgb(197,197,197)` when disabled; all candidate stages retain `#2c3e50`.
+No applicable captured own color/reset rules were found, and both input layers
+have opacity zero. The literal matches `browser-defaults.ts`'s generic input
+entry. Existing public background/border reductions do **not** assert ink parity;
+reuse their minimal input setup for a color assertion rather than claiming that
+adjacent passing checks prove this discrepancy. The existing conservative
+root-inheritance proof remains unchanged; no transition exclusions were relaxed.
 Prepared coverage includes 62 background groups / 450 observations and ten color
 groups / 168 observations. The remaining 36 color groups need applicability work;
 the existing retained-label proofs must not be generalized to container owners.
