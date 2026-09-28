@@ -61,6 +61,17 @@ coverage query identifies 145 unresolved positioning/transform groups across 26
 families; prioritize slider, grid and overlay owner/coordinate questions before
 the remaining border/current-color and typography/inheritance groups.
 
+Prepared slider-position review covers 16 groups / 780 observations across all
+78 slider cases, including disabled states. Three groups are explicit native
+edge/relative-position requests replaced or omitted by candidate authoring;
+13 are computed native offsets (`auto` right, unauthored bottom/insets) versus
+candidate local omission. Original full scalar/three-stage owner correspondence,
+active rules and inline requests are retained. No sampled native pixel offsets
+are proposed as fixture fixes; swapped/jerky dragging remains a separate causal
+question. `node --test tests/material-parity/slider-position-request-review.spec.mjs`
+passes (3.45 s), checking raw/unrelated-row conservation and rejecting inserted
+native/candidate offset requests. Prepared only; no producer integration yet.
+
 Cursor/pointer integration guard is ready: the existing canonical conservation
 checker now supports `--component-interaction`, pinned to the accepted color
 generation below. It independently constrains 42 groups / 1,587 observations,
