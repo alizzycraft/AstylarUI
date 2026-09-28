@@ -60,7 +60,8 @@ dimensions. Twelve static cases supply paired measured boxes (maximum size error
 static geometry into interaction paint equivalence. The remaining conditional
 paint gaps require evidence at a justified browser milestone, not guessed closure.
 
-Owner-boundary export 23967 completed in 2414.21 s: all 436 static / 1875 interaction
+Accepted owner-boundary checkpoint (export source 818e2a8): export 23967 completed
+in 2414.21 s, covering all 436 static / 1875 interaction
 cases, 8483 scalar groups / 389202 occurrences, 134 source findings; its only
 reported error is 439 unattributed groups. All 519 current source fingerprints
 match, including producer LF SHA 887cc07d4c7ddb92f5b548c5df90e8168045ff4f23a1d254ee40958959c180d0.
@@ -70,11 +71,30 @@ receipt and 48 control receipts updated, all raw inputs and other control eviden
 conserved. Source reconciliation confirms four expected additions, three expected
 changes, and no removals (519 verified fingerprints). Logs:
 `owner-boundary-conservation-818e2a8.log` and `owner-boundary-fingerprints-818e2a8.log`
-under `artifacts/material-parity`. The all-section scan (session 15642, PID 7768)
-is confirmed live; do not restart it or import/accept the generation until its
-section changes are accounted for. Current payload
+under `artifacts/material-parity`. All 79 sections reconciled: 72 unchanged and
+seven expected changes (source fingerprints, summary, discrepancies, control
+typography, line-box receipts, owner-caret binding, reviewed-source binding).
+The 55 leaf metadata changes are exactly four summary counts, 48 line-box producer
+receipts, two other producer receipts and the independently reconstructed motion
+report digest. Section/metadata logs use the same owner-boundary/818e2a8 prefix.
+Compact import and verification pass: 8483 scalar groups, 134 source findings,
+39904 control records, 389202 occurrences, 439 unresolved groups, 71723948 compact
+bytes. The immutable generation includes its manifest. Current payload
 SHA is a593d4c7e804b6cf5ba863163122fde6cb31774c88c5fe6f97f6504cee2fa948;
 decoded SHA d278ff1faf4d3389db64eef2cba515072a1f55b27f787ce5664acff1287cdc46.
+Current compact index SHA: c5224eea34da7aa30570bcad482ac04e55c39ba0a8988a0d7ec0b88629f350c1.
+This accepts the coherent audit increment, not input equivalence or final browser
+acceptance. The 85-group anchor/corner followup above remains prepared, not in
+this generation. No exporter or reconciliation job remains running.
+
+Next prioritize the 41 minimum-size groups: eight explicit native constraints
+(badge min-width/min-height 16px token, card/dialog/toolbar button min-width 64px,
+slider min-width 112px, table min-width 100%) versus 33 computed-auto/local-omission
+groups. Representative owner trees show the explicit rules absent from candidate
+authoring; replay the complete populations before classification and distinguish
+fixed dimensions from minimum constraints. Then address 27 textTransform groups
+and remaining inherited/wrapping values. Preserve conditional corner-paint gaps
+for a justified browser evidence batch; do not reopen completed source questions.
 
 Prepared anchor/position followup now totals 53 groups / 2780 observations.
 The last 16 static-owner position groups add 918 observations. Fourteen are
