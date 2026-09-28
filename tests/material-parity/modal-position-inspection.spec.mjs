@@ -308,6 +308,35 @@ test('current rounded rectangle kernel undersamples oversized full-round radii d
   const Kernel = new Function('roundPolygon', 'getSegments', 'VertexData', compiled + '\nreturn Kernel;')(
     roundPolygon, getSegments, VertexData);
   const kernel = new Kernel(), observations = [];
+  const actionEdges = [];
+  // Bound mesh-only error for the measured toolbar/Save cases. Do not infer
+  // framebuffer coverage from vertex presence or from the oversized-radius case.
+  for (const [owner, cssWidth, cssHeight] of [['toolbar', 65.140625, 24], ['save', 78.671875, 40]]) {
+    for (const scale of [1, 0.01]) {
+      const mesh = kernel.createPolygonVertexData('rectangle', cssWidth * scale, cssHeight * scale, 20 * scale);
+      const points = Array.from({ length: mesh.positions.length / 3 }, (_, i) => ({
+        x: mesh.positions[i * 3] / scale + cssWidth / 2,
+        y: cssHeight / 2 - mesh.positions[i * 3 + 1] / scale,
+      }));
+      const radius = Math.min(20, cssHeight / 2, cssWidth / 2);
+      const errors = [0, 1, 2, 3].flatMap(corner => [1.5, 2.5, 3.5].map(inset => {
+        const y = corner >= 2 ? cssHeight - inset : inset;
+        const crossings = points.flatMap((p, i) => {
+          const q = points[(i + 1) % points.length];
+          return (p.y <= y && q.y > y) || (q.y <= y && p.y > y)
+            ? [p.x + (y - p.y) * (q.x - p.x) / (q.y - p.y)] : [];
+        });
+        assert.equal(crossings.length, 2);
+        const ideal = radius - Math.sqrt(radius ** 2 - (radius - inset) ** 2);
+        const edge = corner % 2 ? cssWidth - Math.max(...crossings) : Math.min(...crossings);
+        return Math.abs(edge - ideal);
+      }));
+      assert.equal(points.length, owner === 'toolbar' ? 40 : 68);
+      assert.ok(errors.every(error => error < (owner === 'toolbar' ? 0.07 : 0.03)));
+      actionEdges.push({ owner, scale, vertices: points.length, errors });
+    }
+  }
+  t.diagnostic(JSON.stringify({ actionEdges, scope: 'continuous four-corner mesh boundaries versus CSS circles; excludes rasterization' }));
   for (const scale of [1, 0.01]) {
     const width = 480 * scale, height = 48 * scale;
     const points = [{ x: -width / 2, y: height / 2 }, { x: width / 2, y: height / 2 },

@@ -46,9 +46,25 @@ between tessellation, raster phase and other paint behavior. Box-relative
 sampling separates it from the dialog's 1px whole-control vertical offset.
 Focused test passes 1/1 in 6.69s while explicitly retaining those discrepancies.
 
-Do not repeat this cohort's capture or corner scan. Next investigate the
-toolbar/Save residual at the paint boundary using the existing radius kernel
-proof, and integrate only classifications justified by the supported population.
+**Mesh-boundary reduction narrows the toolbar/Save residual.** The existing
+source-extracted radius-kernel test now also evaluates the actual sampled
+dimensions (toolbar 65.140625x24, Save 78.671875x40; both request radius20).
+At CSS scales 1 and .01, all four continuous mesh boundaries at the three sampled
+insets differ from ideal CSS circular arcs by less than .07px (toolbar, 40
+vertices) and .03px (Save, 68 vertices). The known 9999px catastrophic sampling
+defect does not justify attributing these smaller-radius pixel residuals to a
+similarly large geometric error. This is source-kernel evidence, not a replay
+of runtime mesh buffers or a framebuffer-coverage claim. Focused command
+`node --test --test-name-pattern="current rounded rectangle kernel"
+tests/material-parity/modal-position-inspection.spec.mjs` passes 1/1 (1.17s).
+
+A read-only sensitivity check added 1e-7 device pixel before sample-index floor
+to test near-integer floating-point ambiguity: Save maxima remain 2 CSS px at
+DPR1 and 1px at DPR2 in both profiles. Thus that probe alone does not remove the
+residual; original sample coordinates and failing observations are unchanged.
+Next distinguish runtime mesh/paint bounds from rasterization/coverage at the
+remaining residual, rather than rerunning the source kernel or the same scans.
+Do not repeat this cohort's capture without a newly identified observation gap.
 Remaining profiles/states are not covered by this sample. Runner/spec fingerprint
 changes must join pending export reconciliation. Canonical unresolved count
 stays 180; the 10-group stacking batch is still pending. No renderer/fixture fix.
