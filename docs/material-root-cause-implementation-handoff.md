@@ -26,10 +26,21 @@ button-pill evidence likewise distinguishes authored intent from used paint.
 Reuse those proofs and resolve the conditional geometry question rather than
 silently treating every numeric radius difference as either a paint defect or
 equivalent rendering. No canonical classification or capture changed this turn.
-The existing export session 23967 / Node PID 12020 was polled and confirmed live
-with advancing CPU time; do not restart it. Reconcile it before integrating this
-prepared followup. Next decisive question: which remaining finite-versus-pill
-radii have sufficient equal used-box evidence to establish equivalent corners?
+The remaining sheet-radius geometry question is now bounded by original evidence:
+25 open-sheet cases / 50 action owners have paired 480x48 or 868x48 border boxes,
+with dimensions equal within 1e-6 CSS px. Native/candidate child order binds the
+capture's Share/Copy row arrays. CSS uniform-radius reduction produces 24px for
+the native 9999px radius and candidate 24px/36px radii (38 owners); contrast's
+18px radius stays different (12 owners, already classified separately). The
+existing proof is reused, not weakened. Altered dimensions and swapped owner
+order are rejected. Focused row rasters are absent, so actual corner paint and
+rendering equivalence remain unproved; no pending scalar is reclassified by this
+geometry-only extension. The final combined focused spec passes 1/1 in 40.56 s.
+Next resolve badge/card/dialog/toolbar pill inputs and retain this precise sheet
+paint gap for a justified browser milestone rather than recapturing now.
+Export session 23967 / Node PID 12020 remains live with advancing CPU time
+(2639.73 s at last process check); do not restart it. Reconcile it before
+integrating the prepared followup.
 
 Prepared anchor/position followup now totals 53 groups / 2780 observations.
 The last 16 static-owner position groups add 918 observations. Fourteen are

@@ -11,6 +11,7 @@ import { applyCoreAnchorReviews, proveCoreAnchor } from './authored-anchor-revie
 import { applyRelativeOwnerOffsetReviews, proveRelativeOwnerOffsets } from './authored-anchor-review.mjs';
 import { applyStaticOwnerPositionReviews, proveStaticOwnerPosition } from './authored-anchor-review.mjs';
 import { applyAuthoredCornerReviews, proveAuthoredCornerRequests } from './authored-anchor-review.mjs';
+import { proveSheetCornerBoxEvidence } from './authored-anchor-review.mjs';
 
 test('authored anchor and corner reviews retain 3356 observations and reject altered requests', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -70,6 +71,23 @@ test('authored anchor and corner reviews retain 3356 observations and reject alt
     }
   }
   assert.equal(cornerOwners, 220); assert.equal(mutatedProfiles.size, 12);
+  let sheetOwners = 0, equalSheetCorners = 0;
+  for (const entry of cases.filter(e => e.family === 'bottom-sheet' && e.styleInputs.some(i => i.id === 'bottom-sheet-copy'))) {
+    const [r, a] = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}/${entry.state}`);
+    for (const element of ['bottom-sheet-dismiss', 'bottom-sheet-copy']) {
+      const proof = proveSheetCornerBoxEvidence(entry, r, a, element); sheetOwners++;
+      if (proof.sameCssCornerGeometry) equalSheetCorners++;
+      assert.equal(proof.candidateUsedPaintVerified, false); assert.equal(proof.renderingEquivalent, null);
+      const altered = structuredClone(entry); altered.overlayPlacement.astylarRows[element === 'bottom-sheet-dismiss' ? 0 : 1].height = 50;
+      assert.throws(() => proveSheetCornerBoxEvidence(altered, r, a, element));
+      const swapped = structuredClone(a);
+      const first = swapped.nodes.findIndex(n => n.authored?.id === 'bottom-sheet-dismiss');
+      const second = swapped.nodes.findIndex(n => n.authored?.id === 'bottom-sheet-copy');
+      [swapped.nodes[first], swapped.nodes[second]] = [swapped.nodes[second], swapped.nodes[first]];
+      assert.throws(() => proveSheetCornerBoxEvidence(entry, r, swapped, element));
+    }
+  }
+  assert.equal(sheetOwners, 50); assert.equal(equalSheetCorners, 38);
   for (const row of staticChanges) {
     const entry = cases.find(e => e.family === row.family);
     const [r, a] = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}`);

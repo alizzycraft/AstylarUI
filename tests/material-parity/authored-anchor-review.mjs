@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { applyModalBoxReview } from './modal-position-inspection.mjs';
+import { applyModalBoxReview, proveBottomSheetActionCorners } from './modal-position-inspection.mjs';
 import { proveFlowPositionSubstitution } from '../../scripts/audit-material-flow-position-substitutions.mjs';
 import { proveBadgePointerRequest } from './component-pointer-events-review.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
@@ -9,6 +9,41 @@ import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 const cornerProperties = ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius'];
 const radiusProperty = key => key === 'all' || /^border.*radius$/i.test(key.replaceAll('-', ''));
 const radiusFields = object => Object.fromEntries(Object.entries(object ?? {}).filter(([key]) => radiusProperty(key)));
+
+export function proveSheetCornerBoxEvidence(entry, reference, candidate, element) {
+  const inputs = proveBottomSheetActionCorners(entry, reference, candidate, element);
+  const overlay = entry.overlayPlacement;
+  assert.ok(!(entry.focusedRasters ?? []).some(raster => ['bottom-sheet-dismiss', 'bottom-sheet-copy'].includes(raster.id)));
+  assert.equal(overlay.targetId, 'bottom-sheet-panel');
+  assert.equal(overlay.referenceRows.length, 2); assert.equal(overlay.astylarRows.length, 2);
+  // The retained harness emits Share, Copy link in this order. Bind that order
+  // to authenticated native/candidate children rather than trusting a pass flag.
+  const rn = reference.nodes.find(node => node.key === inputs.referenceNode);
+  const an = candidate.nodes.find(node => node.key === inputs.astylarNode);
+  const nativeSiblings = reference.nodes.filter(node => node.parent === rn.parent && node.type === 'a');
+  const candidateSiblings = candidate.nodes.filter(node => node.parent === an.parent && node.authored?.type === 'button');
+  const index = element === 'bottom-sheet-dismiss' ? 0 : 1;
+  assert.equal(nativeSiblings.length, 2); assert.equal(candidateSiblings.length, 2);
+  assert.equal(nativeSiblings[index].key, rn.key); assert.equal(candidateSiblings[index].key, an.key);
+  const nativeBox = overlay.referenceRows[index], candidateBox = overlay.astylarRows[index];
+  const expectedWidth = entry.viewport.id === 'comparison-pane-dpr1' ? 868 : 480;
+  for (const box of [nativeBox, candidateBox]) {
+    for (const property of ['left', 'top', 'right', 'bottom', 'width', 'height']) assert.ok(Number.isFinite(box[property]));
+    assert.ok(Math.abs(box.width - expectedWidth) < 1e-6); assert.ok(Math.abs(box.height - 48) < 1e-6);
+    assert.ok(Math.abs(box.right - box.left - box.width) < 1e-6);
+    assert.ok(Math.abs(box.bottom - box.top - box.height) < 1e-6);
+  }
+  const reduce = (radius, box) => Math.min(radius, box.width / 2, box.height / 2);
+  const nativeUsedRadius = reduce(9999, nativeBox);
+  const candidateCssUsedRadius = reduce(Number.parseFloat(inputs.candidate.borderTopLeftRadius), candidateBox);
+  const sameCssCornerGeometry = Math.abs(nativeUsedRadius - candidateCssUsedRadius) < 1e-6;
+  assert.equal(sameCssCornerGeometry, entry.profile !== 'contrast');
+  return { ...inputs, measuredBoxes: { reference: nativeBox, candidate: candidateBox },
+    nativeUsedRadius, candidateCssUsedRadius, sameCssCornerGeometry,
+    candidateUsedLayoutMeasured: true, candidateUsedPaintVerified: false,
+    renderingEquivalent: null,
+    limitation: 'Original row border boxes establish equal dimensions and conditional CSS radius reduction, not renderer paint. Retained focused row rasters are absent; no radius classification is promoted to rendering equivalence.' };
+}
 
 // Authored token substitution is not a used-corner or clipping diagnosis: CSS
 // may reduce distinct radii to the same shape on a sufficiently short box.
