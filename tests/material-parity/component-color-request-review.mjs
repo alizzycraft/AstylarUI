@@ -22,6 +22,21 @@ export function proveSelectedChipHostColor(entry, reference, candidate, element,
   assert.ok(native.attributes.class.split(/\s+/).includes('mat-mdc-chip-selected'));
   assert.ok(owner.authored.class.split(/\s+/).includes('selected')); assert.equal(owner.authored.ariaSelected, true);
   for (const [k, v] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][k], v);
+  const referencePath = traceFrameColor(entry, reference, native, input, normalize);
+  assert.ok(!Object.keys(owner.authored.style ?? {}).some(relevant)); assert.equal(owner.authored.attributes?.style, undefined);
+  const candidateRequests = candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, owner.authored))
+    .flatMap(r => Object.entries(r).filter(([k]) => relevant(k)).map(([key, value]) => ({ selector: r.selector, key, value })));
+  assert.deepEqual(candidateRequests, [{ selector: '.chip', key: 'color', value: entry.profile === 'dark' ? '#e6e1e5' : '#1d1b20' },
+    { selector: '.chip.selected', key: 'color', value: '#4b4357' }]);
+  for (const [stage, field] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(owner[stage], input[field]); assert.equal(owner[stage].color, '#4b4357');
+  }
+  return { referenceNode: native.key, astylarNode: owner.key, referencePath, candidateRequests,
+    inputEquivalent: false, renderingEquivalent: false, labelColorEquivalent: false, motionSettlementVerified: false };
+}
+
+function traceFrameColor(entry, reference, native, input, normalize) {
   const ink = key => relevant(key) && !/^(animation|transition)/i.test(key);
   const referencePath = [], seen = new Set(); let node = native;
   while (node) {
@@ -47,17 +62,52 @@ export function proveSelectedChipHostColor(entry, reference, candidate, element,
     node = one(reference.nodes.filter(n => n.key === node.parent));
   }
   assert.equal(referencePath.at(-1).node, 'frame');
-  assert.ok(!Object.keys(owner.authored.style ?? {}).some(relevant)); assert.equal(owner.authored.attributes?.style, undefined);
-  const candidateRequests = candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, owner.authored))
-    .flatMap(r => Object.entries(r).filter(([k]) => relevant(k)).map(([key, value]) => ({ selector: r.selector, key, value })));
-  assert.deepEqual(candidateRequests, [{ selector: '.chip', key: 'color', value: entry.profile === 'dark' ? '#e6e1e5' : '#1d1b20' },
-    { selector: '.chip.selected', key: 'color', value: '#4b4357' }]);
+  return referencePath;
+}
+
+const motionColors = { 'tab-panel': 'tabs', 'progress-bar-primary': 'progress-bar', 'progress-spinner-primary': 'progress-spinner' };
+export function proveMotionBoundaryColor(entry, reference, candidate, element, normalize) {
+  assert.ok(motionColors[element]); assert.equal(entry.family, motionColors[element]);
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  const owner = one(candidate.nodes.filter(n => n.authored?.id === element));
+  let mapping, native;
+  if (element === 'tab-panel') {
+    mapping = resolveOriginAliasPair(entry, reference, candidate, input);
+    assert.equal(mapping.status, 'mapped');
+    native = one(reference.nodes.filter(n => n.key === mapping.referenceNode));
+  } else native = one(reference.nodes.filter(n => n.attributes?.id === element));
+  for (const [k, v] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][k], v);
   for (const [stage, field] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
-    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
-    assert.deepEqual(owner[stage], input[field]); assert.equal(owner[stage].color, '#4b4357');
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) assert.deepEqual(owner[stage], input[field]);
+  const referencePath = traceFrameColor(entry, reference, native, input, normalize);
+  // Preserve variable-containing shorthand rules, including empty CSSOM longhands.
+  // These sampled ancestry values do not establish animation settlement.
+  const candidatePath = [], seen = new Set(); let node = owner;
+  while (node) {
+    assert.ok(!seen.has(node.key)); seen.add(node.key);
+    assert.ok(!Object.keys(node.authored.style ?? {}).some(relevant)); assert.equal(node.authored.attributes?.style, undefined);
+    const requests = candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, node.authored))
+      .flatMap(r => Object.entries(r).filter(([k]) => relevant(k)).map(([key, value]) => ({ selector: r.selector, key, value })));
+    const page = node.authored.id === 'page', color = entry.profile === 'dark' ? '#e6e1e5' : '#1d1b20';
+    assert.deepEqual(requests, page ? [{ selector: '#page', key: 'color', value: color }] : []);
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.equal(node[stage].color, page ? color : undefined);
+    candidatePath.push({ node: node.key, parent: node.parent, requests, localColor: node.resolvedStyle.color ?? null });
+    if (page) { assert.equal(normalize({color}).color, normalize(input.reference).color); break; }
+    node = one(candidate.nodes.filter(n => n.key === node.parent));
   }
-  return { referenceNode: native.key, astylarNode: owner.key, referencePath, candidateRequests,
-    inputEquivalent: false, renderingEquivalent: false, labelColorEquivalent: false, motionSettlementVerified: false };
+  assert.equal(candidatePath.at(-1).requests[0]?.selector, '#page');
+  return { referenceNode: native.key, astylarNode: owner.key, mapping, referencePath, candidatePath,
+    candidateLocalColor: null, candidateComputedColorVerified: false, motionSettlementVerified: false,
+    inputEquivalent: false, renderingEquivalent: false };
+}
+
+export function applyMotionBoundaryColors(rows, cases, inventory, normalize) {
+  return Object.entries(motionColors).reduce((result, [element, family]) => applyModalBoxReview(result, cases, inventory, normalize, {
+    family, element, properties: ['color'], classification: 'parity-harness-defect',
+    attribution: 'reviewed-motion-owner-color-computed-local-boundary', owner: 'scalar computed/local color measurement with retained motion uncertainty',
+    justification: 'Native sampled owner color traces to the frame while candidate owner-local color is absent and its page ancestor requests the matching theme ink. This is a computed/local comparison, not proof of candidate computed color or equivalent rendering. Preserve all native motion rules, including empty CSSOM longhands; no animation settlement or transition-support claim follows.',
+    prove: (entry, reference, candidate) => proveMotionBoundaryColor(entry, reference, candidate, element, normalize),
+  }), rows);
 }
 
 export function applySelectedChipHostColors(rows, cases, inventory, normalize) {

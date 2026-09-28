@@ -73,6 +73,23 @@ color rejection, preserving raw rows. Prepared standalone color coverage is
 the color routing batch (tab panel and progress motion boundaries). Export and
 final acceptance remain pending; no renderer or fixture changes were made.
 
+The last **6 color groups / 110 observations** (tab-panel, progress bar and
+spinner) now have computed/local boundary proofs in the same module. The native
+sampled color follows captured frame ancestry; candidate local color stays absent
+through its ancestry until `#page` requests the matching theme ink. Existing tab
+alias mapping checks the actual active-panel owner. The shared frame trace now
+also serves chip hosts, avoiding another independent ancestry implementation.
+All native motion rules are retained, including variable shorthand's empty CSSOM
+longhands, height/opacity transitions and no-op overrides. They are not discarded
+to make the earlier conservative inheritance proof pass: this new attribution
+explicitly does **not** establish animation settlement or candidate computed ink.
+The focused spec passed **1/1 in 27.71 s**, checking all **36 prepared groups /
+922 observations**, exact raw-row preservation and conflicting owner requests.
+The remaining color routing batch is fully prepared, not canonical. Next integrate
+the combined replay/independent validation and source provenance only after the
+running paint export finishes and its reconciliation is accepted. The overall
+audit still has unresolved non-color coverage and final browser gates.
+
 Accepted grid/height export: complete-input cold export from `890de9f`
 finished in **2,354.82 seconds**, with 436/436 static and 1,875/1,875 interaction
 cases, 8,483 scalar groups / 389,202 observations, 134 source findings and
