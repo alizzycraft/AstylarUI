@@ -11,6 +11,26 @@ const hash = text => createHash('sha256').update(text.replaceAll('\r\n', '\n')).
 export const gapSurveyNormalizationRevision = '4650791a7208b841dd29f1ced015f98234949623';
 const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 
+// Historical gap evidence predates additive interaction paint/box diagnostics.
+// Authenticate both complete sources and prove that removing only those additions
+// restores the original capture; never reuse this receipt for a fresh capture.
+export function restoreGapCaptureDiagnostics(source) {
+  const current = source.replaceAll('\r\n', '\n');
+  assert.equal(hash(current), '4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d');
+  const start = current.indexOf('    // Read-only paint-boundary evidence for measured button controls.');
+  const end = current.indexOf('    const styleInputs = compareStyleInputs', start);
+  assert.ok(start > 0 && end > start);
+  let restored = current.slice(0, start) + current.slice(end);
+  const fields = '      // Retain measured interaction boxes for input/paint diagnosis. This is\n' +
+    '      // diagnostic evidence, not a new acceptance gate or a static-box fallback.\n' +
+    '      geometry: compareGeometry(referenceMeasurement.elements, astylarMeasurement.elements),\n' +
+    '      controlPaintGeometry,\n';
+  assert.equal(restored.split(fields).length, 2);
+  restored = restored.replace(fields, '');
+  assert.equal(hash(restored), 'c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10');
+  return restored;
+}
+
 // The survey is historical evidence, not a demand that the live normalizer
 // retain its old color-rounding bug. That dependency is read historically;
 // The mapping module's later read adapter can be restored only by its exact
@@ -23,6 +43,9 @@ export function readGapSurveySource(descriptor, readers = {}) {
     ['show', `${revision}:${file}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }));
   let source = descriptor.file === moduleFile
     ? readHistorical(gapSurveyNormalizationRevision, descriptor.file) : readCurrent(descriptor.file);
+  if (descriptor.file === 'tests/material-parity/run-material-parity.mjs' && hash(source) !== descriptor.sha256) {
+    source = restoreGapCaptureDiagnostics(source);
+  }
   if (descriptor.file === 'tests/material-parity/generated-node-mapping-evidence.mjs' && hash(source) !== descriptor.sha256) {
     source = restoreMappingReadAdapterSource(descriptor, source);
   }

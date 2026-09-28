@@ -23,8 +23,26 @@ The historical `prepared 106-group followup` regression also passes (1/1,
 63.39s), preserving its 8,483 scalar rows and prior classifications.
 Accepted unresolved count remains 180; pending combined classifications would
 leave 150 only after full export, predecessor conservation and cold replay.
-Next: reconcile source fingerprints and run the coherent integration milestone;
-do not repeat the completed corner-raster investigation.
+Cold export attempted with the named five-input launcher and progress enabled.
+During build, explicit-gap and gap-membership collectors rejected the changed
+capture-harness fingerprint (current 4ed6abe8..., historical c3cabcfde...).
+The still-running export was deliberately stopped after this deterministic
+failure; canonical files are unchanged and no new snapshot was accepted.
+`gap-survey-source-replay.mjs` now authenticates the complete current harness
+and removes only the added interaction geometry/paint diagnostics to recover
+the exact historical source. It does not assert new captures equal old captures.
+All seven gap-source replay tests pass (9.94s total), including changed-harness,
+forged-receipt and live gap-normalization negative controls.
+Next: preflight remaining dependency receipts, extend combined-batch full-payload
+conservation, then retry the cold integration milestone. Do not repeat the
+completed corner-raster investigation.
+
+Read-only next-batch lead: all 32 original states for each dialog action retain
+candidate padding `10px 20px` in all three stages with no authored padding rule.
+That matches `src/app/config/browser-defaults.ts` button defaults. Native Cancel
+and Save compute `0px 12px` and `0px 24px`; Save additionally has explicit 8px
+left margin. Bind historical defaults and complete native token/shorthand rules
+before classifying these nine spacing groups; do not infer a renderer offset.
 
 **Interaction used-box gap closed for a focused 20-case cohort.** The harness
 already measured interaction border boxes but discarded them from its report.
