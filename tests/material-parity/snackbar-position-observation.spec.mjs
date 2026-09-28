@@ -2,11 +2,70 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { PNG } from 'pngjs';
+import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
+import { propertyGroups } from './input-equivalence-policy.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { proveSnackbarPositionRequests, applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
+
+test('ordinary snackbar opens in bounds but loses paint behind the short-surface camera', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const file = 'artifacts/material-parity/snackbar-boundary-e331e79/latest-report.json';
+  const bytes = readFileSync(file);
+  assert.equal(hash(bytes), '51434ca9c9a9d375e778c3185881b9bb09be2e28baa8133b99f67d216d4c0994');
+  const report = JSON.parse(bytes), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  const binding = validateSupplementalCapture(report, { reportFile: file,
+    expectedProvenance: manifest.provenance, script: 'scripts/audit-material-snackbar-boundary.mjs',
+    styleProperties: Object.values(propertyGroups).flat() });
+  assert.equal(binding.status, 'checkpoint-bound', JSON.stringify(binding.errors));
+  assert.equal(manifest.provenance.core.length, 104);
+  for (const receipt of manifest.provenance.core) {
+    assert.equal(hash(readFileSync(receipt.source)), receipt.sourceSha256);
+    assert.equal(hash(readFileSync(`examples/material-showcase/node_modules/astylarui/dist/lib/${receipt.file}`)), receipt.sha256);
+  }
+  assert.deepEqual(report.results.map(e => [e.deviceScaleFactor, e.viewport.height, e.action]),
+    [1, 2].flatMap(d => [1000, 240].flatMap(h => ['initial', 'click'].map(a => [d, h, a]))));
+  for (const row of report.results) {
+    const clicked = row.action === 'click', short = row.viewport.height === 240, dpr = row.deviceScaleFactor;
+    assert.equal(row.astylar.candidateOpen, clicked);
+    for (const side of ['reference', 'astylar']) {
+      const sample = row[side], tree = JSON.parse(readFileSync(sample.inputTree.file));
+      const popups = tree.nodes.filter(n => side === 'reference'
+        ? String(n.attributes?.class ?? '').split(/\s+/).includes('mat-mdc-snackbar-surface')
+        : n.authored?.id === 'snack-bar-surface');
+      assert.equal(popups.length, Number(clicked));
+      const pngBytes = readFileSync(sample.screenshot.file);
+      assert.equal(hash(pngBytes), sample.screenshot.sha256);
+      const png = PNG.sync.read(pngBytes);
+      assert.equal(png.width, 900 * dpr); assert.equal(png.height, row.viewport.height * dpr);
+      if (!clicked) { assert.equal(sample.box, null); assert.equal(sample.darkPixels, 0); continue; }
+      assert.ok(sample.clicks.some(e => e.trusted && e.x >= sample.trigger.x && e.x <= sample.trigger.x + sample.trigger.width &&
+        e.y >= sample.trigger.y && e.y <= sample.trigger.y + sample.trigger.height));
+      for (const [key, expected] of Object.entries({ left: 278, top: row.viewport.height - 56, width: 344, height: 48 })) {
+        assert.ok(Math.abs(sample.box[key] - expected) < .01, `${side} ${key}`);
+      }
+      let darkPixels = 0;
+      for (let y = Math.ceil(sample.box.top * dpr); y < Math.floor(sample.box.bottom * dpr); y++) {
+        for (let x = Math.ceil(sample.box.left * dpr); x < Math.floor(sample.box.right * dpr); x++) {
+          const i = (y * png.width + x) * 4;
+          if (png.data[i] < 80 && png.data[i + 1] < 80 && png.data[i + 2] < 80) darkPixels++;
+        }
+      }
+      assert.equal(darkPixels, sample.darkPixels);
+      if (side === 'astylar' && short) assert.equal(darkPixels, 0);
+      else assert.ok(darkPixels > 15000 * dpr * dpr);
+    }
+    if (clicked) {
+      assert.equal(row.astylar.meshes.length, 1);
+      const mesh = row.astylar.meshes[0];
+      assert.equal(mesh.enabled, true); assert.equal(mesh.visible, true); assert.equal(mesh.visibility, 1);
+      assert.equal(mesh.z > row.astylar.cameraZ, short);
+    }
+  }
+});
 
 test('34 snackbar wrappers distinguish authored composition from computed-only right/bottom offsets', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

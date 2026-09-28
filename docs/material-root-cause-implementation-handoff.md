@@ -2,6 +2,42 @@
 
 ## Current audit checkpoint — September 28
 
+**Snackbar boundary evidence retained and replay-verified:**
+`artifacts/material-parity/snackbar-boundary-e331e79/latest-report.json`, SHA
+`51434ca9c9a9d375e778c3185881b9bb09be2e28baa8133b99f67d216d4c0994`.
+Eight paired ordinary-light samples: initial/real click, width 900, heights
+1000/240, DPR 1/2. Chrome 153.0.8010.53; served bytes authenticated against the
+existing fresh-build checkpoint; zero runtime errors. Both input trees omit the
+surface initially and contain it after clicking. Both surface boxes equal
+(278,height-56,344,48), with no below-viewport placement. Tall native/candidate
+dark-pixel counts are 15,707/15,576 at DPR 1 and 63,610/63,211 at DPR 2; short
+native counts remain 15,707/63,610 while candidate is 0 at both DPRs. Paired
+short DPR 1 screenshots were visually inspected. This is missing painted output,
+not missing authored state. The short candidate mesh Z 249.949 exceeds camera
+Z 207.846; the tall camera Z is 866.025. The independent equal-input reduction
+above/below owns the core defect attribution; showcase authoring is not declared
+equivalent merely because the surface bounds agree.
+
+Capture command: `node scripts/audit-material-snackbar-boundary.mjs
+--base-url=<local-frozen-origin>
+--checkpoint=artifacts/material-parity/tooltip-keyboard-runtime-813f658/checkpoint
+--output=artifacts/material-parity/snackbar-boundary-e331e79`; exit 1 honestly
+reports the two short-surface visibility failures. Existing supplemental helper
+retains trees, screenshots, source hashes and served-asset receipts. No separate
+framework or fixture changes. Focused replay:
+`node --test --test-name-pattern="ordinary snackbar opens"
+tests/material-parity/snackbar-position-observation.spec.mjs` passes 1/1 in
+1.66s, checking all 104 installed core/source receipts, matrix, actual clicks,
+trees, screenshot hashes, bounds, independently recounted pixels and depth.
+Passing replay authenticates the failure, not rendering parity.
+
+Next: determine which historical large-host missing-output reports remain
+unexplained after the already-recorded overlay compensation/lifetime history;
+do not attribute them to this short-height defect without matching host evidence.
+Supplemental source/export reconciliation and remaining state coverage/final
+gates stay open. The following probe entry is historical preparation, now
+superseded by the retained paired capture for these exact conditions.
+
 **Snackbar applicability probe:** unchanged fresh showcase browser assets were
 rehash-validated against `tooltip-keyboard-runtime-813f658/checkpoint/manifest.json`
 and served locally, Chrome 153.0.8010.53. Real mouse clicks in ordinary light
