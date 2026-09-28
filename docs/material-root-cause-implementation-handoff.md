@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 28
 
+Border triage (accepted interaction snapshot, not new classifications): compact
+authenticated queries find 79 unresolved color groups across ten owners, totaling
+1904 observations. Smallest decisive first check used the hash-pinned original
+capture and authenticated full-tree inventory for one light/desktop static case
+per family (eight cases). This disproves treating all 79 as one omission cause:
+divider explicitly requests a solid 1px top border with a theme color, while its
+other three sides are zero/none; table explicitly resets all four colors to
+currentcolor with zero/none widths/styles. Native icon, slider visual and tab
+owners have no local border declarations in those samples; their candidate types
+(img/custom plugin/button versus native hosts/spans) require owner-specific
+admission rather than broadening the existing ordinary-element proof blindly.
+Progress hosts also carry opacity transitions (spinner has a captured important
+none override). Badge is a generated alias, not a direct native parity-ID match.
+Next: prove complete state membership and candidate declaration exclusion for
+the omission candidates using existing identity helpers; separately inspect the
+divider's painted top edge and table reset requests. Sample triage does not prove
+all-state omission, equal inputs, visible paint correctness, or a renderer cause.
+The existing border proof and export dependencies were left unchanged.
+
 Prepared overlay-origin review covers seven groups / 210 observations (tooltip
 18, dialog 192). Existing scalar/type/ancestry and motion identity proofs are
 reused, then origin/transform ownership is checked separately. The measured native
