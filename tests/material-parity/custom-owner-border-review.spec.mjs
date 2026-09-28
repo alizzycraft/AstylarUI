@@ -6,12 +6,12 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
-import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder, applyDividerPositionReviews, proveDividerPositionRequests, applyProgressPositionReviews, proveProgressPositionRequests, applyBadgeProgressOriginReviews, proveBadgeProgressOrigin } from './custom-owner-border-review.mjs';
+import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder, applyDividerPositionReviews, proveDividerPositionRequests, applyProgressPositionReviews, proveProgressPositionRequests, applyBadgeProgressOriginReviews, proveBadgeProgressOrigin, applyChipTabOriginReviews, proveChipTabOrigin } from './custom-owner-border-review.mjs';
 
 test('custom host initial colors retain all observations without claiming generated paint equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
-  const capture = JSON.parse(bytes), families = ['icon', 'slider', 'tabs', 'table', 'divider', 'progress-bar', 'progress-spinner', 'badge'];
+  const capture = JSON.parse(bytes), families = ['icon', 'slider', 'tabs', 'table', 'divider', 'progress-bar', 'progress-spinner', 'badge', 'chips'];
   const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
   assert.deepEqual(inventory.errors, []);
@@ -43,6 +43,20 @@ test('custom host initial colors retain all observations without claiming genera
   const originChanges = origins.filter((r, i) => r !== progress[i]);
   assert.equal(originChanges.length, 5); assert.equal(originChanges.reduce((n, r) => n + r.occurrences, 0), 92);
   origins.forEach((r, i) => { assert.deepEqual(raw(r), raw(progress[i])); if (!originChanges.includes(r)) assert.deepEqual(r, progress[i]); });
+  const motionOrigins = applyChipTabOriginReviews(origins, cases, inventory, normalize);
+  const motionChanges = motionOrigins.filter((r, i) => r !== origins[i]);
+  assert.equal(motionChanges.length, 11); assert.equal(motionChanges.reduce((n, r) => n + r.occurrences, 0), 362);
+  motionOrigins.forEach((r, i) => { assert.deepEqual(raw(r), raw(origins[i])); if (!motionChanges.includes(r)) assert.deepEqual(r, origins[i]); });
+  for (const element of ['chip-0', 'chip-1', 'tab-overview', 'tab-activity', 'tab-panel']) {
+    const row = motionChanges.find(r => r.element === element), key = row.reviewedCases[0];
+    const e = cases.find(e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === key);
+    const [r, a] = modalInventoryTrees(inventory, key), proof = proveChipTabOrigin(e, r, a, element);
+    assert.equal(proof.motionSettlementVerified, false); assert.equal(proof.inputEquivalent, false);
+    const native = structuredClone(r); native.nodes.find(n => n.key === proof.nativePath[1].node).inline['transform-box'] = { value: 'content-box', important: false };
+    assert.throws(() => proveChipTabOrigin(e, native, a, element));
+    const altered = structuredClone(a); altered.rules.push({ selector: '#page', transformOrigin: '50% 50%' });
+    assert.throws(() => proveChipTabOrigin(e, r, altered, element));
+  }
   for (const family of ['badge', 'progress-bar', 'progress-spinner']) {
     const e = cases.find(e => e.family === family), key = `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
     const [r, a] = modalInventoryTrees(inventory, key), proof = proveBadgeProgressOrigin(e, r, a, normalize);
@@ -72,7 +86,7 @@ test('custom host initial colors retain all observations without claiming genera
     const altered = structuredClone(a); altered.rules.find(rule => rule.selector === '.divider').top = '0';
     assert.throws(() => proveDividerPositionRequests(e, r, altered, normalize));
   }
-  for (const family of families) {
+  for (const family of families.filter(f => f !== 'chips')) {
     const row = changed.find(r => r.family === family && (family !== 'tabs' || r.element === 'tab-panel')), key = row.reviewedCases[0];
     const e = cases.find(e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === key);
     const [r, a] = modalInventoryTrees(inventory, key), proof = proveCustomOwnerBorder(e, r, a, normalize);

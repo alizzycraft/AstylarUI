@@ -3,6 +3,7 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
 import { proveBadgePointerRequest } from './component-pointer-events-review.mjs';
+import { proveMotionCaretRequests } from '../../scripts/audit-material-caret-motion-context.mjs';
 
 const owners = {
   icon: ['icon-primary', 'mat-icon', 'img'],
@@ -232,7 +233,16 @@ export function applyProgressPositionReviews(rows, cases, inventory, normalize) 
 
 export function proveBadgeProgressOrigin(entry, reference, candidate, normalize) {
   assert.ok(['badge', 'progress-bar', 'progress-spinner'].includes(entry.family));
-  const identity = proveCustomOwnerBorder(entry, reference, candidate, normalize);
+  return proveOwnerOriginBoundary(reference, candidate, proveCustomOwnerBorder(entry, reference, candidate, normalize));
+}
+
+export function proveChipTabOrigin(entry, reference, candidate, element) {
+  assert.ok(['chips', 'tabs'].includes(entry.family));
+  // Reuse scalar/owner/motion authentication, not caret-color semantics.
+  return proveOwnerOriginBoundary(reference, candidate, proveMotionCaretRequests(entry, reference, candidate, element));
+}
+
+function proveOwnerOriginBoundary(reference, candidate, identity) {
   const origin = k => /^(all|transformorigin|transformbox)$/.test(k.replaceAll('-', '').toLowerCase());
   const context = k => origin(k) || /^(transform|translate|rotate|scale|animation|transition)/.test(k.replaceAll('-', '').toLowerCase());
   const walk = (tree, key) => {
@@ -268,7 +278,19 @@ export function proveBadgeProgressOrigin(entry, reference, candidate, normalize)
   const referenceOrigin = reference.styles[measured.style].transformOrigin;
   assert.match(referenceOrigin, /^-?\d+(?:\.\d+)?px -?\d+(?:\.\d+)?px(?: 0px)?$/);
   return { ...identity, nativePath, candidatePath, referenceOrigin,
+    inputEquivalent: false, renderingEquivalent: false, motionSettlementVerified: false,
     candidateComputedOriginVerified: false, referenceBoxEqualityVerified: false };
+}
+
+export function applyChipTabOriginReviews(rows, cases, inventory, normalize) {
+  for (const [family, elements] of Object.entries({ chips: ['chip-0', 'chip-1'], tabs: ['tab-overview', 'tab-activity', 'tab-panel'] }))
+    for (const element of elements) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+      family, element, properties: ['transformOrigin'], classification: 'parity-harness-defect',
+      attribution: 'reviewed-chip-tab-origin-owner-boundary', owner: 'chip/tab computed origin versus local declaration inspection',
+      prove: (e, r, a) => proveChipTabOrigin(e, r, a, element),
+      justification: 'Existing scalar/owner/motion identity is reused, then complete captured ancestry is checked separately for origin/reference-box/reset requests. Native computed pixel origins and candidate local omission are different observation stages. Competing native motion declarations, unresolved variable-based transitions and label/control structural differences remain explicit; neither choosing transition:none nor copying measured origin pixels establishes equal rendering. Candidate computed origins, reference-box equality and motion settlement remain unproven.',
+    });
+  return rows;
 }
 
 export function applyBadgeProgressOriginReviews(rows, cases, inventory, normalize) {

@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 28
 
+Chip/tab origins add 11 groups / 362 observations. The existing motion-caret
+proof supplies authenticated scalar/owner identity and retains competing motion
+requests; the shared origin-only ancestry check independently excludes explicit
+origin/reference-box/reset requests. This is a local-versus-computed observation
+boundary, not settled animation, equal reference boxes or equal rendering.
+All five owners reject native ancestor transform-box injection and candidate
+page-origin injection. Combined focused test passes (1/1, 12.16 s), conserving
+raw/unrelated rows. Existing caret collectors were not modified. Prepared batch
+now totals 118 groups / 2860 observations, including seven overlay origins.
+All origin groups from the accepted checkpoint now have prepared scoped reviews;
+canonical acceptance still awaits export 91866, confirmed live in validation.
+
 Badge/progress origin proof adds five groups / 92 observations. Exact measured
 owners reuse the border identity/alias proofs; complete captured ancestry excludes
 authored origin, reference-box and reset declarations. Native pixel origins are
