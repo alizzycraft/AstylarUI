@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 29
 
+**Tooltip shrink integrated; export pending:** the two-group / 80-observation
+proof from `be5cca9` now runs in the bound production tail with replay validation
+and unbound-attribution rejection. Against the current checkpoint the tail
+changes 61 groups / 2,926 observations (116 / 5,882 and 96 / 4,755 against earlier
+checkpoints). Raw/unrelated conservation and reversed reducer order pass.
+`node --test --test-name-pattern="omitted owner paint requests preserve|tooltip shrink preserves" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/display-request-review.spec.mjs`
+passes **2/2**, 39,444.8835 ms total. The first run exposed a test selecting the
+first tooltip row as the word-break limitation; it now explicitly selects
+`wordBreak` and separately checks `flexShrink` authoring classifications.
+Historical producer reversal retains
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+current producer is `096d44b4ecf3f878ab713bec79ccfaab6adf6743317b1ec10dae2a07954a8219`.
+Canonical remains **95 unresolved**; integrated batches project **14**.
+Compact queries confirm the next structural batch: expansion title alignItems,
+marginRight and textAlign (68 observations each), and tree flexDirection (52).
+Distinguish missing requests from differences caused by distinct formatting
+owners; do not infer computed candidate text alignment from an omitted local
+field. Source/export reconciliation and final gates remain pending. No new
+captures, renderer changes or fixture edits.
+
 **Tooltip shrink question answered; integration pending:** two groups / 80
 observations (62 trigger, 18 popup) bind explicit candidate `flexShrink:0` to a
 shared 72px column with 8px gap. Native trigger is in block flow, so its computed

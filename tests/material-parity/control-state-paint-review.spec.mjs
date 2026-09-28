@@ -33,6 +33,7 @@ import { applyDialogActionSpacingReviews, validateDialogActionSpacingReviews } f
 import { applyDialogPanelGapReview, validateDialogPanelGapReview } from './display-request-review.mjs';
 import { applyOverlayFlowReviews, validateOverlayFlowReviews } from './overlay-position-request-review.mjs';
 import { applyPanelVisibilityOwnership, validatePanelVisibilityOwnership } from '../../scripts/audit-material-panel-state-ownership.mjs';
+import { applyTooltipShrinkReviews, validateTooltipShrinkReviews } from './display-request-review.mjs';
 
 test('modal non-widget native appearance is invariant across mapped tags and noop transition context', async () => {
   const { chromium } = await import('playwright-core');
@@ -608,13 +609,13 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   const tail = new Function('ownerInitialStyleBinding', 'beforeOwnerOmissionReviews', 'cases', 'elementInventory',
     'canonicalStyle', 'applyOwnerMaximumWidths', 'applyOmittedOwnerPaintRequests', 'applyBadgeMarginReviews',
     'applySliderMarginReviews', 'applyListSpacingReviews', 'applyHeadingVisibleOverflow', 'applyTabPanelOverflowBoundary',
-    'applyTableVisibleOverflow', 'applyControlOverflowOwnerBoundaries', 'applyRangeVisibleOverflow', 'applyFocusShadowSubstitutions', 'applyCardShadowSyntax', 'applyMappedNonwidgetAppearance', 'applyRangeAppearanceInitial', 'applyAppearanceOwnerBoundaries', 'applySheetActionAppearance', 'applyTooltipWordBreakReview', 'applyStepperSpacingReviews', 'applyChipSpacingReviews', 'applyChoiceSpacingReviews', 'applyToolbarSpacingReviews', 'applyDialogActionSpacingReviews', 'applyDialogPanelGapReview', 'applyOverlayFlowReviews', 'applyPanelVisibilityOwnership', source.slice(start, end) + '\nreturn discrepancies;');
+    'applyTableVisibleOverflow', 'applyControlOverflowOwnerBoundaries', 'applyRangeVisibleOverflow', 'applyFocusShadowSubstitutions', 'applyCardShadowSyntax', 'applyMappedNonwidgetAppearance', 'applyRangeAppearanceInitial', 'applyAppearanceOwnerBoundaries', 'applySheetActionAppearance', 'applyTooltipWordBreakReview', 'applyStepperSpacingReviews', 'applyChipSpacingReviews', 'applyChoiceSpacingReviews', 'applyToolbarSpacingReviews', 'applyDialogActionSpacingReviews', 'applyDialogPanelGapReview', 'applyOverlayFlowReviews', 'applyPanelVisibilityOwnership', 'applyTooltipShrinkReviews', source.slice(start, end) + '\nreturn discrepancies;');
   const applies = [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, applyFocusShadowSubstitutions, applyCardShadowSyntax, applyMappedNonwidgetAppearance, applyRangeAppearanceInitial, applyAppearanceOwnerBoundaries, applySheetActionAppearance];
-  applies.push(applyTooltipWordBreakReview, applyStepperSpacingReviews, applyChipSpacingReviews, applyChoiceSpacingReviews, applyToolbarSpacingReviews, applyDialogActionSpacingReviews, applyDialogPanelGapReview, applyOverlayFlowReviews, applyPanelVisibilityOwnership);
+  applies.push(applyTooltipWordBreakReview, applyStepperSpacingReviews, applyChipSpacingReviews, applyChoiceSpacingReviews, applyToolbarSpacingReviews, applyDialogActionSpacingReviews, applyDialogPanelGapReview, applyOverlayFlowReviews, applyPanelVisibilityOwnership, applyTooltipShrinkReviews);
   const combined = tail({ status: 'bound' }, rows, cases, inventory, normalize, ...applies);
   assert.deepEqual(combined, [...applies].reverse().reduce((values, apply) => apply(values, cases, inventory, normalize), rows));
   const batch = combined.filter((r, i) => r !== rows[i]);
-  assert.equal(batch.length, 114); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 5802);
+  assert.equal(batch.length, 116); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 5882);
   assert.deepEqual(combined.map(raw), rows.map(raw));
   for (let i = 0; i < rows.length; i++) if (!batch.includes(combined[i])) assert.deepEqual(combined[i], rows[i]);
   assert.deepEqual(validate(combined), []);
@@ -661,13 +662,16 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   assert.ok(source.includes("errors.push('panel visibility attribution lacks bound original cases')"));
   assert.ok(source.includes('errors.push(...validatePanelVisibilityOwnership(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));'));
   assert.deepEqual(validatePanelVisibilityOwnership(combined, rows, cases, inventory, normalize), []);
+  assert.ok(source.includes("errors.push('tooltip shrink attribution lacks bound original cases')"));
+  assert.ok(source.includes('errors.push(...validateTooltipShrinkReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));'));
+  assert.deepEqual(validateTooltipShrinkReviews(combined, rows, cases, inventory, normalize), []);
   const currentRows = families.flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
     generation: '8fbd2e22dfd801587ce6c1dce90e6daba668171ae26eae0a9c834142a8bd0a43',
     indexSha256: '6f86d55a6ea6be0f1533ac893579bf517769061ed25a13812b0370c46b7c06e6',
   })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
   const currentApplied = tail({ status: 'bound' }, currentRows, cases, inventory, normalize, ...applies);
   const currentBatch = currentApplied.filter((r, i) => r !== currentRows[i]);
-  assert.equal(currentBatch.length, 94); assert.equal(currentBatch.reduce((n, r) => n + r.occurrences, 0), 4675);
+  assert.equal(currentBatch.length, 96); assert.equal(currentBatch.reduce((n, r) => n + r.occurrences, 0), 4755);
   assert.deepEqual(currentApplied.map(raw), currentRows.map(raw));
   currentApplied.forEach((r, i) => { if (!currentBatch.includes(r)) assert.deepEqual(r, currentRows[i]); });
   const checkpointRows = families.flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
@@ -676,9 +680,10 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
   const checkpointApplied = tail({ status: 'bound' }, checkpointRows, cases, inventory, normalize, ...applies);
   const checkpointBatch = checkpointApplied.filter((r, i) => r !== checkpointRows[i]);
-  assert.equal(checkpointBatch.length, 59);
-  assert.equal(checkpointBatch.reduce((n, r) => n + r.occurrences, 0), 2846);
-  assert.equal(checkpointBatch.find(r => r.family === 'tooltip').classification, 'documented-limitation');
+  assert.equal(checkpointBatch.length, 61);
+  assert.equal(checkpointBatch.reduce((n, r) => n + r.occurrences, 0), 2926);
+  assert.equal(checkpointBatch.find(r => r.family === 'tooltip' && r.property === 'wordBreak').classification, 'documented-limitation');
+  assert.ok(checkpointBatch.filter(r => r.family === 'tooltip' && r.property === 'flexShrink').every(r => r.classification === 'application-plugin-authoring-defect'));
   assert.deepEqual(checkpointApplied.map(raw), checkpointRows.map(raw));
   checkpointApplied.forEach((r, i) => { if (!checkpointBatch.includes(r)) assert.deepEqual(r, checkpointRows[i]); });
   assert.deepEqual(validateTooltipWordBreakReview(checkpointApplied, checkpointRows, cases, inventory, normalize), []);
@@ -690,6 +695,7 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   assert.deepEqual(validateDialogPanelGapReview(checkpointApplied, checkpointRows, cases, inventory, normalize), []);
   assert.deepEqual(validateOverlayFlowReviews(checkpointApplied, checkpointRows, cases, inventory, normalize), []);
   assert.deepEqual(validatePanelVisibilityOwnership(checkpointApplied, checkpointRows, cases, inventory, normalize), []);
+  assert.deepEqual(validateTooltipShrinkReviews(checkpointApplied, checkpointRows, cases, inventory, normalize), []);
   for (const [family, { entry, pair, proof }] of samples) {
     const property = family === 'badge' ? 'textOverflow' : 'boxShadow';
     for (const mutate of [
