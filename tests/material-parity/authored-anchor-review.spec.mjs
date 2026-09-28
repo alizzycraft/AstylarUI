@@ -9,11 +9,12 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { applyAuthoredAnchorReviews, proveAuthoredAnchor } from './authored-anchor-review.mjs';
 import { applyCoreAnchorReviews, proveCoreAnchor } from './authored-anchor-review.mjs';
 import { applyRelativeOwnerOffsetReviews, proveRelativeOwnerOffsets } from './authored-anchor-review.mjs';
+import { applyStaticOwnerPositionReviews, proveStaticOwnerPosition } from './authored-anchor-review.mjs';
 
-test('authored anchor reviews retain 1862 observations and reject substituted offsets or margin tokens', () => {
+test('authored anchor reviews retain 2780 observations and reject substituted offsets or margin tokens', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
-  const capture = JSON.parse(bytes), families = ['slide-toggle', 'badge', 'core', 'card', 'checkbox', 'sidenav', 'toolbar'];
+  const capture = JSON.parse(bytes), families = ['slide-toggle', 'badge', 'core', 'card', 'checkbox', 'sidenav', 'toolbar', 'chips', 'icon', 'list', 'tree', 'paginator', 'tabs', 'stepper', 'expansion', 'sort'];
   const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))];
   const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
   const rows = families.flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, {
@@ -34,6 +35,19 @@ test('authored anchor reviews retain 1862 observations and reject substituted of
   const relativeChanges = relative.filter((r, i) => r !== combined[i]);
   assert.equal(relativeChanges.length, 22); assert.equal(relativeChanges.reduce((n, r) => n + r.occurrences, 0), 1258);
   relative.forEach((r, i) => { assert.deepEqual(raw(r), raw(rows[i])); if (r !== combined[i]) assert.equal(combined[i].attribution, 'unresolved'); });
+  const stationary = applyStaticOwnerPositionReviews(relative, cases, inventory, bindPreciseAuditNormalization());
+  const staticChanges = stationary.filter((r, i) => r !== relative[i]);
+  assert.equal(staticChanges.length, 16); assert.equal(staticChanges.reduce((n, r) => n + r.occurrences, 0), 918);
+  stationary.forEach((r, i) => { assert.deepEqual(raw(r), raw(rows[i])); if (r !== relative[i]) assert.equal(relative[i].attribution, 'unresolved'); });
+  for (const row of staticChanges) {
+    const entry = cases.find(e => e.family === row.family);
+    const [r, a] = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}`);
+    const proof = proveStaticOwnerPosition(entry, r, a, row.element);
+    const native = structuredClone(r); native.nodes.find(n => n.key === proof.referenceNode).inline.position = { value: 'static', important: false };
+    assert.throws(() => proveStaticOwnerPosition(entry, native, a, row.element));
+    const altered = structuredClone(a); altered.rules.push({ selector: '#' + row.element, position: 'static' });
+    assert.throws(() => proveStaticOwnerPosition(entry, r, altered, row.element));
+  }
   for (const family of ['badge', 'card', 'checkbox', 'sidenav', 'toolbar']) {
     const entry = cases.find(e => e.family === family);
     const [r, a] = modalInventoryTrees(inventory, `${entry.kind}:${family}@${entry.profile}/${entry.viewport.id}`);

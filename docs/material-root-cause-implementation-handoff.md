@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared anchor/position followup now totals 53 groups / 2780 observations.
+The last 16 static-owner position groups add 918 observations. Fourteen are
+native computed-static versus absent candidate local declarations; sort and
+toolbar-primary explicitly substitute relative positioning. All exact native/
+candidate types, 89 native scalar fields, three candidate stages and relevant
+rules are verified. Paginator range/size, tab panel and stepper content use the
+existing authenticated alias mapper; direct IDs do not bypass full scalar joins.
+No structural or candidate-computed-position equivalence is claimed. Focused
+anchor test passes 1/1 in 24.25 s, preserves raw/prior rows and rejects injected
+native or candidate position declarations for every new owner. These prepared
+reviews cover the remaining position/inset/transform scalar population after
+the running 134-group batch, but are not canonical or evidence of resolved
+rendering defects. Next prioritize corner clipping/radius and sizing groups
+while awaiting export reconciliation. Export 23967 remains in validation.
+
 Prepared followup now totals 37 groups / 1862 observations. Relative-owner
 review adds 22 groups / 1258 observations: badge/card/checkbox host insets (four
 each), sidenav and toolbar-action position plus four insets each. Exact direct

@@ -4,6 +4,65 @@ import { proveFlowPositionSubstitution } from '../../scripts/audit-material-flow
 import { proveBadgePointerRequest } from './component-pointer-events-review.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { inspectButtonHostRequests } from './button-host-request-evidence.mjs';
+import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+
+const staticOwners = [
+  ['card', 'card-copy', 'mat-card-content', 'p'], ['card', 'card-title', 'mat-card-title', 'h2'],
+  ['chips', 'chips-primary', 'mat-chip-listbox', 'div'], ['icon', 'icon-primary', 'mat-icon', 'img'],
+  ['list', 'list-primary', 'mat-list', 'div'], ['tree', 'tree-primary', 'mat-tree', 'div'],
+  ['paginator', 'paginator-primary', 'mat-paginator', 'div'], ['paginator', 'paginator-range', 'div', 'span'],
+  ['paginator', 'paginator-size', 'div', 'span'], ['tabs', 'tab-panel', 'span', 'showcase.material:tab-panel'],
+  ['tabs', 'tab-overview', 'span', 'button'], ['tabs', 'tab-activity', 'span', 'button'],
+  ['stepper', 'stepper-content', 'span', 'span'], ['expansion', 'expansion-title', 'mat-panel-title', 'span'],
+  ['sort', 'sort-primary', 'div', 'div', '.sort-header'], ['toolbar', 'toolbar-primary', 'mat-toolbar', 'div', '.toolbar'],
+];
+export function proveStaticOwnerPosition(entry, reference, candidate, element) {
+  const definition = staticOwners.find(([family, id]) => family === entry.family && id === element); assert.ok(definition);
+  const [, , nativeType, candidateType, selector] = definition;
+  const inputs = entry.styleInputs.filter(i => i.id === element); assert.equal(inputs.length, 1);
+  const input = inputs[0];
+  let matches = reference.nodes.filter(n => n.attributes?.id === element), identity;
+  if (!matches.length) {
+    identity = resolveOriginAliasPair(entry, reference, candidate, input); assert.equal(identity.status, 'mapped');
+    assert.deepEqual(identity.missingRules, []); assert.deepEqual(identity.extraRules, []);
+    matches = reference.nodes.filter(n => n.key === identity.referenceNode);
+  }
+  assert.equal(matches.length, 1); const r = matches[0];
+  const candidates = candidate.nodes.filter(n => n.authored?.id === element); assert.equal(candidates.length, 1); const a = candidates[0];
+  assert.equal(r.type, nativeType); assert.equal(a.authored.type, candidateType);
+  assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);
+  assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+  assert.equal(Object.keys(input.reference).length, 89);
+  for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[r.style][key], value);
+  const relevant = key => /^(all|position|top|right|bottom|left|transform)$|^(inset|animation|transition)/.test(key.replaceAll('-', '').toLowerCase());
+  assert.ok(!Object.keys(r.inline ?? {}).some(relevant));
+  const rules = r.rules.map(i => reference.rules[i]).filter(rule => rule.active);
+  assert.ok(rules.every(rule => !Object.keys(rule.declarations).some(relevant)));
+  assert.equal(reference.styles[r.style].position, 'static');
+  assert.equal(a.authored.style, undefined); assert.equal(a.authored.attributes?.style, undefined);
+  const pick = o => Object.fromEntries(Object.entries(o ?? {}).filter(([k]) => relevant(k)));
+  const requests = candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, a.authored))
+    .map(({ selector, ...d }) => ({ selector, declarations: pick(d) })).filter(rule => Object.keys(rule.declarations).length);
+  assert.deepEqual(requests, selector ? [{ selector, declarations: { position: 'relative' } }] : []);
+  for (const [field, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']]) {
+    assert.deepEqual(input[field], a[stage]); assert.deepEqual(pick(a[stage]), selector ? { position: 'relative' } : {});
+  }
+  return { referenceNode: r.key, astylarNode: a.key, identity, referenceRules: rules, candidateRequests: requests,
+    ownerTypes: { reference: nativeType, candidate: candidateType }, inputEquivalent: false, renderingEquivalent: false,
+    structuralEquivalenceProven: false, candidateComputedPositionVerified: false };
+}
+export function applyStaticOwnerPositionReviews(rows, cases, inventory, normalize) {
+  for (const [family, element, , , selector] of staticOwners) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family, element, properties: ['position'], prove: (entry, r, a) => proveStaticOwnerPosition(entry, r, a, element),
+    classification: selector ? 'application-plugin-authoring-defect' : 'parity-harness-defect',
+    attribution: selector ? 'reviewed-static-owner-relative-substitution' : 'reviewed-static-owner-observation-boundary',
+    owner: 'mapped native static owner versus candidate positioning authoring',
+    justification: selector
+      ? 'Native owner computes static without an authored position/reset/motion request. Candidate explicitly requests relative in a matching rule and all local stages. This is unequal positioning authoring, not proof of a renderer defect or equivalent containing blocks.'
+      : 'Native owner computes static without an authored position/reset/motion request, while candidate authoring and all local stages omit position. Preserve exact owner types and alias mapping where needed; this observation boundary does not prove structural equivalence or candidate computed positioning.',
+  });
+  return rows;
+}
 
 export function proveCoreAnchor(entry, reference, candidate) {
   assert.equal(entry.family, 'core');
