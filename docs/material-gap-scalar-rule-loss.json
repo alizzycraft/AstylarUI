@@ -24,7 +24,7 @@
     },
     {
       "file": "tests/material-parity/run-material-parity.mjs",
-      "sha256": "c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10"
+      "sha256": "4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d"
     },
     {
       "file": "tests/material-parity/input-tree-evidence.mjs",

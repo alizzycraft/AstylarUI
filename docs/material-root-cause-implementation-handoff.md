@@ -45,11 +45,18 @@ remain null, matching the individual observations, instead of the shared
 wrapper's false default. Radius and combined production tests pass (2/2).
 Explicit-gap collector `--check` now passes: 16 groups, 296 cases, 1,032
 observations and 40 negative controls; canonical unchanged.
-Gap-membership preflight still fails in its scalar-rule-loss prerequisite:
-the saved supplement cites historical capture hash c3cabcfde..., whereas its
-reproducer emits current harness hash 4ed6abe8.... This is a receipt-provenance
-mismatch to resolve explicitly; do not regenerate historical findings blindly
-or start another full export yet.
+Gap-membership's scalar-rule-loss prerequisite is reconciled: its unchanged
+generator advances only the harness source receipt to the authenticated current
+4ed6abe8... source; the membership generator advances only that supplement's
+hash. Original captures/findings are unchanged. Existing seven-report receipt
+conservation proves exactly 17 permitted historical receipt changes, with all
+other fields identical and mutation rejection intact (7/7 tests, 9.53s).
+Membership replay passes: 38 groups / 1,902 observations / 676 cases, retaining
+two unresolved motion groups. No canonical audit acceptance change.
+The separate pending-motion binding preflight exposes an older stale CSSOM
+parent receipt (2e990e6c... versus current survey 3a365228...). Its generator
+stops before writing. Preserve that failure for focused reconciliation; merely
+updating the membership reference would not fix this independent prerequisite.
 Next: finish dependency preflight and retry the cold integration milestone,
 then verify new payload and all section/fingerprint changes before acceptance.
 Do not repeat the completed corner-raster investigation.

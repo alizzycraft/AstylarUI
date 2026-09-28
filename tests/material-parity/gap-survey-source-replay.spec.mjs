@@ -107,14 +107,14 @@ test('a live gap regression cannot hide behind a valid historical source hash', 
   }
 });
 
-test('historical gap report refresh changes exactly sixteen dependency receipts and no finding data', () => {
+test('historical gap report refresh changes exactly seventeen dependency receipts and no finding data', () => {
   const files = [
     ['docs/material-owner-gap-input-survey.json', ['sourceFingerprints.0']],
     ['docs/material-owner-gap-canonical-join.json', ['survey', 'sourceFingerprint']],
     ['docs/material-explicit-gap-composition.json', ['survey', 'join', 'sourceFingerprint']],
     ['docs/material-explicit-gap-canonical-binding.json', ['composition', 'join', 'sourceFingerprints.0']],
     ['docs/material-owner-gap-motion-review.json', ['parent', 'sources.0']],
-    ['docs/material-gap-scalar-rule-loss.json', ['parent', 'sourceFingerprints.0']],
+    ['docs/material-gap-scalar-rule-loss.json', ['parent', 'sourceFingerprints.0', 'sourceFingerprints.3']],
     ['docs/material-gap-review-membership.json', ['sources.0', 'sources.1', 'sources.2']],
   ];
   const get = (object, address) => address.split('.').reduce((value, key) => value[key], object);
@@ -142,5 +142,5 @@ test('historical gap report refresh changes exactly sixteen dependency receipts 
     const forged = structuredClone(after); get(forged, addresses[0]).sha256 = '0'.repeat(64);
     assert.throws(() => conserve(forged));
   }
-  assert.equal(changes, 16);
+  assert.equal(changes, 17);
 });
