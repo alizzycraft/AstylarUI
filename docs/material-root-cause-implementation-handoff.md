@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 28
 
+Divider paint substitution is now bound across all 24 captured cases: native
+solid 1px top border uses the Material outline token; candidate instead paints a
+1px-high background with literal #cac4d0. The single top-color group / 24
+observations is an authoring mismatch, consistent with the existing
+`fixture-divider-replaces-paragraph-flow-with-coordinates` history finding.
+Three unpainted sides remain a separately scoped initial-color divergence
+(six groups / 72 observations); they do not erase the explicit top request.
+The existing custom-owner review now covers 39 groups / 976 observations.
+Focused test passes (1/1, 4.62 s), including background-mutation rejection and
+raw/unrelated conservation. No new infrastructure, canonical update or renderer
+change. Next border gaps are badge alias, tab controls and progress motion rules.
+
 Table border reset now has full-state proof: 52 captured cases / eight groups /
 208 color observations. The native `.mat-mdc-table` explicitly requests
 `border: 0px` (four none styles/currentcolor colors plus border-image reset),

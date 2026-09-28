@@ -11,7 +11,7 @@ import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder } from './custom-
 test('custom host initial colors retain all observations without claiming generated paint equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
-  const capture = JSON.parse(bytes), families = ['icon', 'slider', 'tabs', 'table'];
+  const capture = JSON.parse(bytes), families = ['icon', 'slider', 'tabs', 'table', 'divider'];
   const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
   assert.deepEqual(inventory.errors, []);
@@ -20,7 +20,10 @@ test('custom host initial colors retain all observations without claiming genera
     indexSha256: 'd0446d1c61bec60527c34459da6a28e4af1699793c50b38fef93846627cd6aca',
   })).filter(r => r.evidence.section === 'discrepancies');
   const reviewed = applyCustomOwnerBorderReviews(rows, cases, inventory, normalize), changed = reviewed.filter((r, i) => r !== rows[i]);
-  assert.equal(changed.length, 32); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 880);
+  assert.equal(changed.length, 39); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 976);
+  const dividerTop = changed.filter(r => r.family === 'divider' && r.property === 'borderTopColor');
+  assert.equal(dividerTop.length, 1); assert.equal(dividerTop[0].occurrences, 24);
+  assert.equal(dividerTop[0].classification, 'application-plugin-authoring-defect');
   const tableRows = changed.filter(r => r.family === 'table');
   assert.equal(tableRows.length, 8); assert.equal(tableRows.reduce((n, r) => n + r.occurrences, 0), 208);
   assert.ok(tableRows.every(r => r.classification === 'application-plugin-authoring-defect'));
@@ -38,6 +41,11 @@ test('custom host initial colors retain all observations without claiming genera
     assert.throws(() => proveCustomOwnerBorder(e, r, candidate, normalize));
     const wrongType = structuredClone(a); wrongType.nodes.find(n => n.key === proof.astylarNode).authored.type = 'button';
     assert.throws(() => proveCustomOwnerBorder(e, r, wrongType, normalize));
+    if (family === 'divider') {
+      const changedPaint = structuredClone(a);
+      changedPaint.rules.find(rule => rule.selector === '.divider').background = '#7b757f';
+      assert.throws(() => proveCustomOwnerBorder(e, r, changedPaint, normalize));
+    }
     if (family === 'table') {
       const changedReset = structuredClone(r);
       const owner = changedReset.nodes.find(n => n.key === proof.referenceNode);
