@@ -169,6 +169,32 @@ test('tooltip proof rejects changed containing blocks, layout, mapping and omitt
   }
 });
 
+test('tooltip focus matrix does not establish keyboard-origin opening', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const cases = JSON.parse(bytes).interactions.filter(row => row.family === 'tooltip' && row.state === 'focus');
+  assert.equal(cases.length, 8);
+  for (const row of cases) for (const side of ['reference', 'astylar']) {
+    const receipt = row.inputTrees[side], treeBytes = readFileSync(receipt.file);
+    assert.equal(hash(treeBytes), receipt.sha256);
+    const tree = JSON.parse(treeBytes);
+    const popup = tree.nodes.filter(node => side === 'reference'
+      ? String(node.attributes?.class ?? '').split(/\s+/).includes('mat-mdc-tooltip-surface')
+      : node.authored?.id === 'tooltip-popup');
+    assert.equal(popup.length, 0, 'review changed focus capture before reusing this conclusion');
+  }
+  const harness = readFileSync('tests/material-parity/run-material-parity.mjs', 'utf8');
+  const branch = harness.slice(harness.indexOf("if (state === 'focus')"), harness.indexOf("if (state === 'hover')"));
+  assert.equal(branch.match(/target\.focus\(\)/g)?.length, 2);
+  assert.doesNotMatch(branch, /keyboard\.press/);
+  const reference = readFileSync('examples/material-showcase/node_modules/@angular/material/fesm2022/module-CWxMD37a.mjs', 'utf8');
+  assert.match(reference, /origin === 'keyboard'[\s\S]{0,100}this\.show\(\)/);
+  // Both captured owners lack a popup; that is not evidence that real Tab
+  // focus opens/dismisses equivalent content. Do not change fixture behavior
+  // or reinterpret programmatic focus as keyboard-origin input to close it.
+});
+
 test('connected placement is a reference behavior and only a private select primitive in current core', () => {
   const read = file => readFileSync(file, 'utf8');
   const parse = file => ts.createSourceFile(file, read(file), ts.ScriptTarget.Latest, true);

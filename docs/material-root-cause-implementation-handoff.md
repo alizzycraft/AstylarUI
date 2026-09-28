@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 28
 
+Tooltip keyboard coverage is now distinguished from the eight historical
+`focus` cases: all eight authenticated paired trees contain no tooltip popup.
+The current harness's focus branch calls `target.focus()` on both sides, whereas
+Material's directive opens on `origin === 'keyboard'`. Thus these cases cannot
+prove real keyboard-origin opening, even with high screenshot similarity.
+The focused `tooltip focus matrix` test in the existing composition spec passes
+1/1 (2.01 s process), authenticating the original report and all 16 tree receipts.
+This proves a coverage gap, not runtime Tab failure. Next capture ordinary real
+Tab/blur states with current browser provenance. This new spec is a pending
+source-fingerprint change for the next coherent integration milestone; no full
+export is warranted solely for this assertion.
+
 Next overlay question narrowed: existing tooltip state evidence covers only
 initial/hover/press/release/leave, not keyboard focus, edge fallback or scrolling.
 `scripts/audit-material-tooltip-state.mjs` declares exactly those five actions;
