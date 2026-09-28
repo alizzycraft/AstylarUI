@@ -2,6 +2,32 @@
 
 ## Current audit checkpoint — September 28
 
+The cold export from **24ff18b** finished in 2,923 seconds. Its sole reported
+error is the remaining **180 unresolved attributions** (previously 286); it
+retains 436 static / 1,875 interaction cases, 8,483 scalar groups, 389,202
+observations and 134 source findings. Independent `--prepared-followup`
+conservation passes: exactly 106 groups / 4,635 observations change attribution,
+all raw inputs and unrelated control evidence remain conserved, and 48 control
+source receipts reconcile. Input/rendering equivalence remains false.
+
+Independent section reconciliation authenticates all 79 sections: 72 unchanged;
+only sourceFingerprints, summary, discrepancies, controlTypography,
+controlLineBoxes, ownerCaretInputs and reviewedSourceBatchInputs change.
+All 527 source fingerprints match current normalized-LF files (two additions,
+seven updates, no removals). The 54 metadata leaf changes are three summary
+counts, 50 producer receipts and one independently reconstructed motion-report
+digest (`93492522d40f27a3236314d82e44f815c66ca582a039e1ce26d73edecd135914`).
+The new compressed snapshot is
+`6f0a4c1c3c214695abe87bb185f6c6c392acd5fa6452d2315891854f85cc9de9`,
+decoded SHA `757fce0f5455b3de19e0ef1bf93af3725a3ac01794a7d44a4feb42a4f2b6d9bf`.
+Evidence logs: `artifacts/material-parity/prepared-followup-{export,conservation,sections,metadata}-24ff18b`
+(export/conservation `.log`, sections/metadata `.json`). Compact import and
+`npm run audit:findings:verify` pass (72,284,568 compact bytes); the current index
+SHA is `a28657efd56dc23b707d09cd3148c55b4974c9385f8d47fd38cfc8cdb5754a96`.
+This snapshot is accepted as an attribution/evidence update only. Next prioritize remaining
+coordinate/overlay/clipping and plugin-ownership questions, then residual scalar
+and history coverage. No renderer or fixture changes; final gates remain open.
+
 Export preparation is complete for the 106-group batch. The existing canonical
 conservation command now accepts `--prepared-followup`, pins accepted generation
 4880964f and its decoded SHA, replays original capture membership, and requires
