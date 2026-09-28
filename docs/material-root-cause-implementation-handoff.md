@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 28
 
+Latest bounded investigation: the public range-color reduction now reproduces
+the default-selection difference independently of Material authoring. Command:
+`npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/range-color-default-audit.spec.ts`.
+Chrome Headless 153 / DPR 1 / 320×180, installed AstylarUI 0.2.0: **2 failed,
+2 passed**. Both omitted-color cases resolve to `#2c3e50` in candidate normal
+and effective stages; native enabled color is `rgb(16,16,16)` and disabled is
+`rgb(197,197,197)`. Both explicit `#123456` cases agree. Shared style declarations,
+unchanged authored inputs, empty renderer diagnostics and disposal assertions
+separate this default-policy gap from a general explicit-color conversion issue.
+The literal is the generic input default at `src/app/config/browser-defaults.ts:297`.
+These are intentionally retained equality failures, not a passing parity claim.
+They do not establish visible thumb paint, drag targeting, or raster equivalence.
+The newer browser reproduces the historical sampled colors but does not replace
+the Chrome 152 original capture or authenticate all historical owners by itself.
+Failure log: `artifacts/material-parity/range-color-default-public-23e361f.log`,
+SHA-256 `d8530e48b61ff0966a64cc88efd030de80131f3b510e226465342f54298eb4ec`.
+Angular CLI build passed in 35.170 s, prerendering two routes; log:
+`artifacts/material-parity/range-color-build-23e361f.log`. Its successful output
+was removed by `withAuditScratch`. Next bind this proof to the four original
+range-color groups / 156 observations with the existing review infrastructure;
+do not infer causation for the opacity-zero input's visible Material thumb.
+The paint export remains live and unreconciled; no canonical count changes are
+claimed by this standalone reduction.
+
 Accepted grid/height export: complete-input cold export from `890de9f`
 finished in **2,354.82 seconds**, with 436/436 static and 1,875/1,875 interaction
 cases, 8,483 scalar groups / 389,202 observations, 134 source findings and
