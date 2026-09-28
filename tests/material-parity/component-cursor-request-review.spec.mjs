@@ -8,7 +8,7 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applyExplicitComponentCursors, proveExplicitComponentCursor } from './component-cursor-request-review.mjs';
 
-test('explicit component cursor requests bind 138 observations without claiming hover behavior', () => {
+test('component cursor requests bind 555 observations without claiming hover behavior', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const captured = JSON.parse(bytes), cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
@@ -16,11 +16,14 @@ test('explicit component cursor requests bind 138 observations without claiming 
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
   const snapshot = { generation: '5998d72bd0310ff4ddd8d3a44954fa5ade6655abb506f2bb85baa4935c3792d0',
     indexSha256: '8882ab9d062d52eeec3dcbadb1d72ee8518f3bb8bda8d8f4df7cc4466af89eef' };
-  const rows = ['button', 'checkbox', 'slider'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+  const rows = ['button', 'checkbox', 'slider', 'core', 'toolbar', 'card', 'menu', 'bottom-sheet', 'dialog', 'snack-bar', 'tooltip']
+    .flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
     .filter(r => r.evidence.section === 'discrepancies');
   const reviewed = applyExplicitComponentCursors(rows, cases, inventory, normalize);
   const changed = reviewed.filter((r, i) => r !== rows[i]);
-  assert.equal(changed.length, 3); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 138);
+  assert.equal(changed.length, 13); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 555);
+  const buttons = changed.filter(r => r.attribution === 'reviewed-button-cursor-request-substitution');
+  assert.equal(buttons.length, 10); assert.equal(buttons.reduce((sum, r) => sum + r.occurrences, 0), 417);
   const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
   const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
   reviewed.forEach((r, i) => {
@@ -35,7 +38,8 @@ test('explicit component cursor requests bind 138 observations without claiming 
     const [reference, candidate] = modalInventoryTrees(inventory, key);
     const owner = row.reviewEvidence.observations[0];
     const missing = structuredClone(reference);
-    missing.nodes.find(n => n.key === owner.referenceNode).rules = [];
+    if (owner.nativeAuthorCursorOmitted) missing.nodes.find(n => n.key === owner.referenceNode).inline.cursor = { value: 'pointer', important: false };
+    else missing.nodes.find(n => n.key === owner.referenceNode).rules = [];
     assert.throws(() => proveExplicitComponentCursor(entry, missing, candidate, row.element));
     const changedCandidate = structuredClone(candidate);
     changedCandidate.rules.push({ selector: '#' + row.element, cursor: 'crosshair' });

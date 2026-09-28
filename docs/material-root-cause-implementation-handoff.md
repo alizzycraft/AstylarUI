@@ -84,15 +84,19 @@ This confirms the existing public root cause under current dependencies, not tha
 every remaining Material cursor discrepancy shares it. Retain this 20,510,567-byte
 failed-case package and log; no new audit framework or fixture changes were needed.
 
-Prepared cursor review (not yet canonical): existing `applyModalBoxReview` now has
-a focused consumer in `tests/material-parity/component-cursor-request-review.mjs`
-for three groups / 138 original observations: disabled button 60, disabled checkbox
-8, slider host 70. Explicit native default/pointer requests, exact mapped owners,
-candidate authored requests/ancestry and all three captured stages prove unequal
-authoring. This excludes dialog defaults, inherited labels and actual hovered
-canvas behavior; it does not depend on the stale public capture. The focused spec
-passes in 14.96 s, preserves all raw values/unrelated rows, and rejects missing
-native requests, injected own/ancestor requests, stage changes and lost cases.
+Prepared cursor review (not yet canonical): existing `applyModalBoxReview` supports
+13 groups / 555 observations through `tests/material-parity/component-cursor-request-review.mjs`.
+Three groups / 138 observations bind explicit native requests (disabled button 60,
+disabled checkbox 8, slider host 70). Ten button-owner groups / 417 observations
+bind native omitted author requests/default computed cursor against explicit
+candidate pointer declarations (`.material-button`, `.text-button`, `.toolbar-action`).
+Exact owners, ancestor paths and all three captured stages prove unequal authoring;
+they do not prove that removing the request fixes output, since core defaults differ.
+Six cursor groups / 208 observations remain: four inherited labels (152) and two
+dialog default-policy candidates (56), plus actual hovered-canvas attribution remains
+separate. The focused spec passes in 22.46 s, preserves raw values/unrelated rows,
+and rejects missing native requests, added native/own/ancestor requests, stage
+changes and lost cases. No stale public browser evidence is used by this classifier.
 No producer integration or source-fingerprint changes while color export is live.
 Next combine this with the remaining cursor request/default investigations before
 another canonical batch; accepted unresolved count remains 715.
