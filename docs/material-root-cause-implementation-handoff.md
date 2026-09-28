@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 28
 
+**Static badge/action corner evidence bounded without recapture.** The focused
+`retained static badge` test in `authored-anchor-review.spec.mjs` authenticates
+36 original cases and 72 PNGs: 12 each badge, card action and toolbar action.
+Measured paired dimensions agree within 1e-6 CSS px. Captured native 9999px and
+candidate radius inputs reduce to the same CSS radius on these measured boxes,
+except the three contrast-card cases (12px native versus 9px candidate), already
+classified as an authored substitution. This closes the static used-box gap for
+card/toolbar; it does not extrapolate measurements to interaction cases.
+
+The badge's two upper corner edges differ by at most 1 CSS px at the sampled
+heights in all 12 cases. Lower-left paint overlaps the neighboring label and is
+not a trustworthy shape sample. Static card/toolbar corner/interior probes have
+zero contrast on both surfaces, so their actual corner shape remains unproved.
+Color and whole-control parity are not asserted. Focused test passes 1/1;
+no capture, renderer, fixture or canonical classification changed.
+
+Next obtain used boxes for retained interaction action states and check whether
+their hover/focus paint exposes corners. Do not rerun these static samples or
+the completed Share samples. Preserve transparent-control/occluded-corner gaps.
+Canonical 180 unresolved and pending 10-group stacking batch are unchanged;
+the modified spec joins source-fingerprint reconciliation at the next milestone.
+
 **Retained sheet rasters can partially answer the corner-paint gap.** No new
 browser capture was needed. A focused test in `modal-position-inspection.spec.mjs`
 authenticates the original report and all 50 paired PNGs for the 25 sheet cases.

@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { applyPreparedInputReviews, validatePreparedInputReviews } from './authored-anchor-review.mjs';
 import { applyPreparedInputFollowups, validatePreparedInputFollowups } from './authored-anchor-review.mjs';
 import { createHash } from 'node:crypto';
+import { PNG } from 'pngjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
@@ -15,6 +16,70 @@ import { applyStaticOwnerPositionReviews, proveStaticOwnerPosition } from './aut
 import { applyAuthoredCornerReviews, proveAuthoredCornerRequests } from './authored-anchor-review.mjs';
 import { proveSheetCornerBoxEvidence } from './authored-anchor-review.mjs';
 import { proveActionCornerBoxInputs, applyCardContrastCornerReview } from './authored-anchor-review.mjs';
+
+test('retained static badge and action boxes bound corner evidence without inferring invisible paint', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const cases = JSON.parse(bytes).results.filter(e => ['badge', 'card', 'toolbar'].includes(e.family));
+  assert.equal(cases.length, 36);
+  const receipts = [], counts = { badge: 0, card: 0, toolbar: 0 };
+  for (const entry of cases) {
+    counts[entry.family]++;
+    const id = { badge: 'badge-count', card: 'card-open', toolbar: 'toolbar-action' }[entry.family];
+    const geometry = entry.geometry.elements.find(e => e.id === id);
+    assert.equal(geometry.missing, false);
+    const height = entry.family === 'badge' ? 16 : { light: 40, dark: 40, contrast: 24, custom: 28 }[entry.profile];
+    for (const key of ['width', 'height']) assert.ok(Math.abs(geometry.expected[key] - geometry.actual[key]) < 1e-6);
+    assert.equal(geometry.expected.height, height);
+    const input = entry.styleInputs.find(i => i.id === id);
+    assert.equal(input.reference.borderTopLeftRadius, '9999px');
+    const candidateRadius = entry.family === 'badge' ? 8 : entry.family === 'toolbar' ? 20 :
+      { light: 20, dark: 20, contrast: 9, custom: 21 }[entry.profile];
+    assert.equal(input.astylar.borderRadius, `${candidateRadius}px`);
+    const used = (radius, box) => Math.min(radius, box.width / 2, box.height / 2);
+    const cssRadiusDelta = Math.abs(used(9999, geometry.expected) - used(candidateRadius, geometry.actual));
+    if (entry.family === 'card' && entry.profile === 'contrast') assert.equal(cssRadiusDelta, 3);
+    else assert.ok(cssRadiusDelta < 1e-6);
+    const edges = {};
+    for (const side of ['reference', 'astylar']) {
+      const file = entry.inputTrees[side].file.replace(`${side}-input-tree.json`, `${side}.png`);
+      const bytes = readFileSync(file), png = PNG.sync.read(bytes), dpr = png.width / entry.viewport.width;
+      receipts.push([file, hash(bytes)]);
+      const box = geometry[side === 'reference' ? 'expected' : 'actual'];
+      const pixel = (x, y) => {
+        const px = Math.floor(x * dpr), py = Math.floor(y * dpr);
+        assert.ok(px >= 0 && px < png.width && py >= 0 && py < png.height);
+        const offset = (py * png.width + px) * 4;
+        return [...png.data.slice(offset, offset + 3)];
+      };
+      const fill = pixel(box.left + box.width / 2, box.top + 2);
+      const background = pixel(box.left + 0.5, box.top + 0.5);
+      const vector = fill.map((v, i) => v - background[i]);
+      const energy = vector.reduce((sum, v) => sum + v * v, 0);
+      if (entry.family !== 'badge') {
+        assert.equal(energy, 0); // Invisible corners are unavailable evidence, not equivalent paint.
+        continue;
+      }
+      assert.equal(geometry.expected.width, 16);
+      assert.ok(energy > 1000);
+      // Only upper corners: lower-left is contaminated by adjacent label paint.
+      edges[side] = [false, true].flatMap(right => [1, 2, 3].map(y => {
+        for (let x = 0; x < 8; x++) {
+          const color = pixel(right ? box.right - x - 0.5 : box.left + x + 0.5, box.top + y + 0.5);
+          const coverage = color.reduce((sum, v, i) => sum + (v - background[i]) * vector[i], 0) / energy;
+          if (coverage > 0.5) return x;
+        }
+        assert.fail('badge upper corner missing');
+      }));
+      assert.ok(edges[side][0] >= 3); // Reject a square edge at x=0.
+    }
+    if (entry.family === 'badge')
+      assert.ok(edges.reference.every((value, i) => Math.abs(value - edges.astylar[i]) <= 1));
+  }
+  assert.deepEqual(counts, { badge: 12, card: 12, toolbar: 12 });
+  assert.equal(hash(JSON.stringify(receipts)), '9f27f73f9366a641331513b99af00b2979384ce47f5270a4aceab7f8c60941a1');
+});
 
 test('prepared 106-group followup conserves raw records and all prior classifications', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
