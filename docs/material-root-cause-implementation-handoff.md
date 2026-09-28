@@ -131,6 +131,24 @@ yet. Next distinguish explicit disabled/hit-layer omissions from computed/local
 measurement differences; do not collapse the inherited overlay chain to a default
 or infer actual hit behavior from these scalars.
 
+Pointer-event follow-up: existing slider peer-pointer evidence remains reusable.
+`node --test tests/material-parity/slider-peer-pointer-survey.spec.mjs` passed 2/2
+in 2.51 s, reopening all 78 cases / 156 paired owners and checking source hashes.
+Only the eight original held states suppress the start-thumb sibling; all other
+reference inputs remain auto. This is not yet a diagnosis of swapped/jerky dragging.
+Disabled controls require a separate distinction: fixture `handleClick` guards
+checkbox/radio/switch activation; core button click/hover/interaction handlers return
+when disabled, but `createButtonMesh` creates a pickable mesh and `setButtonDisabled`
+changes state, not pickability. Those five methods match the installed package
+under the existing method projection helper (handler projection SHA
+`6ca95b38753d8fe3a5f565ece6f3d5f4ff883b483034057bec47b8186e8036a9`,
+mesh-creation projection `8648471a17f811e9b07d319a68f48606041952a92b08907872f1aac1ee27e2c8`).
+The distinct CSS path is `element-creation.service.ts:400`, which disables picking
+for resolved pointerEvents none; the compatibility contract describes descendant
+inheritance. Do not substitute disabled activation guards for proof of equivalent
+CSS hit suppression. These source-level findings do not establish the actual picked
+mesh or event delivery in the Material cases; no new scalar classification yet.
+
 Color producer/validator integration is now wired and focused-verified against
 the accepted paint compact snapshot. Validation starts from original rows and
 fresh sort/sidenav retained ancestry; unbound color attributions are rejected.
