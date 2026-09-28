@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 28
 
+Exploratory next-case selection (not accepted raster/coverage proof): unchanged
+fresh showcase assets, authenticated against the keyboard-run manifest, were
+hovered in ordinary light mode at width 900 / DPR 1 and heights 1000, 260, 240.
+At height 1000 both popup tops are about 229.08px. At 260 and 240 the native
+tooltip flips above its trigger to top 149.078px/bottom 173.078px, while the
+candidate remains at top 229.080px/bottom 253.080px. Both trigger tops stay about
+181.08px and both candidate states are open. At 240 the candidate box exceeds
+the viewport bottom. All six pages report no page errors. This console-only
+probe selects the decisive boundary case; it does not prove painted visibility,
+scroll reachability or shared historical snackbar causality. Next retain paired
+trees/rasters and DPR 2 for this boundary using the existing capture machinery,
+then test scroll behavior separately. Do not repeat the tall generic overlay
+reduction or attribute unequal placement strategies to a core coordinate defect.
+
 **Tooltip keyboard question answered:** fresh ordinary-mode real Tab capture at
 DPR 1 and 2 focuses `tooltip-primary` on both sides (trusted key/focus events),
 but only the reference opens a popup. Candidate `open` stays false and its
