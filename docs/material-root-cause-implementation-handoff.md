@@ -32,9 +32,18 @@ changed. Pending classification/proof integration:
   join the existing range ownership proof before classifying omitted margins.
 - Badge: 52 owners / 208 side observations have computed native -12px versus
   candidate zero; candidate uses absolute top/right -4px and 16px dimensions.
-  Captured native medium/overlap rule margin fields are empty strings, so this
-  scan does NOT establish the native authored margin expression. Resolve it
-  through retained stylesheet/token evidence instead of treating empty as zero.
+  Follow-up authenticated all 52 reference and candidate trees and recovered
+  native authored expressions from retained rule `cssText`: medium uses
+  `margin: var(--mat-badge-container-offset, -12px 0)`; medium-overlap uses
+  `margin: var(--mat-badge-container-overlap-offset, -12px)`. Every native parent
+  has medium/overlap/above/after classes. No active captured rule defines either
+  offset custom property; native computed margin is -12px in every case.
+  Blank captured longhand declarations therefore do not mean absent intent.
+  Candidate top/right -4px and margin 0 were verified in every tree. Native
+  computed top/right are 8px, not the authored percentage anchors; do not
+  compare those used values as authored offsets. Next join the existing badge
+  anchor/structure proof to assess representation equivalence; no renderer
+  margin defect or equivalent geometry has been established by this survey.
 
 **Additional read-only spacing evidence queued:** all 68 original expansion
 cases retain reference title margin-right 16px from the authored Material title
