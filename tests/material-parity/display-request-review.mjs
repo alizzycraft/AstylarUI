@@ -3,6 +3,90 @@ import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { proveStepperPositionSubstitution } from '../../scripts/audit-material-stepper-position-substitution.mjs';
+import { proveChipPositionInspection } from './chip-position-inspection.mjs';
+
+export function proveChipSpacingComposition(entry, reference, candidate, element) {
+  assert.equal(entry.family, 'chips');
+  assert.ok(['chips-primary', 'chip-0', 'chip-1'].includes(element));
+  assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);
+  assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+  const composition = proveChipPositionInspection(reference, candidate);
+  const one = ns => { assert.equal(ns.length, 1); return ns[0]; };
+  const rn = id => one(reference.nodes.filter(n => n.attributes?.id === id));
+  const an = id => one(candidate.nodes.filter(n => n.authored?.id === id));
+  const relevant = key => /^(padding.*|margin.*|flexwrap|gap|rowgap|columngap|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  const nativeRequests = node => {
+    assert.deepEqual(Object.keys(node.inline).filter(relevant), []);
+    return node.rules.map(i => reference.rules[i]).filter(q => q.active).flatMap(q =>
+      Object.entries(q.declarations).filter(([k]) => relevant(k)).map(([key, value]) => ({ selector: q.selector, key, ...value })));
+  };
+  const ownRequests = node => {
+    assert.equal(node.authored.style, undefined); assert.equal(node.authored.attributes?.style, undefined);
+    return candidate.rules.filter(q => rootInitialSelectorCanApply(q.selector, node.authored)).flatMap(q =>
+      Object.entries(q).filter(([k]) => relevant(k)).map(([key, value]) => ({ selector: q.selector, key, value })));
+  };
+  const r = rn(element), a = an(element), input = one(entry.styleInputs.filter(i => i.id === element));
+  assert.equal(Object.keys(input.reference).length, 89);
+  for (const [k, v] of Object.entries(input.reference)) assert.deepEqual(reference.styles[r.style][k], v);
+  for (const [scalar, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']])
+    assert.deepEqual(input[scalar], a[stage]);
+  const wrapper = one(reference.nodes.filter(n => n.key === composition.referenceWrapper));
+  assert.deepEqual(nativeRequests(wrapper), [
+    { selector: '.mat-mdc-chip-set .mdc-evolution-chip-set__chips', key: 'margin-left', value: '-8px', important: false },
+    { selector: '.mat-mdc-chip-set .mdc-evolution-chip-set__chips', key: 'margin-right', value: '0px', important: false },
+    { selector: '.mdc-evolution-chip-set__chips', key: 'flex-wrap', value: 'wrap', important: false },
+  ]);
+  const wrapperStyle = reference.styles[wrapper.style];
+  assert.equal(wrapperStyle.marginLeft, '-8px'); assert.equal(wrapperStyle.flexWrap, 'wrap'); assert.equal(wrapperStyle.minWidth, '100%');
+  const host = element === 'chips-primary';
+  assert.deepEqual(nativeRequests(r), host ? [] : ['top', 'right', 'bottom', 'left'].map((side, i) => ({
+    selector: '.mat-mdc-chip-set .mdc-evolution-chip', key: 'margin-' + side, value: ['4px', '0px', '4px', '8px'][i], important: false,
+  })));
+  assert.deepEqual(ownRequests(a), host ? [
+    { selector: '.row', key: 'flexWrap', value: 'wrap' }, { selector: '.row', key: 'gap', value: '0' },
+    { selector: '#chips-primary', key: 'gap', value: '8px' },
+  ] : [{ selector: '.chip', key: 'padding', value: '0 12px' }, { selector: '.chip', key: 'gap', value: '8px' }]);
+  if (host) assert.equal(reference.styles[r.style].flexWrap, 'nowrap');
+  else {
+    const rs = reference.styles[r.style];
+    assert.equal(rs.padding, '0px'); assert.equal(rs.margin, '4px 0px 4px 8px');
+    const chip = composition.chips.find(c => c.id === element);
+    const graphic = one(reference.nodes.filter(n => n.key === chip.referenceGraphicOwner));
+    const button = one(reference.nodes.filter(n => n.key === graphic.parent));
+    assert.equal(button.type, 'button');
+    assert.equal(reference.styles[button.style].padding, '0px 12px 0px 0px');
+    assert.equal(reference.styles[graphic.style].padding, '0px 6px');
+  }
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(a[stage].margin, '0'); assert.equal(a[stage].padding, host ? '0' : '0 12px');
+    assert.equal(a[stage].gap, '8px'); if (host) assert.equal(a[stage].flexWrap, 'wrap');
+  }
+  return { referenceNode: r.key, astylarNode: a.key, composition,
+    referenceRequests: nativeRequests(r), candidateRequests: ownRequests(a), wrapperRequests: nativeRequests(wrapper),
+    firstDivergence: 'negative-margin wrapping wrapper and nested padded action replaced by direct gap and host padding',
+    inputEquivalent: false, renderingEquivalent: false, coreDefectProven: false,
+    compensationIntentProven: false, usedSpacingEquivalenceProven: false };
+}
+
+export function applyChipSpacingReviews(rows, cases, inventory, normalize) {
+  for (const element of ['chips-primary', 'chip-0', 'chip-1'])
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+      family: 'chips', element, properties: element === 'chips-primary' ? ['flexWrap']
+        : ['marginTop', 'marginBottom', 'marginLeft', 'paddingLeft', 'paddingRight'],
+      prove: (entry, reference, candidate) => proveChipSpacingComposition(entry, reference, candidate, element),
+      attribution: 'reviewed-chip-spacing-composition-substitution', owner: 'showcase chip wrapper, action and graphic authoring',
+      justification: 'Native chip wrapping belongs to a negative-margin child wrapper, with margins on chip hosts and padding on retained action/graphic descendants. Candidate wraps direct children with a gap, removes host margins, and moves padding onto fixed-width flattened chip hosts. The nowrap/wrap scalar compares different composition owners; it does not prove broken core wrapping. Preserve these structural substitutions separately from intrinsic-size, outline and state findings; nominal spacing and matching screenshots cannot establish equal inputs or used-layout equivalence.',
+    });
+  return rows;
+}
+
+export function validateChipSpacingReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-chip-spacing-composition-substitution');
+    assert.deepEqual(select(rows), select(applyChipSpacingReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`chip spacing composition lacks original evidence: ${error.message}`]; }
+}
 
 export function proveStepperSpacingComposition(entry, reference, candidate, element) {
   assert.equal(entry.family, 'stepper');

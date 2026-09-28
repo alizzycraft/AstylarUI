@@ -9,6 +9,46 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { displayRequestOwners, displayBoundaryOwners, proveDisplayRequest, applyDisplayRequestReviews, applyDisplayBoundaryReviews } from './display-request-review.mjs';
 import { proveListSpacingComposition, applyListSpacingReviews, validateListSpacingReviews } from './display-request-review.mjs';
 import { proveStepperSpacingComposition, applyStepperSpacingReviews, validateStepperSpacingReviews } from './display-request-review.mjs';
+import { proveChipSpacingComposition, applyChipSpacingReviews, validateChipSpacingReviews } from './display-request-review.mjs';
+
+test('chip spacing binds all 836 observations to nested versus flat composition', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))]
+    .filter(e => e.family === 'chips');
+  assert.equal(cases.length, 76);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'chips', {
+    generation: '9b827bb2b09ae9d20d35e1640f987c9a4972aeab04676d595d7dd5f7d6ee01ab',
+    indexSha256: 'cd3d3c45aab1db7095753132870a660f456dc80e5334787f6f4508e8d30d9486',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyChipSpacingReviews(rows, cases, inventory, normalize);
+  const changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 11); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 836);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
+  assert.deepEqual(validateChipSpacingReviews(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-chip-spacing-composition-substitution').reviewedCases.pop();
+  assert.equal(validateChipSpacingReviews(forged, rows, cases, inventory, normalize).length, 1);
+  assert.throws(() => applyChipSpacingReviews(rows, cases.slice(1), inventory, normalize));
+  for (const profile of ['light', 'dark', 'contrast', 'custom']) {
+    const entry = cases.find(e => e.profile === profile);
+    const pair = modalInventoryTrees(inventory, `${entry.kind}:chips@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+    for (const element of ['chips-primary', 'chip-0', 'chip-1']) {
+      const proof = proveChipSpacingComposition(entry, ...pair, element);
+      for (const mutate of [
+        ([r]) => { r.ruleEvidenceComplete = false; },
+        ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.padding = '50px'; },
+        ([, a]) => { a.rules.push({ selector: '#' + element, marginLeft: '8px' }); },
+        ([r]) => { r.styles[r.nodes.find(n => n.key === proof.composition.referenceWrapper).style].marginLeft = '0px'; },
+      ]) { const altered = structuredClone(pair); mutate(altered); assert.throws(() => proveChipSpacingComposition(entry, ...altered, element)); }
+    }
+  }
+});
 
 test('stepper spacing preserves all 340 owner substitutions without inferring flex or margin equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

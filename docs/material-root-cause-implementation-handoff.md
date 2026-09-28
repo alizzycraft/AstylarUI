@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 29
 
+**Chip spacing/wrapping integrated; export pending:** 11 groups / 836 observations
+across all 76 cases preserve the native negative-margin wrapping wrapper,
+4px/8px chip margins, and padded action/graphic descendants versus the candidate's
+direct gap, zero chip margins and padded fixed-width hosts. The existing chip
+composition proof is reused. This is an authored owner/structure substitution;
+native host nowrap versus candidate wrap is not proof of a core wrapping bug.
+Selection, nested graphic retention, scalar/tree joins and all three candidate
+stages are checked. Intrinsic-size, outline and state findings remain independent.
+Missing cases, forged membership, extra declarations, altered local padding and
+changed wrapper margins are rejected; raw/unrelated classifications are conserved.
+`node --test --test-name-pattern="omitted owner paint requests preserve|chip spacing binds|stepper spacing preserves|list spacing preserves" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/display-request-review.spec.mjs`
+passes **4/4**, 27,656.9139 ms. The actual guarded production tail changes exactly
+17 groups / 1,194 observations versus the current checkpoint; earlier checkpoints
+change 72 / 4,150 and 52 / 3,023. Unbound reducers do not run and validators replay
+the original population. Producer reversal retains the historical digest below;
+current producer is `bd716bf400f8a28a3bc2b173bab42478559096a728998e41fbfec4760628fc6d`.
+Canonical stays **95 unresolved**, with integrated batches projecting **58**.
+No renderer/fixture changes or new captures. Next: radio/checkbox and dialog/toolbar
+spacing, remaining flow/state and border semantics; then batch reconciliation.
+
 **Stepper spacing integrated; export pending:** five groups / 340 observations
 across all 68 cases now bind to the existing header-position substitution proof.
 Native block host has an unpadded column wrapper; native headers own 24px side

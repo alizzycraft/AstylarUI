@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyChipSpacingReviews,')) {
+    for (const [from, to] of [
+      ["import { applyChipSpacingReviews, validateChipSpacingReviews } from './display-request-review.mjs';\n", ''],
+      ['applyStepperSpacingReviews, applyChipSpacingReviews]', 'applyStepperSpacingReviews]'],
+      ['      errors.push(...validateChipSpacingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-chip-spacing-composition-substitution'))\n    errors.push('chip spacing attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated chip spacing integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyStepperSpacingReviews,')) {
     for (const [from, to] of [
       ["import { applyStepperSpacingReviews, validateStepperSpacingReviews } from './display-request-review.mjs';\n", ''],
