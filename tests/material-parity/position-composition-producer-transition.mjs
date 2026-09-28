@@ -33,9 +33,27 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restoreCaretPositionProducer(source) {
+export function restoreOwnerBoundaryProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyOwnerBoundaryReviews, validateOwnerBoundaryReviews, isOwnerBoundaryReviewRow } from './custom-owner-border-review.mjs';\n", ''],
+    ["  const beforeOwnerBoundaryReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyOwnerBoundaryReviews(beforeOwnerBoundaryReviews, cases, elementInventory, canonicalStyle)\n    : beforeOwnerBoundaryReviews;\n", ''],
+    ["      errors.push(...validateOwnerBoundaryReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n", ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isOwnerBoundaryReviewRow))\n    errors.push('owner boundary review attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/custom-owner-border-review.mjs',\n    'tests/material-parity/custom-owner-border-review.spec.mjs',\n    'tests/material-parity/overlay-origin-request-review.mjs',\n    'tests/material-parity/overlay-origin-request-review.spec.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated owner boundary integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'f8554c3fe36008b31acdb01afc03df2395a20b658436622ffed4104ff76b4b43',
+    'producer changed beyond reviewed owner boundary integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restoreCaretPositionProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const beforeOwnerBoundaryReviews =') ? restoreOwnerBoundaryProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyCaretPositionReviews, validateCaretPositionReviews, isCaretPositionReviewRow } from './overlay-position-request-review.mjs';\n", ''],
     ["  const beforeCaretPositionReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

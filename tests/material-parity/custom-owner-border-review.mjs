@@ -4,6 +4,30 @@ import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
 import { proveBadgePointerRequest } from './component-pointer-events-review.mjs';
 import { proveMotionCaretRequests } from '../../scripts/audit-material-caret-motion-context.mjs';
+import { applyOverlayOriginReviews } from './overlay-origin-request-review.mjs';
+
+const boundaryAttributions = new Set([
+  'reviewed-custom-host-border-initial-divergence', 'reviewed-table-border-reset-omission',
+  'reviewed-divider-border-background-substitution', 'reviewed-tab-border-measurement-owner',
+  'reviewed-divider-coordinate-substitution', 'reviewed-progress-position-request-omission',
+  'reviewed-progress-computed-offset-boundary', 'reviewed-badge-progress-origin-boundary',
+  'reviewed-chip-tab-origin-owner-boundary', 'reviewed-toggle-position-request-omission',
+  'reviewed-toggle-computed-offset-boundary', 'reviewed-overlay-origin-owner-boundary',
+]);
+export const isOwnerBoundaryReviewRow = row => boundaryAttributions.has(row.attribution);
+export function applyOwnerBoundaryReviews(rows, cases, inventory, normalize) {
+  return [applyCustomOwnerBorderReviews, applyDividerPositionReviews, applyProgressPositionReviews,
+    applyBadgeProgressOriginReviews, applyChipTabOriginReviews, applyTogglePositionReviews,
+    applyOverlayOriginReviews].reduce((values, apply) => apply(values, cases, inventory, normalize), rows);
+}
+export function validateOwnerBoundaryReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const expected = applyOwnerBoundaryReviews(originalRows, cases, inventory, normalize).filter(isOwnerBoundaryReviewRow);
+    assert.equal(JSON.stringify(rows.filter(isOwnerBoundaryReviewRow)), JSON.stringify(expected),
+      'complete owner boundary review differs');
+    return [];
+  } catch (error) { return [`owner boundary review does not replay: ${error.message}`]; }
+}
 
 const owners = {
   icon: ['icon-primary', 'mat-icon', 'img'],

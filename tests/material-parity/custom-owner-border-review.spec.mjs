@@ -9,6 +9,7 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder, applyDividerPositionReviews, proveDividerPositionRequests, applyProgressPositionReviews, proveProgressPositionRequests, applyBadgeProgressOriginReviews, proveBadgeProgressOrigin, applyChipTabOriginReviews, proveChipTabOrigin } from './custom-owner-border-review.mjs';
 import { applyTogglePositionReviews, proveTogglePositionRequests } from './custom-owner-border-review.mjs';
 import { applyOverlayOriginReviews } from './overlay-origin-request-review.mjs';
+import { applyOwnerBoundaryReviews, validateOwnerBoundaryReviews } from './custom-owner-border-review.mjs';
 
 test('prepared border/position/origin batch conserves the accepted caret checkpoint in full capture order', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -50,8 +51,13 @@ test('prepared border/position/origin batch conserves the accepted caret checkpo
   assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 3948);
   assert.equal(reviewed.filter(r => r.attribution === 'unresolved').length, 439);
   // Replay serialized output from original evidence, not from submitted proof objects.
-  const replay = steps.reduce((values, [apply]) => apply(values, cases, inventory, normalize), rows);
+  const replay = applyOwnerBoundaryReviews(rows, cases, inventory, normalize);
   assert.deepEqual(JSON.parse(JSON.stringify(reviewed)), JSON.parse(JSON.stringify(replay)));
+  assert.deepEqual(validateOwnerBoundaryReviews(JSON.parse(JSON.stringify(reviewed)), rows, cases, inventory, normalize), []);
+  const forged = JSON.parse(JSON.stringify(reviewed));
+  const index = reviewed.findIndex((r, i) => r !== rows[i]);
+  forged[index].classification = 'equivalent';
+  assert.equal(validateOwnerBoundaryReviews(forged, rows, cases, inventory, normalize).length, 1);
 });
 
 test('custom host initial colors retain all observations without claiming generated paint equivalence', () => {

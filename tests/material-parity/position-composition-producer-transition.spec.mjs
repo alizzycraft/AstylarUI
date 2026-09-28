@@ -16,6 +16,20 @@ import { restorePaintReviewProducer } from './position-composition-producer-tran
 import { restoreComponentColorProducer } from './position-composition-producer-transition.mjs';
 import { restoreComponentInteractionProducer } from './position-composition-producer-transition.mjs';
 import { restoreCaretPositionProducer } from './position-composition-producer-transition.mjs';
+import { restoreOwnerBoundaryProducer } from './position-composition-producer-transition.mjs';
+
+test('owner boundary integration restores the complete accepted caret predecessor', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', 'a9a2f55:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreOwnerBoundaryProducer(current).restoredSource, previous);
+  for (const fragment of ['applyOwnerBoundaryReviews(beforeOwnerBoundaryReviews',
+    'validateOwnerBoundaryReviews(report.discrepancies',
+    "errors.push('owner boundary review attribution lacks bound original cases');",
+    "    'tests/material-parity/custom-owner-border-review.mjs',\n"])
+    assert.throws(() => restoreOwnerBoundaryProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreOwnerBoundaryProducer(current + '\n// unrelated'));
+});
 
 test('caret/position integration restores the complete accepted interaction predecessor', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

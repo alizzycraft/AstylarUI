@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 28
 
+Owner-boundary producer integration is prepared and focused verification passed:
+the seven existing reviews compose under authenticated original-case binding,
+independent serialized replay rejects a forged equivalent classification, and
+unbound review claims are rejected. Four review/test modules enter source
+fingerprints. The exact producer transition restores accepted a9a2f55 source
+(LF SHA f8554c3fe36008b31acdb01afc03df2395a20b658436622ffed4104ff76b4b43),
+with all older predecessor transitions still passing. Command:
+`node --test tests/material-parity/position-composition-producer-transition.spec.mjs tests/material-parity/custom-owner-border-review.spec.mjs tests/material-parity/overlay-origin-request-review.spec.mjs`
+passed 27/27 in 47.65 s. No canonical export started; canonical remains 573
+unresolved and the combined proposal 439. Next extend the existing canonical
+conservation command for this exact 134-group / 3948-observation batch, then run
+one integration export and reconcile sections, fingerprints and receipts before
+acceptance. This supersedes the earlier instruction to add producer wiring.
+
 Prepared batch predecessor check passed after checkpoint a9a2f55. The existing
 custom-owner-border spec now composes all seven prepared reviews against the
 accepted fca6a435 compact snapshot and authenticated original capture, using all
