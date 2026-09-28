@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared overlay-origin review covers seven groups / 210 observations (tooltip
+18, dialog 192). Existing scalar/type/ancestry and motion identity proofs are
+reused, then origin/transform ownership is checked separately. The measured native
+owners have no origin/reference-box requests; tooltip's center-top origin and
+8px translation belong to ancestors. Candidate paths omit transform/origin/motion
+requests. This is a computed/local owner boundary with unequal ancestor inputs,
+not proof of misplacement, equal reference boxes or motion settlement.
+`node --test tests/material-parity/overlay-origin-request-review.spec.mjs` passes
+(1/1, 5.12 s), preserving raw/unrelated rows and rejecting candidate ancestor
+origin injection or native measured-owner origin injection across all seven owners.
+An initial test exposed absent synthetic-root style stages; the proof now verifies
+that exact absence rather than inventing empty/computed styles. No producer
+integration yet; these new files are outside the running export's dependency set.
+
+Cold caret/position export is live in unified session **91866**, started from
+88e7044 (producer integration 40980fe). Log:
+`artifacts/material-parity/caret-position-export-40980fe.log`.
+Build phase started after 0.94 s. Poll the same handle; do not restart or modify
+fingerprinted producer dependencies while it runs. Expected only incomplete-audit
+error: 573 unresolved groups. Then run `--caret-position` conservation, section
+and source reconciliation, compact import/verify before accepting the output.
+
 Next-batch replay is verified against the accepted cursor/pointer snapshot:
 `applyCaretPositionReviews` composes existing caret, slider, grid and overlay
 proofs; `validateCaretPositionReviews` checks exact serialized membership.
