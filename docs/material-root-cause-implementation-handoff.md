@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 28
 
+**Bottom-sheet action appearance producer-integrated:** both prepared link-to-button
+classifications now run and replay only with bound original evidence. The existing
+combined production-fragment test preserves all raw/unrelated records and checks
+forward/reverse application plus unbound rejection. Pending changes cover 31 groups
+/ 1,708 observations against current 8fbd (51 / 2,835 against 0a30). Modal focused
+and combined checks pass 2/2 (31.44s). Exact historical producer restoration passes;
+new producer SHA256 is
+`4d0bc199fdd7ad70a1418f17fa8754c6cb448f7cd286568c82295561174f6f00`.
+Canonical/index still has 130 unresolved groups; **99** is the projected count
+after source-receipt reconciliation and milestone export, not canonical acceptance.
+Next: four non-widget modal appearance groups (121 observations), then shared
+spacing/layout gaps. No renderer/fixture changes, new captures or full export.
+
 **Bottom-sheet action appearance classifications prepared:** two groups / 50
 observations now have a scoped application/plugin-authoring-defect reducer, using
 the existing complete modal mapping and link/list-item composition proof. It
