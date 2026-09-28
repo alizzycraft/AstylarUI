@@ -87,13 +87,25 @@ This accepts the coherent audit increment, not input equivalence or final browse
 acceptance. The 85-group anchor/corner followup above remains prepared, not in
 this generation. No exporter or reconciliation job remains running.
 
-Next prioritize the 41 minimum-size groups: eight explicit native constraints
+Prepared minimum-size review now covers all 41 groups / 2197 observations:
+eight explicit native constraints (402 observations)
 (badge min-width/min-height 16px token, card/dialog/toolbar button min-width 64px,
 slider min-width 112px, table min-width 100%) versus 33 computed-auto/local-omission
-groups. Representative owner trees show the explicit rules absent from candidate
-authoring; replay the complete populations before classification and distinguish
-fixed dimensions from minimum constraints. Then address 27 textTransform groups
-and remaining inherited/wrapping values. Preserve conditional corner-paint gaps
+groups (1795 observations). Full populations, exact owner types/aliases, 89 native
+scalars, serialized physical/logical/reset declarations, and all three candidate
+stages now pass. Raw rows and prior classifications are conserved; injected
+native declarations, candidate logical minima and stage changes are rejected for
+all 41 owner/property combinations. Focused command:
+`node --test tests/material-parity/minimum-size-request-review.spec.mjs` passes
+1/1 in 26.80 s. One mutation setup initially assumed every native text owner had
+an active rule; the test now injects a rule for unstyled owners as well.
+The range plugin reads `context.dimensions.width` (material-showcase.plugin.ts:178),
+not a hidden 112px minimum. No candidate used-minimum or core-layout equivalence
+is inferred. Existing `applyModalBoxReview` supplies the review/conservation path;
+no new exporter or capture was needed. This adds to the anchor/corner followup:
+126 prepared groups / 5605 observations, not yet in the 439-unresolved canonical
+checkpoint. Next address 27 textTransform groups and remaining inherited/wrapping
+values, then integrate a coherent batch. Preserve conditional corner-paint gaps
 for a justified browser evidence batch; do not reopen completed source questions.
 
 Prepared anchor/position followup now totals 53 groups / 2780 observations.
