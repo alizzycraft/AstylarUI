@@ -35,6 +35,16 @@ classification remain pending. Do not repeat these surveys without new evidence.
   preserves the +16px contrast difference. Do not classify omitted host padding
   as an equivalent height redistribution. The list-item rule originates in
   initial showcase commit 2f44011; deliberate later compensation is not proven.
+- Radio: all 68 cases / 136 labels have native inner-span margin-left zero,
+  native label-parent padding-left 4px, and candidate label margin-left 8px in
+  all three stages. Native `.mdc-radio` padding is 10px light/dark, 4px contrast,
+  6px custom; candidate group margin-top is 9px light/dark and 4px contrast/custom,
+  versus native group margin zero (17 cases per profile). Candidate absolute
+  options and flattened ring/label children do not preserve the native padded
+  control/label wrappers. The group offset originates in initial showcase commit
+  2f44011, not a demonstrated later regression. Treat these as composition and
+  authored-offset evidence; no used-geometry or renderer-cause equivalence is
+  established. Original report/tree hashes were authenticated during the check.
 
 **Targeted pre-export binding check completed:** text alignment (49 groups /
 2,677 observations), LTR alignment (4 / 178), reviewed-source batch (146 /
