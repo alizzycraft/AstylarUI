@@ -2,10 +2,35 @@
 
 ## Current audit checkpoint — September 28
 
+**Cold export finished but is rejected; do not import it:** session 46537 exited 1
+after 2,589,023ms. Coverage remains 436 static / 1,875 interaction cases,
+8,483 scalar groups / 389,202 observations / 134 source findings. Evidence-session
+verification passed (1,205 files, 89,154,859 bytes, no invalidations), but three
+bindings failed and unresolved groups rose to 415. This is not an accepted
+regression in findings: missing historical bindings must be reconciled first.
+The newly written docs canonical files are unaccepted working output, not the
+accepted 6f0a4c... snapshot. That accepted index has not been replaced.
+The failed manifest/payload/Markdown are retained under
+`artifacts/material-parity/failed-input-export-f5db369`; compressed payload SHA
+e50e2504dfa5fbb1e9045455923c30a2e8fec9472e8184cd27e27f222408be82,
+decoded SHA cf5873bdcfca59311cbf3d6f0d0486238092d334e348d932a4bf76aff86d2209.
+Targeted streamed inspection isolated the errors without another full builder:
+
+- ownerCaretInputs: owner-caret-source-binding rejects harness c3cabcfde... ->
+  4ed6abe8...; reuse the existing exact diagnostic-source reversal with tests.
+- reviewedInputs: historical overlay-context replay rejects harness raw-byte
+  receipt b2477a12... -> d0ded55f.... Establish newline/raw-byte provenance;
+  do not substitute a normalized hash without proving historical bytes.
+- overlaySurfaceAuditInputs: its review pins tooltip-position-composition.mjs
+  SHA 259d6d7b..., now 276502d9.... Determine the exact source transition and
+  conserve all original observations before accepting a receipt change.
+
+No export is running. Next: repair these bindings with focused original-source
+replay, then regenerate and perform full-payload conservation plus cold checks.
+
 **Read-only spacing investigations queued for the next classification batch:**
-The cold export launched from f5db369 is still running and has reached
-`validate-audit` (build elapsed 1,021,463ms). Its evidence/source inputs have
-not been changed. The following checks used the hash-pinned original report
+During the cold export launched from f5db369, its evidence/source inputs were
+not changed. The following checks used the hash-pinned original report
 b07ef154... and authenticated referenced trees, not new captures. These are
 investigation conclusions only; focused regression integration and canonical
 classification remain pending. Do not repeat these surveys without new evidence.
