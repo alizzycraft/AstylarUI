@@ -14,6 +14,47 @@ import { proveChoiceSpacingComposition, applyChoiceSpacingReviews, validateChoic
 import { proveToolbarSpacingComposition, applyToolbarSpacingReviews, validateToolbarSpacingReviews } from './display-request-review.mjs';
 import { proveDialogActionSpacing, applyDialogActionSpacingReviews, validateDialogActionSpacingReviews } from './display-request-review.mjs';
 import { proveDialogPanelGap, applyDialogPanelGapReview, validateDialogPanelGapReview } from './display-request-review.mjs';
+import { proveTooltipShrinkComposition, applyTooltipShrinkReviews, validateTooltipShrinkReviews } from './display-request-review.mjs';
+
+test('tooltip shrink preserves 80 observations across distinct parent contracts', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => e.family === 'tooltip');
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'tooltip', {
+    generation: '9b827bb2b09ae9d20d35e1640f987c9a4972aeab04676d595d7dd5f7d6ee01ab',
+    indexSha256: 'cd3d3c45aab1db7095753132870a660f456dc80e5334787f6f4508e8d30d9486',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyTooltipShrinkReviews(rows, cases, inventory, normalize);
+  const changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 2); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 80);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
+  assert.deepEqual(validateTooltipShrinkReviews(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-tooltip-shrink-composition-substitution').reviewedCases.pop();
+  assert.equal(validateTooltipShrinkReviews(forged, rows, cases, inventory, normalize).length, 1);
+  const key = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+  assert.throws(() => applyTooltipShrinkReviews(rows, cases.filter(e => key(e) !== changed[0].reviewedCases[0]), inventory, normalize));
+  for (const row of changed) {
+    const entry = cases.find(e => row.cases.includes(key(e)));
+    const pair = modalInventoryTrees(inventory, key(entry));
+    const proof = proveTooltipShrinkComposition(entry, ...pair, row.element);
+    assert.equal(proof.renderingEquivalent, null); assert.equal(proof.usedShrinkEffectProven, false);
+    for (const mutate of [
+      ([r]) => { r.ruleEvidenceComplete = false; },
+      ([r]) => { r.styles[r.nodes.find(n => n.key === proof.referenceNode).style].flexShrink = '0'; },
+      ([r]) => { r.styles[r.nodes.find(n => n.key === proof.referenceParent.key).style].display = 'grid'; },
+      ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.flexShrink = '1'; },
+      ([, a]) => { a.nodes.find(n => n.key === proof.candidateParent.key).resolvedStyle.height = '90px'; },
+      ([, a]) => { a.rules.find(q => q.selector === proof.request.selector).flexShrink = '1'; },
+      ([, a]) => { a.rules.push({ selector: '#' + row.element, flexShrink: '1' }); },
+    ]) { const altered = structuredClone(pair); mutate(altered); assert.throws(() => proveTooltipShrinkComposition(entry, ...altered, row.element)); }
+  }
+});
 
 test('dialog action spacing binds 416 observations to omitted Material requests', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

@@ -9,6 +9,75 @@ import { proveRadioPositionSubstitution } from './radio-position-substitution.mj
 import { proveToolbarPositionInspection } from './toolbar-position-inspection.mjs';
 import { inspectOwnerGapInput } from './owner-gap-input-evidence.mjs';
 
+export function proveTooltipShrinkComposition(entry, reference, candidate, element) {
+  assert.equal(entry.family, 'tooltip');
+  assert.ok(['tooltip-primary', 'tooltip-popup'].includes(element));
+  const one = values => { assert.equal(values.length, 1); return values[0]; };
+  for (const tree of [reference, candidate]) {
+    assert.deepEqual(tree.errors, []); assert.equal(tree.ruleEvidenceComplete, true);
+  }
+  assert.equal(candidate.resolvedStyleEvidenceVersion, 2);
+  assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  const display = element === 'tooltip-popup' ? proveDisplayRequest(entry, reference, candidate, element) : null;
+  const r = one(reference.nodes.filter(n => display ? n.key === display.referenceNode : n.attributes?.id === element));
+  const a = one(candidate.nodes.filter(n => n.authored?.id === element));
+  assert.equal(Object.keys(input.reference).length, 89);
+  for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[r.style][key], value);
+  const relevant = key => /^(flex|flex-shrink|flexShrink|all)$/.test(key);
+  const select = value => Object.fromEntries(Object.entries(value ?? {}).filter(([key]) => relevant(key)));
+  assert.deepEqual(select(r.inline), {}); assert.deepEqual(select(a.authored.style), {});
+  assert.equal(a.authored.attributes?.style, undefined);
+  const rules = r.rules.map(i => reference.rules[i]).filter(q => q.active);
+  assert.ok(rules.every(q => Object.keys(select(q.declarations)).length === 0));
+  assert.ok(rules.every(q => !/(?:^|;)\s*(?:flex(?:-shrink)?|all)\s*:/i.test(q.cssText)));
+  const selector = element === 'tooltip-primary' ? '.tooltip-anchor .material-button' : '#tooltip-popup';
+  const request = one(input.astylarAuthored.filter(q => Object.keys(select(q.declarations)).length));
+  assert.equal(request.selector, selector); assert.deepEqual(select(request.declarations), { flexShrink: '0' });
+  assert.deepEqual(select(one(candidate.rules.filter(q => q.selector === selector))), { flexShrink: '0' });
+  const competing = candidate.rules.filter(q => (q.selector === selector || rootInitialSelectorCanApply(q.selector, a.authored)) && Object.keys(select(q)).length);
+  assert.deepEqual(competing.map(q => ({ selector: q.selector, declarations: select(q) })), [{ selector, declarations: { flexShrink: '0' } }]);
+  assert.equal(reference.styles[r.style].flexShrink, '1');
+  for (const [scalar, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']]) {
+    assert.deepEqual(input[scalar], a[stage]); assert.equal(a[stage].flexShrink, '0');
+  }
+  const rp = one(reference.nodes.filter(n => n.key === r.parent));
+  const ap = one(candidate.nodes.filter(n => n.key === a.parent));
+  assert.equal(ap.authored.id, 'tooltip-anchor');
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(ap[stage].display, 'flex'); assert.equal(ap[stage].flexDirection, 'column');
+    assert.equal(ap[stage].height, '72px'); assert.equal(ap[stage].gap, '8px');
+  }
+  const primary = element === 'tooltip-primary';
+  assert.equal(reference.styles[rp.style].display, primary ? 'block' : 'inline-flex');
+  if (primary) assert.equal(rp.attributes.id, 'tooltip-root');
+  else assert.ok(rp.attributes.class.split(/\s+/).includes('mat-mdc-tooltip'));
+  return { referenceNode: r.key, astylarNode: a.key, display, request,
+    referenceParent: { key: rp.key, display: reference.styles[rp.style].display },
+    candidateParent: { key: ap.key, id: ap.authored.id, display: 'flex', flexDirection: 'column', height: '72px', gap: '8px' },
+    referenceComputedShrink: '1', candidateRequestedShrink: '0', nativeOwnerIsFlexItem: !primary,
+    firstDivergence: 'separate native button/overlay owners replaced by a nonshrinking shared column',
+    inputEquivalent: false, renderingEquivalent: null, usedShrinkEffectProven: false, originalRasterCauseProven: false };
+}
+
+export function applyTooltipShrinkReviews(rows, cases, inventory, normalize) {
+  for (const element of ['tooltip-primary', 'tooltip-popup']) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'tooltip', element, properties: ['flexShrink'],
+    prove: (entry, r, a) => proveTooltipShrinkComposition(entry, r, a, element),
+    attribution: 'reviewed-tooltip-shrink-composition-substitution', owner: 'tooltip fixture structure and flex sizing authoring',
+    justification: 'Candidate explicitly disables shrinking inside a shared 72px column with an 8px gap. Native button belongs to normal block flow (its computed shrink is not an active flex-item request); native tooltip surface belongs to a separate inline-flex overlay owner with default shrink. These distinct parent/axis contracts are not equivalent inputs. This does not prove used shrink, a core flex defect, or the cause of tooltip position/blur.',
+  });
+  return rows;
+}
+
+export function validateTooltipShrinkReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-tooltip-shrink-composition-substitution');
+    assert.deepEqual(select(rows), select(applyTooltipShrinkReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`tooltip shrink lacks original evidence: ${error.message}`]; }
+}
+
 export function proveDialogPanelGap(entry, reference, candidate) {
   assert.equal(entry.family, 'dialog');
   assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);

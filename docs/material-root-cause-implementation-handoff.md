@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 29
 
+**Tooltip shrink question answered; integration pending:** two groups / 80
+observations (62 trigger, 18 popup) bind explicit candidate `flexShrink:0` to a
+shared 72px column with 8px gap. Native trigger is in block flow, so its computed
+shrink:1 is not an active flex-item request; native popup belongs to a separate
+inline-flex tooltip owner. This is a demonstrated composition/input substitution,
+not proof of a used shrink effect, core flex defect, or tooltip blur/displacement.
+The original capture hash and all three local candidate stages are checked;
+missing/forged membership, changed parents/requests/stages, competing shrink rules
+and raw/unrelated conservation have focused coverage.
+`node --test --test-name-pattern="tooltip shrink preserves" tests/material-parity/display-request-review.spec.mjs`
+passes **1/1**, 2,625.4808 ms total. History `f3c8254` introduced the shared column
+and trigger shrink override while changing popup absolute positioning to relative
+and adding `translate(93px, 37px)`; popup shrink:0 predates that change. Current
+source retains the column/shrink contract at
+`examples/material-showcase/src/app/astylar.component.ts:809` and `:1076`.
+This establishes provenance, not the original rendering failure's cause.
+Canonical remains **95 unresolved**, integrated projection **16**; these two
+new classifications await integration. Next: integrate, then expansion/tree and
+remaining styling questions. Export reconciliation and final gates remain pending.
+No renderer/fixture changes or new captures.
+
 **Panel visibility integrated; export pending:** the two-group / 138-observation
 state-owner proof from `b89731a` now runs in the bound production tail with
 independent replay and rejection of unbound attribution. The tail changes
