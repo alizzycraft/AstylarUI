@@ -20,7 +20,7 @@ test('custom host initial colors retain all observations without claiming genera
     indexSha256: 'd0446d1c61bec60527c34459da6a28e4af1699793c50b38fef93846627cd6aca',
   })).filter(r => r.evidence.section === 'discrepancies');
   const reviewed = applyCustomOwnerBorderReviews(rows, cases, inventory, normalize), changed = reviewed.filter((r, i) => r !== rows[i]);
-  assert.equal(changed.length, 55); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 1136);
+  assert.equal(changed.length, 71); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 1696);
   const dividerTop = changed.filter(r => r.family === 'divider' && r.property === 'borderTopColor');
   assert.equal(dividerTop.length, 1); assert.equal(dividerTop[0].occurrences, 24);
   assert.equal(dividerTop[0].classification, 'application-plugin-authoring-defect');
@@ -31,7 +31,7 @@ test('custom host initial colors retain all observations without claiming genera
   const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
   reviewed.forEach((r, i) => { assert.deepEqual(raw(r), raw(rows[i])); if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
   for (const family of families) {
-    const row = changed.find(r => r.family === family), key = row.reviewedCases[0];
+    const row = changed.find(r => r.family === family && (family !== 'tabs' || r.element === 'tab-panel')), key = row.reviewedCases[0];
     const e = cases.find(e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === key);
     const [r, a] = modalInventoryTrees(inventory, key), proof = proveCustomOwnerBorder(e, r, a, normalize);
     assert.equal(proof.generatedChildPaintVerified, false);
@@ -67,5 +67,19 @@ test('custom host initial colors retain all observations without claiming genera
       delete missingWidth.rules.find(rule => rule.selector === '.material-table').borderWidth;
       assert.throws(() => proveCustomOwnerBorder(e, r, missingWidth, normalize));
     }
+  }
+  for (const element of ['tab-overview', 'tab-activity']) {
+    const row = changed.find(r => r.element === element), key = row.reviewedCases[0];
+    assert.equal(row.classification, 'parity-harness-defect');
+    const e = cases.find(e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === key);
+    const [r, a] = modalInventoryTrees(inventory, key);
+    const proof = proveCustomOwnerBorder(e, r, a, normalize, element);
+    assert.ok(proof.composition); assert.equal(proof.renderingEquivalent, false);
+    const mutated = structuredClone(a);
+    mutated.rules.push({ selector: '#' + element, borderColor: 'currentcolor' });
+    assert.throws(() => proveCustomOwnerBorder(e, r, mutated, normalize, element));
+    const native = structuredClone(r);
+    native.nodes.find(n => n.key === proof.referenceNode).inline.border = { value: '0', important: false };
+    assert.throws(() => proveCustomOwnerBorder(e, native, a, normalize, element));
   }
 });

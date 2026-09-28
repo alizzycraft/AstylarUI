@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+Tab border measurements are now joined to the existing composition proof:
+native text-label span versus candidate button, 70 cases per control / 16 groups /
+560 color observations. Label border requests are absent; candidate `.tab`
+requests width/radius zero but exposes transparent initial color. Classified as
+a measurement-owner boundary, not equivalent control paint or a missing native
+button reset. Shared review now covers 71 groups / 1696 observations; focused
+test passes (1/1, 5.83 s), including both controls' native/candidate declaration
+mutation rejections. An initial negative selected a newly reviewed tab-control
+row while invoking the panel proof; the test now selects the panel explicitly
+and verifies controls separately. Raw/unrelated rows remain conserved.
+Badge triage authenticated 52 alias pairs using the existing pointer identity
+proof. Its native rules request radius tokens and transform-only transition
+with a none override; candidate radius is 8px. Those requests must be preserved
+separately from color omission, not rejected/erased as if absent. Eight border
+groups / 208 observations remain to review. No canonical/export dependency edits.
+
 Progress-host border omission review now covers both hosts' 40 captured cases /
 16 groups / 160 observations. Native motion is exactly opacity 250ms; spinner
 also captures transition:none !important. Neither requests border/color motion.

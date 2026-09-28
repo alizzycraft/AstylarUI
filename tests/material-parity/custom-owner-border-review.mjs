@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
+import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
 
 const owners = {
   icon: ['icon-primary', 'mat-icon', 'img'],
@@ -16,14 +17,19 @@ const sides = ['Top', 'Right', 'Bottom', 'Left'];
 
 // Explicit host pairs, not a widening of ordinary-element or native-control
 // assumptions. No claims about a plugin's generated children or painted output.
-export function proveCustomOwnerBorder(entry, reference, candidate, normalize) {
-  const [id, nativeType, candidateType] = owners[entry.family];
+export function proveCustomOwnerBorder(entry, reference, candidate, normalize, element) {
+  const tabControl = entry.family === 'tabs' && ['tab-overview', 'tab-activity'].includes(element);
+  const [id, nativeType, candidateType] = tabControl ? [element, 'span', 'button'] : owners[entry.family];
   const inputs = entry.styleInputs.filter(i => i.id === id); assert.equal(inputs.length, 1);
   const input = inputs[0];
   const rs = reference.nodes.filter(n => n.attributes?.['data-parity-id'] === id || n.attributes?.id === id);
   const as = candidate.nodes.filter(n => n.authored?.id === id);
   assert.equal(rs.length, 1); assert.equal(as.length, 1);
   const r = rs[0], a = as[0];
+  const composition = tabControl ? proveTabControlStage(reference, candidate, id) : undefined;
+  if (composition) {
+    assert.equal(composition.referenceLabel, r.key); assert.equal(composition.candidateControl, a.key);
+  }
   assert.equal(r.type, nativeType); assert.equal(a.authored.type, candidateType);
   assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);
   assert.equal(candidate.resolvedStyleEvidenceVersion, 2);
@@ -87,8 +93,9 @@ export function proveCustomOwnerBorder(entry, reference, candidate, normalize) {
   const ownRules = candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, a.authored));
   const candidateRequests = ownRules.flatMap(rule => Object.entries(rule).filter(([k]) => relevant(k))
     .map(([property, value]) => ({ selector: rule.selector, property, value })));
-  assert.deepEqual(candidateRequests, entry.family === 'table'
-    ? [{ selector: '.material-table', property: 'borderWidth', value: '0' }] : []);
+  assert.deepEqual(candidateRequests, tabControl
+    ? [{ selector: '.tab', property: 'borderWidth', value: '0' }, { selector: '.tab', property: 'borderRadius', value: '0' }]
+    : entry.family === 'table' ? [{ selector: '.material-table', property: 'borderWidth', value: '0' }] : []);
   const native = normalize(input.reference);
   assert.match(native.color, /^rgba\(\d+,\d+,\d+,1\)$/);
   for (const side of sides) {
@@ -108,6 +115,7 @@ export function proveCustomOwnerBorder(entry, reference, candidate, normalize) {
   }
   return { referenceNode: r.key, astylarNode: a.key, nativeType, candidateType,
     nativeRules, candidateRules: ownRules, candidateRequests, referenceColor: native.color,
+    ...(composition ? { composition } : {}),
     inputEquivalent: false, renderingEquivalent: false, generatedChildPaintVerified: false,
     motionSettlementVerified: false,
     scope: entry.family === 'divider' ? 'Explicit top-border/background substitution; three other native sides retain zero/none initial colors. No paint equivalence.'
@@ -141,6 +149,13 @@ export function applyCustomOwnerBorderReviews(rows, cases, inventory, normalize)
     owner: 'showcase divider border and theme-token input translation',
     prove: (e, r, a) => proveCustomOwnerBorder(e, r, a, normalize),
     justification: 'The native divider requests a solid 1px top border using the Material outline token; the candidate omits borders and paints a 1px-high background with literal #cac4d0. This is an authored paint-primitive and token substitution, consistent with the separately retained absolute-flow compensation finding. Matching thin-line screenshots cannot establish equal inputs. Other omitted border sides, layout, contextual theme resolution and final raster remain separate; restore authored intent before diagnosing equal-input core paint.',
+  });
+  for (const element of ['tab-overview', 'tab-activity']) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'tabs', element, properties: sides.map(s => `border${s}Color`),
+    classification: 'parity-harness-defect', attribution: 'reviewed-tab-border-measurement-owner',
+    owner: 'tab label versus control measurement boundary',
+    prove: (e, r, a) => proveCustomOwnerBorder(e, r, a, normalize, element),
+    justification: 'The authenticated scalar owner is a native text-label span inside the tab control, compared with a candidate button. The native label omits border declarations and computes zero/none currentcolor borders; the candidate button explicitly sets width/radius zero and retains transparent initial color. Existing tab composition proof preserves the distinct control/label hierarchy. This local observation cannot establish equivalent control borders, missing native reset translation or a renderer paint defect. Parent control requests and output remain separate.',
   });
   return rows;
 }
