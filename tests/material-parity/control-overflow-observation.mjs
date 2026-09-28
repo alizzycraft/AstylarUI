@@ -5,6 +5,7 @@ import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { proveTabPanelWrapping } from './wrapping-input-review.mjs';
+import { proveSliderMarginOwner } from './slider-position-request-review.mjs';
 
 export const mappedVisibleOwners = Object.freeze({
   paginator: ['paginator-range', 'paginator-size'], stepper: ['stepper-content'],
@@ -171,7 +172,7 @@ export function applyTableVisibleOverflow(rows, cases, inventory, normalize) {
     'src/app/services/dom/elements/table.service.ts': '0d96f98c3bdcfbba71a1eaa839cfa34d19e5621471b27929574334535e7733c9',
     'src/app/services/dom/elements/element-creation.service.ts': 'bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a',
     'src/app/services/dom/elements/element-creation.service.spec.ts': 'c968bb582c470305f1a83144319d6aaa9d85f6089e19c21c7eff6ca4b09e2830',
-    'tests/material-parity/control-overflow-observation.spec.mjs': '7dd26e7d37cee3402ce75b6dac78a63cf57549b182607aaa8592672ff798fb1e' };
+    'tests/material-parity/control-overflow-observation.spec.mjs': 'd9f94882d8098d282535978a4d5d8b1908a220abe2cb10613c91269b9715c6e6' };
   for (const [file, expected] of Object.entries(sources)) assert.equal(createHash('sha256')
     .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
   return applyModalBoxReview(rows, cases, inventory, normalize, {
@@ -234,6 +235,55 @@ export function proveRemainingControlOverflowInputs(entry, r, a, element) {
   return { ...proveOmittedOverflowOwner(entry, r, a, element, ...types[element]),
     referenceType: types[element][0], candidateType: types[element][1],
     initialValueEquivalent: false, ownClippingBranchVerified: false, renderingEquivalent: false };
+}
+
+export function proveControlOverflowOwnerBoundary(entry, r, a, element) {
+  const inputs = proveRemainingControlOverflowInputs(entry, r, a, element);
+  const native = r.nodes.find(n => n.key === inputs.referenceNode);
+  const candidate = a.nodes.find(n => n.key === inputs.astylarNode);
+  assert.deepEqual(a.nodes.filter(n => n.parent === candidate.key), []);
+  if (element === 'slider-visual') {
+    const composition = proveSliderMarginOwner(entry, r, a);
+    assert.equal(composition.referenceNode, inputs.referenceNode);
+    assert.equal(composition.astylarNode, inputs.astylarNode);
+    return { ...inputs, composition, boundary: 'native slider host versus child visual plugin',
+      pluginOverflowSensitivityVerified: false, inputEquivalent: false, coreDefectProven: false };
+  }
+  assert.equal(entry.family, 'tabs'); assert.equal(candidate.authored.role, 'tab');
+  const parent = node => { const matches = r.nodes.filter(n => n.key === node.parent); assert.equal(matches.length, 1); return matches[0]; };
+  const label = parent(native), content = parent(label), control = parent(content);
+  assert.ok(label.attributes.class.split(/\s+/).includes('mdc-tab__text-label'));
+  assert.ok(content.attributes.class.split(/\s+/).includes('mdc-tab__content'));
+  assert.equal(control.attributes.role, 'tab'); assert.equal(control.type, 'div');
+  const ancestors = []; let current = control;
+  while (current.attributes?.id !== 'tabs-primary') {
+    current = parent(current);
+    ancestors.push({ node: current.key, type: current.type,
+      overflowX: r.styles[current.style].overflowX, overflowY: r.styles[current.style].overflowY });
+    assert.ok(ancestors.length < r.nodes.length);
+  }
+  assert.equal(ancestors.filter(n => n.overflowX === 'hidden' && n.overflowY === 'hidden').length, 2);
+  return { ...inputs, boundary: 'native nested text leaf versus flattened button paint owner',
+    nativeLabel: label.key, nativeContent: content.key, nativeControl: control.key, nativeAncestors: ancestors,
+    inputEquivalent: false, ancestorClippingEquivalent: false, coreDefectProven: false };
+}
+
+export function applyControlOverflowOwnerBoundaries(rows, cases, inventory, normalize) {
+  return [['slider', 'slider-visual'], ['tabs', 'tab-overview'], ['tabs', 'tab-activity']].reduce((values, [family, element]) =>
+    applyModalBoxReview(values, cases, inventory, normalize, {
+      family, element, properties: ['overflowX', 'overflowY'], classification: 'parity-harness-defect',
+      attribution: 'reviewed-control-overflow-owner-boundary', owner: 'scalar overflow measurement ownership',
+      prove: (entry, r, a) => proveControlOverflowOwnerBoundary(entry, r, a, element),
+      justification: 'The exact native/candidate pair omits overflow declarations but measures different owners: native slider host versus its decomposed visual child, or nested native tab text versus a flattened button. Original tree ancestry proves the boundary mismatch. Native visible versus omitted local candidate data cannot establish equal clipping or a core overflow defect. Preserve separate composition/typography/interaction findings; no candidate overflow value, plugin clipping behavior or raster equivalence is invented.',
+    }), rows);
+}
+
+export function validateControlOverflowOwnerBoundaries(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(row => row.attribution === 'reviewed-control-overflow-owner-boundary');
+    assert.deepEqual(select(rows), select(applyControlOverflowOwnerBoundaries(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`control overflow owner boundary lacks original ancestry proof: ${error.message}`]; }
 }
 
 export function applyHeadingVisibleOverflow(rows, cases, inventory, normalize) {

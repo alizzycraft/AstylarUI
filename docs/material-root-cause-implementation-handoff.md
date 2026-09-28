@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+**Six control-overflow owner groups prepared:** the 78 slider visual cases reuse
+the independently bound composition proof: native host owns both inputs, while
+the measured candidate visual is their sibling under the range-stack parent.
+The 140 tab cases prove native leaf -> text-label -> content -> role-tab control
+ancestry, with two hidden-overflow header ancestors, versus a childless candidate
+button. Native measured leaves can compute display:block (flex item blockification);
+do not describe them as necessarily inline or use inline applicability as proof.
+Six groups / 436 observations are harness measurement-owner boundaries, not an
+equivalence waiver or confirmed renderer overflow defect. Candidate clipping,
+plugin overflow sensitivity, inherited clipping and final raster stay unproved;
+existing composition/typography findings remain. Focused replay verifies exact
+population, raw/unrelated conservation and rejects broken native role ancestry,
+missing cases and forged membership. Canonical remains 130 unresolved; together
+with the prepared table groups, eight groups await batch producer integration.
+Next investigate the four native/candidate range-input overflow groups separately.
+
 **Remaining control overflow owners bound:** all 156 original range inputs are
 native-input to candidate-input; 78 slider visual owners are mat-slider to
 mesh-rendering range plugin; 140 tab owners are native text spans to candidate

@@ -15,7 +15,8 @@ import { proveHeadingVisibleOverflow, applyHeadingVisibleOverflow, validateHeadi
 import { proveTabPanelOverflowBoundary, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
 import { proveTableOverflowInputs, applyTableVisibleOverflow, validateTableVisibleOverflow } from './control-overflow-observation.mjs';
 import { chromium } from 'playwright-core';
-import { proveRemainingControlOverflowInputs } from './control-overflow-observation.mjs';
+import { proveRemainingControlOverflowInputs, proveControlOverflowOwnerBoundary,
+  applyControlOverflowOwnerBoundaries, validateControlOverflowOwnerBoundaries } from './control-overflow-observation.mjs';
 
 test('remaining range and tab overflow inputs retain exact owner boundaries', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -44,6 +45,26 @@ test('remaining range and tab overflow inputs retain exact owner boundaries', ()
     }
   }
   assert.deepEqual(counts, { 'slider-start': 78, 'slider-primary': 78, 'slider-visual': 78, 'tab-overview': 70, 'tab-activity': 70 });
+  const rows = Object.keys(owners).flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '8fbd2e22dfd801587ce6c1dce90e6daba668171ae26eae0a9c834142a8bd0a43',
+    indexSha256: '6f86d55a6ea6be0f1533ac893579bf517769061ed25a13812b0370c46b7c06e6',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const normalize = bindPreciseAuditNormalization(), applied = applyControlOverflowOwnerBoundaries(rows, cases, inventory, normalize);
+  const changed = applied.filter((row, i) => row !== rows[i]);
+  assert.equal(changed.length, 6); assert.equal(changed.reduce((n, row) => n + row.occurrences, 0), 436);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  applied.forEach((row, i) => { if (!changed.includes(row)) assert.deepEqual(row, rows[i]); });
+  assert.deepEqual(validateControlOverflowOwnerBoundaries(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied); forged.find(row => row.attribution === 'reviewed-control-overflow-owner-boundary').reviewedCases.pop();
+  assert.equal(validateControlOverflowOwnerBoundaries(forged, rows, cases, inventory, normalize).length, 1);
+  const entry = cases.find(e => e.family === 'tabs');
+  const pair = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+  const proof = proveControlOverflowOwnerBoundary(entry, ...pair, 'tab-overview');
+  const broken = structuredClone(pair); broken[0].nodes.find(n => n.key === proof.nativeControl).attributes.role = 'button';
+  assert.throws(() => proveControlOverflowOwnerBoundary(entry, ...broken, 'tab-overview'));
+  assert.throws(() => applyControlOverflowOwnerBoundaries(rows, cases.slice(1), inventory, normalize));
 });
 
 test('native table omitted overflow retains visible descendants with hidden and ancestor sensitivity', async () => {
