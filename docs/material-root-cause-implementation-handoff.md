@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 28
 
+**Chip/tab appearance review producer-integrated:** the existing production
+pipeline now applies and validates the three owner-boundary classifications only
+with bound original evidence. The combined test executes the actual pipeline
+fragment in forward and reverse order: 49 groups / 2,785 observations change
+against 0a30, and 29 / 1,658 against current 8fbd; all raw observations and
+unrelated rows remain unchanged. Focused chip/tab and combined tests pass 2/2
+(22.36s). Exact historical producer restoration still authenticates
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+current producer SHA256 is
+`16563e25a9217ba12a2a6a690df9457821460996bdda6058876c3e0f8f4d81b0`.
+Canonical/index remains 130 unresolved; projected count is **101** after the
+pending source-receipt reconciliation/export milestone. Next unresolved scope:
+six modal appearance groups, followed by shared spacing/layout inputs. No
+renderer/fixture edits, recapture or full export in this integration increment.
+
 **Chip/tab appearance owner review prepared, not producer-integrated:** the focused
 original-evidence check passes for three groups / 222 observations (two chip
 owners, 76 each; tab panel, 70). The unfinished proof initially assumed the
