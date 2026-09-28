@@ -33,9 +33,27 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restorePaintReviewProducer(source) {
+export function restoreComponentColorProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyComponentColorReviews, validateComponentColorReviews, isComponentColorReviewRow } from './component-color-request-review.mjs';\n", ''],
+    ["  const beforeComponentColorReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyComponentColorReviews(beforeComponentColorReviews, cases, elementInventory, retainedTypography, canonicalStyle)\n    : beforeComponentColorReviews;\n", ''],
+    ["      errors.push(...validateComponentColorReviews(report.discrepancies, replayedRows, cases, report.elementInventory,\n        collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), report.elementInventory), canonicalStyle));\n", ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isComponentColorReviewRow))\n    errors.push('component color review attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/component-color-request-review.mjs',\n    'tests/material-parity/component-color-request-review.spec.mjs',\n    'examples/material-showcase/src/app/range-color-default-audit.spec.ts',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated component color integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), '3c45893048e7cebdcc34985eb9767b109f076048f1c33345c85cdef5ee457507',
+    'producer changed beyond reviewed component color integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restorePaintReviewProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const beforeComponentColorReviews =') ? restoreComponentColorProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyPaintReviews, validatePaintReviews, collectPaintReviewSources, isPaintReviewRow } from './control-state-paint-review.mjs';\n", ''],
     ["  const beforePaintReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],

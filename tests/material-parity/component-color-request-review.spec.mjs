@@ -21,8 +21,8 @@ test('component color requests preserve 922 observations across container, inher
     ...captured.interactions.map(e => ({ ...e, kind: 'interaction' }))];
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
   const retained = collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), inventory);
-  const snapshot = { generation: '04ec615b0e97cdc75f44b817efca421d24a79cb04d7bc1f2f22969b99a4c4240',
-    indexSha256: '7698638b57da8d8c8f4bf50902886f11c3d3304e45078771917b804c6c30a075' };
+  const snapshot = { generation: '5998d72bd0310ff4ddd8d3a44954fa5ade6655abb506f2bb85baa4935c3792d0',
+    indexSha256: '8882ab9d062d52eeec3dcbadb1d72ee8518f3bb8bda8d8f4df7cc4466af89eef' };
   const rows = ['sort', 'sidenav', 'toolbar', 'radio', 'expansion', 'icon', 'paginator', 'slider', 'dialog', 'snack-bar', 'bottom-sheet', 'chips', 'tabs', 'progress-bar', 'progress-spinner'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
     .filter(r => r.evidence.section === 'discrepancies');
   const result = applyComponentColorRequests(rows, cases, inventory, retained, normalize);

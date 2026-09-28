@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { applyPaintReviews, validatePaintReviews, collectPaintReviewSources, isPaintReviewRow } from './control-state-paint-review.mjs';
+import { applyComponentColorReviews, validateComponentColorReviews, isComponentColorReviewRow } from './component-color-request-review.mjs';
 import { applyBoxSizingReviews, validateBoxSizingReviews, replayBoxSizingPredecessors, boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
 import { applyGridHeightReviews, validateGridHeightReviews, replayGridHeightPredecessors, isGridHeightReviewAttribution } from './mapped-grid-template-review.mjs';
 import { applyWrappingReviews, validateWrappingReviews, wrappingAttributions } from './wrapping-input-review.mjs';
@@ -340,9 +341,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforePaintReviews = ownerInitialStyleBinding.status === 'bound'
     ? applyGridHeightReviews(beforeGridHeightReviews, cases, elementInventory, canonicalStyle)
     : beforeGridHeightReviews;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforeComponentColorReviews = ownerInitialStyleBinding.status === 'bound'
     ? applyPaintReviews(beforePaintReviews, cases, elementInventory, retainedTypography, canonicalStyle, collectPaintReviewSources())
     : beforePaintReviews;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyComponentColorReviews(beforeComponentColorReviews, cases, elementInventory, retainedTypography, canonicalStyle)
+    : beforeComponentColorReviews;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -663,6 +667,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
         report.rootFlowHeightInputs, report.buttonPillRadiusInputs, report.buttonFlexInputs, report.buttonHostRequestInputs,
         report.buttonFixedWidthInputs, report.ownerGridInitialInputs, report.buttonBoxSizingInputs, report.fieldHostLayoutInputs, report.ownerGapInputs, report.explicitGapInputs, report.gapReviewInputs, report.ownerCaretInputs, report.reviewedInputs, report.followupInputs, report.alignmentFontInputs, report.textAlignInputs, report.ltrAlignmentInputs, report.reviewedSourceBatchInputs, report.rootBackgroundInputs);
       const selected = rows => rows.filter(r => r.attribution === ownerInitialStyleAttribution);
+      errors.push(...validateComponentColorReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
+        collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), report.elementInventory), canonicalStyle));
       errors.push(...validatePaintReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
         collectRetainedTypographyEvidence(cases.filter(e => e.family === 'stepper'), report.elementInventory),
         canonicalStyle, collectPaintReviewSources()));
@@ -762,6 +768,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     errors.push('grid/height review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isPaintReviewRow))
     errors.push('paint review attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isComponentColorReviewRow))
+    errors.push('component color review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))
     errors.push('button-host line-height attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>
@@ -9066,6 +9074,9 @@ function sourceFingerprints(root) {
     'tests/material-parity/overlay-trigger-paint-review.mjs',
     'tests/material-parity/overlay-trigger-paint-review.spec.mjs',
     'examples/material-showcase/src/app/range-background-default-audit.spec.ts',
+    'tests/material-parity/component-color-request-review.mjs',
+    'tests/material-parity/component-color-request-review.spec.mjs',
+    'examples/material-showcase/src/app/range-color-default-audit.spec.ts',
     'tests/material-parity/wrapping-input-populations.spec.mjs',
     'examples/material-showcase/src/app/material-plugin/tab-panel-wrapping-audit.spec.ts',
     'tests/material-parity/tab-scalar-typography-reuse.spec.mjs',

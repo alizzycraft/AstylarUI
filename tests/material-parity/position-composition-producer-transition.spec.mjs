@@ -13,6 +13,20 @@ import { restoreTypographyReviewProducer } from './position-composition-producer
 import { restoreBoxSizingReviewProducer } from './position-composition-producer-transition.mjs';
 import { restoreGridHeightReviewProducer } from './position-composition-producer-transition.mjs';
 import { restorePaintReviewProducer } from './position-composition-producer-transition.mjs';
+import { restoreComponentColorProducer } from './position-composition-producer-transition.mjs';
+
+test('component color integration restores the complete accepted paint predecessor', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '7121d16:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restoreComponentColorProducer(current).restoredSource, previous);
+  for (const fragment of ['applyComponentColorReviews(beforeComponentColorReviews, cases',
+    'validateComponentColorReviews(report.discrepancies, replayedRows',
+    "errors.push('component color review attribution lacks bound original cases');",
+    "    'tests/material-parity/component-color-request-review.mjs',\n"])
+    assert.throws(() => restoreComponentColorProducer(current.replace(fragment, '')));
+  assert.throws(() => restoreComponentColorProducer(current + '\n// unrelated'));
+});
 
 test('paint integration restores the complete accepted grid/height predecessor', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

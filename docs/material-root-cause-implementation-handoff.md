@@ -35,6 +35,16 @@ requests from two dialog actions with no local request, four label-local omissio
 plugin range visual. This is routing evidence, not a diagnosis of actual hover
 cursor behavior. Native rules and candidate ancestry still require binding.
 
+Color producer/validator integration is now wired and focused-verified against
+the accepted paint compact snapshot. Validation starts from original rows and
+fresh sort/sidenav retained ancestry; unbound color attributions are rejected.
+The module, spec and public range-color reduction enter source fingerprints.
+Exact source restoration authenticates the complete `7121d16` producer and rejects
+removed proof/guard fragments or unrelated edits. Color plus producer-transition
+suites passed **22/22 in 34.84 s**. Next extend the existing conservation command
+for this 36-group batch before the next cold export. The full canonical validation
+path has not yet run with this hook; canonical unresolved remains **715**.
+
 ### Prepared color work and preceding checkpoint evidence
 
 Latest bounded investigation: the public range-color reduction now reproduces
