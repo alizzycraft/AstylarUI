@@ -5,6 +5,72 @@ import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { applySliderPositionReviews } from './slider-position-request-review.mjs';
 import { applyGridOffsetReviews } from './grid-position-request-review.mjs';
 import { applyComponentCaretReviews, isComponentCaretReviewRow } from '../../scripts/audit-material-overlay-caret-context.mjs';
+import { proveSnackbarPositionRequests } from './snackbar-position-observation.mjs';
+
+export function proveOverlayFlowRequests(entry, reference, candidate) {
+  const sheet = entry.family === 'bottom-sheet';
+  assert.ok(sheet || entry.family === 'snack-bar');
+  const element = entry.family + '-overlay';
+  const position = sheet ? proveOverlayPositionRequests(entry, reference, candidate, element)
+    : proveSnackbarPositionRequests(entry, reference, candidate);
+  const r = reference.nodes.find(n => n.key === position.referenceNode), a = candidate.nodes.find(n => n.key === position.astylarNode);
+  const input = entry.styleInputs.find(i => i.id === element);
+  const relevant = key => /^(flexdirection|alignitems|justifycontent|padding.*|textalign|verticalalign|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  assert.deepEqual(r.inline, { 'justify-content': { value: 'center', important: false }, 'align-items': { value: 'flex-end', important: false } });
+  const nativeRequests = r.rules.map(i => reference.rules[i]).filter(q => q.active)
+    .flatMap(q => Object.entries(q.declarations).filter(([key]) => relevant(key)));
+  assert.deepEqual(nativeRequests, []);
+  const candidateRequests = candidate.rules.filter(q => rootInitialSelectorCanApply(q.selector, a.authored))
+    .map(({ selector, ...style }) => ({ selector, style: Object.fromEntries(Object.entries(style).filter(([key]) => relevant(key))) }))
+    .filter(q => Object.keys(q.style).length);
+  assert.deepEqual(candidateRequests, sheet ? [
+    { selector: '.modal-overlay', style: { padding: '32px', justifyContent: 'center', alignItems: 'center' } },
+    { selector: '.bottom-sheet-overlay', style: { flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', padding: '0' } },
+  ] : [{ selector: '.snack-overlay', style: { flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', padding: '0 0 8px' } }]);
+  const native = reference.styles[r.style];
+  for (const [key, value] of Object.entries({ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '0px', textAlign: 'start', verticalAlign: 'baseline' })) assert.equal(native[key], value);
+  for (const [scalar, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']]) {
+    assert.deepEqual(input[scalar], a[stage]);
+    assert.deepEqual(Object.fromEntries(Object.entries(a[stage]).filter(([key]) => relevant(key))), {
+      padding: sheet ? '0' : '0 0 8px', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center',
+    });
+  }
+  const rc = reference.nodes.filter(n => n.parent === r.key), ac = candidate.nodes.filter(n => n.parent === a.key);
+  assert.equal(rc.length, 1); assert.equal(ac.length, 1);
+  assert.equal(rc[0].attributes.class, 'cdk-overlay-pane');
+  assert.equal(ac[0].authored.id, sheet ? 'bottom-sheet-panel' : 'snack-bar-surface');
+  assert.equal(reference.styles[rc[0].style].flexShrink, '1');
+  assert.equal(ac[0].resolvedStyle.flexShrink, '1');
+  return { referenceNode: r.key, astylarNode: a.key, position, candidateRequests,
+    referenceInline: r.inline, referenceChild: rc[0].key, candidateChild: ac[0].key,
+    firstDivergence: 'row wrapper and pane replaced by column wrapper and direct surface',
+    inputEquivalent: false, renderingEquivalent: null, constrainedLayoutEquivalenceProven: false,
+    inheritedTextAlignProven: false, computedCandidateAlignmentProven: false, popupVisibilityCauseProven: false };
+}
+
+export function applyOverlayFlowReviews(rows, cases, inventory, normalize) {
+  for (const family of ['bottom-sheet', 'snack-bar']) {
+    const common = { family, element: family + '-overlay', prove: proveOverlayFlowRequests };
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, { ...common,
+      properties: ['flexDirection', 'alignItems', 'justifyContent', ...(family === 'snack-bar' ? ['paddingBottom'] : [])],
+      attribution: 'reviewed-overlay-flow-composition-substitution', owner: 'showcase overlay structure and flex sizing authoring',
+      justification: 'Native bottom alignment uses a row wrapper and a CDK pane; candidate uses a column wrapper and direct surface, plus 8px bottom padding for snackbar. Single-item placement may coincide, but changing the shrink axis, sizing owner and padding does not establish equivalent layout under constraint. Preserve the separate containing-block and depth/visibility evidence; these input substitutions alone do not explain missing or clipped overlays.',
+    });
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, { ...common, properties: ['textAlign', 'verticalAlign'],
+      classification: 'parity-harness-defect', attribution: 'reviewed-overlay-alignment-observation-stage', owner: 'audit computed versus local alignment observation',
+      justification: 'Mapped native wrapper computes text-align:start and vertical-align:baseline without local requests; candidate local rules and all three declaration stages omit those properties. This compares different observation stages, not demonstrated candidate computed values. Inherited text alignment, used layout, full structure and visibility remain separate; do not add guessed start/baseline declarations or infer equivalent rendering.',
+    });
+  }
+  return rows;
+}
+
+export function validateOverlayFlowReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => ['reviewed-overlay-flow-composition-substitution', 'reviewed-overlay-alignment-observation-stage'].includes(r.attribution));
+    assert.deepEqual(select(rows), select(applyOverlayFlowReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`overlay flow lacks original evidence: ${error.message}`]; }
+}
 
 const positionAttributions = new Set(['reviewed-slider-position-request-substitution',
   'reviewed-slider-computed-offset-boundary', 'reviewed-grid-inset-request-substitution',

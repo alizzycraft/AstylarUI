@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 29
 
+**Overlay flow proof verified; integration pending:** 11 groups / 329 observations
+across 25 bottom-sheet and 34 snackbar wrapper cases distinguish row/pane native
+composition from column/direct-surface candidate composition. Seven groups are
+authored axis/alignment/padding substitutions; four are computed-versus-local
+text/vertical alignment observations, not inferred candidate computed values.
+The single child on both sides permits similar bottom/center placement but does
+not prove equivalent constrained sizing or shrink axes. Snackbar wrapper adds
+8px bottom padding. Existing position/mapping proofs, including the scalar
+z-index rule gap, are reused; separate depth, containing-block, clipping and
+missing-overlay causes are not reassigned to these style differences.
+History `f3c8254` changed bottom-sheet alignment to column/end/center while
+removing a 146px translation. `899c741` changed snackbar paddingBottom:8px to
+padding:0 0 8px while resizing its surface; it did not originate the 8px offset.
+Those changes establish provenance, not a demonstrated equal-input core cause.
+`node --test tests/material-parity/overlay-position-request-review.spec.mjs`
+passes **2/2**, 6,144.8061 ms total. Exact membership, original scalar/stage joins,
+raw/unrelated conservation, forged/missing evidence and changed rules, children
+or stages are checked. No renderer/fixture changes or new captures.
+Canonical remains **95 unresolved**, integrated batches project **29**; this
+proof is not yet in the production tail. Next: integrate and verify this batch,
+then remaining visibility, shrink, and styling semantics before reconciliation
+and full final gates.
+
 **Dialog panel gap integrated; export pending:** the serialized-transition proof
 from `86bf71f` now runs in the bound production tail with replay validation and
 unbound-attribution rejection. Existing historical gap review remains unchanged
