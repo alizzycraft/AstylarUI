@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { restoreGapCaptureDiagnostics } from './gap-survey-source-replay.mjs';
 
 const file = 'tests/material-parity/run-material-parity.mjs';
 const rawSha256 = 'b2477a124293aec6bba3a2413ff58d41f409288dcf0cb53a54ed17d162b9fa97';
@@ -19,7 +20,8 @@ export function recoverOriginalOverlayRunnerSource(receipt, currentBytes, ending
   assert.equal(endings.schemaVersion, 1); assert.equal(endings.file, file);
   assert.equal(endings.recordedSha256, rawSha256); assert.equal(endings.normalizedSha256, normalizedSha256);
   assert.equal(endings.lineCount, 1724); assert.equal(endings.crlfLines.length, 564);
-  const normalized = currentBytes.toString('utf8').replaceAll('\r\n', '\n');
+  let normalized = currentBytes.toString('utf8').replaceAll('\r\n', '\n');
+  if (hash(normalized) !== normalizedSha256) normalized = restoreGapCaptureDiagnostics(normalized);
   assert.equal(hash(normalized), normalizedSha256, 'overlay runner changed beyond checkout line endings');
   const lines = normalized.split('\n'); assert.equal(lines.length, endings.lineCount);
   let previous = 0;

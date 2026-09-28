@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import ts from 'typescript';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
+import { recoverOriginalOverlayRunnerSource } from './original-overlay-runner-source.mjs';
 import { originalCaseKey } from './owner-initial-style-membership.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { originalOverlayAuditSourceFile, verifyHistoricalAuditModuleSource,
@@ -33,6 +34,8 @@ export function collectOriginalOverlayContextSurvey(reportFile, { root = process
   };
   const hashed = (item, source = false) => {
     assert.match(item?.sha256 ?? '', /^[a-f0-9]{64}$/); const bytes = read(item.file, source);
+    if (source && item.file === 'tests/material-parity/run-material-parity.mjs')
+      return recoverOriginalOverlayRunnerSource(item, bytes).bytes;
     if (source && item.file === 'tests/material-parity/generated-node-mapping-evidence.mjs') {
       restoreMappingReadAdapterSource(item, bytes); return bytes;
     }
@@ -54,7 +57,7 @@ export function collectOriginalOverlayContextSurvey(reportFile, { root = process
   const historicalAuditSource = verifyHistoricalAuditModuleSource(
     raw.capture.sources.find(s => s.file === originalOverlayAuditSourceFile), read(originalOverlayAuditSourceFile, true), { root });
   raw.capture.sources.filter(item => item.file !== originalOverlayAuditSourceFile).forEach(item => hashed(item, true));
-  const runner = read(expectedSources[3], true).toString('utf8');
+  const runner = hashed(raw.capture.sources.find(s => s.file === expectedSources[3]), true).toString('utf8');
   const parsed = ts.createSourceFile(expectedSources[3], runner, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   const names = ['profileTheme', 'sendShowcaseCommand', 'waitForThemeApplied', 'settleInteraction',
     'setBenchmarkPhase', 'interactionTargetBox', 'popupHoverBox', 'performInteraction'];

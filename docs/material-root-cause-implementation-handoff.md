@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 28
 
+**All three rejected-export bindings now pass focused replay.** Reviewed-input
+replay binds 3,325 observations in 35.97s via `collectReviewedInputAuditInputs`
+against the pinned original report. The last mismatch was the retained producer's
+mixed newline encoding plus the known additive diagnostics. Reused the existing
+`original-overlay-runner-line-endings.json` and exact source reversal; recovered
+bytes authenticate to the original b2477a12... raw receipt. Neither original
+receipts nor captured observations were changed. The context reader now parses
+those authenticated historical bytes; it does not claim current execution parity.
+The mapping/context conservation paths independently validate the same source
+transition and conserve all non-receipt data. Initial focused runs exposed those
+additional downstream checks; after reconciliation, both suites pass 14/14 in
+23.71s: `node --test tests/material-parity/original-overlay-runner-source.spec.mjs tests/material-parity/original-overlay-context-survey.spec.mjs`.
+Coverage includes 91 states, 200 mapped owners, 17,654 root properties, all eight
+reused function receipts, corrupted ownership and provenance rejection.
+Next justified milestone: named cold export, then full-payload/source-fingerprint
+conservation and independent cold validation before compact-index acceptance.
+The failed export remains unaccepted; pending classifications and final gates
+still require completion.
+
 **Overlay surface binding repaired:** e526f85 added a separate stacking proof;
 the existing surface collector and all other module bytes are conserved. The
 binding now pins the complete current source (276502d9...), removes only that

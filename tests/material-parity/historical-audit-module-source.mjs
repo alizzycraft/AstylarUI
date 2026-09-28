@@ -8,6 +8,7 @@ import { restoreMappedBorderInitialProducer } from './position-composition-produ
 import { isDeepStrictEqual } from 'node:util';
 import { conserveDisabledInkGuard } from './disabled-ink-source-transition.mjs';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
+import { restoreGapCaptureDiagnostics } from './gap-survey-source-replay.mjs';
 
 // The 91-state capture predates tooltip wrapping classification. Its source
 // receipt describes the producer then, not a promise that today's audit module
@@ -160,6 +161,9 @@ export function verifyHistoricalOverlayMappingSource(recorded, currentBytes, { r
     } else if (source.file === 'tests/material-parity/generated-node-mapping-evidence.mjs' &&
       hash(sourceBytes.toString('utf8').replaceAll('\r\n', '\n')) !== source.sha256) {
       currentSourceChecks.push(mappingReaderProof(source, sourceBytes));
+    } else if (source.file === 'tests/material-parity/run-material-parity.mjs' &&
+      hash(sourceBytes.toString('utf8').replaceAll('\r\n', '\n')) !== source.sha256) {
+      currentSourceChecks.push(captureDiagnosticProof(source, sourceBytes));
     } else assert.equal(hash(sourceBytes.toString('utf8').replaceAll('\r\n', '\n')), source.sha256,
       `Current mapping source changed: ${source.file}`);
   }
@@ -182,6 +186,14 @@ function mappingReaderProof(source, bytes) {
     verification: 'exact-reader-import-transition-with-complete-mapping-source-conserved' };
 }
 
+function captureDiagnosticProof(source, bytes) {
+  assert.equal(source.file, 'tests/material-parity/run-material-parity.mjs');
+  assert.equal(hash(restoreGapCaptureDiagnostics(bytes.toString('utf8'))), source.sha256);
+  return { file: source.file, recordedSha256: source.sha256,
+    currentSha256: hash(bytes), exactHistoricalSourceRecovered: true,
+    currentExecutionEquivalentProven: false };
+}
+
 // Replay today's context first, then preserve the historical proof's lineage
 // receipt only if ALL observations and every non-current-source field agree.
 // The returned object is explicitly the original snapshot, not a current hash.
@@ -201,6 +213,8 @@ export function conserveOriginalOverlayContextSnapshot(context, { root = process
     if (source.file === originalOverlayAuditSourceFile) {
       const anchor = execFileSync('git', ['show', `${mappingAuditRevision}:${source.file}`], { cwd: root, maxBuffer: 4 * 1024 * 1024 });
       expectedChecks.push(verifyOverlayMappingAuditProjection(source, current, anchor));
+    } else if (source.file === 'tests/material-parity/run-material-parity.mjs') {
+      expectedChecks.push(captureDiagnosticProof(source, current));
     } else expectedChecks.push(mappingReaderProof(source, current));
   }
   if (sourceChanged) assert.ok(expectedChecks.some(s => s.file === originalOverlayAuditSourceFile));
@@ -220,6 +234,11 @@ export function verifyOverlayFontSnapshot(live, historicalBytes, currentReaderBy
   const reader = currentReaderBytes.toString('utf8').replaceAll('\r\n', '\n');
   const currentSha = hash(reader);
   const restored = reader.replace("import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';\n", '')
+    .replace("import { recoverOriginalOverlayRunnerSource } from './original-overlay-runner-source.mjs';\n", '')
+    .replace("    if (source && item.file === 'tests/material-parity/run-material-parity.mjs')\n" +
+      "      return recoverOriginalOverlayRunnerSource(item, bytes).bytes;\n", '')
+    .replace("const runner = hashed(raw.capture.sources.find(s => s.file === expectedSources[3]), true).toString('utf8');",
+      "const runner = read(expectedSources[3], true).toString('utf8');")
     .replace("    if (source && item.file === 'tests/material-parity/generated-node-mapping-evidence.mjs') {\n" +
       "      restoreMappingReadAdapterSource(item, bytes); return bytes;\n    }\n", '');
   assert.equal(hash(restored), 'e94b253c1c51105c785ee361863fc1d58d5b8b7b406911d6853d7b3c5b56016f',
