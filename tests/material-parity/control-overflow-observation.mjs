@@ -166,6 +166,32 @@ export function proveTableOverflowInputs(entry, r, a) {
     structuralEquivalenceVerified: false, ancestorClippingVerified: false, renderingEquivalent: false };
 }
 
+export function applyTableVisibleOverflow(rows, cases, inventory, normalize) {
+  const sources = { ...initialOverflowSources,
+    'src/app/services/dom/elements/table.service.ts': '0d96f98c3bdcfbba71a1eaa839cfa34d19e5621471b27929574334535e7733c9',
+    'src/app/services/dom/elements/element-creation.service.ts': 'bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a',
+    'src/app/services/dom/elements/element-creation.service.spec.ts': 'c968bb582c470305f1a83144319d6aaa9d85f6089e19c21c7eff6ca4b09e2830',
+    'tests/material-parity/control-overflow-observation.spec.mjs': '142fc7044bbfb041cfad37871afc47df4d27c58990645d77d9e8edcfc7541d30' };
+  for (const [file, expected] of Object.entries(sources)) assert.equal(createHash('sha256')
+    .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'table', element: 'table-primary', properties: ['overflowX', 'overflowY'],
+    classification: 'equivalent-representation', attribution: 'reviewed-table-visible-overflow-initial-value', owner: 'none',
+    justification: 'The original paired table owners omit overflow/reset requests; native axes compute visible and all captured candidate stages omit overflow. Dependency-pinned native table sensitivity and actual table-dispatch/shared-clip tests establish the same initial no-own-clipping branch. The reviewed table layout path introduces no separate overflow boundary. This explains only the initial overflow scalar, not equal table sizing, descendants, ancestor clipping, scrolling or final raster.',
+    prove: (entry, r, a) => ({ ...proveTableOverflowInputs(entry, r, a), sources,
+      initialValueEquivalent: true, ownClippingBranchVerified: true,
+      tableSizingAlgorithmVerified: false, scrollingVerified: false }),
+  });
+}
+
+export function validateTableVisibleOverflow(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(row => row.attribution === 'reviewed-table-visible-overflow-initial-value');
+    assert.deepEqual(select(rows), select(applyTableVisibleOverflow(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`table initial overflow lacks original population and applicability proof: ${error.message}`]; }
+}
+
 function proveOmittedOverflowOwner(entry, r, a, element, referenceType, candidateType) {
   for (const tree of [r, a]) { assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []); }
   assert.equal(a.resolvedStyleSource, 'core-style-inspection'); assert.equal(a.resolvedStyleEvidenceVersion, 2);

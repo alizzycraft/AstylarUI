@@ -13,7 +13,7 @@ import { clippingOwners, proveControlClippingRequests, applyControlClippingReque
 import { applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
 import { proveHeadingVisibleOverflow, applyHeadingVisibleOverflow, validateHeadingVisibleOverflow } from './control-overflow-observation.mjs';
 import { proveTabPanelOverflowBoundary, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
-import { proveTableOverflowInputs } from './control-overflow-observation.mjs';
+import { proveTableOverflowInputs, applyTableVisibleOverflow, validateTableVisibleOverflow } from './control-overflow-observation.mjs';
 import { chromium } from 'playwright-core';
 
 test('native table omitted overflow retains visible descendants with hidden and ancestor sensitivity', async () => {
@@ -75,6 +75,23 @@ test('52 original tables bind omitted overflow without assuming table clipping e
   const alteredEntry = structuredClone(entry);
   alteredEntry.styleInputs.find(i => i.id === 'table-primary').astylar.overflow = 'hidden';
   assert.throws(() => proveTableOverflowInputs(alteredEntry, ...pair));
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'table', {
+    generation: '8fbd2e22dfd801587ce6c1dce90e6daba668171ae26eae0a9c834142a8bd0a43',
+    indexSha256: '6f86d55a6ea6be0f1533ac893579bf517769061ed25a13812b0370c46b7c06e6',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const normalize = bindPreciseAuditNormalization();
+  const applied = applyTableVisibleOverflow(rows, cases, inventory, normalize);
+  const changed = applied.filter((row, i) => row !== rows[i]);
+  assert.equal(changed.length, 2); assert.equal(changed.reduce((n, row) => n + row.occurrences, 0), 104);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  applied.forEach((row, i) => { if (!changed.includes(row)) assert.deepEqual(row, rows[i]); });
+  assert.deepEqual(validateTableVisibleOverflow(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied);
+  forged.find(row => row.attribution === 'reviewed-table-visible-overflow-initial-value').reviewedCases.pop();
+  assert.equal(validateTableVisibleOverflow(forged, rows, cases, inventory, normalize).length, 1);
+  assert.throws(() => applyTableVisibleOverflow(rows, cases.slice(1), inventory, normalize));
 });
 
 test('70 original tab panels retain the plugin overflow observation boundary', () => {

@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 28
 
+**Table overflow classification prepared, not yet producer-integrated:** the
+existing modal-row review binds both table axes to all 52 original owners
+(two groups / 104 observations). Native initial visible overflow and candidate
+omission are equivalent only at the own-clipping/default scalar boundary.
+The proof pins table layout, creation/dispatch, shared clipping/defaults and
+the focused tests; full table sizing, structure, scrolling, ancestor clipping
+and raster equivalence remain unproved. Exact raw/unrelated conservation,
+replay, missing-case and forged-membership controls pass. Browser/table/heading
+focused command passes 3/3 (6.09s); scoped diff check passes. Canonical remains
+130 unresolved; this prepared batch would reduce it to 128 after integration.
+Next inspect remaining range-input/plugin and tab-button overflow boundaries;
+do not trigger a full export for these two prepared metadata groups alone.
+
 **Table overflow applicability checks pass:** added a browser sensitivity case
 to the existing control-overflow spec: a fixed-layout 60x40 table with an
 absolutely positioned 120x120 cell descendant has identical visible axes and
