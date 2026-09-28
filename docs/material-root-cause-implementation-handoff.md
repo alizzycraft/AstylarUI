@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 29
 
+**Panel visibility integrated; export pending:** the two-group / 138-observation
+state-owner proof from `b89731a` now runs in the bound production tail with
+independent replay and rejection of unbound attribution. The tail changes
+59 groups / 2,846 observations against the current checkpoint (114 / 5,802 and
+94 / 4,675 against the earlier checkpoints), conserving raw and unrelated rows;
+reverse reducer order agrees. These are classifications, not renderer fixes.
+`node --test --test-name-pattern="omitted owner paint requests preserve|panel visibility scalar review" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/panel-state-ownership.spec.mjs`
+passes **2/2**, 33,223.6338 ms total. The former process handle was missing;
+this result is a fresh verification, not an inferred prior pass.
+Historical producer reversal retains
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+current producer is `c88c4bdb0fdd36d58eb020e4a59c74712e342a2f4e2ed51952c88ddbb9919077`.
+Canonical remains **95 unresolved**; integrated batches project **16**.
+Prioritize tooltip shrink (two groups) using existing composition proofs, then
+expansion/tree structure and alignment, followed by tab padding, button-toggle
+border styles, divider paint substitution, progress text alignment and icon fit.
+Do not infer shared root causes from similar symptoms or reopen settled overlay
+coordinate/depth findings without new evidence. Source-fingerprint/export
+reconciliation and final browser gates remain pending; no captures or rendering
+inputs changed in this increment.
+
 **Panel visibility scalar join verified; integration pending:** two groups / 138
 observations (70 tabs, 68 stepper) now join to the existing complete state-owner
 proof, rather than treating active visible/omitted values as sufficient evidence.
