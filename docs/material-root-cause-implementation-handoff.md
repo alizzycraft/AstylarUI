@@ -40,6 +40,20 @@ changes were made, and this checkpoint does not establish rendering equivalence.
 
 ### Prepared work and prior checkpoint history
 
+September 28 stepper color join prepares another **2 groups / 136 observations**
+using the existing retained typography classifier and original source capture.
+Every case, owner ID, precise native color, three omitted candidate local stages
+and state membership matches; native wrapper token ancestry and retained page
+ink remain separate from local declarations. The existing control-paint spec
+passed **2/2 in 24.59 s**, including missing retained evidence, invented candidate
+color and raw-row conservation. No new browser run or core diagnosis was added.
+Prepared color coverage is now **10/46 groups / 168 observations**; 36 groups /
+922 observations remain. A read-only census found 15 existing sort-label color
+proofs but did not promote the container scalar: label-to-container correspondence
+still requires binding. Existing chip label-ink evidence covers only 32 enabled,
+unselected labels and must not be generalized to selected/disabled host colors.
+The grid/height exporter remains live; canonical counts are unchanged.
+
 September 28 disabled-label color preparation: fresh replay of
 `collectDisabledLabelColorStages()` exactly matches the retained
 `docs/material-disabled-label-color-stages.json` and all eight current unresolved

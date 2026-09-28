@@ -9,6 +9,35 @@ const digest = value => createHash('sha256').update(JSON.stringify(value)).diges
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
 
+export function applyStepperLabelColorReview(rows, cases, retained, normalize) {
+  return rows.map(row => {
+    if (row.attribution !== 'unresolved' || row.family !== 'stepper' || row.property !== 'color' ||
+        !['step-details-text', 'step-review-text'].includes(row.element)) return row;
+    const observations = retained.differences.filter(p => p.family === row.family && p.element === row.element &&
+      p.property === 'color' && p.attribution === 'reviewed-stepper-text-input');
+    const keys = observations.map(p => p.case);
+    assert.equal(keys.length, row.occurrences); assert.equal(new Set(keys).size, keys.length);
+    assert.deepEqual(keys.slice(0, 12), row.cases); assert.equal(row.astylar, undefined);
+    const members = observations.map(p => {
+      const entry = one(cases.filter(e => keyOf(e) === p.case));
+      const input = one(entry.styleInputs.filter(i => i.id === row.element));
+      assert.equal(normalize(input.reference).color, p.values.reference);
+      assert.equal(p.values.reference, row.reference);
+      for (const stage of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'])
+        assert.equal(normalize(input[stage]).color, undefined);
+      assert.equal(p.classification, 'application-plugin-authoring-defect');
+      assert.equal(p.inputEquivalent, false); assert.equal(p.currentPseudoStatePaintVerified, false);
+      return entry;
+    });
+    assert.deepEqual([...new Set(members.map(e => e.state ?? 'static'))], row.states);
+    return { ...row, classification: 'application-plugin-authoring-defect', attribution: 'reviewed-stepper-text-input',
+      recommendedOwner: 'showcase stepper typography and token inheritance',
+      justification: 'The existing retained-text proof traces the native label token through its wrappers while candidate labels omit local color and retain page ink. Preserve omission, authored ancestry and retained values separately; this is unequal input, not a core color-conversion or current pseudo-state paint claim.',
+      reviewedCases: keys, reviewEvidence: { originalRowSha256: digest(row), observations,
+        inputEquivalent: false, renderingEquivalent: false, localOmissionPreserved: true } };
+  });
+}
+
 // Caller supplies the independently replayed disabled-label stage collector,
 // not inferred inherited values or classifications from the proposed export.
 export function applyDisabledLabelColorReview(rows, evidence) {

@@ -3,10 +3,10 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
-import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
+import { collectFullTreeInventory, collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
-import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions, applyDisabledLabelColorReview } from './control-state-paint-review.mjs';
+import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions, applyDisabledLabelColorReview, applyStepperLabelColorReview } from './control-state-paint-review.mjs';
 import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
 
 test('disabled label colors reuse all 32 retained-stage proofs without filling omitted locals', () => {
@@ -44,6 +44,20 @@ test('control paint preserves owner boundaries and all 397 captured observations
     .filter(r => r.evidence.section === 'discrepancies');
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
   assert.deepEqual(inventory.errors, []);
+  const stepperRows = queryFindings('artifacts/material-parity/working-audit', 'stepper', snapshot)
+    .filter(r => r.evidence.section === 'discrepancies');
+  const stepperCases = cases.filter(e => e.family === 'stepper');
+  const retained = collectRetainedTypographyEvidence(stepperCases, inventory);
+  const stepperResult = applyStepperLabelColorReview(stepperRows, stepperCases, retained, normalize);
+  const changedStepper = stepperResult.filter((r, i) => r !== stepperRows[i]);
+  assert.equal(changedStepper.length, 2); assert.equal(changedStepper.reduce((n, r) => n + r.occurrences, 0), 136);
+  const lostRetained = structuredClone(retained);
+  lostRetained.differences = lostRetained.differences.filter((p, i) => i !==
+    retained.differences.findIndex(p => p.property === 'color' && p.attribution === 'reviewed-stepper-text-input'));
+  assert.throws(() => applyStepperLabelColorReview(stepperRows, stepperCases, lostRetained, normalize));
+  const filled = structuredClone(stepperCases);
+  filled[0].styleInputs.find(i => i.id === 'step-details-text').astylar.color = '#000000';
+  assert.throws(() => applyStepperLabelColorReview(stepperRows, filled, retained, normalize));
   const result = applyControlStatePaintReview(rows, cases, inventory, normalize);
   const reviewed = result.filter(r => [controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution,
     ...Object.values(specialPaintDefinitions).map(d => d.attribution)].includes(r.attribution));
@@ -87,6 +101,7 @@ test('control paint preserves owner boundaries and all 397 captured observations
     toggles.filter(o => o.nativeLayerBackground === color).length), [18, 6]);
   const metadata = new Set(['classification', 'attribution', 'recommendedOwner', 'justification', 'reviewEvidence', 'reviewedCases']);
   const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  stepperResult.forEach((r, i) => assert.deepEqual(raw(r), raw(stepperRows[i])));
   for (let i = 0; i < rows.length; i++) {
     assert.deepEqual(raw(result[i]), raw(rows[i]));
     if (!reviewed.includes(result[i])) assert.deepEqual(result[i], rows[i]);
