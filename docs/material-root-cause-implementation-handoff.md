@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared divider inset proof binds five groups / 72 observations to the existing
+historical flow-compensation finding. Across all 24 cases, native position is
+static with omitted inset requests; candidate `.divider` explicitly requests
+absolute, left/right 28px, top 79px (light/dark), 74.785px (contrast), or 86.785px
+(custom). Reuses border identity and original inventory, not a new survey.
+All candidate stages match exact requests; native computed auto is not treated
+as a literal replacement instruction. Source location remains
+`examples/material-showcase/src/app/astylar.component.ts:759`; history/ownership
+is `fixture-divider-replaces-paragraph-flow-with-coordinates` in existing policy.
+Focused combined border/inset test passes (1/1, 7.06 s), preserving raw/unrelated
+rows and rejecting native inset injection/candidate offset changes in all four
+profiles. No new equal-input core cause is claimed. Prepared next batch is now
+91 groups / 2186 observations including overlay-origin; canonical acceptance
+still waits for export 91866 and its reconciliation.
+
 Prepared border batch is complete for the 79 originally unresolved groups /
 1904 observations (not canonical acceptance). Badge adds eight groups / 208
 observations from 52 authenticated generated-span alias pairs. Exact native

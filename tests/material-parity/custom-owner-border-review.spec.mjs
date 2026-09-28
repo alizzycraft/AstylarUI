@@ -6,7 +6,7 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
-import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder } from './custom-owner-border-review.mjs';
+import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder, applyDividerPositionReviews, proveDividerPositionRequests } from './custom-owner-border-review.mjs';
 
 test('custom host initial colors retain all observations without claiming generated paint equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -30,6 +30,20 @@ test('custom host initial colors retain all observations without claiming genera
   const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
   const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
   reviewed.forEach((r, i) => { assert.deepEqual(raw(r), raw(rows[i])); if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
+  const positioned = applyDividerPositionReviews(reviewed, cases, inventory, normalize);
+  const positionChanges = positioned.filter((r, i) => r !== reviewed[i]);
+  assert.equal(positionChanges.length, 5); assert.equal(positionChanges.reduce((n, r) => n + r.occurrences, 0), 72);
+  positioned.forEach((r, i) => { assert.deepEqual(raw(r), raw(reviewed[i])); if (!positionChanges.includes(r)) assert.deepEqual(r, reviewed[i]); });
+  for (const profile of ['light', 'dark', 'contrast', 'custom']) {
+    const e = cases.find(e => e.family === 'divider' && e.profile === profile);
+    const key = `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+    const [r, a] = modalInventoryTrees(inventory, key), proof = proveDividerPositionRequests(e, r, a, normalize);
+    assert.equal(proof.coreCoordinateDefectProven, false);
+    const native = structuredClone(r); native.nodes.find(n => n.key === proof.referenceNode).inline.top = { value: 'auto', important: false };
+    assert.throws(() => proveDividerPositionRequests(e, native, a, normalize));
+    const altered = structuredClone(a); altered.rules.find(rule => rule.selector === '.divider').top = '0';
+    assert.throws(() => proveDividerPositionRequests(e, r, altered, normalize));
+  }
   for (const family of families) {
     const row = changed.find(r => r.family === family && (family !== 'tabs' || r.element === 'tab-panel')), key = row.reviewedCases[0];
     const e = cases.find(e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === key);

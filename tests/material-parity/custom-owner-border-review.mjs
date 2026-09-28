@@ -155,6 +155,40 @@ function ownDividerRules(candidate, node) {
     .map(rule => ({ selector: rule.selector, background: rule.background, height: rule.height }));
 }
 
+export function proveDividerPositionRequests(entry, reference, candidate, normalize) {
+  assert.equal(entry.family, 'divider');
+  const identity = proveCustomOwnerBorder(entry, reference, candidate, normalize);
+  const r = reference.nodes.find(n => n.key === identity.referenceNode);
+  const a = candidate.nodes.find(n => n.key === identity.astylarNode);
+  const position = k => /^(position|top|right|bottom|left|all)$|^inset/.test(k.replaceAll('-', '').toLowerCase());
+  assert.ok(!Object.keys(r.inline).some(position));
+  assert.ok(r.rules.map(i => reference.rules[i]).every(rule => !Object.keys(rule.declarations).some(position)));
+  const native = reference.styles[r.style];
+  assert.equal(native.position, 'static');
+  for (const side of ['top', 'right', 'bottom', 'left']) assert.equal(native[side], 'auto');
+  const top = entry.profile === 'contrast' ? '74.785px' : entry.profile === 'custom' ? '86.785px' : '79px';
+  const expected = { position: 'absolute', top, left: '28px', right: '28px' };
+  const select = o => Object.fromEntries(Object.entries(o).filter(([k]) => position(k)));
+  assert.deepEqual(candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, a.authored))
+    .map(rule => ({ selector: rule.selector, ...select(rule) })).filter(rule => Object.keys(rule).length > 1),
+    [{ selector: '.divider', ...expected }]);
+  assert.ok(!Object.keys(a.authored.style ?? {}).some(position));
+  for (const stage of [a.resolvedStyle, a.normalResolvedStyle, a.interactionResolvedStyle]) assert.deepEqual(select(stage), expected);
+  return { ...identity, nativePosition: native.position, candidatePositionRequests: expected,
+    sourceFinding: 'fixture-divider-replaces-paragraph-flow-with-coordinates',
+    coreCoordinateDefectProven: false };
+}
+
+export function applyDividerPositionReviews(rows, cases, inventory, normalize) {
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'divider', element: 'divider-primary', properties: ['top', 'left', 'right'],
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-divider-coordinate-substitution',
+    owner: 'showcase divider block-flow authoring',
+    prove: (e, r, a) => proveDividerPositionRequests(e, r, a, normalize),
+    justification: 'Native static divider authoring omits insets; the candidate requests absolute positioning with 28px opposing edges and density-specific top offsets. Exact original requests and all candidate stages bind these scalar rows to the existing historical paragraph-flow compensation finding. Native auto is computed, not an instruction to copy auto onto the positioned substitute. The first divergence is authoring; equal-input block-flow reductions, not further offset tuning, must determine core layout behavior.',
+  });
+}
+
 export function applyCustomOwnerBorderReviews(rows, cases, inventory, normalize) {
   for (const [family, [element]] of Object.entries(owners)) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
     family, element, properties: (family === 'divider' ? sides.slice(1) : sides).map(s => `border${s}Color`),
