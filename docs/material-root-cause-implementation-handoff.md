@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared overlay-position review covers five groups / 141 observations: one
+bottom-sheet wrapper group (25) explicitly substitutes fixed for native absolute;
+two sheet right/bottom groups (50) and snackbar-surface/dialog-copy static groups
+(66) compare computed native values with omitted candidate local declarations.
+Original tree hashes, 89-field alias identity, three candidate stages and complete
+owner rules are checked. The sheet's 25 missing scalar z-index-rule observations
+remain explicit. `node --test tests/material-parity/overlay-position-request-review.spec.mjs`
+passes (1/1, 3.55 s), with raw/unrelated conservation and request-injection negatives.
+No containing-block equivalence or popup visibility cause is claimed. Tooltip's
+remaining transform-origin row and six dialog origin rows still need box/transform
+context; do not infer the snackbar's missing-output cause from its static scalar.
+This batch is prepared only, not connected to the live exporter.
+
 Prepared grid-offset review: 16 groups / 624 observations across 52 original cases.
 Existing composition proof plus exact scalar/tree and three-stage identity checks
 distinguish six authored top/left omission groups (208 observations) from ten
