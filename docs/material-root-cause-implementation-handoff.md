@@ -2,7 +2,7 @@
 
 ## Current audit checkpoint — September 29
 
-**Tooltip word-break support classification prepared, not yet integrated:** the
+**Tooltip word-break support classification integrated; export pending:** the
 existing wrapping review module now provides a bounded reducer/validator for the
 one unresolved tooltip-popup wordBreak group (18 observations). Classification is
 `documented-limitation`, not an inferred intentional policy or fixture-only defect.
@@ -12,9 +12,23 @@ The existing modal review mechanism checks complete membership and all owner sta
 Tests preserve every raw/unrelated tooltip row and reject missing population,
 forged membership, competing native/candidate requests and each changed dependency.
 The existing public support test and expanded population test pass **2/2** in
-19,053.7909 ms with the same focused command below. No renderer or fixture changes.
-Next wire the reducer and validator into the production bound-evidence path with
-its unbound guard and exact predecessor-source reconciliation. Canonical/index stays
+20,542.4584 ms on the integration rerun with the same focused command below.
+No renderer or fixture changes.
+The production bound-evidence path now runs the reducer and replay validator,
+with an explicit unbound-attribution guard. The existing combined-tail test
+executes the actual production fragment: exactly one group / 18 observations
+changes against the latest checkpoint, preserving all raw and unrelated rows.
+Earlier checkpoint replays change 56 / 2,974 and 36 / 1,847 respectively;
+reverse reducer order agrees, and unbound execution invokes no reducer.
+`node --test --test-name-pattern="omitted owner paint requests preserve" tests/material-parity/control-state-paint-review.spec.mjs`
+passes **1/1**, 25,923.1662 ms. Exact predecessor restoration still yields
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+the current producer digest is
+`3163120799acd75328a2bf95e0f0e6b65aba2e2de9c1c1f51723d3bb74712334`.
+No new capture, full export, or browser matrix was run for this increment.
+Next address the remaining shared spacing/layout-owner and rounded-paint groups;
+do not reopen established tooltip placement/paint causes to explain this support gap.
+Canonical/index stays
 **95 unresolved** until a later coherent batch export; this one group projects 94.
 
 **Checkpoint published; tooltip support proof expanded:** `dcc6e52` is pushed to
