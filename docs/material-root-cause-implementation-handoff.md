@@ -63,6 +63,19 @@ hit behavior. Next bind the exact authored/default populations to existing revie
 infrastructure; refresh the public capture only for claims requiring current
 browser behavior. Do not reinterpret absent requests as proven default provenance.
 
+Prepared cursor review (not yet canonical): existing `applyModalBoxReview` now has
+a focused consumer in `tests/material-parity/component-cursor-request-review.mjs`
+for three groups / 138 original observations: disabled button 60, disabled checkbox
+8, slider host 70. Explicit native default/pointer requests, exact mapped owners,
+candidate authored requests/ancestry and all three captured stages prove unequal
+authoring. This excludes dialog defaults, inherited labels and actual hovered
+canvas behavior; it does not depend on the stale public capture. The focused spec
+passes in 14.96 s, preserves all raw values/unrelated rows, and rejects missing
+native requests, injected own/ancestor requests, stage changes and lost cases.
+No producer integration or source-fingerprint changes while color export is live.
+Next combine this with the remaining cursor request/default investigations before
+another canonical batch; accepted unresolved count remains 715.
+
 Color producer/validator integration is now wired and focused-verified against
 the accepted paint compact snapshot. Validation starts from original rows and
 fresh sort/sidenav retained ancestry; unbound color attributions are rejected.
