@@ -2,6 +2,39 @@
 
 ## Current audit checkpoint — September 28
 
+**High-z-index paint defect now independently reproduced:** the existing public-
+package overlay reduction authors one identical absolute rectangle on both sides
+(20,20; 120x24; background #302d32; z-index 1 or 1000), without tooltip wrappers,
+text, overflow, or placement logic. At heights 240/1000 and DPR 1/2 every retained
+CSS and projected rectangle exactly equals native geometry. Low-z controls and
+the tall high-z control paint all 2,880/11,520 native solid pixels with zero pane
+mask differences. Short high-z paints **zero** candidate pane pixels. Chrome
+153.0.8010.53; zero runtime errors; each four-case run is three passes and one
+honest visibility failure. No renderer or comparison changes.
+
+Evidence: `artifacts/material-parity/overlay-depth-ba5873b-v2-dpr1` and
+`overlay-depth-ba5873b-v2-dpr2` contain result, source/package receipts and paired
+rasters. Runner checks all fresh emitted package bytes against installed/local
+compiled bytes. Commands: set `ASTYLAR_AUDIT_SPEC_FILTER=depth-`, then run
+`node scripts/audit-overlay-layout-stage.mjs <new-output> <1-or-2>
+artifacts/material-parity/tooltip-keyboard-source-build-813f658`.
+The filter is recorded in provenance; excluded cases are not coverage passes.
+
+The short camera Z is 207.846, whereas the high-z pane is at world Z 250;
+tall camera Z is 866.025. Thus the equal-input defect is at the CSS-stacking to
+camera/paint boundary, not CSS x/y layout. Unlike the earlier showcase trace,
+this primitive remains in the active mesh list (including when respecting its
+logical length), despite absent pixels. Active membership is not visibility
+proof. First draft captures without `v2` are diagnostic history; v2 corrects
+the active-list inspection to exclude unused backing-array slots.
+
+Remaining priorities: relate this established depth defect to actual snackbar
+state/depth before claiming a shared cause; keep missing connected-placement
+fallback and keyboard opening separate; complete outstanding interaction and
+source-history coverage. New supplemental proofs and changed reduction/runner
+fingerprints remain pending the next coherent canonical integration/export.
+No full gate or canonical classification was rerun/changed for this focused proof.
+
 Short-tooltip scene trace narrows the missing paint to camera/depth, not authored
 overflow: popup/ancestors have no clipping request; both popup meshes are enabled,
 visible, opacity 1, and have null clip planes. Read-only Angular debug inspection

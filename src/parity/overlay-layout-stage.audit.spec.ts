@@ -12,16 +12,17 @@ describe('overlay CSS layout versus projection audit', () => {
   for (const composition of ['nested-row', 'flat-column', 'sheet-auto', 'snack-intrinsic-short', 'snack-intrinsic-long', 'snack-intrinsic-short-auto', 'dialog-intrinsic', 'dialog-intrinsic-explicit',
     'dialog-intrinsic-autoheight', 'dialog-intrinsic-explicit-autoheight', 'dialog-intrinsic-explicit-autoheight-nolimit',
     'dialog-intrinsic-explicit-autoheight-nolimit-autowidth', 'dialog-intrinsic-explicit-autoheight-omitlimit-autowidth',
-    'fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only',
+    'fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only', 'depth-low', 'depth-high',
     'chip-intrinsic-unselected', 'chip-intrinsic-selected', 'chip-intrinsic-unselected-long', 'chip-intrinsic-selected-long', 'chip-intrinsic-selected-div',
     'chip-intrinsic-selected-div-auto', 'chip-intrinsic-selected-div-auto-nopadding', 'chip-label-zero', 'chip-label-tracked'] as const) {
     const clipping = composition.endsWith('-clip');
+    const depth = composition.startsWith('depth-');
     const rounded = composition.startsWith('rounded-');
     const chip = composition.startsWith('chip-intrinsic-');
     const labels = composition.startsWith('chip-label-');
     const dialog = composition.startsWith('dialog-intrinsic');
     const snack = composition.startsWith('snack-intrinsic');
-    for (const [width, height] of (snack ? [[800, 400]] : dialog ? [[640, 400]] : chip || labels ? [[320, 100]] : rounded ? [[160, 80]] : composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
+    for (const [width, height] of (depth ? [[320, 240], [320, 1000]] : snack ? [[800, 400]] : dialog ? [[640, 400]] : chip || labels ? [[320, 100]] : rounded ? [[160, 80]] : composition === 'sheet-auto' ? [[1440, 1000], [900, 700]] : clipping ? [[320, 200]] : [[320, 200], [321.5, 201.25]])) {
       it(`${composition} at ${width} x ${height}`, async () => {
         TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] });
         const frame = document.createElement('iframe');
@@ -60,6 +61,13 @@ describe('overlay CSS layout versus projection audit', () => {
             ] : [{ selector: '#pane', width: '120px', height: '48px', marginBottom: clipping ? '-20px' : '8px', background: '#302d32' }]),
           ],
         };
+        if (depth) {
+          site.root.children = [{ type: 'div', id: 'pane' }];
+          site.styles = [{ selector: '#pane', display: 'block', position: 'absolute',
+            boxSizing: 'border-box', margin: '0', padding: '0', borderWidth: '0', borderStyle: 'none',
+            left: '20px', top: '20px', width: '120px', height: '24px', background: '#302d32',
+            zIndex: composition === 'depth-high' ? '1000' : '1' }];
+        }
         if (dialog) {
           // Preserve the reference percentage/inherited-constraint chain. The
           // content blocks isolate sizing from fonts; never author the measured
@@ -202,7 +210,7 @@ describe('overlay CSS layout versus projection audit', () => {
           const engine = surface.scene.getEngine();
           const viewport = surface.scene.activeCamera!.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
           const canvasBox = canvas.getBoundingClientRect();
-          const observations = (snack ? ['host', 'pane', 'label', 'action'] : dialog ? ['host', 'wrapper', 'container', 'inner', 'pane', 'item-a', 'item-b', 'item-c'] : labels ? ['host', 'label-a', 'label-b', 'label-long'] : chip ? ['host', 'pane', 'cell', 'action', 'graphic', 'label-block'] : rounded ? ['host', 'filler', 'pane'] : sheet ? ['host', 'overlay', 'wrapper', 'pane', 'list', 'item-a', 'item-b'] :
+          const observations = (depth ? ['pane'] : snack ? ['host', 'pane', 'label', 'action'] : dialog ? ['host', 'wrapper', 'container', 'inner', 'pane', 'item-a', 'item-b', 'item-c'] : labels ? ['host', 'label-a', 'label-b', 'label-long'] : chip ? ['host', 'pane', 'cell', 'action', 'graphic', 'label-block'] : rounded ? ['host', 'filler', 'pane'] : sheet ? ['host', 'overlay', 'wrapper', 'pane', 'list', 'item-a', 'item-b'] :
             nested ? ['host', 'overlay', 'wrapper', 'pane'] : ['host', 'overlay', 'pane']).map(id => {
             const reference = doc.getElementById(id)!.getBoundingClientRect();
             const mesh = manager.elementsMap.get(id)!;
@@ -215,6 +223,12 @@ describe('overlay CSS layout versus projection audit', () => {
             const nativeStyle = dialog ? frame.contentWindow!.getComputedStyle(doc.getElementById(id)!) : undefined;
             const retainedStyle = manager.elementStylesMap.get(id)?.normal;
             return { id, parentId: manager.layoutBoxesMap.get(id)?.parentId,
+              ...(depth ? { depth: { cameraZ: surface!.scene.activeCamera!.position.z,
+                minZ: surface!.scene.activeCamera!.minZ, maxZ: surface!.scene.activeCamera!.maxZ,
+                meshZ: mesh.getAbsolutePosition().z, active: surface!.scene.getActiveMeshes().data
+                  .slice(0, surface!.scene.getActiveMeshes().length).includes(mesh),
+                enabled: mesh.isEnabled(), visible: mesh.isVisible, visibility: mesh.visibility,
+                authoredZIndex: site.styles[0].zIndex } } : {}),
               ...(dialog ? { constraints: {
                 reference: Object.fromEntries(constraintKeys.map(key => [key, nativeStyle![key]])),
                 retained: Object.fromEntries(constraintKeys.map(key => [key, retainedStyle?.[key] ?? '<omitted>'])),
@@ -269,7 +283,7 @@ describe('overlay CSS layout versus projection audit', () => {
               expect(observation.projected[key]).withContext(`${observation.id} projection ${key}`).toBeCloseTo(observation.css![key], 1);
             }
           }
-          if (clipping || rounded) {
+          if (clipping || rounded || depth) {
             const capture = (window as Window & { auditCapture?: (info: { composition: string; width: number; height: number }) => Promise<void> }).auditCapture;
             await capture?.({ composition, width, height });
           }

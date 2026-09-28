@@ -44,7 +44,7 @@ const built = await consumer('esbuild').build({ absWorkingDir: root,
     await import('./${spec}');
     const results=[];
     jasmine.getEnv().addReporter({specDone:r=>results.push({description:r.fullName,status:r.status,failures:r.failedExpectations.map(e=>e.message)}),jasmineDone:r=>window.auditDone={status:r.overallStatus,results}});
-    jasmine.getEnv().configure({random:false}); jasmine.getEnv().execute();`, resolveDir: root },
+    jasmine.getEnv().configure({random:false, specFilter: spec => spec.getFullName().includes(${JSON.stringify(process.env.ASTYLAR_AUDIT_SPEC_FILTER ?? '')})}); jasmine.getEnv().execute();`, resolveDir: root },
   bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true,
   plugins: [{ name: 'installed-audit-package', setup(build) {
     build.onResolve({ filter: /^astylarui$/ }, () => ({ path: consumer.resolve('astylarui') }));
@@ -65,6 +65,7 @@ const assets = new Map([
 ]);
 const html = '<!doctype html><html><body><script src="/jasmine.js"></script><script src="/jasmine-html.js"></script><script src="/boot0.js"></script><script type="module" src="/audit.js"></script></body></html>';
 const provenance = { commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+  specFilter: process.env.ASTYLAR_AUDIT_SPEC_FILTER ?? '',
   freshBuild, compiledReceipts,
   runnerSha256: hash(readFileSync('scripts/audit-overlay-layout-stage.mjs')),
   htmlSha256: hash(html), runtimeAssets: [...assets].map(([url, bytes]) => ({ url, sha256: hash(bytes) })),
@@ -82,11 +83,12 @@ try {
   const screenshots = [];
   await page.exposeFunction('auditCapture', async ({ composition, width, height }) => {
     const radiusDiagnostic = /^radius-(div|button)-(24|36|9999)$/.test(composition);
-    assert.ok(radiusDiagnostic || ['fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only'].includes(composition));
+    const depthDiagnostic = /^depth-(low|high)$/.test(composition);
+    assert.ok(depthDiagnostic || radiusDiagnostic || ['fixed-clip', 'absolute-clip', 'rounded-toggle', 'rounded-border-only'].includes(composition));
     const captures = {};
     const rasters = {};
     for (const [side, selector] of [['reference', 'iframe'], ['astylar', 'canvas']]) {
-      const file = `${composition}-${side}.png`;
+      const file = `${composition}${depthDiagnostic ? `-${height}` : ''}-${side}.png`;
       const bytes = await page.locator(selector).screenshot({ path: path.join(output, file) });
       captures[side] = { file, sha256: hash(bytes) };
       rasters[side] = PNG.sync.read(bytes);
@@ -105,7 +107,12 @@ try {
       allPixelDifferences += Number(!reference.data.subarray(offset, offset + 4).equals(candidate.data.subarray(offset, offset + 4)));
     }
     const paint = { referencePanePixels, candidatePanePixels, paneMaskDifferences, allPixelDifferences };
-    screenshots.push({ composition, captures, paint });
+    screenshots.push({ composition, width, height, captures, paint });
+    if (depthDiagnostic) {
+      assert.equal(referencePanePixels, 120 * 24 * dpr * dpr);
+      assert.equal(paneMaskDifferences, 0, 'Fully in-viewport pane must paint regardless of z-index');
+      return;
+    }
     if (radiusDiagnostic) {
       assert.ok(referencePanePixels > 20000 * dpr * dpr, 'Native capsule must be present');
       assert.ok(candidatePanePixels > 0, 'Candidate capsule must be present');
