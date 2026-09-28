@@ -18,18 +18,18 @@ import { restoreBoxSizingReviewProducer } from './position-composition-producer-
 import { boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
 import { restoreGridHeightReviewProducer } from './position-composition-producer-transition.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
-import { paintPopulation, componentColorPopulation, componentInteractionPopulation, caretPositionPopulation } from '../../scripts/check-material-position-canonical-conservation.mjs';
-import { restorePaintReviewProducer, restoreComponentColorProducer, restoreComponentInteractionProducer, restoreCaretPositionProducer } from './position-composition-producer-transition.mjs';
+import { paintPopulation, componentColorPopulation, componentInteractionPopulation, caretPositionPopulation, ownerBoundaryPopulation, ownerBoundaryClassification } from '../../scripts/check-material-position-canonical-conservation.mjs';
+import { restorePaintReviewProducer, restoreComponentColorProducer, restoreComponentInteractionProducer, restoreCaretPositionProducer, restoreOwnerBoundaryProducer } from './position-composition-producer-transition.mjs';
 
-for (const mode of ['paint', 'componentColor', 'componentInteraction', 'caretPosition']) test(`${mode} conservation rejects missing observations, false equivalence and unrelated changes`, () => {
-  const componentColor = mode === 'componentColor', componentInteraction = mode === 'componentInteraction', caretPosition = mode === 'caretPosition';
-  const transition = (caretPosition ? restoreCaretPositionProducer : componentInteraction ? restoreComponentInteractionProducer : componentColor ? restoreComponentColorProducer : restorePaintReviewProducer)(currentSource), rows = [], expected = [];
-  for (const [attribution, { groups, observations }] of Object.entries(caretPosition ? caretPositionPopulation : componentInteraction ? componentInteractionPopulation : componentColor ? componentColorPopulation : paintPopulation)) for (let i = 0; i < groups; i++) {
-    const before = { element: attribution + i, property: caretPosition ? (attribution.includes('caret') ? 'caretColor' : 'position') : componentInteraction ? (attribution.includes('cursor') ? 'cursor' : 'pointerEvents') : componentColor ? 'color' : 'backgroundColor', reference: 'transparent',
+for (const mode of ['paint', 'componentColor', 'componentInteraction', 'caretPosition', 'ownerBoundary']) test(`${mode} conservation rejects missing observations, false equivalence and unrelated changes`, () => {
+  const componentColor = mode === 'componentColor', componentInteraction = mode === 'componentInteraction', caretPosition = mode === 'caretPosition', ownerBoundary = mode === 'ownerBoundary';
+  const transition = (ownerBoundary ? restoreOwnerBoundaryProducer : caretPosition ? restoreCaretPositionProducer : componentInteraction ? restoreComponentInteractionProducer : componentColor ? restoreComponentColorProducer : restorePaintReviewProducer)(currentSource), rows = [], expected = [];
+  for (const [attribution, { groups, observations }] of Object.entries(ownerBoundary ? ownerBoundaryPopulation : caretPosition ? caretPositionPopulation : componentInteraction ? componentInteractionPopulation : componentColor ? componentColorPopulation : paintPopulation)) for (let i = 0; i < groups; i++) {
+    const before = { element: attribution + i, property: ownerBoundary ? (attribution.includes('origin') ? 'transformOrigin' : attribution.includes('border') ? 'borderTopColor' : i % 2 ? 'position' : 'transform') : caretPosition ? (attribution.includes('caret') ? 'caretColor' : 'position') : componentInteraction ? (attribution.includes('cursor') ? 'cursor' : 'pointerEvents') : componentColor ? 'color' : 'backgroundColor', reference: 'transparent',
       attribution: 'unresolved', occurrences: i ? 1 : observations - groups + 1 };
     rows.push(before);
     expected.push({ ...before, attribution,
-      classification: caretPosition ? (/request-(omission|substitution)$|overlay-position-substitution$/.test(attribution) ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : ['reviewed-disabled-range-background-default', 'reviewed-range-color-default-policy', 'reviewed-dialog-button-cursor-default-policy'].includes(attribution) ? 'intentional-documented-limitation'
+      classification: ownerBoundary ? ownerBoundaryClassification(attribution) : caretPosition ? (/request-(omission|substitution)$|overlay-position-substitution$/.test(attribution) ? 'application-plugin-authoring-defect' : 'parity-harness-defect') : ['reviewed-disabled-range-background-default', 'reviewed-range-color-default-policy', 'reviewed-dialog-button-cursor-default-policy'].includes(attribution) ? 'intentional-documented-limitation'
         : ['reviewed-sheet-backdrop-measurement-owner', 'reviewed-sheet-pointer-measurement-owner', 'reviewed-tab-pointer-owner-stage-boundary'].includes(attribution) || attribution.endsWith('-computed-local-boundary') ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
       reviewedCases: Array.from({ length: before.occurrences }, (_, j) => 'case-' + j),
       reviewEvidence: { originalRowSha256: createHash('sha256').update(JSON.stringify(before)).digest('hex'),
@@ -45,7 +45,7 @@ for (const mode of ['paint', 'componentColor', 'componentInteraction', 'caretPos
   for (const c of current.control.differences)
     c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
   const compare = (c, e = expected) => compareBorderDefaultCanonical(previous, c, e, currentSource, { [mode]: true });
-  assert.equal(compare(current).changedGroups, caretPosition ? 64 : componentInteraction ? 42 : componentColor ? 36 : 72); assert.equal(compare(current).changedOccurrences, caretPosition ? 2441 : componentInteraction ? 1587 : componentColor ? 922 : 618);
+  assert.equal(compare(current).changedGroups, ownerBoundary ? 134 : caretPosition ? 64 : componentInteraction ? 42 : componentColor ? 36 : 72); assert.equal(compare(current).changedOccurrences, ownerBoundary ? 3948 : caretPosition ? 2441 : componentInteraction ? 1587 : componentColor ? 922 : 618);
   for (const mutate of [r => { r.reference = 'forged'; }, r => { r.classification = 'equivalent-representation'; },
     r => { r.reviewEvidence.originalRowSha256 = 'forged'; }, r => { r.reviewEvidence.observations.pop(); },
     r => { r.reviewEvidence.inputEquivalent = true; }, r => { r.reviewEvidence.renderingEquivalent = true; }]) {

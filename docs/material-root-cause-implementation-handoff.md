@@ -2,6 +2,17 @@
 
 ## Current audit checkpoint — September 28
 
+The existing canonical conservation command now supports `--owner-boundary`,
+pinned to the accepted fca6a435 package and original capture. It checks all
+twelve attribution populations (134 groups / 3948 observations), raw scalar
+conservation, complete independent replay, false-equivalence guards and 48
+control receipt-only updates. `node --test tests/material-parity/position-canonical-conservation.spec.mjs`
+passed 30/30 in 97.81 s; the final owner-boundary property allowlist (including
+transform/origin and side borders) also passed its focused mutation test in
+1.47 s. Named exporter dry-run confirms all five baseline paths; no export was
+running at preflight. Next run one cold integration export, then this command
+plus full section/fingerprint reconciliation. Canonical acceptance remains pending.
+
 Owner-boundary producer integration is prepared and focused verification passed:
 the seven existing reviews compose under authenticated original-case binding,
 independent serialized replay rejects a forged equivalent classification, and
