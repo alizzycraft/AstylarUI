@@ -6,6 +6,7 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory, collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
+import { proveModalPositionInspection, proveBottomSheetActionLayout } from './modal-position-inspection.mjs';
 import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions, applyDisabledLabelColorReview, applyStepperLabelColorReview } from './control-state-paint-review.mjs';
 import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
 import { collectPaintReviewSources, applyPaintReviews, validatePaintReviews, isPaintReviewRow } from './control-state-paint-review.mjs';
@@ -22,6 +23,53 @@ import { proveCardShadowSyntax, applyCardShadowSyntax, validateCardShadowSyntax 
 import { proveMappedNonwidgetAppearance, applyMappedNonwidgetAppearance, validateMappedNonwidgetAppearance } from './control-state-paint-review.mjs';
 import { proveRangeAppearanceInitial, applyRangeAppearanceInitial, validateRangeAppearanceInitial } from './control-state-paint-review.mjs';
 import { proveAppearanceOwnerBoundary, applyAppearanceOwnerBoundaries, validateAppearanceOwnerBoundaries } from './control-state-paint-review.mjs';
+
+test('remaining modal appearance distinguishes link substitutions from non-widget owners across 171 observations', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = JSON.parse(bytes);
+  const cases = report.interactions.filter(e => ['dialog', 'bottom-sheet'].includes(e.family))
+    .map(e => ({ ...e, kind: 'interaction' }));
+  const inventory = collectFullTreeInventory(cases);
+  const expected = {
+    'dialog-actions': ['mat-dialog-actions', 'div', 32],
+    'dialog-copy': ['mat-dialog-content', 'p', 32],
+    'dialog-panel': ['div', 'section', 32],
+    'bottom-sheet-panel': ['mat-bottom-sheet-container', 'section', 25],
+    'bottom-sheet-copy': ['a', 'button', 25],
+    'bottom-sheet-dismiss': ['a', 'button', 25],
+  };
+  let observations = 0, linkSubstitutions = 0;
+  for (const [element, [nativeType, candidateType, count]] of Object.entries(expected)) {
+    const matching = cases.filter(e => e.styleInputs.some(i => i.id === element));
+    assert.equal(matching.length, count);
+    for (const entry of matching) {
+      const key = `interaction:${entry.family}@${entry.profile}/${entry.viewport.id}/${entry.state}`;
+      const [r, a] = modalInventoryTrees(inventory, key);
+      const { mapping } = proveModalPositionInspection(entry, r, a, element);
+      const native = r.nodes.find(n => n.key === mapping.referenceNode);
+      const candidate = a.nodes.find(n => n.key === mapping.candidateNode);
+      assert.equal(native.type, nativeType); assert.equal(candidate.authored.type, candidateType);
+      assert.equal(r.styles[native.style].appearance, 'none');
+      const declarations = native.rules.flatMap(i => Object.entries(r.rules[i].declarations));
+      assert.deepEqual(declarations.filter(([k]) => /^(appearance|-webkit-appearance|-moz-appearance|all)$/.test(k)), []);
+      const motion = declarations.filter(([k]) => /^(animation|transition)/.test(k));
+      if (element === 'dialog-panel') {
+        assert.equal(motion.length, 10);
+        assert.ok(motion.some(([k, v]) => k === 'transition-property' && v.value === 'none'));
+        assert.ok(motion.some(([k, v]) => k === 'transition-property' && v.value === ''));
+      } else assert.deepEqual(motion, []);
+      if (nativeType === 'a') {
+        const proof = proveBottomSheetActionLayout(entry, r, a, element);
+        assert.equal(proof.inputEquivalent, false); assert.equal(proof.renderingEquivalent, false);
+        linkSubstitutions++;
+      }
+      observations++;
+    }
+  }
+  assert.equal(observations, 171); assert.equal(linkSubstitutions, 50);
+});
 
 test('chip and tab appearance binds distinct observation owners across all 222 cases', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

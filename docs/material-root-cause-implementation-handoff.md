@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 28
 
+**Remaining modal appearance question narrowed across all 171 observations:**
+the authenticated capture and existing alias/position proofs show 50 bottom-sheet
+action observations replace native `a[href="#"]` elements (with child content
+and state layers) with childless value buttons. Existing action-layout evidence
+independently confirms unequal authoring; omitted appearance must not be called
+an equivalent default across this element-type substitution. The other 121
+observations map non-widget owners: dialog actions/content/surface and sheet
+container to div/p/section. None has an own native appearance/reset declaration.
+The 32 dialog surfaces retain ten transition longhands, including empty CSSOM
+expansions and the noop override `transition-property:none`; empty expansions
+are not evidence of omitted authoring. Other mapped owners have no own motion
+declarations. This distinguishes control substitution from the non-widget initial
+request question; it does not infer candidate computed appearance or motion parity.
+
+Focused test `remaining modal appearance distinguishes` passes 1/1 (2.92s total),
+using original evidence only and no new captures. No classifications changed:
+canonical 130 / projected 101 remain. Next decisive work: bind the two link-to-button
+appearance rows to the established authoring defect; check whether retained public
+non-widget appearance proof covers the four remaining owner types and their motion
+context before assigning those rows. Source-receipt/export reconciliation remains
+pending, followed by spacing/layout coverage and final acceptance gates.
+
 **Chip/tab appearance review producer-integrated:** the existing production
 pipeline now applies and validates the three owner-boundary classifications only
 with bound original evidence. The combined test executes the actual pipeline
