@@ -18,6 +18,47 @@ import { restoreBoxSizingReviewProducer } from './position-composition-producer-
 import { boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
 import { restoreGridHeightReviewProducer } from './position-composition-producer-transition.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
+import { compareStackingRadiusCanonical, stackingRadiusPopulation } from '../../scripts/check-material-position-canonical-conservation.mjs';
+import { restoreStackingProducer } from './position-composition-producer-transition.mjs';
+
+test('stacking/radius conservation rejects forged raw inputs and unrelated proof changes', () => {
+  const transition = restoreStackingProducer(currentSource), rows = [], expected = [];
+  for (const [attribution, { groups, observations }] of Object.entries(stackingRadiusPopulation)) {
+    const radius = attribution === 'reviewed-full-radius-action-request-coverage-gap';
+    for (let i = 0; i < groups; i++) {
+      const before = { element: attribution + i, property: radius ? 'borderTopLeftRadius' : 'zIndex',
+        reference: 'native', attribution: 'unresolved', occurrences: i ? 1 : observations - groups + 1 };
+      rows.push(before);
+      expected.push({ ...before, attribution,
+        classification: radius ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
+        reviewedCases: Array.from({ length: before.occurrences }, (_, j) => 'case-' + j),
+        reviewEvidence: { originalRowSha256: createHash('sha256').update(JSON.stringify(before)).digest('hex'),
+          observations: Array.from({ length: before.occurrences }, () => ({ syntheticGuard: true })),
+          inputEquivalent: radius ? null : false, renderingEquivalent: radius ? null : false } });
+    }
+  }
+  rows.push({ property: 'height', reference: 'auto', attribution: 'unresolved' });
+  expected.push(structuredClone(rows.at(-1)));
+  const previous = { rows, control: { differences: Array.from({ length: 48 }, (_, i) => ({ case: 'case-' + i,
+    attribution: 'reviewed-interactive-normal-line-box-stage-comparison',
+    reviewEvidence: { observation: { normalizationReconciliation: { currentModuleSha256: transition.previousModuleSha256 } } } })) } };
+  const current = { rows: structuredClone(expected), control: structuredClone(previous.control) };
+  current.control.differences.forEach(c => { c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256; });
+  const compare = (c, e = expected) => compareStackingRadiusCanonical(previous, c, e, currentSource);
+  assert.equal(compare(current).changedGroups, 30);
+  assert.equal(compare(current).changedOccurrences, 1228);
+  for (const mutate of [r => { r.reference = 'forged'; }, r => { r.classification = 'equivalent-representation'; },
+    r => { r.property = 'height'; }, r => { r.reviewedCases[1] = r.reviewedCases[0]; },
+    r => { r.reviewEvidence.originalRowSha256 = 'forged'; }, r => { r.reviewEvidence.observations.pop(); },
+    r => { r.reviewEvidence.renderingEquivalent = true; }]) {
+    const c = structuredClone(current), e = structuredClone(expected); mutate(c.rows[0]); mutate(e[0]);
+    assert.throws(() => compare(c, e));
+  }
+  for (const mutate of [c => { c.rows.reverse(); }, c => { c.rows.pop(); },
+    c => { c.control.differences[0].extra = true; }]) {
+    const c = structuredClone(current); mutate(c); assert.throws(() => compare(c));
+  }
+});
 import { paintPopulation, componentColorPopulation, componentInteractionPopulation, caretPositionPopulation, ownerBoundaryPopulation, ownerBoundaryClassification } from '../../scripts/check-material-position-canonical-conservation.mjs';
 import { restorePaintReviewProducer, restoreComponentColorProducer, restoreComponentInteractionProducer, restoreCaretPositionProducer, restoreOwnerBoundaryProducer } from './position-composition-producer-transition.mjs';
 import { preparedInputPopulation, preparedInputClassification } from '../../scripts/check-material-position-canonical-conservation.mjs';

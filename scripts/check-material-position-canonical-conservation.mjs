@@ -68,6 +68,63 @@ import { restorePreparedInputProducer } from '../tests/material-parity/position-
 import { applyPreparedInputReviews, isPreparedInputReviewRow } from '../tests/material-parity/authored-anchor-review.mjs';
 import { applyPreparedInputFollowups, isPreparedInputFollowupRow } from '../tests/material-parity/authored-anchor-review.mjs';
 import { restorePreparedInputFollowupProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { restoreStackingProducer } from '../tests/material-parity/position-composition-producer-transition.mjs';
+import { applyStackingReviews } from '../tests/material-parity/stacking-input-review.mjs';
+import { applyFullRadiusActionReview } from '../tests/material-parity/authored-anchor-review.mjs';
+
+export const stackingRadiusPopulation = Object.freeze({
+  'reviewed-stacking-owner-request-addition': { groups: 6, observations: 376 },
+  'reviewed-stacking-owner-request-omission': { groups: 3, observations: 214 },
+  'reviewed-tooltip-stacking-owner-substitution': { groups: 1, observations: 18 },
+  'reviewed-full-radius-action-request-coverage-gap': { groups: 20, observations: 620 },
+});
+
+export function compareStackingRadiusCanonical(previous, current, expectedRows, source) {
+  const transition = restoreStackingProducer(source);
+  const adjusted = refreshScalarControlReceipts(previous.rows, previous.control, current.control, transition);
+  const expected = refreshScalarControlReceipts(expectedRows, previous.control, current.control, transition);
+  same(current.rows, expected, 'stacking/radius differs from original-source replay');
+  assert.equal(current.rows.length, previous.rows.length);
+  const control = structuredClone(current.control);
+  assert.equal(control.differences.length, previous.control.differences.length);
+  let receipts = 0;
+  control.differences.forEach((after, i) => {
+    const before = previous.control.differences[i];
+    if (before.attribution === 'reviewed-interactive-normal-line-box-stage-comparison' &&
+        receipt(before)?.currentModuleSha256 === transition.previousModuleSha256) {
+      assert.equal(receipt(after)?.currentModuleSha256, transition.currentModuleSha256);
+      receipt(after).currentModuleSha256 = transition.previousModuleSha256;
+      receipts++;
+    }
+  });
+  assert.equal(receipts, 48);
+  same(control, previous.control, 'stacking/radius changed unrelated control evidence');
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = row => Object.fromEntries(Object.entries(row).filter(([key]) => !metadata.has(key)));
+  const totals = {};
+  current.rows.forEach((after, i) => {
+    const before = previous.rows[i];
+    same(raw(after), raw(before), 'stacking/radius changed raw inputs');
+    if (isDeepStrictEqual(adjusted[i], after)) return;
+    assert.equal(before.attribution, 'unresolved');
+    assert.ok(Object.hasOwn(stackingRadiusPopulation, after.attribution));
+    const radius = after.attribution === 'reviewed-full-radius-action-request-coverage-gap';
+    assert.match(before.property, radius ? /^border(Top|Bottom)(Left|Right)Radius$/ : /^zIndex$/);
+    assert.equal(after.classification, radius ? 'parity-harness-defect' : 'application-plugin-authoring-defect');
+    assert.equal(after.reviewEvidence.originalRowSha256, digest(before));
+    assert.equal(after.reviewedCases.length, before.occurrences);
+    assert.equal(new Set(after.reviewedCases).size, before.occurrences);
+    assert.equal(after.reviewEvidence.observations.length, before.occurrences);
+    assert.equal(after.reviewEvidence.inputEquivalent, radius ? null : false);
+    assert.equal(after.reviewEvidence.renderingEquivalent, radius ? null : false);
+    const count = totals[after.attribution] ??= { groups: 0, observations: 0 };
+    count.groups++; count.observations += before.occurrences;
+  });
+  same(totals, stackingRadiusPopulation, 'stacking/radius population changed');
+  return { changedGroups: 30, changedOccurrences: 1228, controlReceiptRecords: receipts,
+    allRawInputsConserved: true, allNonReceiptControlEvidenceConserved: true,
+    orderedCurrentRowsSha256: digest(current.rows) };
+}
 
 export const preparedFollowupPopulation = Object.freeze({
   'reviewed-display-request-substitution': { groups: 15, observations: 844 },
@@ -852,7 +909,21 @@ function replayAppearanceRows(rows, captured, { colorMotion = false, originMotio
   });
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--prepared-followup') {
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--stacking-radius') {
+  assert.equal(process.argv.length, 3);
+  const previous = await readAudit('artifacts/material-parity/working-audit/6f0a4c1c3c214695abe87bb185f6c6c392acd5fa6452d2315891854f85cc9de9');
+  assert.equal(previous.manifest.uncompressedSha256, '757fce0f5455b3de19e0ef1bf93af3725a3ac01794a7d44a4feb42a4f2b6d9bf');
+  const current = await readAudit('docs');
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const captured = JSON.parse(bytes);
+  const cases = [...captured.results.map(c => ({ ...c, kind: 'static' })), ...captured.interactions.map(c => ({ ...c, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const expected = applyFullRadiusActionReview(applyStackingReviews(previous.rows, cases, inventory, normalize), cases, inventory, normalize);
+  console.log(JSON.stringify(compareStackingRadiusCanonical(previous, current, expected,
+    readFileSync('tests/material-parity/input-equivalence-audit.mjs')), null, 2));
+} else if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href && process.argv[2] === '--prepared-followup') {
   assert.equal(process.argv.length, 3);
   const previous = await readAudit('artifacts/material-parity/working-audit/4880964fc1018a1fd6409f7c7af2ddaa5fc21a82e45dab3a0cc5fce5a6019156');
   assert.equal(previous.manifest.uncompressedSha256, 'f5f653def115d188c8905b75f0e41ef5a1bd0c7de7a29b8b31e8b65b494751dd');

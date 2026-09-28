@@ -204,7 +204,8 @@ export function applyFullRadiusActionReview(rows, cases, inventory, normalize) {
       },
     });
   }
-  const replacements = new Map(selected.map((row, index) => [row, reviewed[index]]));
+  const replacements = new Map(selected.map((row, index) => [row, { ...reviewed[index],
+    reviewEvidence: { ...reviewed[index].reviewEvidence, inputEquivalent: null, renderingEquivalent: null } } ]));
   return rows.map(row => replacements.get(row) ?? row);
 }
 

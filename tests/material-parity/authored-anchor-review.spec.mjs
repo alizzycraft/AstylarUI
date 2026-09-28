@@ -41,6 +41,8 @@ test('full-radius action requests classify missing renderer-input coverage acros
     if (row !== rows[index]) {
       assert.equal(rows[index].attribution, 'unresolved');
       assert.equal(row.classification, 'parity-harness-defect');
+      assert.equal(row.reviewEvidence.inputEquivalent, null);
+      assert.equal(row.reviewEvidence.renderingEquivalent, null);
       assert.equal(row.reviewEvidence.observations.length, row.occurrences);
       for (const observation of row.reviewEvidence.observations) {
         assert.equal(observation.sameShapeOnEqualWideBoxes, true);

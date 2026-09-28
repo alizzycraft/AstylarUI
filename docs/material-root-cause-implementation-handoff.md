@@ -33,9 +33,26 @@ and removes only the added interaction geometry/paint diagnostics to recover
 the exact historical source. It does not assert new captures equal old captures.
 All seven gap-source replay tests pass (9.94s total), including changed-harness,
 forged-receipt and live gap-normalization negative controls.
-Next: preflight remaining dependency receipts, extend combined-batch full-payload
-conservation, then retry the cold integration milestone. Do not repeat the
-completed corner-raster investigation.
+Combined scalar/control conservation is now available in the existing command:
+`node scripts/check-material-position-canonical-conservation.mjs --stacking-radius`.
+It authenticates the accepted 6f0a4c... predecessor, independently replays the
+original cases, permits exactly 30 groups / 1,228 observations and the existing
+48 producer-receipt updates, and preserves every other scalar/control value.
+Focused forged-data tests pass (1/1); actual new-export comparison is pending.
+This does not by itself compare every other top-level report section or accept
+source-fingerprint changes. Radius group-level equivalence flags now correctly
+remain null, matching the individual observations, instead of the shared
+wrapper's false default. Radius and combined production tests pass (2/2).
+Explicit-gap collector `--check` now passes: 16 groups, 296 cases, 1,032
+observations and 40 negative controls; canonical unchanged.
+Gap-membership preflight still fails in its scalar-rule-loss prerequisite:
+the saved supplement cites historical capture hash c3cabcfde..., whereas its
+reproducer emits current harness hash 4ed6abe8.... This is a receipt-provenance
+mismatch to resolve explicitly; do not regenerate historical findings blindly
+or start another full export yet.
+Next: finish dependency preflight and retry the cold integration milestone,
+then verify new payload and all section/fingerprint changes before acceptance.
+Do not repeat the completed corner-raster investigation.
 
 Read-only next-batch lead: all 32 original states for each dialog action retain
 candidate padding `10px 20px` in all three stages with no authored padding rule.
