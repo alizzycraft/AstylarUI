@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyDialogPanelGapReview,')) {
+    for (const [from, to] of [
+      ["import { applyDialogPanelGapReview, validateDialogPanelGapReview } from './display-request-review.mjs';\n", ''],
+      ['applyDialogActionSpacingReviews, applyDialogPanelGapReview]', 'applyDialogActionSpacingReviews]'],
+      ['      errors.push(...validateDialogPanelGapReview(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-dialog-panel-gap-observation-stage'))\n    errors.push('dialog panel gap attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated dialog panel gap integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyDialogActionSpacingReviews,')) {
     for (const [from, to] of [
       ["import { applyDialogActionSpacingReviews, validateDialogActionSpacingReviews } from './display-request-review.mjs';\n", ''],

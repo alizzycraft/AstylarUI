@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 29
 
+**Dialog panel gap integrated; export pending:** the serialized-transition proof
+from `86bf71f` now runs in the bound production tail with replay validation and
+unbound-attribution rejection. Existing historical gap review remains unchanged
+and limited to its original evidence; its validator selects only its own
+attributions. The new proof has a separate explicitly checked attribution.
+The actual tail changes 46 groups / 2,379 observations against the current
+checkpoint, or 101 / 5,335 and 81 / 4,208 against the earlier checkpoints.
+Raw/unrelated rows remain unchanged; reversed reducer order agrees and unbound
+execution does not run reducers.
+`node --test --test-name-pattern="omitted owner paint requests preserve|dialog action spacing binds" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/display-request-review.spec.mjs`
+passes **2/2**, 32,255.2296 ms total. Exact producer reversal retains historical
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+current producer is `d9d3e231deaed9bd0c9a991a2a87f838ad5d3c318e1009f430bf55c20b77d906`.
+Canonical remains **95 unresolved**; integrated batches project **29**.
+Compact-query triage confirms the remaining population, excluding already
+integrated stepper flex direction: bottom-sheet/snackbar overlay flow and local
+text/alignment observations (11 groups), tab/stepper visibility (2), tooltip
+shrink (2), expansion alignment/margin/text (3), tab top padding (2), toggle
+zero-width border styles (3), divider border substitution (2), progress text
+alignment (2), icon object-fit (1), tree direction (1). Prioritize overlay
+ownership, then state and remaining styling semantics. Source/export
+reconciliation and full final gates remain pending. No renderer/fixture changes
+or captures; these counts describe classification coverage, not repaired output.
+
 **Dialog panel gap ambiguity resolved; integration pending:** two groups / 64
 observations across all 32 panel cases retain browser-computed `normal` versus
 omitted candidate local gaps. The prior gap survey stopped at empty CSSOM
