@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 29
 
+**Overlay flow integrated; export pending:** the 11-group proof from `6e10415`
+now runs in the bound production tail with independent replay and unbound
+attribution rejection. Actual tail changes 57 groups / 2,708 observations against
+the current checkpoint, or 112 / 5,664 and 92 / 4,537 against earlier checkpoints.
+Raw/unrelated records remain unchanged; reverse reducer order agrees and unbound
+execution runs no reducers.
+`node --test --test-name-pattern="omitted owner paint requests preserve|overlay flow preserves" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/overlay-position-request-review.spec.mjs`
+passes **2/2**, 33,784.5148 ms total. Historical producer reversal retains
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+current producer is `47bd9254fb83a0983634c7d1ebcefdd304014e314e13e93ee13194b40a754a83`.
+Canonical remains **95 unresolved**, integrated batches project **18**. Next:
+tab/stepper visibility and state ownership using existing panel-state/ancestry
+proofs, tooltip shrink, then remaining styling semantics. Source/export
+reconciliation and full final gates remain pending. No renderer/fixture changes
+or new captures; this is audit coverage, not an output-parity claim.
+
 **Overlay flow proof verified; integration pending:** 11 groups / 329 observations
 across 25 bottom-sheet and 34 snackbar wrapper cases distinguish row/pane native
 composition from column/direct-surface candidate composition. Seven groups are

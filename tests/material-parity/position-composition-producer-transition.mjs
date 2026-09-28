@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyOverlayFlowReviews,')) {
+    for (const [from, to] of [
+      ["import { applyOverlayFlowReviews, validateOverlayFlowReviews } from './overlay-position-request-review.mjs';\n", ''],
+      ['applyDialogPanelGapReview, applyOverlayFlowReviews]', 'applyDialogPanelGapReview]'],
+      ['      errors.push(...validateOverlayFlowReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => ['reviewed-overlay-flow-composition-substitution', 'reviewed-overlay-alignment-observation-stage'].includes(row.attribution)))\n    errors.push('overlay flow attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated overlay flow integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyDialogPanelGapReview,')) {
     for (const [from, to] of [
       ["import { applyDialogPanelGapReview, validateDialogPanelGapReview } from './display-request-review.mjs';\n", ''],
