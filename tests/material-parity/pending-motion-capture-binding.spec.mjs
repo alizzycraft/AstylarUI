@@ -40,6 +40,12 @@ test('replayed motion receipts preserve all original evidence across parent and 
 test('pending motion capture binding retains all original memberships without inventing resolved motion', () => {
   const report = recordPendingMotionCapture(evidence);
   assert.deepEqual(report, JSON.parse(readFileSync('docs/material-pending-motion-capture-binding.json')));
+  const previous = JSON.parse(execFileSync('git', ['show', 'ba40020:docs/material-pending-motion-capture-binding.json'],
+    { maxBuffer: 2 * 1024 * 1024 }));
+  assert.deepEqual(report.sources.map(s => s.file), previous.sources.map(s => s.file));
+  assert.equal(report.sourceFingerprint.file, previous.sourceFingerprint.file);
+  assert.deepEqual({ ...report, sources: previous.sources, sourceFingerprint: previous.sourceFingerprint }, previous,
+    'motion receipt refresh changed binding observations or conclusions');
   assert.deepEqual(report.counts, { groups: 2, cases: 32, propertyObservations: 64, browserControls: 6 });
   for (const row of report.rows) {
     assert.equal(row.originalMotionDisposition, 'requires-review'); assert.equal(row.priorAttribution, 'unresolved');

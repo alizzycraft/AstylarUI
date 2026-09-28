@@ -4,16 +4,16 @@
   "sources": [
     {
       "file": "docs/material-gap-review-membership.json",
-      "sha256": "f7e4cb94f4ec9e1b7c061a42b21d0eead8f4476f196e4ef43088e9637cbaa8f5"
+      "sha256": "ad227dbbcabf676f05332258cec93c2a0adaa0205b9f55a4c40e167f353234be"
     },
     {
       "file": "docs/material-motion-cssom-capture-proof.json",
-      "sha256": "2891e51fb6cbf12f3085c91eddaf982fb74cdabed40dcdc31aa0bd7a5e1d65d2"
+      "sha256": "6ded8c5e2d48ab1a3bf07884ebbb4885a7aadee75581787b0fcedc99b5eb50e6"
     }
   ],
   "sourceFingerprint": {
     "file": "scripts/bind-material-pending-motion-capture.mjs",
-    "sha256": "ad999df9d0ee122eb95281db48e228f32009bf2d4db6af3fd2a57d10da39fd08"
+    "sha256": "d57b84eaa6ec8f3f33e80783c3cc32c79d866cbbcec1aed46b06b605a99659e4"
   },
   "counts": {
     "groups": 2,

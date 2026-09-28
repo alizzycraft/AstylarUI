@@ -53,10 +53,16 @@ conservation proves exactly 17 permitted historical receipt changes, with all
 other fields identical and mutation rejection intact (7/7 tests, 9.53s).
 Membership replay passes: 38 groups / 1,902 observations / 676 cases, retaining
 two unresolved motion groups. No canonical audit acceptance change.
-The separate pending-motion binding preflight exposes an older stale CSSOM
-parent receipt (2e990e6c... versus current survey 3a365228...). Its generator
-stops before writing. Preserve that failure for focused reconciliation; merely
-updating the membership reference would not fix this independent prerequisite.
+The separate pending-motion binding's older stale CSSOM parent receipt is now
+reconciled. The browser verifier uses the authenticated historical gap reader;
+exact removal of that import/call restores the complete pinned verifier hash.
+Real Chrome 153.0.8010.53 replay retains all six browser controls and 32 original
+dialog cases. Only browser version, parent receipt and verifier receipt change
+in its report; the dependent binding changes only three source receipts.
+All three pending-motion tests pass (28.03s including browser replay), retaining
+14 receipt mutations, 17 binding mutations, and exact original binding contents
+apart from those receipts. Both motion groups remain unresolved; no rendering
+or resolved-motion claim is added. Canonical audit files remain unchanged.
 Next: finish dependency preflight and retry the cold integration milestone,
 then verify new payload and all section/fingerprint changes before acceptance.
 Do not repeat the completed corner-raster investigation.

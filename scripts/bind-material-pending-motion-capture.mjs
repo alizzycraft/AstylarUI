@@ -65,7 +65,25 @@ export function bindPendingMotionCapture(membership, cssom) {
 export function assertMotionReceiptConservation(cssom, pinned) {
   assert.match(cssom.browser, /^\d+\.\d+\.\d+\.\d+$/);
   assert.match(cssom.parent.sha256, /^[a-f0-9]{64}$/);
-  assert.deepEqual({ ...cssom, browser: pinned.browser, parent: { ...cssom.parent, sha256: pinned.parent.sha256 } }, pinned,
+  const sources = structuredClone(cssom.source);
+  const index = sources.findIndex(s => s.file === verifier);
+  assert.ok(index >= 0);
+  if (sources[index].sha256 !== pinned.source[index].sha256) {
+    const current = readFileSync(verifier, 'utf8').replaceAll('\r\n', '\n');
+    assert.equal(hash(current), sources[index].sha256);
+    let restored = current;
+    for (const [from, to] of [
+      ["import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';\n", ''],
+      ['for (const source of survey.sourceFingerprints) readGapSurveySource(source);',
+        "for (const source of survey.sourceFingerprints)\n  assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\\r\\n', '\\n')), source.sha256);"],
+    ]) {
+      assert.equal(restored.split(from).length, 2);
+      restored = restored.replace(from, to);
+    }
+    assert.equal(hash(restored), pinned.source[index].sha256, 'CSSOM verifier changed beyond historical dependency reader');
+    sources[index].sha256 = pinned.source[index].sha256;
+  }
+  assert.deepEqual({ ...cssom, source: sources, browser: pinned.browser, parent: { ...cssom.parent, sha256: pinned.parent.sha256 } }, pinned,
     'original CSSOM proof changed beyond replayed parent receipt and recorded browser version');
 }
 

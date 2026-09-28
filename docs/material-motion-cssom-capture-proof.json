@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "kind": "browser-cssom-motion-capture-proof",
-  "browser": "152.0.7977.84",
+  "browser": "153.0.8010.53",
   "parent": {
     "file": "docs/material-owner-gap-input-survey.json",
-    "sha256": "2e990e6c15b959d396770ce8012bc62c61e0a32926fc67020e4a34ba43ee28f8"
+    "sha256": "3a36522878febc51d87ed2526c318e60d79e61a761238665b4292952d20a368e"
   },
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",
@@ -1263,7 +1263,7 @@
   "source": [
     {
       "file": "scripts/verify-material-motion-cssom-capture.mjs",
-      "sha256": "fcaee07d55e0af1914bb38db023741eb835782a6d1d2a1a5d9c1c515f6c26310"
+      "sha256": "d36b48d3812503e03831e7b69214b44de4f17585cbd8a4befc17ec8670d59811"
     },
     {
       "file": "tests/material-parity/input-tree-evidence.mjs",

@@ -5,14 +5,14 @@ import path from 'node:path';
 import { chromium } from 'playwright-core';
 import { captureBrowserInputTree } from '../tests/material-parity/input-tree-evidence.mjs';
 import { inspectOwnerGapInput } from '../tests/material-parity/owner-gap-input-evidence.mjs';
+import { readGapSurveySource } from '../tests/material-parity/gap-survey-source-replay.mjs';
 
 const args = process.argv.slice(2);
 assert.ok(args.length === 0 || args.length === 1 && args[0] === '--check', 'only --check is accepted');
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const parentFile = 'docs/material-owner-gap-input-survey.json';
 const survey = JSON.parse(readFileSync(parentFile));
-for (const source of survey.sourceFingerprints)
-  assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256);
+for (const source of survey.sourceFingerprints) readGapSurveySource(source);
 const originalGroups = survey.groups.filter(g => g.family === 'dialog' && g.element === 'dialog-panel');
 assert.equal(originalGroups.length, 2);
 assert.deepEqual(originalGroups[0].originalCases, originalGroups[1].originalCases);
