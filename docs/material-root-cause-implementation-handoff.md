@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 28
 
+**Four range-input overflow groups prepared:** all 156 original input owners
+are explicitly verified as type=range/inputType=range. Dependency-bound native
+thumb-pixel and actual RangeManager/shared-clip evidence explains initial visible
+versus omitted overflow in four groups / 312 observations. No equal hit regions,
+dimensions, appearance, ancestor clipping, plugin composition or raster claim.
+The combined range/owner-boundary replay is order-independent, preserves every
+raw and unrelated row, and rejects incomplete/forged membership. Browser/table/
+range focused checks pass 4/4 (10.52s); scoped diff check passes. Twelve overflow
+groups / 852 observations are now prepared (table 2/104, differing owners 6/436,
+range inputs 4/312), none yet producer-integrated. Canonical remains 130 unresolved;
+expected 118 after this batch, subject to full integration validation. Next wire
+the existing three apply/validate functions into the production tail and its
+historical-source restoration; reuse the existing combined-tail test rather than
+creating another integration framework. Batch subsequent findings before export.
+
 **Range initial-overflow applicability demonstrated:** native Chrome range with
 an authored oversized thumb paints 1,600 red pixels, 1,200 outside the 100x10
 input box, identically for omitted/visible overflow. Hidden and clip controls

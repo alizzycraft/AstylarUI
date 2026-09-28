@@ -172,7 +172,7 @@ export function applyTableVisibleOverflow(rows, cases, inventory, normalize) {
     'src/app/services/dom/elements/table.service.ts': '0d96f98c3bdcfbba71a1eaa839cfa34d19e5621471b27929574334535e7733c9',
     'src/app/services/dom/elements/element-creation.service.ts': 'bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a',
     'src/app/services/dom/elements/element-creation.service.spec.ts': 'c968bb582c470305f1a83144319d6aaa9d85f6089e19c21c7eff6ca4b09e2830',
-    'tests/material-parity/control-overflow-observation.spec.mjs': '082994aa31d414d82af001b05c88077899f7328c6cfc9248d4f049205c8354a1' };
+    'tests/material-parity/control-overflow-observation.spec.mjs': '8008b11bce62333459b75577f6d08c5c5fd17dcad28a5acbadadb252a3d76f51' };
   for (const [file, expected] of Object.entries(sources)) assert.equal(createHash('sha256')
     .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
   return applyModalBoxReview(rows, cases, inventory, normalize, {
@@ -232,6 +232,12 @@ export function proveRemainingControlOverflowInputs(entry, r, a, element) {
     'tab-overview': ['span', 'button'], 'tab-activity': ['span', 'button'],
   } : {};
   assert.ok(types[element]);
+  if (types[element][0] === 'input') {
+    const ref = r.nodes.filter(n => n.attributes?.id === element);
+    const ast = a.nodes.filter(n => n.authored?.id === element);
+    assert.equal(ref.length, 1); assert.equal(ast.length, 1);
+    assert.equal(ref[0].attributes.type, 'range'); assert.equal(ast[0].authored.inputType, 'range');
+  }
   return { ...proveOmittedOverflowOwner(entry, r, a, element, ...types[element]),
     referenceType: types[element][0], candidateType: types[element][1],
     initialValueEquivalent: false, ownClippingBranchVerified: false, renderingEquivalent: false };
@@ -284,6 +290,32 @@ export function validateControlOverflowOwnerBoundaries(rows, originalRows, cases
     assert.deepEqual(select(rows), select(applyControlOverflowOwnerBoundaries(originalRows, cases, inventory, normalize)));
     return [];
   } catch (error) { return [`control overflow owner boundary lacks original ancestry proof: ${error.message}`]; }
+}
+
+export function applyRangeVisibleOverflow(rows, cases, inventory, normalize) {
+  const sources = { ...initialOverflowSources,
+    'src/app/services/dom/input/range.manager.ts': '5300fd18403ff659f4ef415df796f0e9ea0260e7c591004fa407fd99ec24b4db',
+    'src/app/services/dom/input/range.manager.spec.ts': 'b9879c8cb2b52922b88037f21f27bf188c11ea1218b86364361676124fa771e4',
+    'src/app/services/dom/input/input-element.service.ts': '1feefdf367bdaf42f777913049034e06af6faa14dad6f4019b2d05913170a5cf',
+    'tests/material-parity/control-overflow-observation.spec.mjs': '8008b11bce62333459b75577f6d08c5c5fd17dcad28a5acbadadb252a3d76f51' };
+  for (const [file, expected] of Object.entries(sources)) assert.equal(createHash('sha256')
+    .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
+  return ['slider-start', 'slider-primary'].reduce((values, element) => applyModalBoxReview(values, cases, inventory, normalize, {
+    family: 'slider', element, properties: ['overflowX', 'overflowY'],
+    classification: 'equivalent-representation', attribution: 'reviewed-range-visible-overflow-initial-value', owner: 'none',
+    justification: 'The exact native and candidate range-input owners omit overflow/reset requests. Native axes compute visible while candidate captured stages omit overflow. A native oversized-thumb pixel test distinguishes visible/omitted from hidden/clip, and actual RangeManager/shared-clip tests establish the initial unclipped presentation branch. This explains only initial overflow representation, not equal dimensions, appearance, hit regions, scrolling, ancestor clipping, plugin composition or final rendering.',
+    prove: (entry, r, a) => ({ ...proveRemainingControlOverflowInputs(entry, r, a, element), sources,
+      initialValueEquivalent: true, ownClippingBranchVerified: true, inputEquivalent: false,
+      ancestorClippingVerified: false, hitTestingVerified: false, scrollingVerified: false }),
+  }), rows);
+}
+
+export function validateRangeVisibleOverflow(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(row => row.attribution === 'reviewed-range-visible-overflow-initial-value');
+    assert.deepEqual(select(rows), select(applyRangeVisibleOverflow(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`range initial overflow lacks original inputs and sensitivity proof: ${error.message}`]; }
 }
 
 export function applyHeadingVisibleOverflow(rows, cases, inventory, normalize) {

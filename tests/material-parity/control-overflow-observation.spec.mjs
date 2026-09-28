@@ -17,7 +17,8 @@ import { proveTableOverflowInputs, applyTableVisibleOverflow, validateTableVisib
 import { chromium } from 'playwright-core';
 import { PNG } from 'pngjs';
 import { proveRemainingControlOverflowInputs, proveControlOverflowOwnerBoundary,
-  applyControlOverflowOwnerBoundaries, validateControlOverflowOwnerBoundaries } from './control-overflow-observation.mjs';
+  applyControlOverflowOwnerBoundaries, validateControlOverflowOwnerBoundaries,
+  applyRangeVisibleOverflow, validateRangeVisibleOverflow } from './control-overflow-observation.mjs';
 
 test('native range visible overflow preserves outside thumb pixels with clipping sensitivity', async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
@@ -94,6 +95,17 @@ test('remaining range and tab overflow inputs retain exact owner boundaries', ()
   const broken = structuredClone(pair); broken[0].nodes.find(n => n.key === proof.nativeControl).attributes.role = 'button';
   assert.throws(() => proveControlOverflowOwnerBoundary(entry, ...broken, 'tab-overview'));
   assert.throws(() => applyControlOverflowOwnerBoundaries(rows, cases.slice(1), inventory, normalize));
+  const combined = applyRangeVisibleOverflow(applied, cases, inventory, normalize);
+  const rangeChanges = combined.filter((row, i) => row !== applied[i]);
+  assert.equal(rangeChanges.length, 4); assert.equal(rangeChanges.reduce((n, row) => n + row.occurrences, 0), 312);
+  assert.deepEqual(combined.map(raw), rows.map(raw));
+  combined.forEach((row, i) => { if (!rangeChanges.includes(row)) assert.deepEqual(row, applied[i]); });
+  assert.deepEqual(combined, applyControlOverflowOwnerBoundaries(applyRangeVisibleOverflow(rows, cases, inventory, normalize), cases, inventory, normalize));
+  assert.deepEqual(validateRangeVisibleOverflow(combined, rows, cases, inventory, normalize), []);
+  const forgedRange = structuredClone(combined);
+  forgedRange.find(row => row.attribution === 'reviewed-range-visible-overflow-initial-value').reviewedCases.pop();
+  assert.equal(validateRangeVisibleOverflow(forgedRange, rows, cases, inventory, normalize).length, 1);
+  assert.throws(() => applyRangeVisibleOverflow(rows, cases.filter(e => e !== cases.find(e => e.family === 'slider')), inventory, normalize));
 });
 
 test('native table omitted overflow retains visible descendants with hidden and ancestor sensitivity', async () => {
