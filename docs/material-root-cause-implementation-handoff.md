@@ -142,6 +142,20 @@ container color and incomplete population rejection. This module is deliberately
 not imported by the producer while the paint export is running; it adds no changes
 to that export's dependency graph or accepted counts. Once integrated separately,
 the remaining prepared-color gap is 34 groups / 845 observations.
+The same module now prepares the **8 enabled toolbar/radio/expansion groups /
+184 observations** as computed/local measurement-boundary findings. Each native
+token path ends at its recorded component declaration; the candidate leaf omits
+local color and its ancestor explicitly requests the same normalized color in
+all three stages. Neither candidate computed ink nor token-semantic/rendering
+equivalence is inferred. Conflicting color declarations and color-transition
+mutations reject the proof. The initial test exposed 39 matches for a 30-case
+interaction group: equal-valued, already-reviewed static cases were outside that
+group. Membership now uses the recorded states and still enforces exact counts
+and ordered case IDs. The expanded focused spec passed **1/1 in 16.57 s**, covering
+all **10 newly prepared groups / 261 observations** and preserving raw fields.
+The remaining color gap beyond these preparations is **26 groups / 661
+observations**. This module remains outside the live export dependency graph;
+canonical counts and the pending paint batch are unchanged.
 Prepared coverage includes 62 background groups / 450 observations and ten color
 groups / 168 observations. The remaining 36 color groups need applicability work;
 the existing retained-label proofs must not be generalized to container owners.
