@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 28
 
+**Targeted pre-export binding check completed:** text alignment (49 groups /
+2,677 observations), LTR alignment (4 / 178), reviewed-source batch (146 /
+6,295), and root background (144 / 2,311) bind successfully to the retained
+original capture. Alignment/font alone rejected the same changed diagnostic
+harness receipt. Its existing conservation helper now verifies the exact
+current-to-historical source reversal and still compares every non-receipt
+field. All six conservation tests pass (19.79s), including changed observation
+and unrelated source-edit rejection. Fresh alignment/font collection then
+binds all 72 groups / 4,016 observations across 2,311 cases with no missing
+inputs or observations (35.61s). This checks these five bindings, not every
+builder stage or final canonical acceptance. Next action is the named cold
+export and complete conservation checks; accepted counts remain unchanged.
+
 **Cold-export failure traced to followup binding, not a new box-sizing finding:**
 The second cold export exited before writing canonical output. Its visible
 `proveBoxSizingOmission` assertion was secondary: the expansion owner-mapping

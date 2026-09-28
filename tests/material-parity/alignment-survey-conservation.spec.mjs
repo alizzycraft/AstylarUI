@@ -126,3 +126,24 @@ test('mapping reader receipt changes require exact whole-source import conservat
   f.current.sourceFingerprints.at(-1).sha256 = hash(f.sources.get(mapping));
   assert.throws(() => verifyAlignmentSurveyConservation(report, f.current, f.options), /mapping implementation changed/);
 });
+
+test('capture diagnostics receipt requires exact source reversal and unchanged observations', () => {
+  const f = fixture(), capture = 'tests/material-parity/run-material-parity.mjs';
+  const before = execFileSync('git', ['show', '67db724e5f258c84cfdc70e9da2ccb6ee6353ad0:' + capture],
+    { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+  const after = read(capture);
+  f.originals.set(capture, before); f.sources.set(capture, after);
+  f.initial.sourceFingerprints.push({ file: capture, sha256: hash(before) });
+  f.current.sourceFingerprints.push({ file: capture, sha256: hash(after) });
+  f.originals.set(report, JSON.stringify(f.initial)); f.sources.set(report, JSON.stringify(f.initial));
+  const result = verifyAlignmentSurveyConservation(report, f.current, f.options);
+  assert.deepEqual(result.report, f.initial);
+  assert.deepEqual(result.evidence.sourceChanges.at(-1).proof,
+    { additiveCaptureDiagnosticsOnly: true, completeHistoricalCaptureSourceConserved: true });
+  f.current.observations[0].reference = 'invented';
+  assert.throws(() => verifyAlignmentSurveyConservation(report, f.current, f.options), /observations/);
+  f.current.observations[0].reference = f.initial.observations[0].reference;
+  f.sources.set(capture, after + '\n// unreviewed source edit');
+  f.current.sourceFingerprints.at(-1).sha256 = hash(f.sources.get(capture));
+  assert.throws(() => verifyAlignmentSurveyConservation(report, f.current, f.options));
+});

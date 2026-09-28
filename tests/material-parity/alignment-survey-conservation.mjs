@@ -7,6 +7,7 @@ import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
 import { bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { conserveDisabledInkGuard } from './disabled-ink-source-transition.mjs';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
+import { restoreGapCaptureDiagnostics } from './gap-survey-source-replay.mjs';
 import { restoreMappedBorderInitialProducer, verifyBorderEvidenceSourceTransition } from './position-composition-producer-transition.mjs';
 
 export const alignmentSurveyBaseline = '67db724e5f258c84cfdc70e9da2ccb6ee6353ad0';
@@ -151,6 +152,10 @@ export function verifyAlignmentSurveyConservation(reportFile, current, {
     const oldBytes = readBaseline(receipt.file); assert.equal(hash(normalized(oldBytes)), old.sha256);
     let proof;
     if (receipt.file === auditFile) proof = verifyAlignmentAuditProjection(oldBytes, currentBytes);
+    else if (receipt.file === 'tests/material-parity/run-material-parity.mjs') {
+      assert.equal(restoreGapCaptureDiagnostics(normalized(currentBytes)), normalized(oldBytes));
+      proof = { additiveCaptureDiagnosticsOnly: true, completeHistoricalCaptureSourceConserved: true };
+    }
     else if (receipt.file === 'tests/material-parity/border-initial-input-evidence.mjs') {
       proof = verifyBorderEvidenceSourceTransition(oldBytes, currentBytes);
     }
