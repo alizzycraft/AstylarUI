@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 28
 
+**Icon focused proof added:** `node --test
+tests/material-parity/icon-asset-input.spec.mjs` passes 1/1 (2.44s overall).
+Reuses existing authenticated full-tree inventory and checks all 20 original
+owners, actual currentColor SVG path, preserveAspectRatio, exact light/dark PNG
+sources and 24×24 IHDR dimensions, plus all three scalar/style joins. Counts
+15 light / 5 dark; negative controls alter source, SVG path, style dimensions,
+and PNG dimensions. The proof keeps coreDefectProven/rasterVerified false.
+This new isolated test is not a dependency of running cold check4560; existing
+producer inputs and canonical payload remain untouched. Source-finding and
+canonical integration follow after that check; public SVG loading/alpha/DPR
+root-cause reproduction remains required.
+
 **Icon input substitution uncovered (pending source finding/proof):** the one
 remaining objectFit group / 20 cases is not a like-for-like replaced-element
 comparison. Authenticated b07ef154... full trees show native `mat-icon` wrapper
