@@ -12,6 +12,7 @@ import { applyRangeDefaultColors, proveRangeDefaultColor } from './component-col
 import { applyOverlayContainerColors, proveOverlayContainerColor } from './component-color-request-review.mjs';
 import { applySelectedChipHostColors, proveSelectedChipHostColor } from './component-color-request-review.mjs';
 import { applyMotionBoundaryColors, proveMotionBoundaryColor } from './component-color-request-review.mjs';
+import { applyComponentColorReviews, validateComponentColorReviews, isComponentColorReviewRow } from './component-color-request-review.mjs';
 
 test('component color requests preserve 922 observations across container, inherited-leaf and default boundaries', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -133,4 +134,17 @@ test('component color requests preserve 922 observations across container, inher
     assert.throws(() => proveInheritedComponentColor(entry, motion, candidate, row.element, normalize));
     assert.ok(row.reviewEvidence.observations.every(o => o.candidateLocalColor === null && !o.candidateComputedColorVerified && !o.renderingEquivalent));
   }
+  const combined = applyComponentColorReviews(rows, cases, inventory, retained, normalize);
+  const reviewed = combined.filter(isComponentColorReviewRow);
+  assert.equal(reviewed.length, 36); assert.equal(reviewed.reduce((n, r) => n + r.occurrences, 0), 922);
+  combined.forEach((r, i) => {
+    assert.deepEqual(raw(r), raw(rows[i]));
+    if (!isComponentColorReviewRow(r)) assert.deepEqual(r, rows[i]);
+  });
+  assert.deepEqual(validateComponentColorReviews(combined, rows, cases, inventory, retained, normalize), []);
+  const lost = combined.filter(r => r !== reviewed[0]);
+  assert.equal(validateComponentColorReviews(lost, rows, cases, inventory, retained, normalize).length, 1);
+  const forged = structuredClone(combined);
+  forged.find(isComponentColorReviewRow).reviewEvidence.renderingEquivalent = true;
+  assert.equal(validateComponentColorReviews(forged, rows, cases, inventory, retained, normalize).length, 1);
 });

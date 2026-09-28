@@ -90,6 +90,17 @@ the combined replay/independent validation and source provenance only after the
 running paint export finishes and its reconciliation is accepted. The overall
 audit still has unresolved non-color coverage and final browser gates.
 
+Combined color replay and validation now pass in the existing module, using the
+same replay-from-original pattern as paint reviews. All **36 groups / 922
+observations** apply together; raw fields and unrelated rows remain unchanged.
+Validation rejects a removed reviewed row and a fabricated rendering-equivalence
+claim. The expanded focused spec passed **1/1 in 47.34 s**. This prepares the
+producer hook without editing its running dependency graph; independent source
+collection and fingerprint integration are still required at that hook.
+The `f9ab31c` export has passed evidence-session verification (zero invalidations,
+1,205 files / 89,151,875 bytes) and reached canonical encoding. It remains live;
+do not import or approve its in-progress files. Reconciliation remains next.
+
 Accepted grid/height export: complete-input cold export from `890de9f`
 finished in **2,354.82 seconds**, with 436/436 static and 1,875/1,875 interaction
 cases, 8,483 scalar groups / 389,202 observations, 134 source findings and

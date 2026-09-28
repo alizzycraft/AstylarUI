@@ -10,6 +10,34 @@ const one = values => { assert.equal(values.length, 1); return values[0]; };
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const relevant = key => ['color', 'all', 'webkittextfillcolor'].includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
 
+export function isComponentColorReviewRow(row) {
+  return row.property === 'color' && [
+    'reviewed-sort-header-color-substitution', 'reviewed-sidenav-container-token-omission',
+    'reviewed-component-color-computed-local-boundary', 'reviewed-range-color-default-policy',
+    'reviewed-dialog-container-color-substitution', 'reviewed-overlay-color-computed-local-boundary',
+    'reviewed-selected-chip-host-color-substitution', 'reviewed-motion-owner-color-computed-local-boundary',
+  ].includes(row.attribution);
+}
+
+export function applyComponentColorReviews(rows, cases, inventory, retained, normalize) {
+  let result = applyComponentColorRequests(rows, cases, inventory, retained, normalize);
+  for (const apply of [applyInheritedComponentColors, applyRangeDefaultColors, applyOverlayContainerColors,
+    applySelectedChipHostColors, applyMotionBoundaryColors]) result = apply(result, cases, inventory, normalize);
+  return result;
+}
+
+// Replay from original rows and independently collected trees/retained text,
+// not classifications copied from the proposed export. Same validator pattern
+// as paint reviews; source authentication remains the caller's responsibility.
+export function validateComponentColorReviews(rows, originalRows, cases, inventory, retained, normalize) {
+  try {
+    const expected = applyComponentColorReviews(originalRows, cases, inventory, retained, normalize).filter(isComponentColorReviewRow);
+    const persisted = value => JSON.parse(JSON.stringify(value));
+    assert.deepEqual(persisted(rows.filter(isComponentColorReviewRow)), persisted(expected));
+    return [];
+  } catch (error) { return [`component color evidence does not replay: ${error.message}`]; }
+}
+
 const overlayColors = { 'dialog-panel': 'dialog', 'dialog-actions': 'dialog',
   'snack-bar-overlay': 'snack-bar', 'bottom-sheet-overlay': 'bottom-sheet' };
 
