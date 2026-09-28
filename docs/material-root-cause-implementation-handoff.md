@@ -2,7 +2,17 @@
 
 ## Current audit checkpoint — September 28
 
-**Prepared list composition batch:** three groups /156 observations (52 each
+**Current integration status:** the9 spacing groups below now join the5 owner
+omission groups in the bound-evidence production tail:14 groups /819 observations.
+Four focused checks pass4/4 (13.12s), including actual-tail execution against the
+authenticated checkpoint, reverse-order application independence, unchanged raw
+and unrelated rows, all five replay validators, unbound guards and exact
+historical producer restoration. No full export or browser recapture yet.
+Canonical/index remain150 unresolved; the expected post-export count is136 if
+no further changes. The icon source finding and all changed source fingerprints
+still require canonical integration/cold verification. No process is running.
+
+**List composition proof:** three groups /156 observations (52 each
 for top padding, bottom padding and flex direction) reuse the existing display
 owner proof. Native padded block list is replaced by unpadded column-flex list.
 Both native rows are48px light/dark,40px custom,24px contrast; candidate explicit
@@ -17,11 +27,11 @@ Focused `node --test --test-name-pattern="list spacing"
 tests/material-parity/display-request-review.spec.mjs` passes1/1 (2.64s), checking
 all52 owners, exact rules/stages, children/text, row conservation, replay and
 negative controls. Uses existing module/test and retained trees, no new report.
-Pending spacing batch now totals9 groups /520 observations including slider/badge
-below. Integrate together; no renderer/fixture changes or full export this turn.
+Spacing batch totals9 groups /520 observations including slider/badge below.
+All are producer-integrated, not yet canonical. No renderer/fixture changes.
 
-**Prepared margin-owner batch:** six groups /364 observations are now covered by
-focused reusable proofs, not yet hooked into production. Slider left/right
+**Margin-owner proof:** six groups /364 observations are covered by
+focused reusable proofs and now hooked into production. Slider left/right
 margins (78 each) are a measurement-owner boundary: native mat-slider requests
 8px, while the candidate visual plugin has zero and its range-stack parent
 requests0 8px at all three stages. Both inputs and plugin are children of that
@@ -37,9 +47,8 @@ alongside size20→16 and text offsets; it does not prove a renderer cause.
 `node --test tests/material-parity/slider-position-request-review.spec.mjs`
 passes2/2 (6.52s), retaining all78 original slider-position states plus new
 row conservation, exact populations, replay and missing-parent/rule controls.
-No new captures, framework, fixture or renderer changes. Next integrate this
-with the next spacing batch; canonical150 and producer-pending five-group
-transition below remain distinct from these six prepared groups.
+No new captures, framework, fixture or renderer changes. These six groups are
+included in the14-group pending canonical transition summarized above.
 
 **Owner omissions integrated into producer; export pending:** five groups /299
 original observations now pass through the bound-evidence production tail and
@@ -55,8 +64,8 @@ scope at the preceding stage; its first run failed on the newly extended tail,
 then passed after separating the extraction boundary. Earlier paint regression
 passed2/2 (34.18s), and width suite5/5 (38.81s).
 No full export or browser recapture for this increment. Canonical snapshot and
-compact index still report150 unresolved; the five new classifications are not
-yet canonical (expected145 after export if no other changes). Icon source finding
+compact index still report150 unresolved; these five classifications are not
+yet canonical and now accompany the nine spacing groups above. Icon source finding
 also awaits export. Source-fingerprint/receipt refresh and independent cold
 canonical verification remain required at the next coherent milestone.
 Next: shared spacing/owner composition, overflow/appearance semantics and

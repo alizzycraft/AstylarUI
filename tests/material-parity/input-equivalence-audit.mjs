@@ -2,6 +2,9 @@ import { existsSync, readFileSync } from 'node:fs';
 import { applyPaintReviews, validatePaintReviews, collectPaintReviewSources, isPaintReviewRow } from './control-state-paint-review.mjs';
 import { applyOmittedOwnerPaintRequests, validateOmittedOwnerPaintRequests } from './control-state-paint-review.mjs';
 import { applyOwnerMaximumWidths, validateOwnerMaximumWidths } from './control-width-observation.mjs';
+import { applyBadgeMarginReviews, validateBadgeMarginReviews } from './authored-anchor-review.mjs';
+import { applySliderMarginReviews, validateSliderMarginReviews } from './slider-position-request-review.mjs';
+import { applyListSpacingReviews, validateListSpacingReviews } from './display-request-review.mjs';
 import { applyComponentColorReviews, validateComponentColorReviews, isComponentColorReviewRow } from './component-color-request-review.mjs';
 import { applyExplicitComponentCursors, validateComponentCursorReviews, isComponentCursorReviewRow } from './component-cursor-request-review.mjs';
 import { applyComponentPointerReviews, validateComponentPointerReviews, isComponentPointerReviewRow } from './component-pointer-events-review.mjs';
@@ -379,7 +382,8 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
     ? applyFullRadiusActionReview(beforeFullRadiusReviews, cases, elementInventory, canonicalStyle)
     : beforeFullRadiusReviews;
   const discrepancies = ownerInitialStyleBinding.status === 'bound'
-    ? applyOmittedOwnerPaintRequests(applyOwnerMaximumWidths(beforeOwnerOmissionReviews, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    ? [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews]
+      .reduce((rows, apply) => apply(rows, cases, elementInventory, canonicalStyle), beforeOwnerOmissionReviews)
     : beforeOwnerOmissionReviews;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
@@ -711,6 +715,9 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
       errors.push(...validateFullRadiusActionReview(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateOwnerMaximumWidths(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateOmittedOwnerPaintRequests(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
+      errors.push(...validateBadgeMarginReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
+      errors.push(...validateSliderMarginReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
+      errors.push(...validateListSpacingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateComponentColorReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
         collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), report.elementInventory), canonicalStyle));
       errors.push(...validatePaintReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
@@ -832,6 +839,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     errors.push('full-radius action review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => ['reviewed-owner-maximum-width-omission', 'reviewed-owner-paint-request-omission'].includes(row.attribution)))
     errors.push('owner omission review attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => ['reviewed-badge-anchor-margin-substitution', 'reviewed-slider-margin-owner-boundary', 'reviewed-list-spacing-composition-substitution'].includes(row.attribution)))
+    errors.push('spacing composition review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))
     errors.push('button-host line-height attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>

@@ -36,6 +36,19 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyBadgeMarginReviews,')) {
+    for (const [from, to] of [
+      ["import { applyBadgeMarginReviews, validateBadgeMarginReviews } from './authored-anchor-review.mjs';\n", ''],
+      ["import { applySliderMarginReviews, validateSliderMarginReviews } from './slider-position-request-review.mjs';\n", ''],
+      ["import { applyListSpacingReviews, validateListSpacingReviews } from './display-request-review.mjs';\n", ''],
+      ["    ? [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews]\n      .reduce((rows, apply) => apply(rows, cases, elementInventory, canonicalStyle), beforeOwnerOmissionReviews)", "    ? applyOmittedOwnerPaintRequests(applyOwnerMaximumWidths(beforeOwnerOmissionReviews, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)"],
+      ...['validateBadgeMarginReviews', 'validateSliderMarginReviews', 'validateListSpacingReviews'].map(name => [`      errors.push(...${name}(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n`, '']),
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => ['reviewed-badge-anchor-margin-substitution', 'reviewed-slider-margin-owner-boundary', 'reviewed-list-spacing-composition-substitution'].includes(row.attribution)))\n    errors.push('spacing composition review attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated spacing composition integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('const beforeOwnerOmissionReviews =')) {
     for (const [from, to] of [
       ["import { applyOmittedOwnerPaintRequests, validateOmittedOwnerPaintRequests } from './control-state-paint-review.mjs';\n", ''],
