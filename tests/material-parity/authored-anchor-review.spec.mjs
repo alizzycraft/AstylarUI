@@ -17,6 +17,68 @@ import { applyAuthoredCornerReviews, proveAuthoredCornerRequests } from './autho
 import { proveSheetCornerBoxEvidence } from './authored-anchor-review.mjs';
 import { proveActionCornerBoxInputs, applyCardContrastCornerReview } from './authored-anchor-review.mjs';
 import { applyFullRadiusActionReview, validateFullRadiusActionReview } from './authored-anchor-review.mjs';
+import { proveRemainingFullRadiusInputs } from './authored-anchor-review.mjs';
+
+test('remaining badge and sheet full-radius requests preserve all 360 observations without claiming paint equivalence', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes), families = ['badge', 'bottom-sheet'];
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })),
+    ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const normalize = bindPreciseAuditNormalization();
+  const rows = families.flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, {
+    generation: '9b827bb2b09ae9d20d35e1640f987c9a4972aeab04676d595d7dd5f7d6ee01ab',
+    indexSha256: 'cd3d3c45aab1db7095753132870a660f456dc80e5334787f6f4508e8d30d9486',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const reviewed = applyFullRadiusActionReview(rows, cases, inventory, normalize);
+  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const start = source.indexOf('  const beforeOwnerOmissionReviews =');
+  const end = source.indexOf('  const discrepancies =', start);
+  assert.ok(start > 0 && end > start);
+  const production = new Function('ownerInitialStyleBinding', 'beforeFullRadiusReviews', 'cases',
+    'elementInventory', 'canonicalStyle', 'applyFullRadiusActionReview',
+    source.slice(start, end) + '\nreturn beforeOwnerOmissionReviews;');
+  assert.deepEqual(production({ status: 'bound' }, rows, cases, inventory, normalize, applyFullRadiusActionReview), reviewed);
+  assert.equal(production({ status: 'unbound' }, rows, cases, inventory, normalize,
+    () => assert.fail('unbound radius review ran')), rows);
+  const changed = reviewed.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 20); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 360);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  assert.deepEqual(reviewed.map(raw), rows.map(raw));
+  reviewed.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
+  assert.deepEqual(validateFullRadiusActionReview(reviewed, rows, cases, inventory, normalize), []);
+  for (const row of changed) {
+    assert.equal(row.reviewEvidence.inputEquivalent, null);
+    assert.equal(row.reviewEvidence.renderingEquivalent, null);
+    assert.equal(row.reviewEvidence.observations.length, row.occurrences);
+  }
+  const forged = structuredClone(reviewed);
+  forged.find(r => r.attribution === 'reviewed-full-radius-action-request-coverage-gap').reviewedCases.pop();
+  assert.equal(validateFullRadiusActionReview(forged, rows, cases, inventory, normalize).length, 1);
+  assert.throws(() => applyFullRadiusActionReview(rows, cases.slice(1), inventory, normalize));
+  let badges = 0, sheets = 0;
+  for (const entry of cases) {
+    const elements = entry.family === 'badge' ? ['badge-count'] : entry.profile !== 'contrast'
+      ? entry.styleInputs.filter(i => ['bottom-sheet-copy', 'bottom-sheet-dismiss'].includes(i.id)).map(i => i.id) : [];
+    if (!elements.length) continue;
+    const key = `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.kind === 'interaction' ? '/' + entry.state : ''}`;
+    const [r, a] = modalInventoryTrees(inventory, key);
+    for (const element of elements) {
+      const proof = proveRemainingFullRadiusInputs(entry, r, a, element, normalize);
+      if (entry.family === 'badge') badges++; else sheets++;
+      assert.equal(proof.candidateUsedPaintVerified, false);
+      const altered = structuredClone(a);
+      altered.nodes.find(n => n.key === proof.astylarNode).interactionResolvedStyle.borderRadius = '0';
+      assert.throws(() => proveRemainingFullRadiusInputs(entry, r, altered, element, normalize));
+      const native = structuredClone(r);
+      native.styles[native.nodes.find(n => n.key === proof.referenceNode).style].borderTopLeftRadius = '0px';
+      assert.throws(() => proveRemainingFullRadiusInputs(entry, native, a, element, normalize));
+    }
+  }
+  assert.equal(badges, 52); assert.equal(sheets, 38);
+});
 
 test('full-radius action requests classify missing renderer-input coverage across original owners', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

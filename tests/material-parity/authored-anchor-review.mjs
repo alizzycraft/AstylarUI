@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { applyModalBoxReview, proveBottomSheetActionCorners } from './modal-position-inspection.mjs';
 import { proveFlowPositionSubstitution } from '../../scripts/audit-material-flow-position-substitutions.mjs';
 import { proveBadgePointerRequest } from './component-pointer-events-review.mjs';
+import { proveCustomOwnerBorder } from './custom-owner-border-review.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { inspectButtonHostRequests } from './button-host-request-evidence.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
@@ -181,25 +182,63 @@ export function applyCardContrastCornerReview(rows, cases, inventory, normalize)
   return rows.map(row => replacements.get(row) ?? row);
 }
 
+export function proveRemainingFullRadiusInputs(entry, reference, candidate, element, normalize) {
+  if (entry.family === 'bottom-sheet') {
+    const proof = proveSheetCornerBoxEvidence(entry, reference, candidate, element);
+    assert.equal(proof.sameCssCornerGeometry, true);
+    // The old proof attributes only different shapes. This review attributes
+    // missing full-radius input coverage, without promoting paint equivalence.
+    return { ...proof, attributableProperties: cornerProperties };
+  }
+  assert.equal(entry.family, 'badge'); assert.equal(element, 'badge-count');
+  const identity = proveCustomOwnerBorder(entry, reference, candidate, normalize, element);
+  const r = reference.nodes.find(n => n.key === identity.referenceNode);
+  const a = candidate.nodes.find(n => n.key === identity.astylarNode);
+  const native = reference.styles[r.style];
+  const requests = r.rules.map(i => reference.rules[i]).filter(rule => rule.active)
+    .flatMap(rule => [...rule.cssText.matchAll(/(?:^|;)\s*(border[\w-]*radius|all)\s*:\s*([^;]+)(?=;|$)/g)]
+      .map(([, property, value]) => ({ selector: rule.selector, property, value: value.trim() })));
+  assert.deepEqual(requests, [{ selector: '.mat-badge-content', property: 'border-radius',
+    value: 'var(--mat-badge-container-shape, var(--mat-sys-corner-full))' }]);
+  for (const property of cornerProperties) assert.equal(native[property], '9999px');
+  for (const property of ['width', 'height']) {
+    assert.equal(native[property], '16px');
+    for (const stage of [a.resolvedStyle, a.normalResolvedStyle, a.interactionResolvedStyle])
+      assert.equal(stage[property], '16px');
+  }
+  return { referenceNode: r.key, astylarNode: a.key, alias: identity.alias,
+    referenceRequests: requests, candidateRequests: identity.candidateRequests,
+    reference: Object.fromEntries(cornerProperties.map(p => [p, '9999px'])),
+    candidate: Object.fromEntries(cornerProperties.map(p => [p, '8px'])),
+    sameShapeOnEqualWideBoxes: true, nativeUsedRadiusOnDeclaredBox: 8,
+    candidateCssUsedRadiusOnDeclaredBox: 8, candidateUsedLayoutMeasured: false,
+    candidateUsedPaintVerified: false, renderingEquivalent: null };
+}
+
 // Keep this separate from the accepted historical batch until its coherent
 // export/conservation milestone. This classifies test-input coverage, not paint.
 export function applyFullRadiusActionReview(rows, cases, inventory, normalize) {
   const selected = rows.filter(row => row.attribution === 'unresolved' && cornerProperties.includes(row.property) &&
-    ['card-open', 'toolbar-action', 'dialog-cancel', 'dialog-save'].includes(row.element) && row.astylar !== '9px');
+    ['card-open', 'toolbar-action', 'dialog-cancel', 'dialog-save', 'badge-count', 'bottom-sheet-dismiss', 'bottom-sheet-copy'].includes(row.element) && !['9px', '18px'].includes(row.astylar));
   let reviewed = selected;
   for (const [family, element] of [['card', 'card-open'], ['toolbar', 'toolbar-action'],
-    ['dialog', 'dialog-cancel'], ['dialog', 'dialog-save']]) {
+    ['dialog', 'dialog-cancel'], ['dialog', 'dialog-save'], ['badge', 'badge-count'],
+    ['bottom-sheet', 'bottom-sheet-dismiss'], ['bottom-sheet', 'bottom-sheet-copy']]) {
     reviewed = applyModalBoxReview(reviewed, cases, inventory, normalize, {
       family, element, properties: cornerProperties,
       classification: 'parity-harness-defect', attribution: 'reviewed-full-radius-action-request-coverage-gap',
       owner: 'comparison request fidelity; core rounded-rectangle sampling owns the independent rendering defect',
-      justification: 'Native full-radius tokens resolve to 9999px while these candidate owners explicitly request 20px or 21px. On equal sufficiently wide boxes the CSS used radius can be identical, so this is not classified as a different intended shape. The comparison nevertheless does not exercise the native full-radius request through AstylarUI; the independent equal-input radius proof demonstrates that this request has a core sampling failure. Classify the missing request coverage, not presumed historical intent or whole-control equivalence. Restore equal requests only alongside a general core correction, never tune the smaller radius against antialiasing pixels.',
+      justification: 'Native full-radius tokens resolve to 9999px while these candidate owners explicitly request ' +
+        (['badge', 'bottom-sheet'].includes(family) ? 'a finite radius' : '20px or 21px') +
+        '. On equal sufficiently wide boxes the CSS used radius can be identical, so this is not classified as a different intended shape. The comparison nevertheless does not exercise the native full-radius request through AstylarUI; the independent equal-input radius proof demonstrates that this request has a core sampling failure. Classify the missing request coverage, not presumed historical intent or whole-control equivalence. Restore equal requests only alongside a general core correction, never tune the smaller radius against antialiasing pixels.',
       prove: (entry, reference, candidate) => {
-        const proof = proveActionCornerBoxInputs(entry, reference, candidate, element);
-        assert.equal(proof.sameShapeOnEqualWideBoxes, true);
+        const remaining = ['badge', 'bottom-sheet'].includes(family);
+        const proof = remaining ? proveRemainingFullRadiusInputs(entry, reference, candidate, element, normalize)
+          : proveActionCornerBoxInputs(entry, reference, candidate, element);
+        assert.equal(proof.sameShapeOnEqualWideBoxes ?? proof.sameCssCornerGeometry, true);
         return { ...proof, firstDivergence: 'authored full-radius request replaced before renderer input',
           sourceFinding: 'core-rounded-radius-sampling-uses-unclamped-request',
-          originalCompensationIntentProven: false, allStatesUsedBoxesMeasured: false,
+          originalCompensationIntentProven: false, allStatesUsedBoxesMeasured: proof.candidateUsedLayoutMeasured === true,
           actualCaseRendererCauseProven: false, inputEquivalent: null, renderingEquivalent: null };
       },
     });

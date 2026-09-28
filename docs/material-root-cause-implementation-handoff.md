@@ -2,6 +2,34 @@
 
 ## Current audit checkpoint — September 29
 
+**Remaining full-radius input coverage integrated; export pending:** the existing
+full-radius reducer/validator now includes all 20 remaining badge/sheet radius
+groups, 360 scalar observations (52 badge owners and 38 noncontrast sheet actions).
+It reuses the authenticated badge alias/border contract and sheet token/box proof.
+Native 9999px requests are replaced with 8px badge or 24px/36px sheet requests.
+The sheet's measured equal boxes establish equal CSS used radius; badge equality
+remains conditional on its declared 16x16 box, not measured interaction geometry.
+Classify missing renderer-input coverage, not presumed compensation intent,
+different intended shapes, or original framebuffer causation. Contrast sheet
+actions retain their separately classified 18-vs-24px shape discrepancy.
+The shared modal validator initially rejected the sheet proof's deliberately
+empty shape-attribution list. The new adapter explicitly attributes request
+coverage only; it preserves unknown input/rendering equivalence and does not
+change the original geometry proof or promote it to a paint verdict.
+
+`node --test --test-name-pattern="nine stacking groups|current rounded rectangle kernel|remaining badge and sheet full-radius|full-radius action requests classify" tests/material-parity/stacking-input-review.spec.mjs tests/material-parity/modal-position-inspection.spec.mjs tests/material-parity/authored-anchor-review.spec.mjs`
+passes **4/4**, 16,007.491 ms. The current source kernel still emits four vertices
+for radius9999 versus 68 for radius24 at both scale1 and scale0.01, despite equal
+normalized arcs. Existing historical stacking/action checks remain unchanged.
+The new test preserves raw/unrelated records and rejects missing owners, forged
+membership, changed native corners and changed candidate interaction radii.
+It also executes the production bound/unbound radius fragment directly.
+The final focused rerun of that test passes **1/1**, 6,705.1232 ms.
+No renderer or fixture edits, new captures, or full export in this increment.
+Canonical remains **95 unresolved**; tooltip plus this radius batch project
+**74** after source-fingerprint reconciliation and the next coherent export.
+Next prioritize the remaining shared spacing and layout-owner substitutions.
+
 **Tooltip word-break support classification integrated; export pending:** the
 existing wrapping review module now provides a bounded reducer/validator for the
 one unresolved tooltip-popup wordBreak group (18 observations). Classification is
