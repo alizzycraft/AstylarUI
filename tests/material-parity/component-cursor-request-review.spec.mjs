@@ -8,7 +8,7 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applyExplicitComponentCursors, proveExplicitComponentCursor } from './component-cursor-request-review.mjs';
 
-test('component cursor requests and defaults bind 611 observations without claiming Material hover behavior', () => {
+test('all 19 unresolved cursor groups bind 763 observations without claiming Material hover behavior', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const captured = JSON.parse(bytes), cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
@@ -16,12 +16,14 @@ test('component cursor requests and defaults bind 611 observations without claim
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
   const snapshot = { generation: '5998d72bd0310ff4ddd8d3a44954fa5ade6655abb506f2bb85baa4935c3792d0',
     indexSha256: '8882ab9d062d52eeec3dcbadb1d72ee8518f3bb8bda8d8f4df7cc4466af89eef' };
-  const rows = ['button', 'checkbox', 'slider', 'core', 'toolbar', 'card', 'menu', 'bottom-sheet', 'dialog', 'snack-bar', 'tooltip']
+  const rows = ['button', 'checkbox', 'slider', 'core', 'toolbar', 'card', 'menu', 'bottom-sheet', 'dialog', 'snack-bar', 'tooltip', 'radio', 'slide-toggle']
     .flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
     .filter(r => r.evidence.section === 'discrepancies');
   const reviewed = applyExplicitComponentCursors(rows, cases, inventory, normalize);
   const changed = reviewed.filter((r, i) => r !== rows[i]);
-  assert.equal(changed.length, 15); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 611);
+  assert.equal(changed.length, 19); assert.equal(changed.reduce((sum, r) => sum + r.occurrences, 0), 763);
+  const labels = changed.filter(r => r.attribution === 'reviewed-choice-label-cursor-ancestry-substitution');
+  assert.equal(labels.length, 4); assert.equal(labels.reduce((sum, r) => sum + r.occurrences, 0), 152);
   const defaults = changed.filter(r => r.attribution === 'reviewed-dialog-button-cursor-default-policy');
   assert.equal(defaults.length, 2); assert.equal(defaults.reduce((sum, r) => sum + r.occurrences, 0), 56);
   const buttons = changed.filter(r => r.attribution === 'reviewed-button-cursor-request-substitution');
@@ -54,6 +56,14 @@ test('component cursor requests and defaults bind 611 observations without claim
     const wrongStage = structuredClone(candidate);
     wrongStage.nodes.find(n => n.key === owner.astylarNode).normalResolvedStyle.cursor = 'crosshair';
     assert.throws(() => prove(reference, wrongStage));
+    if (labels.includes(row)) {
+      const changedParent = structuredClone(reference);
+      changedParent.nodes.find(n => n.key === owner.nativePath[1].node).type = 'div';
+      assert.throws(() => prove(changedParent, candidate));
+      const wrongParentStage = structuredClone(candidate);
+      wrongParentStage.nodes.find(n => n.key === owner.candidatePath[1].node).normalResolvedStyle.cursor = 'default';
+      assert.throws(() => prove(reference, wrongParentStage));
+    }
     if (defaults.includes(row)) assert.throws(() => proveExplicitComponentCursor(entry, reference, candidate, row.element));
   }
   const lost = cases.filter(c => c !== cases.find(c => c.family === 'slider'));
