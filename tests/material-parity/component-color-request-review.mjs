@@ -13,6 +13,62 @@ const relevant = key => ['color', 'all', 'webkittextfillcolor'].includes(key.rep
 const overlayColors = { 'dialog-panel': 'dialog', 'dialog-actions': 'dialog',
   'snack-bar-overlay': 'snack-bar', 'bottom-sheet-overlay': 'bottom-sheet' };
 
+export function proveSelectedChipHostColor(entry, reference, candidate, element, normalize) {
+  assert.equal(entry.family, 'chips'); assert.ok(['chip-0', 'chip-1'].includes(element));
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  const native = one(reference.nodes.filter(n => n.attributes?.id === element));
+  const owner = one(candidate.nodes.filter(n => n.authored?.id === element));
+  assert.equal(native.type, 'mat-chip-option');
+  assert.ok(native.attributes.class.split(/\s+/).includes('mat-mdc-chip-selected'));
+  assert.ok(owner.authored.class.split(/\s+/).includes('selected')); assert.equal(owner.authored.ariaSelected, true);
+  for (const [k, v] of Object.entries(input.reference)) assert.equal(reference.styles[native.style][k], v);
+  const ink = key => relevant(key) && !/^(animation|transition)/i.test(key);
+  const referencePath = [], seen = new Set(); let node = native;
+  while (node) {
+    assert.ok(!seen.has(node.key)); seen.add(node.key);
+    assert.equal(normalize(reference.styles[node.style]).color, normalize(input.reference).color);
+    assert.ok(!Object.keys(node.inline ?? {}).some(ink));
+    const rules = node.rules.map(i => reference.rules[i]).filter(r => r.active);
+    const requests = rules.flatMap(r => Object.entries(r.declarations).filter(([k]) => ink(k))
+      .map(([key, declaration]) => ({ selector: r.selector, key, declaration })));
+    referencePath.push({ node: node.key, parent: node.parent, requests,
+      motionRules: rules.filter(r => Object.keys(r.declarations).some(k => /^(animation|transition)/i.test(k))) });
+    if (requests.length) {
+      assert.equal(node.key, 'frame'); assert.equal(requests.length, entry.profile === 'dark' ? 2 : 1);
+      assert.match(requests[0].selector, /^\.frame\[_ngcontent-[\w-]+\]$/);
+      assert.equal(requests[0].declaration.value, 'rgb(29, 27, 32)');
+      if (entry.profile === 'dark') assert.equal(requests[1].selector, requests[0].selector.replace('.frame', '.dark'));
+      for (const request of requests) {
+        assert.equal(request.key, 'color'); assert.equal(request.declaration.important, false);
+      }
+      assert.equal(normalize({ color: requests.at(-1).declaration.value }).color, normalize(input.reference).color);
+      break;
+    }
+    node = one(reference.nodes.filter(n => n.key === node.parent));
+  }
+  assert.equal(referencePath.at(-1).node, 'frame');
+  assert.ok(!Object.keys(owner.authored.style ?? {}).some(relevant)); assert.equal(owner.authored.attributes?.style, undefined);
+  const candidateRequests = candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, owner.authored))
+    .flatMap(r => Object.entries(r).filter(([k]) => relevant(k)).map(([key, value]) => ({ selector: r.selector, key, value })));
+  assert.deepEqual(candidateRequests, [{ selector: '.chip', key: 'color', value: entry.profile === 'dark' ? '#e6e1e5' : '#1d1b20' },
+    { selector: '.chip.selected', key: 'color', value: '#4b4357' }]);
+  for (const [stage, field] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'],
+    ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) {
+    assert.deepEqual(owner[stage], input[field]); assert.equal(owner[stage].color, '#4b4357');
+  }
+  return { referenceNode: native.key, astylarNode: owner.key, referencePath, candidateRequests,
+    inputEquivalent: false, renderingEquivalent: false, labelColorEquivalent: false, motionSettlementVerified: false };
+}
+
+export function applySelectedChipHostColors(rows, cases, inventory, normalize) {
+  return ['chip-0', 'chip-1'].reduce((result, element) => applyModalBoxReview(result, cases, inventory, normalize, {
+    family: 'chips', element, properties: ['color'], attribution: 'reviewed-selected-chip-host-color-substitution',
+    owner: 'showcase selected chip host color authoring, distinct from Material label tokens',
+    justification: 'The selected native chip host inherits the recorded frame color, while the candidate host overrides its theme color with fixed selected ink. Trace the measured host rather than substituting an inner label token. Native motion declarations are retained without a settlement claim. No color-conversion defect, label-ink or rendering equivalence is inferred.',
+    prove: (entry, reference, candidate) => proveSelectedChipHostColor(entry, reference, candidate, element, normalize),
+  }), rows);
+}
+
 export function proveOverlayContainerColor(entry, reference, candidate, element) {
   assert.equal(entry.family, overlayColors[element]); assert.ok(overlayColors[element]);
   const input = one(entry.styleInputs.filter(i => i.id === element));

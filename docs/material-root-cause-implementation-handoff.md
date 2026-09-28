@@ -58,6 +58,21 @@ negative controls and unchanged raw rows. Total prepared standalone color work:
 observations**, selected chip hosts (4/120) and motion-boundary cases (6/110).
 These findings remain pending integration; the running paint export is unchanged.
 
+Selected chip host color is now bound across **4 groups / 120 observations**.
+The native selected `mat-chip-option` inherits frame ink, including the separate
+dark override; candidate `.chip.selected` replaces its theme ink with fixed
+`#4b4357` in every captured stage. Owner selection flags, complete scalar/tree
+agreement and the ancestry requests are checked. This is host authoring, not a
+claim about the inner label's Material token, text raster or interaction effect.
+Native motion declarations stay in the evidence without a settlement claim.
+The first focused run rejected an assumed single frame declaration in dark mode;
+the proof now preserves and checks both base and dark requests. The expanded
+test passed **1/1 in 23.83 s**, including changed selection and inserted native
+color rejection, preserving raw rows. Prepared standalone color coverage is
+**30 groups / 812 observations**; only **6 groups / 110 observations** remain in
+the color routing batch (tab panel and progress motion boundaries). Export and
+final acceptance remain pending; no renderer or fixture changes were made.
+
 Accepted grid/height export: complete-input cold export from `890de9f`
 finished in **2,354.82 seconds**, with 436/436 static and 1,875/1,875 interaction
 cases, 8,483 scalar groups / 389,202 observations, 134 source findings and
