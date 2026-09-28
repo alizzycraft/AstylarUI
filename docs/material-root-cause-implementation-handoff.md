@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared display-request proof now explains 15 groups / 844 original observations
+without changing the canonical 286-unresolved checkpoint. The existing compact
+index, tree inventory, normalization and modal-review/conservation helpers are
+reused; display-request-review.mjs/spec.mjs supply the missing semantic assertions,
+not another collector/report/export framework. Exact active native declarations
+(including serialized declarations), candidate applicable rules, all 89 scalar
+fields and three local stages establish request substitution/omission. Native
+dialog buttons explicitly request inline-flex before flex-parent blockification;
+candidate buttons omit that request. Toggle hosts replace a native inner button
+and overlay spans with direct label/check-mark children and explicit host flex.
+Record these differing owners/children rather than assuming flattened wrappers
+are equivalent. Expansion's native title explicitly requests flex, while the
+candidate span omits display and receives the inline type default
+(src/app/config/browser-defaults.ts:114, StyleDefaultsService.getElementTypeDefaults).
+
+The focused test authenticates the original capture and current compact generation,
+preserves every raw row/prior classification, covers all 844 observations and
+rejects altered inline/serialized declarations, resets, types, parent context and
+interaction stages. Used display, structural equivalence and rendering remain
+unproved. Radio, tab-panel and toolbar's three display groups remain unresolved
+by this proof; they require type-default/plugin and computed/local boundary
+analysis, not the explicit-request classification. History corroborates separate
+compensation work: 354084e introduced the expansion div/span label structure;
+1f2f2aa later added a dense-profile translate(0, -1px) to that title. This does not
+prove the display omission caused the old alignment symptom. Current authoring
+locations: astylar.component.ts:513,663,977,993; reference.component.ts:86,90.
+Next complete those three display boundaries, then batch integration with other
+verified followups. Do not regenerate the full canonical package for this proof.
+Verification: `node --test tests/material-parity/display-request-review.spec.mjs`
+passes 1/1 in 20.61 s including the parent-context negative controls. Scoped
+`git diff --check` passes. No renderer or canonical fixture inputs changed.
+
 The cold export from f6e1ce6 completed in 2727.14 s with all 436 static and
 1875 interaction cases, 8483 scalar groups, 389202 observations and 134 source
 findings preserved. Its only reported acceptance error is 286 unresolved scalar
