@@ -14,9 +14,13 @@ decoded 2,208,243,072 bytes, SHA
 f4d0e6c60d2440d7f5f0f002c6e382190f7beb6d04ab31c9fc213b40fc831442.
 This remains an UNACCEPTED working snapshot; the accepted compact index is still
 6f0a4c.... `node scripts/check-material-position-canonical-conservation.mjs
---stacking-radius` is now running as unified session 65414. Poll it rather than
-restarting. Its scope is scalar/control evidence, not every report section;
-full-payload/source-fingerprint comparison and independent cold check remain.
+--stacking-radius` finished successfully (session 65414, exit 0): exactly 30
+groups / 1,228 occurrences changed, 48 control producer receipts refreshed,
+all raw scalar inputs and non-receipt control evidence conserved. Ordered row
+SHA 390f795069694b5d6c5b0a390cdc2c47bb359d442d7a68f30b76fac3dda6dc88.
+Its scope is scalar/control evidence, not every report section; full-payload/
+source-fingerprint comparison and independent cold check remain. Neither
+export nor conservation is still running.
 
 **Remaining appearance triage:** accepted index has 15 groups / 660 observations.
 Pinned raw style inputs confirm: slider start/primary are input-to-input native
