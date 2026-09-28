@@ -7,13 +7,27 @@ Cursor/pointer export completed (source 864a53f, 2362.05 s, exit 1 solely for
 8483 scalar differences / 389202 observations and 134 source findings.
 New compressed package: 8635694f2f111b71b50ed25ce0de8947ecb16baa3aada405163b6a8be5339f49
 (61470998 bytes); decoded SHA c6481d5bd32baf62366745b1ee89a6a305e302c1ff6875bc54ab96d0941072e3
-(2160068166 bytes). **Not accepted yet.** Reconciliation jobs are running:
-conservation session 32761 (`--component-interaction`), all-section digest session
-42098, metadata/source-fingerprint session 90340. Their outputs are retained as
+(2160068166 bytes). **Not accepted yet.** Conservation passed: exactly 42 groups /
+1587 observations changed; all raw inputs and non-receipt control evidence remain
+unchanged (one scalar receipt, 48 control receipts). Source reconciliation passed:
+all 504 LF-normalized fingerprints match current files; ten added, three changed,
+none removed. Coverage is identical; summary changes match the classifications.
+Owner-caret and source-batch changes are only current producer/report receipts.
+The all-section digest job remains live as session 42098 / PID 23340.
+Completed conservation/metadata sessions were 32761 / 90340. Outputs are retained as
 `component-interaction-{conservation,metadata}-864a53f.log` and
-`component-interaction-sections-864a53f.json`. Poll those handles; do not rerun the
+`component-interaction-sections-864a53f.json`. Poll the remaining handle; do not rerun the
 completed export. Next inspect every result, account for all changed sections,
 then import/verify compact evidence before committing the canonical package.
+
+Tooltip origin triage: exact matching of the pending scalar value selects 18
+observations, not all 26 tooltip interactions (some lack a native measurement).
+Authenticated inventory/alias replay shows the explicit `center top` origin is
+on an ancestor, not the measured popup box; another ancestor requests
+`translateY(8px)`. All 18 match. The existing origin-stage guard correctly leaves
+these unresolved for explicit ancestor origin/reference-box context. Do not copy
+the measured popup's pixel origin or treat this as a demonstrated misplacement
+cause. Next inspect the equivalent candidate ancestry and transform-box ownership.
 
 Prepared overlay-position review covers five groups / 141 observations: one
 bottom-sheet wrapper group (25) explicitly substitutes fixed for native absolute;
