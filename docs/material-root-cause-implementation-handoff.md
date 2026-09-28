@@ -2,6 +2,41 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared font-family followup covers all twelve remaining groups / 619 original
+observations, reusing the same ancestry/rule/local-stage proof rather than adding
+another collector. Five page cases (chips, list, table, private tab; 326 observations)
+retain the authored Roboto, Arial, sans-serif stack on both page ancestors and no
+nearer request. They are computed/local measurement boundaries, not consumed-font
+or plugin equivalence. Two toggle hosts (136) explicitly request legacy/component
+family tokens while candidates retain only the page stack: token omissions, not
+a substitution of current computed Roboto for authored intent. Five overlay
+owners (157) are outside the styled native frame under the captured CDK overlay
+root, with computed Times New Roman; candidates descend from the styled page.
+This is substituted ancestry. Historical external declarations are not inferred
+or reconstructed, and descendant font selection/paint is not established.
+
+The proof checks exact page selectors/stacks, ordered token requests, serialized
+declarations, complete mapped paths, all 89 native fields and three candidate
+local stages. It preserves token resolution, physical font selection, motion
+exclusion and rendering as unverified. Negative controls reject local insertion,
+page-stack mutation, wildcard font reset, native override, changed token and
+moving an overlay owner beneath the reference frame. Source locations for page
+requests: reference.component.ts:106 and astylar.component.ts:471.
+`node --test --test-name-pattern="font family requests" tests/material-parity/wrapping-input-populations.spec.mjs`
+passes 1/1 in 23.32 s; scoped diff checks pass. No fixture/renderer changes or
+browser rerun. The earlier scalar groups' raw data and classifications are retained.
+
+Prepared display/word/font batch now totals 106 groups / 4635 observations:
+28 authoring groups and 78 harness boundaries. Canonical remains 286 unresolved.
+Next integrate these existing apply functions and validators as one coherent
+batch, run combined raw/prior-classification conservation and source-transition
+checks, then one cold canonical export with the named baseline and full receipt/
+section reconciliation. Do not accept the expected 180-unresolved result merely
+from arithmetic, or treat scalar attribution as final root-cause/browser acceptance.
+The explicit tooltip wordBreak support question remains open outside this batch.
+
+### Explicit weight followup
+
 Prepared explicit-weight followup adds six groups / 263 observations. Four
 overlay groups (sheet copy/dismiss/panel and dialog copy; 107 observations) retain
 the exact Material component weight token requested by the owner or sheet ancestor,

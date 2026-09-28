@@ -12,6 +12,7 @@ import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-rev
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { inheritedWordOwners, omittedFontOwners, proveInheritedLocalOmission, applyInheritedWordReviews, applyOmittedFontReviews } from './wrapping-input-review.mjs';
 import { weightRequestOwners, applyWeightRequestReviews } from './wrapping-input-review.mjs';
+import { familyRequestOwners, applyFamilyRequestReviews } from './wrapping-input-review.mjs';
 import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNowrap,
   validateExplicitNowrap, explicitNowrapAttribution, applyOmittedNowrap,
   validateOmittedNowrap, omittedNowrapAttribution, proveOmittedNowrap,
@@ -24,6 +25,54 @@ import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNow
 
 const one = xs => { assert.equal(xs.length, 1); return xs[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+test('font family requests preserve page inheritance token omissions and external overlay context', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes), cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const snapshot = { generation: '4880964fc1018a1fd6409f7c7af2ddaa5fc21a82e45dab3a0cc5fce5a6019156', indexSha256: '5e86f89a05cd88843d7dd6130ed13c88cdb6371efb389d73a934c8d9f953511b' };
+  const rows = [...new Set(familyRequestOwners.map(([f]) => f))].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot)).filter(r => r.evidence.section === 'discrepancies');
+  const reviewed = applyFamilyRequestReviews(rows, cases, inventory, bindPreciseAuditNormalization()), changed = reviewed.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 12); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 619);
+  assert.equal(changed.filter(r => r.classification === 'parity-harness-defect').length, 5);
+  for (const [suffix, groups, observations] of [['page-family-computed-local-boundary', 5, 326], ['toggle-family-token-request-omission', 2, 136], ['overlay-family-ancestry-substitution', 5, 157]]) {
+    const selected = changed.filter(r => r.attribution === 'reviewed-' + suffix);
+    assert.equal(selected.length, groups); assert.equal(selected.reduce((n, r) => n + r.occurrences, 0), observations);
+  }
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  reviewed.forEach((r, i) => {
+    assert.deepEqual(raw(r), raw(rows[i]));
+    if (r !== rows[i]) {
+      assert.equal(rows[i].attribution, 'unresolved'); assert.equal(r.reviewEvidence.observations.length, r.occurrences);
+      for (const p of r.reviewEvidence.observations) {
+        assert.equal(p.candidateComputedVerified, false); assert.equal(p.descendantConsumptionVerified, false); assert.equal(p.renderingEquivalent, false);
+        for (const field of ['externalReferenceAncestorsReconstructed', 'physicalFontSelectionVerified', 'tokenResolutionVerified', 'motionEffectsExcluded']) assert.equal(p.familyContext[field], false);
+      }
+    }
+  });
+  for (const [family, element, kind] of familyRequestOwners) {
+    const entry = cases.find(e => e.family === family && e.styleInputs.some(i => i.id === element && i.reference));
+    const [r, a] = modalInventoryTrees(inventory, keyOf(entry)), proof = proveInheritedLocalOmission(entry, r, a, element, 'fontFamily');
+    const local = structuredClone(a); local.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.fontFamily = 'Roboto';
+    assert.throws(() => proveInheritedLocalOmission(entry, r, local, element, 'fontFamily'));
+    const page = structuredClone(a); page.rules.find(rule => rule.selector === '#page').fontFamily = 'serif';
+    assert.throws(() => proveInheritedLocalOmission(entry, r, page, element, 'fontFamily'));
+    const reset = structuredClone(a); reset.rules.push({ selector: '*', font: 'inherit' });
+    assert.throws(() => proveInheritedLocalOmission(entry, r, reset, element, 'fontFamily'));
+    const native = structuredClone(r), owner = native.nodes.find(n => n.key === proof.referenceNode);
+    owner.inline['font-family'] = { value: 'Roboto', important: false };
+    assert.throws(() => proveInheritedLocalOmission(entry, native, a, element, 'fontFamily'));
+    const context = structuredClone(r);
+    if (kind === 'overlay') context.nodes.find(n => n.key === proof.referenceNode).parent = 'frame';
+    else {
+      const rule = context.rules.find(rule => rule.active && rule.selector === (kind === 'token' ? '.mat-button-toggle-appearance-standard' : proof.nativeRequests.at(-1).selector));
+      rule.declarations['font-family'].value = 'Roboto';
+    }
+    assert.throws(() => proveInheritedLocalOmission(entry, context, a, element, 'fontFamily'));
+  }
+});
 
 test('explicit weight requests distinguish overlay token omissions from range inherited-weight observations', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

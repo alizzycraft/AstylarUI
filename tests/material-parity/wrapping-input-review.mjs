@@ -506,10 +506,20 @@ export const weightRequestOwners = [
   ['bottom-sheet', 'bottom-sheet-copy'], ['bottom-sheet', 'bottom-sheet-dismiss'], ['bottom-sheet', 'bottom-sheet-panel'],
   ['dialog', 'dialog-copy'], ['slider', 'slider-primary'], ['slider', 'slider-start'],
 ];
+export const familyRequestOwners = [
+  ['bottom-sheet', 'bottom-sheet-overlay', 'overlay'],
+  ['dialog', 'dialog-actions', 'overlay'], ['dialog', 'dialog-panel', 'overlay'],
+  ['snack-bar', 'snack-bar-overlay', 'overlay'], ['snack-bar', 'snack-bar-surface', 'overlay'],
+  ['button-toggle', 'button-toggle-one', 'token'], ['button-toggle', 'button-toggle-two', 'token'],
+  ['chips', 'chip-0', 'page'], ['chips', 'chip-1', 'page'], ['list', 'list-primary', 'page'],
+  ['table', 'table-primary', 'page'], ['tabs', 'tab-panel', 'page'],
+];
 export function proveInheritedLocalOmission(entry, reference, candidate, element, property) {
-  const font = ['fontStyle', 'fontWeight'].includes(property);
+  const font = ['fontStyle', 'fontWeight', 'fontFamily'].includes(property);
+  const familyScope = property === 'fontFamily' ? familyRequestOwners.find(([family, id]) => family === entry.family && id === element) : undefined;
+  const familyKind = familyScope?.[2], stack = 'Roboto, Arial, sans-serif';
   const weightRequest = property === 'fontWeight' && weightRequestOwners.some(([family, id]) => family === entry.family && id === element);
-  if (font) assert.ok(weightRequest || omittedFontOwners.some(([family, id, key]) => family === entry.family && id === element && key === property));
+  if (font) assert.ok(familyScope || weightRequest || omittedFontOwners.some(([family, id, key]) => family === entry.family && id === element && key === property));
   else {
     assert.ok(inheritedWordOwners[entry.family]?.includes(element));
     assert.ok(['wordBreak', 'overflowWrap', 'wordSpacing'].includes(property));
@@ -536,11 +546,23 @@ export function proveInheritedLocalOmission(entry, reference, candidate, element
   assert.equal(native.type, input.referenceStructure.type); assert.equal(ast.authored.type, input.astylarStructure.type);
   assert.equal(Object.keys(input.reference).length, 89);
   for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[native.style][key], value);
-  assert.equal(input.reference[property], property === 'wordSpacing' ? '0px' : property === 'fontWeight' ? '400' : 'normal');
+  assert.equal(input.reference[property], familyScope ? familyKind === 'overlay' ? '"Times New Roman"' : familyKind === 'token' ? 'Roboto' : stack
+    : property === 'wordSpacing' ? '0px' : property === 'fontWeight' ? '400' : 'normal');
   assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
   assert.equal(input.astylarResolvedStyleEvidenceVersion, 2);
   for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'], ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) assert.deepEqual(ast[stage], input[scalar]);
   const rp = ancestry(reference, native), ap = ancestry(candidate, ast), nativeRequests = [];
+  if (familyScope) {
+    assert.equal(ap.filter(n => n.authored.id === 'page').length, 1);
+    assert.equal(ap.find(n => n.authored.id === 'page').authored.type, 'main');
+    if (familyKind === 'overlay') {
+      assert.ok(!rp.some(n => n.key === 'frame'));
+      assert.ok(String(rp.at(-1).attributes.class).split(/\s+/).includes('cdk-overlay-container'));
+    } else {
+      assert.equal(rp.at(-1).key, 'frame'); assert.equal(rp.at(-1).type, 'main');
+      assert.ok(String(rp.at(-1).attributes.class).split(/\s+/).includes('frame'));
+    }
+  }
   const explicit = element === 'tooltip-popup' && property === 'wordBreak';
   const requestOwner = weightRequest ? entry.family === 'bottom-sheet'
     ? one(rp.filter(n => n.type === 'mat-bottom-sheet-container')) : native : undefined;
@@ -552,24 +574,38 @@ export function proveInheritedLocalOmission(entry, reference, candidate, element
   for (const n of rp) {
     assert.deepEqual(select(n.inline), {});
     const active = n.rules.map(i => reference.rules[i]).filter(rule => rule.active);
-    const expected = n === native && explicit ? [{ selector: '.mat-mdc-tooltip-surface', conditions: [], declarations: { 'word-break': { value: 'normal', important: false } } }]
+    let expected = n === native && explicit ? [{ selector: '.mat-mdc-tooltip-surface', conditions: [], declarations: { 'word-break': { value: 'normal', important: false } } }]
       : n === requestOwner ? [{ selector: requestSelector, conditions: [], declarations: { 'font-weight': { value: requestValue, important: false } } }] : [];
+    if (familyScope) {
+      if (n.key === 'frame') {
+        const frameRule = one(active.filter(rule => Object.keys(select(rule.declarations)).length));
+        assert.match(frameRule.selector, /^\.frame(?:\[_ngcontent-[\w-]+\])?$/);
+        expected = [{ selector: frameRule.selector, conditions: [], declarations: { 'font-family': { value: stack, important: false } } }];
+      } else if (n === native && familyKind === 'token') expected = [
+        ['.mat-button-toggle', 'var(--mat-button-toggle-legacy-label-text-font)'],
+        ['.mat-button-toggle-appearance-standard', 'var(--mat-button-toggle-label-text-font, var(--mat-sys-label-large-font))'],
+      ].map(([selector, value]) => ({ selector, conditions: [], declarations: { 'font-family': { value, important: false } } }));
+    }
     const requests = active.map(rule => ({ selector: rule.selector, conditions: rule.conditions, declarations: select(rule.declarations) })).filter(rule => Object.keys(rule.declarations).length);
     assert.deepEqual(requests, expected);
     const serialized = active.flatMap(rule => [...rule.cssText.matchAll(/(?:^|;)\s*([\w-]+)\s*:\s*([^;]*)(?=;|$)/g)].filter(([, key]) => affects(key)).map(([, key, value]) => ({ selector: rule.selector, key, value: value.trim() })));
-    assert.deepEqual(serialized, explicit && n === native ? [{ selector: '.mat-mdc-tooltip-surface', key: 'word-break', value: 'normal' }]
+    assert.deepEqual(serialized, familyScope ? expected.map(rule => ({ selector: rule.selector, key: 'font-family', value: rule.declarations['font-family'].value }))
+      : explicit && n === native ? [{ selector: '.mat-mdc-tooltip-surface', key: 'word-break', value: 'normal' }]
       : n === requestOwner ? [{ selector: requestSelector, key: entry.family === 'slider' ? 'font' : 'font-weight', value: requestValue }] : []);
     nativeRequests.push(...requests.map(rule => ({ node: n.key, ...rule })));
   }
   for (const n of ap) {
     assert.deepEqual(select(n.authored), {}); assert.deepEqual(select(n.authored.style), {}); assert.equal(n.authored.attributes?.style, undefined);
-    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.deepEqual(select(n[stage]), {});
-    for (const rule of candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, n.authored))) assert.deepEqual(select(rule), {});
+    const pageFamily = familyScope && n.authored.id === 'page';
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.deepEqual(select(n[stage]), pageFamily ? { fontFamily: stack } : {});
+    const requests = candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, n.authored)).map(({ selector, ...style }) => ({ selector, declarations: select(style) })).filter(rule => Object.keys(rule.declarations).length);
+    assert.deepEqual(requests, pageFamily ? [{ selector: '#page', declarations: { fontFamily: stack } }] : []);
   }
   return { referenceNode: native.key, astylarNode: ast.key, identity, property, nativeRequests,
     nativeComputed: input.reference[property], referencePath: rp.map(n => n.key), candidatePath: ap.map(n => n.key),
-    ownerTypes: { reference: native.type, candidate: ast.authored.type }, explicitNativeRequest: explicit || weightRequest,
+    ownerTypes: { reference: native.type, candidate: ast.authored.type }, explicitNativeRequest: nativeRequests.length > 0,
     rangeContext: rangeContext ? { originalSizeResetReplayed: true, referenceFontSize: rangeContext.referenceFontSize, candidateFontSize: rangeContext.candidateFontSize, visibleTextVerified: false } : undefined,
+    familyContext: familyScope ? { kind: familyKind, candidatePageRequest: stack, referencePageAncestor: rp.some(n => n.key === 'frame'), externalReferenceAncestorsReconstructed: false, tokenResolutionVerified: false, physicalFontSelectionVerified: false, motionEffectsExcluded: false } : undefined,
     publicSupportCheckRequired: explicit,
     candidateComputedVerified: false, descendantConsumptionVerified: false, inputEquivalent: false, renderingEquivalent: false };
 }
@@ -612,5 +648,19 @@ export function applyWeightRequestReviews(rows, cases, inventory, normalize) {
         : 'Native sheet/body or dialog supporting-text weight is explicitly requested through a component token on the mapped owner/ancestor; candidate ancestry and all local stages omit any corresponding weight request. Preserve the token rather than substituting current computed 400. This establishes unequal authoring, not token resolution under untested themes, candidate consumed weight or a core rendering defect.',
     });
   }
+  return rows;
+}
+export function applyFamilyRequestReviews(rows, cases, inventory, normalize) {
+  for (const [family, element, kind] of familyRequestOwners) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family, element, properties: ['fontFamily'], prove: (entry, r, a) => proveInheritedLocalOmission(entry, r, a, element, 'fontFamily'),
+    classification: kind === 'page' ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
+    attribution: kind === 'page' ? 'reviewed-page-family-computed-local-boundary' : kind === 'token' ? 'reviewed-toggle-family-token-request-omission' : 'reviewed-overlay-family-ancestry-substitution',
+    owner: kind === 'page' ? 'page family inheritance versus local measurement' : kind === 'token' ? 'toggle component family token authoring' : 'overlay versus page inheritance context',
+    justification: kind === 'page'
+      ? 'Both captured paths contain the authored page font stack without a nearer family/reset request; native computed stack is compared with omitted candidate local fields. This identifies an observation boundary, not candidate consumed inheritance, plugin typography, physical font selection, motion exclusion or rendering equivalence.'
+      : kind === 'token'
+        ? 'Native toggle host has explicit legacy/component family token requests ahead of page inheritance; candidate retains only the page stack. Preserve token requests and differing owners rather than replacing them with the current computed Roboto. Token resolution, consumed candidate family and rendering equivalence remain unproved.'
+        : 'Native owner is captured under the external CDK overlay root, outside the styled reference frame, with computed Times New Roman and no captured family request. Candidate owner instead descends from the page Roboto stack. This establishes substituted ancestry, not historical external declarations, candidate computed family, descendant paint or a core defect; external ancestors were not reconstructed.',
+  });
   return rows;
 }
