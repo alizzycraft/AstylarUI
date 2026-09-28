@@ -2,7 +2,33 @@
 
 ## Current audit checkpoint — September 28
 
-Accepted box-sizing generation:
+Accepted grid/height export: complete-input cold export from `890de9f`
+finished in **2,354.82 seconds**, with 436/436 static and 1,875/1,875 interaction
+cases, 8,483 scalar groups / 389,202 observations, 134 source findings and
+**787 unresolved groups**. Its sole reported error is remaining unattributed
+groups. Evidence-session verification invalidated zero dependencies (1,205 files,
+89,151,875 bytes). New compressed generation:
+`04ec615b0e97cdc75f44b817efca421d24a79cb04d7bc1f2f22969b99a4c4240`.
+`check-material-position-canonical-conservation.mjs --grid-height` passed:
+exactly 103 groups / 4,322 observations plus one scalar and 48 control producer
+receipts changed; all raw inputs and unrelated control evidence are conserved.
+Section reconciliation passed: 79 sections, 72 unchanged, none added/removed.
+The seven changed sections are discrepancies, sourceFingerprints, summary,
+controlTypography, controlLineBoxes, ownerCaretInputs and reviewedSourceBatchInputs.
+All 486 current source fingerprints match; four grid/height helper/spec files
+were added, three producer/transition files changed and none removed. Remaining
+metadata changes are expected producer receipts and counts (authoring +16,
+harness -16, unresolved 890 → 787). Decoded SHA-256:
+`e3ea396e3ec4ab560596899657eddb63a221ede3770fe8b1801e05499b38484b`.
+Compact import and verification passed: 134 source findings, 39,904 control
+records, 71,253,343 compact bytes. Index SHA-256:
+`7698638b57da8d8c8f4bf50902886f11c3d3304e45078771917b804c6c30a075`.
+The standalone manifest is retained beside the indexed compressed evidence.
+No decoded 2 GB file was written; all reconciliation/import jobs are complete. Logs use the
+`grid-height-{export,conservation,sections,metadata}-890de9f` prefix under
+`artifacts/material-parity/` (sections is JSON; others are logs).
+
+Previous accepted box-sizing generation (retained predecessor evidence):
 `d25a9078972edf1884a4e56a7c17f4a7b3d249d3ed22933811f69daa4aafda9a`.
 Complete-input cold export from `6a23c58` finished in **2,512.22 seconds**.
 Exit 1 reports **890 unresolved groups**, not a validation error. Coverage remains
@@ -32,9 +58,11 @@ Decoded SHA-256:
 The standalone manifest is retained beside the compressed indexed evidence.
 No decoded 2 GB file was written. All checkpoint reconciliation jobs are complete.
 
-**Next:** integrate the already prepared grid (60 groups) and height (43 groups)
-proofs as one coherent batch, retaining scope limits; then join existing paint
-proofs before starting new investigations. The 890 unresolved groups and final
+**Next:** integrate the prepared paint proofs before starting new investigations.
+Prepared coverage includes 62 background groups / 450 observations and ten color
+groups / 168 observations. The remaining 36 color groups need applicability work;
+the existing retained-label proofs must not be generalized to container owners.
+The 787 unresolved canonical groups and final
 enforced browser gates still prevent audit completion. No renderer or fixture
 changes were made, and this checkpoint does not establish rendering equivalence.
 
