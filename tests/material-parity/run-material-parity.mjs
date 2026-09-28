@@ -364,6 +364,32 @@ async function captureInteractionCase(benchmarkCase) {
     const ids = benchmarkMeasurementIds(family);
     const referenceMeasurement = await measureReference(reference.page, ids);
     const astylarMeasurement = await measureAstylarInputs(astylar.page, ids);
+    // Read-only paint-boundary evidence for measured button controls. This
+    // observes production meshes; it does not substitute requested CSS boxes.
+    const controlPaintGeometry = await astylar.page.evaluate(ids => {
+      const surface = window.ng?.getComponent(document.querySelector('app-astylar-showcase'))?.surface;
+      const scene = surface?.scene;
+      if (!scene?.activeCamera) return null;
+      const engine = scene.getEngine(), canvas = document.querySelector('canvas').getBoundingClientRect();
+      const viewport = scene.activeCamera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
+      return ids.flatMap(id => {
+        const input = surface.host.inputElementService.getInputElement(id);
+        if (input?.type !== 'button' || !input.mesh) return [];
+        const mesh = input.mesh;
+        mesh.computeWorldMatrix(true);
+        const positions = mesh.getVerticesData('position') ?? [];
+        const Vector = mesh.position.constructor;
+        const projected = Array.from({ length: positions.length / 3 }, (_, i) => {
+          const point = Vector.Project(new Vector(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]),
+            mesh.getWorldMatrix(), scene.getTransformMatrix(), viewport);
+          return { x: point.x * canvas.width / engine.getRenderWidth(), y: point.y * canvas.height / engine.getRenderHeight() };
+        });
+        return [{ id, name: mesh.name, vertices: positions.length / 3, projected,
+          material: mesh.material?.getClassName(), diffuseTexture: mesh.material?.diffuseTexture?.name ?? null,
+          scaling: mesh.scaling.asArray(), cameraZ: scene.activeCamera.position.z,
+          z: mesh.getAbsolutePosition().z, enabled: mesh.isEnabled(), visible: mesh.isVisible }];
+      });
+    }, ids);
     const styleInputs = compareStyleInputs(referenceMeasurement.elements, astylarMeasurement?.elements ?? {});
     const astylarState = await astylar.page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__?.state());
     const interactionState = await compareInteractionState(reference.page, astylar.page, family, state, astylarState);
@@ -425,6 +451,7 @@ async function captureInteractionCase(benchmarkCase) {
       // Retain measured interaction boxes for input/paint diagnosis. This is
       // diagnostic evidence, not a new acceptance gate or a static-box fallback.
       geometry: compareGeometry(referenceMeasurement.elements, astylarMeasurement.elements),
+      controlPaintGeometry,
       inputTrees: persistInputTrees(directory, referenceMeasurement.inputTree, astylarMeasurement.inputTree),
       focus: { reference: referenceFocus, astylar: astylarFocus, matches: focusMatches },
       runtimeErrors, resourceSnapshots, resourcesStable, astylarState,

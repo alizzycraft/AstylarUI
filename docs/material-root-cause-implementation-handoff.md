@@ -62,9 +62,32 @@ A read-only sensitivity check added 1e-7 device pixel before sample-index floor
 to test near-integer floating-point ambiguity: Save maxima remain 2 CSS px at
 DPR1 and 1px at DPR2 in both profiles. Thus that probe alone does not remove the
 residual; original sample coordinates and failing observations are unchanged.
-Next distinguish runtime mesh/paint bounds from rasterization/coverage at the
-remaining residual, rather than rerunning the source kernel or the same scans.
-Do not repeat this cohort's capture without a newly identified observation gap.
+**Runtime paint ownership/bounds now observed.** Diagnostic harness field
+`controlPaintGeometry` reads registered button meshes through the surface host,
+retaining projected vertices, material/texture identity, scale and visibility.
+It changes no renderer/fixture state or acceptance gate. Frozen-build capture
+`action-meshes-b399ba7-v3/latest-report.json` SHA-256
+`54f433e715c5079c499362f9b03d7249df7c294727e17b1f7f872dce9bbcf17b`
+contains 12 toolbar/dialog hover/open cases, light/contrast, DPR1/2. Use the same
+capture command above with families `toolbar,dialog` and this new output path.
+Existing report-only interaction checks pass 12/12, with no runtime errors.
+
+Eight relevant toolbar/Save meshes use StandardMaterial without diffuse texture,
+unit scale, and 40 vertices for contrast toolbar /68 otherwise. Projected bounds
+agree with measured control boxes within .000031 CSS px; target style records
+match the prior focused capture exactly. There is no observed separate fill
+texture or multi-pixel projected bounds shift. The test `runtime button paint`
+requires eight observations, so absent captures cannot pass. Combined with
+`focused interaction capture`, 2/2 pass in 6.70s. This narrows the residual to
+framebuffer coverage/composition or probe interpretation, not a proven diagnosis.
+
+Two diagnostic attempts are retained as failures, not usable mesh evidence:
+`action-meshes-b399ba7` looked up pre-normalization mesh names and recorded empty
+arrays; `action-meshes-b399ba7-v2` terminated because the registry belongs to
+`surface.host`, not the public handle. V3 uses the actual registry. Do not repeat
+these failed approaches or the successful geometry checks. Next inspect
+framebuffer edge coverage against the projected boundary if pursuing the small
+raster residual; this does not authorize compensating fixture radius changes.
 Remaining profiles/states are not covered by this sample. Runner/spec fingerprint
 changes must join pending export reconciliation. Canonical unresolved count
 stays 180; the 10-group stacking batch is still pending. No renderer/fixture fix.

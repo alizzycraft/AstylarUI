@@ -17,6 +17,43 @@ import { applyAuthoredCornerReviews, proveAuthoredCornerRequests } from './autho
 import { proveSheetCornerBoxEvidence } from './authored-anchor-review.mjs';
 import { proveActionCornerBoxInputs, applyCardContrastCornerReview } from './authored-anchor-review.mjs';
 
+test('runtime button paint meshes agree with measured control bounds without background textures', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const bytes = readFileSync('artifacts/material-parity/action-meshes-b399ba7-v3/latest-report.json');
+  assert.equal(hash(bytes), '54f433e715c5079c499362f9b03d7249df7c294727e17b1f7f872dce9bbcf17b');
+  const report = JSON.parse(bytes);
+  const previousBytes = readFileSync('artifacts/material-parity/action-boxes-79bd3dd/latest-report.json');
+  assert.equal(hash(previousBytes), '02576edccf740a7dcf5273ea9193ba73a4b045a8ee7558e705853e7bd458b041');
+  const previous = JSON.parse(previousBytes);
+  assert.deepEqual(report.captureProvenance.browserFiles, previous.captureProvenance.browserFiles);
+  assert.equal(report.browser.version, previous.browser.version);
+  assert.equal(report.interactions.length, 12);
+  let measured = 0;
+  for (const entry of report.interactions) {
+    assert.deepEqual(entry.runtimeErrors, []);
+    const old = previous.interactions.find(e => e.family === entry.family && e.profile === entry.profile &&
+      e.viewport.id === entry.viewport.id && e.state === entry.state);
+    assert.ok(old);
+    for (const paint of entry.controlPaintGeometry.filter(p => ['toolbar-action', 'dialog-save'].includes(p.id))) {
+      measured++;
+      assert.equal(paint.name, paint.id); // Element creation renames constructor-time mesh IDs.
+      assert.equal(paint.material, 'StandardMaterial');
+      assert.equal(paint.diffuseTexture, null);
+      assert.deepEqual(paint.scaling, [1, 1, 1]);
+      assert.equal(paint.enabled, true); assert.equal(paint.visible, true);
+      assert.equal(paint.vertices, paint.id === 'toolbar-action' && entry.profile === 'contrast' ? 40 : 68);
+      assert.equal(paint.projected.length, paint.vertices);
+      const box = entry.geometry.elements.find(e => e.id === paint.id).actual;
+      const x = paint.projected.map(p => p.x), y = paint.projected.map(p => p.y);
+      assert.ok([...x, ...y].every(Number.isFinite));
+      for (const delta of [Math.min(...x) - box.left, Math.max(...x) - box.right,
+        Math.min(...y) - box.top, Math.max(...y) - box.bottom]) assert.ok(Math.abs(delta) < 0.000031);
+      assert.deepEqual(entry.styleInputs.find(i => i.id === paint.id), old.styleInputs.find(i => i.id === paint.id));
+    }
+  }
+  assert.equal(measured, 8); // Empty name-based mesh observations must not pass.
+});
+
 test('focused interaction capture retains actual boxes and binds target inputs to historical cases', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const bytes = readFileSync('artifacts/material-parity/action-boxes-79bd3dd/latest-report.json');
