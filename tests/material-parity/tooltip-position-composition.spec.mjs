@@ -12,6 +12,53 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 
+test('short viewport exposes missing tooltip fallback and unequal scroll extents', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const file = 'artifacts/material-parity/tooltip-boundary-1f46760/latest-report.json';
+  const bytes = readFileSync(file);
+  assert.equal(hash(bytes), '19ee234981edcf4a05a31de2f2fec9f291f25f455e899bbba62ee34c80b1e9c7');
+  const report = JSON.parse(bytes), manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  const binding = validateSupplementalCapture(report, { reportFile: file,
+    expectedProvenance: manifest.provenance, script: 'scripts/audit-material-tooltip-boundary.mjs',
+    styleProperties: Object.values(propertyGroups).flat() });
+  assert.equal(binding.status, 'checkpoint-bound', JSON.stringify(binding.errors));
+  assert.deepEqual(report.results.map(row => [row.deviceScaleFactor, row.viewport.height, row.action]),
+    [1, 2].flatMap(dpr => [1000, 240].flatMap(height => ['initial', 'hover', 'wheel'].map(action => [dpr, height, action]))));
+  for (const row of report.results) {
+    for (const side of ['reference', 'astylar']) {
+      const sample = row[side];
+      assert.equal(hash(readFileSync(sample.screenshot.file)), sample.screenshot.sha256);
+      if (row.action === 'wheel') assert.ok(sample.events.some(event => event.type === 'wheel' && event.trusted && event.deltaY > 0));
+    }
+    if (row.viewport.height === 1000 && row.action !== 'initial') assert.ok(Math.abs(row.popupTopDelta) < .01);
+    if (row.viewport.height !== 240) continue;
+    assert.equal(row.reference.scrollHeight, 286); assert.equal(row.astylar.scrollHeight, 240);
+    if (row.action === 'hover') {
+      assert.ok(row.reference.referencePopup.box.bottom < row.reference.triggerBox.y);
+      assert.ok(row.astylar.candidatePopupBox.top > row.astylar.triggerBox.y + row.astylar.triggerBox.height);
+      assert.ok(row.astylar.candidatePopupBox.bottom > 240);
+      assert.ok(Math.abs(row.popupTopDelta - 80) < .01);
+      for (const side of ['reference', 'astylar']) {
+        const image = PNG.sync.read(readFileSync(row[side].screenshot.file)), dpr = row.deviceScaleFactor;
+        assert.equal(image.width, 900 * dpr); assert.equal(image.height, 240 * dpr);
+        let dark = 0;
+        for (let y = 140 * dpr; y < image.height; y++) for (let x = 70 * dpr; x < 200 * dpr; x++) {
+          const i = (y * image.width + x) * 4;
+          if (image.data[i] < 80 && image.data[i + 1] < 80 && image.data[i + 2] < 80) dark++;
+        }
+        assert.equal(dark, side === 'astylar' ? 0 : dpr === 1 ? 2078 : 8858);
+      }
+    }
+    if (row.action === 'wheel') {
+      assert.equal(row.reference.scrollY, 46); assert.equal(row.astylar.scrollY, 0);
+      assert.equal(row.reference.popupCount, 0); assert.equal(row.astylar.popupCount, 1);
+    }
+  }
+  // Different scroll extents mean disappearance alone cannot diagnose a
+  // scroll-dismissal handler. The local-flow translation lacks native fallback;
+  // neither that input difference nor this raster establishes a core cause.
+});
+
 test('real Tab reaches both tooltip triggers but only reference authors an open popup', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const file = 'artifacts/material-parity/tooltip-keyboard-813f658-v2/latest-report.json';

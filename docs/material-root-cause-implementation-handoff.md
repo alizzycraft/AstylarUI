@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 28
 
+**Tooltip boundary capture retained:** `tooltip-boundary-1f46760/latest-report.json`
+under Material artifacts, SHA
+`19ee234981edcf4a05a31de2f2fec9f291f25f455e899bbba62ee34c80b1e9c7`.
+Twelve paired ordinary states (initial/hover/wheel, 900x1000 and 900x240,
+DPR 1/2), Chrome 153.0.8010.53, existing authenticated fresh-build assets,
+zero runtime errors. Capture exits 1 for genuine placement/presence differences.
+At 240px height both DPRs reproduce an 80.002px top-position difference:
+reference flips above, candidate stays below with bottom 253.080px. Tall controls
+agree within 0.01px. Retained screenshots were inspected: candidate tooltip is
+not visible, despite its retained box; the tooltip-region dark-pixel census is
+0 candidate versus 2,078/8,858 reference pixels at DPR 1/2. This documents missing
+paint in this state without attributing it to a specific clipping/paint stage.
+
+The wheel sample is **not an isolated dismissal proof**: reference document
+height is 286px and scrolls 46px, candidate document height is 240px and scrolls
+0px. Reference popup disappears; candidate remains authored/open. Trusted wheel
+events occur on both. The unequal containing/scroll structure must be addressed
+in the audit before interpreting this as a shared scroll-handler core defect.
+Existing composition-spec checks for `short viewport exposes|real Tab reaches`
+pass 2/2 in 1.35s, replaying runtime provenance, all trees/screenshots, geometry,
+wheel events and viewport pixels. No comparison or renderer edits. Next trace
+the retained-but-unpainted short popup through clipping/paint ownership, and
+separate the reference's pointer leave after document movement from its connected
+strategy's clipping dismissal. Do not redo the now-proven fallback boundary.
+
 Exploratory next-case selection (not accepted raster/coverage proof): unchanged
 fresh showcase assets, authenticated against the keyboard-run manifest, were
 hovered in ordinary light mode at width 900 / DPR 1 and heights 1000, 260, 240.
