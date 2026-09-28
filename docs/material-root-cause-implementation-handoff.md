@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 28
 
+Cursor/pointer export completed (source 864a53f, 2362.05 s, exit 1 solely for
+637 unresolved groups). Coverage remains 436 static / 1875 interaction cases,
+8483 scalar differences / 389202 observations and 134 source findings.
+New compressed package: 8635694f2f111b71b50ed25ce0de8947ecb16baa3aada405163b6a8be5339f49
+(61470998 bytes); decoded SHA c6481d5bd32baf62366745b1ee89a6a305e302c1ff6875bc54ab96d0941072e3
+(2160068166 bytes). **Not accepted yet.** Reconciliation jobs are running:
+conservation session 32761 (`--component-interaction`), all-section digest session
+42098, metadata/source-fingerprint session 90340. Their outputs are retained as
+`component-interaction-{conservation,metadata}-864a53f.log` and
+`component-interaction-sections-864a53f.json`. Poll those handles; do not rerun the
+completed export. Next inspect every result, account for all changed sections,
+then import/verify compact evidence before committing the canonical package.
+
 Prepared overlay-position review covers five groups / 141 observations: one
 bottom-sheet wrapper group (25) explicitly substitutes fixed for native absolute;
 two sheet right/bottom groups (50) and snackbar-surface/dialog-copy static groups
@@ -29,8 +42,7 @@ are not literal styles to copy. No additional renderer coordinate cause is prove
 insets, native bottom requests and scalar/tree disagreement for all three owners.
 Next batch this with the prepared slider-position review after export reconciliation.
 Neither review is wired into the producer yet; no canonical classifications changed.
-The outstanding cursor/pointer export remains live (session 15635, Node PID 9660,
-validation phase); do not restart it or accept its output before reconciliation.
+The cursor/pointer export has completed; reconciliation is tracked above.
 
 Caret next-batch applicability check during the cursor/pointer export:
 the compact accepted-color index retains 27 caret-color groups / 896 observations.
