@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+Short-tooltip scene trace narrows the missing paint to camera/depth, not authored
+overflow: popup/ancestors have no clipping request; both popup meshes are enabled,
+visible, opacity 1, and have null clip planes. Read-only Angular debug inspection
+of the same fresh build finds popup world Z 250.099 (text 250.100). At height
+1000 camera Z is 866.025 and both meshes are active; at height 240 camera Z is
+207.846 and both are inactive. X/Y bounds still intersect the viewport. Source
+`BabylonCameraService.initialize` sets distance from viewport height and FOV,
+whereas `StackingContextManager.rootContextDepth` linearly maps root z-index
+(`0.01 + zIndex * rootContextStep`) without a camera-bound range. This explains
+why the projected measurement can exist while the short popup is behind the
+camera. The trace is diagnostic console evidence, not yet a standalone general
+browser proof. Next extend the existing equal-input overlay reduction with a
+fully in-viewport high-z-index pane at short/tall heights, retaining raster and
+camera/mesh evidence. Do not lower the tooltip's z-index to hide the core
+paint-boundary issue or conflate it with the separate missing fallback strategy.
+
 **Tooltip boundary capture retained:** `tooltip-boundary-1f46760/latest-report.json`
 under Material artifacts, SHA
 `19ee234981edcf4a05a31de2f2fec9f291f25f455e899bbba62ee34c80b1e9c7`.
