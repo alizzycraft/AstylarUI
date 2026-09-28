@@ -2,6 +2,17 @@
 
 ## Current audit checkpoint — September 28
 
+Cursor/pointer integration guard is ready: the existing canonical conservation
+checker now supports `--component-interaction`, pinned to the accepted color
+generation below. It independently constrains 42 groups / 1,587 observations,
+raw inputs, classification scope, false-equivalence flags and the 48 control
+producer receipts. `node --test tests/material-parity/position-canonical-conservation.spec.mjs`
+passed 28/28 in 88.99 s, including joint-forgery and missing-evidence negatives.
+The current-ancestry launcher dry run supplies all five required inputs.
+Next run the cold export, then this conservation check, source/section
+reconciliation and compact import verification. Expected unresolved count is
+637, not an accepted result yet; rendering defects remain unfixed by this audit.
+
 Accepted color checkpoint: export from `e5eb55c` completed in **2,377.28 s**. Its only reported error
 is **679 unresolved groups**; all 436 static / 1,875 interaction cases, 8,483
 scalar groups / 389,202 observations and 134 source findings remain.
