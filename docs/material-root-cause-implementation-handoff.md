@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+Caret next-batch applicability check during the cursor/pointer export:
+the compact accepted-color index retains 27 caret-color groups / 896 observations.
+Existing range evidence covers four groups / 156 observations in 78 cases.
+The legacy `collectRangeCaretInputs()` rejects the changed border dependency;
+the generated-node reader adapter is also a known source transition. A read-only
+replay authenticated the parent capture and every selected tree/input, checked
+all non-normalizer source fingerprints using existing
+`verifyBorderEvidenceSourceTransition` and `restoreMappingReadAdapterSource`,
+then reran `inspectRangeCaretInput` and exactly matched all 156 saved reviews
+(3.63 s). No saved survey or canonical classification was changed. This proves
+the retained range inspection remains reproducible, not computed caret or drag
+equivalence. Next reconcile those two transitions in the existing range collector
+and its saved-receipt comparison before integrating; do not blindly refresh hashes.
+The other 23 groups remain split between motion-sensitive chip/tab ancestry and
+overlay/root-context evidence. Keep these distinct from editable-input caret bugs.
+
 Cursor/pointer integration guard is ready: the existing canonical conservation
 checker now supports `--component-interaction`, pinned to the accepted color
 generation below. It independently constrains 42 groups / 1,587 observations,
