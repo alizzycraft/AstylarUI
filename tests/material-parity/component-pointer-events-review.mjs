@@ -8,6 +8,60 @@ import { inspectSliderInputBox } from './slider-input-box-evidence.mjs';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { proveChipPositionInspection } from './chip-position-inspection.mjs';
+import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
+
+export function proveTabPointerBoundary(entry, reference, candidate, element) {
+  assert.equal(entry.family, 'tabs');
+  const composition = proveTabControlStage(reference, candidate, element);
+  const input = entry.styleInputs.find(i => i.id === element);
+  const r = reference.nodes.find(n => n.key === composition.referenceLabel);
+  const a = candidate.nodes.find(n => n.key === composition.candidateControl);
+  assert.equal(Object.keys(input.reference).length, 89);
+  for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[r.style][key], value);
+  assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+  for (const [field, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']])
+    assert.deepEqual(input[field], a[stage]);
+  const path = (tree, node) => {
+    const keys = [];
+    while (node) { assert.ok(!keys.includes(node.key)); keys.push(node.key);
+      if (node.parent === null) return keys;
+      node = tree.nodes.find(n => n.key === node.parent); assert.ok(node);
+    }
+    assert.fail('missing tab owner');
+  };
+  const identity = { status: 'mapped', inputEquivalent: false, referenceNode: r.key, candidateNode: a.key,
+    referencePath: path(reference, r), candidatePath: path(candidate, a) };
+  const trace = inspectOverlayOwnerDeclarations('pointerEvents', identity, reference, candidate);
+  const relevant = key => ['pointerevents', 'all'].includes(key.replaceAll('-', '').toLowerCase());
+  for (const [index, node] of trace.referencePath.entries()) {
+    assert.equal(node.computed, 'auto'); assert.ok(!Object.keys(node.inline).some(relevant));
+    const requests = node.rules.filter(r => r.active && Object.keys(r.declarations).some(relevant));
+    assert.deepEqual(requests.map(r => r.selector), index === 2 ? ['.mdc-tab__content', '.mat-mdc-tab .mdc-tab__content'] : []);
+    for (const [i, rule] of requests.entries()) {
+      assert.deepEqual(rule.declarations['pointer-events'], { value: i === 0 ? 'none' : 'auto', important: false });
+      assert.equal(rule.declarations.all, undefined);
+    }
+  }
+  for (const node of trace.candidatePath) {
+    assert.deepEqual(Object.values(node.localValues), ['<omitted>', '<omitted>', '<omitted>']);
+    assert.ok(!Object.keys(node.inline).some(relevant));
+    assert.ok(node.possibleRules.every(r => !Object.keys(r.declarations).some(relevant)));
+  }
+  return { referenceNode: r.key, astylarNode: a.key, composition, trace,
+    inputEquivalent: false, renderingEquivalent: false, candidateComputedPointerEventsVerified: false,
+    actualHitTargetVerified: false,
+    limitation: 'The scalar measures a native text label inheriting the tab-content override, versus candidate control-local omission. The native control also computes auto. Flattened structure and different observation stages remain; no missing authored auto, equivalent hit target, or faulty inheritance is inferred.' };
+}
+
+export function applyTabPointerBoundaryReviews(rows, cases, inventory, normalize) {
+  return ['tab-overview', 'tab-activity'].reduce((result, element) => applyModalBoxReview(result, cases, inventory, normalize, {
+    family: 'tabs', element, properties: ['pointerEvents'], classification: 'parity-harness-defect',
+    attribution: 'reviewed-tab-pointer-owner-stage-boundary',
+    owner: 'tab label/control measurement ownership; retained native pointer override and flattened fixture structure',
+    justification: 'Existing structural proof maps the native measurement to a text label, not its owning tab control. The label inherits auto after explicit content none/auto rules; the candidate measurement is a button with omitted local pointer fields. Preserve the ancestor requests rather than treating this as request-free default equivalence or copying auto onto the candidate.',
+    prove: (entry, reference, candidate) => proveTabPointerBoundary(entry, reference, candidate, element),
+  }), rows);
+}
 
 const overlayPointerOwners = [
   ...['bottom-sheet-copy', 'bottom-sheet-dismiss', 'bottom-sheet-panel'].map(id => ['bottom-sheet', id]),

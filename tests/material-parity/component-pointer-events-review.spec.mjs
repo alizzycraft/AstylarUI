@@ -11,6 +11,7 @@ import { applyDisabledPointerRequestReviews, proveDisabledPointerRequest } from 
 import { applySliderPointerRequestReview, proveSliderPointerRequest, collectSliderPointerSource } from './component-pointer-events-review.mjs';
 import { applyOmittedPointerBoundaryReviews, proveOmittedPointerBoundary } from './component-pointer-events-review.mjs';
 import { applyOverlayPointerPolicyReviews, proveOverlayPointerPolicy } from './component-pointer-events-review.mjs';
+import { applyTabPointerBoundaryReviews, proveTabPointerBoundary } from './component-pointer-events-review.mjs';
 
 test('pointer reviews distinguish sheet ownership, badge requests and disabled ancestor suppression', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -144,4 +145,22 @@ test('pointer reviews distinguish sheet ownership, badge requests and disabled a
     pane.declarations['pointer-events'].value = 'none';
     assert.throws(() => proveOverlayPointerPolicy(entry, native, a, row.element));
   }
+  const tabReview = applyTabPointerBoundaryReviews(omittedRows, cases, inventory, normalize);
+  const changedTabs = tabReview.filter((r, i) => r !== omittedRows[i]);
+  assert.equal(changedTabs.length, 2); assert.equal(changedTabs.reduce((n, r) => n + r.occurrences, 0), 140);
+  tabReview.forEach((r, i) => { assert.deepEqual(raw(r), raw(omittedRows[i])); if (!changedTabs.includes(r)) assert.deepEqual(r, omittedRows[i]); });
+  for (const row of changedTabs) {
+    const key = row.reviewedCases[0];
+    const entry = cases.find(c => `${c.kind}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}` === key);
+    const [r, a] = modalInventoryTrees(inventory, key), proof = proveTabPointerBoundary(entry, r, a, row.element);
+    assert.deepEqual(proof, row.reviewEvidence.observations[0]);
+    const native = structuredClone(r), ruleIndex = proof.trace.referencePath[2].rules.find(r => r.selector === '.mat-mdc-tab .mdc-tab__content').index;
+    native.rules[ruleIndex].declarations['pointer-events'].value = 'none';
+    assert.throws(() => proveTabPointerBoundary(entry, native, a, row.element));
+    const altered = structuredClone(a); altered.rules.push({ selector: '#page', pointerEvents: 'none' });
+    assert.throws(() => proveTabPointerBoundary(entry, r, altered, row.element));
+  }
+  const population = [changed, badges, changedDisabled, changedSlider, changedOmitted, changedOverlays, changedTabs].flat();
+  assert.equal(population.length, 23); assert.equal(population.reduce((n, r) => n + r.occurrences, 0), 824);
+  assert.equal(new Set(population.map(r => `${r.family}/${r.element}/${r.property}`)).size, 23);
 });

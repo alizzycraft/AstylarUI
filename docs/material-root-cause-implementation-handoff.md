@@ -119,118 +119,57 @@ claim. The expanded focused test passed in 43.66 s. Next integrate this with the
 pointer-events/caret batch after the running color export is reconciled; accepted
 unresolved count remains 715.
 
-Pointer-events routing census: 23 groups / 824 observations, all candidate scalar
-values omitted (not assumed auto). Native none: eight groups / 177 observations
-(badge, disabled checkbox/radio, one slider input, disabled button, sheet wrapper).
-Native auto: 15 groups / 647 observations; three groups / 222 observations have no
-captured requests (chips and tab panel), while 12 / 425 retain tab or CDK overlay
-none/auto ancestry. Hash-checked trees and exact normalized membership support the
-first 22 groups; tooltip separately binds all 18 observations through the existing
-alias proof and verifies zero candidate ancestor requests/stage values. The initial
-survey stopped on a tooltip input lacking a reference object; that absent-popup
-record is not silently normalized into an observed value. No new classifications
-yet. Next distinguish explicit disabled/hit-layer omissions from computed/local
-measurement differences; do not collapse the inherited overlay chain to a default
-or infer actual hit behavior from these scalars.
+Prepared pointer review is complete: **23 groups / 824 observations**, all
+candidate scalar fields omitted rather than synthesized as auto. The existing
+`component-pointer-events-review.mjs` and its focused spec retain exact raw rows,
+owner/ancestor correspondence and all three local stages. Current breakdown:
 
-Pointer-event follow-up: existing slider peer-pointer evidence remains reusable.
-`node --test tests/material-parity/slider-peer-pointer-survey.spec.mjs` passed 2/2
-in 2.51 s, reopening all 78 cases / 156 paired owners and checking source hashes.
-Only the eight original held states suppress the start-thumb sibling; all other
-reference inputs remain auto. This is not yet a diagnosis of swapped/jerky dragging.
-Disabled controls require a separate distinction: fixture `handleClick` guards
-checkbox/radio/switch activation; core button click/hover/interaction handlers return
-when disabled, but `createButtonMesh` creates a pickable mesh and `setButtonDisabled`
-changes state, not pickability. Those five methods match the installed package
-under the existing method projection helper (handler projection SHA
-`6ca95b38753d8fe3a5f565ece6f3d5f4ff883b483034057bec47b8186e8036a9`,
-mesh-creation projection `8648471a17f811e9b07d319a68f48606041952a92b08907872f1aac1ee27e2c8`).
-The distinct CSS path is `element-creation.service.ts:400`, which disables picking
-for resolved pointerEvents none; the compatibility contract describes descendant
-inheritance. Do not substitute disabled activation guards for proof of equivalent
-CSS hit suppression. These source-level findings do not establish the actual picked
-mesh or event delivery in the Material cases; no new scalar classification yet.
+- Sheet wrapper: 1 group / 25 observations, harness owner mismatch. Native
+  non-picking wrapper differs from its explicitly picking sibling backdrop;
+  candidate combines those owners. Do not copy none onto that combined overlay.
+- Badge: 1 / 52, authored none request omitted on the corresponding badge span.
+- Disabled controls: 5 / 92, explicit native none inherited through checkbox/radio
+  labels versus omitted candidate policy. Disabled event-handler guards do not
+  establish equivalent CSS hit suppression.
+- Slider held sibling: 1 / 8, native start sibling suppressed while end remains
+  auto; candidate peer-state request omitted. Existing source-bound survey covers
+  all 78 cases / 156 owners. Drag causality remains unproven.
+- Chips and active tab panel: 3 / 222, no pointer requests on either captured
+  ancestry; computed native auto versus omitted candidate local fields is a
+  harness stage boundary, not evidence of a missing authored auto value.
+- Overlay descendants: 10 / 285, native none-container/auto-pane policy omitted
+  from candidate replacement composition. Classify structural/policy authoring
+  substitution, not request-free defaults or a demonstrated modal-scope cause.
+- Tab headers: 2 / 140, existing structural proof identifies native text labels
+  versus candidate controls. Native content none is overridden by auto; those
+  ancestor rules remain in evidence. Harness owner/stage boundary, not a faulty
+  inheritance diagnosis or proof of equivalent hit behavior.
 
-Prepared sheet pointer-owner review (not yet canonical): the existing overlay
-identity/paint proof binds all **25 observations** to a non-picking native CDK
-wrapper (`pointer-events: none`) and a separate backdrop explicitly requesting
-`auto`. The candidate combines those owners and omits pointer-events throughout
-its captured ancestry and three style stages. This scalar therefore measures
-different interaction owners; classify this one group as a harness measurement
-defect, not evidence that the candidate needs `none`. Actual picking, dismissal
-and window-wide modal scope remain unproven. The focused command
-`node --test tests/material-parity/component-pointer-events-review.spec.mjs`
-passed 1/1 in 13.71 s, preserving raw/unrelated rows and rejecting altered/missing
-backdrops and an added candidate pointer request. Integrate with the prepared
-cursor/pointer batch after color reconciliation; the remaining pointer population
-is 22 groups / 799 observations. No renderer or fixture changes were made.
+Command: `node --test tests/material-parity/component-pointer-events-review.spec.mjs`.
+Latest result: **1/1 passed in 18.91 s**, proving exact 23-group/824-observation
+coverage with no duplicate owners, raw/unrelated-row conservation and negative
+controls for changed requests, peer state, ancestors and measurement owners.
+The separate slider survey last passed 2/2 with exact original-source replay.
+Earlier test-setup failures (non-style rules lacking declarations and duplicate
+pane selectors) were corrected to mutate the exact retained owning rule; no
+assertion was weakened.
 
-The badge follow-up resolves a different question: all **52 badge-count
-observations** map corresponding span owners, with native `.mat-badge-content`
-explicitly requesting `pointer-events: none` and no corresponding candidate
-request anywhere in the retained ancestry or three local stages. Prepared
-classification: authoring omission, not a sheet-like owner mismatch. The shared
-pointer focused test passes (1/1, 14.66 s), preserves original scalar rows, and
-rejects removed native or added candidate requests. Actual hit delivery and
-candidate computed defaults remain unproven. Together the two prepared pointer
-reviews cover 77 observations; **21 groups / 747 observations** remain to review.
+Disabled source context remains separate: fixture `handleClick` guards activation;
+core button handlers return when disabled, but creation makes a pickable mesh and
+`setButtonDisabled` changes state rather than pickability. Five source/package
+method projections matched (handler SHA
+`6ca95b38753d8fe3a5f565ece6f3d5f4ff883b483034057bec47b8186e8036a9`;
+creation `8648471a17f811e9b07d319a68f48606041952a92b08907872f1aac1ee27e2c8`).
+The separate CSS path in `element-creation.service.ts:400` disables picking for
+resolved none. No candidate computed default, actual picked mesh, event delivery,
+modal scope/dismissal cause, swapped-drag cause or rendering equivalence is
+claimed by these scalar reviews.
 
-Disabled-pointer follow-up now binds **five further groups / 92 observations**:
-button-disabled (60), checkbox owner/label (8 each), and both radio labels (8
-each). Existing cursor proofs supply exact owner/stage correspondence; separate
-pointer traces show native explicit none on disabled component owners, inherited
-through the native labels, versus candidate omission across all captured ancestors
-and three local stages. Prepared classification is authoring omission, not a core
-inheritance failure or equivalent disabled-handler behavior. Actual hit delivery
-remains unproven. The same focused pointer test passes 1/1 in 12.56 s with exact
-population/raw-row conservation and added-candidate/removed-native negative
-controls. An initial negative-control loop incorrectly assumed every retained
-rule had declarations; guarding non-style rules fixed the test setup, without
-weakening proof assertions. **16 pointer groups / 655 observations** remain:
-the slider held-state suppression (8) and 15 native-auto/local-omission groups
-(647). These prepared reviews are not yet part of the accepted 679 count.
-
-Slider held-pointer review now binds the remaining explicit-none group: **eight
-held observations**, both original input owners per case, exact scalar/full-tree
-stages, complete ancestry and the existing installed-source survey. Native start
-sibling requests none while end remains auto; candidate paths omit the rule.
-Prepared classification is plugin interaction-state authoring omission, not proof
-of the swapped/jerky drag cause. Both drag directions, capture, cancellation and
-peer-dependent hit geometry remain separate causal requirements. The combined
-pointer and existing slider-survey tests pass **3/3 in 13.87 s**, including all
-78 survey cases / 156 owners, source fingerprints, exact replay, raw-row
-conservation, altered-peer/candidate-request and non-held-state negatives.
-Command: `node --test tests/material-parity/component-pointer-events-review.spec.mjs tests/material-parity/slider-peer-pointer-survey.spec.mjs`.
-All eight original native-none groups / 177 observations now have prepared
-reviews; the **15 native-auto/local-omission groups / 647 observations** remain.
-No new browser capture, renderer change, or fixture pointer workaround was made.
-
-Auto/local review: **three groups / 222 observations** (both chip owners and
-active tab panel) have no captured pointer requests anywhere on either ancestry.
-Existing owner/composition proofs plus all scalar/stage matches establish a
-computed-native/local-candidate measurement boundary, not a missing authored
-auto value. Prepared harness classification preserves omissions and leaves
-candidate computed defaults, structure and actual hits unproven. The focused
-pointer test passes 1/1 in 15.04 s, including raw conservation and injected
-ancestor-rule negatives. **12 groups / 425 observations remain**: two tab header
-chains explicitly override none with auto; ten overlay groups preserve native
-non-picking containers and picking panes. Do not classify those as request-free
-defaults. The initial alias-only probe correctly rejected four direct-ID owners;
-chips now use their existing composition proof, and tab headers still need binding.
-
-Overlay pointer-policy binding covers **ten groups / 285 observations**: sheet
-panel/actions (75), six dialog owners (192), tooltip surface (18). Exact alias
-proofs retain the native auto pane beneath two non-picking ancestors, including
-the tooltip wrapper that inherits none rather than declaring it locally. Candidate
-replacement ancestry omits this CSS policy in authoring and all three local
-stages. Prepared classification is structural/policy authoring substitution, not
-a request-free default or a proven modal-scope/dismissal cause. Do not copy auto
-onto a leaf as a workaround. The focused pointer test passes 1/1 in 18.14 s;
-original rows and unrelated findings are conserved. A negative control initially
-mutated an unrelated duplicate pane selector; it now targets the exact active
-rule index from the owner trace and correctly fails. **Two tab header groups /
-140 observations remain**, with the existing tab proof identifying native text
-labels versus candidate controls as the next measurement boundary to bind.
+Next: replay/validate this coherent pointer batch with the prepared cursor batch,
+then integrate through the existing producer and conservation gates. These
+prepared classifications are **not yet included** in the accepted 679 count.
+Caret and the remaining positioning/typography/border populations stay open.
+No renderer/fixture changes or new browser captures were made.
 
 Color producer/validator integration is now wired and focused-verified against
 the accepted paint compact snapshot. Validation starts from original rows and
