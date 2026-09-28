@@ -4,6 +4,82 @@ import { proveControlStatePaint } from './control-state-paint-review.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { proveExplicitComponentCursor } from './component-cursor-request-review.mjs';
+import { inspectSliderInputBox } from './slider-input-box-evidence.mjs';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+
+export function collectSliderPointerSource() {
+  const file = 'docs/material-slider-peer-pointer-survey.json', bytes = readFileSync(file);
+  const survey = JSON.parse(bytes), hash = value => createHash('sha256').update(value).digest('hex');
+  for (const source of survey.sourceFingerprints)
+    assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256, source.file);
+  assert.equal(hash(readFileSync(survey.capture.file)), survey.capture.sha256);
+  assert.equal(survey.cases, 78); assert.equal(survey.owners, 156); assert.equal(survey.suppressedSiblingCases, 8);
+  assert.equal(survey.dragCauseVerified, false);
+  return { file, sha256: hash(bytes), survey };
+}
+
+export function proveSliderPointerRequest(entry, reference, candidate, evidence) {
+  assert.equal(entry.family, 'slider'); assert.equal(entry.state, 'held');
+  const key = `${entry.kind}:slider@${entry.profile}/${entry.viewport.id}/${entry.state}`;
+  const observed = evidence.survey.observations.filter(o => o.case === key);
+  assert.equal(observed.length, 1); assert.deepEqual(observed[0].inputTrees, entry.inputTrees);
+  const pairs = ['slider-start', 'slider-primary'].map(id => {
+    const input = entry.styleInputs.find(i => i.id === id);
+    const box = inspectSliderInputBox(entry, input, reference, candidate); assert.ok(box);
+    const r = reference.nodes.find(n => n.key === box.reference.node);
+    const a = candidate.nodes.find(n => n.key === box.candidate.node);
+    const path = (tree, node) => {
+      const keys = [];
+      while (node) { assert.ok(!keys.includes(node.key)); keys.push(node.key);
+        if (node.parent === null) return keys;
+        node = tree.nodes.find(n => n.key === node.parent); assert.ok(node);
+      }
+      assert.fail('missing owner');
+    };
+    const identity = { status: 'mapped', inputEquivalent: false, referenceNode: r.key, candidateNode: a.key,
+      referencePath: path(reference, r), candidatePath: path(candidate, a) };
+    const trace = inspectOverlayOwnerDeclarations('pointerEvents', identity, reference, candidate);
+    const relevant = key => ['pointerevents', 'all'].includes(key.replaceAll('-', '').toLowerCase());
+    const requests = trace.referencePath.flatMap(n => {
+      assert.ok(!Object.keys(n.inline).some(relevant));
+      return n.rules.filter(r => r.active && Object.keys(r.declarations).some(relevant));
+    });
+    assert.equal(trace.referencePath[0].computed, id === 'slider-start' ? 'none' : 'auto');
+    assert.equal(requests.length, id === 'slider-start' ? 1 : 0);
+    if (requests.length) {
+      assert.equal(requests[0].selector, '.mdc-slider__input.mat-mdc-slider-input-no-pointer-events');
+      assert.deepEqual(requests[0].declarations, { 'pointer-events': { value: 'none', important: false } });
+    }
+    for (const node of trace.candidatePath) {
+      assert.deepEqual(Object.values(node.localValues), ['<omitted>', '<omitted>', '<omitted>']);
+      assert.ok(!Object.keys(node.inline).some(relevant));
+      assert.ok(node.possibleRules.every(r => !Object.keys(r.declarations).some(relevant)));
+    }
+    const old = observed[0].owners.find(o => o.element === id); assert.ok(old);
+    assert.equal(old.referenceNode, r.key); assert.equal(old.candidateNode, a.key);
+    assert.equal(old.referenceComputed, trace.referencePath[0].computed);
+    return { id, box, trace };
+  });
+  assert.equal(pairs[0].box.reference.parent, pairs[1].box.reference.parent);
+  return { referenceNode: pairs[0].box.reference.node, astylarNode: pairs[0].box.candidate.node,
+    pairs, source: { file: evidence.file, sha256: evidence.sha256,
+      mechanism: evidence.survey.installedReferenceMechanism, fingerprints: evidence.survey.sourceFingerprints },
+    inputEquivalent: false, renderingEquivalent: false, dragCauseVerified: false,
+    candidateComputedPointerEventsVerified: false,
+    limitation: 'Held-state sibling suppression is an unequal input. Both drag directions, pointer capture, release/cancel and peer-dependent geometry require separate causal proof; no fixture pointer patch is justified here.' };
+}
+
+export function applySliderPointerRequestReview(rows, cases, inventory, normalize) {
+  const evidence = collectSliderPointerSource();
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'slider', element: 'slider-start', properties: ['pointerEvents'],
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-slider-held-pointer-request-omission',
+    owner: 'range plugin peer interaction state versus native sibling hit policy',
+    justification: 'Every original held-state pair has explicit native start-sibling pointer suppression and an auto end thumb. Candidate authoring and three local stages omit the peer-state request throughout ancestry. Existing installed-source evidence explains the native class; neither this classification nor local omission proves the cause of swapped or jerky dragging.',
+    prove: (entry, reference, candidate) => proveSliderPointerRequest(entry, reference, candidate, evidence),
+  });
+}
 
 const disabledOwners = [
   ['button', 'button-disabled'], ['checkbox', 'checkbox-primary'],

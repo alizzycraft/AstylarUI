@@ -190,6 +190,21 @@ weakening proof assertions. **16 pointer groups / 655 observations** remain:
 the slider held-state suppression (8) and 15 native-auto/local-omission groups
 (647). These prepared reviews are not yet part of the accepted 679 count.
 
+Slider held-pointer review now binds the remaining explicit-none group: **eight
+held observations**, both original input owners per case, exact scalar/full-tree
+stages, complete ancestry and the existing installed-source survey. Native start
+sibling requests none while end remains auto; candidate paths omit the rule.
+Prepared classification is plugin interaction-state authoring omission, not proof
+of the swapped/jerky drag cause. Both drag directions, capture, cancellation and
+peer-dependent hit geometry remain separate causal requirements. The combined
+pointer and existing slider-survey tests pass **3/3 in 13.87 s**, including all
+78 survey cases / 156 owners, source fingerprints, exact replay, raw-row
+conservation, altered-peer/candidate-request and non-held-state negatives.
+Command: `node --test tests/material-parity/component-pointer-events-review.spec.mjs tests/material-parity/slider-peer-pointer-survey.spec.mjs`.
+All eight original native-none groups / 177 observations now have prepared
+reviews; the **15 native-auto/local-omission groups / 647 observations** remain.
+No new browser capture, renderer change, or fixture pointer workaround was made.
+
 Color producer/validator integration is now wired and focused-verified against
 the accepted paint compact snapshot. Validation starts from original rows and
 fresh sort/sidenav retained ancestry; unbound color attributions are rejected.

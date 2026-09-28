@@ -8,6 +8,7 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applySheetPointerOwnerReview, proveSheetPointerOwners, applyBadgePointerRequestReview, proveBadgePointerRequest } from './component-pointer-events-review.mjs';
 import { applyDisabledPointerRequestReviews, proveDisabledPointerRequest } from './component-pointer-events-review.mjs';
+import { applySliderPointerRequestReview, proveSliderPointerRequest, collectSliderPointerSource } from './component-pointer-events-review.mjs';
 
 test('pointer reviews distinguish sheet ownership, badge requests and disabled ancestor suppression', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -80,4 +81,23 @@ test('pointer reviews distinguish sheet ownership, badge requests and disabled a
     for (const rule of reference.rules) if (rule.declarations) delete rule.declarations['pointer-events'];
     assert.throws(() => proveDisabledPointerRequest(entry, reference, a, row.element));
   }
+  const sliderRows = queryFindings('artifacts/material-parity/working-audit', 'slider', {
+    generation: '7ffd3a4832d90e185be9d234b3d022f276db113767a6fcb0c3c965c51c14d592',
+    indexSha256: 'b37363024107a9aeca949a701837764fdfe96e17b0aedca1549e187573dc8df4',
+  }).filter(r => r.evidence.section === 'discrepancies');
+  const sliderReview = applySliderPointerRequestReview(sliderRows, cases, inventory, normalize);
+  const changedSlider = sliderReview.filter((r, i) => r !== sliderRows[i]);
+  assert.equal(changedSlider.length, 1); assert.equal(changedSlider[0].occurrences, 8);
+  sliderReview.forEach((r, i) => { assert.deepEqual(raw(r), raw(sliderRows[i])); if (r !== changedSlider[0]) assert.deepEqual(r, sliderRows[i]); });
+  const sk = changedSlider[0].reviewedCases[0];
+  const se = cases.find(c => `${c.kind}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}` === sk);
+  const [sr, sa] = modalInventoryTrees(inventory, sk), evidence = collectSliderPointerSource();
+  assert.deepEqual(proveSliderPointerRequest(se, sr, sa, evidence), changedSlider[0].reviewEvidence.observations[0]);
+  assert.ok(changedSlider[0].reviewEvidence.observations.every(o => !o.dragCauseVerified));
+  const peer = structuredClone(sr), end = peer.nodes.find(n => n.attributes?.id === 'slider-primary');
+  peer.styles[end.style].pointerEvents = 'none';
+  assert.throws(() => proveSliderPointerRequest(se, peer, sa, evidence));
+  const alteredCandidate = structuredClone(sa); alteredCandidate.rules.push({ selector: '#slider-start', pointerEvents: 'none' });
+  assert.throws(() => proveSliderPointerRequest(se, sr, alteredCandidate, evidence));
+  assert.throws(() => proveSliderPointerRequest({ ...se, state: 'released' }, sr, sa, evidence));
 });
