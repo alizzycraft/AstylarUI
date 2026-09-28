@@ -34,8 +34,15 @@ changed. Pending classification/proof integration:
   of a remaining core typography cause.
 - Slider: 78 owners preserve native `.mat-mdc-slider` authored side margins
   8px, versus candidate zero at all stages and no captured own spacing rule.
-  Candidate is `showcase.material:range-visual` inside a different composition;
-  join the existing range ownership proof before classifying omitted margins.
+  Follow-up authenticated all 78 candidate trees: `slider-visual` is inside
+  `slider-pair.range-stack`, whose authored rule and all three resolved stages
+  have margin `0 8px`, width 100%, height 48px. Its children are the visual plugin
+  and two absolute range inputs. The native host's margin is therefore compared
+  to the wrong candidate ownership level for an omission claim: the spacing
+  request exists on the parent, not the mapped visual child. Classify these two
+  groups through the existing range ownership/composition proof; do not label
+  them missing authoring or assert full layout/hit-test equivalence from matching
+  wrapper margins. No core fix follows from this scalar signature alone.
 - Badge: 52 owners / 208 side observations have computed native -12px versus
   candidate zero; candidate uses absolute top/right -4px and 16px dimensions.
   Follow-up authenticated all 52 reference and candidate trees and recovered
