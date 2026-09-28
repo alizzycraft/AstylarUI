@@ -2,6 +2,40 @@
 
 ## Current audit checkpoint — September 28
 
+Caret/position export completed: session 91866 is terminal, exit 1 solely for
+573 unresolved groups, elapsed 2367.41 s. Coverage remains 436 static / 1875
+interaction cases, 8483 scalar rows / 389202 observations and 134 source findings.
+Package compressed SHA fca6a4354e9c006e21066f0d19ea9435afacf436d226cda1c78f5ee420bea137
+(61741143 bytes); decoded SHA
+37b37fbe835a9e277dc4a550b4a49433ad6a29fb2e4b9b055172f36e3c3149f4
+(2176547977 bytes). **Accepted caret/position audit checkpoint.** `--caret-position` conservation passed:
+exactly 64 groups / 2441 observations; one scalar receipt and 48 control receipts;
+all raw inputs and non-receipt controls conserved. Log:
+`artifacts/material-parity/caret-position-conservation-40980fe.log` (26384 terminal).
+Metadata/source/line-box comparison passed (20053 terminal), retained as
+`caret-position-metadata-40980fe.log`: all 515 fingerprints match, eleven added,
+three changed, none removed. Coverage is identical; classification delta is
+27 authoring groups, -27 harness groups, unresolved 637 to 573. Differences are
+one owner-caret producer receipt, two source-batch producer/report receipts, and
+48 line-box producer receipts only; no line-box measurements changed.
+All-section reconciliation passed (12459 terminal), retained as
+`caret-position-sections-40980fe.json`: 79 sections, 72 unchanged, none added or
+removed. All seven changes are accounted for: reviewed discrepancy/summary rows,
+fingerprints, owner-caret/source-batch receipts, control typography receipts,
+and the 48 line-box producer receipts described above.
+Compact import/verify passed (68886
+terminal): 8483 scalar rows, 134 source findings, 39904 controls, 389202
+observations, 573 unresolved groups, 71524360 compact bytes. Current generation
+is fca6a4354e9c006e21066f0d19ea9435afacf436d226cda1c78f5ee420bea137;
+index SHA 5a5e8c8a31681e088f432bfd23d00327cd3757b383e8ccad50d1edc45f5f4472.
+Manifest is retained beside the package. This accepts the reviewed classifications,
+not equal rendering or final audit completion. All processing streamed the packages; no decoded
+file is written. Import logs: `caret-position-{import,import-verify}-40980fe.log`.
+Do not rerun the export. Prepared later reviews remain outside this package.
+Next integrate the prepared 134-group / 3948-observation border/position/origin
+batch with exact serialized replay, preserving this accepted predecessor. Then
+refresh remaining coverage and continue attribution; all final gates remain.
+
 Toggle position proof adds 16 groups / 1088 observations across 68 cases and
 three exact native-host/candidate-div mappings. Four groups identify relative
 position / group translateZ(0px) omissions; twelve distinguish native computed
