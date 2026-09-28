@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 28
 
+Radius triage separates 72 pending corner groups into 28 chip/toggle groups and
+44 badge/action-pill groups. Authenticated read-only replay checked 220 owners
+across 144 original chip/toggle cases, exact native scalar joins and all three
+candidate stages. Chips retain native
+`var(--mat-chip-container-shape-radius, 8px)` resolving to 8px, while candidate
+`.chip` resolves 6px in contrast / 12px in custom (8px light/dark, not pending).
+Toggle group retains ordered legacy and standard tokens, ending with
+`var(--mat-button-toggle-shape, var(--mat-sys-corner-extra-large))`; reference
+radii are 28/28/21/42px versus candidate 21/21/9.75/31.5px. These 28 groups / 576
+observations have an authored-token substitution before paint, not proof that
+clipping is wrong. Next encode this bounded proof with mutation controls.
+Do not lump the other 44 groups into the same conclusion: badge, sheet actions,
+card action, dialog actions and toolbar action use native 9999px pills against
+finite radii. Existing `proveBottomSheetActionCorners` explicitly preserves
+conditional equal-shape-on-equal-box geometry for noncontrast actions; existing
+button-pill evidence likewise distinguishes authored intent from used paint.
+Reuse those proofs and resolve the conditional geometry question rather than
+silently treating every numeric radius difference as either a paint defect or
+equivalent rendering. No radius classification or capture changed this turn.
+
 Prepared anchor/position followup now totals 53 groups / 2780 observations.
 The last 16 static-owner position groups add 918 observations. Fourteen are
 native computed-static versus absent candidate local declarations; sort and
