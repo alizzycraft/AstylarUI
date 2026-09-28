@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — September 28
 
+**Snackbar applicability probe:** unchanged fresh showcase browser assets were
+rehash-validated against `tooltip-keyboard-runtime-813f658/checkpoint/manifest.json`
+and served locally, Chrome 153.0.8010.53. Real mouse clicks in ordinary light
+mode at width 900 and heights 1000/240 open the candidate (`open=true`). At 1000
+the surface box is (278,944,344,48); at 240 it is (278,184,344,48), fully within
+the canvas in both cases. The surface mesh Z is 249.949; camera Z is respectively
+866.025/207.846. It is enabled and visible in both. This rules out missing open
+state and below-screen CSS placement for this specific short-viewport probe.
+
+An independent repeat with in-memory screenshots at DPR 1/2 counted exact
+#322f35 background pixels inside the measured snackbar rectangle: tall
+15,472/62,890; short 0/0. Both remain open at sampling (300ms plus settlement).
+Thus the short-surface paint loss also occurs on the actual snackbar path,
+consistent with the retained equal-input depth reduction. These are exploratory
+console observations, not retained paired raster acceptance; no new report or
+canonical classification was produced. Do not infer that this explains the
+historical missing snackbar at larger heights: the current tall case paints,
+and the original audit already retains 34 visible snackbar surfaces.
+
+Next decisive gap: retain an authenticated paired ordinary snackbar boundary
+capture using existing supplemental infrastructure, including actual click,
+open state, mesh/camera depth, viewport pixels and the reference. Then compare
+the historical symptom's host/scale/lifetime conditions before attributing it.
+Do not repeat the already-established minimal high-z proof or alter snackbar
+z-index/offsets to conceal the defect. Final source/export reconciliation remains
+pending for the supplemental evidence batch.
+
 **High-z-index paint defect now independently reproduced:** the existing public-
 package overlay reduction authors one identical absolute rectangle on both sides
 (20,20; 120x24; background #302d32; z-index 1 or 1000), without tooltip wrappers,
