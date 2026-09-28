@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 28
 
+**Caret binding repaired after the rejected export:** the existing exact additive
+capture-diagnostics reversal now authenticates the caret producer's historical
+source while recording both historical and current receipts. No capture receipt,
+observation, classification, or canonical output was rewritten. Focused command:
+`node --test --test-name-pattern='capture diagnostic additions|owner caret source command' tests/material-parity/gap-survey-source-replay.spec.mjs tests/material-parity/owner-caret-proof-commands.spec.mjs`:
+2/2 passed in 76.61s. Complete caret replay retains 2,311 source cases, 1,734
+selected cases, 4,050 observations, 118 reviewed groups / 3,154 observations,
+896 unresolved observations, and 13 rejection controls; the shared transition
+test rejects unrelated source edits. Canonical files are unchanged by the test.
+The other two bindings remain unresolved. For reviewedInputs, merely restoring
+the known diagnostic additions and changing newline encoding is insufficient:
+restored LF hashes to c3cabcfde..., CRLF to 958a7452..., neither the recorded
+raw receipt b2477a12.... Locate its exact historical producer before reconciliation.
+For overlaySurfaceAuditInputs, git e526f85 adds `proveTooltipStackingComposition`
+to the pinned module; verify complete pre-existing source and replay the 344
+surface observations before accepting that transition. Do not rerun the full
+export yet. Coverage/classification and final acceptance remain incomplete.
+
 **Cold export finished but is rejected; do not import it:** session 46537 exited 1
 after 2,589,023ms. Coverage remains 436 static / 1,875 interaction cases,
 8,483 scalar groups / 389,202 observations / 134 source findings. Evidence-session

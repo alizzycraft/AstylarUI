@@ -9,6 +9,7 @@ import { inspectOwnerCaretInput } from './owner-caret-input-evidence.mjs';
 import { classifyOwnerCaretInput } from './owner-caret-classification.mjs';
 import { expectedOwnerCaretAttributionRows } from './owner-caret-attribution-coverage.mjs';
 import { restoreMappingReadAdapterSource } from './audit-evidence-session.mjs';
+import { restoreGapCaptureDiagnostics } from './gap-survey-source-replay.mjs';
 import { borderEvidenceBaseline, verifyBorderEvidenceSourceTransition } from './position-composition-producer-transition.mjs';
 
 const proofFile = 'docs/material-owner-caret-attribution.json';
@@ -63,7 +64,13 @@ function loadProof(root) {
     const currentBytes = read(s.file), current = hash(currentBytes.toString('utf8').replaceAll('\r\n', '\n'));
     const mappingAdapter = s.file === 'tests/material-parity/generated-node-mapping-evidence.mjs' && current !== s.sha256;
     const borderTransition = s.file === 'tests/material-parity/border-initial-input-evidence.mjs' && current !== s.sha256;
+    const captureDiagnostics = s.file === 'tests/material-parity/run-material-parity.mjs' && current !== s.sha256;
     if (mappingAdapter) restoreMappingReadAdapterSource(s, currentBytes);
+    else if (captureDiagnostics) {
+      // Bind the retained capture to its original producer, not a fresh run.
+      // Only the already authenticated additive diagnostics may be reversed.
+      assert.equal(hash(restoreGapCaptureDiagnostics(currentBytes.toString('utf8'))), s.sha256);
+    }
     else if (borderTransition) {
       const historical = execFileSync('git', ['show', `${borderEvidenceBaseline}:${s.file}`], { cwd: root });
       const transition = verifyBorderEvidenceSourceTransition(historical, currentBytes);
@@ -74,6 +81,7 @@ function loadProof(root) {
     sourceChecks.set(s.file, { file: s.file, recorded: s.sha256, current,
       verification: s.file === moduleFile ? 'historical-replay-and-current-value-revalidation'
         : mappingAdapter ? 'exact-reader-import-transition-with-complete-mapping-source-conserved'
+        : captureDiagnostics ? 'exact-additive-diagnostics-reversal-with-complete-historical-source-conserved'
         : borderTransition ? 'authenticated-border-extension-with-shared-selector-conserved' : 'complete-source' });
   }
   const historicalNormalize = bindOwnerCaretNormalization(historicalSource, parent.productionNormalization);

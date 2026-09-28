@@ -15,6 +15,13 @@ const canonicalFiles = ['docs/material-input-equivalence-audit.json', 'docs/mate
 const before = canonicalFiles.map(f => hash(readFileSync(f)));
 const evidence = collectOwnerCaretInputs(raw, { parityPath });
 assert.equal(evidence.binding.status, 'bound', evidence.binding.error);
+const harnessSource = evidence.binding.sources.find(s => s.file === 'tests/material-parity/run-material-parity.mjs');
+assert.deepEqual(harnessSource, {
+  file: 'tests/material-parity/run-material-parity.mjs',
+  recorded: 'c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10',
+  current: '4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d',
+  verification: 'exact-additive-diagnostics-reversal-with-complete-historical-source-conserved',
+});
 assert.equal(evidence.observations.length, 4050); assert.equal(evidence.captures.length, 1734);
 assert.deepEqual(validateOwnerCaretInputs(evidence), []);
 const contexts = ownerCaretClassificationContexts(evidence), rows = new Map(); let retained = 0, reviewed = 0;
