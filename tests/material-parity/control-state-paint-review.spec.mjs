@@ -23,6 +23,7 @@ import { proveCardShadowSyntax, applyCardShadowSyntax, validateCardShadowSyntax 
 import { proveMappedNonwidgetAppearance, applyMappedNonwidgetAppearance, validateMappedNonwidgetAppearance } from './control-state-paint-review.mjs';
 import { proveRangeAppearanceInitial, applyRangeAppearanceInitial, validateRangeAppearanceInitial } from './control-state-paint-review.mjs';
 import { proveAppearanceOwnerBoundary, applyAppearanceOwnerBoundaries, validateAppearanceOwnerBoundaries } from './control-state-paint-review.mjs';
+import { proveSheetActionAppearance, applySheetActionAppearance, validateSheetActionAppearance } from './control-state-paint-review.mjs';
 
 test('remaining modal appearance distinguishes link substitutions from non-widget owners across 171 observations', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -69,6 +70,33 @@ test('remaining modal appearance distinguishes link substitutions from non-widge
     }
   }
   assert.equal(observations, 171); assert.equal(linkSubstitutions, 50);
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'bottom-sheet', {
+    generation: '8fbd2e22dfd801587ce6c1dce90e6daba668171ae26eae0a9c834142a8bd0a43',
+    indexSha256: '6f86d55a6ea6be0f1533ac893579bf517769061ed25a13812b0370c46b7c06e6',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const normalize = bindPreciseAuditNormalization();
+  const applied = applySheetActionAppearance(rows, cases, inventory, normalize);
+  const changed = applied.filter(r => r.attribution === 'reviewed-sheet-action-appearance-substitution');
+  assert.equal(changed.length, 2); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 50);
+  assert.deepEqual(validateSheetActionAppearance(applied, rows, cases, inventory, normalize), []);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
+  const forged = structuredClone(applied);
+  forged.find(r => r.attribution === 'reviewed-sheet-action-appearance-substitution').reviewedCases.pop();
+  assert.equal(validateSheetActionAppearance(forged, rows, cases, inventory, normalize).length, 1);
+  const entry = cases.find(e => e.styleInputs.some(i => i.id === 'bottom-sheet-copy'));
+  const pair = modalInventoryTrees(inventory, `interaction:${entry.family}@${entry.profile}/${entry.viewport.id}/${entry.state}`);
+  const proof = proveSheetActionAppearance(entry, ...pair, 'bottom-sheet-copy');
+  for (const mutate of [
+    (r, a) => { a.nodes.find(n => n.key === proof.astylarNode).authored.type = 'a'; },
+    (r, a) => { a.rules.push({ selector: '#bottom-sheet-copy', appearance: 'none' }); },
+    r => { r.styles[r.nodes.find(n => n.key === proof.referenceNode).style].appearance = 'auto'; },
+  ]) {
+    const altered = structuredClone(pair); mutate(...altered);
+    assert.throws(() => proveSheetActionAppearance(entry, ...altered, 'bottom-sheet-copy'));
+  }
 });
 
 test('chip and tab appearance binds distinct observation owners across all 222 cases', () => {

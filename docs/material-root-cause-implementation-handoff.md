@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 28
 
+**Bottom-sheet action appearance classifications prepared:** two groups / 50
+observations now have a scoped application/plugin-authoring-defect reducer, using
+the existing complete modal mapping and link/list-item composition proof. It
+verifies omitted appearance/reset requests on native rules and all candidate
+stages; candidate button appearance is never synthesized from native link none.
+The existing 171-observation test now checks exact classification coverage,
+raw/unrelated-row conservation, replay, forged membership, changed element types,
+added appearance requests and changed native appearance. It passes 1/1 (3.53s).
+The producer integration is still pending, so canonical 130 / projected 101
+remain unchanged in this checkpoint.
+
+Retained public non-widget proof dependencies: all seven fingerprints match.
+Its types are a/div/h2/p/section/span, with checkbox/select sensitivity controls.
+It covers empty explicit boxes at DPR 1, not Material custom-container mappings,
+content/state behavior or the dialog transition context. Therefore the remaining
+four modal groups (121 observations) are not silently cleared by reusing that
+proof. Next: integrate the two prepared action groups; close the precise
+non-widget mapping/motion evidence gap without claiming whole-container parity.
+Then continue spacing/layout and source-receipt/export reconciliation.
+
 **Remaining modal appearance question narrowed across all 171 observations:**
 the authenticated capture and existing alias/position proofs show 50 bottom-sheet
 action observations replace native `a[href="#"]` elements (with child content

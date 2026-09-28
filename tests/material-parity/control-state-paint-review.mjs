@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { collectButtonPaintAllStates } from '../../scripts/audit-material-button-paint-all-states.mjs';
 import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
 import { applyOverlayTriggerPaintReview, overlayTriggerPaintAttribution } from './overlay-trigger-paint-review.mjs';
-import { modalInventoryTrees, applyModalBoxReview, proveBottomSheetPanelPaint } from './modal-position-inspection.mjs';
+import { modalInventoryTrees, applyModalBoxReview, proveBottomSheetPanelPaint, proveBottomSheetActionLayout } from './modal-position-inspection.mjs';
 import { proveControlClippingRequests } from './control-overflow-observation.mjs';
 import { proveRemainingControlOverflowInputs } from './control-overflow-observation.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
@@ -17,6 +17,41 @@ import { proveTabPanelWrapping } from './wrapping-input-review.mjs';
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const keyOf = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+
+export function proveSheetActionAppearance(entry, r, a, element) {
+  const composition = proveBottomSheetActionLayout(entry, r, a, element);
+  const native = one(r.nodes.filter(n => n.key === composition.referenceNode));
+  const candidate = one(a.nodes.filter(n => n.key === composition.astylarNode));
+  const affects = key => /^(appearance|webkitappearance|mozappearance|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  assert.equal(r.styles[native.style].appearance, 'none');
+  for (const style of [native.inline, candidate.authored.style ?? {}, candidate.resolvedStyle,
+    candidate.normalResolvedStyle, candidate.interactionResolvedStyle]) assert.deepEqual(Object.keys(style).filter(affects), []);
+  for (const rule of native.rules.map(i => r.rules[i])) assert.deepEqual(Object.keys(rule.declarations).filter(affects), []);
+  assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, candidate.authored))
+    .flatMap(rule => Object.keys(rule).filter(affects)), []);
+  return { ...composition, referenceAppearance: 'none', candidateAppearanceRequest: '<omitted>',
+    attributableProperties: ['appearance'],
+    referenceType: 'a', candidateType: 'button', candidateComputedAppearanceInferred: false,
+    nativeWidgetEquivalenceProven: false };
+}
+
+export function applySheetActionAppearance(rows, cases, inventory, normalize) {
+  return ['bottom-sheet-copy', 'bottom-sheet-dismiss'].reduce((values, element) =>
+    applyModalBoxReview(values, cases, inventory, normalize, {
+      family: 'bottom-sheet', element, properties: ['appearance'],
+      prove: (e, r, a) => proveSheetActionAppearance(e, r, a, element),
+      classification: 'application-plugin-authoring-defect', attribution: 'reviewed-sheet-action-appearance-substitution',
+      owner: 'bottom-sheet link/list-item authoring; retain core native-control support as a separate question',
+      justification: 'The mapped native owner is a link with child label/state-layer structure; the candidate is a childless value button. Neither authors appearance, but the changed element type prevents interpreting native link computed none as an equivalent candidate control default. Existing action-layout proof binds the original mapping and unequal composition. No candidate computed appearance, native-widget parity or renderer appearance defect is inferred.',
+    }), rows);
+}
+
+export function validateSheetActionAppearance(rows, originals, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-sheet-action-appearance-substitution');
+    assert.deepEqual(select(rows), select(applySheetActionAppearance(originals, cases, inventory, normalize))); return [];
+  } catch (error) { return [`sheet action appearance lacks original inputs: ${error.message}`]; }
+}
 
 export function proveAppearanceOwnerBoundary(entry, r, a, element) {
   assert.ok(entry.family === 'chips' ? ['chip-0', 'chip-1'].includes(element) : entry.family === 'tabs' && element === 'tab-panel');
