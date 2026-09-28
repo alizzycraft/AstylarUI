@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 28
 
+Progress position review adds 11 groups / 220 observations across 40 original
+cases. Three groups are explicit relative-position / linear translateZ(0px)
+request omissions; eight are computed-zero-inset versus local-omission boundaries.
+Identity matrix is not accepted as transform:none equivalence: containing-block,
+stacking and used-offset behavior remain unproven. Reuses authenticated border
+host identity and exact motion exclusions. Focused combined test passes (1/1,
+7.27 s), preserving raw/unrelated rows and rejecting candidate position injection
+and native literal-top injection. No producer integration or export dependency
+changes. Prepared batch now totals 102 groups / 2406 observations including the
+seven overlay-origin groups. Remaining progress origins are separate from these
+position requests; pending canonical export/reconciliation is still first priority.
+
 Prepared divider inset proof binds five groups / 72 observations to the existing
 historical flow-compensation finding. Across all 24 cases, native position is
 static with omitted inset requests; candidate `.divider` explicitly requests

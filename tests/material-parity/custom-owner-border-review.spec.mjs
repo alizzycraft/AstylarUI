@@ -6,7 +6,7 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
-import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder, applyDividerPositionReviews, proveDividerPositionRequests } from './custom-owner-border-review.mjs';
+import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder, applyDividerPositionReviews, proveDividerPositionRequests, applyProgressPositionReviews, proveProgressPositionRequests } from './custom-owner-border-review.mjs';
 
 test('custom host initial colors retain all observations without claiming generated paint equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -34,6 +34,20 @@ test('custom host initial colors retain all observations without claiming genera
   const positionChanges = positioned.filter((r, i) => r !== reviewed[i]);
   assert.equal(positionChanges.length, 5); assert.equal(positionChanges.reduce((n, r) => n + r.occurrences, 0), 72);
   positioned.forEach((r, i) => { assert.deepEqual(raw(r), raw(reviewed[i])); if (!positionChanges.includes(r)) assert.deepEqual(r, reviewed[i]); });
+  const progress = applyProgressPositionReviews(positioned, cases, inventory, normalize);
+  const progressChanges = progress.filter((r, i) => r !== positioned[i]);
+  assert.equal(progressChanges.length, 11); assert.equal(progressChanges.reduce((n, r) => n + r.occurrences, 0), 220);
+  assert.equal(progressChanges.filter(r => r.classification === 'application-plugin-authoring-defect').length, 3);
+  progress.forEach((r, i) => { assert.deepEqual(raw(r), raw(positioned[i])); if (!progressChanges.includes(r)) assert.deepEqual(r, positioned[i]); });
+  for (const family of ['progress-bar', 'progress-spinner']) {
+    const e = cases.find(e => e.family === family), key = `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+    const [r, a] = modalInventoryTrees(inventory, key), proof = proveProgressPositionRequests(e, r, a, normalize);
+    assert.equal(proof.containingBlockEquivalenceProven, false);
+    const altered = structuredClone(a); altered.rules.push({ selector: '#' + family + '-primary', position: 'relative' });
+    assert.throws(() => proveProgressPositionRequests(e, r, altered, normalize));
+    const native = structuredClone(r); native.nodes.find(n => n.key === proof.referenceNode).inline.top = { value: '0', important: false };
+    assert.throws(() => proveProgressPositionRequests(e, native, a, normalize));
+  }
   for (const profile of ['light', 'dark', 'contrast', 'custom']) {
     const e = cases.find(e => e.family === 'divider' && e.profile === profile);
     const key = `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;

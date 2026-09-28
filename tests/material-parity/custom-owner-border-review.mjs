@@ -189,6 +189,47 @@ export function applyDividerPositionReviews(rows, cases, inventory, normalize) {
   });
 }
 
+export function proveProgressPositionRequests(entry, reference, candidate, normalize) {
+  assert.ok(['progress-bar', 'progress-spinner'].includes(entry.family));
+  const identity = proveCustomOwnerBorder(entry, reference, candidate, normalize);
+  const r = reference.nodes.find(n => n.key === identity.referenceNode), a = candidate.nodes.find(n => n.key === identity.astylarNode);
+  const relevant = k => /^(position|top|right|bottom|left|transform|translate|rotate|scale|all)$|^inset/.test(k.replaceAll('-', '').toLowerCase());
+  const select = o => Object.fromEntries(Object.entries(o).filter(([k]) => relevant(k)));
+  assert.deepEqual(select(r.inline), {});
+  const bar = entry.family === 'progress-bar';
+  const requests = r.rules.map(i => reference.rules[i]).filter(rule => Object.keys(select(rule.declarations)).length);
+  assert.equal(requests.length, 1); assert.equal(requests[0].selector, bar ? '.mdc-linear-progress' : '.mat-mdc-progress-spinner');
+  assert.equal(requests[0].active, true); assert.deepEqual(requests[0].conditions, []);
+  assert.deepEqual(select(requests[0].declarations), { position: { value: 'relative', important: false },
+    ...(bar ? { transform: { value: 'translateZ(0px)', important: false } } : {}) });
+  const native = select(reference.styles[r.style]);
+  assert.deepEqual(native, { position: 'relative', top: '0px', right: '0px', bottom: '0px', left: '0px',
+    transform: bar ? 'matrix(1, 0, 0, 1, 0, 0)' : 'none' });
+  assert.deepEqual(select(a.authored.style ?? {}), {});
+  assert.ok(candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, a.authored)).every(rule => !Object.keys(select(rule)).length));
+  for (const stage of [a.resolvedStyle, a.normalResolvedStyle, a.interactionResolvedStyle]) assert.deepEqual(select(stage), {});
+  return { ...identity, referencePositionRequests: requests, nativePositionValues: native,
+    candidateUsedOffsetsVerified: false, containingBlockEquivalenceProven: false };
+}
+
+export function applyProgressPositionReviews(rows, cases, inventory, normalize) {
+  for (const family of ['progress-bar', 'progress-spinner']) {
+    const common = { family, element: `${family}-primary`, prove: (e, r, a) => proveProgressPositionRequests(e, r, a, normalize) };
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, { ...common,
+      properties: family === 'progress-bar' ? ['position', 'transform'] : ['position'],
+      classification: 'application-plugin-authoring-defect', attribution: 'reviewed-progress-position-request-omission',
+      owner: 'progress host position and transform authoring',
+      justification: 'Native progress hosts explicitly request relative positioning, and the linear host also requests translateZ(0px); candidate local authoring and all three stages omit them. An identity computed matrix does not prove transform:none equivalence for containing-block/stacking semantics. Preserve original requests rather than copying sampled zero offsets or inferring a projection bug. Generated progress content, opacity settlement and final layout/paint remain unverified.',
+    });
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, { ...common,
+      properties: ['top', 'right', 'bottom', 'left'], classification: 'parity-harness-defect',
+      attribution: 'reviewed-progress-computed-offset-boundary', owner: 'native used insets versus candidate local declarations',
+      justification: 'Native relatively positioned progress hosts have no authored insets and compute zero pixel offsets; candidate local stages omit insets. The zero measurements are not missing literal authored requests. Explicit relative-position/transform omissions are classified separately, and candidate used offsets or containing-block equivalence are not established.',
+    });
+  }
+  return rows;
+}
+
 export function applyCustomOwnerBorderReviews(rows, cases, inventory, normalize) {
   for (const [family, [element]] of Object.entries(owners)) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
     family, element, properties: (family === 'divider' ? sides.slice(1) : sides).map(s => `border${s}Color`),
