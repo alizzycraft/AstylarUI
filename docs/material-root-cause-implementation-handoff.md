@@ -2,6 +2,35 @@
 
 ## Current audit checkpoint — September 28
 
+**Complete remaining z-index batch prepared: 10 groups /608 observations.**
+Six owner-addition groups (376 observations: card surface/action, checkbox label,
+two radio labels, slide-toggle label) compare native auto with candidate explicit
+2. Native own inline/active rules have no z-index request; candidate applicable
+rules and all three captured local stages explicitly contain 2. Three omissions
+(214 observations: two chip hosts, sidenav container) retain native explicit
+`.mat-mdc-chip { z-index:0 }` / `.mat-drawer-container { z-index:1 }` versus no
+candidate owner request. Do not normalize omitted to zero or call different
+host/child structures equivalent. The tenth group is the 18-observation tooltip
+ancestor-owner substitution already proved below.
+
+`stacking-input-review.mjs` uses existing inventory, conservative selector checks
+and `applyModalBoxReview`; it adds no capture or aggregation framework. Original
+full tree/source receipts and the accepted 6f0a4c1c compact generation are reused.
+`node --test tests/material-parity/stacking-input-review.spec.mjs` passes 1/1 in
+7.29s, replaying all 608 original observations, exact per-owner populations,
+unchanged raw rows, missing-population rejection and negative controls for native
+inline overrides, unknown/global candidate rules and changed local stages.
+Each proof explicitly leaves ancestor equivalence, computed omission behavior,
+renderer cause, deliberate compensation intent and rendering parity unproved.
+This attribution batch is not yet canonically applied: 180 unresolved remains
+the accepted count, not 170. No renderer or fixture changes.
+
+Next integrate this coherent batch using existing production followup hooks and
+conservation checks, together with source-fingerprint reconciliation for the new
+supplemental proofs. Do not run another browser capture for these authored-rule
+questions. Remaining shared box/paint populations and final state/history gates
+remain required after integration.
+
 **Remaining-work triage refreshed against authenticated compact generation
 6f0a4c1c:** still 180 unresolved scalar groups. Largest shared populations:
 40 corner-radius groups; 24 padding and 23 margin groups; 18 overflow groups;
