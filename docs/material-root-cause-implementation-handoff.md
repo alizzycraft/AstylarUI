@@ -205,6 +205,19 @@ All eight original native-none groups / 177 observations now have prepared
 reviews; the **15 native-auto/local-omission groups / 647 observations** remain.
 No new browser capture, renderer change, or fixture pointer workaround was made.
 
+Auto/local review: **three groups / 222 observations** (both chip owners and
+active tab panel) have no captured pointer requests anywhere on either ancestry.
+Existing owner/composition proofs plus all scalar/stage matches establish a
+computed-native/local-candidate measurement boundary, not a missing authored
+auto value. Prepared harness classification preserves omissions and leaves
+candidate computed defaults, structure and actual hits unproven. The focused
+pointer test passes 1/1 in 15.04 s, including raw conservation and injected
+ancestor-rule negatives. **12 groups / 425 observations remain**: two tab header
+chains explicitly override none with auto; ten overlay groups preserve native
+non-picking containers and picking panes. Do not classify those as request-free
+defaults. The initial alias-only probe correctly rejected four direct-ID owners;
+chips now use their existing composition proof, and tab headers still need binding.
+
 Color producer/validator integration is now wired and focused-verified against
 the accepted paint compact snapshot. Validation starts from original rows and
 fresh sort/sidenav retained ancestry; unbound color attributions are rejected.

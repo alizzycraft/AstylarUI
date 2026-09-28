@@ -9,6 +9,7 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applySheetPointerOwnerReview, proveSheetPointerOwners, applyBadgePointerRequestReview, proveBadgePointerRequest } from './component-pointer-events-review.mjs';
 import { applyDisabledPointerRequestReviews, proveDisabledPointerRequest } from './component-pointer-events-review.mjs';
 import { applySliderPointerRequestReview, proveSliderPointerRequest, collectSliderPointerSource } from './component-pointer-events-review.mjs';
+import { applyOmittedPointerBoundaryReviews, proveOmittedPointerBoundary } from './component-pointer-events-review.mjs';
 
 test('pointer reviews distinguish sheet ownership, badge requests and disabled ancestor suppression', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -100,4 +101,22 @@ test('pointer reviews distinguish sheet ownership, badge requests and disabled a
   const alteredCandidate = structuredClone(sa); alteredCandidate.rules.push({ selector: '#slider-start', pointerEvents: 'none' });
   assert.throws(() => proveSliderPointerRequest(se, sr, alteredCandidate, evidence));
   assert.throws(() => proveSliderPointerRequest({ ...se, state: 'released' }, sr, sa, evidence));
+  const omittedRows = ['chips', 'tabs'].flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '7ffd3a4832d90e185be9d234b3d022f276db113767a6fcb0c3c965c51c14d592',
+    indexSha256: 'b37363024107a9aeca949a701837764fdfe96e17b0aedca1549e187573dc8df4',
+  }).filter(r => r.evidence.section === 'discrepancies'));
+  const omittedReview = applyOmittedPointerBoundaryReviews(omittedRows, cases, inventory, normalize);
+  const changedOmitted = omittedReview.filter((r, i) => r !== omittedRows[i]);
+  assert.equal(changedOmitted.length, 3); assert.equal(changedOmitted.reduce((n, r) => n + r.occurrences, 0), 222);
+  omittedReview.forEach((r, i) => { assert.deepEqual(raw(r), raw(omittedRows[i])); if (!changedOmitted.includes(r)) assert.deepEqual(r, omittedRows[i]); });
+  for (const row of changedOmitted) {
+    const key = row.reviewedCases[0];
+    const entry = cases.find(c => `${c.kind}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}` === key);
+    const [r, a] = modalInventoryTrees(inventory, key);
+    assert.deepEqual(proveOmittedPointerBoundary(entry, r, a, row.element), row.reviewEvidence.observations[0]);
+    const altered = structuredClone(a); altered.rules.push({ selector: '#page', pointerEvents: 'none' });
+    assert.throws(() => proveOmittedPointerBoundary(entry, r, altered, row.element));
+    const native = structuredClone(r); native.nodes.find(n => n.parent === null).inline['pointer-events'] = { value: 'none', important: false };
+    assert.throws(() => proveOmittedPointerBoundary(entry, native, a, row.element));
+  }
 });

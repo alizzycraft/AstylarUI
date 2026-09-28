@@ -7,6 +7,65 @@ import { proveExplicitComponentCursor } from './component-cursor-request-review.
 import { inspectSliderInputBox } from './slider-input-box-evidence.mjs';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { proveChipPositionInspection } from './chip-position-inspection.mjs';
+
+export function proveOmittedPointerBoundary(entry, reference, candidate, element) {
+  assert.ok((entry.family === 'chips' && ['chip-0', 'chip-1'].includes(element)) ||
+    (entry.family === 'tabs' && element === 'tab-panel'));
+  const input = entry.styleInputs.find(i => i.id === element);
+  let identity;
+  if (entry.family === 'tabs') {
+    identity = resolveOriginAliasPair(entry, reference, candidate, input);
+    assert.equal(identity.status, 'mapped');
+  } else {
+    const composition = proveChipPositionInspection(reference, candidate);
+    const pair = composition.chips.find(c => c.id === element); assert.ok(pair);
+    const r = reference.nodes.find(n => n.key === pair.referenceOwner);
+    const a = candidate.nodes.find(n => n.key === pair.candidateOwner);
+    assert.equal(Object.keys(input.reference).length, 89);
+    for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[r.style][key], value);
+    assert.equal(candidate.resolvedStyleEvidenceVersion, 2);
+    assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+    for (const [field, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']])
+      assert.deepEqual(input[field], a[stage]);
+    const path = (tree, node) => {
+      const keys = [];
+      while (node) { assert.ok(!keys.includes(node.key)); keys.push(node.key);
+        if (node.parent === null) return keys;
+        node = tree.nodes.find(n => n.key === node.parent); assert.ok(node);
+      }
+      assert.fail('missing chip owner');
+    };
+    identity = { status: 'mapped', inputEquivalent: false, referenceNode: r.key, candidateNode: a.key,
+      referencePath: path(reference, r), candidatePath: path(candidate, a), composition };
+  }
+  const trace = inspectOverlayOwnerDeclarations('pointerEvents', identity, reference, candidate);
+  const relevant = key => ['pointerevents', 'all'].includes(key.replaceAll('-', '').toLowerCase());
+  for (const node of trace.referencePath) {
+    assert.equal(node.computed, 'auto'); assert.ok(!Object.keys(node.inline).some(relevant));
+    assert.ok(node.rules.every(r => !r.active || !Object.keys(r.declarations).some(relevant)));
+  }
+  for (const node of trace.candidatePath) {
+    assert.deepEqual(Object.values(node.localValues), ['<omitted>', '<omitted>', '<omitted>']);
+    assert.ok(!Object.keys(node.inline).some(relevant));
+    assert.ok(node.possibleRules.every(r => !Object.keys(r.declarations).some(relevant)));
+  }
+  return { referenceNode: identity.referenceNode, astylarNode: identity.candidateNode, identity, trace,
+    inputEquivalent: false, renderingEquivalent: false, candidateComputedPointerEventsVerified: false,
+    actualHitTargetVerified: false,
+    limitation: 'No captured pointer request exists on either owner-to-root path. Browser computed auto and omitted candidate local declarations are different measurement stages. This does not establish candidate defaults, equivalent structures or actual hit behavior.' };
+}
+
+export function applyOmittedPointerBoundaryReviews(rows, cases, inventory, normalize) {
+  return [['chips', 'chip-0'], ['chips', 'chip-1'], ['tabs', 'tab-panel']].reduce((result, [family, element]) =>
+    applyModalBoxReview(result, cases, inventory, normalize, {
+      family, element, properties: ['pointerEvents'], classification: 'parity-harness-defect',
+      attribution: 'reviewed-pointer-computed-local-boundary',
+      owner: 'audit computed/local pointer measurement; separate chip/tab composition and hit ownership',
+      justification: 'Mapped owner-to-root paths omit pointer-events authoring on both sides, while the scalar compares browser computed auto with absent candidate local fields. It cannot demonstrate a missing authored auto declaration or a core hit-test defect. Candidate computed defaults, structure and actual interaction equivalence remain unproven.',
+      prove: (entry, reference, candidate) => proveOmittedPointerBoundary(entry, reference, candidate, element),
+    }), rows);
+}
 
 export function collectSliderPointerSource() {
   const file = 'docs/material-slider-peer-pointer-survey.json', bytes = readFileSync(file);
