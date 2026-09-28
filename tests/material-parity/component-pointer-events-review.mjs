@@ -2,6 +2,48 @@ import assert from 'node:assert/strict';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { proveControlStatePaint } from './control-state-paint-review.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
+import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+
+export function proveBadgePointerRequest(entry, reference, candidate) {
+  assert.equal(entry.family, 'badge');
+  const input = entry.styleInputs.find(i => i.id === 'badge-count');
+  const identity = resolveOriginAliasPair(entry, reference, candidate, input);
+  assert.equal(identity.status, 'mapped');
+  const trace = inspectOverlayOwnerDeclarations('pointerEvents', identity, reference, candidate);
+  const relevant = key => ['pointerevents', 'all'].includes(key.replaceAll('-', '').toLowerCase());
+  assert.equal(trace.referencePath[0].type, 'span');
+  assert.equal(trace.candidatePath[0].authored.type, 'span');
+  for (const [index, node] of trace.referencePath.entries()) {
+    assert.equal(node.computed, index === 0 ? 'none' : 'auto');
+    assert.ok(!Object.keys(node.inline).some(relevant));
+    const requests = node.rules.filter(r => r.active && Object.keys(r.declarations).some(relevant));
+    assert.equal(requests.length, index === 0 ? 1 : 0);
+    if (index === 0) {
+      assert.equal(requests[0].selector, '.mat-badge-content');
+      assert.deepEqual(requests[0].declarations['pointer-events'], { value: 'none', important: false });
+      assert.equal(requests[0].declarations.all, undefined);
+    }
+  }
+  for (const node of trace.candidatePath) {
+    assert.deepEqual(Object.values(node.localValues), ['<omitted>', '<omitted>', '<omitted>']);
+    assert.ok(!Object.keys(node.inline).some(relevant));
+    assert.ok(node.possibleRules.every(r => !Object.keys(r.declarations).some(relevant)));
+  }
+  return { referenceNode: identity.referenceNode, astylarNode: identity.candidateNode,
+    identity, trace, inputEquivalent: false, renderingEquivalent: false,
+    actualHitTargetVerified: false, candidateComputedPointerEventsVerified: false,
+    limitation: 'Explicit native badge hit-suppression request is absent from candidate authoring and all captured local stages. This does not reconstruct candidate computed defaults or prove actual event delivery.' };
+}
+
+export function applyBadgePointerRequestReview(rows, cases, inventory, normalize) {
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'badge', element: 'badge-count', properties: ['pointerEvents'],
+    classification: 'application-plugin-authoring-defect', attribution: 'reviewed-badge-pointer-request-omission',
+    owner: 'Material badge fixture authoring; core pointer hit-suppression contract',
+    justification: 'Corresponding badge spans differ before layout: native .mat-badge-content explicitly requests pointer-events none; candidate authoring, ancestry and all three local style stages omit that request. Unlike the sheet wrapper, these are mapped badge-content owners. Actual candidate hit behavior and rendering equivalence remain unproven.',
+    prove: proveBadgePointerRequest,
+  });
+}
 
 // Reuse the established wrapper/backdrop identity proof. A wrapper's none
 // cannot stand in for its separately interactive backdrop's pointer policy.

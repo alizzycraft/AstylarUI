@@ -163,6 +163,16 @@ backdrops and an added candidate pointer request. Integrate with the prepared
 cursor/pointer batch after color reconciliation; the remaining pointer population
 is 22 groups / 799 observations. No renderer or fixture changes were made.
 
+The badge follow-up resolves a different question: all **52 badge-count
+observations** map corresponding span owners, with native `.mat-badge-content`
+explicitly requesting `pointer-events: none` and no corresponding candidate
+request anywhere in the retained ancestry or three local stages. Prepared
+classification: authoring omission, not a sheet-like owner mismatch. The shared
+pointer focused test passes (1/1, 14.66 s), preserves original scalar rows, and
+rejects removed native or added candidate requests. Actual hit delivery and
+candidate computed defaults remain unproven. Together the two prepared pointer
+reviews cover 77 observations; **21 groups / 747 observations** remain to review.
+
 Color producer/validator integration is now wired and focused-verified against
 the accepted paint compact snapshot. Validation starts from original rows and
 fresh sort/sidenav retained ancestry; unbound color attributions are rejected.
