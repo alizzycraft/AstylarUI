@@ -2,18 +2,47 @@
 
 ## Current audit checkpoint — September 28
 
-**Whole-report reconciliation in progress:** the existing `readAudit` reader now
-supports `sectionsOnly: true`, hashing every completed primitive/path/container
-before pruning. Unlike the completed scalar/control check, this covers all
-top-level sections (including empty structures); object member order is significant.
-Focused `disabled-ink-canonical-conservation.spec.mjs`: 3/3 passed, including
-mutation and stream-chunk boundary checks. No classifications or payload changed.
-Session 2868 is comparing accepted `working-audit/6f0a4c...` to current `docs`;
-last poll confirmed it running with no output yet. Poll that handle, do not
-restart the scan. It prints authenticated payload hashes and changed/unchanged
-section names. Next inspect only changed sections, explain source-fingerprint
-transitions, and retain the independent cold canonical check requirement.
-This tooling increment is not a whole-report conservation result or acceptance.
+**Whole-report reconciliation completed; cold check running:** streaming section
+comparison session 2868 ended exit 0. Authenticated predecessor decoded SHA
+757fce0f... and current f4d0e6c... cover 79 sections: 70 identical, 9 changed.
+No need to rescan those unchanged sections. The existing `readAudit` option
+`sectionsOnly: true` hashes completed paths, primitives and container markers
+before pruning; member order is significant. Its focused tests passed 3/3.
+Targeted authenticated recursive comparison session 6776 also ended exit 0:
+
+- `discrepancies` and `controlTypography`: already covered by completed exact
+  stacking/radius conservation below (30 groups and 48 producer receipts).
+- `controlLineBoxes`: exactly 48 `normalizationReconciliation.currentModuleSha256`
+  changes, from a986934f... to 0e5654f...; no observation values changed.
+- `summary`: authoring-defect count 1654→1664, harness-defect 4222→4212,
+  unresolved 180→150; no other changes.
+- `gapReviewInputs`: only binding proof hash dbd0d4a9...→ad227dbb..., the
+  receipt-only membership refresh in ba40020 (inspected diff).
+- `ownerCaretInputs`: producer hash, runner hash c3cabcf...→4ed6abe...,
+  and runner verification label change to exact additive-diagnostic reversal.
+  These are the binding repairs verified in c435600; all observations unchanged.
+- `reviewedSourceBatchInputs`: only current report hash 93492522...→7a423807...
+  and producer receipt a986934f...→0e5654f...; no source observations changed.
+- `sourceFindings`: only two line shifts (+34), in `run-material-parity.mjs`:
+  `harness-tooltip-open-popup-checks-omitted` 1236→1270 and
+  `harness-slider-drag-stays-in-half-domains` 1116→1150. IDs, excerpts,
+  classifications and other findings are unchanged; current locations verified.
+- `sourceFingerprints`: comparison by file identity (not array index) finds
+  527→534 files, no removals, 7 additions and 22 changed hashes. All 534 hashes
+  independently match current LF-normalized files: no stale receipts. Additions
+  are overlay-layout stage spec, three tooltip/snackbar diagnostic scripts,
+  tooltip composition spec, and stacking review/spec. Changed entries are audit
+  producers/tests/bindings and the two gap-review receipt documents, not renderer
+  or comparison fixture files. Per-file historical semantic review remains
+  bounded to any transitions not already covered by the recorded focused proofs;
+  matching live hashes alone does not establish historical equivalence.
+
+Independent cold canonical `--check` launched from d2545d5 with the named
+current-ancestry launcher and both COLD/PROGRESS flags. **Session 4560 is running**;
+last confirmed phase build-audit. Poll this handle, do not restart it. This is
+read-only canonical verification, not an export. The current snapshot remains
+unaccepted pending its result and final reconciliation; 150 unresolved groups
+still prevent full audit acceptance. No renderer, fixture or payload changed.
 
 **Cold export 72739 finished (not running):** terminal exit 1 after
 2,204,549ms (36.74 min). The three evidence-binding errors are gone. The ONLY
