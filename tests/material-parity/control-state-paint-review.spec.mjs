@@ -9,6 +9,7 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applyControlStatePaintReview, proveControlStatePaint, controlStatePaintAttribution, cardSurfacePaintAttribution, opaqueSurfacePaintAttribution, specialPaintDefinitions, applyDisabledLabelColorReview, applyStepperLabelColorReview } from './control-state-paint-review.mjs';
 import { collectDisabledLabelColorStages } from '../../scripts/audit-material-disabled-label-color-stages.mjs';
 import { collectPaintReviewSources, applyPaintReviews, validatePaintReviews, isPaintReviewRow } from './control-state-paint-review.mjs';
+import { paintPopulation } from '../../scripts/check-material-position-canonical-conservation.mjs';
 
 test('disabled label colors reuse all 32 retained-stage proofs without filling omitted locals', () => {
   const evidence = collectDisabledLabelColorStages();
@@ -154,6 +155,12 @@ test('control paint preserves owner boundaries and all 397 captured observations
   const combined = applyPaintReviews(allRows, cases, inventory, retained, normalize, sources);
   const changed = combined.filter((r, i) => r !== allRows[i]);
   assert.equal(changed.length, 72); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 618);
+  const population = {};
+  for (const row of changed) {
+    const count = population[row.attribution] ??= { groups: 0, observations: 0 };
+    count.groups++; count.observations += row.occurrences;
+  }
+  assert.deepEqual(population, paintPopulation);
   combined.forEach((r, i) => { assert.deepEqual(raw(r), raw(allRows[i])); if (!isPaintReviewRow(r)) assert.deepEqual(r, allRows[i]); });
   assert.deepEqual(validatePaintReviews(JSON.parse(JSON.stringify(combined)), allRows, cases, inventory, retained, normalize, sources), []);
   assert.ok(validatePaintReviews(combined.filter(r => r !== changed[0]), allRows, cases, inventory, retained, normalize, sources).length);

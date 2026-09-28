@@ -77,6 +77,16 @@ predecessor and rejects deleted guards or unrelated edits. Combined paint and
 producer-transition focused suites passed **22/22 in 38.40 s**. These tests do not
 yet prove the full canonical validation path: the existing conservation command
 still needs its paint mode, followed by the batched export and reconciliation.
+The existing conservation command now supports `--paint`, pinned to the accepted
+grid/height predecessor. It requires all 12 paint populations (72 groups / 618
+observations), exact raw-row conservation, original-row receipts and unchanged
+control evidence except authenticated producer receipts. Actual original-case
+replay matches that population table. Paint plus conservation suites passed
+**28/28 in 88.46 s**, including joint expected/result forgery and unrelated-record
+mutations. The complete-input export launcher dry run passed. Next run the cold
+batched export, then `check-material-position-canonical-conservation.mjs --paint`,
+section/source-fingerprint reconciliation and compact import/verification. Do not
+accept a new snapshot until these checks complete; canonical unresolved remains 787.
 Prepared coverage includes 62 background groups / 450 observations and ten color
 groups / 168 observations. The remaining 36 color groups need applicability work;
 the existing retained-label proofs must not be generalized to container owners.

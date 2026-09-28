@@ -18,6 +18,44 @@ import { restoreBoxSizingReviewProducer } from './position-composition-producer-
 import { boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
 import { restoreGridHeightReviewProducer } from './position-composition-producer-transition.mjs';
 const currentSource = readFileSync('tests/material-parity/input-equivalence-audit.mjs');
+import { paintPopulation } from '../../scripts/check-material-position-canonical-conservation.mjs';
+import { restorePaintReviewProducer } from './position-composition-producer-transition.mjs';
+
+test('paint conservation rejects missing observations, false equivalence and unrelated changes', () => {
+  const transition = restorePaintReviewProducer(currentSource), rows = [], expected = [];
+  for (const [attribution, { groups, observations }] of Object.entries(paintPopulation)) for (let i = 0; i < groups; i++) {
+    const before = { element: attribution + i, property: 'backgroundColor', reference: 'transparent',
+      attribution: 'unresolved', occurrences: i ? 1 : observations - groups + 1 };
+    rows.push(before);
+    expected.push({ ...before, attribution,
+      classification: attribution === 'reviewed-disabled-range-background-default' ? 'intentional-documented-limitation'
+        : attribution === 'reviewed-sheet-backdrop-measurement-owner' ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
+      reviewedCases: Array.from({ length: before.occurrences }, (_, j) => 'case-' + j),
+      reviewEvidence: { originalRowSha256: createHash('sha256').update(JSON.stringify(before)).digest('hex'),
+        inputEquivalent: false, renderingEquivalent: false,
+        observations: Array.from({ length: before.occurrences }, () => ({ evidence: 'synthetic guard test only' })) } });
+  }
+  rows.push({ property: 'height', reference: 'auto', attribution: 'unresolved' });
+  expected.push(structuredClone(rows.at(-1)));
+  const previous = { rows, control: { differences: Array.from({ length: 48 }, (_, i) => ({ case: 'control-' + i,
+    attribution: 'reviewed-interactive-normal-line-box-stage-comparison',
+    reviewEvidence: { observation: { normalizationReconciliation: { currentModuleSha256: transition.previousModuleSha256 } } } })) } };
+  const current = { rows: structuredClone(expected), control: structuredClone(previous.control) };
+  for (const c of current.control.differences)
+    c.reviewEvidence.observation.normalizationReconciliation.currentModuleSha256 = transition.currentModuleSha256;
+  const compare = (c, e = expected) => compareBorderDefaultCanonical(previous, c, e, currentSource, { paint: true });
+  assert.equal(compare(current).changedGroups, 72); assert.equal(compare(current).changedOccurrences, 618);
+  for (const mutate of [r => { r.reference = 'forged'; }, r => { r.classification = 'equivalent-representation'; },
+    r => { r.reviewEvidence.originalRowSha256 = 'forged'; }, r => { r.reviewEvidence.observations.pop(); },
+    r => { r.reviewEvidence.inputEquivalent = true; }, r => { r.reviewEvidence.renderingEquivalent = true; }]) {
+    const c = structuredClone(current), e = structuredClone(expected); mutate(c.rows[0]); mutate(e[0]);
+    assert.throws(() => compare(c, e));
+  }
+  for (const mutate of [c => { c.rows.pop(); }, c => { c.rows.reverse(); },
+    c => { c.rows.at(-1).reference = 'hidden'; }, c => { c.control.differences[0].unexpected = true; }]) {
+    const c = structuredClone(current); mutate(c); assert.throws(() => compare(c));
+  }
+});
 
 test('grid/height conservation preserves raw inputs, scope limits and unrelated controls', () => {
   const transition = restoreGridHeightReviewProducer(currentSource), rows = [], expected = [];
