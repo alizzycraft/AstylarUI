@@ -156,6 +156,17 @@ all **10 newly prepared groups / 261 observations** and preserving raw fields.
 The remaining color gap beyond these preparations is **26 groups / 661
 observations**. This module remains outside the live export dependency graph;
 canonical counts and the pending paint batch are unchanged.
+Icon and paginator now reuse that same token/ancestor boundary proof: **8 more
+groups / 152 observations**, with native icon fallback or paginator component
+tokens retained explicitly and candidate inheritance traced to `#page`. Every
+candidate leaf stays locally omitted; the ancestor's three captured stages agree
+with the native sampled color. This is not proof that replacing a token with a
+literal preserves its semantics. The expanded focused spec passed **1/1 in
+21.06 s**, covering **18 prepared groups / 413 observations** with the existing
+raw-field and negative controls. Remaining color investigation: **18 groups /
+509 observations** (motion boundaries, overlay containers, selected chip hosts
+and range defaults). No additional exporter dependency or canonical update was
+introduced while the cold run is live.
 Prepared coverage includes 62 background groups / 450 observations and ten color
 groups / 168 observations. The remaining 36 color groups need applicability work;
 the existing retained-label proofs must not be generalized to container owners.

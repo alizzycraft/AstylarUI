@@ -73,6 +73,10 @@ export function applyComponentColorRequests(rows, cases, inventory, retained, no
 }
 
 const inheritedComponents = {
+  'icon-primary': { family: 'icon', selector: 'mat-icon, mat-icon.mat-primary, mat-icon.mat-accent, mat-icon.mat-warn', token: 'var(--mat-icon-color, inherit)', candidate: '#page' },
+  'paginator-primary': { family: 'paginator', selector: '.mat-mdc-paginator', token: 'var(--mat-paginator-container-text-color, var(--mat-sys-on-surface))', candidate: '#page' },
+  'paginator-range': { family: 'paginator', selector: '.mat-mdc-paginator', token: 'var(--mat-paginator-container-text-color, var(--mat-sys-on-surface))', candidate: '#page' },
+  'paginator-size': { family: 'paginator', selector: '.mat-mdc-paginator', token: 'var(--mat-paginator-container-text-color, var(--mat-sys-on-surface))', candidate: '#page' },
   'toolbar-title': { family: 'toolbar', selector: '.mat-toolbar', token: 'var(--mat-toolbar-container-text-color, var(--mat-sys-on-surface))', candidate: '.toolbar' },
   'radio-solo-label': { family: 'radio', selector: '.mat-mdc-radio-button .mat-internal-form-field', token: 'var(--mat-radio-label-text-color, var(--mat-sys-on-surface))', candidate: '.radio-option' },
   'radio-team-label': { family: 'radio', selector: '.mat-mdc-radio-button .mat-internal-form-field', token: 'var(--mat-radio-label-text-color, var(--mat-sys-on-surface))', candidate: '.radio-option' },

@@ -9,7 +9,7 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applyComponentColorRequests, proveComponentColorRequest } from './component-color-request-review.mjs';
 import { applyInheritedComponentColors, proveInheritedComponentColor } from './component-color-request-review.mjs';
 
-test('component color requests preserve 261 observations across container and inherited-leaf boundaries', () => {
+test('component color requests preserve 413 observations across container and inherited-leaf boundaries', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const captured = JSON.parse(bytes), cases = [...captured.results.map(e => ({ ...e, kind: 'static' })),
@@ -18,7 +18,7 @@ test('component color requests preserve 261 observations across container and in
   const retained = collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), inventory);
   const snapshot = { generation: '04ec615b0e97cdc75f44b817efca421d24a79cb04d7bc1f2f22969b99a4c4240',
     indexSha256: '7698638b57da8d8c8f4bf50902886f11c3d3304e45078771917b804c6c30a075' };
-  const rows = ['sort', 'sidenav', 'toolbar', 'radio', 'expansion'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+  const rows = ['sort', 'sidenav', 'toolbar', 'radio', 'expansion', 'icon', 'paginator'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
     .filter(r => r.evidence.section === 'discrepancies');
   const result = applyComponentColorRequests(rows, cases, inventory, retained, normalize);
   const changed = result.filter((r, i) => r !== rows[i]);
@@ -50,7 +50,7 @@ test('component color requests preserve 261 observations across container and in
   assert.throws(() => applyComponentColorRequests(incomplete, cases, inventory, retained, normalize));
   const inherited = applyInheritedComponentColors(rows, cases, inventory, normalize);
   const inheritedChanged = inherited.filter((r, i) => r !== rows[i]);
-  assert.equal(inheritedChanged.length, 8); assert.equal(inheritedChanged.reduce((n, r) => n + r.occurrences, 0), 184);
+  assert.equal(inheritedChanged.length, 16); assert.equal(inheritedChanged.reduce((n, r) => n + r.occurrences, 0), 336);
   inherited.forEach((r, i) => assert.deepEqual(raw(r), raw(rows[i])));
   for (const row of inheritedChanged) {
     assert.equal(row.astylar, undefined);
