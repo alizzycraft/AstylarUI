@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { proveTabControlStage } from '../../scripts/audit-material-tab-position-substitution.mjs';
+import { proveBadgePointerRequest } from './component-pointer-events-review.mjs';
 
 const owners = {
   icon: ['icon-primary', 'mat-icon', 'img'],
@@ -11,6 +12,7 @@ const owners = {
   divider: ['divider-primary', 'mat-divider', 'div'],
   'progress-bar': ['progress-bar-primary', 'mat-progress-bar', 'showcase.material:linear-progress'],
   'progress-spinner': ['progress-spinner-primary', 'mat-progress-spinner', 'showcase.material:circular-progress'],
+  badge: ['badge-count', 'span', 'span'],
 };
 const relevant = k => /^(border|all$|animation|transition)/.test(k.replaceAll('-', '').toLowerCase());
 const sides = ['Top', 'Right', 'Bottom', 'Left'];
@@ -22,10 +24,12 @@ export function proveCustomOwnerBorder(entry, reference, candidate, normalize, e
   const [id, nativeType, candidateType] = tabControl ? [element, 'span', 'button'] : owners[entry.family];
   const inputs = entry.styleInputs.filter(i => i.id === id); assert.equal(inputs.length, 1);
   const input = inputs[0];
-  const rs = reference.nodes.filter(n => n.attributes?.['data-parity-id'] === id || n.attributes?.id === id);
+  const alias = entry.family === 'badge' ? proveBadgePointerRequest(entry, reference, candidate).identity : undefined;
+  const rs = reference.nodes.filter(n => alias ? n.key === alias.referenceNode : n.attributes?.['data-parity-id'] === id || n.attributes?.id === id);
   const as = candidate.nodes.filter(n => n.authored?.id === id);
   assert.equal(rs.length, 1); assert.equal(as.length, 1);
   const r = rs[0], a = as[0];
+  if (alias) assert.equal(alias.candidateNode, a.key);
   const composition = tabControl ? proveTabControlStage(reference, candidate, id) : undefined;
   if (composition) {
     assert.equal(composition.referenceLabel, r.key); assert.equal(composition.candidateControl, a.key);
@@ -67,6 +71,27 @@ export function proveCustomOwnerBorder(entry, reference, candidate, normalize, e
     for (const stage of [a.resolvedStyle, a.normalResolvedStyle, a.interactionResolvedStyle]) {
       assert.equal(stage.background, '#cac4d0'); assert.equal(stage.height, '1px');
     }
+  } else if (entry.family === 'badge') {
+    const requests = nativeRules.filter(rule => Object.keys(rule.declarations).some(relevant));
+    assert.equal(requests.length, 3);
+    requests.forEach((rule, index) => {
+      assert.equal(rule.selector, index === 2 ? '.ng-animate-disabled .mat-badge-content, .mat-badge-content._mat-animation-noopable' : '.mat-badge-content');
+      assert.equal(rule.active, index !== 1);
+      assert.deepEqual(rule.conditions, index === 1 ? ['(forced-colors: active)'] : []);
+      const expected = {};
+      if (index !== 1) {
+        const values = { 'transition-behavior': 'normal', 'transition-duration': index === 0 ? '200ms' : '0s',
+          'transition-timing-function': index === 0 ? 'ease-in-out' : 'ease',
+          'transition-delay': '0s', 'transition-property': index === 0 ? 'transform' : 'none' };
+        for (const [k, value] of Object.entries(values)) expected[k] = { value, important: false };
+      }
+      if (index !== 2) for (const corner of ['top-left', 'top-right', 'bottom-right', 'bottom-left'])
+        expected[`border-${corner}-radius`] = { value: index === 0 ? '' : '0px', important: false };
+      assert.deepEqual(Object.fromEntries(Object.entries(rule.declarations).filter(([k]) => relevant(k))), expected);
+      const serialized = [...rule.cssText.matchAll(/(?:^|;)\s*transition\s*:\s*([^;]+)(?=;|$)/g)].map(m => m[1].trim());
+      assert.deepEqual(serialized, index === 1 ? [] : [index === 0 ? 'transform 200ms ease-in-out' : 'none']);
+      if (index === 0) assert.match(rule.cssText, /border-radius: var\(--mat-badge-container-shape, var\(--mat-sys-corner-full\)\);/);
+    });
   } else if (entry.family.startsWith('progress-')) {
     const motion = nativeRules.filter(rule => Object.keys(rule.declarations).some(relevant));
     const spinner = entry.family === 'progress-spinner';
@@ -95,6 +120,7 @@ export function proveCustomOwnerBorder(entry, reference, candidate, normalize, e
     .map(([property, value]) => ({ selector: rule.selector, property, value })));
   assert.deepEqual(candidateRequests, tabControl
     ? [{ selector: '.tab', property: 'borderWidth', value: '0' }, { selector: '.tab', property: 'borderRadius', value: '0' }]
+    : entry.family === 'badge' ? [{ selector: '.badge-bubble', property: 'borderRadius', value: '8px' }]
     : entry.family === 'table' ? [{ selector: '.material-table', property: 'borderWidth', value: '0' }] : []);
   const native = normalize(input.reference);
   assert.match(native.color, /^rgba\(\d+,\d+,\d+,1\)$/);
@@ -109,13 +135,14 @@ export function proveCustomOwnerBorder(entry, reference, candidate, normalize, e
   }
   for (const stage of [a.resolvedStyle, a.normalResolvedStyle, a.interactionResolvedStyle]) {
     const border = Object.fromEntries(Object.entries(stage).filter(([k]) => relevant(k)));
-    assert.deepEqual(border, { borderWidth: '0', borderStyle: 'none', borderColor: 'transparent', borderRadius: '0' });
+    assert.deepEqual(border, { borderWidth: '0', borderStyle: 'none', borderColor: 'transparent', borderRadius: entry.family === 'badge' ? '8px' : '0' });
     const normalized = normalize(stage);
     for (const side of sides) assert.equal(normalized[`border${side}Color`], 'rgba(0,0,0,0)');
   }
   return { referenceNode: r.key, astylarNode: a.key, nativeType, candidateType,
     nativeRules, candidateRules: ownRules, candidateRequests, referenceColor: native.color,
     ...(composition ? { composition } : {}),
+    ...(alias ? { alias } : {}),
     inputEquivalent: false, renderingEquivalent: false, generatedChildPaintVerified: false,
     motionSettlementVerified: false,
     scope: entry.family === 'divider' ? 'Explicit top-border/background substitution; three other native sides retain zero/none initial colors. No paint equivalence.'
@@ -135,7 +162,9 @@ export function applyCustomOwnerBorderReviews(rows, cases, inventory, normalize)
     attribution: family === 'table' ? 'reviewed-table-border-reset-omission' : 'reviewed-custom-host-border-initial-divergence',
     owner: 'core border initial-color contract and measured host identity',
     prove: (e, r, a) => proveCustomOwnerBorder(e, r, a, normalize),
-    justification: family.startsWith('progress-')
+    justification: family === 'badge'
+      ? 'The generated native badge span is authenticated by the existing alias/ancestry proof, not a fabricated parity ID. Its border colors are omitted and zero/none colors compute from currentcolor; candidate stages use transparent initial colors. Native radius tokens and transform-only motion/none override are retained alongside the candidate 8px radius and absent motion. Those unequal requests are not normalized away or accepted as equivalent; this classification covers border color only, not radius, transform settlement, hit testing or final paint.'
+      : family.startsWith('progress-')
       ? 'The explicitly mapped progress hosts omit border requests. Captured native motion is restricted to opacity (plus spinner transition:none !important), not border or color; candidate motion remains omitted. Zero/none native border colors use currentcolor while candidate host stages use transparent defaults. This scoped initial-color limitation neither accepts the unequal motion inputs nor proves opacity settlement, generated progress paint, inherited ink or final raster.'
       : family === 'divider'
       ? 'Only the three non-top sides are covered: no native side requests exist and zero/none colors compute from currentcolor, while candidate stages retain transparent initial borders. The explicit native top border and candidate background replacement are preserved by a separate authoring classification. This is not a claim that the whole divider omits borders or that paint/layout inputs are equivalent.'

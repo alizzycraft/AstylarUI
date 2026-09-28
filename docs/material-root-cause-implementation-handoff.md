@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared border batch is complete for the 79 originally unresolved groups /
+1904 observations (not canonical acceptance). Badge adds eight groups / 208
+observations from 52 authenticated generated-span alias pairs. Exact native
+radius token/pending longhands, inactive forced-colors radius, transform-only
+transition and explicit none override remain recorded; candidate 8px radius and
+absent motion remain unequal. No default or paint equivalence is inferred from
+zero/none borders. Border-color admission rejects altered radius as well as
+native/candidate border injection and wrong owner types. Focused test passes
+(1/1, 6.53 s); combined prepared border/origin checks pass 2/2 in 6.89 s.
+Together the next prepared batch covers 86 groups / 2114 observations (79 border,
+seven origin). Integrate only after the live caret/position export is reconciled;
+do not change its dependencies. Existing session 91866 remains live in validation.
+Next substantive coverage: remaining origin/position and typography/inheritance;
+first refresh compact pending counts after accepted export reconciliation.
+
 Tab border measurements are now joined to the existing composition proof:
 native text-label span versus candidate button, 70 cases per control / 16 groups /
 560 color observations. Label border requests are absent; candidate `.tab`
