@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 29
 
+**Radio/checkbox spacing integrated; export pending:** seven groups / 341
+observations distinguish nested native control/associated-label padding from
+candidate host padding, density-dependent top margin and label left margin.
+All 68 cases per family are retained. The single `static:checkbox@custom/mobile`
+label-bottom-padding observation remains an explicit profile/media adjustment,
+not a general core baseline diagnosis. History `662c179` replaces this label's
+translation with `padding:0 0 1px`; `2f44011` introduced the radio host margin.
+Those origins do not prove why each historical adjustment was chosen.
+Existing choice-label and radio-position proofs are reused; native label padding
+is 4px and native control padding varies by density rather than moving to the host.
+Scalar/tree joins, all candidate stages, complete membership and negative controls
+pass. The production tail changes 24 / 1,535 versus the current checkpoint and
+79 / 4,491 or 59 / 3,364 versus the two earlier checkpoints, with raw/unrelated
+records conserved. Unbound execution remains disabled.
+`node --test --test-name-pattern="omitted owner paint requests preserve|choice spacing preserves" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/display-request-review.spec.mjs`
+passes **2/2**, 28,177.3133 ms. Producer restoration still returns the historical
+digest; current producer is `142a24f42f3a944341a5be9427027773fd81c56fde8fa7b62952237b60f10b44`.
+Canonical stays **95 unresolved**; integrated batches project **51** after export.
+No renderer/fixture edits or captures. Next: dialog/toolbar and remaining overlay
+flow/state/border differences, then coherent source/export reconciliation.
+
 **Chip spacing/wrapping integrated; export pending:** 11 groups / 836 observations
 across all 76 cases preserve the native negative-margin wrapping wrapper,
 4px/8px chip margins, and padded action/graphic descendants versus the candidate's

@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyChoiceSpacingReviews,')) {
+    for (const [from, to] of [
+      ["import { applyChoiceSpacingReviews, validateChoiceSpacingReviews } from './display-request-review.mjs';\n", ''],
+      ['applyChipSpacingReviews, applyChoiceSpacingReviews]', 'applyChipSpacingReviews]'],
+      ['      errors.push(...validateChoiceSpacingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-choice-spacing-authoring-substitution'))\n    errors.push('choice spacing attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated choice spacing integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyChipSpacingReviews,')) {
     for (const [from, to] of [
       ["import { applyChipSpacingReviews, validateChipSpacingReviews } from './display-request-review.mjs';\n", ''],

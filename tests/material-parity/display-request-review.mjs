@@ -4,6 +4,90 @@ import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { proveStepperPositionSubstitution } from '../../scripts/audit-material-stepper-position-substitution.mjs';
 import { proveChipPositionInspection } from './chip-position-inspection.mjs';
+import { proveChoiceLabelStacking } from './choice-label-stacking-substitution.mjs';
+import { proveRadioPositionSubstitution } from './radio-position-substitution.mjs';
+
+export function proveChoiceSpacingComposition(entry, reference, candidate, element) {
+  const checkbox = entry.family === 'checkbox';
+  assert.ok(checkbox ? ['checkbox-primary', 'checkbox-label'].includes(element)
+    : entry.family === 'radio' && ['radio-primary', 'radio-solo-label', 'radio-team-label'].includes(element));
+  assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);
+  assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+  const one = ns => { assert.equal(ns.length, 1); return ns[0]; };
+  const labelId = checkbox ? 'checkbox-label' : element === 'radio-primary' ? 'radio-solo-label' : element;
+  const composition = proveChoiceLabelStacking(reference, candidate, labelId);
+  const position = checkbox ? proveDisplayRequest(entry, reference, candidate, 'checkbox-primary')
+    : proveRadioPositionSubstitution(reference, candidate);
+  const r = one(reference.nodes.filter(n => n.attributes?.id === element));
+  const a = one(candidate.nodes.filter(n => n.authored?.id === element));
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  assert.equal(Object.keys(input.reference).length, 89);
+  for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[r.style][key], value);
+  for (const [scalar, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']])
+    assert.deepEqual(input[scalar], a[stage]);
+  const relevant = key => /^(padding.*|margin.*|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  assert.deepEqual(Object.keys(r.inline).filter(relevant), []);
+  const requests = r.rules.map(i => reference.rules[i]).filter(q => q.active).flatMap(q =>
+    Object.entries(q.declarations).filter(([key]) => relevant(key)));
+  assert.deepEqual(requests, []);
+  assert.equal(a.authored.style, undefined); assert.equal(a.authored.attributes?.style, undefined);
+  const candidateRequests = candidate.rules.filter(q => rootInitialSelectorCanApply(q.selector, a.authored)).flatMap(q =>
+    Object.entries(q).filter(([key]) => relevant(key)).map(([key, value]) => ({ selector: q.selector, key, value,
+      ...(q.mediaMaxWidth === undefined ? {} : { mediaMaxWidth: q.mediaMaxWidth }) })));
+  const group = element.endsWith('-primary');
+  const margin = ['light', 'dark'].includes(entry.profile) ? '9px' : '4px';
+  const expected = checkbox ? { selector: group ? '#checkbox-primary' : '.checkbox-label', key: 'padding',
+    value: group ? '0 11px' : '0 0 1px', ...(group ? {} : { mediaMaxWidth: '500px' }) }
+    : { selector: group ? '#radio-primary' : '.radio-label', key: group ? 'marginTop' : 'marginLeft', value: group ? margin : '8px' };
+  assert.deepEqual(candidateRequests, [expected]);
+  const parentLabel = one(reference.nodes.filter(n => n.key === composition.reference.associatedLabel));
+  assert.equal(reference.styles[parentLabel.style].padding, '0px 0px 0px 4px');
+  const nativeControl = one(reference.nodes.filter(n => n.key === composition.reference.control));
+  const controlBox = one(reference.nodes.filter(n => n.key === nativeControl.parent));
+  const controlPadding = checkbox ? { light: '11px', dark: '11px', contrast: '5px', custom: '7px' }[entry.profile]
+    : { light: '10px', dark: '10px', contrast: '4px', custom: '6px' }[entry.profile];
+  assert.ok(controlPadding); assert.equal(reference.styles[controlBox.style].padding, controlPadding);
+  const native = reference.styles[r.style];
+  assert.equal(native.margin, '0px'); assert.equal(native.padding, '0px');
+  if (checkbox && !group) {
+    assert.equal(entry.profile, 'custom'); assert.equal(entry.viewport.id, 'mobile');
+    assert.equal(entry.kind, 'static');
+  }
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(a[stage].margin, '0');
+    if (checkbox) {
+      assert.equal(a[stage].padding, expected.value);
+      if (group) { assert.equal(a[stage].gap, '14px'); assert.equal(a[stage].display, 'flex'); }
+    } else { assert.equal(a[stage][expected.key], expected.value); assert.equal(a[stage].padding, '0'); }
+  }
+  return { referenceNode: r.key, astylarNode: a.key, composition, position,
+    referenceRequests: requests, candidateRequests, associatedLabelPadding: '0px 0px 0px 4px', controlPadding,
+    firstDivergence: checkbox && !group ? 'custom mobile label adds a one-pixel padding adjustment'
+      : 'native control and associated-label spacing replaced by custom host or label spacing',
+    inputEquivalent: false, renderingEquivalent: false, coreDefectProven: false, compensationIntentProven: false };
+}
+
+export function applyChoiceSpacingReviews(rows, cases, inventory, normalize) {
+  for (const [family, element, properties] of [
+    ['checkbox', 'checkbox-primary', ['paddingLeft', 'paddingRight']], ['checkbox', 'checkbox-label', ['paddingBottom']],
+    ['radio', 'radio-primary', ['marginTop']], ['radio', 'radio-solo-label', ['marginLeft']], ['radio', 'radio-team-label', ['marginLeft']],
+  ]) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family, element, properties, prove: (entry, reference, candidate) => proveChoiceSpacingComposition(entry, reference, candidate, element),
+    attribution: 'reviewed-choice-spacing-authoring-substitution', owner: 'showcase native-control and associated-label composition',
+    justification: element === 'checkbox-label'
+      ? 'The custom mobile candidate label explicitly adds one pixel of bottom padding through a media rule; the corresponding native span has no padding request and computed zero padding. Preserve this profile-specific input adjustment rather than treating it as equal-input evidence of a core baseline defect.'
+      : 'Native control padding and associated-label padding belong to nested owners. Candidate replaces that structure with a custom flex checkbox or absolutely placed radio options, adding host padding/top margin or label left margin. These explicit requests are not equivalent owner inputs; the evidence does not diagnose core spacing or establish historical compensation intent.',
+  });
+  return rows;
+}
+
+export function validateChoiceSpacingReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-choice-spacing-authoring-substitution');
+    assert.deepEqual(select(rows), select(applyChoiceSpacingReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`choice spacing lacks original evidence: ${error.message}`]; }
+}
 
 export function proveChipSpacingComposition(entry, reference, candidate, element) {
   assert.equal(entry.family, 'chips');
