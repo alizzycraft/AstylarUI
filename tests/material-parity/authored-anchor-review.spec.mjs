@@ -8,11 +8,12 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { applyAuthoredAnchorReviews, proveAuthoredAnchor } from './authored-anchor-review.mjs';
 import { applyCoreAnchorReviews, proveCoreAnchor } from './authored-anchor-review.mjs';
+import { applyRelativeOwnerOffsetReviews, proveRelativeOwnerOffsets } from './authored-anchor-review.mjs';
 
-test('authored anchor reviews retain 604 observations and reject substituted offsets or margin tokens', () => {
+test('authored anchor reviews retain 1862 observations and reject substituted offsets or margin tokens', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
-  const capture = JSON.parse(bytes), families = ['slide-toggle', 'badge', 'core'];
+  const capture = JSON.parse(bytes), families = ['slide-toggle', 'badge', 'core', 'card', 'checkbox', 'sidenav', 'toolbar'];
   const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))];
   const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
   const rows = families.flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, {
@@ -29,6 +30,19 @@ test('authored anchor reviews retain 604 observations and reject substituted off
   const coreChanges = combined.filter((r, i) => r !== reviewed[i]);
   assert.equal(coreChanges.length, 5); assert.equal(coreChanges.reduce((n, r) => n + r.occurrences, 0), 260);
   combined.forEach((r, i) => { assert.deepEqual(raw(r), raw(rows[i])); if (r !== reviewed[i]) assert.equal(reviewed[i].attribution, 'unresolved'); });
+  const relative = applyRelativeOwnerOffsetReviews(combined, cases, inventory, bindPreciseAuditNormalization());
+  const relativeChanges = relative.filter((r, i) => r !== combined[i]);
+  assert.equal(relativeChanges.length, 22); assert.equal(relativeChanges.reduce((n, r) => n + r.occurrences, 0), 1258);
+  relative.forEach((r, i) => { assert.deepEqual(raw(r), raw(rows[i])); if (r !== combined[i]) assert.equal(combined[i].attribution, 'unresolved'); });
+  for (const family of ['badge', 'card', 'checkbox', 'sidenav', 'toolbar']) {
+    const entry = cases.find(e => e.family === family);
+    const [r, a] = modalInventoryTrees(inventory, `${entry.kind}:${family}@${entry.profile}/${entry.viewport.id}`);
+    const proof = proveRelativeOwnerOffsets(entry, r, a);
+    const native = structuredClone(r); native.nodes.find(n => n.key === proof.referenceNode).inline.top = { value: '0', important: false };
+    assert.throws(() => proveRelativeOwnerOffsets(entry, native, a));
+    const altered = structuredClone(a); altered.rules.push({ selector: '#' + altered.nodes.find(n => n.key === proof.astylarNode).authored.id, top: '0' });
+    assert.throws(() => proveRelativeOwnerOffsets(entry, r, altered));
+  }
   const core = cases.find(e => e.family === 'core');
   const [cr, ca] = modalInventoryTrees(inventory, `${core.kind}:core@${core.profile}/${core.viewport.id}`);
   const cp = proveCoreAnchor(core, cr, ca); assert.equal(cp.containingBlockEquivalenceProven, false);
@@ -36,7 +50,7 @@ test('authored anchor reviews retain 604 observations and reject substituted off
   assert.throws(() => proveCoreAnchor(core, native, ca));
   const candidate = structuredClone(ca); candidate.rules.push({ selector: '#core-primary', transform: 'translateZ(0px)' });
   assert.throws(() => proveCoreAnchor(core, cr, candidate));
-  for (const family of families.filter(f => f !== 'core')) {
+  for (const family of ['slide-toggle', 'badge']) {
     const entry = cases.find(e => e.family === family), key = `${entry.kind}:${family}@${entry.profile}/${entry.viewport.id}`;
     const [r, a] = modalInventoryTrees(inventory, key), proof = proveAuthoredAnchor(entry, r, a);
     assert.equal(proof.rendererCauseProven, false); assert.equal(proof.compoundPlacementEquivalenceProven, false);

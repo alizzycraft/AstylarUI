@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared followup now totals 37 groups / 1862 observations. Relative-owner
+review adds 22 groups / 1258 observations: badge/card/checkbox host insets (four
+each), sidenav and toolbar-action position plus four insets each. Exact direct
+ID/type/scalar/stage joins are used, not the alias-only mapper (which correctly
+returns unresolved for these direct IDs). Native hosts explicitly request
+relative positioning without physical/logical insets; badge/card/checkbox match
+that request locally, while sidenav/toolbar omit it. Classify the two position
+omissions as authoring defects and the twenty computed-zero/local-omission
+inset groups as observation boundaries, never as proof of used-layout equality.
+The existing anchor spec passes 1/1 in 17.74 s with all raw/prior rows conserved
+and native/candidate inset-injection controls for all five owners.
+Export 23967 advanced to `validate-audit` at 925.58 s (about 15.4 minutes).
+It remains active; these prepared files are still outside its dependency set.
+
 Prepared anchor batch now totals 15 groups / 604 observations. Five core-demo
 groups (260 observations) reuse `inspectButtonHostRequests`: native relative
 button has no authored insets and requests `.mat-ripple:not(:empty)`

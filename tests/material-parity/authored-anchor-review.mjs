@@ -51,6 +51,60 @@ export function applyCoreAnchorReviews(rows, cases, inventory, normalize) {
 const relevant = key => /^(all|position|top|right|bottom|left)$|^(inset|margin)/.test(key.replaceAll('-', '').toLowerCase());
 const pick = value => Object.fromEntries(Object.entries(value ?? {}).filter(([key]) => relevant(key)));
 
+const relativeOwners = {
+  badge: ['badge-primary', 'span', 'span', '.mat-badge', '.badge-anchor'],
+  card: ['card-primary', 'mat-card', 'div', '.mat-mdc-card', '.material-card'],
+  checkbox: ['checkbox-primary', 'mat-checkbox', 'div', '.mat-mdc-checkbox', '#checkbox-primary'],
+  sidenav: ['sidenav-primary', 'mat-sidenav-container', 'div', '.mat-drawer-container', null],
+  toolbar: ['toolbar-action', 'button', 'button', '.mdc-button', null],
+};
+export function proveRelativeOwnerOffsets(entry, reference, candidate) {
+  const [element, nativeType, candidateType, nativeSelector, candidateSelector] = relativeOwners[entry.family];
+  const one = values => { assert.equal(values.length, 1); return values[0]; };
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  const r = one(reference.nodes.filter(n => n.attributes?.id === element));
+  const a = one(candidate.nodes.filter(n => n.authored?.id === element));
+  assert.equal(r.type, nativeType); assert.equal(a.authored.type, candidateType);
+  assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);
+  assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+  assert.equal(Object.keys(input.reference).length, 89);
+  for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[r.style][key], value);
+  const selected = key => /^(all|position|top|right|bottom|left|transform)$|^inset/.test(key.replaceAll('-', '').toLowerCase());
+  const select = value => Object.fromEntries(Object.entries(value ?? {}).filter(([key]) => selected(key)));
+  assert.deepEqual(select(r.inline), {}); assert.equal(a.authored.style, undefined); assert.equal(a.authored.attributes?.style, undefined);
+  const referenceRules = r.rules.map(i => reference.rules[i]).filter(rule => rule.active);
+  assert.deepEqual(referenceRules.map(rule => ({ selector: rule.selector, declarations: select(rule.declarations) }))
+    .filter(rule => Object.keys(rule.declarations).length), [{ selector: nativeSelector, declarations: { position: { value: 'relative', important: false } } }]);
+  for (const rule of referenceRules) assert.doesNotMatch(rule.cssText, /(?:^|;)\s*(?:inset[\w-]*|top|right|bottom|left|all)\s*:/i);
+  const candidateRequests = candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, a.authored))
+    .map(({ selector, ...declarations }) => ({ selector, declarations: select(declarations) })).filter(rule => Object.keys(rule.declarations).length);
+  assert.deepEqual(candidateRequests, candidateSelector ? [{ selector: candidateSelector, declarations: { position: 'relative' } }] : []);
+  for (const [field, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']]) {
+    assert.deepEqual(input[field], a[stage]); assert.deepEqual(select(a[stage]), candidateSelector ? { position: 'relative' } : {});
+  }
+  for (const property of ['top', 'right', 'bottom', 'left']) assert.equal(reference.styles[r.style][property], '0px');
+  assert.equal(reference.styles[r.style].position, 'relative'); assert.equal(reference.styles[r.style].transform, 'none');
+  return { referenceNode: r.key, astylarNode: a.key, referenceRules, candidateRequests,
+    inputEquivalent: false, renderingEquivalent: false, candidateUsedOffsetsVerified: false,
+    containingBlockEquivalenceProven: false };
+}
+export function applyRelativeOwnerOffsetReviews(rows, cases, inventory, normalize) {
+  for (const [family, [element, , , , candidateSelector]] of Object.entries(relativeOwners)) {
+    if (!candidateSelector) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+      family, element, properties: ['position'], prove: proveRelativeOwnerOffsets,
+      attribution: 'reviewed-relative-owner-position-omission', owner: 'Material container/button host authoring',
+      justification: 'The exact native host explicitly requests relative positioning; candidate authoring and all three local stages omit it. Preserve the owner mapping and unequal request without assuming candidate computed positioning or matching containing blocks.',
+    });
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+      family, element, properties: ['top', 'right', 'bottom', 'left'], prove: proveRelativeOwnerOffsets,
+      classification: 'parity-harness-defect', attribution: 'reviewed-relative-owner-computed-insets',
+      owner: 'native computed relative insets versus candidate local declarations',
+      justification: 'Native relative owner has no authored inset/reset request and computes zero insets. Candidate omits insets in authoring and all three local stages. These zeros are not literal authoring to copy. Preserve differing host structure and any missing relative request; used offsets and containing-block equivalence are not established.',
+    });
+  }
+  return rows;
+}
+
 export function proveAuthoredAnchor(entry, reference, candidate) {
   const badge = entry.family === 'badge';
   assert.ok(badge || entry.family === 'slide-toggle');
