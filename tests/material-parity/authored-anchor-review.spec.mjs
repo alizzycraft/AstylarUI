@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { applyPreparedInputReviews, validatePreparedInputReviews } from './authored-anchor-review.mjs';
+import { applyPreparedInputFollowups, validatePreparedInputFollowups } from './authored-anchor-review.mjs';
 import { createHash } from 'node:crypto';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
@@ -14,6 +15,53 @@ import { applyStaticOwnerPositionReviews, proveStaticOwnerPosition } from './aut
 import { applyAuthoredCornerReviews, proveAuthoredCornerRequests } from './authored-anchor-review.mjs';
 import { proveSheetCornerBoxEvidence } from './authored-anchor-review.mjs';
 import { proveActionCornerBoxInputs, applyCardContrastCornerReview } from './authored-anchor-review.mjs';
+
+test('prepared 106-group followup conserves raw records and all prior classifications', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
+  const accepted = [...new Set(cases.map(e => e.family))].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, {
+    generation: '4880964fc1018a1fd6409f7c7af2ddaa5fc21a82e45dab3a0cc5fce5a6019156',
+    indexSha256: '5e86f89a05cd88843d7dd6130ed13c88cdb6371efb389d73a934c8d9f953511b',
+  })).filter(r => r.evidence.section === 'discrepancies');
+  const prepared = applyPreparedInputFollowups(accepted, cases, inventory, bindPreciseAuditNormalization());
+  const batch = prepared.filter((r, i) => r !== accepted[i]);
+  assert.equal(accepted.length, 8483); assert.equal(prepared.length, accepted.length);
+  assert.equal(batch.length, 106); assert.equal(batch.reduce((n, r) => n + r.occurrences, 0), 4635);
+  const populations = [
+    ['reviewed-display-request-substitution', 15, 844], ['reviewed-display-owner-substitution', 2, 138],
+    ['reviewed-display-computed-local-boundary', 1, 52], ['reviewed-inherited-word-computed-local-boundary', 46, 1764],
+    ['reviewed-font-initial-computed-local-boundary', 24, 955], ['reviewed-overlay-weight-token-request-omission', 4, 107],
+    ['reviewed-range-weight-inherit-observation-boundary', 2, 156], ['reviewed-page-family-computed-local-boundary', 5, 326],
+    ['reviewed-toggle-family-token-request-omission', 2, 136], ['reviewed-overlay-family-ancestry-substitution', 5, 157],
+  ];
+  for (const [attribution, groups, observations] of populations) {
+    const matches = batch.filter(r => r.attribution === attribution);
+    assert.equal(matches.length, groups, attribution);
+    assert.equal(matches.reduce((n, r) => n + r.occurrences, 0), observations, attribution);
+  }
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  prepared.forEach((r, i) => {
+    assert.deepEqual(raw(r), raw(accepted[i]));
+    if (accepted[i].attribution !== 'unresolved') assert.deepEqual(r, accepted[i]);
+    if (r !== accepted[i]) {
+      assert.equal(accepted[i].attribution, 'unresolved');
+      assert.equal(r.reviewEvidence.inputEquivalent, false); assert.equal(r.reviewEvidence.renderingEquivalent, false);
+      assert.equal(r.reviewEvidence.observations.length, r.occurrences);
+    }
+  });
+  assert.equal(batch.filter(r => r.classification === 'application-plugin-authoring-defect').length, 28);
+  assert.equal(batch.filter(r => r.classification === 'parity-harness-defect').length, 78);
+  assert.equal(prepared.filter(r => r.attribution === 'unresolved').length, 180);
+  assert.ok(prepared.some(r => r.family === 'tooltip' && r.property === 'wordBreak' && r.attribution === 'unresolved'));
+  assert.deepEqual(validatePreparedInputFollowups(prepared, accepted, cases, inventory, bindPreciseAuditNormalization()), []);
+  const tampered = [...prepared], index = prepared.findIndex((r, i) => r !== accepted[i]);
+  tampered[index] = { ...tampered[index], justification: 'unsupported replacement' };
+  assert.equal(validatePreparedInputFollowups(tampered, accepted, cases, inventory, bindPreciseAuditNormalization()).length, 1);
+});
 
 test('prepared 153-group batch conserves all scalar records and retains focused anchor/corner proofs', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

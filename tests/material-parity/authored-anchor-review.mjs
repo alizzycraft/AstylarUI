@@ -7,6 +7,29 @@ import { inspectButtonHostRequests } from './button-host-request-evidence.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { applyMinimumSizeReviews } from './minimum-size-request-review.mjs';
 import { applyTextTransformBoundaryReviews } from './text-transform-boundary-review.mjs';
+import { applyDisplayRequestReviews, applyDisplayBoundaryReviews } from './display-request-review.mjs';
+import { applyInheritedWordReviews, applyOmittedFontReviews, applyWeightRequestReviews, applyFamilyRequestReviews } from './wrapping-input-review.mjs';
+
+const followupAttributions = new Set([
+  'reviewed-display-request-substitution', 'reviewed-display-owner-substitution',
+  'reviewed-display-computed-local-boundary', 'reviewed-inherited-word-computed-local-boundary',
+  'reviewed-font-initial-computed-local-boundary', 'reviewed-overlay-weight-token-request-omission',
+  'reviewed-range-weight-inherit-observation-boundary', 'reviewed-page-family-computed-local-boundary',
+  'reviewed-toggle-family-token-request-omission', 'reviewed-overlay-family-ancestry-substitution',
+]);
+export const isPreparedInputFollowupRow = row => followupAttributions.has(row.attribution);
+export function applyPreparedInputFollowups(rows, cases, inventory, normalize) {
+  return [applyDisplayRequestReviews, applyDisplayBoundaryReviews, applyInheritedWordReviews,
+    applyOmittedFontReviews, applyWeightRequestReviews, applyFamilyRequestReviews]
+    .reduce((values, apply) => apply(values, cases, inventory, normalize), rows);
+}
+export function validatePreparedInputFollowups(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const expected = applyPreparedInputFollowups(originalRows, cases, inventory, normalize).filter(isPreparedInputFollowupRow);
+    assert.equal(JSON.stringify(rows.filter(isPreparedInputFollowupRow)), JSON.stringify(expected));
+    return [];
+  } catch (error) { return [`prepared input followup does not replay: ${error.message}`]; }
+}
 
 const preparedAttributions = new Set([
   'reviewed-authored-anchor-substitution', 'reviewed-core-anchor-substitution',

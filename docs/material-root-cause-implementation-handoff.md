@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 28
 
+The prepared 106-group display/word/font batch now has a combined apply/replay
+validator in the existing authored-anchor review module. Its focused test replays
+all 8,483 accepted scalar records from authenticated generation 4880964f, changes
+exactly 106 groups / 4,635 observations, checks all ten attribution populations,
+preserves raw fields/order and every prior classification, and rejects forged
+justification metadata. Input/rendering equivalence remains false. The explicit
+tooltip wordBreak group remains unresolved. Command:
+`node --test --test-name-pattern="prepared 106-group" tests/material-parity/authored-anchor-review.spec.mjs`
+passes 1/1 (56.11 s test; 57.34 s process); scoped diff checks pass.
+
+This is batch composition proof, not canonical integration. The canonical pointer
+still names 4880964f and retains 286 unresolved groups. Next wire this aggregate
+into the guarded producer stage, extend the existing exact producer-reversal and
+canonical conservation checks, then perform one cold export and authenticate its
+source/section transitions. No renderer/fixture changes, export or browser run
+occurred in this increment. Remaining coverage priorities are shared coordinate,
+overlay/clipping and plugin ownership causes; conditional radius paint, unsupported
+tooltip wordBreak and other residual scalar questions; then full coverage/history
+and the original unfiltered acceptance gates. Classification does not close those
+root-cause or rendering questions.
+
 Prepared font-family followup covers all twelve remaining groups / 619 original
 observations, reusing the same ancestry/rule/local-stage proof rather than adding
 another collector. Five page cases (chips, list, table, private tab; 326 observations)
