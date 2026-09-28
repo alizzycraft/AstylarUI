@@ -2,38 +2,28 @@
 
 ## Current audit checkpoint — September 28
 
-**Prepared owner-paint omission batch:** existing paint-review module now proves
-badge text-overflow:ellipsis omission (52 original owners) and bottom-sheet
-three-layer box-shadow omission (25). Reuses clipping/modal owner mappings;
-checks complete rule evidence, exact native declarations, candidate authoring,
-potentially applicable rules and all three captured stages. Two groups are
-classified as unequal authoring, with no core/raster-cause claim. Focused test
-passes1/1 (2.74s), including raw-row conservation, replay and negative controls.
-Combined new proof and existing 397-observation control-paint regression pass2/2
-(34.18s); no full aggregation or browser recapture was invoked.
-The first negative-control run exposed a missing completeness precondition;
-the new proof now rejects incomplete rule evidence explicitly. No fixture or
-renderer edits. Like max-width below, this is prepared, not yet hooked into the
-aggregator or exported. Current canonical count remains150 unresolved. Combine
-both batches at the next integration milestone; do not rerun full export for
-this metadata increment. Remaining high-impact work is shared spacing/owner
-composition, overflow/appearance semantics and focus-paint behavior, not a new
-survey of already settled projection/slider causes.
-
-**Prepared max-width classification batch:** extended existing
-control-width-observation.mjs with `proveOwnerMaximumWidth`,
-`applyOwnerMaximumWidths`, and replay validator. Exactly3 groups /222 original
-observations (chip0=76,chip1=76,tabs=70) receive unequal-authoring attribution;
-raw inputs and unrelated rows remain byte-value equivalent. Proof reuses chip
-width identity and rejects competing inline/logical/reset/max-width inputs,
-changed computed values, missing rule completeness, and tampered coverage.
-The native tab animation custom property is retained but is not a sizing
-request. Existing width suite passed5/5 (38.81s); after adding replay-validator
-coverage, focused new test passed1/1 (4.09s). No production aggregator hook or
-canonical export yet: combine this batch with other prepared classifications
-before the next expensive integration milestone.
-Both checkpoint505835c and icon-definition e3d3693 were successfully pushed;
-push59929 is terminal, as are cold4560 and import13953. No run is pending.
+**Owner omissions integrated into producer; export pending:** five groups /299
+original observations now pass through the bound-evidence production tail and
+independent replay validation: max-width100% on chip0/1 (76 each) and tabs (70),
+badge text-overflow:ellipsis (52), and bottom-sheet three-layer box-shadow (25).
+These are unequal authored inputs, not confirmed core/raster causes. Existing
+owner mappings, exact declarations, candidate rules and all three captured
+stages are checked; incomplete evidence and competing requests are rejected.
+Focused tests pass3/3 (11.70s), exercising the actual production tail, raw-value
+and unrelated-row conservation, unbound gating, and exact historical producer
+restoration. The prior stacking/radius test retains its30-group /1228-observation
+scope at the preceding stage; its first run failed on the newly extended tail,
+then passed after separating the extraction boundary. Earlier paint regression
+passed2/2 (34.18s), and width suite5/5 (38.81s).
+No full export or browser recapture for this increment. Canonical snapshot and
+compact index still report150 unresolved; the five new classifications are not
+yet canonical (expected145 after export if no other changes). Icon source finding
+also awaits export. Source-fingerprint/receipt refresh and independent cold
+canonical verification remain required at the next coherent milestone.
+Next: shared spacing/owner composition, overflow/appearance semantics and
+focus-paint behavior. Do not repeat settled projection/slider investigations.
+Checkpoint505835c, icon definitione3d3693, width proof70596fc and paint proof891ed39
+are pushed; previous export/check/import sessions are terminal. No run is pending.
 
 **Current compact index refreshed:** import13953 is terminal exit0; existing
 store verification passes with 8483 groups,389202 occurrences,39904 controls,

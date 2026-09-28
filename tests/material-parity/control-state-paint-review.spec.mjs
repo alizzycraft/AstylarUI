@@ -11,18 +11,20 @@ import { collectDisabledLabelColorStages } from '../../scripts/audit-material-di
 import { collectPaintReviewSources, applyPaintReviews, validatePaintReviews, isPaintReviewRow } from './control-state-paint-review.mjs';
 import { paintPopulation } from '../../scripts/check-material-position-canonical-conservation.mjs';
 import { proveOmittedOwnerPaintRequest, applyOmittedOwnerPaintRequests, validateOmittedOwnerPaintRequests } from './control-state-paint-review.mjs';
+import { applyOwnerMaximumWidths, validateOwnerMaximumWidths } from './control-width-observation.mjs';
 
 test('omitted owner paint requests preserve all 77 original observations and reject competing inputs', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'),
     'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const report = JSON.parse(bytes), owners = { badge: 'badge-count', 'bottom-sheet': 'bottom-sheet-panel' };
+  const families = [...Object.keys(owners), 'chips', 'tabs'];
   const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
     ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))]
-    .filter(e => owners[e.family] && e.styleInputs.some(i => i.id === owners[e.family]));
+    .filter(e => families.includes(e.family));
   const inventory = collectFullTreeInventory(cases), counts = {}, samples = new Map();
   assert.deepEqual(inventory.errors, []);
-  for (const entry of cases) {
+  for (const entry of cases.filter(e => owners[e.family] && e.styleInputs.some(i => i.id === owners[e.family]))) {
     const pair = modalInventoryTrees(inventory,
       `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
     const proof = proveOmittedOwnerPaintRequest(entry, ...pair);
@@ -32,7 +34,7 @@ test('omitted owner paint requests preserve all 77 original observations and rej
     if (!samples.has(entry.family)) samples.set(entry.family, { entry, pair, proof });
   }
   assert.deepEqual(counts, { badge: 52, 'bottom-sheet': 25 });
-  const rows = Object.keys(owners).flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+  const rows = families.flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
     generation: '0a30ca894170b342e4521c01e4fcb23ed990d70cea789fe89bd4eba0baf663fb',
     indexSha256: 'edf9c2de34728dc874460796853460dd5d39bafd71d4db41cba257366ec50cc0',
   })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
@@ -49,6 +51,26 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   const forged = structuredClone(applied);
   forged.find(r => r.attribution === 'reviewed-owner-paint-request-omission').reviewedCases.pop();
   assert.equal(validate(forged).length, 1);
+  // Execute the production tail against the authenticated preceding checkpoint.
+  const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8');
+  const start = source.indexOf('  const discrepancies =', source.indexOf('  const beforeOwnerOmissionReviews ='));
+  const end = source.indexOf('  const classifications =', start);
+  assert.ok(start > 0 && end > start);
+  const tail = new Function('ownerInitialStyleBinding', 'beforeOwnerOmissionReviews', 'cases', 'elementInventory',
+    'canonicalStyle', 'applyOwnerMaximumWidths', 'applyOmittedOwnerPaintRequests', source.slice(start, end) + '\nreturn discrepancies;');
+  const combined = tail({ status: 'bound' }, rows, cases, inventory, normalize, applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests);
+  assert.deepEqual(combined, applyOwnerMaximumWidths(applied, cases, inventory, normalize));
+  const batch = combined.filter((r, i) => r !== rows[i]);
+  assert.equal(batch.length, 5); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 299);
+  assert.deepEqual(combined.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (!batch.includes(combined[i])) assert.deepEqual(combined[i], rows[i]);
+  assert.deepEqual(validate(combined), []);
+  assert.deepEqual(validateOwnerMaximumWidths(combined, rows, cases, inventory, normalize), []);
+  assert.equal(tail({ status: 'unbound' }, rows, cases, inventory, normalize,
+    () => assert.fail('unbound maximum-width review ran'), () => assert.fail('unbound paint review ran')), rows);
+  for (const name of ['validateOwnerMaximumWidths', 'validateOmittedOwnerPaintRequests'])
+    assert.ok(source.includes(`errors.push(...${name}(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));`));
+  assert.ok(source.includes("errors.push('owner omission review attribution lacks bound original cases')"));
   for (const [family, { entry, pair, proof }] of samples) {
     const property = family === 'badge' ? 'textOverflow' : 'boxShadow';
     for (const mutate of [

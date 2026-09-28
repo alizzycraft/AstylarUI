@@ -36,6 +36,20 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('const beforeOwnerOmissionReviews =')) {
+    for (const [from, to] of [
+      ["import { applyOmittedOwnerPaintRequests, validateOmittedOwnerPaintRequests } from './control-state-paint-review.mjs';\n", ''],
+      ["import { applyOwnerMaximumWidths, validateOwnerMaximumWidths } from './control-width-observation.mjs';\n", ''],
+      ["  const beforeOwnerOmissionReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+      ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyOmittedOwnerPaintRequests(applyOwnerMaximumWidths(beforeOwnerOmissionReviews, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)\n    : beforeOwnerOmissionReviews;\n", ''],
+      ["      errors.push(...validateOwnerMaximumWidths(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n", ''],
+      ["      errors.push(...validateOmittedOwnerPaintRequests(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n", ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => ['reviewed-owner-maximum-width-omission', 'reviewed-owner-paint-request-omission'].includes(row.attribution)))\n    errors.push('owner omission review attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated owner omission integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('const beforeFullRadiusReviews =')) {
     for (const [from, to] of [
       ["import { applyFullRadiusActionReview, validateFullRadiusActionReview } from './authored-anchor-review.mjs';\n", ''],

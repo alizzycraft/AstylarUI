@@ -59,10 +59,10 @@ test('nine stacking groups preserve added versus omitted owner requests across 5
   const transition = restoreStackingProducer(source);
   assert.equal(transition.previousModuleSha256, 'a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393');
   assert.throws(() => restoreStackingProducer(source + '\n// unreviewed producer change'));
-  const start = source.indexOf('  const beforeStackingReviews ='), end = source.indexOf('  const classifications =', start);
+  const start = source.indexOf('  const beforeStackingReviews ='), end = source.indexOf('  const discrepancies =', start);
   assert.ok(start > 0 && end > start);
   const tail = new Function('ownerInitialStyleBinding', 'beforePreparedInputFollowups', 'cases', 'elementInventory', 'canonicalStyle',
-    'applyPreparedInputFollowups', 'applyStackingReviews', 'applyFullRadiusActionReview', source.slice(start, end) + '\nreturn discrepancies;');
+    'applyPreparedInputFollowups', 'applyStackingReviews', 'applyFullRadiusActionReview', source.slice(start, end) + '\nreturn beforeOwnerOmissionReviews;');
   const final = tail({ status: 'bound' }, rows, cases, inventory, normalize, values => values, applyStackingReviews, applyFullRadiusActionReview);
   assert.deepEqual(final, applyFullRadiusActionReview(combined, cases, inventory, normalize));
   const finalChanged = final.filter((r, i) => r !== rows[i]);

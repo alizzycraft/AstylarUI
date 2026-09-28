@@ -1,5 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { applyPaintReviews, validatePaintReviews, collectPaintReviewSources, isPaintReviewRow } from './control-state-paint-review.mjs';
+import { applyOmittedOwnerPaintRequests, validateOmittedOwnerPaintRequests } from './control-state-paint-review.mjs';
+import { applyOwnerMaximumWidths, validateOwnerMaximumWidths } from './control-width-observation.mjs';
 import { applyComponentColorReviews, validateComponentColorReviews, isComponentColorReviewRow } from './component-color-request-review.mjs';
 import { applyExplicitComponentCursors, validateComponentCursorReviews, isComponentCursorReviewRow } from './component-cursor-request-review.mjs';
 import { applyComponentPointerReviews, validateComponentPointerReviews, isComponentPointerReviewRow } from './component-pointer-events-review.mjs';
@@ -373,9 +375,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforeFullRadiusReviews = ownerInitialStyleBinding.status === 'bound'
     ? applyStackingReviews(beforeStackingReviews, cases, elementInventory, canonicalStyle)
     : beforeStackingReviews;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforeOwnerOmissionReviews = ownerInitialStyleBinding.status === 'bound'
     ? applyFullRadiusActionReview(beforeFullRadiusReviews, cases, elementInventory, canonicalStyle)
     : beforeFullRadiusReviews;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyOmittedOwnerPaintRequests(applyOwnerMaximumWidths(beforeOwnerOmissionReviews, cases, elementInventory, canonicalStyle), cases, elementInventory, canonicalStyle)
+    : beforeOwnerOmissionReviews;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -704,6 +709,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
       errors.push(...validatePreparedInputFollowups(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateStackingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateFullRadiusActionReview(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
+      errors.push(...validateOwnerMaximumWidths(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
+      errors.push(...validateOmittedOwnerPaintRequests(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateComponentColorReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
         collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), report.elementInventory), canonicalStyle));
       errors.push(...validatePaintReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
@@ -823,6 +830,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     errors.push('stacking owner review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-full-radius-action-request-coverage-gap'))
     errors.push('full-radius action review attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => ['reviewed-owner-maximum-width-omission', 'reviewed-owner-paint-request-omission'].includes(row.attribution)))
+    errors.push('owner omission review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))
     errors.push('button-host line-height attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>
