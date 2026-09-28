@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 28
 
+**Current compact index refreshed:** import13953 is terminal exit0; existing
+store verification passes with 8483 groups,389202 occurrences,39904 controls,
+134 source findings,150 unresolved. Current generation
+0a30ca894170b342e4521c01e4fcb23ed990d70cea789fe89bd4eba0baf663fb,
+index SHA edf9c2de34728dc874460796853460dd5d39bafd71d4db41cba257366ec50cc0.
+Checkpoint commit505835c contains verified payload/Markdown; push session59929
+was still live at last poll (no failure reported). Poll before another push.
+
+**Icon finding integrated into producer definitions, export deferred:** added
+`fixture-icon-svg-replaced-by-fixed-raster` to existing sourceAuditDefinitions,
+without changing earlier definitions. The focused icon proof now checks its
+classification, exact live selector/source match and absence after substituting
+the original SVG URL. Test passes1/1 (2.12s). No classification threshold or
+rendering input changed. This intentionally makes the producer newer than the
+verified checkpoint: defer full export to the next coherent classification batch.
+The checkpoint/index still has134 findings; do not present the new definition as
+already canonical or the pending core SVG reproduction as complete.
+
 **Canonical checkpoint verified (audit incomplete):** cold check4560 is TERMINAL,
 exit1 after 2,313,612ms (38.56min). It passed exact regenerated payload and
 Markdown equality and reported ONLY 150 unresolved scalar groups. Coverage

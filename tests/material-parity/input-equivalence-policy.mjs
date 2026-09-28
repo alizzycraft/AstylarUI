@@ -1372,6 +1372,16 @@ export const sourceAuditDefinitions = Object.freeze([
     owner: 'core typography and plugin tab transition',
     justification: 'A plugin data knob manually moves a text baseline and is direct evidence of an Astylar-only typography compensation.',
   }),
+  Object.freeze({
+    id: 'fixture-icon-svg-replaced-by-fixed-raster',
+    introducedBy: '48825c4 fix(example): render Material icon asset',
+    file: 'examples/material-showcase/src/app/astylar.component.ts',
+    pattern: String.raw`src: theme\.mode === 'dark' \? MATERIAL_FAVORITE_ICON_DARK : MATERIAL_FAVORITE_ICON_LIGHT`,
+    classification: 'application-plugin-authoring-defect',
+    owner: 'showcase icon asset/currentColor inputs and core SVG/image texture loading',
+    focusedProof: 'tests/material-parity/icon-asset-input.spec.mjs: all 20 original SVG/PNG owners and asset/dimension negative controls',
+    justification: 'The reference renders an inline currentColor SVG inside mat-icon. The candidate replaces its original SVG URL with fixed 24px light/dark PNGs; the historical asset comment cites transparent-pixel stability in the Babylon texture loader. All 20 captured owners bind the same SVG path, xMidYMid meet viewport and exact raster assets. Native wrapper objectFit fill versus candidate image contain is not a like-for-like image-fit comparison. Fixed raster resolution and baked theme ink do not preserve vector/currentColor inputs across DPR, size or color changes. Restore equivalent asset and paint inputs only after reducing SVG loading/alpha behavior through public APIs; this proof establishes historical input substitution, not a confirmed remaining core texture defect or raster equivalence.',
+  }),
 ]);
 
 export const pluginBoundaryVerdict = Object.freeze({

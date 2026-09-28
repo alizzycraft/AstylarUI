@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
+import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 
@@ -45,6 +46,13 @@ function inspect(entry, reference, candidate, assets, svgPath) {
 }
 
 test('all original icon owners replace currentColor SVG with fixed 24px theme rasters', () => {
+  const finding = one(sourceAuditDefinitions.filter(d => d.id === 'fixture-icon-svg-replaced-by-fixed-raster'));
+  assert.equal(finding.classification, 'application-plugin-authoring-defect');
+  assert.match(finding.focusedProof, /icon-asset-input\.spec\.mjs/);
+  const authoredSource = readFileSync(finding.file, 'utf8');
+  assert.equal([...authoredSource.matchAll(new RegExp(finding.pattern, 'g'))].length, 1);
+  assert.doesNotMatch(authoredSource.replace(
+    new RegExp(finding.pattern, 'g'), "src: '/icons/favorite.svg'"), new RegExp(finding.pattern));
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'),
     'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
