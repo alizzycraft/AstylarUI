@@ -14,6 +14,37 @@ import { applySnackbarPositionRequests, validateSnackbarPositionRequests } from 
 import { proveHeadingVisibleOverflow, applyHeadingVisibleOverflow, validateHeadingVisibleOverflow } from './control-overflow-observation.mjs';
 import { proveTabPanelOverflowBoundary, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
 import { proveTableOverflowInputs } from './control-overflow-observation.mjs';
+import { chromium } from 'playwright-core';
+
+test('native table omitted overflow retains visible descendants with hidden and ancestor sensitivity', async () => {
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 640, height: 360 } });
+    const result = await page.evaluate(() => {
+      const observe = (overflow, ancestorClips = false) => {
+        const parent = document.createElement('div'), table = document.createElement('table');
+        const cell = table.insertRow().insertCell(), child = document.createElement('div');
+        Object.assign(parent.style, { position: 'absolute', left: '20px', top: '20px', width: '60px',
+          height: '40px', overflow: ancestorClips ? 'hidden' : 'visible' });
+        Object.assign(table.style, { width: '60px', height: '40px', tableLayout: 'fixed', borderSpacing: '0', ...overflow });
+        Object.assign(cell.style, { position: 'relative', padding: '0' });
+        Object.assign(child.style, { position: 'absolute', left: '0', top: '0', width: '120px', height: '120px', background: 'red' });
+        cell.append(child); parent.append(table); document.body.append(parent);
+        const style = getComputedStyle(table), rect = table.getBoundingClientRect();
+        const observation = { x: style.overflowX, y: style.overflowY, width: rect.width, height: rect.height,
+          outsideX: document.elementFromPoint(100, 30) === child,
+          outsideY: document.elementFromPoint(30, 90) === child };
+        parent.remove(); return observation;
+      };
+      return { omitted: observe({}), visible: observe({ overflow: 'visible' }),
+        hidden: observe({ overflow: 'hidden' }), ancestor: observe({}, true) };
+    });
+    assert.deepEqual(result.omitted, { x: 'visible', y: 'visible', width: 60, height: 40, outsideX: true, outsideY: true });
+    assert.deepEqual(result.visible, result.omitted);
+    assert.deepEqual(result.hidden, { ...result.omitted, x: 'hidden', y: 'hidden', outsideX: false, outsideY: false });
+    assert.deepEqual(result.ancestor, { ...result.omitted, outsideX: false, outsideY: false });
+  } finally { await browser.close(); }
+});
 
 test('52 original tables bind omitted overflow without assuming table clipping equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

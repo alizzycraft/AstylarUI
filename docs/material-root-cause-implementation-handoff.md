@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 28
 
+**Table overflow applicability checks pass:** added a browser sensitivity case
+to the existing control-overflow spec: a fixed-layout 60x40 table with an
+absolutely positioned 120x120 cell descendant has identical visible axes and
+outside-X/Y reachability for omitted and explicit-visible overflow. Hidden
+overflow and a clipping ancestor both remove outside reachability without
+changing the measured table box. Browser plus original-52-owner checks pass
+2/2 (3.53s). Added an ElementCreationService spec exercising actual table dispatch
+followed by actual OverflowClipService: real table defaults omit overflow,
+omitted/visible do not project or install clip planes, hidden does both.
+The table sizing callback is a controlled descendant producer, not a claim
+about the complete table algorithm or browser raster. Executed this one persisted
+spec with the existing audit-button-overflow-core.mjs runner retargeted in memory
+(entry point and exact spec name only): 1/1 passed, no new runner/artifact.
+Scoped diff checks pass. Next bind these applicability dependencies and the
+reviewed table path to the two original scalar groups; keep structural, ancestor
+and full-rendering equivalence explicitly unproved. No canonical rebuild yet.
+
 **Table overflow input binding prepared:** all 52 original table owners have
 complete native rule evidence, no own overflow/reset requests, visible native
 axes, and omitted candidate overflow in authored and all three captured stages.

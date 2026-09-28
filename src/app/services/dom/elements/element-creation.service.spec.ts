@@ -2,8 +2,56 @@ import { ElementCreationService } from './element-creation.service';
 import { DOMAncestryService } from '../dom-ancestry.service';
 import { BabylonDOM } from '../interfaces/dom.types';
 import { DOMElement } from '../../../types/dom-element';
+import * as BABYLON from '@babylonjs/core';
+import { OverflowClipService } from './overflow-clip.service';
+import { StyleDefaultsService } from '../style-defaults.service';
+import { createCssLayoutBox } from '../../css-layout-geometry';
 
 describe('ElementCreationService', () => {
+  it('applies the shared clipping boundary after table dispatch without clipping initial visible overflow', () => {
+    const engine = new BABYLON.NullEngine(), scene = new BABYLON.Scene(engine);
+    try {
+      const defaults = new StyleDefaultsService();
+      expect(defaults.getElementTypeDefaults('table').overflow).toBeUndefined();
+      for (const overflow of [undefined, 'visible', 'hidden'] as const) {
+        const service = Object.create(ElementCreationService.prototype) as ElementCreationService;
+        Object.assign(service, { ancestry: new DOMAncestryService(), overflowClip: new OverflowClipService(),
+          grid: { isGridContainer: () => false } });
+        spyOn(service as never, 'shouldUseInlineFlow' as never).and.returnValue(false as never);
+        const parent = BABYLON.MeshBuilder.CreatePlane('table', { width: 60, height: 40 }, scene);
+        let child: BABYLON.Mesh | undefined;
+        // Isolate dispatch/clip composition, not the table sizing algorithm.
+        const processTable = jasmine.createSpy('processTable').and.callFake(() => {
+          child = BABYLON.MeshBuilder.CreatePlane('cell', { width: 120, height: 120 }, scene);
+          child.parent = parent;
+          child.material = new BABYLON.StandardMaterial('cell-material', scene);
+        });
+        const style = { ...defaults.getElementTypeDefaults('table'), selector: '#table',
+          ...(overflow ? { overflow } : {}) };
+        const project = jasmine.createSpy('project').and.callFake((point: { x: number; y: number }) => ({ ...point, z: 0 }));
+        const dom = { actions: { isFlexContainer: () => false, processTable },
+          context: { elementStyles: new Map(), layoutBoxes: new Map([['table', {
+            parentId: null, box: createCssLayoutBox({ x: 0, y: 0, width: 60, height: 40 }),
+          }]]) } };
+        const render = { actions: { style: { findStyleForElement: () => style },
+          camera: { projectCssViewportPoint: project } } };
+        service.processChildren(dom as never, render as never, [], parent, [], { id: 'table', type: 'table' });
+        expect(processTable).toHaveBeenCalledTimes(1);
+        expect(child).toBeDefined();
+        if (overflow === 'hidden') {
+          expect(project).toHaveBeenCalledTimes(2);
+          expect(child!.material!.clipPlane).toBeDefined();
+          expect(child!.material!.clipPlane4).toBeDefined();
+        } else {
+          expect(project).not.toHaveBeenCalled();
+          expect(child!.material!.clipPlane).toBeUndefined();
+          expect(child!.material!.clipPlane4).toBeUndefined();
+        }
+        parent.dispose(false, true);
+      }
+    } finally { scene.dispose(); engine.dispose(); }
+  });
+
   it('normalizes a built-in control root to the retained CSS layout identity', () => {
     const service = Object.create(ElementCreationService.prototype) as ElementCreationService;
     const controlMesh = { name: 'button_item-one-action' };
