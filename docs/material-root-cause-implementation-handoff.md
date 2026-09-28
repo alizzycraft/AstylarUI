@@ -2,6 +2,36 @@
 
 ## Current audit checkpoint — September 28
 
+**Canonical reconciliation completed at a6905e2:** the named current-ancestry
+export completed in 35.67 minutes, and independent `ASTYLAR_AUDIT_COLD=1`
+`node scripts/export-material-input-audit-current-ancestry.mjs --check` completed
+in 38.09 minutes with exact canonical payload and Markdown equality. Both exit 1
+solely for the remaining **130 unresolved groups**; there are no binding failures.
+This is a reproducible partial audit, not completed input-equivalence acceptance.
+Coverage remains 436/436 static and 1875/1875 interaction cases, 8,483 scalar
+groups / 389,202 occurrences, and 135 source findings. Cold replay executed two
+collectors with ten memory hits and no disk hits; all 1,205 read files / 89,154,859
+bytes were reverified without invalidation.
+
+Conservation against preserved 0a30: all 79 sections remain, 69 are unchanged;
+all 8,483 raw scalar rows are identical. Exactly 20 previously unresolved groups
+/ 1,127 observations acquire the prepared classifications. Other scalar changes
+are receipts only: 530 mapped-overflow and 1,432 button-overflow shared-spec pins,
+plus 48 dependent control-proof hashes. All other control evidence is identical
+apart from 48 producer-reconciliation receipts. Remaining section changes are
+22 source fingerprints, 48 line-box producer receipts, five summary fields,
+five dependent binding receipts, and the added `fixture-icon-svg-replaced-by-fixed-raster`
+finding; existing source findings are unchanged. All 534 exported LF-normalized
+source fingerprints match disk. Scoped canonical diff/whitespace checks pass.
+Compressed payload SHA: 8fbd2e22dfd801587ce6c1dce90e6daba668171ae26eae0a9c834142a8bd0a43;
+decoded SHA: 1862059e3ff9ec370d2b5dc1061141c0aef8eabda5a7009540318c987fea7bcf.
+
+Next: import this verified partial checkpoint into the compact working index,
+then finish remaining control/plugin overflow applicability before cosmetic
+spacing/paint differences. Preserve the original captures and failed exports;
+do not rerun the completed reconciliation or reopen proven coordinate causes.
+The older notes below describe superseded checkpoint states, not current failures.
+
 **Survey generator historical-receipt inconsistency resolved:** its finding replay
 used the historical contract, but sourceFingerprints recorded live hashes for the
 border, generated-mapping and capture-harness modules. The generator now uses the

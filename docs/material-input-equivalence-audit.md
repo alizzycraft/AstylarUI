@@ -27,7 +27,7 @@ Explicit gap composition: 1032 original observations support 16 unequal applicat
 
 Visual parity is green, but input equivalence is **not established**. The audit found 8483 unique normalized input differences across 389202 occurrences.
 
-150 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
+130 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
 
 Border initial-color evidence: 3664 uniquely paired node observations prove omitted author/inline color inputs with browser currentColor versus core transparent defaults. Attribution rejects possibly applicable state/media/reset rules and unknown selectors, and is not an equivalence waiver. Alpha paint, contextual-color paint, structure and final raster require separate evidence.
 
@@ -154,10 +154,10 @@ This means the existing screenshot score cannot be used as evidence that the ren
 
 | Classification | Unique signatures |
 | --- | ---: |
-| application-plugin-authoring-defect | 1664 |
-| equivalent-representation | 2122 |
+| application-plugin-authoring-defect | 1676 |
+| equivalent-representation | 2126 |
 | intentional-documented-limitation | 485 |
-| parity-harness-defect | 4212 |
+| parity-harness-defect | 4196 |
 
 ## Source-level compensation findings
 
@@ -297,6 +297,7 @@ This means the existing screenshot score cannot be used as evidence that the ren
 | plugin-circular-progress-start-angle | application-plugin-authoring-defect | 7159b1d fix(showcase): tighten Material component parity | examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts:152 | Material plugin circular-progress paint |
 | plugin-tab-panel-competing-text-renderer | application-plugin-authoring-defect | 7159b1d fix(showcase): tighten Material component parity | examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts:338 | core text paint plus plugin-owned transition orchestration |
 | plugin-tab-panel-baseline-offset | application-plugin-authoring-defect | 593f81b fix(material): align custom tab typography | examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts:368, examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts:466, examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts:466 | core typography and plugin tab transition |
+| fixture-icon-svg-replaced-by-fixed-raster | application-plugin-authoring-defect | 48825c4 fix(example): render Material icon asset | examples/material-showcase/src/app/astylar.component.ts:851 | showcase icon asset/currentColor inputs and core SVG/image texture loading |
 
 ## Plugin boundary verdict
 
