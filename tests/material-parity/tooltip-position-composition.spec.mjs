@@ -5,12 +5,34 @@ import { createHash } from 'node:crypto';
 import ts from 'typescript';
 import { PNG } from 'pngjs';
 import { measureTextInkCenter, textCenterOffsetError } from './text-alignment-metrics.mjs';
-import { collectTooltipPositionComposition, proveTooltipPositionComposition } from './tooltip-position-composition.mjs';
+import { collectTooltipPositionComposition, proveTooltipPositionComposition, proveTooltipStackingComposition } from './tooltip-position-composition.mjs';
 import { proveTooltipSizingRequests } from './overlay-surface-review.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
+
+test('tooltip z-index scalar compares different stacking owners in all 18 retained cases', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const review = collectTooltipPositionComposition();
+  assert.equal(review.observations.length, 18);
+  for (const observation of review.observations) {
+    const pair = ['reference', 'astylar'].map(side => {
+      const receipt = observation.inputTrees[side], bytes = readFileSync(receipt.file);
+      assert.equal(hash(bytes), receipt.sha256); return JSON.parse(bytes);
+    });
+    const proof = proveTooltipStackingComposition(...pair);
+    assert.equal(proof.classification, 'application-plugin-authoring-defect');
+    assert.equal(proof.rendererCauseProven, false);
+    for (const mutate of [
+      ([r]) => { r.schemaVersion = 0; },
+      ([r]) => { r.nodes.find(n => String(n.attributes?.class ?? '').split(/\s+/).includes('mat-mdc-tooltip-surface')).parent = 'missing'; },
+      ([r]) => { for (const rule of r.rules) if (rule.selector === '.cdk-overlay-pane' && rule.declarations?.['z-index']) rule.declarations['z-index'].value = '999'; },
+      ([, a]) => { a.nodes.find(n => n.authored?.id === 'tooltip-popup').normalResolvedStyle.zIndex = 'auto'; },
+      ([, a]) => { a.rules.find(rule => rule.selector === '#tooltip-popup').zIndex = '999'; },
+    ]) { const changed = structuredClone(pair); mutate(changed); assert.throws(() => proveTooltipStackingComposition(...changed)); }
+  }
+});
 
 test('short viewport exposes missing tooltip fallback and unequal scroll extents', () => {
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');

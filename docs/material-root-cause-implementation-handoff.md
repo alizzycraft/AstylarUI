@@ -2,6 +2,44 @@
 
 ## Current audit checkpoint — September 28
 
+**Remaining-work triage refreshed against authenticated compact generation
+6f0a4c1c:** still 180 unresolved scalar groups. Largest shared populations:
+40 corner-radius groups; 24 padding and 23 margin groups; 18 overflow groups;
+15 appearance groups; 10 z-index groups; 9 shadows; remaining flex/alignment,
+visibility, sizing and wordBreak questions. This is scalar attribution coverage,
+not the complete interaction/history acceptance checklist. Prioritize stacking/
+overlay ownership while depth evidence is fresh, then shared box/paint requests;
+do not repeat the now-proven short snackbar/tooltip depth capture. Source changes
+since the accepted export still require coherent fingerprint reconciliation.
+
+**Tooltip stacking-owner mismatch proved for all 18 original cases:** the
+native surface and its next two ancestors compute z-index auto; the pane,
+connected-position bounding box and fixed overlay container each explicitly
+request 1000. The candidate places 1000 directly on relative `tooltip-popup`
+inside the local `tooltip-anchor`/`tooltip-root`/page chain, with ancestor local
+z-index fields omitted in all three captured style stages. This is an authored
+stacking-composition substitution, not a core failure to turn native auto into
+1000, and not permission to set the candidate leaf to auto. The independently
+proved high-z camera defect remains separate.
+
+Existing `tooltip-position-composition.mjs` now exposes a focused proof of those
+owners; its existing spec authenticates original tree receipts, all 18 cases,
+rule/ancestry/stage evidence and negative controls. Command
+`node --test --test-name-pattern="tooltip z-index scalar|short viewport exposes|real Tab reaches"
+tests/material-parity/tooltip-position-composition.spec.mjs` passes 3/3 in 1.58s.
+Initial proof attempted to read a completeness field from normalized inventory
+on raw trees; corrected to the actual raw schema/source contract, with immutable
+tree receipts preserved. No canonical row changed: the one group /18 observations
+is prepared evidence pending batch integration, not a claimed reduction to 179.
+
+Historical snackbar sizing/translation compensation is already closed in the
+source-history section (0d67d46 -> f3c8254 -> 899c741). No retained matching runtime
+establishes the cause of the user's old large-host missing-output report; neither
+the removed 159px transform nor the new short-height depth defect may be asserted
+as that cause. Keep that explicit historical uncertainty, rather than repeatedly
+recapturing the current tall state which paints. Next investigate the other nine
+z-index groups' authored owners before integrating a coherent attribution batch.
+
 **Snackbar boundary evidence retained and replay-verified:**
 `artifacts/material-parity/snackbar-boundary-e331e79/latest-report.json`, SHA
 `51434ca9c9a9d375e778c3185881b9bb09be2e28baa8133b99f67d216d4c0994`.
