@@ -85,9 +85,30 @@ Two diagnostic attempts are retained as failures, not usable mesh evidence:
 `action-meshes-b399ba7` looked up pre-normalization mesh names and recorded empty
 arrays; `action-meshes-b399ba7-v2` terminated because the registry belongs to
 `surface.host`, not the public handle. V3 uses the actual registry. Do not repeat
-these failed approaches or the successful geometry checks. Next inspect
-framebuffer edge coverage against the projected boundary if pursuing the small
-raster residual; this does not authorize compensating fixture radius changes.
+these failed approaches or the successful geometry checks.
+
+**Raster-coverage distinction established; stop treating the small sampled-edge
+residual as a geometric offset.** Across all eight saved toolbar/Save cases,
+partial upper-left edge pixels cluster within .035 of quarter coverage after
+normalizing each surface's fill/background colors. Every native reference case
+has partial pixels more than .07 from those quarters. The existing runtime test
+authenticates all 24 mesh-run PNGs and checks this distinction; no threshold of
+the parity harness was changed. A single focused toolbar/light/DPR1 observation
+in `action-samples-e534c82/latest-report.json` (SHA-256
+`f812bd8f67c8198300ee0e273cb57ef70879abc3b6e3e4e28fa968d2ca2f0763`)
+records WebGL antialias=true, SAMPLES=4, render/canvas size 1440x1000, using the
+same frozen browser assets. Command uses toolbar/light/desktop-dpr1/hover and
+the same runner/options above, with this output directory. Existing interaction
+checks pass 1/1; focused `runtime button paint` proof passes 1/1 in 2.80s.
+
+The native/WebGL coverage distinction is observed, consistent with four-sample
+coverage quantization; it does not prove the exact sample pattern or causally
+allocate every residual pixel. In particular a strict >50% probe treats half-
+covered WebGL pixels as outside. Preserve original residuals and report paint
+sampling separately from equal CSS used-radius geometry, not as an invented
+radius correction. Further pixel tuning is outside this input audit. Next
+consolidate the radius-input classifications with these explicit paint limits,
+then return to remaining box/overflow populations and pending export integration.
 Remaining profiles/states are not covered by this sample. Runner/spec fingerprint
 changes must join pending export reconciliation. Canonical unresolved count
 stays 180; the 10-group stacking batch is still pending. No renderer/fixture fix.

@@ -385,6 +385,10 @@ async function captureInteractionCase(benchmarkCase) {
           return { x: point.x * canvas.width / engine.getRenderWidth(), y: point.y * canvas.height / engine.getRenderHeight() };
         });
         return [{ id, name: mesh.name, vertices: positions.length / 3, projected,
+          rasterization: { antialias: engine._gl?.getContextAttributes()?.antialias ?? null,
+            samples: engine._gl?.getParameter(engine._gl.SAMPLES) ?? null,
+            renderWidth: engine.getRenderWidth(), renderHeight: engine.getRenderHeight(),
+            canvasWidth: canvas.width, canvasHeight: canvas.height },
           material: mesh.material?.getClassName(), diffuseTexture: mesh.material?.diffuseTexture?.name ?? null,
           scaling: mesh.scaling.asArray(), cameraZ: scene.activeCamera.position.z,
           z: mesh.getAbsolutePosition().z, enabled: mesh.isEnabled(), visible: mesh.isVisible }];

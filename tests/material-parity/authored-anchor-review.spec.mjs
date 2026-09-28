@@ -28,12 +28,27 @@ test('runtime button paint meshes agree with measured control bounds without bac
   assert.deepEqual(report.captureProvenance.browserFiles, previous.captureProvenance.browserFiles);
   assert.equal(report.browser.version, previous.browser.version);
   assert.equal(report.interactions.length, 12);
+  const sampleBytes = readFileSync('artifacts/material-parity/action-samples-e534c82/latest-report.json');
+  assert.equal(hash(sampleBytes), 'f812bd8f67c8198300ee0e273cb57ef70879abc3b6e3e4e28fa968d2ca2f0763');
+  const sample = JSON.parse(sampleBytes);
+  assert.deepEqual(sample.captureProvenance.browserFiles, report.captureProvenance.browserFiles);
+  assert.equal(sample.interactions.length, 1);
+  assert.deepEqual(sample.interactions[0].runtimeErrors, []);
+  assert.deepEqual(sample.interactions[0].controlPaintGeometry[0].rasterization,
+    { antialias: true, samples: 4, renderWidth: 1440, renderHeight: 1000, canvasWidth: 1440, canvasHeight: 1000 });
+  const imageReceipts = [];
   let measured = 0;
   for (const entry of report.interactions) {
     assert.deepEqual(entry.runtimeErrors, []);
     const old = previous.interactions.find(e => e.family === entry.family && e.profile === entry.profile &&
       e.viewport.id === entry.viewport.id && e.state === entry.state);
     assert.ok(old);
+    const images = {};
+    for (const side of ['reference', 'astylar']) {
+      const file = entry.inputTrees[side].file.replace(`${side}-input-tree.json`, `${side}.png`);
+      const bytes = readFileSync(file); imageReceipts.push([file, hash(bytes)]);
+      images[side] = PNG.sync.read(bytes);
+    }
     for (const paint of entry.controlPaintGeometry.filter(p => ['toolbar-action', 'dialog-save'].includes(p.id))) {
       measured++;
       assert.equal(paint.name, paint.id); // Element creation renames constructor-time mesh IDs.
@@ -49,9 +64,28 @@ test('runtime button paint meshes agree with measured control bounds without bac
       for (const delta of [Math.min(...x) - box.left, Math.max(...x) - box.right,
         Math.min(...y) - box.top, Math.max(...y) - box.bottom]) assert.ok(Math.abs(delta) < 0.000031);
       assert.deepEqual(entry.styleInputs.find(i => i.id === paint.id), old.styleInputs.find(i => i.id === paint.id));
+      for (const side of ['reference', 'astylar']) {
+        const png = images[side], dpr = entry.viewport.deviceScaleFactor;
+        const b = entry.geometry.elements.find(e => e.id === paint.id)[side === 'reference' ? 'expected' : 'actual'];
+        const pixel = (x, y) => { const offset = (y * png.width + x) * 4; return [...png.data.slice(offset, offset + 3)]; };
+        const at = (x, y) => pixel(Math.floor(x * dpr), Math.floor(y * dpr));
+        const fill = at(b.left + b.width / 2, b.top + 2), background = at(b.left + 0.5, b.top + 0.5);
+        const vector = fill.map((v, i) => v - background[i]), energy = vector.reduce((s, v) => s + v * v, 0);
+        const partial = [];
+        for (let y = Math.floor(b.top * dpr); y < Math.floor((b.top + 5) * dpr); y++)
+          for (let x = Math.floor(b.left * dpr); x < Math.floor((b.left + b.height / 2) * dpr); x++) {
+            const coverage = pixel(x, y).reduce((s, v, i) => s + (v - background[i]) * vector[i], 0) / energy;
+            if (coverage > 0.03 && coverage < 0.97) partial.push(coverage);
+          }
+        assert.ok(partial.length > 0);
+        const quarterError = partial.map(v => Math.abs(v - Math.round(v * 4) / 4));
+        if (side === 'astylar') assert.ok(quarterError.every(error => error < 0.035));
+        else assert.ok(quarterError.some(error => error > 0.07));
+      }
     }
   }
   assert.equal(measured, 8); // Empty name-based mesh observations must not pass.
+  assert.equal(hash(JSON.stringify(imageReceipts)), '3c4753f6981f88dda041913e02615b8c1b7bdf726f0860aaa0d527edd4f52fa5');
 });
 
 test('focused interaction capture retains actual boxes and binds target inputs to historical cases', () => {
