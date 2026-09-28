@@ -2,6 +2,41 @@
 
 ## Current audit checkpoint — September 28
 
+Accepted paint checkpoint: export from `f9ab31c` completed in **2,407.27 s**. Its only reported error
+is **715 unresolved groups**; all 436 static / 1,875 interaction cases, 8,483
+scalar groups / 389,202 observations and 134 source findings remain.
+Conservation passed: exactly **72 groups / 618 observations**, one scalar
+producer receipt and 48 control receipts changed; raw inputs and unrelated
+control evidence are unchanged. Section reconciliation passed: 79 sections,
+72 unchanged, seven accounted-for changes, none added/removed. All **491 source
+fingerprints** match current files (five added, three changed, none removed).
+Metadata changes are expected producer receipts and classification counts.
+Compressed generation: `5998d72bd0310ff4ddd8d3a44954fa5ade6655abb506f2bb85baa4935c3792d0`;
+decoded SHA: `6e8daf2a96a3af01f10247fd9b96decfe2a0332ae7ab1abcc5c489ea256f9325`.
+Evidence logs: `paint-{export,conservation,metadata}-f9ab31c.log` and
+`paint-sections-f9ab31c.json` under `artifacts/material-parity/`.
+Compact import and verification passed: 39,904 control records and 71,281,340
+compact bytes. Index SHA:
+`8882ab9d062d52eeec3dcbadb1d72ee8518f3bb8bda8d8f4df7cc4466af89eef`.
+The manifest is retained beside the indexed compressed evidence; no decoded
+2 GB file was written. All export/reconciliation/import jobs are complete.
+Logs: `paint-import-f9ab31c.log` and `paint-import-verify-f9ab31c.log`.
+
+Next: integrate the separately prepared **36 color groups / 922 observations**.
+These are not included in the 715 count. The compact
+predecessor census has **679 unresolved non-color/background groups**. Prioritize
+cursor/pointer/caret (69 groups), then positioning/overlay structure, followed by
+border/current-color and typography/inheritance applicability. Existing public
+cursor and caret proofs must be reused only after owner/request correspondence.
+Read-only replay matched all **19 cursor groups / 763 observations**: 18 groups
+are native `default` versus candidate `pointer`; the 70 slider-visual observations
+are the reverse. Candidate own-rule inspection separates explicit pointer
+requests from two dialog actions with no local request, four label-local omissions and the
+plugin range visual. This is routing evidence, not a diagnosis of actual hover
+cursor behavior. Native rules and candidate ancestry still require binding.
+
+### Prepared color work and preceding checkpoint evidence
+
 Latest bounded investigation: the public range-color reduction now reproduces
 the default-selection difference independently of Material authoring. Command:
 `npm --prefix examples/material-showcase test -- --watch=false --browsers=ChromeHeadless --include=src/app/range-color-default-audit.spec.ts`.
