@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 29
 
+**Dialog action spacing integrated; export pending:** the proof from `1a411ee`
+now participates in the bound production tail, replay validation and explicit
+unbound-attribution rejection. The actual tail changes 44 groups / 2,315
+observations against the current checkpoint; comparisons with earlier checkpoints
+change 99 / 5,271 and 79 / 4,144. Raw/unrelated rows remain unchanged, reversed
+reducer order agrees, and unbound reducers do not run.
+`node --test --test-name-pattern="omitted owner paint requests preserve|dialog action spacing binds" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/display-request-review.spec.mjs`
+passes **2/2**, 32,503.9655 ms total. Exact source restoration retains historical
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+current producer digest is
+`82396e56c4ac52a80be8170e9706a103a91a2c43359ef15a44586ce51e66598a`.
+Canonical remains **95 unresolved**; integrated batches now project **31**.
+Next: dialog panel gap semantics and remaining overlay flow, state and border
+questions, then source/export reconciliation and required full gates. These
+results classify retained original input evidence, not corrected runtime output.
+No renderer/fixture edits or new captures.
+
 **Dialog action spacing proof verified; integration pending:** 13 groups / 416
 observations across 32 open-dialog cases bind to omitted Material button inputs.
 Native buttons request centered flex layout and zero vertical/token horizontal

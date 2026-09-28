@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyDialogActionSpacingReviews,')) {
+    for (const [from, to] of [
+      ["import { applyDialogActionSpacingReviews, validateDialogActionSpacingReviews } from './display-request-review.mjs';\n", ''],
+      ['applyToolbarSpacingReviews, applyDialogActionSpacingReviews]', 'applyToolbarSpacingReviews]'],
+      ['      errors.push(...validateDialogActionSpacingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-dialog-action-spacing-request-omission'))\n    errors.push('dialog action spacing attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated dialog action spacing integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyToolbarSpacingReviews,')) {
     for (const [from, to] of [
       ["import { applyToolbarSpacingReviews, validateToolbarSpacingReviews } from './display-request-review.mjs';\n", ''],
