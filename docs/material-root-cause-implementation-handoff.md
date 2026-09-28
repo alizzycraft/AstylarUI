@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 28
 
+**Cold export completed, not accepted; receipt chain reconciled:** export at
+37cbaaf took36.36min, retained436/436 static and1875/1875 interaction cases,
+8,483 groups /389,202 occurrences and135 source findings. It failed the gap
+binding and reported166 unresolved rather than expected130. Failed manifest,
+payload and Markdown are preserved in `artifacts/material-parity/failed-input-export-37cbaaf`
+(compressed SHA cc44b653d8a1813b26cd2b8d8e340016d453385f3b63bc9774293e2b4aba3dda).
+The docs canonical files currently contain this UNACCEPTED export; the compact
+index still points to accepted0a30/150. Do not import the failed output.
+The heading addition changed input-tree-evidence.spec.mjs c2d0884f...→e442a49c...;
+independent in-memory replay proved all4 gap groups /59 cases /118 observations
+and17 negative controls unchanged. The original scalar-layer browser test passes
+1/1. Updated exactly three active receipts: scalar-rule-loss, gap membership,
+and dependent pending-motion membership. Full JSON comparison against37cbaaf
+proves no other fields changed. Scalar and membership --check pass; focused gap
+receipt conservation and pending-motion binding tests pass2/2 (21.73s).
+The broader legacy “all seven gap generators” test fails separately because its
+survey CLI regenerates three live source fingerprints where the saved survey
+keeps historical border/mapping/harness fingerprints. Do not refresh that whole
+survey blindly; reconcile its historical-source replay contract before final gates.
+No renderer/fixture changes. Re-export and independent cold canonical check are
+still required. The preserved0a30 package is hash-verified and its79 section
+fingerprints were collected read-only for subsequent conservation comparison.
+
 **Prepared overflow groups now producer-integrated:** the six heading/tab-panel
 groups below join the earlier14 groups in the bound-evidence producer tail.
 Combined verification changes exactly20 groups /1,127 observations, preserves raw
