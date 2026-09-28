@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyTableVisibleOverflow,')) {
+    for (const [from, to] of [
+      ["import { applyTableVisibleOverflow, validateTableVisibleOverflow, applyControlOverflowOwnerBoundaries, validateControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, validateRangeVisibleOverflow } from './control-overflow-observation.mjs';\n", ''],
+      ['applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow]', 'applyTabPanelOverflowBoundary]'],
+      ...['validateTableVisibleOverflow', 'validateControlOverflowOwnerBoundaries', 'validateRangeVisibleOverflow'].map(name => [`      errors.push(...${name}(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n`, '']),
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => ['reviewed-table-visible-overflow-initial-value', 'reviewed-control-overflow-owner-boundary', 'reviewed-range-visible-overflow-initial-value'].includes(row.attribution)))\n    errors.push('table and control overflow attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated table/control overflow integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyHeadingVisibleOverflow,')) {
     for (const [from, to] of [
       ["import { applyHeadingVisibleOverflow, validateHeadingVisibleOverflow, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';\n", ''],

@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+**Twelve overflow groups producer-integrated:** production now invokes all three
+prepared reducers and validators under bound original evidence, with an explicit
+unbound-attribution guard. The existing combined-tail test executes actual source:
+32 groups / 1,979 observations change against 0a30, and exactly 12 / 852 against
+the current 8fbd checkpoint; all raw and unrelated rows are conserved. Reverse
+order, individual replay and unbound execution controls pass. Focused command
+`node --test --test-name-pattern="omitted owner paint" tests/material-parity/control-state-paint-review.spec.mjs`
+passes 1/1 (14.18s). Exact historical producer restoration still authenticates
+a986934f...; current producer SHA is 9b35aa8ead9a52c99fd73e68b7951382349f2718c2f04abaf7e514f2193cf31f.
+Scoped diff checks pass. No new export: canonical/index still 130 unresolved,
+expected 118 after milestone reconciliation. The new shared test/source receipts
+and additive range-manager spec require reconciliation at that milestone; do not
+silently refresh historical evidence. Next prioritize remaining appearance/paint
+applicability and shared spacing ownership; all originally pending overflow
+groups now have integrated scoped explanations, not full-rendering acceptance.
+
 **Four range-input overflow groups prepared:** all 156 original input owners
 are explicitly verified as type=range/inputType=range. Dependency-bound native
 thumb-pixel and actual RangeManager/shared-clip evidence explains initial visible
