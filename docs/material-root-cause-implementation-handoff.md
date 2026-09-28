@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 28
 
+**Canonical checkpoint verified (audit incomplete):** cold check4560 is TERMINAL,
+exit1 after 2,313,612ms (38.56min). It passed exact regenerated payload and
+Markdown equality and reported ONLY 150 unresolved scalar groups. Coverage
+436/436 static,1875/1875 interaction;8483 groups,389202 occurrences,134 source
+findings. No binding failures, stale output or evidence invalidations. Do not
+poll/restart4560. The current 0a30ca89... compressed / f4d0e6c... decoded snapshot
+can now be committed as a verified incomplete checkpoint, not full acceptance.
+The completed scalar/control and 79-section conservation checks establish the
+intended 30-group transition; no raw observations were discarded. Compact index
+import from docs is running in session13953; poll it before querying the current
+generation. Old6f0a4c... remains immutable predecessor evidence. Producer changes
+may now resume in focused batches; avoid another full export per small finding.
+
 **Cold verification advanced:** session4560 completed evidence-session checks
 with 1,205 files / 89,154,859 bytes, 2 collectors, 10 memory hits, zero disk hits
 and zero invalidations. It reached `check-canonical` at 2,183,386ms; still live

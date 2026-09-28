@@ -27,7 +27,7 @@ Explicit gap composition: 1032 original observations support 16 unequal applicat
 
 Visual parity is green, but input equivalence is **not established**. The audit found 8483 unique normalized input differences across 389202 occurrences.
 
-180 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
+150 signatures still require authored-rule/cascade/structure attribution. These are evidence gaps, not confirmed authoring or renderer defects; complete audit acceptance rejects them. Source-level findings below carry their own traced evidence.
 
 Border initial-color evidence: 3664 uniquely paired node observations prove omitted author/inline color inputs with browser currentColor versus core transparent defaults. Attribution rejects possibly applicable state/media/reset rules and unknown selectors, and is not an equivalence waiver. Alpha paint, contextual-color paint, structure and final raster require separate evidence.
 
@@ -154,10 +154,10 @@ This means the existing screenshot score cannot be used as evidence that the ren
 
 | Classification | Unique signatures |
 | --- | ---: |
-| application-plugin-authoring-defect | 1654 |
+| application-plugin-authoring-defect | 1664 |
 | equivalent-representation | 2122 |
 | intentional-documented-limitation | 485 |
-| parity-harness-defect | 4222 |
+| parity-harness-defect | 4212 |
 
 ## Source-level compensation findings
 
@@ -260,7 +260,7 @@ This means the existing screenshot score cannot be used as evidence that the ren
 | fixture-tooltip-text-alignment-omission | application-plugin-authoring-defect | 7159b1d introduced tooltip-popup styling without text alignment; subsequent flow/flex rewrites retain the omission | examples/material-showcase/src/app/astylar.component.ts:811 | showcase tooltip original surface typography and layout input translation |
 | fixture-tooltip-benchmark-hover-suppression | application-plugin-authoring-defect | undefined | examples/material-showcase/src/app/astylar.component.ts:97 | showcase tooltip state authoring and benchmark adapter neutrality |
 | fixture-tooltip-benchmark-click-forces-open | application-plugin-authoring-defect | 7159b1d fix(showcase): tighten Material component parity | examples/material-showcase/src/app/astylar.component.ts:285 | showcase tooltip click/dismissal state and core surface event contract |
-| harness-tooltip-open-popup-checks-omitted | parity-harness-defect | f324bd1 limited tooltip interaction text targets to hover/held; current placement and focused-raster checks also omit open | tests/material-parity/run-material-parity.mjs:1236 | Material interaction state, popup presence, placement and focused-raster assertions |
+| harness-tooltip-open-popup-checks-omitted | parity-harness-defect | f324bd1 limited tooltip interaction text targets to hover/held; current placement and focused-raster checks also omit open | tests/material-parity/run-material-parity.mjs:1270 | Material interaction state, popup presence, placement and focused-raster assertions |
 | fixture-tab-label-typography-flattened | application-plugin-authoring-defect | 2f44011 omitted tab font/tracking tokens; bc4d442 retains the 20px control-label line-height and adjusts density padding | examples/material-showcase/src/app/astylar.component.ts:727 | showcase Material tab content/label structure and typography input translation |
 | fixture-paginator-svg-icons-replaced-by-text-glyphs | application-plugin-authoring-defect | 2f44011 feat(example): add Material component showcase | examples/material-showcase/src/app/astylar.component.ts:894, examples/material-showcase/src/app/astylar.component.ts:895 | showcase paginator icon geometry inputs through core vector/image rendering |
 | fixture-toolbar-button-height-replaces-inherited-line-height | application-plugin-authoring-defect | 3bf5b4d toolbar typography and density alignment | examples/material-showcase/src/app/astylar.component.ts:674 | showcase toolbar button inherited typography inputs |
@@ -288,7 +288,7 @@ This means the existing screenshot score cannot be used as evidence that the ren
 | fixture-hardcoded-ripple-bounds | application-plugin-authoring-defect | 7945a42 fix(example): audit Material text and card | examples/material-showcase/src/app/astylar.component.ts:388 | core event geometry and Material ripple adapter |
 | fixture-rendered-geometry-feeds-layout | application-plugin-authoring-defect | c64397c connected-overlay placement; audit measurement cycle isolated in d6a3158 | examples/material-showcase/src/app/astylar.component.ts:431 | core CSS layout-box query API and showcase overlay authoring |
 | fixture-slider-fixed-half-domains | application-plugin-authoring-defect | range interaction parity changes; current min/max/step declarations are the direct evidence | examples/material-showcase/src/app/astylar.component.ts:903, examples/material-showcase/src/app/astylar.component.ts:904 | showcase range authoring and core two-thumb control composition |
-| harness-slider-drag-stays-in-half-domains | parity-harness-defect | existing sliderDragCoordinates diagnostic action contract | tests/material-parity/run-material-parity.mjs:1116 | Material slider interaction matrix |
+| harness-slider-drag-stays-in-half-domains | parity-harness-defect | existing sliderDragCoordinates diagnostic action contract | tests/material-parity/run-material-parity.mjs:1150 | Material slider interaction matrix |
 | fixture-calendar-selection-ring-coordinates | application-plugin-authoring-defect | 87f7f83 fix(example): render Material picker overlays | examples/material-showcase/src/app/astylar.component.ts:628 | showcase fixture; use the same grid-cell structure as the reference |
 | fixture-calendar-day-typography-substitution | application-plugin-authoring-defect | 87f7f83 fixed cell ink/omitted typography; c64397c flattened day span into control | examples/material-showcase/src/app/astylar.component.ts:620 | showcase calendar component token translation and inner text structure |
 | fixture-calendar-navigation-svg-icons-replaced-by-text-glyphs | application-plugin-authoring-defect | 87f7f83 fix(example): render Material picker overlays | examples/material-showcase/src/app/astylar.component.ts:1057, examples/material-showcase/src/app/astylar.component.ts:1058 | showcase calendar vector icon inputs and navigation accessible state |
