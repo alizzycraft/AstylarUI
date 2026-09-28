@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 28
 
+**Card shadow syntax question answered, classification not yet integrated:** the
+focused `card shadow serialization` test in `control-state-paint-review.spec.mjs`
+authenticates the retained capture and checks all 52 card owners. Reference
+computed color-first syntax, candidate authored color-last syntax and all three
+candidate inspected stages parse into the same ordered three layers using the
+actual core parser. A browser reduction produces identical computed shadows and
+pixels for both syntaxes at DPR 1 and 2. Removing the shadow or changing the last
+blur from 3px to 8px changes pixels; the latter also changes parsed layers.
+Command `node --test --test-name-pattern="card shadow serialization" tests/material-parity/control-state-paint-review.spec.mjs`
+passes 1/1 (2.45s test body). No scratch artifacts, renderer or fixture changes.
+This proves this syntax difference is harmless, not actual WebGL shadow fidelity,
+whole-card equivalence, or token equivalence in uncaptured themes. Canonical
+counts remain unchanged. Next bind the scoped representation classification into
+the existing review machinery; reconcile this additive test receipt at the batch
+milestone. Separately retain transparent focus shadows as unresolved: core
+`configureFocusIndicator` explicitly disables the fallback for alpha-zero shadow
+but lets `none` reach `shouldShowDefaultFocusIndicator`. That source distinction
+requires a public focus reduction, not a blanket invisible-paint normalization.
+
 **Twelve overflow groups producer-integrated:** production now invokes all three
 prepared reducers and validators under bound original evidence, with an explicit
 unbound-attribution guard. The existing combined-tail test executes actual source:

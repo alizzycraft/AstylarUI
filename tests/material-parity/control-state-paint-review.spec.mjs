@@ -18,6 +18,66 @@ import { applyListSpacingReviews, validateListSpacingReviews } from './display-r
 import { applyHeadingVisibleOverflow, validateHeadingVisibleOverflow, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
 import { applyTableVisibleOverflow, validateTableVisibleOverflow, applyControlOverflowOwnerBoundaries, validateControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, validateRangeVisibleOverflow } from './control-overflow-observation.mjs';
 
+test('card shadow serialization preserves all original layers and browser pixels', async () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const report = JSON.parse(bytes);
+  const inputs = [...report.results, ...report.interactions].filter(e => e.family === 'card')
+    .flatMap(e => e.styleInputs.filter(i => i.id === 'card-primary'));
+  assert.equal(inputs.length, 52);
+  const { build } = await import('esbuild');
+  const built = await build({ entryPoints: ['src/app/services/dom/elements/box-shadow.ts'],
+    bundle: true, write: false, platform: 'node', format: 'esm' });
+  const { parseBoxShadow } = await import('data:text/javascript;base64,' +
+    Buffer.from(built.outputFiles[0].contents).toString('base64'));
+  const layers = value => parseBoxShadow(value).map(layer => ({ ...layer,
+    color: layer.color.replaceAll(' ', '') }));
+  const expected = [
+    { offsetX: 0, offsetY: 2, blur: 1, spread: -1, color: 'rgba(0,0,0,0.2)' },
+    { offsetX: 0, offsetY: 1, blur: 1, spread: 0, color: 'rgba(0,0,0,0.14)' },
+    { offsetX: 0, offsetY: 1, blur: 3, spread: 0, color: 'rgba(0,0,0,0.12)' },
+  ];
+  const pairs = new Map();
+  for (const input of inputs) {
+    assert.deepEqual(layers(input.reference.boxShadow), expected);
+    for (const style of [input.astylar, input.astylarNormalResolvedStyle, input.astylarInteractionResolvedStyle])
+      assert.deepEqual(layers(style.boxShadow), expected);
+    const authored = input.astylarAuthored.filter(r => r.declarations.boxShadow);
+    assert.equal(authored.length, 1);
+    assert.deepEqual(layers(authored[0].declarations.boxShadow), expected);
+    pairs.set(JSON.stringify([input.reference.boxShadow, input.astylar.boxShadow]),
+      [input.reference.boxShadow, input.astylar.boxShadow]);
+  }
+  assert.equal(pairs.size, 1);
+  const { chromium } = await import('playwright-core');
+  const { PNG } = await import('pngjs');
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    for (const deviceScaleFactor of [1, 2]) {
+      const page = await browser.newPage({ viewport: { width: 220, height: 140 }, deviceScaleFactor });
+      await page.setContent('<style>body{margin:0;background:white}div{position:absolute;left:40px;top:30px;width:140px;height:70px;border-radius:12px;background:#f8f2f6}</style><div></div>');
+      const capture = async shadow => {
+        const computed = await page.evaluate(value => {
+          const node = document.querySelector('div'); node.style.boxShadow = value;
+          return getComputedStyle(node).boxShadow;
+        }, shadow);
+        return { computed, pixels: PNG.sync.read(await page.screenshot()).data };
+      };
+      for (const [reference, candidate] of pairs.values()) {
+        const r = await capture(reference), a = await capture(candidate);
+        assert.equal(a.computed, r.computed); assert.deepEqual(a.pixels, r.pixels);
+        // These controls must remain observable; do not canonicalize shadow away.
+        assert.notDeepEqual((await capture('none')).pixels, r.pixels);
+        assert.notDeepEqual((await capture(candidate.replace('3px', '8px'))).pixels, r.pixels);
+        assert.notDeepEqual(layers(candidate.replace('3px', '8px')), expected);
+      }
+      await page.close();
+    }
+  } finally { await browser.close(); }
+  // Browser syntax equivalence plus core parser equivalence is not WebGL raster parity.
+});
+
 test('omitted owner paint requests preserve all 77 original observations and reject competing inputs', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'),
