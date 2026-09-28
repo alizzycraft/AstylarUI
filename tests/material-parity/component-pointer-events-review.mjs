@@ -3,6 +3,58 @@ import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { proveControlStatePaint } from './control-state-paint-review.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
+import { proveExplicitComponentCursor } from './component-cursor-request-review.mjs';
+
+const disabledOwners = [
+  ['button', 'button-disabled'], ['checkbox', 'checkbox-primary'],
+  ['checkbox', 'checkbox-label'], ['radio', 'radio-solo-label'], ['radio', 'radio-team-label'],
+];
+
+export function proveDisabledPointerRequest(entry, reference, candidate, element) {
+  assert.ok(disabledOwners.some(([family, id]) => family === entry.family && id === element));
+  // Reuse independently checked owner/stage and ancestry correspondence, not
+  // the cursor result as proof of pointer behavior.
+  const owners = proveExplicitComponentCursor(entry, reference, candidate, element);
+  const identity = { status: 'mapped', inputEquivalent: false,
+    referenceNode: owners.referenceNode, candidateNode: owners.astylarNode,
+    referencePath: owners.nativePath.map(n => n.node), candidatePath: owners.candidatePath.map(n => n.node) };
+  const trace = inspectOverlayOwnerDeclarations('pointerEvents', identity, reference, candidate);
+  const relevant = key => ['pointerevents', 'all'].includes(key.replaceAll('-', '').toLowerCase());
+  const inherited = element.endsWith('-label'), requestIndex = inherited ? 3 : 0;
+  const expected = entry.family === 'button'
+    ? ['.mdc-button:disabled', '.mat-mdc-unelevated-button[disabled], .mat-mdc-unelevated-button.mat-mdc-button-disabled']
+    : [entry.family === 'checkbox' ? '.mdc-checkbox--disabled' : '.mat-mdc-radio-disabled'];
+  for (const [index, node] of trace.referencePath.entries()) {
+    assert.equal(node.computed, index <= requestIndex ? 'none' : 'auto');
+    assert.ok(!Object.keys(node.inline).some(relevant));
+    const requests = node.rules.filter(r => r.active && Object.keys(r.declarations).some(relevant));
+    assert.deepEqual(requests.map(r => r.selector), index === requestIndex ? expected : []);
+    for (const rule of requests) {
+      assert.deepEqual(rule.declarations['pointer-events'], { value: 'none', important: false });
+      assert.equal(rule.declarations.all, undefined);
+    }
+  }
+  for (const node of trace.candidatePath) {
+    assert.deepEqual(Object.values(node.localValues), ['<omitted>', '<omitted>', '<omitted>']);
+    assert.ok(!Object.keys(node.inline).some(relevant));
+    assert.ok(node.possibleRules.every(r => !Object.keys(r.declarations).some(relevant)));
+  }
+  return { referenceNode: owners.referenceNode, astylarNode: owners.astylarNode,
+    ownerCorrespondence: owners, trace, inherited, requestOwner: trace.referencePath[requestIndex].node,
+    inputEquivalent: false, renderingEquivalent: false, actualHitTargetVerified: false,
+    candidateComputedPointerEventsVerified: false, disabledGuardEquivalentToPointerSuppression: false,
+    limitation: 'Native disabled CSS suppression, including inherited label suppression, is absent from candidate authored paths. Event-handler disabled guards are a different mechanism; no actual picked-mesh, event delivery or renderer causation is inferred.' };
+}
+
+export function applyDisabledPointerRequestReviews(rows, cases, inventory, normalize) {
+  return disabledOwners.reduce((result, [family, element]) => applyModalBoxReview(result, cases, inventory, normalize, {
+    family, element, properties: ['pointerEvents'], classification: 'application-plugin-authoring-defect',
+    attribution: 'reviewed-disabled-pointer-request-omission',
+    owner: 'Material disabled-state authoring and inherited pointer policy; separate core event guards',
+    justification: 'Native disabled controls explicitly request pointer-events none; measured labels inherit it through their retained ancestors. Candidate owner-to-root authoring and all three local stages omit that CSS request. This is an input omission, not evidence that activation guards implement equivalent hit suppression or that the renderer delivered an incorrect event.',
+    prove: (entry, reference, candidate) => proveDisabledPointerRequest(entry, reference, candidate, element),
+  }), rows);
+}
 
 export function proveBadgePointerRequest(entry, reference, candidate) {
   assert.equal(entry.family, 'badge');

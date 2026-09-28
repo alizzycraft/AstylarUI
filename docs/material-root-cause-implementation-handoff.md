@@ -175,6 +175,21 @@ rejects removed native or added candidate requests. Actual hit delivery and
 candidate computed defaults remain unproven. Together the two prepared pointer
 reviews cover 77 observations; **21 groups / 747 observations** remain to review.
 
+Disabled-pointer follow-up now binds **five further groups / 92 observations**:
+button-disabled (60), checkbox owner/label (8 each), and both radio labels (8
+each). Existing cursor proofs supply exact owner/stage correspondence; separate
+pointer traces show native explicit none on disabled component owners, inherited
+through the native labels, versus candidate omission across all captured ancestors
+and three local stages. Prepared classification is authoring omission, not a core
+inheritance failure or equivalent disabled-handler behavior. Actual hit delivery
+remains unproven. The same focused pointer test passes 1/1 in 12.56 s with exact
+population/raw-row conservation and added-candidate/removed-native negative
+controls. An initial negative-control loop incorrectly assumed every retained
+rule had declarations; guarding non-style rules fixed the test setup, without
+weakening proof assertions. **16 pointer groups / 655 observations** remain:
+the slider held-state suppression (8) and 15 native-auto/local-omission groups
+(647). These prepared reviews are not yet part of the accepted 679 count.
+
 Color producer/validator integration is now wired and focused-verified against
 the accepted paint compact snapshot. Validation starts from original rows and
 fresh sort/sidenav retained ancestry; unbound color attributions are rejected.

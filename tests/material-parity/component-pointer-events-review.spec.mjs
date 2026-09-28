@@ -7,8 +7,9 @@ import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applySheetPointerOwnerReview, proveSheetPointerOwners, applyBadgePointerRequestReview, proveBadgePointerRequest } from './component-pointer-events-review.mjs';
+import { applyDisabledPointerRequestReviews, proveDisabledPointerRequest } from './component-pointer-events-review.mjs';
 
-test('pointer reviews distinguish 25 sheet owner mismatches from 52 badge request omissions', () => {
+test('pointer reviews distinguish sheet ownership, badge requests and disabled ancestor suppression', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const captured = JSON.parse(bytes), cases = [...captured.results.map(c => ({ ...c, kind: 'static' })),
@@ -54,4 +55,29 @@ test('pointer reviews distinguish 25 sheet owner mismatches from 52 badge reques
   const badgeRule = missingRule.rules.find(r => r.selector === '.mat-badge-content');
   delete badgeRule.declarations['pointer-events'];
   assert.throws(() => proveBadgePointerRequest(badgeEntry, missingRule, ba));
+
+  const disabledRows = ['button', 'checkbox', 'radio'].flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '7ffd3a4832d90e185be9d234b3d022f276db113767a6fcb0c3c965c51c14d592',
+    indexSha256: 'b37363024107a9aeca949a701837764fdfe96e17b0aedca1549e187573dc8df4',
+  }).filter(r => r.evidence.section === 'discrepancies'));
+  const disabledReview = applyDisabledPointerRequestReviews(disabledRows, cases, inventory, normalize);
+  const changedDisabled = disabledReview.filter((r, i) => r !== disabledRows[i]);
+  assert.equal(changedDisabled.length, 5);
+  assert.equal(changedDisabled.reduce((n, r) => n + r.occurrences, 0), 92);
+  disabledReview.forEach((r, i) => {
+    assert.deepEqual(raw(r), raw(disabledRows[i]));
+    if (!changedDisabled.includes(r)) assert.deepEqual(r, disabledRows[i]);
+  });
+  for (const row of changedDisabled) {
+    assert.ok(row.reviewEvidence.observations.every(p => !p.actualHitTargetVerified && !p.disabledGuardEquivalentToPointerSuppression));
+    const key = row.reviewedCases[0];
+    const entry = cases.find(c => `${c.kind}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}` === key);
+    const [r, a] = modalInventoryTrees(inventory, key);
+    assert.deepEqual(proveDisabledPointerRequest(entry, r, a, row.element), row.reviewEvidence.observations[0]);
+    const altered = structuredClone(a); altered.rules.push({ selector: `#${row.element}`, pointerEvents: 'none' });
+    assert.throws(() => proveDisabledPointerRequest(entry, r, altered, row.element));
+    const reference = structuredClone(r);
+    for (const rule of reference.rules) if (rule.declarations) delete rule.declarations['pointer-events'];
+    assert.throws(() => proveDisabledPointerRequest(entry, reference, a, row.element));
+  }
 });
