@@ -38,6 +38,58 @@ const modalSizingPredecessor = Object.freeze({
   indexSha256: '7e3141128b5728007cf478b5d37b7820ac6a9cd56d34e0242d4f10842ce4e745',
 });
 
+test('retained sheet corner pixels distinguish observable Share from transparent Copy link', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  assert.equal(hash(bytes), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const cases = JSON.parse(bytes).interactions.filter(e => e.family === 'bottom-sheet' &&
+    e.styleInputs.some(i => i.id === 'bottom-sheet-copy'));
+  assert.equal(cases.length, 25);
+  const receipts = [], differences = { contrast: [], other: [] };
+  for (const entry of cases) {
+    const edges = {};
+    for (const side of ['reference', 'astylar']) {
+      const file = entry.inputTrees[side].file.replace(`${side}-input-tree.json`, `${side}.png`);
+      const bytes = readFileSync(file), png = PNG.sync.read(bytes);
+      receipts.push([file, hash(bytes)]);
+      const dpr = png.width / entry.viewport.width;
+      const pixel = (x, y) => {
+        const px = Math.floor(x * dpr), py = Math.floor(y * dpr);
+        assert.ok(px >= 0 && px < png.width && py >= 0 && py < png.height);
+        return [...png.data.slice((py * png.width + px) * 4, (py * png.width + px) * 4 + 3)];
+      };
+      for (const [index, box] of entry.overlayPlacement[`${side}Rows`].entries()) {
+        const fill = pixel(box.left + box.width / 2, box.top + 4);
+        const background = pixel(box.left + 1, box.top + 1);
+        const vector = fill.map((v, i) => v - background[i]);
+        const energy = vector.reduce((sum, v) => sum + v * v, 0);
+        if (index === 1) {
+          // No contrast at these probes: never count an invisible edge as a shape pass.
+          assert.equal(energy, 0);
+          continue;
+        }
+        assert.ok(energy > 400);
+        // Compare coverage rather than theme colors; only the upper-left edge
+        // is sampled. This does not assert all corners, text, or whole-row parity.
+        const coverage = color => color.reduce((sum, v, i) =>
+          sum + (v - background[i]) * vector[i], 0) / energy;
+        edges[side] = [2, 4, 8, 12, 16, 20].map(y => {
+          for (let x = 0; x < 30; x++)
+            if (coverage(pixel(box.left + x + 0.5, box.top + y + 0.5)) > 0.5) return x;
+          assert.fail('observable Share corner edge missing');
+        });
+      }
+    }
+    const delta = edges.reference.map((x, i) => Math.abs(x - edges.astylar[i]));
+    differences[entry.profile === 'contrast' ? 'contrast' : 'other'].push(delta);
+  }
+  assert.equal(hash(JSON.stringify(receipts)), 'de6f2710b874d857968643ed77ac09d2e98bc1cf6c57fe8824765407954a2703');
+  assert.equal(differences.contrast.length, 6);
+  assert.equal(differences.other.length, 19);
+  assert.ok(differences.contrast.every(delta => delta[0] >= 5));
+  assert.ok(differences.other.every(delta => delta.every(value => value <= 1)));
+});
+
 test('dialog position requests separate authored omissions from computed offsets across original owners', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');

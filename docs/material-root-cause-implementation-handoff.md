@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 28
 
+**Retained sheet rasters can partially answer the corner-paint gap.** No new
+browser capture was needed. A focused test in `modal-position-inspection.spec.mjs`
+authenticates the original report and all 50 paired PNGs for the 25 sheet cases.
+Share has measurable fill/background contrast in both surfaces; Copy link has
+zero contrast at the same corner/interior probes in all cases. Do not use the
+transparent Copy link samples to claim corner-shape equivalence.
+
+Color-normalized upper-left edge samples at six heights differ by at most 1 CSS
+pixel in the 19 non-contrast cases. All six contrast cases differ by at least 5
+CSS pixels at the first sample, consistent with the already established 18-vs-24
+used-radius mismatch. This is local edge evidence, not all-corner, input, color,
+or whole-control equivalence, and introduces no new canonical classification.
+Verification: `node --test --test-name-pattern="retained sheet corner pixels"
+tests/material-parity/modal-position-inspection.spec.mjs` passes 1/1 (6.42s).
+
+Next use retained images for the remaining observable corners/owners; a state
+with visible corner paint is still needed for transparent controls if their
+actual corner rendering is to be established. Do not repeat the existing generic
+oversized-radius core proof. Accepted unresolved count remains 180, pending
+stacking integration remains 10 groups; this added spec dependency must join
+source-fingerprint reconciliation at the next coherent export milestone.
+
 **Stacking production integration wired and narrowly verified, not exported.**
 The main builder applies the 10-group/608-observation batch after prepared
 followups only when `ownerInitialStyleBinding` is bound. Validation independently
