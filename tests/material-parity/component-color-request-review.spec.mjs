@@ -9,8 +9,9 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { applyComponentColorRequests, proveComponentColorRequest } from './component-color-request-review.mjs';
 import { applyInheritedComponentColors, proveInheritedComponentColor } from './component-color-request-review.mjs';
 import { applyRangeDefaultColors, proveRangeDefaultColor } from './component-color-request-review.mjs';
+import { applyOverlayContainerColors, proveOverlayContainerColor } from './component-color-request-review.mjs';
 
-test('component color requests preserve 569 observations across container, inherited-leaf and default boundaries', () => {
+test('component color requests preserve 692 observations across container, inherited-leaf and default boundaries', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
   const captured = JSON.parse(bytes), cases = [...captured.results.map(e => ({ ...e, kind: 'static' })),
@@ -19,7 +20,7 @@ test('component color requests preserve 569 observations across container, inher
   const retained = collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), inventory);
   const snapshot = { generation: '04ec615b0e97cdc75f44b817efca421d24a79cb04d7bc1f2f22969b99a4c4240',
     indexSha256: '7698638b57da8d8c8f4bf50902886f11c3d3304e45078771917b804c6c30a075' };
-  const rows = ['sort', 'sidenav', 'toolbar', 'radio', 'expansion', 'icon', 'paginator', 'slider'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
+  const rows = ['sort', 'sidenav', 'toolbar', 'radio', 'expansion', 'icon', 'paginator', 'slider', 'dialog', 'snack-bar', 'bottom-sheet'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot))
     .filter(r => r.evidence.section === 'discrepancies');
   const result = applyComponentColorRequests(rows, cases, inventory, retained, normalize);
   const changed = result.filter((r, i) => r !== rows[i]);
@@ -49,6 +50,22 @@ test('component color requests preserve 569 observations across container, inher
   }
   const incomplete = structuredClone(rows); incomplete.find(r => r.attribution === 'unresolved' && r.property === 'color').occurrences++;
   assert.throws(() => applyComponentColorRequests(incomplete, cases, inventory, retained, normalize));
+  const overlays = applyOverlayContainerColors(rows, cases, inventory, normalize);
+  const overlayChanged = overlays.filter((r, i) => r !== rows[i]);
+  assert.equal(overlayChanged.length, 4); assert.equal(overlayChanged.reduce((n, r) => n + r.occurrences, 0), 123);
+  overlays.forEach((r, i) => assert.deepEqual(raw(r), raw(rows[i])));
+  for (const row of overlayChanged) {
+    const key = row.reviewedCases[0];
+    const entry = cases.find(e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === key);
+    const [reference, candidate] = modalInventoryTrees(inventory, key);
+    const bad = structuredClone(candidate);
+    bad.rules.push({ selector: '#' + row.element, color: '#1d1b20' });
+    assert.throws(() => proveOverlayContainerColor(entry, reference, bad, row.element));
+    const reparented = structuredClone(reference);
+    reparented.nodes.find(n => n.key === row.reviewEvidence.observations[0].nativeDetachedOverlayRoot).parent = 'missing';
+    assert.throws(() => proveOverlayContainerColor(entry, reparented, candidate, row.element));
+    assert.ok(row.reviewEvidence.observations.every(o => !o.candidateComputedColorVerified && !o.positionOrVisibilityCauseProven));
+  }
   const range = applyRangeDefaultColors(rows, cases, inventory, normalize);
   const rangeChanged = range.filter((r, i) => r !== rows[i]);
   assert.equal(rangeChanged.length, 4); assert.equal(rangeChanged.reduce((n, r) => n + r.occurrences, 0), 156);

@@ -4,10 +4,64 @@ import { readFileSync } from 'node:fs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { reviewedTemplateTextMappings } from './input-equivalence-audit.mjs';
+import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 
 const one = values => { assert.equal(values.length, 1); return values[0]; };
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const relevant = key => ['color', 'all', 'webkittextfillcolor'].includes(key.replaceAll('-', '').toLowerCase()) || /^(animation|transition)/i.test(key);
+
+const overlayColors = { 'dialog-panel': 'dialog', 'dialog-actions': 'dialog',
+  'snack-bar-overlay': 'snack-bar', 'bottom-sheet-overlay': 'bottom-sheet' };
+
+export function proveOverlayContainerColor(entry, reference, candidate, element) {
+  assert.equal(entry.family, overlayColors[element]); assert.ok(overlayColors[element]);
+  const input = one(entry.styleInputs.filter(i => i.id === element));
+  const mapping = resolveOriginAliasPair(entry, reference, candidate, input);
+  const wrapper = element.endsWith('-overlay');
+  assert.equal(mapping.status, wrapper ? 'mapped-with-scalar-rule-gap' : 'mapped');
+  assert.deepEqual(mapping.missingRules, wrapper ? [{ selector: '.cdk-global-overlay-wrapper',
+    declarations: { 'z-index': { value: '1000', important: false } } }] : []);
+  assert.deepEqual(mapping.extraRules, []);
+  const ink = key => relevant(key) && !/^(animation|transition)/i.test(key);
+  const referencePath = mapping.referencePath.map(key => {
+    const node = one(reference.nodes.filter(n => n.key === key));
+    assert.equal(reference.styles[node.style].color, 'rgb(0, 0, 0)');
+    assert.ok(!Object.keys(node.inline ?? {}).some(ink));
+    const rules = node.rules.map(i => reference.rules[i]).filter(r => r.active);
+    assert.ok(rules.every(r => !Object.keys(r.declarations).some(ink)));
+    return { node: key, parent: node.parent, type: node.type, computedColor: 'rgb(0, 0, 0)',
+      motionRules: rules.filter(r => Object.keys(r.declarations).some(k => /^(animation|transition)/i.test(k))) };
+  });
+  assert.equal(referencePath.at(-1).parent, null);
+  const candidatePath = mapping.candidatePath.map(key => {
+    const node = one(candidate.nodes.filter(n => n.key === key));
+    assert.ok(!Object.keys(node.authored.style ?? {}).some(relevant)); assert.equal(node.authored.attributes?.style, undefined);
+    const requests = candidate.rules.filter(r => rootInitialSelectorCanApply(r.selector, node.authored))
+      .flatMap(r => Object.entries(r).filter(([k]) => relevant(k)).map(([k, value]) => ({ selector: r.selector, key: k, value })));
+    const selector = node.authored.id === 'page' ? '#page' : node.authored.id === 'dialog-panel' ? '.dialog-panel' : undefined;
+    const color = selector === '#page' && entry.profile === 'dark' ? '#e6e1e5' : '#1d1b20';
+    assert.deepEqual(requests, selector ? [{ selector, key: 'color', value: color }] : []);
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle'])
+      assert.equal(node[stage]?.color, selector ? color : undefined);
+    return { node: key, parent: node.parent, requests, localColor: node.resolvedStyle?.color ?? null };
+  });
+  return { mapping, referenceNode: mapping.referenceNode, astylarNode: mapping.candidateNode,
+    referencePath, candidatePath, candidateLocalColor: input.astylar.color ?? null,
+    nativeDetachedOverlayRoot: referencePath.at(-1).node, nativePageInheritanceAssumed: false,
+    candidateComputedColorVerified: false, motionSettlementVerified: false,
+    inputEquivalent: false, renderingEquivalent: false, positionOrVisibilityCauseProven: false };
+}
+
+export function applyOverlayContainerColors(rows, cases, inventory, normalize) {
+  return Object.entries(overlayColors).reduce((result, [element, family]) => applyModalBoxReview(result, cases, inventory, normalize, {
+    family, element, properties: ['color'],
+    classification: element === 'dialog-panel' ? 'application-plugin-authoring-defect' : 'parity-harness-defect',
+    attribution: element === 'dialog-panel' ? 'reviewed-dialog-container-color-substitution' : 'reviewed-overlay-color-computed-local-boundary',
+    owner: 'showcase overlay ancestry, container authoring and scalar measurement boundaries',
+    justification: 'The mapped native container computes black throughout its detached overlay-root path, with no captured local color requests. Candidate ancestry stays under #page; only the dialog panel adds its own explicit color. Preserve omitted container-local values, alias rule gaps and native motion rules. This does not copy page or label color into a container, prove candidate computed ink, settle animations, or diagnose overlay position/visibility.',
+    prove: (entry, reference, candidate) => proveOverlayContainerColor(entry, reference, candidate, element),
+  }), rows);
+}
 
 export function proveRangeDefaultColor(entry, reference, candidate, element) {
   assert.equal(entry.family, 'slider');

@@ -39,6 +39,25 @@ failures, while keeping color evidence separate from position/visibility proof.
 The paint export remains live and unreconciled; these standalone preparations
 are outside its dependency graph and do not change canonical counts.
 
+Overlay color-owner investigation now prepares **4 groups / 123 observations**
+in the same review module. Existing structural alias mappings authenticate all
+89 reference scalar fields and candidate stages. Native dialog panel/actions and
+snackbar/sheet wrappers compute black along their detached overlay-root ancestry;
+candidate overlays remain beneath the themed page. The dialog panel explicitly
+requests `#1d1b20` even in dark cases, while the other measured container-local
+colors remain omitted. Panel color is an authoring substitution; the other three
+are computed/local measurement-boundary findings, not inferred candidate ink.
+The native wrapper's missing scalar z-index rule is retained, as are native
+dialog motion rules. No animation-settlement, label-color, position, visibility
+or rendering-equivalence claim is made. Focused testing first caught a missing
+review-helper owner field, then an overly broad light-page-color assumption;
+the join now preserves the dark page's `#e6e1e5` independently of panel ink.
+The expanded test passed **1/1 in 22.49 s** with conflicting-color and broken-root
+negative controls and unchanged raw rows. Total prepared standalone color work:
+**26 groups / 692 observations**. Remaining color gaps: **10 groups / 230
+observations**, selected chip hosts (4/120) and motion-boundary cases (6/110).
+These findings remain pending integration; the running paint export is unchanged.
+
 Accepted grid/height export: complete-input cold export from `890de9f`
 finished in **2,354.82 seconds**, with 436/436 static and 1,875/1,875 interaction
 cases, 8,483 scalar groups / 389,202 observations, 134 source findings and
