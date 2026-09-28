@@ -15,8 +15,14 @@ changed. Pending classification/proof integration:
 
 - Checkbox: 68 owners, native padding 0, candidate authored `#checkbox-primary`
   padding `0 11px`, unchanged through all stages. This establishes authored
-  substitution, not equivalent composition; native inner-control spacing still
-  needs the existing wrapper mapping before assigning the two scalar groups.
+  substitution, not equivalent composition. Follow-up authenticated all 68
+  native trees: inner `.mdc-checkbox` padding is 11px light/dark, 5px contrast,
+  7px custom (17 cases each), with separate `.mdc-label` left padding 4px in
+  every case. Candidate host padding stays 11px with gap 14px and flattened box/
+  label children. Thus this is not a universally equivalent relocation of the
+  native inner padding. Reuse `proveRelativeOwnerOffsets` for exact host identity
+  and extend the existing composition evidence when classifying the two groups;
+  no renderer-padding cause or geometric equivalence was proved.
 - Snackbar: 34 owners, native overlay padding 0, candidate `.snack-overlay`
   explicitly requests `0 0 8px` with fixed full-surface flex-end positioning.
   Join to the existing overlay placement proof; do not infer equivalence or
@@ -44,6 +50,11 @@ changed. Pending classification/proof integration:
   compare those used values as authored offsets. Next join the existing badge
   anchor/structure proof to assess representation equivalence; no renderer
   margin defect or equivalent geometry has been established by this survey.
+  Existing `proveAuthoredAnchor` already verifies these exact requests and all
+  three candidate stages, with negative controls for changed/duplicated margin
+  shorthand. Reuse it for the four pending margin groups rather than creating
+  another survey. Its `compoundPlacementEquivalenceProven: false` must remain;
+  existing intrinsic-width/margin-box core findings are independent evidence.
 
 **Additional read-only spacing evidence queued:** all 68 original expansion
 cases retain reference title margin-right 16px from the authored Material title
