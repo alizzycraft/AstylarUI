@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+Grid-offset triage (not yet canonical): the accepted-color compact index has
+16 unresolved inset groups / 624 observations across 52 grid-list cases.
+A read-only replay authenticated every original tree pair by its recorded SHA-256
+and reran `proveGridPositionSubstitution` for all 52 cases. All cases share three
+owner request signatures: the native root requests relative positioning without
+insets; native absolute tiles request inline top=0 and left=0 / calc(50% + 0.5px).
+Candidate local styles omit those insets and use relative tiles in a grid.
+Thus tile top/left rows include explicit authoring omissions, while root offsets
+and tile right/bottom are browser-computed observations, not authored pixel values
+that should be copied into candidate styles. This reuses the existing composition
+cause; it does not demonstrate an additional renderer coordinate defect. Next:
+bind these requests to exact scalar membership and inspect candidate authored
+rules before classifying the 16 rows. No classifications or fixtures changed.
+The outstanding cursor/pointer export remains live (session 15635, Node PID 9660,
+validation phase); do not restart it or accept its output before reconciliation.
+
 Caret next-batch applicability check during the cursor/pointer export:
 the compact accepted-color index retains 27 caret-color groups / 896 observations.
 Existing range evidence covers four groups / 156 observations in 78 cases.
