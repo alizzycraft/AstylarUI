@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 28
 
+The 106-group aggregate is now wired after the previous prepared-input stage,
+only when original-case binding is bound. Producer validation replays the new
+attributions and rejects their presence without that binding. The two display
+proof sources are fingerprinted; wrapping and aggregate sources were already in
+the fingerprint inventory. The existing source-transition chain now reverses
+these exact additions to accepted producer SHA
+`aaf27f96aa92742f29a736e8f0dd5d658379c3cab0ad758ce71528d676cfd234`.
+`node --test tests/material-parity/position-composition-producer-transition.spec.mjs`
+passes 26/26 in 6.72 s, including rejection of missing guards, missing source
+entries and unrelated producer edits, plus all previous historical transitions.
+Scoped diff checks pass. No export has run: canonical remains 286 unresolved.
+Next extend the existing canonical conservation mode/test with the ten followup
+populations and accepted 4880964f predecessor, then cold export and reconcile.
+
 The prepared 106-group display/word/font batch now has a combined apply/replay
 validator in the existing authored-anchor review module. Its focused test replays
 all 8,483 accepted scalar records from authenticated generation 4880964f, changes

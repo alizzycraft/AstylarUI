@@ -6,6 +6,7 @@ import { applyComponentPointerReviews, validateComponentPointerReviews, isCompon
 import { applyCaretPositionReviews, validateCaretPositionReviews, isCaretPositionReviewRow } from './overlay-position-request-review.mjs';
 import { applyOwnerBoundaryReviews, validateOwnerBoundaryReviews, isOwnerBoundaryReviewRow } from './custom-owner-border-review.mjs';
 import { applyPreparedInputReviews, validatePreparedInputReviews, isPreparedInputReviewRow } from './authored-anchor-review.mjs';
+import { applyPreparedInputFollowups, validatePreparedInputFollowups, isPreparedInputFollowupRow } from './authored-anchor-review.mjs';
 import { applyBoxSizingReviews, validateBoxSizingReviews, replayBoxSizingPredecessors, boxSizingReviewAttributions } from './box-sizing-authoring-review.mjs';
 import { applyGridHeightReviews, validateGridHeightReviews, replayGridHeightPredecessors, isGridHeightReviewAttribution } from './mapped-grid-template-review.mjs';
 import { applyWrappingReviews, validateWrappingReviews, wrappingAttributions } from './wrapping-input-review.mjs';
@@ -361,9 +362,12 @@ export function buildMaterialInputAudit(parityReport, options = {}) {
   const beforePreparedInputReviews = ownerInitialStyleBinding.status === 'bound'
     ? applyOwnerBoundaryReviews(beforeOwnerBoundaryReviews, cases, elementInventory, canonicalStyle)
     : beforeOwnerBoundaryReviews;
-  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+  const beforePreparedInputFollowups = ownerInitialStyleBinding.status === 'bound'
     ? applyPreparedInputReviews(beforePreparedInputReviews, cases, elementInventory, canonicalStyle)
     : beforePreparedInputReviews;
+  const discrepancies = ownerInitialStyleBinding.status === 'bound'
+    ? applyPreparedInputFollowups(beforePreparedInputFollowups, cases, elementInventory, canonicalStyle)
+    : beforePreparedInputFollowups;
   const classifications = countBy(discrepancies, (entry) => entry.classification);
   const propertyGroupCounts = countBy(discrepancies, (entry) => entry.propertyGroup);
   const familyCounts = countBy(discrepancies, (entry) => entry.family);
@@ -689,6 +693,7 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
       errors.push(...validateCaretPositionReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateOwnerBoundaryReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validatePreparedInputReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
+      errors.push(...validatePreparedInputFollowups(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));
       errors.push(...validateComponentColorReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
         collectRetainedTypographyEvidence(cases.filter(e => ['sort', 'sidenav'].includes(e.family)), report.elementInventory), canonicalStyle));
       errors.push(...validatePaintReviews(report.discrepancies, replayedRows, cases, report.elementInventory,
@@ -802,6 +807,8 @@ export function validateMaterialInputAudit(report, { requireComplete = true, roo
     errors.push('owner boundary review attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isPreparedInputReviewRow))
     errors.push('prepared input review attribution lacks bound original cases');
+  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isPreparedInputFollowupRow))
+    errors.push('prepared input followup attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d => d.attribution === normalLineBoxScalarAttribution))
     errors.push('button-host line-height attribution lacks bound original cases');
   if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(d =>
@@ -9116,6 +9123,8 @@ function sourceFingerprints(root) {
     'tests/material-parity/overlay-origin-request-review.mjs',
     'tests/material-parity/overlay-origin-request-review.spec.mjs',
     'tests/material-parity/authored-anchor-review.mjs',
+    'tests/material-parity/display-request-review.mjs',
+    'tests/material-parity/display-request-review.spec.mjs',
     'tests/material-parity/authored-anchor-review.spec.mjs',
     'tests/material-parity/minimum-size-request-review.mjs',
     'tests/material-parity/minimum-size-request-review.spec.mjs',

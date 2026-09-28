@@ -18,6 +18,20 @@ import { restoreComponentInteractionProducer } from './position-composition-prod
 import { restoreCaretPositionProducer } from './position-composition-producer-transition.mjs';
 import { restoreOwnerBoundaryProducer } from './position-composition-producer-transition.mjs';
 import { restorePreparedInputProducer } from './position-composition-producer-transition.mjs';
+import { restorePreparedInputFollowupProducer } from './position-composition-producer-transition.mjs';
+
+test('prepared input followup restores the complete accepted prepared-input predecessor', () => {
+  const file = 'tests/material-parity/input-equivalence-audit.mjs';
+  const current = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  const previous = execFileSync('git', ['show', '4d30214:' + file], { encoding: 'utf8', maxBuffer: 4000000 }).replaceAll('\r\n', '\n');
+  assert.equal(restorePreparedInputFollowupProducer(current).restoredSource, previous);
+  for (const fragment of ['applyPreparedInputFollowups(beforePreparedInputFollowups',
+    'validatePreparedInputFollowups(report.discrepancies',
+    "errors.push('prepared input followup attribution lacks bound original cases');",
+    "    'tests/material-parity/display-request-review.mjs',\n"])
+    assert.throws(() => restorePreparedInputFollowupProducer(current.replace(fragment, '')));
+  assert.throws(() => restorePreparedInputFollowupProducer(current + '\n// unrelated'));
+});
 
 test('prepared input integration restores the complete accepted owner-boundary predecessor', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

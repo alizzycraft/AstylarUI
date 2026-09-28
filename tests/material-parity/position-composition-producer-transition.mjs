@@ -33,9 +33,27 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
   return { historicalSha256: hash(before), currentSha256: hash(after),
     completeSnapshotsAuthenticated: true, selectorSourceConserved: true };
 }
-export function restorePreparedInputProducer(source) {
+export function restorePreparedInputFollowupProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  for (const [from, to] of [
+    ["import { applyPreparedInputFollowups, validatePreparedInputFollowups, isPreparedInputFollowupRow } from './authored-anchor-review.mjs';\n", ''],
+    ["  const beforePreparedInputFollowups = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
+    ["  const discrepancies = ownerInitialStyleBinding.status === 'bound'\n    ? applyPreparedInputFollowups(beforePreparedInputFollowups, cases, elementInventory, canonicalStyle)\n    : beforePreparedInputFollowups;\n", ''],
+    ["      errors.push(...validatePreparedInputFollowups(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n", ''],
+    ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(isPreparedInputFollowupRow))\n    errors.push('prepared input followup attribution lacks bound original cases');\n", ''],
+    ["    'tests/material-parity/display-request-review.mjs',\n    'tests/material-parity/display-request-review.spec.mjs',\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or repeated prepared input followup integration fragment');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(hash(restored), 'aaf27f96aa92742f29a736e8f0dd5d658379c3cab0ad758ce71528d676cfd234',
+    'producer changed beyond reviewed prepared input followup integration');
+  return { restoredSource: restored, previousModuleSha256: hash(restored), currentModuleSha256: hash(current) };
+}
+export function restorePreparedInputProducer(source) {
+  const current = source.toString().replaceAll('\r\n', '\n');
+  let restored = current.includes('const beforePreparedInputFollowups =') ? restorePreparedInputFollowupProducer(current).restoredSource : current;
   for (const [from, to] of [
     ["import { applyPreparedInputReviews, validatePreparedInputReviews, isPreparedInputReviewRow } from './authored-anchor-review.mjs';\n", ''],
     ["  const beforePreparedInputReviews = ownerInitialStyleBinding.status === 'bound'", "  const discrepancies = ownerInitialStyleBinding.status === 'bound'"],
