@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 28
 
+Export preparation is complete for the 106-group batch. The existing canonical
+conservation command now accepts `--prepared-followup`, pins accepted generation
+4880964f and its decoded SHA, replays original capture membership, and requires
+the ten exact attribution populations (106 groups / 4,635 observations). It keeps
+raw/prior-record and 48 control-receipt conservation and false equivalence guards.
+`node --test tests/material-parity/position-canonical-conservation.spec.mjs`
+passes 32/32 in 119.98 s; the new focused mutation test passes separately.
+Syntax and scoped diff checks pass. The named export dry-run confirms all five
+baseline inputs; D: has approximately 13.1 GB free. Next run the single cold
+export from this committed checkpoint with progress logging, then execute
+`node scripts/check-material-position-canonical-conservation.mjs --prepared-followup`
+and reconcile source fingerprints and all top-level sections before importing.
+Do not accept counts or refresh the working pointer before that reconciliation.
+
 The 106-group aggregate is now wired after the previous prepared-input stage,
 only when original-case binding is bound. Producer validation replays the new
 attributions and rejects their presence without that binding. The two display
