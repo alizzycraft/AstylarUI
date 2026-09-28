@@ -94,11 +94,20 @@ const sources = ['scripts/audit-material-owner-gap-inputs.mjs', 'tests/material-
   'tests/material-parity/root-initial-style-evidence.mjs', 'tests/material-parity/border-initial-input-evidence.mjs', auditModule,
   'tests/material-parity/origin-alias-mapping-evidence.mjs', 'tests/material-parity/generated-node-mapping-evidence.mjs',
   'tests/material-parity/run-material-parity.mjs'];
+// Keep the historical survey's dependency contract consistent with its replay
+// readers. These adapters authenticate current additions before restoring the
+// exact historical source; a live hash alone would silently retarget the proof.
+const historicalSources = {
+  'tests/material-parity/border-initial-input-evidence.mjs': '3dbcf33ff70244a8179f438962a2549fb7e354948f084d35d433bcf82e76f9f4',
+  'tests/material-parity/generated-node-mapping-evidence.mjs': 'c21d439f33323e576d19153db104bd6e2245a9d216dc3a157d4187c116c7aa41',
+  'tests/material-parity/run-material-parity.mjs': 'c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10',
+};
 const result = { schemaVersion: 1, kind: 'owner-gap-local-input-survey', baselineRevision,
   baselineCompressedSha256: manifest.compressedSha256, capture,
   productionNormalization: { module: auditModule, functions: normalizationNames, sha256: hash(normalizationSource.replaceAll('\r\n', '\n')) },
   sourceFingerprints: sources.map(file => ({ file, sha256: hash((file === auditModule
-    ? auditSource : readFileSync(file, 'utf8')).replaceAll('\r\n', '\n')) })),
+    ? auditSource : historicalSources[file] ? readGapSurveySource({ file, sha256: historicalSources[file] })
+      : readFileSync(file, 'utf8')).replaceAll('\r\n', '\n')) })),
   groupCount: findings.length, originalCaseCount: cases.length,
   canonicalOccurrences: findings.reduce((n, g) => n + g.canonicalOccurrences, 0),
   observations: findings.reduce((n, g) => n + g.originalCases.length, 0),

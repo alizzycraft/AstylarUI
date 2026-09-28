@@ -4,7 +4,7 @@
   "browser": "153.0.8010.53",
   "parent": {
     "file": "docs/material-owner-gap-input-survey.json",
-    "sha256": "3a36522878febc51d87ed2526c318e60d79e61a761238665b4292952d20a368e"
+    "sha256": "fa7b3f57713fbfed5ad122f250c5967deeedfe4b6f5d798b6d1b9c5346879973"
   },
   "capture": {
     "file": "artifacts/material-parity/current-ancestry-audit/latest-report.json",

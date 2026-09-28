@@ -23,7 +23,7 @@
   "sourceFingerprints": [
     {
       "file": "scripts/audit-material-owner-gap-inputs.mjs",
-      "sha256": "871fa53a39febeeddce0125643b00719df4b1d1f27946bf7ed0ae101631437b0"
+      "sha256": "3ffb3a0a1fa6b0ad972d6dd3eb3717d9c9bfde871b5fbbe7c9fe5398df53fef3"
     },
     {
       "file": "tests/material-parity/owner-gap-input-evidence.mjs",

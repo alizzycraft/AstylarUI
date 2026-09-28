@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 28
 
+**Survey generator historical-receipt inconsistency resolved:** its finding replay
+used the historical contract, but sourceFingerprints recorded live hashes for the
+border, generated-mapping and capture-harness modules. The generator now uses the
+existing authenticated historical-source adapters for those three dependencies;
+adapters still reject unreviewed live changes. Regenerated the active chain:
+exactly14 SHA fields across9 reports changed; full JSON comparison againstda48448
+proves every other field unchanged. No capture, finding or classification changes.
+Six-case browser motion verifier passes; pending-motion membership generator passes.
+`node --test --test-name-pattern="all seven gap generators|gap report refresh"
+tests/material-parity/reviewed-input-gap-receipts.spec.mjs tests/material-parity/gap-survey-source-replay.spec.mjs`
+passes2/2 (72.27s), including every generator's independent --check with filesystem
+writes prohibited and complete historical finding conservation. Scoped diff check
+passes. This resolves the broader replay failure noted below. Canonical docs still
+hold the preserved UNACCEPTED37cbaaf export; fresh export/check remain next.
+
 **Cold export completed, not accepted; receipt chain reconciled:** export at
 37cbaaf took36.36min, retained436/436 static and1875/1875 interaction cases,
 8,483 groups /389,202 occurrences and135 source findings. It failed the gap
