@@ -35,6 +35,34 @@ requests from two dialog actions with no local request, four label-local omissio
 plugin range visual. This is routing evidence, not a diagnosis of actual hover
 cursor behavior. Native rules and candidate ancestry still require binding.
 
+Cursor follow-up during the color export: authenticated original report SHA
+`b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a`
+and 1,070 referenced trees, replayed normalized membership against compact generation
+`5998d72bd0310ff4ddd8d3a44954fa5ade6655abb506f2bb85baa4935c3792d0`;
+all 19 groups / 763 observations matched. Native owner-to-root requests separate:
+disabled button explicit default (60), disabled checkbox owner/label default
+(8 each), and slider host explicit pointer (70). Other button paths have no
+captured author cursor declaration; radio labels split 60 ordinary / 8 disabled
+observations each. Candidate label paths identify explicit pointer requests on
+`#checkbox-primary`, `.radio-option`, and `#slide-toggle-primary`, with pointer
+in all three captured label stages. Dialog cancel/save (24/32) have no captured
+cursor request anywhere on their candidate path, but resolve pointer; slider
+visual has no request and resolves default. These are source-routing observations,
+not yet canonical classifications or actual hovered-canvas cursor proof.
+
+Existing public cursor capture **cannot currently be reused as current browser
+evidence**: `validateCursorEvidence` rejects installed
+`examples/material-showcase/node_modules/@angular/common/fesm2022/common.mjs`
+(recorded SHA `ecd9f39a4e63c12b088f299bc9966b113ec88949b3de4311c644ab4686a1aad9`,
+current `0ec92260d1ddb26d9794a603f6ec3bb9cc662e5de5c32a48c2a603909298dd40`).
+Independent `cursorSourceProof()` still passes all four source/package method
+projections and eight cursor/text-owner combinations: button/label defaults are
+pointer, div default, and owned text changes default/auto to text. That narrower
+source proof is not a refreshed browser capture or proof of original Material
+hit behavior. Next bind the exact authored/default populations to existing review
+infrastructure; refresh the public capture only for claims requiring current
+browser behavior. Do not reinterpret absent requests as proven default provenance.
+
 Color producer/validator integration is now wired and focused-verified against
 the accepted paint compact snapshot. Validation starts from original rows and
 fresh sort/sidenav retained ancestry; unbound color attributions are rejected.
