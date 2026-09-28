@@ -10,6 +10,7 @@ import { applySheetPointerOwnerReview, proveSheetPointerOwners, applyBadgePointe
 import { applyDisabledPointerRequestReviews, proveDisabledPointerRequest } from './component-pointer-events-review.mjs';
 import { applySliderPointerRequestReview, proveSliderPointerRequest, collectSliderPointerSource } from './component-pointer-events-review.mjs';
 import { applyOmittedPointerBoundaryReviews, proveOmittedPointerBoundary } from './component-pointer-events-review.mjs';
+import { applyOverlayPointerPolicyReviews, proveOverlayPointerPolicy } from './component-pointer-events-review.mjs';
 
 test('pointer reviews distinguish sheet ownership, badge requests and disabled ancestor suppression', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -118,5 +119,29 @@ test('pointer reviews distinguish sheet ownership, badge requests and disabled a
     assert.throws(() => proveOmittedPointerBoundary(entry, r, altered, row.element));
     const native = structuredClone(r); native.nodes.find(n => n.parent === null).inline['pointer-events'] = { value: 'none', important: false };
     assert.throws(() => proveOmittedPointerBoundary(entry, native, a, row.element));
+  }
+  const overlayRows = ['dialog', 'bottom-sheet', 'tooltip'].flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '7ffd3a4832d90e185be9d234b3d022f276db113767a6fcb0c3c965c51c14d592',
+    indexSha256: 'b37363024107a9aeca949a701837764fdfe96e17b0aedca1549e187573dc8df4',
+  }).filter(r => r.evidence.section === 'discrepancies'));
+  const overlayReview = applyOverlayPointerPolicyReviews(overlayRows, cases, inventory, normalize);
+  const changedOverlays = overlayReview.filter((r, i) => r !== overlayRows[i]);
+  assert.equal(changedOverlays.length, 10); assert.equal(changedOverlays.reduce((n, r) => n + r.occurrences, 0), 285);
+  overlayReview.forEach((r, i) => { assert.deepEqual(raw(r), raw(overlayRows[i])); if (!changedOverlays.includes(r)) assert.deepEqual(r, overlayRows[i]); });
+  for (const row of changedOverlays) {
+    const key = row.reviewedCases[0];
+    const entry = cases.find(c => `${c.kind}:${c.family}@${c.profile}/${c.viewport.id}${c.state ? '/' + c.state : ''}` === key);
+    const [r, a] = modalInventoryTrees(inventory, key);
+    const proof = proveOverlayPointerPolicy(entry, r, a, row.element);
+    assert.deepEqual(proof, row.reviewEvidence.observations[0]);
+    assert.equal(proof.modalScopeCauseProven, false);
+    const altered = structuredClone(a); altered.rules.push({ selector: '#page', pointerEvents: 'none' });
+    assert.throws(() => proveOverlayPointerPolicy(entry, r, altered, row.element));
+    const native = structuredClone(r);
+    const paneIndex = proof.trace.referencePath.find(n => n.node === proof.nativePickingPane)
+      .rules.find(r => r.active && r.selector === '.cdk-overlay-pane').index;
+    const pane = native.rules[paneIndex];
+    pane.declarations['pointer-events'].value = 'none';
+    assert.throws(() => proveOverlayPointerPolicy(entry, native, a, row.element));
   }
 });

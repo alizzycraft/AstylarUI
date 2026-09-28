@@ -9,6 +9,58 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { proveChipPositionInspection } from './chip-position-inspection.mjs';
 
+const overlayPointerOwners = [
+  ...['bottom-sheet-copy', 'bottom-sheet-dismiss', 'bottom-sheet-panel'].map(id => ['bottom-sheet', id]),
+  ...['dialog-actions', 'dialog-cancel', 'dialog-copy', 'dialog-panel', 'dialog-save', 'dialog-title'].map(id => ['dialog', id]),
+  ['tooltip', 'tooltip-popup'],
+];
+
+export function proveOverlayPointerPolicy(entry, reference, candidate, element) {
+  assert.ok(overlayPointerOwners.some(([family, id]) => family === entry.family && id === element));
+  const input = entry.styleInputs.find(i => i.id === element);
+  const identity = resolveOriginAliasPair(entry, reference, candidate, input);
+  assert.equal(identity.status, 'mapped');
+  const trace = inspectOverlayOwnerDeclarations('pointerEvents', identity, reference, candidate);
+  const relevant = key => ['pointerevents', 'all'].includes(key.replaceAll('-', '').toLowerCase());
+  const paneIndex = trace.referencePath.findIndex(n => n.rules.some(r => r.active && r.selector === '.cdk-overlay-pane'));
+  assert.ok(paneIndex > 0); assert.equal(trace.referencePath.length, paneIndex + 3);
+  for (const [index, node] of trace.referencePath.entries()) {
+    assert.ok(!Object.keys(node.inline).some(relevant));
+    assert.equal(node.computed, index <= paneIndex ? 'auto' : 'none');
+    const requests = node.rules.filter(r => r.active && Object.keys(r.declarations).some(relevant));
+    const expected = index === paneIndex ? ['.cdk-overlay-pane', 'auto'] : index > paneIndex &&
+      !(entry.family === 'tooltip' && index === paneIndex + 1)
+      ? ['.cdk-overlay-container, .cdk-global-overlay-wrapper', 'none'] : null;
+    assert.equal(requests.length, expected ? 1 : 0);
+    if (expected) {
+      assert.equal(requests[0].selector, expected[0]);
+      assert.deepEqual(requests[0].declarations['pointer-events'], { value: expected[1], important: false });
+      assert.equal(requests[0].declarations.all, undefined);
+    }
+  }
+  for (const node of trace.candidatePath) {
+    assert.deepEqual(Object.values(node.localValues), ['<omitted>', '<omitted>', '<omitted>']);
+    assert.ok(!Object.keys(node.inline).some(relevant));
+    assert.ok(node.possibleRules.every(r => !Object.keys(r.declarations).some(relevant)));
+  }
+  return { referenceNode: identity.referenceNode, astylarNode: identity.candidateNode, identity, trace,
+    nativePickingPane: trace.referencePath[paneIndex].node,
+    nativeSuppressedAncestors: trace.referencePath.slice(paneIndex + 1).map(n => n.node),
+    inputEquivalent: false, renderingEquivalent: false, candidateComputedPointerEventsVerified: false,
+    actualHitTargetVerified: false, modalScopeCauseProven: false,
+    limitation: 'The native none-container/auto-pane ancestor policy is not authored in the candidate replacement structure. Computed auto at the leaf is not an authored value to copy. This does not prove core hit behavior, overlay scope, dismissal, or equivalent public-API composition.' };
+}
+
+export function applyOverlayPointerPolicyReviews(rows, cases, inventory, normalize) {
+  return overlayPointerOwners.reduce((result, [family, element]) => applyModalBoxReview(result, cases, inventory, normalize, {
+    family, element, properties: ['pointerEvents'], classification: 'application-plugin-authoring-defect',
+    attribution: 'reviewed-overlay-pointer-policy-substitution',
+    owner: 'Material overlay ancestor-policy authoring and replacement composition; core hit-test ownership remains separate',
+    justification: 'Reference descendants inherit auto from an explicitly picking CDK pane beneath explicitly non-picking containers. Candidate replacement ancestry omits that whole pointer policy in authoring and all three local stages. This is unequal structural/policy input, not a request-free default comparison and not proof that adding auto to the measured leaf fixes modal scope or dismissal.',
+    prove: (entry, reference, candidate) => proveOverlayPointerPolicy(entry, reference, candidate, element),
+  }), rows);
+}
+
 export function proveOmittedPointerBoundary(entry, reference, candidate, element) {
   assert.ok((entry.family === 'chips' && ['chip-0', 'chip-1'].includes(element)) ||
     (entry.family === 'tabs' && element === 'tab-panel'));

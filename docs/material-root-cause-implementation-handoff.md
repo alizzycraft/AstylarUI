@@ -218,6 +218,20 @@ non-picking containers and picking panes. Do not classify those as request-free
 defaults. The initial alias-only probe correctly rejected four direct-ID owners;
 chips now use their existing composition proof, and tab headers still need binding.
 
+Overlay pointer-policy binding covers **ten groups / 285 observations**: sheet
+panel/actions (75), six dialog owners (192), tooltip surface (18). Exact alias
+proofs retain the native auto pane beneath two non-picking ancestors, including
+the tooltip wrapper that inherits none rather than declaring it locally. Candidate
+replacement ancestry omits this CSS policy in authoring and all three local
+stages. Prepared classification is structural/policy authoring substitution, not
+a request-free default or a proven modal-scope/dismissal cause. Do not copy auto
+onto a leaf as a workaround. The focused pointer test passes 1/1 in 18.14 s;
+original rows and unrelated findings are conserved. A negative control initially
+mutated an unrelated duplicate pane selector; it now targets the exact active
+rule index from the owner trace and correctly fails. **Two tab header groups /
+140 observations remain**, with the existing tab proof identifying native text
+labels versus candidate controls as the next measurement boundary to bind.
+
 Color producer/validator integration is now wired and focused-verified against
 the accepted paint compact snapshot. Validation starts from original rows and
 fresh sort/sidenav retained ancestry; unbound color attributions are rejected.
