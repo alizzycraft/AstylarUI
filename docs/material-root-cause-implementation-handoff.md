@@ -63,6 +63,27 @@ hit behavior. Next bind the exact authored/default populations to existing revie
 infrastructure; refresh the public capture only for claims requiring current
 browser behavior. Do not reinterpret absent requests as proven default provenance.
 
+Fresh public cursor evidence now closes that dependency-freshness gap, without
+overwriting the old capture. Command:
+`node scripts/audit-public-cursor-defaults.mjs --output=artifacts/material-parity/public-cursor-defaults-4cf733e`.
+Chrome 153.0.8010.53, Angular 20.3.31, Babylon 8.56.2, AstylarUI 0.2.0:
+36 cases / 180 action boundaries / 72 screenshots, DPR 1/2 and translated/untranslated
+surfaces; zero runtime errors. Exit 1 preserves 148 real differences, not a harness
+failure or parity pass. Existing `validateCursorEvidence(report, file =>
+readFileSync('artifacts/material-parity/public-cursor-defaults-4cf733e/' + file))`
+passes served assets, every bundle dependency, screenshots, observations and
+package/source projections. The returned helper's legacy `artifactRoot` string is
+not the new path; use the explicit path above when citing this replay.
+Report SHA `4773eb64cb37931bfb53e2c3852b7b439eac366e2da51aaf2eb22f0c7133b9a8`;
+provenance SHA `6b2da713b9b1cd1f11f8094a39c196cf4bd8cf00344268e60875ce8a7fa8de38`.
+All 148 difference signatures match the historical capture: omitted button/label
+defaults differ before layout, whereas explicit label default remains correct in
+resolved style and becomes text at owned-text pointer selection (12 action-boundary
+differences). Explicit button default/pointer and div inheritance controls agree.
+This confirms the existing public root cause under current dependencies, not that
+every remaining Material cursor discrepancy shares it. Retain this 20,510,567-byte
+failed-case package and log; no new audit framework or fixture changes were needed.
+
 Prepared cursor review (not yet canonical): existing `applyModalBoxReview` now has
 a focused consumer in `tests/material-parity/component-cursor-request-review.mjs`
 for three groups / 138 original observations: disabled button 60, disabled checkbox
