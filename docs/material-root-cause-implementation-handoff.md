@@ -2,6 +2,40 @@
 
 ## Current audit checkpoint — September 28
 
+**Read-only spacing investigations queued for the next classification batch:**
+The cold export launched from f5db369 is still running and has reached
+`validate-audit` (build elapsed 1,021,463ms). Its evidence/source inputs have
+not been changed. The following checks used the hash-pinned original report
+b07ef154... and authenticated referenced trees, not new captures. These are
+investigation conclusions only; focused regression integration and canonical
+classification remain pending. Do not repeat these surveys without new evidence.
+
+- Stepper: all 68 cases / 136 labels retain native icon margin-right 8px versus
+  candidate label margin-left 8px. Native headers have `0px 24px` padding and
+  native content has `0px 24px 24px`; candidate host padding is `0 24px`, content
+  padding is `0 0 24px`, and absolute headers offset the host with left/right
+  `-24px`. All three candidate stages preserve these values. This is a changed
+  composition, not an isolated renderer margin error or established equivalent
+  layout. bc4d442802a5f75b543b89f3a890aa3de99f5dc8 introduced the negative edge
+  offsets and fixed 130px headers; e45ff92f5f52269de247dd47b3f37ec4700c5562
+  removed an absolute inner wrapper and added header padding/content wrapper.
+- Checkbox label: exactly static custom/mobile has `padding: 0 0 1px` in all
+  three candidate stages; the other 67 cases retain zero padding. Native bottom
+  padding is zero. The original candidate rule is `.checkbox-label` with
+  `mediaMaxWidth: 500px`, emitted for typographyScale > 1. Current source is
+  examples/material-showcase/src/app/astylar.component.ts:779. History at
+  662c179399121a8d05d9235dac42c560eb255e93 replaces 0.6px/1px translations with
+  this padding adjustment. This establishes unequal authored inputs and the
+  compensation's history, not a currently demonstrated renderer cause.
+- List: all 52 cases retain native host padding `8px 0px` versus zero in all
+  three candidate stages. The native `.mdc-list` rule owns that padding.
+  Candidate row heights differ: light/dark 48px -> 56px, custom 40px -> 48px,
+  contrast 24px -> 40px (13 cases per profile, two rows each). A proposed
+  constant +8px-per-row explanation failed on contrast; the completed survey
+  preserves the +16px contrast difference. Do not classify omitted host padding
+  as an equivalent height redistribution. The list-item rule originates in
+  initial showcase commit 2f44011; deliberate later compensation is not proven.
+
 **Targeted pre-export binding check completed:** text alignment (49 groups /
 2,677 observations), LTR alignment (4 / 178), reviewed-source batch (146 /
 6,295), and root background (144 / 2,311) bind successfully to the retained
