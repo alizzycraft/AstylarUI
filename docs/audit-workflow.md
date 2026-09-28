@@ -21,12 +21,14 @@ details, or explicit `--all`. Queries refuse stale canonical snapshots. Evidence
 retrieval authenticates the preserved package and the exact requested row.
 Missing candidate fields remain missing rather than becoming assumed defaults.
 
-The current index preserves 8,483 scalar discrepancies, 132 source findings,
+The September 24 index preserved 8,483 scalar discrepancies, 132 source findings,
 39,904 typography/control differences, 389,202 scalar occurrences and 1,668
 unresolved scalar groups. Compact shards total 69,621,642 bytes versus
 2,017,893,961 decoded canonical bytes. Every original section remains in the
 preserved package; other sections are listed in the index, not discarded.
 This is a derived working index, not a change in the report's acceptance status.
+These measurements are historical. Use the current handoff and authenticated
+index for current counts and pending integration work, not the figures above.
 
 ## One investigation per question
 

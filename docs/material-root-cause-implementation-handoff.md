@@ -2,6 +2,53 @@
 
 ## Current audit checkpoint — September 28
 
+The cold export from f6e1ce6 completed in 2727.14 s with all 436 static and
+1875 interaction cases, 8483 scalar groups, 389202 observations and 134 source
+findings preserved. Its only reported acceptance error is 286 unresolved scalar
+groups (previously 439). This is an audit checkpoint, not input/rendering parity.
+`check-material-position-canonical-conservation.mjs --prepared-input` passed:
+exactly 153 groups / 6909 observations changed attribution, with all raw input,
+row order and unrelated control evidence conserved; one scalar receipt and
+48 control receipts changed. The classification totals move 57 groups from
+harness to authoring defects; 96 already-harness groups gain precise attribution.
+
+Source/section reconciliation passed: all 525 source fingerprints match current
+normalized-LF source, with exactly six added review files, three changed producer/
+transition files and no removals. All 79 sections are accounted for, 72 unchanged.
+The seven changed sections are sourceFingerprints, summary, discrepancies,
+controlTypography, controlLineBoxes, ownerCaretInputs and reviewedSourceBatchInputs.
+All 54 metadata differences are explained by three summary values, 48 control
+producer receipts, two other producer receipts and the independently reconstructed
+motion-report digest 4226426f40e559c8847d2c3f5ddf1354bba796be01316bd85991df6806f46730.
+Evidence: artifacts/material-parity/prepared-input-{export,conservation}-f6e1ce6.log
+and prepared-input-{metadata,sections}-f6e1ce6.json. Canonical compressed SHA:
+4880964fc1018a1fd6409f7c7af2ddaa5fc21a82e45dab3a0cc5fce5a6019156
+(62269741 bytes); decoded SHA:
+f5f653def115d188c8905b75f0e41ef5a1bd0c7de7a29b8b31e8b65b494751dd
+(2202607350 bytes). The historical capture remains historical, with applicability
+validated by these source/proof transitions; this is not fresh browser evidence.
+Compact import and `npm run audit:findings:verify` pass with all 39904 control
+differences retained, 72050480 compact bytes and index SHA
+5e86f89a05cd88843d7dd6130ed13c88cdb6371efb389d73a934c8d9f953511b.
+The current pointer now selects the reconciled 4880964f generation. No decoded
+2 GB report was retained and no additional browser capture was launched.
+
+Remaining investigation priority: finish display/structure semantics before
+inherited typography/wrapping and conditional corner paint. Display triage covers
+18 groups / 1034 original observations, but does not classify them yet. It separates
+explicit display substitutions (toggle groups, checkbox, expansion title, grid,
+list, slide-toggle, slider, stepper and tree), browser blockification (toggle hosts,
+dialog actions and toolbar title), and inline/plugin-wrapper boundaries (radio,
+tab panel and tooltip). Compare candidate authored/default stages and child
+structure next; copying browser computed display is not proof of equivalent input.
+The generic hypothesis that inline children never stretch is unsupported:
+flex.service.ts selects shouldStretchWidth before intrinsicInlineWidth. Do not
+reopen that hypothesis without a minimal paired reproduction. Existing shared
+coordinate, overlay, interaction, history/ownership and final unfiltered browser
+acceptance requirements remain in scope; scalar attribution is not completion.
+
+### Earlier preparation record (superseded by reconciliation above)
+
 The existing canonical-conservation command now accepts `--prepared-input` and
 pins the accepted a593d4c7 predecessor. Its independent population table requires
 exactly 153 groups / 6909 observations in thirteen attribution categories, honest
