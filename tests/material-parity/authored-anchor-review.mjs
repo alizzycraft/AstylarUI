@@ -6,6 +6,69 @@ import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { inspectButtonHostRequests } from './button-host-request-evidence.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 
+const cornerProperties = ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius'];
+const radiusProperty = key => key === 'all' || /^border.*radius$/i.test(key.replaceAll('-', ''));
+const radiusFields = object => Object.fromEntries(Object.entries(object ?? {}).filter(([key]) => radiusProperty(key)));
+
+// Authored token substitution is not a used-corner or clipping diagnosis: CSS
+// may reduce distinct radii to the same shape on a sufficiently short box.
+export function proveAuthoredCornerRequests(entry, reference, candidate, element) {
+  const chip = entry.family === 'chips';
+  assert.ok(chip ? ['chip-0', 'chip-1'].includes(element) : entry.family === 'button-toggle' && element === 'button-toggle-primary');
+  const inputs = entry.styleInputs.filter(input => input.id === element); assert.equal(inputs.length, 1);
+  const native = reference.nodes.filter(node => node.attributes?.id === element);
+  const candidates = candidate.nodes.filter(node => node.authored?.id === element);
+  assert.equal(native.length, 1); assert.equal(candidates.length, 1);
+  const r = native[0], a = candidates[0], input = inputs[0];
+  assert.equal(r.type, chip ? 'mat-chip-option' : 'mat-button-toggle-group'); assert.equal(a.authored.type, 'div');
+  assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);
+  assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+  assert.equal(input.astylarResolvedStyleEvidenceVersion, 2); assert.equal(Object.keys(input.reference).length, 89);
+  for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[r.style][key], value);
+  assert.deepEqual(radiusFields(r.inline), {});
+  const requests = r.rules.map(index => reference.rules[index]).filter(rule => rule.active).flatMap(rule => {
+    const declarations = [...rule.cssText.matchAll(/(?:^|;)\s*([\w-]+)\s*:\s*([^;]*)(?=;|$)/g)]
+      .filter(([, key]) => radiusProperty(key)).map(([, key, value]) => [key, value.trim()]);
+    if (!declarations.length && !Object.keys(radiusFields(rule.declarations)).length) return [];
+    assert.deepEqual(radiusFields(rule.declarations), Object.fromEntries(cornerProperties.map(key => [key.replace(/[A-Z]/g, c => '-' + c.toLowerCase()), { value: '', important: false }])));
+    return [{ selector: rule.selector, declarations }];
+  });
+  assert.deepEqual(requests, chip ? [
+    { selector: '.mat-mdc-standard-chip', declarations: [['border-radius', 'var(--mat-chip-container-shape-radius, 8px)']] },
+  ] : [
+    { selector: '.mat-button-toggle-standalone, .mat-button-toggle-group', declarations: [['border-radius', 'var(--mat-button-toggle-legacy-shape)']] },
+    { selector: '.mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard', declarations: [['border-radius', 'var(--mat-button-toggle-shape, var(--mat-sys-corner-extra-large))']] },
+  ]);
+  const nativeRadius = chip ? '8px' : { light: '28px', dark: '28px', contrast: '21px', custom: '42px' }[entry.profile];
+  const candidateRadius = (chip ? { light: '8px', dark: '8px', contrast: '6px', custom: '12px' }
+    : { light: '21px', dark: '21px', contrast: '9.75px', custom: '31.5px' })[entry.profile];
+  assert.ok(nativeRadius && candidateRadius);
+  for (const property of cornerProperties) assert.equal(reference.styles[r.style][property], nativeRadius);
+  assert.deepEqual(radiusFields(a.authored.style), {}); assert.equal(a.authored.attributes?.style, undefined);
+  const candidateRequests = candidate.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, a.authored))
+    .map(({ selector, ...style }) => ({ selector, declarations: radiusFields(style) })).filter(rule => Object.keys(rule.declarations).length);
+  assert.deepEqual(candidateRequests, [{ selector: chip ? '.chip' : '#button-toggle-primary', declarations: { borderRadius: candidateRadius } }]);
+  for (const [field, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']]) {
+    assert.deepEqual(input[field], a[stage]); assert.deepEqual(radiusFields(a[stage]), { borderRadius: candidateRadius });
+  }
+  return { referenceNode: r.key, astylarNode: a.key, referenceRequests: requests, candidateRequests,
+    nativeRadius, candidateRadius, usedCornerEquivalenceProven: false, clippingCauseProven: false,
+    attributableProperties: cornerProperties };
+}
+
+export function applyAuthoredCornerReviews(rows, cases, inventory, normalize) {
+  for (const [family, element] of [['chips', 'chip-0'], ['chips', 'chip-1'], ['button-toggle', 'button-toggle-primary']]) {
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+      family, element, properties: cornerProperties,
+      prove: (entry, reference, candidate) => proveAuthoredCornerRequests(entry, reference, candidate, element),
+      attribution: 'reviewed-chip-toggle-radius-token-substitution',
+      owner: 'chip/toggle authored shape-token substitution',
+      justification: 'Native owners retain Material shape-token declarations, while corresponding candidate rules substitute profile-specific numeric radii. Exact native scalar joins and all three candidate stages bind this authoring discrepancy. Distinct specified radii may reduce to the same used shape; this does not diagnose clipping, prove unequal painted corners, or authorize fixture compensation.',
+    });
+  }
+  return rows;
+}
+
 const staticOwners = [
   ['card', 'card-copy', 'mat-card-content', 'p'], ['card', 'card-title', 'mat-card-title', 'h2'],
   ['chips', 'chips-primary', 'mat-chip-listbox', 'div'], ['icon', 'icon-primary', 'mat-icon', 'img'],

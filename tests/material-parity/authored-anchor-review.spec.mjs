@@ -10,11 +10,12 @@ import { applyAuthoredAnchorReviews, proveAuthoredAnchor } from './authored-anch
 import { applyCoreAnchorReviews, proveCoreAnchor } from './authored-anchor-review.mjs';
 import { applyRelativeOwnerOffsetReviews, proveRelativeOwnerOffsets } from './authored-anchor-review.mjs';
 import { applyStaticOwnerPositionReviews, proveStaticOwnerPosition } from './authored-anchor-review.mjs';
+import { applyAuthoredCornerReviews, proveAuthoredCornerRequests } from './authored-anchor-review.mjs';
 
-test('authored anchor reviews retain 2780 observations and reject substituted offsets or margin tokens', () => {
+test('authored anchor and corner reviews retain 3356 observations and reject altered requests', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
-  const capture = JSON.parse(bytes), families = ['slide-toggle', 'badge', 'core', 'card', 'checkbox', 'sidenav', 'toolbar', 'chips', 'icon', 'list', 'tree', 'paginator', 'tabs', 'stepper', 'expansion', 'sort'];
+  const capture = JSON.parse(bytes), families = ['slide-toggle', 'badge', 'core', 'card', 'checkbox', 'sidenav', 'toolbar', 'chips', 'icon', 'list', 'tree', 'paginator', 'tabs', 'stepper', 'expansion', 'sort', 'button-toggle'];
   const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))];
   const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
   const rows = families.flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, {
@@ -39,6 +40,36 @@ test('authored anchor reviews retain 2780 observations and reject substituted of
   const staticChanges = stationary.filter((r, i) => r !== relative[i]);
   assert.equal(staticChanges.length, 16); assert.equal(staticChanges.reduce((n, r) => n + r.occurrences, 0), 918);
   stationary.forEach((r, i) => { assert.deepEqual(raw(r), raw(rows[i])); if (r !== relative[i]) assert.equal(relative[i].attribution, 'unresolved'); });
+  const corners = applyAuthoredCornerReviews(stationary, cases, inventory, bindPreciseAuditNormalization());
+  const cornerChanges = corners.filter((r, i) => r !== stationary[i]);
+  assert.equal(cornerChanges.length, 28); assert.equal(cornerChanges.reduce((n, r) => n + r.occurrences, 0), 576);
+  corners.forEach((r, i) => { assert.deepEqual(raw(r), raw(rows[i])); if (r !== stationary[i]) assert.equal(stationary[i].attribution, 'unresolved'); });
+  let cornerOwners = 0;
+  const mutatedProfiles = new Set();
+  for (const entry of cases.filter(e => ['chips', 'button-toggle'].includes(e.family))) {
+    const key = `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.kind === 'interaction' ? '/' + entry.state : ''}`;
+    const [r, a] = modalInventoryTrees(inventory, key);
+    for (const element of entry.family === 'chips' ? ['chip-0', 'chip-1'] : ['button-toggle-primary']) {
+      const proof = proveAuthoredCornerRequests(entry, r, a, element); cornerOwners++;
+      assert.equal(proof.usedCornerEquivalenceProven, false); assert.equal(proof.clippingCauseProven, false);
+      const mutationKey = `${entry.family}/${entry.profile}/${element}`;
+      if (mutatedProfiles.has(mutationKey)) continue;
+      mutatedProfiles.add(mutationKey);
+      for (const declaration of ['border-radius: 0;', 'border-top-left-radius: 1px;', 'all: initial;']) {
+        const native = structuredClone(r);
+        const rule = native.rules.find(rule => rule.selector === proof.referenceRequests.at(-1).selector);
+        rule.cssText += ' ' + declaration;
+        assert.throws(() => proveAuthoredCornerRequests(entry, native, a, element));
+      }
+      const native = structuredClone(r); native.nodes.find(n => n.key === proof.referenceNode).inline['border-radius'] = { value: '0', important: false };
+      assert.throws(() => proveAuthoredCornerRequests(entry, native, a, element));
+      const candidate = structuredClone(a); candidate.rules.push({ selector: '#' + element, borderRadius: proof.candidateRadius });
+      assert.throws(() => proveAuthoredCornerRequests(entry, r, candidate, element));
+      const stage = structuredClone(a); stage.nodes.find(n => n.key === proof.astylarNode).interactionResolvedStyle.borderRadius = '0';
+      assert.throws(() => proveAuthoredCornerRequests(entry, r, stage, element));
+    }
+  }
+  assert.equal(cornerOwners, 220); assert.equal(mutatedProfiles.size, 12);
   for (const row of staticChanges) {
     const entry = cases.find(e => e.family === row.family);
     const [r, a] = modalInventoryTrees(inventory, `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}`);

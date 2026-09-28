@@ -2,17 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
-Radius triage separates 72 pending corner groups into 28 chip/toggle groups and
-44 badge/action-pill groups. Authenticated read-only replay checked 220 owners
-across 144 original chip/toggle cases, exact native scalar joins and all three
-candidate stages. Chips retain native
+Radius proof now prepares 28 chip/toggle groups / 576 observations; 44
+badge/action-pill groups remain separate. The existing authored-anchor review
+and spec were extended rather than adding another report or validation layer.
+Authenticated replay checked 220 owners across 144 original chip/toggle cases,
+exact native scalar joins and all three candidate stages. Chips retain native
 `var(--mat-chip-container-shape-radius, 8px)` resolving to 8px, while candidate
 `.chip` resolves 6px in contrast / 12px in custom (8px light/dark, not pending).
 Toggle group retains ordered legacy and standard tokens, ending with
 `var(--mat-button-toggle-shape, var(--mat-sys-corner-extra-large))`; reference
 radii are 28/28/21/42px versus candidate 21/21/9.75/31.5px. These 28 groups / 576
 observations have an authored-token substitution before paint, not proof that
-clipping is wrong. Next encode this bounded proof with mutation controls.
+clipping is wrong. Native duplicate/shorthand/longhand/reset mutations, inline
+overrides, candidate duplicate rules, and altered interaction radii are rejected
+across all twelve owner/profile combinations. The focused anchor/corner spec
+passes 1/1 (33.19 s), conserving raw rows and prior classifications. Prepared
+followup now totals 81 groups / 3356 observations, not yet canonical.
 Do not lump the other 44 groups into the same conclusion: badge, sheet actions,
 card action, dialog actions and toolbar action use native 9999px pills against
 finite radii. Existing `proveBottomSheetActionCorners` explicitly preserves
@@ -20,7 +25,11 @@ conditional equal-shape-on-equal-box geometry for noncontrast actions; existing
 button-pill evidence likewise distinguishes authored intent from used paint.
 Reuse those proofs and resolve the conditional geometry question rather than
 silently treating every numeric radius difference as either a paint defect or
-equivalent rendering. No radius classification or capture changed this turn.
+equivalent rendering. No canonical classification or capture changed this turn.
+The existing export session 23967 / Node PID 12020 was polled and confirmed live
+with advancing CPU time; do not restart it. Reconcile it before integrating this
+prepared followup. Next decisive question: which remaining finite-versus-pill
+radii have sufficient equal used-box evidence to establish equivalent corners?
 
 Prepared anchor/position followup now totals 53 groups / 2780 observations.
 The last 16 static-owner position groups add 918 observations. Fourteen are
