@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 29
 
+**Tooltip word-break support classification prepared, not yet integrated:** the
+existing wrapping review module now provides a bounded reducer/validator for the
+one unresolved tooltip-popup wordBreak group (18 observations). Classification is
+`documented-limitation`, not an inferred intentional policy or fixture-only defect.
+Five exact current/installed contract, admission, loaded-CSS and parser fingerprints
+bind the existing public-package proof; changed sources reopen the finding.
+The existing modal review mechanism checks complete membership and all owner stages.
+Tests preserve every raw/unrelated tooltip row and reject missing population,
+forged membership, competing native/candidate requests and each changed dependency.
+The existing public support test and expanded population test pass **2/2** in
+19,053.7909 ms with the same focused command below. No renderer or fixture changes.
+Next wire the reducer and validator into the production bound-evidence path with
+its unbound guard and exact predecessor-source reconciliation. Canonical/index stays
+**95 unresolved** until a later coherent batch export; this one group projects 94.
+
 **Checkpoint published; tooltip support proof expanded:** `dcc6e52` is pushed to
 `origin/codex/material-audit-alignment-integration` (remote hash verified). The
 existing compact import and `npm run audit:findings:verify` preserve 8,483 scalar

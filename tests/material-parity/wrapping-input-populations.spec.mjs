@@ -13,6 +13,8 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { inheritedWordOwners, omittedFontOwners, proveInheritedLocalOmission, applyInheritedWordReviews, applyOmittedFontReviews } from './wrapping-input-review.mjs';
 import { weightRequestOwners, applyWeightRequestReviews } from './wrapping-input-review.mjs';
 import { familyRequestOwners, applyFamilyRequestReviews } from './wrapping-input-review.mjs';
+import { bindTooltipWordBreakSupport, applyTooltipWordBreakReview,
+  validateTooltipWordBreakReview, tooltipWordBreakAttribution } from './wrapping-input-review.mjs';
 import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNowrap,
   validateExplicitNowrap, explicitNowrapAttribution, applyOmittedNowrap,
   validateOmittedNowrap, omittedNowrapAttribution, proveOmittedNowrap,
@@ -182,6 +184,29 @@ test('tooltip word-break request preserves all 18 paired owners and eight unpair
     local.nodes.find(n => n.key === proof.astylarNode).resolvedStyle.wordBreak = 'normal';
     assert.throws(() => prove(reference, local));
   }
+  const snapshot = { generation: '9b827bb2b09ae9d20d35e1640f987c9a4972aeab04676d595d7dd5f7d6ee01ab',
+    indexSha256: 'cd3d3c45aab1db7095753132870a660f456dc80e5334787f6f4508e8d30d9486' };
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'tooltip', snapshot)
+    .filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const normalize = bindPreciseAuditNormalization();
+  const reviewed = applyTooltipWordBreakReview(rows, all, inventory, normalize);
+  const changed = reviewed.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 1); assert.equal(changed[0].occurrences, 18);
+  assert.equal(changed[0].attribution, tooltipWordBreakAttribution);
+  assert.equal(changed[0].classification, 'documented-limitation');
+  assert.deepEqual(changed[0].reviewedCases, paired.map(keyOf));
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  assert.deepEqual(reviewed.map(raw), rows.map(raw));
+  reviewed.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
+  assert.deepEqual(validateTooltipWordBreakReview(reviewed, rows, all, inventory, normalize), []);
+  const forged = structuredClone(reviewed);
+  forged.find(r => r.attribution === tooltipWordBreakAttribution).reviewedCases.pop();
+  assert.equal(validateTooltipWordBreakReview(forged, rows, all, inventory, normalize).length, 1);
+  assert.throws(() => applyTooltipWordBreakReview(rows, all.filter(e => e !== paired[0]), inventory, normalize));
+  for (const source of bindTooltipWordBreakSupport().sources)
+    assert.throws(() => bindTooltipWordBreakSupport(file => readFileSync(file, 'utf8') +
+      (file === source.file ? '\n// changed support\n' : '')));
 });
 
 test('inherited word properties separate 46 observation boundaries from the tooltip explicit request', () => {

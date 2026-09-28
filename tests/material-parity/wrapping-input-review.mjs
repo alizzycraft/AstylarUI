@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
@@ -625,6 +627,49 @@ export function applyInheritedWordReviews(rows, cases, inventory, normalize) {
       });
     }
   return rows;
+}
+
+export const tooltipWordBreakAttribution = 'reviewed-tooltip-word-break-public-support-gap';
+export function bindTooltipWordBreakSupport(read = file => readFileSync(file, 'utf8')) {
+  // Public package-root admission is tested in wrapping-input-populations.spec.
+  // Bind that conclusion to the inspected contract, admission and parsing sources;
+  // changed support must reopen this limitation rather than inherit an old waiver.
+  const sources = [
+    ['src/app/types/style-rule.ts', 'f59e9522605eeb64c7ffa0369f3a6b023a54a1e7e329434d6a5bd9420adadfae'],
+    ['examples/material-showcase/node_modules/astylarui/dist/lib/app/types/style-rule.d.ts', '1e4cb286b38fef688fd1fd619cc9e7624792e475b85521b17b128e1021b1a8a3'],
+    ['src/lib/astylar-diagnostics.ts', 'd53a6540d80d041c703271fc3c7455b187ca90563fa4dce3893680763419b571'],
+    ['src/lib/astylar-document-style-resolver.ts', '3cb04ca0d3a7a76deec3743768a429bb89f1a3f8722cc49dfc4dee2144bba8f9'],
+    ['src/app/services/text/text-style-parser.service.ts', '6c30ccdc018ca95fc6a3832f9563d22e65f971d5de475df64bd8a99b3fa5fc9f'],
+  ].map(([file, sha256]) => {
+    assert.equal(createHash('sha256').update(read(file).replaceAll('\r\n', '\n')).digest('hex'), sha256,
+      `tooltip word-break support source changed: ${file}`);
+    return { file, sha256 };
+  });
+  return { sources, publicPackage: 'astylarui', typedProperty: 'wordBreak', requestedValue: 'normal',
+    publicAdmissionDiagnostic: 2353, supportedControl: 'wordWrap',
+    test: 'public word-property support boundary rejects wordBreak without inventing a fixture workaround',
+    intentionalPolicyProven: false, runtimeWordBreakTested: false, originalRasterCauseProven: false };
+}
+export function applyTooltipWordBreakReview(rows, cases, inventory, normalize) {
+  if (!rows.some(r => r.family === 'tooltip' && r.element === 'tooltip-popup' &&
+      r.property === 'wordBreak' && r.attribution === 'unresolved')) return rows;
+  const support = bindTooltipWordBreakSupport();
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'tooltip', element: 'tooltip-popup', properties: ['wordBreak'],
+    attribution: tooltipWordBreakAttribution, classification: 'documented-limitation',
+    owner: 'core public CSS word-break support; preserve separate tooltip authoring and paint findings',
+    justification: 'All paired native tooltip owners explicitly request word-break:normal; candidate ancestry and local stages omit it. The current package-root StyleRule rejects wordBreak while accepting wordWrap, and the checked contract, validation, loaded-CSS mapping and parser lack a word-break path. This is a public input-support limitation, not an intentional policy or fixture-only omission. Do not substitute wordWrap or infer runtime defaults, wrapping, blur, position, or rendering equivalence. Unpaired open-state records remain separate.',
+    prove: (entry, reference, candidate) => ({
+      ...proveInheritedLocalOmission(entry, reference, candidate, 'tooltip-popup', 'wordBreak'), support,
+    }),
+  });
+}
+export function validateTooltipWordBreakReview(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === tooltipWordBreakAttribution);
+    assert.deepEqual(select(rows), select(applyTooltipWordBreakReview(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`tooltip word-break support review does not replay: ${error.message}`]; }
 }
 export function applyOmittedFontReviews(rows, cases, inventory, normalize) {
   for (const [family, element, property] of omittedFontOwners) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
