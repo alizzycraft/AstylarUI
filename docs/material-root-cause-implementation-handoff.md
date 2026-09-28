@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — September 28
 
+Next overlay question narrowed: existing tooltip state evidence covers only
+initial/hover/press/release/leave, not keyboard focus, edge fallback or scrolling.
+`scripts/audit-material-tooltip-state.mjs` declares exactly those five actions;
+its retained supplemental report is bound to Chrome 152.0.7977.76. Do not extend
+its conclusions to keyboard/scroll states or recapture under a different browser
+while claiming the same checkpoint. Current reference Material directive
+`module-CWxMD37a.mjs` (lines 260–269) monitors keyboard-origin focus and calls
+show, and hides on loss of focus. Candidate `astylar.component.ts` focus handler
+(lines 110–122) opens only autocomplete/timepicker; tooltip opening is authored
+in pointerenter. This is a source-level focus-contract omission, not yet a real
+keyboard reproduction or a core placement diagnosis. Next use the existing
+package/browser diagnostic route with explicit current provenance to compare
+ordinary Tab focus/blur, then edge and scroll behavior. Preserve the old pointer
+capture and avoid rerunning its settled matrix unchanged.
+
 The cold export from **24ff18b** finished in 2,923 seconds. Its sole reported
 error is the remaining **180 unresolved attributions** (previously 286); it
 retains 436 static / 1,875 interaction cases, 8,483 scalar groups, 389,202
