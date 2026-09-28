@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 29
 
+**Panel visibility scalar join verified; integration pending:** two groups / 138
+observations (70 tabs, 68 stepper) now join to the existing complete state-owner
+proof, rather than treating active visible/omitted values as sufficient evidence.
+Exact generated-owner mapping checks all 89 reference fields, three candidate
+stages and the active text node against both native linked panel owners. Native
+stepper retains hidden/inert inactive text; native tabs use distinct mounting;
+candidate substitutes one changing owner/custom tab painter. Selected content
+matches, but authored state structure does not. Existing core hidden-state
+support, live animation and accessibility/focus questions remain unwaived;
+adding a visible declaration is not the inferred fix. Original state report and
+its receipt replay remain unchanged and pass.
+`node --test tests/material-parity/panel-state-ownership.spec.mjs`
+passes **3/3**, 3,898.2021 ms total. Missing cases, forged membership, broken
+inactive/linkage state, altered unrelated scalar fields and fabricated candidate
+visibility are rejected; raw/unrelated rows remain unchanged.
+Canonical remains **95 unresolved**, integrated batches project **18**; this
+scalar join is not yet in the production tail. Next: integrate it, then tooltip
+shrink and remaining styling semantics before source/export reconciliation and
+final gates. No renderer/fixture changes or new captures.
+
 **Overlay flow integrated; export pending:** the 11-group proof from `6e10415`
 now runs in the bound production tail with independent replay and unbound
 attribution rejection. Actual tail changes 57 groups / 2,708 observations against
