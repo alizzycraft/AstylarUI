@@ -25,6 +25,29 @@ the declaration's introduction; it does not independently prove its motivation.
 Next attach these offset rows to the existing proof after export; do not rebuild
 the original position investigation. Canonical classifications remain unchanged.
 
+Badge anchor followup also completed read-only across all 52 authenticated
+original cases, reusing `proveBadgePointerRequest` for exact native/candidate
+identity and full captured stage agreement. The eight pending badge-count inset
+groups (208 observations) are not an authored `8px` versus `-4px` comparison:
+native rules request `.mat-badge-above .mat-badge-content { bottom: 100% }` and
+`.mat-badge-after .mat-badge-content { left: 100% }`, with no top/right request.
+Native CSSOM computes top/right 8px and margin -12px; serialized active rules
+retain `margin: var(--mat-badge-container-offset, -12px 0)` and the overlap
+override `margin: var(--mat-badge-container-overlap-offset, -12px)` (expanded
+captured margin declarations are empty). Candidate's sole relevant rule is
+`.badge-bubble { position: absolute; top: -4px; right: -4px }`, and all three
+resolved stages preserve those requests plus default margin 0. This confirms
+different anchor/margin authoring, not an alias error or a measured 12px renderer
+translation. Do not replace candidate offsets with native computed 8px.
+Source: `astylar.component.ts:686-689`; current badge-bubble line blame 48c994e3,
+fixed host and theme-width table blame 2f440115. Existing input-equivalence policy
+already records independent descendant-intrinsic-width and positioned-margin-box
+core reductions (near lines 490/500), and the fixture-width substitution (1084).
+Reuse those causes; do not infer compound placement equivalence from them.
+Next add the pending inset rows to an exact authored-anchor proof with token
+serialization and mutation guards. Canonical classifications remain unchanged.
+Export 23967 remains live (Node PID 12020 confirmed); no source it reads changed.
+
 Compact coverage refresh of accepted fca6a435 snapshot confirms 573 unresolved
 groups. Largest remaining areas include 72 corner-radius groups, 27 textTransform,
 21 minWidth, 20 minHeight, 18 display, and shared text/flow defaults. Prioritize
