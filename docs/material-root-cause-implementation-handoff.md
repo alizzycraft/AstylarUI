@@ -49,10 +49,17 @@ candidate stages; original paths, raw inline declarations and unknown external
 inheritance remain explicit. No fresh external-context evidence is retroactively
 treated as historical truth. Both tests in `component-motion-caret-review.spec.mjs`
 pass (15.82 s), preserving raw rows and rejecting candidate caret injections.
-All 27 caret groups / 896 observations now have prepared reviews, not accepted
-canonical classifications. Next add exact combined replay validation using these
-existing apply functions, then integrate a coherent batch after the running
-cursor/pointer export is reconciled. Keep these distinct from editable-input bugs.
+All 27 caret groups / 896 observations now have prepared reviews and exact
+combined replay validation, not accepted canonical classifications.
+`applyComponentCaretReviews` composes the three existing apply functions;
+`validateComponentCaretReviews` authenticates complete serialized membership.
+The three focused tests pass (56.98 s), including raw/unrelated-row conservation
+and dropped-row/false-equivalence rejection in each of four attribution categories.
+Next integrate this coherent batch after the running cursor/pointer export is
+reconciled. Keep these distinct from editable-input bugs. The subsequent compact
+coverage query identifies 145 unresolved positioning/transform groups across 26
+families; prioritize slider, grid and overlay owner/coordinate questions before
+the remaining border/current-color and typography/inheritance groups.
 
 Cursor/pointer integration guard is ready: the existing canonical conservation
 checker now supports `--component-interaction`, pinned to the accepted color

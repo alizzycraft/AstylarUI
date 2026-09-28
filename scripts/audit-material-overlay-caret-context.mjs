@@ -11,6 +11,24 @@ import { collectTooltipCaretContext } from './audit-material-tooltip-caret-conte
 import { collectOriginalOverlayContextSurvey } from '../tests/material-parity/original-overlay-context-survey.mjs';
 import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
 import { applyModalBoxReview } from '../tests/material-parity/modal-position-inspection.mjs';
+import { applyRangeCaretReviews, rangeCaretAttribution } from './audit-material-range-caret-inputs.mjs';
+import { applyMotionCaretReviews, motionCaretAttribution } from './audit-material-caret-motion-context.mjs';
+
+const componentCaretAttributions = new Set([rangeCaretAttribution, motionCaretAttribution,
+  'reviewed-overlay-motion-caret-request-omission', 'reviewed-overlay-caret-local-observation-boundary']);
+export const isComponentCaretReviewRow = row => row.property === 'caretColor' && componentCaretAttributions.has(row.attribution);
+export function applyComponentCaretReviews(rows, cases, inventory, normalize) {
+  return [applyRangeCaretReviews, applyMotionCaretReviews, applyOverlayCaretReviews]
+    .reduce((values, apply) => apply(values, cases, inventory, normalize), rows);
+}
+export function validateComponentCaretReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const expected = applyComponentCaretReviews(originalRows, cases, inventory, normalize).filter(isComponentCaretReviewRow);
+    assert.ok(JSON.stringify(rows.filter(isComponentCaretReviewRow)) === JSON.stringify(expected),
+      'complete component caret review differs');
+    return [];
+  } catch (error) { return [`component caret review does not replay: ${error.message}`]; }
+}
 
 const caretOwners = {
   'bottom-sheet': ['bottom-sheet-copy', 'bottom-sheet-dismiss', 'bottom-sheet-overlay', 'bottom-sheet-panel'],
