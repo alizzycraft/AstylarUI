@@ -8,6 +8,16 @@ import { proveSnackbarSurfaceRequests, proveTooltipSizingRequests, applyOverlayS
   snackbarSurfaceValues } from './overlay-surface-review.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+export function restoreTooltipStackingProofAddition(source) {
+  const current = source.replaceAll('\r\n', '\n');
+  assert.equal(hash(current), '276502d9174da48bc2ce27ac79b0c5f3e37485104dbf20b1cc654a5f18ce1ea5');
+  const start = current.indexOf('// Stacking ownership differs even though both applications request an overlay');
+  const end = current.indexOf('if (process.argv[1]', start);
+  assert.ok(start > 0 && end > start);
+  const historical = current.slice(0, start) + current.slice(end);
+  assert.equal(hash(historical), '259d6d7bbcd0ebaca75620c863a15ea0befd2da2378a7d1f72849b6e50edc9ec');
+  return historical;
+}
 export const overlaySurfaceAttributions = ['reviewed-snackbar-surface-input-substitution', 'reviewed-tooltip-sizing-constraint-omission'];
 const capture = { file: 'artifacts/material-parity/current-ancestry-audit/latest-report.json',
   sha256: 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a' };
@@ -21,8 +31,12 @@ const readBound = receipt => {
 function prepare(report) {
   assert.equal(bindOwnerCaretCaptureSubset(report, readBound(capture)).coverage.complete, true);
   const review = readBound(reviewSource);
-  for (const source of review.sources)
-    assert.equal(hash(readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n')), source.sha256);
+  for (const source of review.sources) {
+    let text = readFileSync(source.file, 'utf8').replaceAll('\r\n', '\n');
+    if (source.file === 'tests/material-parity/tooltip-position-composition.mjs' && hash(text) !== source.sha256)
+      text = restoreTooltipStackingProofAddition(text);
+    assert.equal(hash(text), source.sha256);
+  }
   const population = readBound({ file: 'docs/material-position-input-population.json',
     sha256: '71ed7689534232fe8c167532455abbf9510e89ae69b4c918d9dc7f40d3d346ff' });
   const snacks = population.groups.find(g => g.element === 'snack-bar-overlay').observations;

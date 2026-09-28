@@ -26,10 +26,30 @@ import { sourceAuditDefinitions } from './input-equivalence-policy.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { proveSnackbarSurfaceRequests, collectOverlaySurfaceReview, applyOverlaySurfaceRows,
   overlaySurfacePredecessor } from './overlay-surface-review.mjs';
-import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows,
+import { collectOverlaySurfaceAuditInputs, applyOverlaySurfaceAuditRows, restoreTooltipStackingProofAddition,
   validateOverlaySurfaceAuditInputs, validateOverlaySurfaceAuditClassifications } from './overlay-surface-audit-source-binding.mjs';
 import { collectFullTreeInventory, collectControlTypographyEvidence,
   collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
+
+test('tooltip stacking addition preserves complete historical surface source and observations', () => {
+  const source = readFileSync('tests/material-parity/tooltip-position-composition.mjs', 'utf8');
+  const historical = restoreTooltipStackingProofAddition(source);
+  assert.ok(!historical.includes('function proveTooltipStackingComposition'));
+  for (const changed of [source + '\n// unrelated',
+    source.replace('r.length, 6', 'r.length, 7'),
+    source.replace('candidateLeafZIndex:', 'changedLeafZIndex:')]) {
+    assert.notEqual(changed, source);
+    assert.throws(() => restoreTooltipStackingProofAddition(changed));
+  }
+  const parityPath = 'artifacts/material-parity/current-ancestry-audit/latest-report.json';
+  const evidence = collectOverlaySurfaceAuditInputs(JSON.parse(readFileSync(parityPath)), { parityPath });
+  assert.equal(evidence.binding.status, 'bound', evidence.binding.error);
+  assert.equal(evidence.review.groups.length, 13);
+  assert.equal(evidence.observations.length, 344);
+  assert.deepEqual(validateOverlaySurfaceAuditInputs(evidence), []);
+  const forged = structuredClone(evidence); forged.observations.pop();
+  assert.ok(validateOverlaySurfaceAuditInputs(forged).length);
+});
 
 // Transition tests need original unresolved inputs, not a moving current index
 // in which the same classifications may already have been accepted.

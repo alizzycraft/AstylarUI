@@ -2,6 +2,17 @@
 
 ## Current audit checkpoint — September 28
 
+**Overlay surface binding repaired:** e526f85 added a separate stacking proof;
+the existing surface collector and all other module bytes are conserved. The
+binding now pins the complete current source (276502d9...), removes only that
+addition, and verifies the complete historical digest (259d6d7b...). The original
+review receipt remains untouched. Focused command:
+`node --test --test-name-pattern='tooltip stacking addition preserves' tests/material-parity/modal-position-inspection.spec.mjs`
+passed 1/1 in 9.34s, replaying all 13 groups / 344 observations and rejecting
+unrelated edits, changes to the added function, and lost observations. Only the
+reviewedInputs historical harness binding remains from the rejected export.
+No full export or canonical acceptance was performed.
+
 **Caret binding repaired after the rejected export:** the existing exact additive
 capture-diagnostics reversal now authenticates the caret producer's historical
 source while recording both historical and current receipts. No capture receipt,
