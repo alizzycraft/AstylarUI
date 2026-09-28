@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 28
 
+**Remaining control overflow owners bound:** all 156 original range inputs are
+native-input to candidate-input; 78 slider visual owners are mat-slider to
+mesh-rendering range plugin; 140 tab owners are native text spans to candidate
+buttons. Complete declarations, raw style/reset checks, scalar/tree joins and
+all three candidate stages establish native visible axes versus candidate
+omission for these ten groups / 748 observations. Negative controls reject
+missing rules, wrong types, hidden native axes and candidate overflow additions.
+Do not reuse the tab-panel private-texture explanation for the range plugin:
+its tracks/thumbs/state layers are child meshes. Likewise do not infer native
+range internals from ordinary block overflow. All ten groups remain unresolved
+pending these distinct applicability/ownership assessments. The new focused
+binding test passes 1/1 (3.51s). Updated the prepared table proof's shared-spec
+receipt for this additive test; no canonical integration or renderer changes.
+
 **Table overflow classification prepared, not yet producer-integrated:** the
 existing modal-row review binds both table axes to all 52 original owners
 (two groups / 104 observations). Native initial visible overflow and candidate

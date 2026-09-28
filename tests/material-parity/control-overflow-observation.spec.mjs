@@ -15,6 +15,36 @@ import { proveHeadingVisibleOverflow, applyHeadingVisibleOverflow, validateHeadi
 import { proveTabPanelOverflowBoundary, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
 import { proveTableOverflowInputs, applyTableVisibleOverflow, validateTableVisibleOverflow } from './control-overflow-observation.mjs';
 import { chromium } from 'playwright-core';
+import { proveRemainingControlOverflowInputs } from './control-overflow-observation.mjs';
+
+test('remaining range and tab overflow inputs retain exact owner boundaries', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const owners = { slider: ['slider-start', 'slider-primary', 'slider-visual'], tabs: ['tab-overview', 'tab-activity'] };
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })),
+    ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => owners[e.family]);
+  const inventory = collectFullTreeInventory(cases), counts = {};
+  assert.deepEqual(inventory.errors, []);
+  for (const entry of cases) {
+    const pair = modalInventoryTrees(inventory,
+      `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+    for (const element of owners[entry.family]) {
+      const proof = proveRemainingControlOverflowInputs(entry, ...pair, element);
+      assert.equal(proof.initialValueEquivalent, false); assert.equal(proof.renderingEquivalent, false);
+      counts[element] = (counts[element] ?? 0) + 1;
+      if (counts[element] !== 1) continue;
+      for (const mutate of [
+        ([r]) => { r.ruleEvidenceComplete = false; },
+        ([r]) => { r.styles[r.nodes.find(n => n.key === proof.referenceNode).style].overflowX = 'hidden'; },
+        ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).authored.type = 'div'; },
+        ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).normalResolvedStyle.overflow = 'hidden'; },
+        ([, a]) => { a.rules.push({ selector: '#' + element, overflow: 'clip' }); },
+      ]) { const altered = structuredClone(pair); mutate(altered); assert.throws(() => proveRemainingControlOverflowInputs(entry, ...altered, element)); }
+    }
+  }
+  assert.deepEqual(counts, { 'slider-start': 78, 'slider-primary': 78, 'slider-visual': 78, 'tab-overview': 70, 'tab-activity': 70 });
+});
 
 test('native table omitted overflow retains visible descendants with hidden and ancestor sensitivity', async () => {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });

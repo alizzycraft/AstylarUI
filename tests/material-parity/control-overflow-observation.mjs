@@ -171,7 +171,7 @@ export function applyTableVisibleOverflow(rows, cases, inventory, normalize) {
     'src/app/services/dom/elements/table.service.ts': '0d96f98c3bdcfbba71a1eaa839cfa34d19e5621471b27929574334535e7733c9',
     'src/app/services/dom/elements/element-creation.service.ts': 'bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a',
     'src/app/services/dom/elements/element-creation.service.spec.ts': 'c968bb582c470305f1a83144319d6aaa9d85f6089e19c21c7eff6ca4b09e2830',
-    'tests/material-parity/control-overflow-observation.spec.mjs': '142fc7044bbfb041cfad37871afc47df4d27c58990645d77d9e8edcfc7541d30' };
+    'tests/material-parity/control-overflow-observation.spec.mjs': '7dd26e7d37cee3402ce75b6dac78a63cf57549b182607aaa8592672ff798fb1e' };
   for (const [file, expected] of Object.entries(sources)) assert.equal(createHash('sha256')
     .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
   return applyModalBoxReview(rows, cases, inventory, normalize, {
@@ -221,6 +221,19 @@ function proveOmittedOverflowOwner(entry, r, a, element, referenceType, candidat
   assert.ok(Array.isArray(input.astylarAuthored));
   assert.ok(input.astylarAuthored.every(rule => rule.declarations && !Object.keys(rule.declarations).some(affects)));
   return { element, referenceNode: ref.key, astylarNode: ast.key, referenceAxes: 'visible', candidateAxes: 'omitted' };
+}
+
+export function proveRemainingControlOverflowInputs(entry, r, a, element) {
+  const types = entry.family === 'slider' ? {
+    'slider-start': ['input', 'input'], 'slider-primary': ['input', 'input'],
+    'slider-visual': ['mat-slider', 'showcase.material:range-visual'],
+  } : entry.family === 'tabs' ? {
+    'tab-overview': ['span', 'button'], 'tab-activity': ['span', 'button'],
+  } : {};
+  assert.ok(types[element]);
+  return { ...proveOmittedOverflowOwner(entry, r, a, element, ...types[element]),
+    referenceType: types[element][0], candidateType: types[element][1],
+    initialValueEquivalent: false, ownClippingBranchVerified: false, renderingEquivalent: false };
 }
 
 export function applyHeadingVisibleOverflow(rows, cases, inventory, normalize) {
