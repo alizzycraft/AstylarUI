@@ -193,13 +193,17 @@ export function applyDividerPositionReviews(rows, cases, inventory, normalize) {
 export function proveProgressPositionRequests(entry, reference, candidate, normalize) {
   assert.ok(['progress-bar', 'progress-spinner'].includes(entry.family));
   const identity = proveCustomOwnerBorder(entry, reference, candidate, normalize);
+  return proveRelativePositionRequests(reference, candidate, identity,
+    entry.family === 'progress-bar' ? '.mdc-linear-progress' : '.mat-mdc-progress-spinner', entry.family === 'progress-bar');
+}
+
+function proveRelativePositionRequests(reference, candidate, identity, selector, bar) {
   const r = reference.nodes.find(n => n.key === identity.referenceNode), a = candidate.nodes.find(n => n.key === identity.astylarNode);
   const relevant = k => /^(position|top|right|bottom|left|transform|translate|rotate|scale|all)$|^inset/.test(k.replaceAll('-', '').toLowerCase());
   const select = o => Object.fromEntries(Object.entries(o).filter(([k]) => relevant(k)));
   assert.deepEqual(select(r.inline), {});
-  const bar = entry.family === 'progress-bar';
   const requests = r.rules.map(i => reference.rules[i]).filter(rule => Object.keys(select(rule.declarations)).length);
-  assert.equal(requests.length, 1); assert.equal(requests[0].selector, bar ? '.mdc-linear-progress' : '.mat-mdc-progress-spinner');
+  assert.equal(requests.length, 1); assert.equal(requests[0].selector, selector);
   assert.equal(requests[0].active, true); assert.deepEqual(requests[0].conditions, []);
   assert.deepEqual(select(requests[0].declarations), { position: { value: 'relative', important: false },
     ...(bar ? { transform: { value: 'translateZ(0px)', important: false } } : {}) });
@@ -211,6 +215,44 @@ export function proveProgressPositionRequests(entry, reference, candidate, norma
   for (const stage of [a.resolvedStyle, a.normalResolvedStyle, a.interactionResolvedStyle]) assert.deepEqual(select(stage), {});
   return { ...identity, referencePositionRequests: requests, nativePositionValues: native,
     candidateUsedOffsetsVerified: false, containingBlockEquivalenceProven: false };
+}
+
+export function proveTogglePositionRequests(entry, reference, candidate, element) {
+  assert.equal(entry.family, 'button-toggle');
+  assert.ok(['button-toggle-primary', 'button-toggle-one', 'button-toggle-two'].includes(element));
+  const inputs = entry.styleInputs.filter(i => i.id === element); assert.equal(inputs.length, 1);
+  const input = inputs[0], rs = reference.nodes.filter(n => n.attributes?.id === element || n.attributes?.['data-parity-id'] === element);
+  const as = candidate.nodes.filter(n => n.authored?.id === element); assert.equal(rs.length, 1); assert.equal(as.length, 1);
+  const r = rs[0], a = as[0], group = element === 'button-toggle-primary';
+  assert.equal(r.type, group ? 'mat-button-toggle-group' : 'mat-button-toggle'); assert.equal(a.authored.type, 'div');
+  assert.equal(reference.ruleEvidenceComplete, true); assert.equal(candidate.ruleEvidenceComplete, true);
+  assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
+  assert.equal(input.astylarResolvedStyleEvidenceVersion, 2); assert.equal(Object.keys(input.reference).length, 89);
+  for (const [k, v] of Object.entries(input.reference)) assert.deepEqual(reference.styles[r.style][k], v);
+  for (const [scalar, stage] of [['astylar', 'resolvedStyle'], ['astylarNormalResolvedStyle', 'normalResolvedStyle'], ['astylarInteractionResolvedStyle', 'interactionResolvedStyle']])
+    assert.deepEqual(input[scalar], a[stage]);
+  assert.equal(a.authored.attributes?.style, undefined);
+  const identity = { referenceNode: r.key, astylarNode: a.key, inputEquivalent: false, renderingEquivalent: false };
+  return proveRelativePositionRequests(reference, candidate, identity,
+    group ? '.mat-button-toggle-standalone, .mat-button-toggle-group' : '.mat-button-toggle', group);
+}
+
+export function applyTogglePositionReviews(rows, cases, inventory, normalize) {
+  for (const element of ['button-toggle-primary', 'button-toggle-one', 'button-toggle-two']) {
+    const common = { family: 'button-toggle', element, prove: (e, r, a) => proveTogglePositionRequests(e, r, a, element) };
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, { ...common,
+      properties: element === 'button-toggle-primary' ? ['position', 'transform'] : ['position'],
+      classification: 'application-plugin-authoring-defect', attribution: 'reviewed-toggle-position-request-omission',
+      owner: 'toggle host relative-position and transform authoring',
+      justification: 'Native toggle group and hosts request relative positioning; the group also requests translateZ(0px). Corresponding candidate divs omit these requests at authoring and all three stages. Identity matrix pixels do not establish transform:none or stacking/containing-block equivalence. This proves unequal inputs, not the cause of the rounded-border overflow or a renderer coordinate fault.',
+    });
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, { ...common,
+      properties: ['top', 'right', 'bottom', 'left'], classification: 'parity-harness-defect',
+      attribution: 'reviewed-toggle-computed-offset-boundary', owner: 'toggle used-inset versus local declaration measurement',
+      justification: 'Native relative toggle owners compute zero offsets without authored insets; candidate local declarations omit insets. Preserve zero computed observations without copying them as missing CSS requests. Relative-position and transform omissions are separately classified. Used layout, rounded clipping and final output remain unproven.',
+    });
+  }
+  return rows;
 }
 
 export function applyProgressPositionReviews(rows, cases, inventory, normalize) {

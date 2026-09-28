@@ -7,11 +7,12 @@ import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder, applyDividerPositionReviews, proveDividerPositionRequests, applyProgressPositionReviews, proveProgressPositionRequests, applyBadgeProgressOriginReviews, proveBadgeProgressOrigin, applyChipTabOriginReviews, proveChipTabOrigin } from './custom-owner-border-review.mjs';
+import { applyTogglePositionReviews, proveTogglePositionRequests } from './custom-owner-border-review.mjs';
 
 test('custom host initial colors retain all observations without claiming generated paint equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
   assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
-  const capture = JSON.parse(bytes), families = ['icon', 'slider', 'tabs', 'table', 'divider', 'progress-bar', 'progress-spinner', 'badge', 'chips'];
+  const capture = JSON.parse(bytes), families = ['icon', 'slider', 'tabs', 'table', 'divider', 'progress-bar', 'progress-spinner', 'badge', 'chips', 'button-toggle'];
   const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => families.includes(e.family));
   const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
   assert.deepEqual(inventory.errors, []);
@@ -29,6 +30,19 @@ test('custom host initial colors retain all observations without claiming genera
   assert.ok(tableRows.every(r => r.classification === 'application-plugin-authoring-defect'));
   const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
   const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  const toggles = applyTogglePositionReviews(rows, cases, inventory, normalize), toggleChanges = toggles.filter((r, i) => r !== rows[i]);
+  assert.equal(toggleChanges.length, 16); assert.equal(toggleChanges.reduce((n, r) => n + r.occurrences, 0), 1088);
+  assert.equal(toggleChanges.filter(r => r.classification === 'application-plugin-authoring-defect').length, 4);
+  toggles.forEach((r, i) => { assert.deepEqual(raw(r), raw(rows[i])); if (!toggleChanges.includes(r)) assert.deepEqual(r, rows[i]); });
+  for (const element of ['button-toggle-primary', 'button-toggle-one', 'button-toggle-two']) {
+    const e = cases.find(e => e.family === 'button-toggle'), key = `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+    const [r, a] = modalInventoryTrees(inventory, key), proof = proveTogglePositionRequests(e, r, a, element);
+    assert.equal(proof.containingBlockEquivalenceProven, false);
+    const altered = structuredClone(a); altered.rules.push({ selector: '#' + element, position: 'relative' });
+    assert.throws(() => proveTogglePositionRequests(e, r, altered, element));
+    const native = structuredClone(r); native.nodes.find(n => n.key === proof.referenceNode).inline.left = { value: '0px', important: false };
+    assert.throws(() => proveTogglePositionRequests(e, native, a, element));
+  }
   reviewed.forEach((r, i) => { assert.deepEqual(raw(r), raw(rows[i])); if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
   const positioned = applyDividerPositionReviews(reviewed, cases, inventory, normalize);
   const positionChanges = positioned.filter((r, i) => r !== reviewed[i]);
@@ -86,7 +100,7 @@ test('custom host initial colors retain all observations without claiming genera
     const altered = structuredClone(a); altered.rules.find(rule => rule.selector === '.divider').top = '0';
     assert.throws(() => proveDividerPositionRequests(e, r, altered, normalize));
   }
-  for (const family of families.filter(f => f !== 'chips')) {
+  for (const family of families.filter(f => !['chips', 'button-toggle'].includes(f))) {
     const row = changed.find(r => r.family === family && (family !== 'tabs' || r.element === 'tab-panel')), key = row.reviewedCases[0];
     const e = cases.find(e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}` === key);
     const [r, a] = modalInventoryTrees(inventory, key), proof = proveCustomOwnerBorder(e, r, a, normalize);

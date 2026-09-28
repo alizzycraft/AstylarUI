@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 28
 
+Toggle position proof adds 16 groups / 1088 observations across 68 cases and
+three exact native-host/candidate-div mappings. Four groups identify relative
+position / group translateZ(0px) omissions; twelve distinguish native computed
+zero offsets from omitted local declarations. Shared progress request proof is
+reused without weakening exact selectors, types, scalar or stage checks.
+Rounded clipping, containing blocks and equal-input coordinate behavior remain
+unproven. Combined focused test passes (1/1, 13.44 s), conserving raw/unrelated
+rows and rejecting literal native inset/candidate position injection for all
+three owners. Prepared next batch totals 134 groups / 3948 observations.
+Export 91866 advanced through evidence verification (1205 files / 89151875 bytes,
+ten memory hits, zero disk hits/invalidations) to encode-canonical at 2222.71 s.
+Await terminal result, then run the existing caret-position conservation and
+all-section/source reconciliation; do not accept the package from encoding alone.
+
 Chip/tab origins add 11 groups / 362 observations. The existing motion-caret
 proof supplies authenticated scalar/owner identity and retains competing motion
 requests; the shared origin-only ancestry check independently excludes explicit
