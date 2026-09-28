@@ -2,6 +2,42 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared font followup adds 24 groups / 955 observations: 14 fontStyle groups
+(536 observations) and ten fontWeight groups (419). The inherited-local-omission
+proof shared with the word-property followup now rejects font shorthand as well
+as the specific font field and all resets, on complete native/candidate ancestry.
+All original native fields and three local candidate stages are checked. Native
+normal style / 400 weight versus omitted candidate local fields is attributed
+to the observation boundary only; no computed, inherited-response, descendant,
+plugin paint or rendering equivalence is asserted. The existing proof helper was
+renamed proveInheritedLocalOmission to describe its actual shared scope; no new
+report, collector or validation layer was introduced.
+
+The same focused population test conserves both the previous 46 word groups and
+the new 24 font groups, keeps the tooltip explicit wordBreak request unresolved,
+and exercises ancestor/serialized/reset/missing-path controls plus candidate font
+shorthand mutations. Command:
+`node --test --test-name-pattern="inherited word properties" tests/material-parity/wrapping-input-populations.spec.mjs`
+passes 1/1 in 64.71 s; scoped diff checks pass. Prepared followups now total
+88 groups / 3753 observations (18 display + 46 word + 24 font); the accepted
+canonical still has 286 unresolved groups until coherent integration/export.
+
+Remaining font triage is deliberately distinct: six weight groups / 263
+observations include explicit sheet body-weight tokens (copy, dismiss, panel),
+dialog supporting-text weight (copy), and native button/input/select font-weight:
+inherit requests (both range input owners). Twelve family groups / 619 observations
+split into five overlay owners with native external Times New Roman versus candidate
+page-stack inheritance; two toggle owners with component family tokens; and five
+chip/list/table/tab owners inheriting the page stack. These are first-case request
+traces, not full-population classifications. Next reuse the existing font scope,
+overlay and private-tab ownership proofs for those contexts; do not collapse
+token requests into initial values just because they currently compute 400/Roboto.
+RendererService.getInheritedTextStyle/pickInheritedTextProperties and
+TextStyleParserService.DEFAULT_TEXT_STYLE contain normal font fallbacks, supporting
+the local-versus-consumed distinction without proving all consumers use them.
+
+### Inherited word-property followup
+
 Prepared inherited-word followup covers 46 groups / 1764 original observations
 in the existing wrapping-input-review module and population spec. It checks all
 89 native scalar fields, complete ancestry, inline/active/serialized requests,

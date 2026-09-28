@@ -10,7 +10,7 @@ import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { inspectOverlayOwnerDeclarations } from './overlay-owner-declaration-review.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
-import { inheritedWordOwners, proveInheritedWordBoundary, applyInheritedWordReviews } from './wrapping-input-review.mjs';
+import { inheritedWordOwners, omittedFontOwners, proveInheritedLocalOmission, applyInheritedWordReviews, applyOmittedFontReviews } from './wrapping-input-review.mjs';
 import { explicitNowrapTargets as targets, proveExplicitNowrap, applyExplicitNowrap,
   validateExplicitNowrap, explicitNowrapAttribution, applyOmittedNowrap,
   validateOmittedNowrap, omittedNowrapAttribution, proveOmittedNowrap,
@@ -59,7 +59,7 @@ test('inherited word properties separate 46 observation boundaries from the tool
   const capture = JSON.parse(bytes), cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))];
   const inventory = collectFullTreeInventory(cases); assert.deepEqual(inventory.errors, []);
   const snapshot = { generation: '4880964fc1018a1fd6409f7c7af2ddaa5fc21a82e45dab3a0cc5fce5a6019156', indexSha256: '5e86f89a05cd88843d7dd6130ed13c88cdb6371efb389d73a934c8d9f953511b' };
-  const rows = Object.keys(inheritedWordOwners).flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot)).filter(r => r.evidence.section === 'discrepancies');
+  const rows = [...new Set([...Object.keys(inheritedWordOwners), ...omittedFontOwners.map(([f]) => f)])].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, snapshot)).filter(r => r.evidence.section === 'discrepancies');
   const reviewed = applyInheritedWordReviews(rows, cases, inventory, bindPreciseAuditNormalization()), changed = reviewed.filter((r, i) => r !== rows[i]);
   assert.equal(changed.length, 46); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 1764);
   const explicit = rows.find(r => r.element === 'tooltip-popup' && r.property === 'wordBreak');
@@ -76,30 +76,47 @@ test('inherited word properties separate 46 observation boundaries from the tool
       for (const proof of r.reviewEvidence.observations) { assert.equal(proof.candidateComputedVerified, false); assert.equal(proof.descendantConsumptionVerified, false); }
     }
   });
-  for (const row of [...changed, explicit]) {
+  const withFonts = applyOmittedFontReviews(reviewed, cases, inventory, bindPreciseAuditNormalization());
+  const fonts = withFonts.filter((r, i) => r !== reviewed[i]);
+  assert.equal(fonts.length, 24); assert.equal(fonts.reduce((n, r) => n + r.occurrences, 0), 955);
+  assert.equal(fonts.filter(r => r.property === 'fontStyle').length, 14);
+  assert.equal(fonts.filter(r => r.property === 'fontWeight').length, 10);
+  withFonts.forEach((r, i) => {
+    assert.deepEqual(raw(r), raw(rows[i]));
+    if (r !== reviewed[i]) {
+      assert.equal(rows[i].attribution, 'unresolved'); assert.equal(r.classification, 'parity-harness-defect');
+      assert.equal(r.reviewEvidence.observations.length, r.occurrences);
+      for (const p of r.reviewEvidence.observations) { assert.equal(p.candidateComputedVerified, false); assert.equal(p.descendantConsumptionVerified, false); assert.equal(p.renderingEquivalent, false); }
+    }
+  });
+  for (const row of [...changed, ...fonts, explicit]) {
     const { family, element, property } = row;
     const entry = cases.find(e => e.family === family && e.styleInputs.some(i => i.id === element && i.reference));
-    const [r, a] = modalInventoryTrees(inventory, keyOf(entry)), proof = proveInheritedWordBoundary(entry, r, a, element, property);
+    const [r, a] = modalInventoryTrees(inventory, keyOf(entry)), proof = proveInheritedLocalOmission(entry, r, a, element, property);
     assert.equal(proof.publicSupportCheckRequired, row === explicit);
     const css = property.replace(/[A-Z]/g, c => '-' + c.toLowerCase());
     const ancestor = structuredClone(r), owner = ancestor.nodes.find(n => n.key === proof.referenceNode);
     ancestor.nodes.find(n => n.key === owner.parent).inline[css] = { value: 'inherit', important: false };
-    assert.throws(() => proveInheritedWordBoundary(entry, ancestor, a, element, property));
+    assert.throws(() => proveInheritedLocalOmission(entry, ancestor, a, element, property));
     const reset = structuredClone(a); reset.rules.push({ selector: '*', all: 'initial' });
-    assert.throws(() => proveInheritedWordBoundary(entry, r, reset, element, property));
+    assert.throws(() => proveInheritedLocalOmission(entry, r, reset, element, property));
     const inherited = structuredClone(a), child = inherited.nodes.find(n => n.key === proof.astylarNode);
     inherited.nodes.find(n => n.key === child.parent).resolvedStyle[property] = 'normal';
-    assert.throws(() => proveInheritedWordBoundary(entry, r, inherited, element, property));
+    assert.throws(() => proveInheritedLocalOmission(entry, r, inherited, element, property));
     const incomplete = structuredClone(a); incomplete.nodes = incomplete.nodes.filter(n => n.key !== child.parent);
-    assert.throws(() => proveInheritedWordBoundary(entry, r, incomplete, element, property));
+    assert.throws(() => proveInheritedLocalOmission(entry, r, incomplete, element, property));
     const serialized = structuredClone(r), n = serialized.nodes.find(n => n.key === proof.referenceNode);
     const index = n.rules.find(i => serialized.rules[i].active);
     if (index === undefined) { n.rules.push(serialized.rules.length); serialized.rules.push({ active: true, selector: '#injected', conditions: [], declarations: {}, cssText: `${css}: inherit;` }); }
     else serialized.rules[index].cssText += ` ${css}: inherit;`;
-    assert.throws(() => proveInheritedWordBoundary(entry, serialized, a, element, property));
+    assert.throws(() => proveInheritedLocalOmission(entry, serialized, a, element, property));
     if (property === 'overflowWrap') {
       const alias = structuredClone(a); alias.rules.push({ selector: '#' + element, wordWrap: 'break-word' });
-      assert.throws(() => proveInheritedWordBoundary(entry, r, alias, element, property));
+      assert.throws(() => proveInheritedLocalOmission(entry, r, alias, element, property));
+    }
+    if (property.startsWith('font')) {
+      const shorthand = structuredClone(a); shorthand.rules.push({ selector: '#' + element, font: 'italic bold 16px serif' });
+      assert.throws(() => proveInheritedLocalOmission(entry, r, shorthand, element, property));
     }
   }
 });

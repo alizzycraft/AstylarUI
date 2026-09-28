@@ -492,11 +492,24 @@ export const inheritedWordOwners = {
   dialog: ['dialog-actions', 'dialog-cancel', 'dialog-copy', 'dialog-panel', 'dialog-save', 'dialog-title'],
   'snack-bar': ['snack-bar-overlay', 'snack-bar-surface'], tabs: ['tab-panel'], tooltip: ['tooltip-popup'],
 };
-export function proveInheritedWordBoundary(entry, reference, candidate, element, property) {
-  assert.ok(inheritedWordOwners[entry.family]?.includes(element));
-  assert.ok(['wordBreak', 'overflowWrap', 'wordSpacing'].includes(property));
+export const omittedFontOwners = [
+  ...Object.entries(inheritedWordOwners).flatMap(([family, ids]) => ids.filter(id => !['dialog-cancel', 'dialog-save'].includes(id)).map(id => [family, id, 'fontStyle'])),
+  ['bottom-sheet', 'bottom-sheet-overlay', 'fontWeight'],
+  ['chips', 'chip-0', 'fontWeight'], ['chips', 'chip-1', 'fontWeight'],
+  ['dialog', 'dialog-actions', 'fontWeight'], ['dialog', 'dialog-panel', 'fontWeight'],
+  ['progress-bar', 'progress-bar-primary', 'fontWeight'], ['progress-spinner', 'progress-spinner-primary', 'fontWeight'],
+  ['snack-bar', 'snack-bar-overlay', 'fontWeight'], ['snack-bar', 'snack-bar-surface', 'fontWeight'],
+  ['tabs', 'tab-panel', 'fontWeight'],
+];
+export function proveInheritedLocalOmission(entry, reference, candidate, element, property) {
+  const font = ['fontStyle', 'fontWeight'].includes(property);
+  if (font) assert.ok(omittedFontOwners.some(([family, id, key]) => family === entry.family && id === element && key === property));
+  else {
+    assert.ok(inheritedWordOwners[entry.family]?.includes(element));
+    assert.ok(['wordBreak', 'overflowWrap', 'wordSpacing'].includes(property));
+  }
   assert.ok(element !== 'tooltip-popup' || property !== 'overflowWrap'); // Existing explicit anywhere proof.
-  const affects = key => ['all', property.toLowerCase(), ...(property === 'overflowWrap' ? ['wordwrap'] : [])].includes(key.replaceAll('-', '').toLowerCase());
+  const affects = key => ['all', property.toLowerCase(), ...(font ? ['font'] : []), ...(property === 'overflowWrap' ? ['wordwrap'] : [])].includes(key.replaceAll('-', '').toLowerCase());
   const select = style => Object.fromEntries(Object.entries(style ?? {}).filter(([key]) => affects(key)));
   for (const tree of [reference, candidate]) {
     assert.deepEqual(tree.errors, []); assert.equal(tree.ruleEvidenceComplete, true);
@@ -517,7 +530,7 @@ export function proveInheritedWordBoundary(entry, reference, candidate, element,
   assert.equal(native.type, input.referenceStructure.type); assert.equal(ast.authored.type, input.astylarStructure.type);
   assert.equal(Object.keys(input.reference).length, 89);
   for (const [key, value] of Object.entries(input.reference)) assert.deepEqual(reference.styles[native.style][key], value);
-  assert.equal(input.reference[property], property === 'wordSpacing' ? '0px' : 'normal');
+  assert.equal(input.reference[property], property === 'wordSpacing' ? '0px' : property === 'fontWeight' ? '400' : 'normal');
   assert.equal(candidate.resolvedStyleEvidenceVersion, 2); assert.equal(candidate.resolvedStyleSource, 'core-style-inspection');
   assert.equal(input.astylarResolvedStyleEvidenceVersion, 2);
   for (const [stage, scalar] of [['resolvedStyle', 'astylar'], ['normalResolvedStyle', 'astylarNormalResolvedStyle'], ['interactionResolvedStyle', 'astylarInteractionResolvedStyle']]) assert.deepEqual(ast[stage], input[scalar]);
@@ -552,12 +565,21 @@ export function applyInheritedWordReviews(rows, cases, inventory, normalize) {
       // this native request into a fixture-only defect without a support proof.
       if (explicit) continue;
       rows = applyModalBoxReview(rows, cases, inventory, normalize, {
-        family, element, properties: [property], prove: (entry, r, a) => proveInheritedWordBoundary(entry, r, a, element, property),
+        family, element, properties: [property], prove: (entry, r, a) => proveInheritedLocalOmission(entry, r, a, element, property),
         classification: 'parity-harness-defect',
         attribution: 'reviewed-inherited-word-computed-local-boundary',
         owner: 'computed inherited word properties versus local measurement',
         justification: 'The exact native owner computes normal or zero word spacing without a relevant request/reset on its captured ancestry; candidate local stages and ancestry omit the field. This is an observation-stage boundary, not proof of candidate computed defaults, descendant/plugin consumption, inherited response or rendering equivalence. Preserve original owners, overlay rule gaps and all other typography/wrapping findings.',
       });
     }
+  return rows;
+}
+export function applyOmittedFontReviews(rows, cases, inventory, normalize) {
+  for (const [family, element, property] of omittedFontOwners) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family, element, properties: [property], prove: (entry, r, a) => proveInheritedLocalOmission(entry, r, a, element, property),
+    classification: 'parity-harness-defect', attribution: 'reviewed-font-initial-computed-local-boundary',
+    owner: 'computed inherited font versus local declaration measurement',
+    justification: 'Native computed normal style or 400 weight has no corresponding request, font shorthand or reset on the captured ancestry; candidate ancestry and local stages omit the field. Preserve actual owners and all explicit font/token, plugin and descendant findings. This establishes unlike measurement stages, not computed candidate defaults, equivalent inherited response, descendant consumption or rendering parity.',
+  });
   return rows;
 }
