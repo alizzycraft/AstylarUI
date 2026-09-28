@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 28
 
+**Cold verification advanced:** session4560 completed evidence-session checks
+with 1,205 files / 89,154,859 bytes, 2 collectors, 10 memory hits, zero disk hits
+and zero invalidations. It reached `check-canonical` at 2,183,386ms; still live
+at last poll, not terminal. The named launch remains read-only; do not restart.
+Direct diff of producer against last canonical commit5183513 confirms only
+stacking/full-radius application and validation plus seven fingerprint entries
+(22 additions / 1 replacement); policy source definitions unchanged at this
+checkpoint. Whole-report/scalar conservation results above remain applicable.
+
+**Remaining max-width requests bound (integration pending):** all 222 original
+owners in the three unresolved groups were checked in b07ef154... full trees:
+chip0/1 76 each and tabs-primary70. `.mdc-evolution-chip` and
+`.mat-mdc-tab-group` explicitly request max-width100%. Candidate chip nodes
+instead have fixed widths97/68 and93/64; tab group has width100%, not maxWidth.
+All three candidate stages omit maxWidth at these nodes. Their ancestry has
+only the separate shared root maxWidth778px, not a relocated owner constraint.
+This is not evidence that a percentage maximum was ignored by core: it was not
+submitted at the mapped owner. Reuse `proveControlWidthRequest` for chip identity
+and existing tab composition evidence when integrating. Parent size caps and
+width100% do not generally establish the same min/max-content/flex behavior;
+do not equate these inputs from captured geometry. No capture or fixture edits.
+
 **Icon focused proof added:** `node --test
 tests/material-parity/icon-asset-input.spec.mjs` passes 1/1 (2.44s overall).
 Reuses existing authenticated full-tree inventory and checks all 20 original
