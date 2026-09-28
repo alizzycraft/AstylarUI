@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 28
 
+**Tooltip keyboard question answered:** fresh ordinary-mode real Tab capture at
+DPR 1 and 2 focuses `tooltip-primary` on both sides (trusted key/focus events),
+but only the reference opens a popup. Candidate `open` stays false and its
+authored tree contains no popup; this is missing opening behavior, not an
+existing popup lost in placement/clipping/projection. Tab away leaves both
+closed. This supports the source-level comparison-authoring omission described
+below, not a general core focus defect or the old large-offset symptom.
+
+Capture: `artifacts/material-parity/tooltip-keyboard-813f658-v2/latest-report.json`,
+SHA `7bc0a3e60a7f875196b0d75ab60d63de05b1419a9c2bed1b370cfe5de4f3477a`;
+Chrome 153.0.8010.53, six paired states, zero runtime errors, exit 1 for the two
+honest focus mismatches. Separate keyboard producer reuses supplemental capture
+validation without changing the historical pointer producer or its receipts.
+Fresh `ngc` source compilation matched all 104 installed core JS files; fresh
+showcase development build completed in 19.24 s with two prerendered routes.
+`tooltip-keyboard-runtime-813f658/checkpoint/manifest.json` retains source/core
+and served-asset provenance; this is a new browser run, not the old checkpoint.
+Existing composition-spec focused checks (`real Tab reaches|tooltip focus matrix`)
+pass 2/2 in 2.10 s, independently checking runtime receipts, tree/screenshot
+hashes, actual focus identities and missing popup ownership. First draft capture
+is retained as diagnostic history, not the accepted producer-bound proof.
+No fixture/core edits or full export. Next: connected placement edge/scroll
+coverage, keeping this demonstrated state omission separate from geometry.
+
 Tooltip keyboard coverage is now distinguished from the eight historical
 `focus` cases: all eight authenticated paired trees contain no tooltip popup.
 The current harness's focus branch calls `target.focus()` on both sides, whereas

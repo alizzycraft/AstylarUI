@@ -9,6 +9,53 @@ import { collectTooltipPositionComposition, proveTooltipPositionComposition } fr
 import { proveTooltipSizingRequests } from './overlay-surface-review.mjs';
 import { queryFindings, loadFindingEvidence } from '../../scripts/audit-findings-store.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
+import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
+import { propertyGroups } from './input-equivalence-policy.mjs';
+
+test('real Tab reaches both tooltip triggers but only reference authors an open popup', () => {
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const file = 'artifacts/material-parity/tooltip-keyboard-813f658-v2/latest-report.json';
+  const bytes = readFileSync(file);
+  assert.equal(hash(bytes), '7bc0a3e60a7f875196b0d75ab60d63de05b1419a9c2bed1b370cfe5de4f3477a');
+  const report = JSON.parse(bytes);
+  const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  const binding = validateSupplementalCapture(report, { reportFile: file,
+    expectedProvenance: manifest.provenance, script: 'scripts/audit-material-tooltip-keyboard.mjs',
+    styleProperties: Object.values(propertyGroups).flat() });
+  assert.equal(binding.status, 'checkpoint-bound', JSON.stringify(binding.errors));
+  assert.deepEqual(report.actions, ['initial', 'keyboard-focus', 'keyboard-blur']);
+  assert.deepEqual(report.results.map(row => [row.deviceScaleFactor, row.action]),
+    [1, 2].flatMap(dpr => report.actions.map(action => [dpr, action])));
+  assert.equal(manifest.provenance.core.length, 104);
+  for (const receipt of manifest.provenance.core) {
+    assert.equal(hash(readFileSync(receipt.source)), receipt.sourceSha256);
+    assert.equal(hash(readFileSync(`examples/material-showcase/node_modules/astylarui/dist/lib/${receipt.file}`)), receipt.sha256);
+  }
+  for (const row of report.results) {
+    const focused = row.action === 'keyboard-focus';
+    for (const side of ['reference', 'astylar']) {
+      const sample = row[side], tree = JSON.parse(readFileSync(sample.inputTree.file));
+      const expected = side === 'reference' && focused;
+      const popups = tree.nodes.filter(node => side === 'reference'
+        ? String(node.attributes?.class ?? '').split(/\s+/).includes('mat-mdc-tooltip-surface')
+        : node.authored?.id === 'tooltip-popup');
+      assert.equal(popups.length, Number(expected));
+      assert.equal(sample.popupCount, popups.length);
+      assert.equal(hash(readFileSync(sample.screenshot.file)), sample.screenshot.sha256);
+      const active = side === 'reference' ? sample.activeId : sample.activeAstylarId;
+      assert.equal(active === 'tooltip-primary', focused);
+      if (focused) {
+        assert.ok(sample.events.some(event => event.type === 'keydown' && event.key === 'Tab' && event.trusted));
+        assert.ok(sample.events.some(event => event.type === 'focusin' && event.trusted &&
+          (side === 'reference' ? event.id : event.astylarId) === 'tooltip-primary'));
+      }
+    }
+    assert.equal(row.astylar.candidateOpen, false);
+    assert.equal(row.presenceMatches, !focused);
+  }
+  // Candidate's state and authored tree both omit the popup: not evidence of
+  // an existing popup rendered off-screen, clipped, or lost in projection.
+});
 
 test('tooltip pixel width is a computed observation, not an explicit owner width request', () => {
   const report = collectTooltipPositionComposition(); // authenticates all original tree receipts
