@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+**Tab-panel overflow boundary now bound; integration pending:** all70 original
+tab-panel owners reuse the existing wrapping/alias proof and the unchanged plugin
+source fingerprint. Two groups /140 observations are measurement-owner boundary
+differences: native inline text versus a childless private-texture plugin. Neither
+an ordinary visible-overflow normalization nor invented hidden overflow is justified.
+The existing competing-plugin text-renderer finding remains; original-case raster
+clipping and overflow-mode sensitivity are explicitly unproved. Focused command
+`node --test --test-name-pattern="70 original tab panels"
+tests/material-parity/control-overflow-observation.spec.mjs` passes1/1 (2.59s),
+including exact population, raw/unrelated conservation, replay and negative controls.
+No new capture, framework, renderer or fixture changes. These two groups and the
+four heading groups below still need producer integration. Canonical count remains
+150; source-fingerprint reconciliation, independent cold export/check and final
+gates remain outstanding. Prioritize remaining control/plugin overflow boundaries
+before ordinary cosmetic differences; do not reopen proven coordinate root causes.
+
 **Heading-overflow proof now bound to original owners; integration pending:**
 card-title52 and dialog-title32 original owners pass complete declaration,
 identity, native-axis and all-three-candidate-stage checks. Four groups /168

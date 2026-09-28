@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { resolveOriginAliasPair } from './origin-alias-mapping-evidence.mjs';
 import { rootInitialSelectorCanApply } from './root-initial-style-evidence.mjs';
 import { applyModalBoxReview } from './modal-position-inspection.mjs';
+import { proveTabPanelWrapping } from './wrapping-input-review.mjs';
 
 export const mappedVisibleOwners = Object.freeze({
   paginator: ['paginator-range', 'paginator-size'], stepper: ['stepper-content'],
@@ -204,6 +205,51 @@ export function validateHeadingVisibleOverflow(rows, originalRows, cases, invent
     assert.deepEqual(select(rows), select(applyHeadingVisibleOverflow(originalRows, cases, inventory, normalize)));
     return [];
   } catch (error) { return [`heading initial overflow lacks bound original owners: ${error.message}`]; }
+}
+
+export function proveTabPanelOverflowBoundary(entry, r, a) {
+  const inputs = entry.styleInputs.filter(i => i.id === 'tab-panel'); assert.equal(inputs.length, 1);
+  const mapping = proveTabPanelWrapping(entry, inputs[0], r, a);
+  for (const tree of [r, a]) { assert.equal(tree.ruleEvidenceComplete, true); assert.deepEqual(tree.errors, []); }
+  const ref = r.nodes.find(n => n.key === mapping.referenceNode), ast = a.nodes.find(n => n.key === mapping.astylarNode);
+  assert.equal(ref.type, 'span');
+  const affects = key => /^(overflow.*|all)$/.test(key.replaceAll('-', '').toLowerCase());
+  assert.deepEqual(Object.keys(ref.inline ?? {}).filter(affects), []);
+  assert.doesNotMatch(ref.attributes?.style ?? '', /(?:overflow(?:-[\w-]+)?|all)\s*:/i);
+  for (const rule of ref.rules.map(i => r.rules[i]).filter(rule => rule.active)) {
+    assert.ok(!rule.cssText.includes('\\')); assert.deepEqual(Object.keys(rule.declarations).filter(affects), []);
+  }
+  for (const key of ['overflowX', 'overflowY']) assert.equal(r.styles[ref.style][key], 'visible');
+  assert.doesNotMatch(ast.authored.attributes?.style ?? '', /(?:overflow(?:-[\w-]+)?|all)\s*:/i);
+  for (const style of [ast.authored.style ?? {}, ast.normalResolvedStyle, ast.resolvedStyle, ast.interactionResolvedStyle])
+    assert.deepEqual(Object.keys(style).filter(affects), []);
+  assert.deepEqual(a.rules.filter(rule => rootInitialSelectorCanApply(rule.selector, ast.authored))
+    .flatMap(rule => Object.keys(rule).filter(affects)), []);
+  const file = 'examples/material-showcase/src/app/material-plugin/material-showcase.plugin.ts';
+  const sourceSha256 = createHash('sha256').update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex');
+  assert.equal(sourceSha256, 'dee2c10af7f3116bc6a476d63182ac182e5717b90f5333a327b77213e0b9107e');
+  return { referenceNode: ref.key, astylarNode: ast.key, mapping, file, sourceSha256,
+    referenceAxes: 'visible', candidateLocalAxes: 'omitted',
+    inputEquivalent: false, renderingEquivalent: false, candidateComputedOverflowVerified: false,
+    pluginOverflowSensitivityVerified: false, originalRasterClippingVerified: false, coreDefectProven: false,
+    limitation: 'Native inline text owner versus a childless private-texture plugin. Existing wrapping evidence establishes paint ownership, not an overflow-mode comparison or raster clipping in these original cases.' };
+}
+
+export function applyTabPanelOverflowBoundary(rows, cases, inventory, normalize) {
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'tabs', element: 'tab-panel', properties: ['overflowX', 'overflowY'], prove: proveTabPanelOverflowBoundary,
+    classification: 'parity-harness-defect', attribution: 'reviewed-tab-panel-overflow-owner-boundary',
+    owner: 'tab-panel inline-text versus plugin observation boundary; existing competing plugin text renderer',
+    justification: 'The measured native owner is an inline text span; the candidate owner is a childless custom plugin that paints its label on a dimension-bounded private texture. Both omit own overflow requests, but their local style observations do not establish equivalent text overflow handling. Reuse the existing plugin text/wrapping ownership proof and retain the source finding; do not normalize this plugin as an ordinary visible-overflow node, invent hidden overflow, or claim original-case clipping or a shared-core defect.',
+  });
+}
+
+export function validateTabPanelOverflowBoundary(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-tab-panel-overflow-owner-boundary');
+    assert.deepEqual(select(rows), select(applyTabPanelOverflowBoundary(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`tab-panel overflow boundary lacks original ownership evidence: ${error.message}`]; }
 }
 
 export const clippingOwners = Object.freeze({

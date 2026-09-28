@@ -12,6 +12,44 @@ import { clippingOwners, proveControlClippingRequests, applyControlClippingReque
   applyVisibleButtonOverflow, validateVisibleButtonOverflow, visibleButtonOverflowAttribution } from './control-overflow-observation.mjs';
 import { applySnackbarPositionRequests, validateSnackbarPositionRequests } from './snackbar-position-observation.mjs';
 import { proveHeadingVisibleOverflow, applyHeadingVisibleOverflow, validateHeadingVisibleOverflow } from './control-overflow-observation.mjs';
+import { proveTabPanelOverflowBoundary, applyTabPanelOverflowBoundary, validateTabPanelOverflowBoundary } from './control-overflow-observation.mjs';
+
+test('70 original tab panels retain the plugin overflow observation boundary', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))]
+    .filter(e => e.family === 'tabs');
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []); assert.equal(cases.length, 70);
+  const rows = queryFindings('artifacts/material-parity/working-audit', 'tabs', {
+    generation: '0a30ca894170b342e4521c01e4fcb23ed990d70cea789fe89bd4eba0baf663fb',
+    indexSha256: 'edf9c2de34728dc874460796853460dd5d39bafd71d4db41cba257366ec50cc0',
+  }).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyTabPanelOverflowBoundary(rows, cases, inventory, normalize);
+  const changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 2); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 140);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([key]) => !metadata.has(key)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  for (let i = 0; i < rows.length; i++) if (!changed.includes(applied[i])) assert.deepEqual(applied[i], rows[i]);
+  assert.deepEqual(validateTabPanelOverflowBoundary(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied);
+  forged.find(r => r.attribution === 'reviewed-tab-panel-overflow-owner-boundary').reviewedCases.pop();
+  assert.equal(validateTabPanelOverflowBoundary(forged, rows, cases, inventory, normalize).length, 1);
+  const entry = cases[0], pair = modalInventoryTrees(inventory,
+    `${entry.kind}:${entry.family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
+  const proof = proveTabPanelOverflowBoundary(entry, ...pair);
+  assert.equal(proof.pluginOverflowSensitivityVerified, false); assert.equal(proof.renderingEquivalent, false);
+  for (const mutate of [
+    ([r]) => { r.ruleEvidenceComplete = false; },
+    ([r]) => { r.nodes.find(n => n.key === proof.referenceNode).inline = { overflow: { value: 'hidden' } }; },
+    ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).authored.type = 'div'; },
+    ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).resolvedStyle.overflowY = 'hidden'; },
+    ([, a]) => { a.rules.push({ selector: '#tab-panel', overflow: 'hidden' }); },
+  ]) { const altered = structuredClone(pair); mutate(altered); assert.throws(() => proveTabPanelOverflowBoundary(entry, ...altered)); }
+  assert.throws(() => applyTabPanelOverflowBoundary(rows, cases.slice(1), inventory, normalize));
+});
 
 test('84 original heading owners satisfy the dependency-bound initial overflow proof', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
