@@ -36,6 +36,17 @@ function fixture(kind = 'controlFontStyle') {
 }
 const verify = f => verifyFollowupSourceReceipt(f.kind, f.binding, f.plan, f.proof, f.proofBytes);
 
+test('expansion receipt reconciliation does not permit altered observations or arbitrary source receipts', () => {
+  const f = fixture('expansionOwner');
+  const changedSource = structuredClone(f);
+  changedSource.proof.sourceFingerprints.find(s => s.file.endsWith('/run-material-parity.mjs')).sha256 = '0'.repeat(64);
+  assert.throws(() => verify(changedSource));
+  const changedObservation = structuredClone(f);
+  changedObservation.proof.findings[0].proof.originalReferenceOwner.type = 'button';
+  assert.throws(() => verify(changedObservation));
+  assert.equal(verify(f).proposedGroups, 43);
+});
+
 test('receipt checking preserves bounded claims and rejects changed plans, sources, and unsupported acceptance', () => {
   for (const kind of ['leafFamily', 'leafWeightTracking', 'expansionOwner', 'controlFontStyle']) {
     const f = fixture(kind), r = verify(f);

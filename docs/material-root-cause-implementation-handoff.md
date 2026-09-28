@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 28
 
+**Cold-export failure traced to followup binding, not a new box-sizing finding:**
+The second cold export exited before writing canonical output. Its visible
+`proveBoxSizingOmission` assertion was secondary: the expansion owner-mapping
+binding had failed, allowing the already-reviewed panel/header mismatch to
+reach an inappropriate fallback. Isolated replay identified exactly one changed
+leaf in the expansion source proof: the capture-harness receipt changed from
+c3cabcfde... to 4ed6abe8.... All 68 original observations remain identical.
+`followup-input-source-replay.mjs` now reuses the existing exact diagnostic-source
+reversal before comparing the complete historical proof. No assertions,
+classifications, captured bytes, renderer code or fixtures were weakened/changed.
+Source replay tests pass (3/3, 20.57s); added expansion receipt/observation
+mutation check passes (1/1). The focused builder-boundary test passes (1/1,
+44.36s), independently binding and validating all 66 groups / 2,640 observations.
+Accepted canonical counts remain unchanged. No export is currently running.
+Next: check other pending source bindings before another expensive export, then
+perform full-payload conservation and cold acceptance. Prioritize integration
+provenance first, then the retained dialog/toolbar/chips spacing investigations;
+remaining scalar/state coverage and final enforced browser gates are still open.
+
 **Pending action-radius coverage classification prepared:** card, toolbar and
 dialog actions account for 20 previously unresolved groups / 620 observations.
 Their native 9999px requests are replaced with explicit 20px/21px requests.

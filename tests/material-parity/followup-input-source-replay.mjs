@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { restoreGapCaptureDiagnostics } from './gap-survey-source-replay.mjs';
 import { collectLeafFontFamily } from '../../scripts/audit-material-leaf-font-family-stages.mjs';
 import { collectLeafWeightTracking } from '../../scripts/audit-material-leaf-weight-tracking-stages.mjs';
 import { collectExpansionOwnerMapping } from '../../scripts/audit-material-expansion-owner-mapping.mjs';
@@ -94,6 +95,22 @@ export function replayFollowupInputSourcePlans() {
     const proofDescriptor = plan.proof ?? plan.sourceProof;
     const proofBytes = readFileSync(proofDescriptor.file, 'utf8').replaceAll('\r\n', '\n');
     const proof = collect();
+    // This retained capture predates the additive paint diagnostics. Authenticate
+    // the complete current source and its exact reversal before replaying the
+    // historical receipt; never relax comparison of observations or other sources.
+    if (kind === 'expansionOwner') {
+      const historical = JSON.parse(proofBytes);
+      const file = 'tests/material-parity/run-material-parity.mjs';
+      const currentReceipt = proof.sourceFingerprints.find(s => s.file === file);
+      const priorReceipt = historical.sourceFingerprints.find(s => s.file === file);
+      assert.ok(currentReceipt && priorReceipt);
+      if (currentReceipt.sha256 !== priorReceipt.sha256) {
+        const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+        assert.equal(hash(source), currentReceipt.sha256);
+        assert.equal(hash(restoreGapCaptureDiagnostics(source)), priorReceipt.sha256);
+        currentReceipt.sha256 = priorReceipt.sha256;
+      }
+    }
     descriptors[kind] = verifyFollowupSourceReceipt(kind, binding, plan, proof, proofBytes);
     plans[kind] = plan;
   }
