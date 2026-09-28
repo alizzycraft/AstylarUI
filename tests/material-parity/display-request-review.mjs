@@ -22,9 +22,14 @@ export const displayRequestOwners = [
   ['tooltip', 'tooltip-popup', 'div', 'div', 'block', 'flex', null, '#tooltip-popup'],
   ['tree', 'tree-primary', 'mat-tree', 'div', 'block', 'flex', '.mat-tree', '.material-tree'],
 ];
+export const displayBoundaryOwners = [
+  ['radio', 'radio-primary', 'mat-radio-group', 'div', 'inline', 'block', null, null],
+  ['tabs', 'tab-panel', 'span', 'showcase.material:tab-panel', 'inline', 'block', null, null],
+  ['toolbar', 'toolbar-title', 'span', 'span', 'block', 'inline', null, null],
+];
 
 export function proveDisplayRequest(entry, reference, candidate, element) {
-  const scope = displayRequestOwners.find(([family, id]) => entry.family === family && id === element);
+  const scope = [...displayRequestOwners, ...displayBoundaryOwners].find(([family, id]) => entry.family === family && id === element);
   assert.ok(scope);
   for (const tree of [reference, candidate]) {
     assert.deepEqual(tree.errors, []); assert.equal(tree.ruleEvidenceComplete, true);
@@ -71,11 +76,37 @@ export function proveDisplayRequest(entry, reference, candidate, element) {
   assert.ok(rp); assert.ok(ap);
   if (scope[8]) assert.equal(reference.styles[rp.style].display, 'flex');
   if (['button-toggle-one', 'button-toggle-two'].includes(element)) assert.equal(reference.styles[rp.style].display, 'inline-flex');
+  const rc = reference.nodes.filter(n => n.parent === r.key), ac = candidate.nodes.filter(n => n.parent === a.key);
+  if (displayBoundaryOwners.includes(scope)) {
+    assert.equal(ap.resolvedStyle.display, 'flex');
+    assert.equal(reference.styles[rp.style].display, element === 'toolbar-title' ? 'flex' : 'block');
+    if (element === 'radio-primary') {
+      assert.equal(rp.type, 'section'); assert.equal(ap.authored.type, 'section');
+      assert.deepEqual(rc.map(n => [n.type, reference.styles[n.style].position]), [['mat-radio-button', 'static'], ['mat-radio-button', 'static']]);
+      assert.deepEqual(ac.map(n => [n.authored.type, n.resolvedStyle.position]), [['div', 'absolute'], ['div', 'absolute']]);
+    } else {
+      assert.deepEqual(rc, []); assert.deepEqual(ac, []);
+      if (element === 'toolbar-title') {
+        assert.equal(rp.type, 'mat-toolbar'); assert.equal(ap.authored.type, 'div');
+        assert.equal(r.ownText, 'Material workspace'); assert.equal(a.authored.textContent, r.ownText);
+      } else {
+        assert.equal(rp.type, 'div'); assert.equal(ap.authored.type, 'div');
+        assert.ok(['Overview content', 'Activity content'].includes(r.ownText));
+        assert.equal(a.authored.textContent, undefined);
+        assert.equal(a.authored.role, 'tabpanel');
+        assert.ok(['Overview content', 'Activity content'].includes(a.authored.ariaLabel));
+        assert.equal(typeof a.authored.data.selected, 'boolean');
+        // Animation observations may show outgoing native text. Preserve both
+        // states without claiming the plugin label is native rendered content.
+      }
+    }
+  }
   return { referenceNode: r.key, astylarNode: a.key, identity, nativeRequests, candidateRequests,
     nativeComputedDisplay: scope[4], candidateLocalDisplay: scope[5],
     parentDisplays: { reference: reference.styles[rp.style].display, candidate: ap.resolvedStyle.display },
     ownerTypes: { reference: r.type, candidate: a.authored.type },
-    directChildTypes: { reference: reference.nodes.filter(n => n.parent === r.key).map(n => n.type), candidate: candidate.nodes.filter(n => n.parent === a.key).map(n => n.authored.type) },
+    directChildTypes: { reference: rc.map(n => n.type), candidate: ac.map(n => n.authored.type) },
+    contentOwnership: { nativeOwnText: r.ownText, candidateText: a.authored.textContent, candidateLabel: a.authored.ariaLabel, candidateData: a.authored.data },
     structuralEquivalenceProven: false, candidateUsedDisplayVerified: false, renderingEquivalent: false };
 }
 
@@ -87,5 +118,24 @@ export function applyDisplayRequestReviews(rows, cases, inventory, normalize) {
     owner: 'comparison display authoring and wrapper structure',
     justification: 'Exact native display requests differ from candidate requests or are omitted; preserve browser computed versus candidate local stages and differing owner/child types. This identifies unequal input authoring, not equivalent wrapper flattening, candidate used display, a core defect, or rendering parity. Browser blockification does not erase the native inner flex request.',
   });
+  return rows;
+}
+
+export function applyDisplayBoundaryReviews(rows, cases, inventory, normalize) {
+  for (const [family, element] of displayBoundaryOwners) {
+    const toolbar = family === 'toolbar';
+    rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+      family, element, properties: ['display'],
+      prove: (entry, r, a) => proveDisplayRequest(entry, r, a, element),
+      classification: toolbar ? 'parity-harness-defect' : 'application-plugin-authoring-defect',
+      attribution: toolbar ? 'reviewed-display-computed-local-boundary' : 'reviewed-display-owner-substitution',
+      owner: toolbar ? 'computed flex-item versus local type-default measurement' : 'comparison element/plugin and flow ownership',
+      justification: toolbar
+        ? 'Both owners are spans without authored display/reset requests under flex parents. Native computed block is compared with candidate local inline, not candidate used display. Preserve other style differences; this is an observation-stage boundary, not proof of correct flex-item layout or rendering equivalence.'
+        : family === 'radio'
+          ? 'Native inline mat-radio-group with two static mat-radio-button children is replaced by a locally block div and two absolute div children; neither host requests display. Element defaults, parent layout and child flow ownership differ before core layout. This is not evidence that equal authored inputs fail in core or that the representations are equivalent.'
+          : 'Native inline span owns text; candidate is a locally block private tab-panel plugin with no authored text children, using label/data state instead. Preserve both content owners and state values; this structural/paint ownership substitution is not a core display defect or a proven equivalent representation.',
+    });
+  }
   return rows;
 }

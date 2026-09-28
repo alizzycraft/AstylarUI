@@ -6,7 +6,7 @@ import { queryFindings } from '../../scripts/audit-findings-store.mjs';
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
-import { displayRequestOwners, proveDisplayRequest, applyDisplayRequestReviews } from './display-request-review.mjs';
+import { displayRequestOwners, displayBoundaryOwners, proveDisplayRequest, applyDisplayRequestReviews, applyDisplayBoundaryReviews } from './display-request-review.mjs';
 
 test('explicit display requests retain all observations and do not infer wrapper or used-display equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
@@ -30,7 +30,20 @@ test('explicit display requests retain all observations and do not infer wrapper
     }
   });
   assert.equal(reviewed.filter(r => r.property === 'display' && r.attribution === 'unresolved').length, 3);
-  for (const [family, element] of displayRequestOwners) {
+  const completed = applyDisplayBoundaryReviews(reviewed, cases, inventory, bindPreciseAuditNormalization());
+  const boundaries = completed.filter((r, i) => r !== reviewed[i]);
+  assert.equal(boundaries.length, 3); assert.equal(boundaries.reduce((n, r) => n + r.occurrences, 0), 190);
+  assert.equal(boundaries.filter(r => r.classification === 'parity-harness-defect').length, 1);
+  assert.equal(boundaries.find(r => r.family === 'toolbar').occurrences, 52);
+  assert.equal(completed.filter(r => r.property === 'display' && r.attribution === 'unresolved').length, 0);
+  completed.forEach((r, i) => {
+    assert.deepEqual(raw(r), raw(rows[i]));
+    if (r !== reviewed[i]) {
+      assert.equal(r.reviewEvidence.observations.length, r.occurrences);
+      r.reviewEvidence.observations.forEach(p => { assert.equal(p.structuralEquivalenceProven, false); assert.equal(p.candidateUsedDisplayVerified, false); assert.equal(p.renderingEquivalent, false); });
+    }
+  });
+  for (const [family, element] of [...displayRequestOwners, ...displayBoundaryOwners]) {
     const entry = cases.find(e => e.family === family && e.styleInputs.some(i => i.id === element && i.reference));
     const [r, a] = modalInventoryTrees(inventory, `${entry.kind}:${family}@${entry.profile}/${entry.viewport.id}${entry.state ? '/' + entry.state : ''}`);
     const proof = proveDisplayRequest(entry, r, a, element);
@@ -51,6 +64,15 @@ test('explicit display requests retain all observations and do not infer wrapper
       const parent = structuredClone(r), n = parent.nodes.find(n => n.key === proof.referenceNode);
       parent.styles[parent.nodes.find(p => p.key === n.parent).style].display = 'block';
       assert.throws(() => proveDisplayRequest(entry, parent, a, element));
+    }
+    if (displayBoundaryOwners.some(([f]) => f === family)) {
+      const parent = structuredClone(a), n = parent.nodes.find(n => n.key === proof.astylarNode);
+      parent.nodes.find(p => p.key === n.parent).resolvedStyle.display = 'grid';
+      assert.throws(() => proveDisplayRequest(entry, r, parent, element));
+      const content = structuredClone(a), owner = content.nodes.find(n => n.key === proof.astylarNode);
+      if (family === 'radio') content.nodes.find(n => n.parent === owner.key).resolvedStyle.position = 'relative';
+      else owner.authored.textContent = 'invented content';
+      assert.throws(() => proveDisplayRequest(entry, r, content, element));
     }
   }
 });

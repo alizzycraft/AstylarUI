@@ -2,6 +2,42 @@
 
 ## Current audit checkpoint — September 28
 
+The three remaining display groups now have focused boundary proofs in the same
+display-request-review module: radio (68 observations) substitutes an inline
+mat-radio-group with two static mat-radio-button children for a locally block div
+with two absolute div children; tab-panel (70) substitutes a text-bearing native
+span for the childless private painting plugin; toolbar-title (52) compares
+native computed block with local inline for spans without display/reset requests
+under flex parents. The first two are authoring/ownership substitutions; toolbar
+is a computed/local observation boundary, not proof of correct candidate used
+display. All 89 native scalar fields, all three local stages, parent context,
+child type/flow and text ownership are checked. Animation observations retain
+native text and plugin label/data independently rather than assuming equal state.
+
+All 18 display groups / 1034 observations are now covered by prepared proofs:
+17 authoring attributions (982 observations), one harness boundary (52).
+Original rows remain unchanged; structural, used-display and rendering equivalence
+remain unproved. The test rejects changed declarations, resets, element types,
+interaction stages, parent display and child-flow/text ownership. Command:
+`node --test tests/material-parity/display-request-review.spec.mjs` passes 1/1
+in 22.94 s. No browser recapture or canonical export was justified by this bounded
+extension. The accepted canonical remains 286 unresolved until batch integration.
+
+Current source corroborates the tab ownership boundary at
+material-showcase.plugin.ts:337-388 (DynamicTexture, data-selected labels, private
+font/baseline and fillText), astylar.component.ts:974 (plugin/data authoring), and
+reference.component.ts:88 (native span). Reuse the existing tab-panel typography
+and wrapping browser proofs documented below; this extension does not claim a
+new browser pass or reclassify their root cause as core. Radio authoring is at
+astylar.component.ts:491-492,935 and reference.component.ts:80. Toolbar local inline
+comes from browser-defaults.ts:114 via StyleDefaultsService; used flex layout is a
+separate core measurement, not a reason to replace its authoring with block.
+Next prioritize the inherited typography/wrapping groups, reusing existing owner
+proofs and examining consumption only where it is still unknown, then conditional
+corner paint. Integrate these prepared display proofs with the next coherent batch.
+
+### Explicit display-request preparation
+
 Prepared display-request proof now explains 15 groups / 844 original observations
 without changing the canonical 286-unresolved checkpoint. The existing compact
 index, tree inventory, normalization and modal-review/conservation helpers are
