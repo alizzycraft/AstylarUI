@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 28
 
+Prepared batch predecessor check passed after checkpoint a9a2f55. The existing
+custom-owner-border spec now composes all seven prepared reviews against the
+accepted fca6a435 compact snapshot and authenticated original capture, using all
+2311 cases in original order. Exactly 134 groups / 3948 observations change;
+each was unresolved beforehand, compact raw fields remain unchanged, and fresh
+serialized replay matches. Proposal unresolved count is 439; canonical remains
+573 until producer integration and full conservation are accepted. Command:
+`node --test --test-name-pattern="prepared border/position/origin" tests/material-parity/custom-owner-border-review.spec.mjs`
+passed 1/1 (24.80 s). This verifies compact scalar composition, not full canonical
+section conservation or rendering equivalence. Next: integrate existing review
+functions with bound producer replay/source fingerprints and predecessor checks;
+then refresh remaining property coverage. Prioritize coordinate/overlay ownership
+and shared border/initial-style boundaries before isolated typography differences.
+The accepted source-fingerprint reconciliation below is complete; do not rerun it
+for this standalone test addition. No renderer, fixture or capture changes.
+
 Caret/position export completed: session 91866 is terminal, exit 1 solely for
 573 unresolved groups, elapsed 2367.41 s. Coverage remains 436 static / 1875
 interaction cases, 8483 scalar rows / 389202 observations and 134 source findings.

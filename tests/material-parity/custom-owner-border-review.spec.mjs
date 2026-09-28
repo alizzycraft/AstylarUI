@@ -8,6 +8,51 @@ import { modalInventoryTrees } from './modal-position-inspection.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder, applyDividerPositionReviews, proveDividerPositionRequests, applyProgressPositionReviews, proveProgressPositionRequests, applyBadgeProgressOriginReviews, proveBadgeProgressOrigin, applyChipTabOriginReviews, proveChipTabOrigin } from './custom-owner-border-review.mjs';
 import { applyTogglePositionReviews, proveTogglePositionRequests } from './custom-owner-border-review.mjs';
+import { applyOverlayOriginReviews } from './overlay-origin-request-review.mjs';
+
+test('prepared border/position/origin batch conserves the accepted caret checkpoint in full capture order', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))];
+  assert.equal(cases.length, 2311);
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const families = [...new Set(cases.map(e => e.family))];
+  const rows = families.flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, {
+    generation: 'fca6a4354e9c006e21066f0d19ea9435afacf436d226cda1c78f5ee420bea137',
+    indexSha256: '5a5e8c8a31681e088f432bfd23d00327cd3757b383e8ccad50d1edc45f5f4472',
+  })).filter(r => r.evidence.section === 'discrepancies');
+  assert.equal(rows.length, 8483);
+  assert.equal(rows.filter(r => r.attribution === 'unresolved').length, 573);
+  const steps = [
+    [applyCustomOwnerBorderReviews, 79, 1904], [applyDividerPositionReviews, 5, 72],
+    [applyProgressPositionReviews, 11, 220], [applyBadgeProgressOriginReviews, 5, 92],
+    [applyChipTabOriginReviews, 11, 362], [applyTogglePositionReviews, 16, 1088],
+    [applyOverlayOriginReviews, 7, 210],
+  ];
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  let reviewed = rows;
+  for (const [apply, groups, observations] of steps) {
+    const next = apply(reviewed, cases, inventory, normalize);
+    const changed = next.filter((r, i) => r !== reviewed[i]);
+    assert.equal(changed.length, groups, apply.name);
+    assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), observations, apply.name);
+    next.forEach((r, i) => {
+      assert.deepEqual(raw(r), raw(reviewed[i]));
+      if (r !== reviewed[i]) assert.equal(reviewed[i].attribution, 'unresolved', 'must not reopen an accepted classification');
+    });
+    reviewed = next;
+  }
+  const changed = reviewed.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 134);
+  assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 3948);
+  assert.equal(reviewed.filter(r => r.attribution === 'unresolved').length, 439);
+  // Replay serialized output from original evidence, not from submitted proof objects.
+  const replay = steps.reduce((values, [apply]) => apply(values, cases, inventory, normalize), rows);
+  assert.deepEqual(JSON.parse(JSON.stringify(reviewed)), JSON.parse(JSON.stringify(replay)));
+});
 
 test('custom host initial colors retain all observations without claiming generated paint equivalence', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
