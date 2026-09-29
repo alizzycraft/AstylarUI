@@ -3,7 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { planLeafFontFamilyAttribution } from '../../scripts/audit-material-leaf-font-family-attribution.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 test('leaf-family attribution replays all original proofs and complete frozen canonical rows without writes', () => {
   const file = 'docs/material-leaf-font-family-attribution-plan.json', before = readFileSync(file);
@@ -33,7 +33,7 @@ function fixture() {
       property: g.property, reference: g.reference, occurrences: g.occurrences, cases: g.cases, states: g.states,
       attribution: g.previousAttribution, retainedExtraField: true }));
     rows.push({ family: 'unrelated', element: 'sentinel', property: 'width', reference: '1px', astylar: '2px', attribution: 'unresolved' });
-    source = { proof, original, rows, normalize: bindOwnerCaretNormalization(readFileSync(plan.productionNormalization.module, 'utf8'), plan.productionNormalization) };
+    source = { proof, original, rows, normalize: bindHistoricalAuditNormalization(plan.productionNormalization, plan.canonicalRevision) };
   }
   const { normalize, ...data } = source; return { ...structuredClone(data), normalize };
 }

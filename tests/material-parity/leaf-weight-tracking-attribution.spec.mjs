@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { planLeafWeightTracking } from '../../scripts/audit-material-leaf-weight-tracking-attribution.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const file = 'docs/material-leaf-weight-tracking-attribution-plan.json';
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -37,7 +37,7 @@ function fixture() {
       states: g.states, attribution: g.previousAttribution, retainedRawField: true }));
     rows.push({ family: 'unrelated', element: 'sentinel', property: 'width', attribution: 'unresolved' });
     cached = { proof, original: { results: project(full.results), interactions: project(full.interactions) }, rows,
-      normalize: bindOwnerCaretNormalization(readFileSync(plan.productionNormalization.module, 'utf8'), plan.productionNormalization) };
+      normalize: bindHistoricalAuditNormalization(plan.productionNormalization, plan.canonicalRevision) };
   }
   const { normalize, ...data } = cached; return { ...structuredClone(data), normalize };
 }

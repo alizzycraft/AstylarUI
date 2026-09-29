@@ -2,6 +2,14 @@
 
 ## Current audit checkpoint — September 29
 
+**Remaining typography bindings:** host-token proposal, leaf-family tests and
+leaf weight/tracking tests now bind their own recorded historical revisions.
+The three existing suites passed 10/10 in 239,970.9222 ms
+(`remaining-typography-normalizer-reconciliation.log`), preserving complete
+no-write payload replays and mutation checks. No stored proposals, raw evidence
+or live normalization changed. Next: remaining source-receipt/integration
+failures, then missing Material interaction boundaries and final gates.
+
 **Font/leaf/motion replay boundaries verified:** historical font-ownership,
 leaf-font and motion proposals now use their own pinned normalizers. The first
 batch passed all four leaf-font tests but exposed two source-receipt boundaries.

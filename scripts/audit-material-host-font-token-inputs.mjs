@@ -7,7 +7,7 @@ import { pathToFileURL } from 'node:url';
 import { selectorCanApply } from '../tests/material-parity/border-initial-input-evidence.mjs';
 import { inspectFontScopeInputs } from './audit-material-font-scope-inputs.mjs';
 import { inspectContainerFontStages } from './audit-material-container-font-stages.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -202,7 +202,7 @@ export async function collectHostFontTokenPlan() {
       ...(e.state ? { state: e.state } : {}), inputTrees: e.inputTrees, styleInputs: e.styleInputs.filter(i => i.id === e.family + '-primary' && Object.hasOwn(targets, e.family)) }));
     return { results: project(parsed.results), interactions: project(parsed.interactions) };
   })();
-  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const normalize = bindHistoricalAuditNormalization(normalization, canonicalRevision);
   const { manifest, rows } = await readCaretConservationRows(file => execFileSync('git', ['show', `${canonicalRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   const result = planHostFontTokens(proof, original, rows, normalize);
   assert.equal(result.proposedGroups, 7); assert.equal(result.proposedObservations, 380);
