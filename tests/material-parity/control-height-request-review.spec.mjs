@@ -9,6 +9,23 @@ import { bindPreciseAuditNormalization } from './audit-normalization-contracts.m
 import { collectFullTreeInventory } from './input-equivalence-audit.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
 
+test('fixed-height review preserves unresolved owners outside its evidence scope', () => {
+  const rows = ['slider-primary', 'slider-start', 'toString'].map(element => ({
+    family: 'slider', element, property: 'height', attribution: 'unresolved',
+    reference: undefined, astylar: '44px', states: ['static'], occurrences: 1,
+  }));
+  rows.push({ ...rows[0], element: 'checkbox-primary' });
+  const result = applyHeightRequestReviews(rows, [], {}, () => {
+    assert.fail('out-of-scope rows must not enter normalization or evidence review');
+  });
+  assert.deepEqual(result, rows);
+  for (let index = 0; index < rows.length; index++) assert.equal(result[index], rows[index]);
+  assert.throws(() => proveFixedHeightRequest({ family: 'slider' },
+    { id: 'slider-primary', astylar: { height: '44px' } }, {}, {}));
+  assert.throws(() => proveFixedHeightRequest({ family: 'checkbox' },
+    { id: 'checkbox-primary', astylar: { height: '999px' } }, {}, {}));
+});
+
 test('all 43 remaining height groups preserve owner requests and stage boundaries', () => {
   const hash = b => createHash('sha256').update(b).digest('hex');
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

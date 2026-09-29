@@ -12,6 +12,10 @@ export function applyHeightRequestReviews(rows, cases, inventory, normalize) {
   return rows.map(row => {
     if (row.attribution !== 'unresolved' || row.property !== 'height') return row;
     const omitted = row.astylar === undefined;
+    // Fixed-height evidence is scoped to these original owners, not every
+    // future or synthetic control that declares a height. Preserve unknowns.
+    if (!omitted && (!Object.hasOwn(fixedHeightOwners, row.element) ||
+      fixedHeightOwners[row.element][0] !== row.family)) return row;
     const members = cases.filter(e => e.family === row.family && row.states.includes(e.state ?? 'static'));
     return applyModalBoxReview([row], members, inventory, normalize, {
       family: row.family, element: row.element, properties: ['height'],

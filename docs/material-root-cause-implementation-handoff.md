@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 29
 
+**Full harness completed; first bounded reconciliation:** the unfiltered
+`full-audit-harness-834258e.log` ended with 1,571 tests, 1,449 passed, 122 failed,
+zero cancelled/skipped/todo, in 31,184,564.6298 ms. No harness child remains live.
+The fixed-height review now leaves declared-height rows outside its evidenced
+owner/family population unresolved, instead of invoking an inapplicable proof.
+`node --test tests/material-parity/control-height-request-review.spec.mjs`
+passed 2/2 (32,550.0389 ms): the new unknown-owner/family boundary test and the
+unchanged original 43-group / 1,414-observation replay, including mutations and
+raw/unrelated-row conservation. Direct proofs still reject unknown owners and
+changed heights. This is an audit applicability correction, not a renderer fix;
+the complete synthetic slider integration rerun remains required. Historical
+failure notes below describe the completed run, not a currently live process.
+
 **Tooltip integration conservation:** test 1495 failed after 369,555.4078 ms
 at the unrelated complete-row digest against `65487ae`: current
 `cba874acbb2b76ed194451814ee65694296777a4214b33ec7b57b579572e04fd`,
