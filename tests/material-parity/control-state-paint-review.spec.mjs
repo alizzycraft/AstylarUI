@@ -36,6 +36,7 @@ import { applyPanelVisibilityOwnership, validatePanelVisibilityOwnership } from 
 import { applyTooltipShrinkReviews, validateTooltipShrinkReviews } from './display-request-review.mjs';
 import { applyExpansionTreeFormattingReviews, validateExpansionTreeFormattingReviews } from './display-request-review.mjs';
 import { applyRemainingBorderReviews, validateRemainingBorderReviews } from './custom-owner-border-review.mjs';
+import { applyFinalOwnerStyleReviews, validateFinalOwnerStyleReviews } from './custom-owner-border-review.mjs';
 
 test('modal non-widget native appearance is invariant across mapped tags and noop transition context', async () => {
   const { chromium } = await import('playwright-core');
@@ -573,7 +574,7 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   const families = [...Object.keys(owners), 'chips', 'tabs', 'slider', 'list', 'card', 'dialog', 'table', 'core', 'button', 'menu', 'snack-bar', 'tooltip', 'stepper', 'radio', 'checkbox', 'toolbar'];
   const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
     ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))]
-    .filter(e => families.includes(e.family) || ['expansion', 'tree', 'button-toggle', 'divider'].includes(e.family));
+    .filter(e => families.includes(e.family) || ['expansion', 'tree', 'button-toggle', 'divider', 'progress-bar', 'progress-spinner', 'icon'].includes(e.family));
   const inventory = collectFullTreeInventory(cases), counts = {}, samples = new Map();
   assert.deepEqual(inventory.errors, []);
   for (const entry of cases.filter(e => owners[e.family] && e.styleInputs.some(i => i.id === owners[e.family]))) {
@@ -611,13 +612,13 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   const tail = new Function('ownerInitialStyleBinding', 'beforeOwnerOmissionReviews', 'cases', 'elementInventory',
     'canonicalStyle', 'applyOwnerMaximumWidths', 'applyOmittedOwnerPaintRequests', 'applyBadgeMarginReviews',
     'applySliderMarginReviews', 'applyListSpacingReviews', 'applyHeadingVisibleOverflow', 'applyTabPanelOverflowBoundary',
-    'applyTableVisibleOverflow', 'applyControlOverflowOwnerBoundaries', 'applyRangeVisibleOverflow', 'applyFocusShadowSubstitutions', 'applyCardShadowSyntax', 'applyMappedNonwidgetAppearance', 'applyRangeAppearanceInitial', 'applyAppearanceOwnerBoundaries', 'applySheetActionAppearance', 'applyTooltipWordBreakReview', 'applyStepperSpacingReviews', 'applyChipSpacingReviews', 'applyChoiceSpacingReviews', 'applyToolbarSpacingReviews', 'applyDialogActionSpacingReviews', 'applyDialogPanelGapReview', 'applyOverlayFlowReviews', 'applyPanelVisibilityOwnership', 'applyTooltipShrinkReviews', 'applyExpansionTreeFormattingReviews', 'applyRemainingBorderReviews', source.slice(start, end) + '\nreturn discrepancies;');
+    'applyTableVisibleOverflow', 'applyControlOverflowOwnerBoundaries', 'applyRangeVisibleOverflow', 'applyFocusShadowSubstitutions', 'applyCardShadowSyntax', 'applyMappedNonwidgetAppearance', 'applyRangeAppearanceInitial', 'applyAppearanceOwnerBoundaries', 'applySheetActionAppearance', 'applyTooltipWordBreakReview', 'applyStepperSpacingReviews', 'applyChipSpacingReviews', 'applyChoiceSpacingReviews', 'applyToolbarSpacingReviews', 'applyDialogActionSpacingReviews', 'applyDialogPanelGapReview', 'applyOverlayFlowReviews', 'applyPanelVisibilityOwnership', 'applyTooltipShrinkReviews', 'applyExpansionTreeFormattingReviews', 'applyRemainingBorderReviews', 'applyFinalOwnerStyleReviews', source.slice(start, end) + '\nreturn discrepancies;');
   const applies = [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, applyFocusShadowSubstitutions, applyCardShadowSyntax, applyMappedNonwidgetAppearance, applyRangeAppearanceInitial, applyAppearanceOwnerBoundaries, applySheetActionAppearance];
-  applies.push(applyTooltipWordBreakReview, applyStepperSpacingReviews, applyChipSpacingReviews, applyChoiceSpacingReviews, applyToolbarSpacingReviews, applyDialogActionSpacingReviews, applyDialogPanelGapReview, applyOverlayFlowReviews, applyPanelVisibilityOwnership, applyTooltipShrinkReviews, applyExpansionTreeFormattingReviews, applyRemainingBorderReviews);
+  applies.push(applyTooltipWordBreakReview, applyStepperSpacingReviews, applyChipSpacingReviews, applyChoiceSpacingReviews, applyToolbarSpacingReviews, applyDialogActionSpacingReviews, applyDialogPanelGapReview, applyOverlayFlowReviews, applyPanelVisibilityOwnership, applyTooltipShrinkReviews, applyExpansionTreeFormattingReviews, applyRemainingBorderReviews, applyFinalOwnerStyleReviews);
   const combined = tail({ status: 'bound' }, rows, cases, inventory, normalize, ...applies);
   assert.deepEqual(combined, [...applies].reverse().reduce((values, apply) => apply(values, cases, inventory, normalize), rows));
   const batch = combined.filter((r, i) => r !== rows[i]);
-  assert.equal(batch.length, 116); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 5882);
+  assert.equal(batch.length, 118); assert.equal(batch.reduce((sum, r) => sum + r.occurrences, 0), 5916);
   assert.deepEqual(combined.map(raw), rows.map(raw));
   for (let i = 0; i < rows.length; i++) if (!batch.includes(combined[i])) assert.deepEqual(combined[i], rows[i]);
   assert.deepEqual(validate(combined), []);
@@ -673,7 +674,7 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
   const currentApplied = tail({ status: 'bound' }, currentRows, cases, inventory, normalize, ...applies);
   const currentBatch = currentApplied.filter((r, i) => r !== currentRows[i]);
-  assert.equal(currentBatch.length, 96); assert.equal(currentBatch.reduce((n, r) => n + r.occurrences, 0), 4755);
+  assert.equal(currentBatch.length, 98); assert.equal(currentBatch.reduce((n, r) => n + r.occurrences, 0), 4789);
   assert.deepEqual(currentApplied.map(raw), currentRows.map(raw));
   currentApplied.forEach((r, i) => { if (!currentBatch.includes(r)) assert.deepEqual(r, currentRows[i]); });
   const checkpointRows = families.flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
@@ -682,8 +683,8 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
   const checkpointApplied = tail({ status: 'bound' }, checkpointRows, cases, inventory, normalize, ...applies);
   const checkpointBatch = checkpointApplied.filter((r, i) => r !== checkpointRows[i]);
-  assert.equal(checkpointBatch.length, 61);
-  assert.equal(checkpointBatch.reduce((n, r) => n + r.occurrences, 0), 2926);
+  assert.equal(checkpointBatch.length, 63);
+  assert.equal(checkpointBatch.reduce((n, r) => n + r.occurrences, 0), 2960);
   assert.equal(checkpointBatch.find(r => r.family === 'tooltip' && r.property === 'wordBreak').classification, 'documented-limitation');
   assert.ok(checkpointBatch.filter(r => r.family === 'tooltip' && r.property === 'flexShrink').every(r => r.classification === 'application-plugin-authoring-defect'));
   assert.deepEqual(checkpointApplied.map(raw), checkpointRows.map(raw));
@@ -698,19 +699,22 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   assert.deepEqual(validateOverlayFlowReviews(checkpointApplied, checkpointRows, cases, inventory, normalize), []);
   assert.deepEqual(validatePanelVisibilityOwnership(checkpointApplied, checkpointRows, cases, inventory, normalize), []);
   assert.deepEqual(validateTooltipShrinkReviews(checkpointApplied, checkpointRows, cases, inventory, normalize), []);
-  const formattingRows = ['expansion', 'tree', 'button-toggle', 'divider'].flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+  const formattingRows = ['expansion', 'tree', 'button-toggle', 'divider', 'progress-bar', 'progress-spinner', 'icon'].flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
     generation: '9b827bb2b09ae9d20d35e1640f987c9a4972aeab04676d595d7dd5f7d6ee01ab',
     indexSha256: 'cd3d3c45aab1db7095753132870a660f456dc80e5334787f6f4508e8d30d9486',
   })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
   const expandedRows = [...checkpointRows, ...formattingRows];
   const expanded = tail({ status: 'bound' }, expandedRows, cases, inventory, normalize, ...applies);
   const expandedBatch = expanded.filter((r, i) => r !== expandedRows[i]);
-  assert.equal(expandedBatch.length, 70); assert.equal(expandedBatch.reduce((n, r) => n + r.occurrences, 0), 3434);
+  assert.equal(expandedBatch.length, 75); assert.equal(expandedBatch.reduce((n, r) => n + r.occurrences, 0), 3528);
   assert.deepEqual(expanded.map(raw), expandedRows.map(raw));
   expanded.forEach((r, i) => { if (!expandedBatch.includes(r)) assert.deepEqual(r, expandedRows[i]); });
   assert.deepEqual(expanded, [...applies].reverse().reduce((values, apply) => apply(values, cases, inventory, normalize), expandedRows));
   assert.deepEqual(validateExpansionTreeFormattingReviews(expanded, expandedRows, cases, inventory, normalize), []);
   assert.deepEqual(validateRemainingBorderReviews(expanded, expandedRows, cases, inventory, normalize), []);
+  assert.deepEqual(validateFinalOwnerStyleReviews(expanded, expandedRows, cases, inventory, normalize), []);
+  assert.ok(source.includes("errors.push('final owner style attribution lacks bound original cases')"));
+  assert.ok(source.includes('errors.push(...validateFinalOwnerStyleReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));'));
   assert.ok(source.includes("errors.push('remaining border attribution lacks bound original cases')"));
   assert.ok(source.includes('errors.push(...validateRemainingBorderReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));'));
   assert.ok(source.includes("errors.push('expansion/tree formatting attribution lacks bound original cases')"));

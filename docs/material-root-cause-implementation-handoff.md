@@ -2,6 +2,26 @@
 
 ## Current audit checkpoint — September 29
 
+**Final owner styles integrated; canonical reconciliation next:** the five-group /
+94-observation proof from `7b40c95` is in the bound production tail with replay and
+unbound guards. Expanded current-checkpoint tail covers 75 groups / 3,528
+observations, with conserved raw/unrelated values and reverse-order agreement.
+Together with the earlier 20-group radius stage this projects **zero unresolved
+scalar groups**. Canonical still reports **95** until export; this is not audit
+completion or rendering equivalence.
+`node --test --test-name-pattern="omitted owner paint requests preserve|final owner style boundaries" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/custom-owner-border-review.spec.mjs`
+passes **2/2**, 34,981.1396 ms total. Historical producer reversal retains
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+current producer is `9fd997b0470b18c959b5d41c3b188ce996672b5db20265a7b2d698f417f0a68f`.
+`node scripts/export-material-input-audit-current-ancestry.mjs --dry-run` confirms
+all five named baseline inputs exist and constructs the complete invocation;
+it does not authenticate evidence or establish current source applicability.
+Next run source/export reconciliation, inspect the full resulting differences,
+and independently verify canonical replay before final coverage/deliverable and
+browser-gate acceptance. Preserve all core/support/authoring defects and remaining
+uncertainties; resolved classification is not resolved rendering behavior.
+No renderer/fixture changes or new captures.
+
 **Final five scalar questions reviewed; integration pending:** 94 observations
 reuse existing custom-owner and tab ancestry proofs. Both compact tabs add 1px
 top padding (34 observations), absent from native measured labels and their

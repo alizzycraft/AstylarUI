@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyFinalOwnerStyleReviews,')) {
+    for (const [from, to] of [
+      ["import { applyFinalOwnerStyleReviews, validateFinalOwnerStyleReviews } from './custom-owner-border-review.mjs';\n", ''],
+      ['applyRemainingBorderReviews, applyFinalOwnerStyleReviews]', 'applyRemainingBorderReviews]'],
+      ['      errors.push(...validateFinalOwnerStyleReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-final-owner-style-boundary'))\n    errors.push('final owner style attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated final owner style integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyRemainingBorderReviews,')) {
     for (const [from, to] of [
       ["import { applyRemainingBorderReviews, validateRemainingBorderReviews } from './custom-owner-border-review.mjs';\n", ''],
