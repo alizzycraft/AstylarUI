@@ -29,6 +29,18 @@ contains precise color differences such as reference
 reviewed precision transition explicitly; do not delete those differences or
 weaken population conservation to make the historical test pass.
 
+The owner-gap integration failure confirms the same historical precision
+boundary independently: test 1061 completed in 378,630.4517 ms and failed at
+`owner-gap-canonical-integration.spec.mjs:60` after gap-classification and
+unchanged-raw-input checks. Its `cab0cc3` predecessor comparison guards
+`normalizeValue` and `formatNumber`, which remain identical, but omits their
+changed `normalizeColor` dependency. Direct function comparison confirms that
+the predecessor rounded sRGB channels whereas current code preserves them.
+The failure includes newly retained root background-color differences for
+autocomplete, badge and bottom-sheet. Reconcile the complete normalization
+transition and exact additional populations before checking unrelated-row
+conservation; do not broadly exempt color properties or remove these rows.
+
 A separate failure in `control-overflow-observation.spec.mjs` is a stale source
 extraction boundary: its three-function snackbar/overflow test now extracts the
 later owner-omission pipeline, which starts with `applyOwnerMaximumWidths` and
@@ -54,6 +66,27 @@ The main matrix does explicitly exercise both slider handles with eight motion
 samples, timepicker wheel scrolling, outside/canvas dismissal for its named
 families, and three repeated mobile Escape cycles. These actions are verified
 in source, not a claim that all their outcomes or authoring inputs are equal.
+
+The supplemental tooltip keyboard question is resolved without recapture:
+`node --test --test-name-pattern="real Tab reaches both tooltip triggers"
+tests/material-parity/tooltip-position-composition.spec.mjs` passes 1/1
+(1,435.3268 ms process). Its six paired initial/Tab-focus/Tab-blur states at
+DPR 1 and 2 authenticate retained capture, tree and screenshot receipts and
+104 installed/core source bindings. Both triggers receive real keyboard focus;
+only the reference authors an open popup. This is a tooltip opening-state
+authoring omission, not evidence that an existing popup was misplaced. It does
+not establish keyboard coverage for the other families.
+
+Focused-empty and text-selection coverage remains missing from the inspected
+Material capture path: `captureBrowserInputTree` records control value but not
+selection endpoints/direction; `edit-empty-blur` measures after blur; the
+caret-context supplemental producers replay style/caret-color questions rather
+than forward/backward text selection. The general parity runner already has
+selection/control visual-state observations, but its generic fixtures are not
+Material-state evidence. Next extend existing Material capture infrastructure
+with explicit action-boundary observations, reusing that observation contract;
+do not count existing caret-color classifications as caret/selection behavior
+coverage. Do not edit tested capture dependencies while the full harness is live.
 
 **Canonical reconciliation verified:** export from `4624a9c` passed in
 2,166,050.6272 ms; independent `ASTYLAR_AUDIT_COLD=1` replay of
