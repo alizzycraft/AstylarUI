@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 29
 
+**Canonical export exposed a classification-vocabulary mismatch:** export from
+`e24a85d` completed in 2,171,401.666 ms, exit 1, with one unclassified difference:
+tooltip-popup `wordBreak`, 18 observations, classified `documented-limitation`.
+All 8,483 scalar groups / 389,202 observations remain present; unresolved
+attributions are zero, with 436/436 static and 1,875/1,875 interaction coverage.
+The support-gap proof deliberately does not claim an intentional design limit;
+the canonical vocabulary now recognizes this distinct category. The bound-tail
+test also checks reviewed classifications against that vocabulary and rejects an
+unknown limitation label. Focused test passes 1/1 in 40,422.5345 ms.
+Export evidence-session verification read 1,205 files / 89,154,859 bytes with
+one collector, ten memory hits, one disk hit and zero invalidations.
+The generated report is **not accepted or imported**. Next reconcile report
+prose, regenerate with the vocabulary correction, inspect conservation and source
+provenance, independently replay cold, and finish deliverable/browser acceptance.
+No renderer, fixture, raw evidence or classification justification was changed.
+
 **Final owner styles integrated; canonical reconciliation next:** the five-group /
 94-observation proof from `7b40c95` is in the bound production tail with replay and
 unbound guards. Expanded current-checkpoint tail covers 75 groups / 3,528

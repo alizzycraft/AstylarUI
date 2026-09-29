@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { queryFindings } from '../../scripts/audit-findings-store.mjs';
+import { inputDifferenceClassifications } from './input-equivalence-policy.mjs';
 import { collectFullTreeInventory, collectRetainedTypographyEvidence } from './input-equivalence-audit.mjs';
 import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';
 import { modalInventoryTrees } from './modal-position-inspection.mjs';
@@ -685,6 +686,8 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   const checkpointBatch = checkpointApplied.filter((r, i) => r !== checkpointRows[i]);
   assert.equal(checkpointBatch.length, 63);
   assert.equal(checkpointBatch.reduce((n, r) => n + r.occurrences, 0), 2960);
+  assert.deepEqual(checkpointBatch.filter(r => !inputDifferenceClassifications.includes(r.classification)), [], 'Every reviewed classification must be recognized by canonical validation');
+  assert.equal(inputDifferenceClassifications.includes('unreviewed-limitation'), false);
   assert.equal(checkpointBatch.find(r => r.family === 'tooltip' && r.property === 'wordBreak').classification, 'documented-limitation');
   assert.ok(checkpointBatch.filter(r => r.family === 'tooltip' && r.property === 'flexShrink').every(r => r.classification === 'application-plugin-authoring-defect'));
   assert.deepEqual(checkpointApplied.map(raw), checkpointRows.map(raw));

@@ -1,6 +1,8 @@
 export const inputDifferenceClassifications = Object.freeze([
   'equivalent-representation',
   'legitimate-public-api-structure',
+  // Observed support gaps need not be intentional design decisions.
+  'documented-limitation',
   'intentional-documented-limitation',
   'application-plugin-authoring-defect',
   'stale-fixture-or-reference-input',
