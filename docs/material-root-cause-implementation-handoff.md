@@ -295,8 +295,19 @@ makes End collapse to the selection maximum instead of the text end. The served
 `chunk-3JXWRYJY.js` contains that exact branch and matches checkpoint SHA-256
 `f366533bd9f80b7f85379db5031c0dea8c9c1840c14fb6ec35f57f1b65ad9eab`.
 The root is keyboard selection arithmetic, not CSS/world projection. Do not fix
-it during the audit. Tab-selection ownership still needs isolation; timepicker
-reference selection differs further and must be investigated in its popup state.
+it during the audit. A minimal native input versus the complete `moveCursor`
+method extracted from the hash-bound served bundle now isolates both Home and
+End: selection [0,3] + End gives native [5,5], shipped [3,3]; selection [2,5] +
+Home gives native [0,0], shipped [2,2]. No-selection Home/End and selected
+Left/Right controls match. This six-case source/browser proof and the existing
+capture checks pass 3/3 in 4,874.092 ms. It complements the public Material
+capture; it is not a replacement implementation or a renderer change.
+Tab-selection ownership still needs isolation. The timepicker reference tree
+at forward selection records an open combobox, listbox popup, and active option
+`mat-option-0`; Material's installed `timepicker.mjs:139,378` configures
+`withHomeAndEnd(true)` and routes open-popup keys through that manager. Keep this
+popup-key-routing explanation separate from the confirmed core text-selection
+defect; a settled boundary immediately after Home/End is not in this capture.
 Native email endpoints remain null: use its retained pixels, not invented native
 selection indices. A candidate form-field empty caret is visibly present in the
 first DPR1 sample; this does not establish every family's caret paint or timing.

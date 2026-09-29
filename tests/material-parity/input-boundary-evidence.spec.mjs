@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import ts from 'typescript';
+import { chromium } from 'playwright-core';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 
@@ -10,6 +12,48 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
+
+test('served core isolates Home and End selection collapse from Material popup behavior', async () => {
+  const source = readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js');
+  assert.equal(hash(source), 'f366533bd9f80b7f85379db5031c0dea8c9c1840c14fb6ec35f57f1b65ad9eab');
+  const ast = ts.createSourceFile('served.js', source.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const methods = [];
+  const visit = node => {
+    if (ts.isMethodDeclaration(node) && node.name.getText(ast) === 'moveCursor') methods.push(node);
+    ts.forEachChild(node, visit);
+  };
+  visit(ast); assert.equal(methods.length, 1);
+  // Execute the complete shipped arithmetic method. No mesh/controller is
+  // needed for these horizontal cases; public Material evidence above supplies
+  // the composed application proof. This is not a replacement renderer.
+  const directions = Object.fromEntries(['Left', 'Right', 'Up', 'Down', 'Home', 'End'].map(k => [k, k.toLowerCase()]));
+  const move = new Function('CursorDirection', `return ({${methods[0].getText(ast)}}).moveCursor;`)(directions);
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  try {
+    assert.equal(browser.version(), report.browser);
+    const page = await browser.newPage();
+    await page.setContent('<input value="Atlas" aria-label="isolated text input">');
+    for (const c of [
+      { key: 'End', range: [0, 3], native: 5, shipped: 3 },
+      { key: 'Home', range: [2, 5], native: 0, shipped: 2 },
+      { key: 'End', range: [2, 2], native: 5, shipped: 5 },
+      { key: 'Home', range: [2, 2], native: 0, shipped: 0 },
+      { key: 'ArrowRight', range: [0, 3], native: 3, shipped: 3 },
+      { key: 'ArrowLeft', range: [2, 5], native: 2, shipped: 2 },
+    ]) {
+      await page.locator('input').focus();
+      await page.locator('input').evaluate((input, range) => input.setSelectionRange(...range), c.range);
+      await page.keyboard.press(c.key);
+      const native = await page.locator('input').evaluate(input => [input.selectionStart, input.selectionEnd]);
+      const input = { textContent: 'Atlas', selectionStart: c.range[0], selectionEnd: c.range[1], cursorPosition: c.range[1],
+        cursorState: { position: c.range[1], selectionStart: c.range[0], selectionEnd: c.range[1], selectionActive: c.range[0] !== c.range[1] } };
+      move.call({}, input, directions[c.key.replace('Arrow', '')], false);
+      assert.deepEqual(native, [c.native, c.native], c.key);
+      assert.deepEqual([input.selectionStart, input.selectionEnd], [c.shipped, c.shipped], c.key);
+    }
+  } finally { await browser.close(); }
+});
 
 test('retained input boundaries authenticate all runtime assets, trees, actions and local rasters', () => {
   const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
