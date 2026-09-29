@@ -219,15 +219,16 @@ explains the long quiet interval, not a hung process. Preserve all mutations
 when considering dependency-validated reuse; this is not authority to replace
 their production-validator checks with weaker assertions.
 
-A separate failure in `control-overflow-observation.spec.mjs` is a stale source
-extraction boundary: its three-function snackbar/overflow test now extracts the
-later owner-omission pipeline, which starts with `applyOwnerMaximumWidths` and
-requires additional dependencies and a different input-stage variable. Restore
-an exact stage-specific production assertion using existing infrastructure,
-while retaining its original membership, negative controls and raw-row checks.
-These are audit-harness diagnoses, not repaired renderer defects or completed
-acceptance. Preserve the full run log named below and finish the run before
-editing its tested dependencies.
+The `control-overflow-observation.spec.mjs` source-extraction failure is repaired:
+the three-function snackbar/overflow test now executes the actual
+`beforeTypographyReviews` production declaration rather than the later final
+owner-omission pipeline. Its marker must be unique; both bound and unbound paths
+remain checked. The focused `combined snackbar and overflow proposal` test passed
+1/1 in 28,915.994 ms with unchanged 8,483 raw rows, 31 changed groups / 1,292
+observations, complete unrelated-row conservation, production validators,
+forged metadata and missing/duplicated-case rejection. No production code or
+acceptance expectation changed. This closes harness failure 193, not snackbar
+rendering or full integration acceptance; the original full-run log is retained.
 
 Test 1277 (`reviewed-input-canonical-integration.spec.mjs`) stopped during
 expansion-owner source replay after 224,170.7933 ms. A separate read-only replay

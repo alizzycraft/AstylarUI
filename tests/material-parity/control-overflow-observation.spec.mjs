@@ -387,12 +387,16 @@ test('combined snackbar and overflow proposal preserves all current raw rows and
   const applied = applyMappedVisibleOverflow(applyControlClippingRequests(
     applySnackbarPositionRequests(rows, cases, inventory, normalize), cases, inventory, normalize), cases, inventory, normalize);
   const source = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
-  const start = source.indexOf("  const discrepancies = ownerInitialStyleBinding.status === 'bound'");
-  const end = source.indexOf('  const classifications = countBy(discrepancies', start);
+  // Later owner/typography stages now follow this bounded three-function stage.
+  // Execute its actual production declaration, not the final discrepancies tail.
+  const marker = "  const beforeTypographyReviews = ownerInitialStyleBinding.status === 'bound'";
+  assert.equal(source.split(marker).length, 2);
+  const start = source.indexOf(marker);
+  const end = source.indexOf('  const beforeBoxSizingReviews =', start);
   assert.ok(start > 0 && end > start);
   const implementations = { applyMappedVisibleOverflow, applyControlClippingRequests, applySnackbarPositionRequests };
   const run = new Function('ownerInitialStyleBinding', 'beforeSnackbarOverflowRequests', 'cases',
-    'elementInventory', 'canonicalStyle', ...Object.keys(implementations), source.slice(start, end) + '\nreturn discrepancies;');
+    'elementInventory', 'canonicalStyle', ...Object.keys(implementations), source.slice(start, end) + '\nreturn beforeTypographyReviews;');
   assert.deepEqual(run({ status: 'bound' }, rows, cases, inventory, normalize, ...Object.values(implementations)), applied);
   assert.equal(run({ status: 'unbound' }, rows, cases, inventory, normalize, ...Object.values(implementations)), rows);
   const validators = { validateSnackbarPositionRequests, validateControlClippingRequests, validateMappedVisibleOverflow };
