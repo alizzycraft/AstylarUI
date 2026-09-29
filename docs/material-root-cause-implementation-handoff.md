@@ -75,6 +75,24 @@ This is the existing runner-receipt transition, not a newly divergent expansion
 finding or normalizer failure. Reconcile that reviewed source transition without
 blindly refreshing the receipt; later full-population assertions remain unrun.
 
+Root-shadow integration has now completed. Test 1340 failed after
+331,395.6612 ms at scalar-population conservation against `502ea44`, with
+newly retained precise background colors. AST comparison confirms that its
+three guarded functions plus `normalizeValue` and `formatNumber` match that
+predecessor, while `normalizeColor` differs. This belongs in the existing
+precision-transition reconciliation, not a new shadow-rendering investigation;
+later attribution-precedence assertions were not reached. Test 1341 passed
+all five production-validator mutation controls in 1,819,200.1015 ms.
+The following survey test (1342) stopped at its source-receipt assertion:
+`border-initial-input-evidence.mjs` has current normalized hash
+`a809c257d8edcd07b1261cad6f7a0a15b5245fa0832922e4bebf287e21b6eff2`
+versus stored `3dbcf33ff70244a8179f438962a2549fb7e354948f084d35d433bcf82e76f9f4`.
+Reconcile the reviewed border-source transition before claiming its subsequent
+2,311-observation replay passed. The independent mutation proof (1343) and
+Chrome shadow-serialization checks at DPR 1 and 2 (1344–1345) passed, preserving
+the distinction between browser alpha `0.133` and candidate request `0.14`.
+These checks establish serialization, not candidate shadow-raster equivalence.
+
 **Remaining interaction-coverage review:** the configured matrix is not proof
 that every requested interaction boundary is captured. In
 `tests/material-parity/run-material-parity.mjs:525`, the `focus` action calls
