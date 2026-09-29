@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyRemainingBorderReviews,')) {
+    for (const [from, to] of [
+      ["import { applyRemainingBorderReviews, validateRemainingBorderReviews } from './custom-owner-border-review.mjs';\n", ''],
+      ['applyExpansionTreeFormattingReviews, applyRemainingBorderReviews]', 'applyExpansionTreeFormattingReviews]'],
+      ['      errors.push(...validateRemainingBorderReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => row.attribution === 'reviewed-remaining-border-request-substitution'))\n    errors.push('remaining border attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated remaining border integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyExpansionTreeFormattingReviews,')) {
     for (const [from, to] of [
       ["import { applyExpansionTreeFormattingReviews, validateExpansionTreeFormattingReviews } from './display-request-review.mjs';\n", ''],

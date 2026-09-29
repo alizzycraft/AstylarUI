@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 29
 
+**Remaining border reviews integrated; export pending:** the five-group /
+252-observation proof from `3045dc9` now runs in the bound production tail with
+replay and unbound-attribution guards. Expanded current-checkpoint coverage changes
+70 groups / 3,434 observations, with exact raw/unrelated conservation and reverse
+reducer agreement. No previous classification is reopened.
+`node --test --test-name-pattern="omitted owner paint requests preserve|remaining toggle and divider borders" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/custom-owner-border-review.spec.mjs`
+passes **2/2**, 35,055.1924 ms total. Historical producer reversal retains
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+current producer is `8c2ab4c6e1372e37bda9ec70e255e65e87e53d4180db0e0d2ed03fa44e10d591`.
+Canonical remains **95 unresolved**; integrated projection **5**. Remaining:
+two compact-tab padding groups, two progress alignment groups, one icon fit group.
+Current tab source explicitly applies 1px top padding at density <= -5; history
+locates its introduction in `bc4d442`. Next inspect that change with the existing
+label/control mapping rather than assume scalar label padding is control padding.
+Then finish progress/icon owner boundaries and reconcile source fingerprints/export
+before final gates. No captures, fixture changes or renderer edits.
+
 **Remaining border questions answered; integration pending:** five groups / 252
 observations reuse the established divider paint proof and toggle owner mapping.
 Toggle top/right/bottom styles are overauthored solid versus native none, but
