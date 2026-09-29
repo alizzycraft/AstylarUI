@@ -10,8 +10,20 @@ duplicate fragments and unrelated edits. The focused conservation test passed
 1/1 (1,042.4435 ms); the unchanged browser input-tree suite passed 10/10
 (6,095.1366 ms). The case-index collector uses this proof and now reaches the
 next distinct boundary: policy source `3256863…` versus expected `44461b3…`.
-The complete case-index replay and saved conservation report are NOT yet current;
-review that policy transition and assertion migration before regenerating either.
+The policy transition is now authenticated: removing the exact three added source
+findings and the non-intentional `documented-limitation` category restores the
+complete recorded policy (`7e939ae…`). The runner's later interaction geometry
+and paint diagnostics reuse `restoreGapCaptureDiagnostics`; its complete
+predecessor is conserved, not treated as a fresh capture. All nine case-index
+reports now pass source and non-receipt conservation. No historical receipt or
+finding was rewritten. Focused policy/heading/rejection checks passed 3/3 in
+24,714.0073 ms; the existing capture-diagnostic reversal test passed 1/1 in
+1,086.6351 ms. The rejection test now verifies a passing original collector first
+and expects the earlier strict stacking-source rejection for its renamed mapping
+mutation. The complete case-index replay and saved conservation report are NOT
+yet current: `verifyCaseIndexAssertionMigration` still rejects changes beyond its
+reviewed assertion/import/inventory projection. Review that exact delta next;
+do not regenerate the report until membership replay succeeds.
 
 **Remaining typography bindings:** host-token proposal, leaf-family tests and
 leaf weight/tracking tests now bind their own recorded historical revisions.

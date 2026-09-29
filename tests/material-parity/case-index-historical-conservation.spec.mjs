@@ -1,8 +1,28 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { collectCaseIndexConservation, verifyInputTreeHeadingExtension } from '../../scripts/audit-material-case-index-conservation.mjs';
+import { collectCaseIndexConservation, verifyInputTreeHeadingExtension, policyProjection } from '../../scripts/audit-material-case-index-conservation.mjs';
 import { caseIndexReceiptFiles, caseIndexAuditModule } from '../../scripts/refresh-material-case-index-receipts.mjs';
+
+test('policy additions conserve the complete historical policy without promoting new classifications', () => {
+  const current = readFileSync('tests/material-parity/input-equivalence-policy.mjs', 'utf8');
+  const expected = '7e939aece26dd69b846b78fc6d21aa332463b53068f488cf19343578306d80d8';
+  const proof = policyProjection(current, expected);
+  assert.equal(proof.retainedSourceUnchanged, true);
+  assert.deepEqual(proof.addedClassifications, ['documented-limitation']);
+  assert.deepEqual(proof.addedSourceFindings, ['core-rounded-radius-sampling-uses-unclamped-request',
+    'fixture-dialog-sampled-panel-and-action-geometry', 'fixture-icon-svg-replaced-by-fixed-raster']);
+  for (const changed of [current + '\n// unrelated',
+    current.replace("  'documented-limitation',", ''),
+    current.replace("  'equivalent-representation',", ''),
+    current.replace('fixture-icon-svg-replaced-by-fixed-raster', 'unreviewed-icon-finding'),
+    current.replace('intentional-documented-limitation', 'equivalent-representation'),
+  ]) {
+    assert.notEqual(changed, current);
+    assert.throws(() => policyProjection(changed, expected), /unreviewed policy transition/);
+  }
+  assert.throws(() => policyProjection(current, '0'.repeat(64)));
+});
 
 test('heading overflow coverage conserves the complete original input-tree suite', () => {
   const current = readFileSync('tests/material-parity/input-tree-evidence.spec.mjs', 'utf8');
@@ -48,6 +68,9 @@ test('historical case-index binding retains saved receipts and never promotes so
 });
 
 test('historical binding rejects changed findings in every index, receipts, dependencies and retained source behavior', () => {
+  // Establish the unchanged baseline before mutations; an already-broken
+  // collector must not make every rejection control pass vacuously.
+  assert.equal(collectCaseIndexConservation().report.reports.length, 9);
   for (const file of caseIndexReceiptFiles) {
     const report = JSON.parse(readFileSync(file)); report.unreviewedFinding = true;
     assert.throws(() => collectCaseIndexConservation({ read: name => name === file
@@ -78,5 +101,5 @@ test('historical binding rejects changed findings in every index, receipts, depe
   assert.ok(source.includes('function reviewedTemplateTextMappings('));
   assert.throws(() => collectCaseIndexConservation({ read: name => name === caseIndexAuditModule
     ? Buffer.from(source.replace('function reviewedTemplateTextMappings(', 'function renamedTemplateTextMappings('))
-    : readFileSync(name) }), /mapping or normalization changed/);
+    : readFileSync(name) }), /producer changed beyond reviewed stacking integration/);
 });

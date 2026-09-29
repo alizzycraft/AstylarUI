@@ -8,6 +8,7 @@ import ts from 'typescript';
 import { caseIndexReceiptFiles, caseIndexReceiptRevision, caseIndexAuditModule } from './refresh-material-case-index-receipts.mjs';
 import { verifyAlignmentAuditProjection } from '../tests/material-parity/alignment-survey-conservation.mjs';
 import { verifyCaseIndexAssertionMigration } from '../tests/material-parity/case-index-assertion-migration.mjs';
+import { restoreGapCaptureDiagnostics } from '../tests/material-parity/gap-survey-source-replay.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const normalize = value => value.toString().replaceAll('\r\n', '\n');
@@ -36,11 +37,11 @@ export function verifyInputTreeHeadingExtension(bytes, expected) {
     retainedSourceUnchanged: true, addedHeadingCases: ['omitted', 'visible', 'hidden', 'ancestor-clipped'] };
 }
 
-// These two later source findings do not replace any historical policy. Prove
+// These later source findings and classification do not replace historical policy. Prove
 // the exact additive transition before reusing the unchanged case memberships.
-function policyProjection(bytes, expected) {
+export function policyProjection(bytes, expected) {
   const source = normalize(bytes);
-  assert.equal(sourceHash(source), '44461b31f8e1dfa20b6d80614ac2412cbcb32e24b1979d144284f32cad524f9d', 'unreviewed policy transition');
+  assert.equal(sourceHash(source), '3256863af7432ce2d9e05e2cc2569bc7f68db5f9a063f718ef09594e13c2474f', 'unreviewed policy transition');
   assert.equal(expected, '7e939aece26dd69b846b78fc6d21aa332463b53068f488cf19343578306d80d8');
   const ast = ts.createSourceFile('policy.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
   assert.equal(ast.parseDiagnostics.length, 0);
@@ -49,19 +50,24 @@ function policyProjection(bytes, expected) {
   assert.equal(owner.length, 1);
   const array = owner[0].initializer.arguments[0];
   assert.ok(ts.isArrayLiteralExpression(array));
-  const ids = ['core-rounded-radius-sampling-uses-unclamped-request', 'fixture-dialog-sampled-panel-and-action-geometry'];
+  const ids = ['core-rounded-radius-sampling-uses-unclamped-request', 'fixture-dialog-sampled-panel-and-action-geometry',
+    'fixture-icon-svg-replaced-by-fixed-raster'];
   const additions = array.elements.filter(n => ts.isCallExpression(n) && n.expression.getText(ast) === 'Object.freeze' &&
     ts.isObjectLiteralExpression(n.arguments[0]) && n.arguments[0].properties.some(p =>
       ts.isPropertyAssignment(p) && p.name.getText(ast) === 'id' && ts.isStringLiteral(p.initializer) && ids.includes(p.initializer.text)));
-  assert.equal(additions.length, 2);
+  assert.equal(additions.length, ids.length);
   let restored = source;
   for (const node of additions.reverse()) {
     assert.equal(source[node.end], ',');
     restored = restored.slice(0, node.getFullStart()) + restored.slice(node.end + 1);
   }
+  const classification = "  // Observed support gaps need not be intentional design decisions.\n  'documented-limitation',\n";
+  assert.equal(restored.split(classification).length, 2);
+  restored = restored.replace(classification, '');
   assert.equal(sourceHash(restored), expected, 'retained policy changed');
   return { file: 'tests/material-parity/input-equivalence-policy.mjs', recordedSha256: expected,
-    currentSha256: sourceHash(source), addedSourceFindings: ids, retainedSourceUnchanged: true };
+    currentSha256: sourceHash(source), addedSourceFindings: ids,
+    addedClassifications: ['documented-limitation'], retainedSourceUnchanged: true };
 }
 
 // Preserve saved historical receipts. The projected copies below are ONLY for
@@ -92,6 +98,12 @@ export function collectCaseIndexConservation({ read = readFileSync } = {}) {
       } else if (dependency.file === 'tests/material-parity/input-tree-evidence.spec.mjs' && sourceHash(bytes) !== dependency.sha256) {
         const proof = verifyInputTreeHeadingExtension(bytes, dependency.sha256);
         if (!dependencyProjections.some(p => p.file === proof.file)) dependencyProjections.push(proof);
+      } else if (dependency.file === 'tests/material-parity/run-material-parity.mjs' && sourceHash(bytes) !== dependency.sha256) {
+        assert.equal(sourceHash(restoreGapCaptureDiagnostics(normalize(bytes))), dependency.sha256);
+        if (!dependencyProjections.some(p => p.file === dependency.file)) dependencyProjections.push({
+          file: dependency.file, recordedSha256: dependency.sha256, currentSha256: sourceHash(bytes),
+          retainedSourceUnchanged: true, addedInteractionDiagnostics: ['geometry', 'controlPaintGeometry'],
+        });
       } else assert.equal(sourceHash(bytes), dependency.sha256, `changed dependency: ${dependency.file}`);
     }
     reports.push({ file, savedSha256: sourceHash(bytes), baselineRevision: caseIndexReceiptRevision,
