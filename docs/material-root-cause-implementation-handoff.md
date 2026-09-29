@@ -41,6 +41,20 @@ autocomplete, badge and bottom-sheet. Reconcile the complete normalization
 transition and exact additional populations before checking unrelated-row
 conservation; do not broadly exempt color properties or remove these rows.
 
+The reviewed-authoring integration file has now completed. Test 1269 failed at
+`reviewed-authoring-canonical-integration.spec.mjs:84` after 425,482.4011 ms:
+its `c391a6f` scalar comparison includes the same newly preserved precise root
+background colors. AST comparison confirms that its three guarded functions
+(`reviewedTemplateTextMappings`, `canonicalStyle`, `equivalentValue`) match,
+as do `normalizeValue` and `formatNumber`, but `normalizeColor` does not.
+Apply the same explicit precision-transition reconciliation, retaining every
+additional raw difference and the later, not-yet-reached precedence assertions.
+Test 1270's ten mutation controls passed in 4,208,367.3425 ms. Its body builds
+one audit then invokes the full validator for each clone; that measured cost
+explains the long quiet interval, not a hung process. Preserve all mutations
+when considering dependency-validated reuse; this is not authority to replace
+their production-validator checks with weaker assertions.
+
 A separate failure in `control-overflow-observation.spec.mjs` is a stale source
 extraction boundary: its three-function snackbar/overflow test now extracts the
 later owner-omission pipeline, which starts with `applyOwnerMaximumWidths` and
