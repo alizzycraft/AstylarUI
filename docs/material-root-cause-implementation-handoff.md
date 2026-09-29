@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 29
 
+**Synthetic slider integration boundary:** tests 1373 and 1374 failed after
+221,412.4451 and 218,138.4239 ms during production audit construction, before
+their slider assertions or mutation checks. The stack reaches
+`proveFixedHeightRequest` (`control-height-request-review.mjs:73`), whose
+`fixedHeightOwners` does not include either slider input. The synthetic helper
+supplies candidate `height: '44px'` and omits reference height; the later generic
+height-review pass attempts to classify every unresolved height row through
+that original-owner-only proof. Reconcile the proof's applicability boundary
+without fabricating slider height evidence, removing the synthetic difference,
+or weakening slider conservation/mutations. Tests 1375–1379 passed the focused
+binding checks and replay of all 156 original slider owners. Tests 1380–1392
+passed the peer-pointer, placement, snackbar camera-depth and sort proofs.
+Inventory tests 1393–1394 separately failed on 534 sources versus their prepared
+409-source expectation; include these in the existing exact inventory-transition
+review rather than blindly refreshing counts. The full harness remains live.
+
 **Slider-border integration result:** the same full harness has advanced through
 test 1372 and entered `slider-input-box-integration.spec.mjs`. Test 1356 failed
 after 291,748.5582 ms at its first attribution-count assertion: 32 rows versus
