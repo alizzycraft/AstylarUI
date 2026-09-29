@@ -2,6 +2,40 @@
 
 ## Current audit checkpoint — September 29
 
+**Canonical reconciliation verified:** export from `4624a9c` passed in
+2,166,050.6272 ms; independent `ASTYLAR_AUDIT_COLD=1` replay of
+`node scripts/export-material-input-audit-current-ancestry.mjs --check` passed
+in 2,352,821.8679 ms (exit 0), including full canonical and Markdown comparison.
+Coverage remains 436/436 static and 1,875/1,875 interaction cases across 36
+families, 8,483 scalar groups / 389,202 observations and 135 source findings.
+Unresolved scalar attributions and unclassified groups are zero;
+`inputEquivalent` remains false. This is not audit completion or renderer repair.
+
+Conservation review against accepted `dcc6e52` authenticated both packages:
+71 of 79 sections are unchanged; all 8,483 raw scalar rows are preserved.
+95 newly classified groups cover 3,888 observations; one existing 60-observation
+button line-box attribution updates its receipt. Other changes are source receipt
+refreshes, classification totals and bounded-proof scope wording. All 534 source
+fingerprints match disk (532 raw, two LF-normalized). Cold replay read and verified
+1,205 files / 89,154,859 bytes, with two collectors, ten memory hits, zero disk
+hits and zero invalidations. The warm export used one collector and one disk hit.
+Accepted compressed SHA-256:
+`db1b33c93c9169169fda86f5e6b36bf38fb1981d3c0aef0ef82cc44ef7b05b1c`;
+decoded SHA-256:
+`c93c4ad15d0094177b7e20651829109040446d8ec3334ee8012ab46a288de9b3`.
+
+Compact import and `npm run audit:findings:verify` pass, preserving all 39,904
+control records as well as the scalar/source populations above. Compact shards
+total 72,700,471 bytes; index SHA-256 is
+`96d60d33e947811518e31724a6a5843f616ea291debf98f1d210e533b4896005`.
+
+Next: commit the reconciled canonical package, review every original deliverable
+and uncertainty, then run the fresh
+unfiltered enforced browser matrix. Historical output results do not satisfy that
+final gate. No renderer, fixture or original capture has been changed.
+
+### Historical checkpoint trail (superseded status, retained evidence)
+
 **Reporting scope reconciled before retry:** bounded caret/gap/origin/alignment
 and calendar-close prose now distinguishes collector-local limitations from final
 row attributions. Retained visual parity is explicitly not a fresh final-gate
