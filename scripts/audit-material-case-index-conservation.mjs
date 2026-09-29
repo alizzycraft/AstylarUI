@@ -15,6 +15,27 @@ const sourceHash = value => hash(normalize(value));
 const receiptRevision = '4650791a7208b841dd29f1ced015f98234949623';
 const historical = (revision, file) => execFileSync('git', ['show', `${revision}:${file}`], { maxBuffer: 16 * 1024 * 1024 });
 
+export function verifyInputTreeHeadingExtension(bytes, expected) {
+  const current = normalize(bytes);
+  assert.equal(expected, 'c2d0884f99fc4e1f41ac65d22b95643c8785f4fb7a339a47746bf31fe91344b3');
+  let restored = current;
+  for (const [from, to] of [
+    ["const observe = (overflow, parentClips = false, type = 'div') => {", "const observe = (overflow, parentClips = false) => {"],
+    ["box = document.createElement(type)", "box = document.createElement('div')"],
+    ["height: '40px', margin: '0', ...overflow", "height: '40px', ...overflow"],
+    ["ancestorClips: observe({}, true),\n        headingOmitted: observe({}, false, 'h2'), headingVisible: observe({ overflow: 'visible' }, false, 'h2'),\n        headingHidden: observe({ overflow: 'hidden' }, false, 'h2'), headingAncestor: observe({}, true, 'h2') };",
+      "ancestorClips: observe({}, true) };"],
+    ["    assert.deepEqual(observations.headingOmitted, observations.omitted);\n    assert.deepEqual(observations.headingVisible, observations.visible);\n    assert.deepEqual(observations.headingHidden, observations.hidden);\n    assert.deepEqual(observations.headingAncestor, observations.ancestorClips);\n", ''],
+  ]) {
+    assert.equal(restored.split(from).length, 2, 'missing or duplicated heading extension');
+    restored = restored.replace(from, to);
+  }
+  assert.equal(sourceHash(restored), expected, 'input-tree suite changed outside heading extension');
+  return { file: 'tests/material-parity/input-tree-evidence.spec.mjs',
+    historicalSha256: expected, currentSha256: sourceHash(current),
+    retainedSourceUnchanged: true, addedHeadingCases: ['omitted', 'visible', 'hidden', 'ancestor-clipped'] };
+}
+
 // These two later source findings do not replace any historical policy. Prove
 // the exact additive transition before reusing the unchanged case memberships.
 function policyProjection(bytes, expected) {
@@ -67,6 +88,9 @@ export function collectCaseIndexConservation({ read = readFileSync } = {}) {
       const bytes = read(dependency.file);
       if (dependency.file === 'tests/material-parity/input-equivalence-policy.mjs' && sourceHash(bytes) !== dependency.sha256) {
         const proof = policyProjection(bytes, dependency.sha256);
+        if (!dependencyProjections.some(p => p.file === proof.file)) dependencyProjections.push(proof);
+      } else if (dependency.file === 'tests/material-parity/input-tree-evidence.spec.mjs' && sourceHash(bytes) !== dependency.sha256) {
+        const proof = verifyInputTreeHeadingExtension(bytes, dependency.sha256);
         if (!dependencyProjections.some(p => p.file === proof.file)) dependencyProjections.push(proof);
       } else assert.equal(sourceHash(bytes), dependency.sha256, `changed dependency: ${dependency.file}`);
     }

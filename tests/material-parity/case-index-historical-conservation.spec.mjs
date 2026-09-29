@@ -1,8 +1,27 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { collectCaseIndexConservation } from '../../scripts/audit-material-case-index-conservation.mjs';
+import { collectCaseIndexConservation, verifyInputTreeHeadingExtension } from '../../scripts/audit-material-case-index-conservation.mjs';
 import { caseIndexReceiptFiles, caseIndexAuditModule } from '../../scripts/refresh-material-case-index-receipts.mjs';
+
+test('heading overflow coverage conserves the complete original input-tree suite', () => {
+  const current = readFileSync('tests/material-parity/input-tree-evidence.spec.mjs', 'utf8');
+  const expected = 'c2d0884f99fc4e1f41ac65d22b95643c8785f4fb7a339a47746bf31fe91344b3';
+  const proof = verifyInputTreeHeadingExtension(current, expected);
+  assert.equal(proof.retainedSourceUnchanged, true);
+  assert.deepEqual(proof.addedHeadingCases, ['omitted', 'visible', 'hidden', 'ancestor-clipped']);
+  for (const changed of [current + '\n// unrelated',
+    current.replace("type = 'div'", "type = 'h2'"),
+    current.replace('assert.deepEqual(observations.visible, observations.omitted);', ''),
+    current.replace('headingHidden: observe', 'unreviewedHidden: observe'),
+    current.replace("margin: '0'", "margin: '1px'"),
+    current + "\nconst observe = (overflow, parentClips = false, type = 'div') => {\n}",
+  ]) {
+    assert.notEqual(changed, current);
+    assert.throws(() => verifyInputTreeHeadingExtension(changed, expected));
+  }
+  assert.throws(() => verifyInputTreeHeadingExtension(current, '0'.repeat(64)));
+});
 
 test('historical case-index binding retains saved receipts and never promotes source proof to canonical acceptance', () => {
   const collected = collectCaseIndexConservation();

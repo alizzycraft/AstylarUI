@@ -2,6 +2,17 @@
 
 ## Current audit checkpoint — September 29
 
+**Case-index heading dependency:** the input-tree test receipt `c2d0884…`
+predates `1660b67`'s four heading-overflow cases (`e442a49…`). An exact reverse
+projection now authenticates the complete predecessor, preserving every original
+div case/assertion while rejecting changed defaults, margins, missing assertions,
+duplicate fragments and unrelated edits. The focused conservation test passed
+1/1 (1,042.4435 ms); the unchanged browser input-tree suite passed 10/10
+(6,095.1366 ms). The case-index collector uses this proof and now reaches the
+next distinct boundary: policy source `3256863…` versus expected `44461b3…`.
+The complete case-index replay and saved conservation report are NOT yet current;
+review that policy transition and assertion migration before regenerating either.
+
 **Remaining typography bindings:** host-token proposal, leaf-family tests and
 leaf weight/tracking tests now bind their own recorded historical revisions.
 The three existing suites passed 10/10 in 239,970.9222 ms
