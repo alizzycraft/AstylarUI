@@ -7,6 +7,39 @@ import { applyModalBoxReview } from './modal-position-inspection.mjs';
 import { proveTabPanelWrapping } from './wrapping-input-review.mjs';
 import { proveSliderMarginOwner } from './slider-position-request-review.mjs';
 
+// The original receipt includes a later test that extracts the snackbar stage.
+// Its extraction moved when more stages were appended to the audit builder;
+// preserve every original assertion and authenticate the complete predecessor.
+export function restoreOverflowStageTestSource(source) {
+  let restored = source.replaceAll('\r\n', '\n');
+  const substitutions = [
+    ["  // Later owner/typography stages now follow this bounded three-function stage.\n" +
+      "  // Execute its actual production declaration, not the final discrepancies tail.\n" +
+      "  const marker = \"  const beforeTypographyReviews = ownerInitialStyleBinding.status === 'bound'\";\n" +
+      "  assert.equal(source.split(marker).length, 2);\n" +
+      "  const start = source.indexOf(marker);\n" +
+      "  const end = source.indexOf('  const beforeBoxSizingReviews =', start);",
+      "  const start = source.indexOf(\"  const discrepancies = ownerInitialStyleBinding.status === 'bound'\");\n" +
+      "  const end = source.indexOf('  const classifications = countBy(discrepancies', start);"],
+    ["source.slice(start, end) + '\\nreturn beforeTypographyReviews;');",
+      "source.slice(start, end) + '\\nreturn discrepancies;');"],
+  ];
+  for (const [current, original] of substitutions) {
+    assert.equal(restored.split(current).length, 2, 'overflow stage migration fragment changed');
+    restored = restored.replace(current, original);
+  }
+  assert.equal(createHash('sha256').update(restored).digest('hex'),
+    '8008b11bce62333459b75577f6d08c5c5fd17dcad28a5acbadadb252a3d76f51',
+    'overflow stage migration changed original assertions or unrelated source');
+  return restored;
+}
+
+function readOverflowProofSource(file) {
+  const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  return file === 'tests/material-parity/control-overflow-observation.spec.mjs'
+    ? restoreOverflowStageTestSource(source) : source;
+}
+
 export const mappedVisibleOwners = Object.freeze({
   paginator: ['paginator-range', 'paginator-size'], stepper: ['stepper-content'],
   'bottom-sheet': ['bottom-sheet-overlay'], 'snack-bar': ['snack-bar-overlay', 'snack-bar-surface'],
@@ -174,7 +207,7 @@ export function applyTableVisibleOverflow(rows, cases, inventory, normalize) {
     'src/app/services/dom/elements/element-creation.service.spec.ts': 'c968bb582c470305f1a83144319d6aaa9d85f6089e19c21c7eff6ca4b09e2830',
     'tests/material-parity/control-overflow-observation.spec.mjs': '8008b11bce62333459b75577f6d08c5c5fd17dcad28a5acbadadb252a3d76f51' };
   for (const [file, expected] of Object.entries(sources)) assert.equal(createHash('sha256')
-    .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
+    .update(readOverflowProofSource(file)).digest('hex'), expected, file);
   return applyModalBoxReview(rows, cases, inventory, normalize, {
     family: 'table', element: 'table-primary', properties: ['overflowX', 'overflowY'],
     classification: 'equivalent-representation', attribution: 'reviewed-table-visible-overflow-initial-value', owner: 'none',
@@ -299,7 +332,7 @@ export function applyRangeVisibleOverflow(rows, cases, inventory, normalize) {
     'src/app/services/dom/input/input-element.service.ts': '1feefdf367bdaf42f777913049034e06af6faa14dad6f4019b2d05913170a5cf',
     'tests/material-parity/control-overflow-observation.spec.mjs': '8008b11bce62333459b75577f6d08c5c5fd17dcad28a5acbadadb252a3d76f51' };
   for (const [file, expected] of Object.entries(sources)) assert.equal(createHash('sha256')
-    .update(readFileSync(file, 'utf8').replaceAll('\r\n', '\n')).digest('hex'), expected, file);
+    .update(readOverflowProofSource(file)).digest('hex'), expected, file);
   return ['slider-start', 'slider-primary'].reduce((values, element) => applyModalBoxReview(values, cases, inventory, normalize, {
     family: 'slider', element, properties: ['overflowX', 'overflowY'],
     classification: 'equivalent-representation', attribution: 'reviewed-range-visible-overflow-initial-value', owner: 'none',

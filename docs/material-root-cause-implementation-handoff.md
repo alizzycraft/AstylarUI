@@ -2,6 +2,36 @@
 
 ## Current audit checkpoint — September 29
 
+**Root-shadow integration retry / overflow receipt:** the first targeted retry
+stopped before row conservation because the table overflow proof still required
+the complete pre-`559f95c` test-source hash. Log:
+`artifacts/material-parity/root-shadow-reconciliation-c83ed6d.log` (one passed,
+one failed, 405,879.4633 ms). Its failure capture is retained at
+`root-shadow-integration-hAL8dQ`; the helper now uses `withAuditScratch` rather
+than deleting failure evidence. Table/range source gates now reverse only the
+two exact snackbar-stage extraction substitutions and require the complete
+original hash `8008b11…`; recorded receipts and proof fields remain unchanged.
+Changed assertions, extraction text and unrelated edits are rejected. Focused
+dependency/normalization tests passed 2/2 (3,618.3813 ms). The original range/tab,
+52-table and combined snackbar/overflow tests passed 3/3 (36,241.0927 ms), log
+`overflow-stage-receipt-c83ed6d.log`. Scratch retention passed 1/1 (147.5286 ms).
+The production conservation test now checks the exact 36 additional background
+groups / 277 observations, their captured authored examples and unresolved
+classification, preserving the complete unrelated-row digest. The retry log is
+`root-shadow-reconciliation-overflow-receipt.log`: all three selected tests
+passed (719,899.3272 ms total; production conservation 716,253.701 ms).
+This closes recorded failure 1340: the original scalar population is conserved
+after accounting for those exact new backgrounds, the root-shadow/root-flow
+attributions pass, every unrelated complete-row digest remains identical, and
+the production validator reports no shadow/flow error. Successful scratch
+`root-shadow-integration-JRg9Nx` was removed automatically; the failed capture
+remains retained. The five mutation cases from previously passing test 1341
+were not rerun in this bounded batch. No renderer, fixture, saved finding,
+color normalization or threshold was changed. Next: remaining tooltip complete-row
+conservation and slider-border precision-population reconciliation, followed by
+the outstanding inventory/export and interaction-coverage work; final gates remain
+required.
+
 **Root-shadow scalar failure isolated:** a focused check now authenticates the
 original capture and both normalization contracts at the integration's exact
 `502ea44` predecessor. Its same `selectStates` boundary selects 277 root inputs

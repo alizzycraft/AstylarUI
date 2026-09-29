@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
@@ -10,6 +10,8 @@ import { buildMaterialInputAudit, validateMaterialInputAudit } from './input-equ
 import { rootShadowAttribution } from './root-shadow-source-binding.mjs';
 import { rootFlowHeightAttribution } from './root-flow-height-source-binding.mjs';
 import { bindHistoricalAuditNormalization, bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
+import { withAuditScratch } from './audit-scratch.mjs';
+import { restoreOverflowStageTestSource, applyTableVisibleOverflow, applyRangeVisibleOverflow } from './control-overflow-observation.mjs';
 
 const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
 const baselineCommit = '502ea44a064d49cd4c273bd93dfb5d51f6adbc87';
@@ -44,6 +46,20 @@ function selectStates(rows) {
   }).map(e => ({ ...e, styleInputs: e.styleInputs.filter(i => i.id === e.family + '-root') }));
 }
 
+test('root shadow builder overflow dependencies preserve original tests after stage extraction migration', () => {
+  const file = 'tests/material-parity/control-overflow-observation.spec.mjs';
+  const source = readFileSync(file, 'utf8');
+  const restored = restoreOverflowStageTestSource(source);
+  assert.equal(hash(restored), '8008b11bce62333459b75577f6d08c5c5fd17dcad28a5acbadadb252a3d76f51');
+  for (const changed of [source.replace('assert.equal(source.split(marker).length, 2)', 'assert.ok(true)'),
+    source.replace('return beforeTypographyReviews;', 'return discrepancies;'),
+    source + '\n// unrelated change\n'])
+    assert.throws(() => restoreOverflowStageTestSource(changed));
+  // Exercise both actual dependency gates without claiming any owner coverage.
+  assert.deepEqual(applyTableVisibleOverflow([], [], {}, x => x), []);
+  assert.deepEqual(applyRangeVisibleOverflow([], [], {}, x => x), []);
+});
+
 test('root shadow selected inputs have exactly one independently authenticated normalization transition', () => {
   assert.equal(hash(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json')),
     'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
@@ -70,18 +86,14 @@ test('root shadow selected inputs have exactly one independently authenticated n
 });
 
 function withCapture(run) {
-  const directory = mkdtempSync(path.resolve('artifacts/material-parity/root-shadow-integration-'));
-  try {
+  return withAuditScratch('root-shadow-integration-', directory => {
     const raw = { ...original, results: selectStates(original.results), interactions: selectStates(original.interactions) };
     assert.equal(raw.results.length, 36);
     assert.deepEqual([...new Set(raw.interactions.map(e => JSON.stringify([e.family, e.state])))],
       [...new Set(original.interactions.map(e => JSON.stringify([e.family, e.state])))]);
     const file = path.join(directory, 'report.json'); writeFileSync(file, JSON.stringify(raw));
     return run(raw, { root: process.cwd(), parityPath: file, supplementalRoot: directory });
-  } finally {
-    assert.ok(directory.startsWith(path.resolve('artifacts/material-parity') + path.sep));
-    rmSync(directory, { recursive: true, force: true });
-  }
+  });
 }
 
 test('root shadow production integration preserves scalar rows and existing attribution precedence', () => withCapture((raw, options) => {
@@ -92,7 +104,37 @@ test('root shadow production integration preserves scalar rows and existing attr
   for (const r of rows) assert.deepEqual([r.element, r.property, r.reference, r.astylar],
     [r.family + '-root', 'boxShadow', 'rgba(0,0,0,0.133) 0 2px 8px 0', '0 2px 8px rgba(0,0,0,0.14)']);
   assert.deepEqual(raw, inputBefore);
-  assert.deepEqual(audit.discrepancies.map(scalar), previous.discrepancies.map(scalar));
+  // Precise normalization exposes one root background difference per selected
+  // capture. Authenticate its exact membership, never exempt all color rows.
+  const backgrounds = audit.discrepancies.filter(r => r.property === 'backgroundColor' && r.element === r.family + '-root');
+  assert.equal(backgrounds.length, 36);
+  assert.equal(backgrounds.reduce((sum, r) => sum + r.occurrences, 0), 277);
+  for (const row of backgrounds) {
+    const members = [['static', raw.results], ['interaction', raw.interactions]].flatMap(([kind, entries]) =>
+      entries.filter(e => e.family === row.family).map(e => ({
+        key: `${kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`,
+        state: e.state ?? 'static',
+      })));
+    assert.deepEqual([row.reference, row.astylar],
+      ['rgba(245.879925,240.73989,248.60001,1)', 'rgba(246,241,249,1)']);
+    assert.equal(row.occurrences, members.length);
+    assert.deepEqual(row.cases, members.slice(0, 12).map(m => m.key));
+    assert.deepEqual(row.states, [...new Set(members.map(m => m.state))]);
+    // The background proof requires the full original population; this reduced
+    // integration must not acquire a source-attribution/equivalence claim.
+    assert.equal(row.attribution, 'unresolved');
+    assert.equal(row.classification, 'parity-harness-defect');
+    assert.equal(row.reviewEvidence, undefined);
+    assert.equal(row.reviewedCases, undefined);
+    const input = raw.results.find(e => e.family === row.family).styleInputs[0];
+    const compact = rules => (rules ?? []).slice(-4).map(({ selector, declarations }) => ({ selector, declarations }));
+    assert.deepEqual(row.referenceAuthoredExamples, compact(input.referenceAuthored));
+    assert.deepEqual(row.astylarAuthoredExamples, compact(input.astylarAuthored));
+  }
+  const backgroundKeys = new Set(backgrounds.map(r => JSON.stringify(scalar(r))));
+  assert.ok(previous.discrepancies.every(r => !backgroundKeys.has(JSON.stringify(scalar(r)))));
+  assert.deepEqual(audit.discrepancies.filter(r => !backgroundKeys.has(JSON.stringify(scalar(r)))).map(scalar),
+    previous.discrepancies.map(scalar));
   // The current pipeline also contains a later, independently source-bound
   // root-flow finding. Check its exact limited coverage instead of treating a
   // legitimate reviewed attribution as an unrelated change or ignoring it.
@@ -106,7 +148,14 @@ test('root shadow production integration preserves scalar rows and existing attr
     audit.rootFlowHeightInputs.observations.filter(o => o.proof.heightOverrides.length === 1).length * 3);
   const selected = new Set([...rows, ...laterFlow].map(r => JSON.stringify(scalar(r))));
   assert.ok(previous.discrepancies.filter(r => selected.has(JSON.stringify(scalar(r)))).every(r => r.attribution === 'unresolved'));
-  const others = r => r.discrepancies.filter(d => !selected.has(JSON.stringify(scalar(d))));
+  const others = r => r.discrepancies.filter(d => !selected.has(JSON.stringify(scalar(d))) &&
+    !backgroundKeys.has(JSON.stringify(scalar(d))));
+  if (hash(JSON.stringify(others(audit))) !== hash(JSON.stringify(others(previous)))) {
+    const oldRows = new Map(others(previous).map(r => [JSON.stringify(scalar(r)), r]));
+    writeFileSync(path.join(options.supplementalRoot, 'changed-unrelated-rows.json'), JSON.stringify(
+      others(audit).filter(r => JSON.stringify(r) !== JSON.stringify(oldRows.get(JSON.stringify(scalar(r)))))
+        .map(r => ({ before: oldRows.get(JSON.stringify(scalar(r))), after: r })), null, 2));
+  }
   assert.equal(hash(JSON.stringify(others(audit))), hash(JSON.stringify(others(previous))));
   assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => /root shadow|root flow height/.test(e)));
 }));
