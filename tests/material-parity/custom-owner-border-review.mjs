@@ -42,6 +42,78 @@ const owners = {
 const relevant = k => /^(border|all$|animation|transition)/.test(k.replaceAll('-', '').toLowerCase());
 const sides = ['Top', 'Right', 'Bottom', 'Left'];
 
+export function proveFinalOwnerStyles(entry, reference, candidate, normalize, element) {
+  const proof = proveCustomOwnerBorder(entry, reference, candidate, normalize, element);
+  const r = reference.nodes.find(n => n.key === proof.referenceNode), a = candidate.nodes.find(n => n.key === proof.astylarNode);
+  const tabs = entry.family === 'tabs', icon = entry.family === 'icon';
+  assert.ok(tabs || icon || ['progress-bar', 'progress-spinner'].includes(entry.family));
+  const relevant = key => tabs ? /^(padding(?:-?(?:top|right|bottom|left))?|all)$/i.test(key)
+    : icon ? /^(object-?fit|all)$/i.test(key) : /^(text-?align|all)$/i.test(key);
+  const select = value => Object.fromEntries(Object.entries(value ?? {}).filter(([k]) => relevant(k)));
+  assert.deepEqual(select(r.inline), {}); assert.deepEqual(select(a.authored.style), {});
+  const nativeRules = r.rules.map(i => reference.rules[i]).filter(q => q.active);
+  const nativeRequests = nativeRules.map(q => ({ selector: q.selector, declarations: select(q.declarations) })).filter(q => Object.keys(q.declarations).length);
+  const bar = entry.family === 'progress-bar';
+  assert.deepEqual(nativeRequests, bar ? [{ selector: '.mat-mdc-progress-bar', declarations: { 'text-align': { value: 'start', important: false } } }] : []);
+  const serialized = nativeRules.flatMap(q => [...q.cssText.matchAll(/(?:^|;)\s*([\w-]+)\s*:\s*([^;]*)(?=;|$)/g)]
+    .filter(([, key]) => relevant(key)).map(([, key, value]) => [key, value.trim()]));
+  assert.deepEqual(serialized, bar ? [['text-align', 'start']] : []);
+  const candidateRequests = candidate.rules.filter(q => rootInitialSelectorCanApply(q.selector, a.authored))
+    .map(q => ({ selector: q.selector, declarations: select(q) })).filter(q => Object.keys(q.declarations).length);
+  assert.deepEqual(candidateRequests, tabs ? [{ selector: '.tab', declarations: { padding: '1px 0 0' } }]
+    : icon ? [{ selector: '.material-icon', declarations: { objectFit: 'contain' } }] : []);
+  if (tabs) {
+    assert.equal(normalize(reference.styles[r.style]).paddingTop, '0');
+    const control = reference.nodes.find(n => n.key === proof.composition.referenceControl);
+    assert.equal(normalize(reference.styles[control.style]).paddingTop, '0');
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+      assert.equal(a[stage].padding, '1px 0 0'); assert.equal(normalize(a[stage]).paddingTop, '1px');
+    }
+  } else if (icon) {
+    assert.equal(reference.styles[r.style].objectFit, 'fill');
+    const children = reference.nodes.filter(n => n.parent === r.key); assert.equal(children.length, 1);
+    assert.equal(children[0].type, 'svg');
+    assert.equal(children[0].attributes.viewBox, '0 0 24 24');
+    assert.equal(children[0].attributes.preserveAspectRatio, 'xMidYMid meet');
+    assert.match(a.authored.src, /^data:image\/png;base64,/);
+    assert.deepEqual(candidate.nodes.filter(n => n.parent === a.key), []);
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.equal(a[stage].objectFit, 'contain');
+  } else {
+    assert.equal(reference.styles[r.style].textAlign, 'start'); assert.equal(r.ownText, '');
+    assert.equal(a.authored.textContent, undefined); assert.equal(a.authored.value, undefined);
+    assert.equal(a.authored.role, 'progressbar');
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.equal(a[stage].textAlign, undefined);
+  }
+  return { referenceNode: r.key, astylarNode: a.key, composition: proof.composition, nativeRequests, candidateRequests,
+    firstDivergence: tabs ? 'compact candidate control adds top padding absent from native label and control'
+      : icon ? 'non-replaced SVG host compared to PNG replaced element' : bar ? 'explicit native text alignment omitted' : 'computed inherited alignment compared to omitted local style',
+    renderingEquivalent: null, candidateComputedAlignmentProven: false, actualRasterVerified: false,
+    sourceReplacementApproved: false };
+}
+
+export function applyFinalOwnerStyleReviews(rows, cases, inventory, normalize) {
+  for (const [family, element, property, classification, explanation] of [
+    ['tabs', 'tab-overview', 'paddingTop', 'application-plugin-authoring-defect', 'Candidate compact control adds 1px top padding absent from both native label and its containing control. Existing owner mapping is retained; this authoring adjustment is not evidence that core text placement is correct.'],
+    ['tabs', 'tab-activity', 'paddingTop', 'application-plugin-authoring-defect', 'Candidate compact control adds 1px top padding absent from both native label and its containing control. Existing owner mapping is retained; this authoring adjustment is not evidence that core text placement is correct.'],
+    ['progress-bar', 'progress-bar-primary', 'textAlign', 'application-plugin-authoring-defect', 'Native linear-progress host explicitly requests text-align:start; candidate custom host omits it. Lack of host text does not make the requests equal or establish inherited alignment, generated paint or output equivalence.'],
+    ['progress-spinner', 'progress-spinner-primary', 'textAlign', 'parity-harness-defect', 'Native spinner computes start without a local request; candidate custom host omits local textAlign. This compares computed and local stages, not candidate inherited/used alignment. No generated progress-paint equivalence is claimed.'],
+    ['icon', 'icon-primary', 'objectFit', 'parity-harness-defect', 'Native scalar owner is a non-replaced mat-icon containing SVG with xMidYMid meet; candidate is a PNG img requesting contain. Host object-fit:fill does not describe SVG fitting. Preserve the separately recorded SVG-to-raster authoring substitution; this measurement-boundary classification neither approves it nor proves asset, aspect-ratio or raster equivalence.'],
+  ]) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family, element, properties: [property], classification,
+    attribution: 'reviewed-final-owner-style-boundary', owner: 'comparison owner identity and authored/local style boundary',
+    prove: (e, r, a) => proveFinalOwnerStyles(e, r, a, normalize, element), justification: explanation,
+  });
+  return rows;
+}
+
+export function validateFinalOwnerStyleReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-final-owner-style-boundary');
+    assert.deepEqual(select(rows), select(applyFinalOwnerStyleReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`final owner styles lack original evidence: ${error.message}`]; }
+}
+
 export function proveRemainingBorderRequests(entry, reference, candidate, normalize) {
   if (entry.family === 'divider') {
     const proof = proveCustomOwnerBorder(entry, reference, candidate, normalize);

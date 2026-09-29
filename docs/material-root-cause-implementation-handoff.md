@@ -2,6 +2,27 @@
 
 ## Current audit checkpoint — September 29
 
+**Final five scalar questions reviewed; integration pending:** 94 observations
+reuse existing custom-owner and tab ancestry proofs. Both compact tabs add 1px
+top padding (34 observations), absent from native measured labels and their
+containing controls; history `bc4d442` introduces this density-specific change.
+Linear progress explicitly requests text-align:start, omitted by the custom host
+(20); spinner instead compares computed start to omitted local alignment (20).
+Do not collapse those two cases into one classification or infer inherited values.
+Icon objectFit (20) compares a non-replaced mat-icon host containing SVG
+`preserveAspectRatio="xMidYMid meet"` to a PNG img requesting contain. This is an
+owner-measurement boundary, not proof that the previously recorded SVG-to-raster
+replacement is acceptable or that assets/paint are equivalent.
+`node --test --test-name-pattern="final owner style boundaries" tests/material-parity/custom-owner-border-review.spec.mjs`
+passes **1/1**, 3,239.2202 ms total. Complete memberships and scalar/stage bindings,
+raw/unrelated conservation, changed rules/stages, incomplete evidence and forged
+membership are checked. Three groups are authoring defects, two harness-stage
+boundaries. Canonical remains **95 unresolved**, integrated projection **5**;
+these final five await integration. Next: integrate, reconcile source/export,
+then assess all coverage/deliverables and final gates. A zero projected scalar
+count will not alone establish audit completion. No renderer/fixture edits or
+new captures.
+
 **Remaining border reviews integrated; export pending:** the five-group /
 252-observation proof from `3045dc9` now runs in the bound production tail with
 replay and unbound-attribution guards. Expanded current-checkpoint coverage changes
