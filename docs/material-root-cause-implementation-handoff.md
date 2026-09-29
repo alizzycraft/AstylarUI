@@ -80,9 +80,13 @@ light profile, 900x700, DPR1, with no recorded page errors. This resolves whethe
 these keyboard captures exist; do not recapture merely because the main matrix
 uses programmatic focus. The current producer hash differs and this inspection
 does not authenticate a currently served bundle or expand coverage to other
-profiles/DPRs, raster visibility, or editing. Next reuse the pinned producer's
-exact action-boundary traces to verify observation identities and observer
-equivalence before counting this limited keyboard coverage as complete.
+profiles/DPRs, raster visibility, or editing. Replaying the pinned producer's
+observer-equivalence assertions passes for all 12 pairs / 54 settled-and-key
+boundaries per observer variant, including exact sequence completeness and
+final application state. The retained identities confirm the already documented
+menu keyboard mismatch, sheet focus escaping to BODY, matching dialog Tab cycle,
+and dialog Escape restoration mismatch. Reuse that limited light/DPR1 coverage;
+do not reopen those diagnoses or count it as broader profile/editing coverage.
 
 The supplemental tooltip keyboard question is resolved without recapture:
 `node --test --test-name-pattern="real Tab reaches both tooltip triggers"
@@ -104,6 +108,18 @@ Material-state evidence. Next extend existing Material capture infrastructure
 with explicit action-boundary observations, reusing that observation contract;
 do not count existing caret-color classifications as caret/selection behavior
 coverage. Do not edit tested capture dependencies while the full harness is live.
+
+Selection instrumentation must preserve the native email boundary: the `input`
+comparison authors `type=email` on both sides (`reference.component.ts:77`,
+`astylar.component.ts:917`), unlike the four text-input families. A read-only
+Chrome 153.0.8010.53 probe typed `Atlas`, pressed Home then Shift+ArrowRight,
+and replaced the selection with `Z`. Both native text and email inputs produced
+`Ztlas`; only text exposed endpoints 0/1 and direction `forward`, while email
+returned null for all three selection fields. Thus null is unavailable native
+evidence, not an empty selection or failure to select. Keep the email input
+unchanged and verify editing behavior plus focused selection/caret paint;
+compare exact endpoints/direction where the native input supports them. The
+probe establishes browser observability only, not Material editing parity.
 
 **Canonical reconciliation verified:** export from `4624a9c` passed in
 2,166,050.6272 ms; independent `ASTYLAR_AUDIT_COLD=1` replay of
