@@ -36,6 +36,17 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  if (restored.includes('import { applyExpansionTreeFormattingReviews,')) {
+    for (const [from, to] of [
+      ["import { applyExpansionTreeFormattingReviews, validateExpansionTreeFormattingReviews } from './display-request-review.mjs';\n", ''],
+      ['applyTooltipShrinkReviews, applyExpansionTreeFormattingReviews]', 'applyTooltipShrinkReviews]'],
+      ['      errors.push(...validateExpansionTreeFormattingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));\n', ''],
+      ["  if (report.ownerInitialStyleBinding?.status !== 'bound' && report.discrepancies?.some(row => ['reviewed-expansion-tree-formatting-substitution', 'reviewed-expansion-text-alignment-observation-stage'].includes(row.attribution)))\n    errors.push('expansion/tree formatting attribution lacks bound original cases');\n", ''],
+    ]) {
+      assert.equal(restored.split(from).length, 2, 'missing or repeated expansion/tree integration fragment');
+      restored = restored.replace(from, to);
+    }
+  }
   if (restored.includes('import { applyTooltipShrinkReviews,')) {
     for (const [from, to] of [
       ["import { applyTooltipShrinkReviews, validateTooltipShrinkReviews } from './display-request-review.mjs';\n", ''],

@@ -34,6 +34,7 @@ import { applyDialogPanelGapReview, validateDialogPanelGapReview } from './displ
 import { applyOverlayFlowReviews, validateOverlayFlowReviews } from './overlay-position-request-review.mjs';
 import { applyPanelVisibilityOwnership, validatePanelVisibilityOwnership } from '../../scripts/audit-material-panel-state-ownership.mjs';
 import { applyTooltipShrinkReviews, validateTooltipShrinkReviews } from './display-request-review.mjs';
+import { applyExpansionTreeFormattingReviews, validateExpansionTreeFormattingReviews } from './display-request-review.mjs';
 
 test('modal non-widget native appearance is invariant across mapped tags and noop transition context', async () => {
   const { chromium } = await import('playwright-core');
@@ -571,7 +572,7 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   const families = [...Object.keys(owners), 'chips', 'tabs', 'slider', 'list', 'card', 'dialog', 'table', 'core', 'button', 'menu', 'snack-bar', 'tooltip', 'stepper', 'radio', 'checkbox', 'toolbar'];
   const cases = [...report.results.map(e => ({ ...e, kind: 'static' })),
     ...report.interactions.map(e => ({ ...e, kind: 'interaction' }))]
-    .filter(e => families.includes(e.family));
+    .filter(e => families.includes(e.family) || ['expansion', 'tree'].includes(e.family));
   const inventory = collectFullTreeInventory(cases), counts = {}, samples = new Map();
   assert.deepEqual(inventory.errors, []);
   for (const entry of cases.filter(e => owners[e.family] && e.styleInputs.some(i => i.id === owners[e.family]))) {
@@ -609,9 +610,9 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   const tail = new Function('ownerInitialStyleBinding', 'beforeOwnerOmissionReviews', 'cases', 'elementInventory',
     'canonicalStyle', 'applyOwnerMaximumWidths', 'applyOmittedOwnerPaintRequests', 'applyBadgeMarginReviews',
     'applySliderMarginReviews', 'applyListSpacingReviews', 'applyHeadingVisibleOverflow', 'applyTabPanelOverflowBoundary',
-    'applyTableVisibleOverflow', 'applyControlOverflowOwnerBoundaries', 'applyRangeVisibleOverflow', 'applyFocusShadowSubstitutions', 'applyCardShadowSyntax', 'applyMappedNonwidgetAppearance', 'applyRangeAppearanceInitial', 'applyAppearanceOwnerBoundaries', 'applySheetActionAppearance', 'applyTooltipWordBreakReview', 'applyStepperSpacingReviews', 'applyChipSpacingReviews', 'applyChoiceSpacingReviews', 'applyToolbarSpacingReviews', 'applyDialogActionSpacingReviews', 'applyDialogPanelGapReview', 'applyOverlayFlowReviews', 'applyPanelVisibilityOwnership', 'applyTooltipShrinkReviews', source.slice(start, end) + '\nreturn discrepancies;');
+    'applyTableVisibleOverflow', 'applyControlOverflowOwnerBoundaries', 'applyRangeVisibleOverflow', 'applyFocusShadowSubstitutions', 'applyCardShadowSyntax', 'applyMappedNonwidgetAppearance', 'applyRangeAppearanceInitial', 'applyAppearanceOwnerBoundaries', 'applySheetActionAppearance', 'applyTooltipWordBreakReview', 'applyStepperSpacingReviews', 'applyChipSpacingReviews', 'applyChoiceSpacingReviews', 'applyToolbarSpacingReviews', 'applyDialogActionSpacingReviews', 'applyDialogPanelGapReview', 'applyOverlayFlowReviews', 'applyPanelVisibilityOwnership', 'applyTooltipShrinkReviews', 'applyExpansionTreeFormattingReviews', source.slice(start, end) + '\nreturn discrepancies;');
   const applies = [applyOwnerMaximumWidths, applyOmittedOwnerPaintRequests, applyBadgeMarginReviews, applySliderMarginReviews, applyListSpacingReviews, applyHeadingVisibleOverflow, applyTabPanelOverflowBoundary, applyTableVisibleOverflow, applyControlOverflowOwnerBoundaries, applyRangeVisibleOverflow, applyFocusShadowSubstitutions, applyCardShadowSyntax, applyMappedNonwidgetAppearance, applyRangeAppearanceInitial, applyAppearanceOwnerBoundaries, applySheetActionAppearance];
-  applies.push(applyTooltipWordBreakReview, applyStepperSpacingReviews, applyChipSpacingReviews, applyChoiceSpacingReviews, applyToolbarSpacingReviews, applyDialogActionSpacingReviews, applyDialogPanelGapReview, applyOverlayFlowReviews, applyPanelVisibilityOwnership, applyTooltipShrinkReviews);
+  applies.push(applyTooltipWordBreakReview, applyStepperSpacingReviews, applyChipSpacingReviews, applyChoiceSpacingReviews, applyToolbarSpacingReviews, applyDialogActionSpacingReviews, applyDialogPanelGapReview, applyOverlayFlowReviews, applyPanelVisibilityOwnership, applyTooltipShrinkReviews, applyExpansionTreeFormattingReviews);
   const combined = tail({ status: 'bound' }, rows, cases, inventory, normalize, ...applies);
   assert.deepEqual(combined, [...applies].reverse().reduce((values, apply) => apply(values, cases, inventory, normalize), rows));
   const batch = combined.filter((r, i) => r !== rows[i]);
@@ -696,6 +697,21 @@ test('omitted owner paint requests preserve all 77 original observations and rej
   assert.deepEqual(validateOverlayFlowReviews(checkpointApplied, checkpointRows, cases, inventory, normalize), []);
   assert.deepEqual(validatePanelVisibilityOwnership(checkpointApplied, checkpointRows, cases, inventory, normalize), []);
   assert.deepEqual(validateTooltipShrinkReviews(checkpointApplied, checkpointRows, cases, inventory, normalize), []);
+  const formattingRows = ['expansion', 'tree'].flatMap(family => queryFindings('artifacts/material-parity/working-audit', family, {
+    generation: '9b827bb2b09ae9d20d35e1640f987c9a4972aeab04676d595d7dd5f7d6ee01ab',
+    indexSha256: 'cd3d3c45aab1db7095753132870a660f456dc80e5334787f6f4508e8d30d9486',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const expandedRows = [...checkpointRows, ...formattingRows];
+  const expanded = tail({ status: 'bound' }, expandedRows, cases, inventory, normalize, ...applies);
+  const expandedBatch = expanded.filter((r, i) => r !== expandedRows[i]);
+  assert.equal(expandedBatch.length, 65); assert.equal(expandedBatch.reduce((n, r) => n + r.occurrences, 0), 3182);
+  assert.deepEqual(expanded.map(raw), expandedRows.map(raw));
+  expanded.forEach((r, i) => { if (!expandedBatch.includes(r)) assert.deepEqual(r, expandedRows[i]); });
+  assert.deepEqual(expanded, [...applies].reverse().reduce((values, apply) => apply(values, cases, inventory, normalize), expandedRows));
+  assert.deepEqual(validateExpansionTreeFormattingReviews(expanded, expandedRows, cases, inventory, normalize), []);
+  assert.ok(source.includes("errors.push('expansion/tree formatting attribution lacks bound original cases')"));
+  assert.ok(source.includes('errors.push(...validateExpansionTreeFormattingReviews(report.discrepancies, replayedRows, cases, report.elementInventory, canonicalStyle));'));
+  assert.deepEqual(tail({ status: 'unbound' }, expandedRows, cases, inventory, normalize, ...applies.map(() => () => { throw new Error('unbound review'); })), expandedRows);
   for (const [family, { entry, pair, proof }] of samples) {
     const property = family === 'badge' ? 'textOverflow' : 'boxShadow';
     for (const mutate of [

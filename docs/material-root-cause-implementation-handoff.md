@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 29
 
+**Expansion/tree integrated; export pending:** the four-group / 256-observation
+proof from `b4ce16d` is now in the bound production tail with replay and unbound
+guards. Expanded current-checkpoint coverage changes 65 groups / 3,182
+observations; raw/unrelated conservation and reverse reducer order pass. Existing
+historical checkpoint assertions remain unchanged; expansion/tree are additionally
+exercised against their authenticated current checkpoint, not presumed historical
+classifications.
+`node --test --test-name-pattern="omitted owner paint requests preserve|expansion and tree formatting" tests/material-parity/control-state-paint-review.spec.mjs tests/material-parity/display-request-review.spec.mjs`
+passes **2/2**, 34,535.8547 ms total. Historical producer reversal retains
+`a986934f89531f5553277617b4d9e03146bf5067e4de1a0a587661348f830393`;
+current producer is `4ee227c37b75238aa074553a67c8eb11b8b0fc019e2dbd339c57513af5a6e66a`.
+Canonical remains **95 unresolved**; integrated projection **10**. Compact queries
+confirm the remaining groups: tab paddingTop (2 / 34 observations), toggle side
+border styles (3 / 204), divider top border width/style (2 / 48), progress-control
+textAlign (2 / 40), and icon objectFit (1 / 20). The index also retains already
+integrated panel visibility until export; it is not a new investigation.
+Next: review those remaining input/paint-owner distinctions, then reconcile
+source fingerprints/export and execute final gates. No rendering inputs changed.
+
 **Expansion/tree formatting reviewed; integration pending:** four groups / 256
 observations distinguish three authoring substitutions from one measurement-stage
 gap. Expansion omits the native title's flex alignment and 16px trailing margin
