@@ -88,6 +88,29 @@ Do not report the capability gate as passing or blindly refresh the hash. Review
 the owning select-anchor proof with the remaining test gates before reconciling
 the receipt; preserve capability claims and the accepted audit evidence.
 
+**Full unit gate executed, not green:** `npm test -- --watch=false
+--browsers=ChromeHeadless` completed 504 tests with 479 passes / 25 failures.
+The first terminal output truncated failure details. One rerun with
+`--reporters=dots` reproduced 479/25 and preserves its complete output in
+`artifacts/material-parity/unit-acceptance-9476a03.log`, SHA-256
+`fe4339cf184135984460bc024c418547b6518a909090aaeb48f3c2947f6c31a1`.
+Chrome Headless 153; rerun test execution 25.639 seconds (build time separate).
+All failing test names belong to the two deliberately diagnostic audit files:
+- Six rounded-radius cases fail because ordinary Karma does not install
+  `window.auditCapture`; this is runner integration, not six new shape diagnoses.
+- Five overlay font cases fail loading `/audit-roboto.woff2`, served by the
+  dedicated `scripts/audit-overlay-layout-stage.mjs` runner, not ordinary Karma.
+- Twelve overlay cases report actual CSS sizing/placement differences (six chip,
+  six dialog compositions); preserve assertions and mismatch evidence.
+- Two fractional nested-row/flat-column cases report projected x=39.937888...
+  versus CSS x=40, consistent with the existing 321.5-versus-322 viewport proof.
+These categories explain why 25 is not a count of independent renderer bugs;
+they do not turn the failed unit command into a pass. No tests were excluded,
+assertions weakened, fixtures changed or renderer fixes made. The existing
+select-anchor test rejects mesh-position reads and uses retained fractional CSS
+rectangles; its suite is not among the failures. Remaining full harness and
+browser gates still require their own results.
+
 ### Historical checkpoint trail (superseded status, retained evidence)
 
 **Reporting scope reconciled before retry:** bounded caret/gap/origin/alignment
