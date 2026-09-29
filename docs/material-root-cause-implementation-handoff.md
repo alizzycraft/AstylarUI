@@ -2,6 +2,35 @@
 
 ## Current audit checkpoint — September 29
 
+**September 30 — tooltip historical integration row attribution:** the retained failure from
+test 1495 was narrowed without changing its original digest. The reduced
+tooltip-popup capture has 96 unrelated scalar rows after the two wrapping rows
+and independently checked later gap rows are set aside. Exactly 23 of those 96
+have later reviewed metadata; all 23 retain identical scalar, cases, states and
+authored examples. The reviews cover appearance (1), border color (4), caret
+(1), display (1), flex shrink (1), font family/style (2), grid template (2),
+overflow (2), pointer events (1), text alignment/transform (2), transform
+origin (1), vertical alignment (1), width (1), word break (1), word spacing
+(1) and stacking (1). Their predecessor attribution was unresolved. The first
+diagnostic log is `tooltip-row-reconciliation-53b37e3.log`, with exact changed
+rows retained at `tooltip-wrapping-integration-5XYcCB/changed-unrelated-rows.json`.
+Two subsequent runs exposed overbroad test selectors: property names alone
+selected 30 rows; matching attribution still selected 41 because some rows had
+already been reviewed by the predecessor. The test now selects only complete
+rows that actually changed, requires the exact property/attribution/classification
+pair, unchanged raw fields, 18 observations per reviewed row and false input
+equivalence. Every remaining complete row stays under the historical digest.
+The exact-delta run reached and passed those row checks; production validation
+then returned nine full-population prerequisites that cannot bind to this
+popup-only diagnostic. Those nine errors are now pinned exactly, with any
+additional validator error failing the test. The bounded final test passed 1/1
+in 869,964.7554 ms (`artifacts/material-parity/tooltip-row-conservation-final.log`).
+Successful scratch was removed; failed diagnostics remain retained. This closes
+the recorded test 1495 complete-row discrepancy for its selected tooltip
+population. Its five validator mutations passed in the historical full harness
+but were not rerun here. Source-fingerprint/export reconciliation, full canonical
+validation and browser gates are still pending. No renderer or fixture changed.
+
 **Root-shadow integration retry / overflow receipt:** the first targeted retry
 stopped before row conservation because the table overflow proof still required
 the complete pre-`559f95c` test-source hash. Log:

@@ -1,14 +1,16 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { isDeepStrictEqual } from 'node:util';
 import ts from 'typescript';
 import { buildMaterialInputAudit, validateMaterialInputAudit } from './input-equivalence-audit.mjs';
 import { tooltipWrappingAttribution } from './tooltip-wrapping-source-binding.mjs';
 import { assertLaterGapClassifications } from './owner-gap-integration-conservation.mjs';
+import { withAuditScratch } from './audit-scratch.mjs';
 
 // A separate diagnostic report retains the original full trees and every tooltip
 // state, with only the target scalar owner selected for the integration proof.
@@ -41,21 +43,41 @@ for (let i = 0; i < sourceFile.statements.length; i++) {
 }
 const prior = await import(`data:text/javascript;base64,${Buffer.from(relocated).toString('base64')}`);
 function withCapture(run) {
-  const directory = mkdtempSync(path.resolve('artifacts/material-parity/tooltip-wrapping-integration-'));
-  try {
+  return withAuditScratch('tooltip-wrapping-integration-', directory => {
     const raw = { ...original, results: original.results.filter(e => e.family === 'tooltip').map(select),
       interactions: original.interactions.filter(e => e.family === 'tooltip').map(select) };
     const file = path.join(directory, 'report.json'); writeFileSync(file, JSON.stringify(raw));
     return run(raw, { root: process.cwd(), parityPath: file, supplementalRoot: directory });
-  } finally {
-    assert.ok(directory.startsWith(path.resolve('artifacts/material-parity') + path.sep));
-    rmSync(directory, { recursive: true, force: true });
-  }
+  });
 }
 function select(entry) {
   return { ...entry, styleInputs: entry.styleInputs.filter(i => i.id === 'tooltip-popup') };
 }
 const projection = r => [r.family, r.element, r.property, r.reference, r.astylar, r.occurrences, r.cases, r.states];
+const laterTooltipReviews = new Map([
+  ['appearance', ['reviewed-mapped-nonwidget-appearance-initial-request', 'equivalent-representation']],
+  ...['borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor']
+    .map(property => [property, ['reviewed-mapped-border-initial-color-divergence', 'intentional-documented-limitation']]),
+  ['caretColor', ['reviewed-overlay-motion-caret-request-omission', 'application-plugin-authoring-defect']],
+  ['display', ['reviewed-display-request-substitution', 'application-plugin-authoring-defect']],
+  ['flexShrink', ['reviewed-tooltip-shrink-composition-substitution', 'application-plugin-authoring-defect']],
+  ['fontFamily', ['reviewed-scalar-component-font-omission', 'application-plugin-authoring-defect']],
+  ['fontStyle', ['reviewed-font-initial-computed-local-boundary', 'parity-harness-defect']],
+  ...['gridTemplateColumns', 'gridTemplateRows']
+    .map(property => [property, ['reviewed-mapped-grid-template-observation-stage', 'parity-harness-defect']]),
+  ...['overflowX', 'overflowY']
+    .map(property => [property, ['reviewed-overlay-overflow-request-omission', 'application-plugin-authoring-defect']]),
+  ['pointerEvents', ['reviewed-overlay-pointer-policy-substitution', 'application-plugin-authoring-defect']],
+  ['textAlign', ['reviewed-tooltip-scalar-text-alignment-omission', 'application-plugin-authoring-defect']],
+  ['textTransform', ['reviewed-text-transform-computed-local-boundary', 'parity-harness-defect']],
+  ['transformOrigin', ['reviewed-overlay-origin-owner-boundary', 'parity-harness-defect']],
+  ['verticalAlign', ['reviewed-alignment-observation-stage-mismatch', 'parity-harness-defect']],
+  ['width', ['reviewed-omitted-width-observation-stage', 'parity-harness-defect']],
+  ['wordBreak', ['reviewed-tooltip-word-break-public-support-gap', 'documented-limitation']],
+  ['wordSpacing', ['reviewed-inherited-word-computed-local-boundary', 'parity-harness-defect']],
+  ['zIndex', ['reviewed-tooltip-stacking-owner-substitution', 'application-plugin-authoring-defect']],
+]);
+assert.equal(laterTooltipReviews.size, 23);
 
 test('tooltip wrapping production integration preserves scalar values and existing classification precedence', () => withCapture((raw, options) => {
   const before = structuredClone(raw), previous = prior.buildMaterialInputAudit(raw, options);
@@ -70,10 +92,50 @@ test('tooltip wrapping production integration preserves scalar values and existi
   const selected = new Set(rows.map(r => JSON.stringify(projection(r))));
   assert.ok(previous.discrepancies.filter(r => selected.has(JSON.stringify(projection(r)))).every(r => r.attribution === 'unresolved'));
   for (const signature of assertLaterGapClassifications(audit, previous)) selected.add(signature);
+  const predecessor = new Map(previous.discrepancies.map(r => [JSON.stringify(projection(r)), r]));
+  assert.equal(predecessor.size, previous.discrepancies.length);
+  const rawFields = row => Object.fromEntries(Object.entries(row).filter(([key]) =>
+    !['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases'].includes(key)));
+  const later = audit.discrepancies.filter(r => r.family === 'tooltip' && r.element === 'tooltip-popup' &&
+    r.attribution === laterTooltipReviews.get(r.property)?.[0] &&
+    !isDeepStrictEqual(r, predecessor.get(JSON.stringify(projection(r)))));
+  assert.equal(later.length, laterTooltipReviews.size);
+  for (const row of later) {
+    const key = JSON.stringify(projection(row)), old = predecessor.get(key);
+    assert.ok(old, `later tooltip ${row.property} lacks predecessor`);
+    assert.equal(old.attribution, 'unresolved');
+    assert.deepEqual([row.attribution, row.classification], laterTooltipReviews.get(row.property));
+    assert.equal(row.occurrences, 18);
+    assert.ok(isDeepStrictEqual(rawFields(row), rawFields(old)), `later tooltip ${row.property} changed raw evidence`);
+    assert.equal(row.reviewEvidence?.inputEquivalent, false);
+    assert.ok(!selected.has(key), `later tooltip ${row.property} overlaps wrapping or gap proof`);
+    selected.add(key);
+  }
   const others = report => report.discrepancies.filter(r => !selected.has(JSON.stringify(projection(r))));
+  if (JSON.stringify(others(audit)) !== JSON.stringify(others(previous))) {
+    const old = others(previous), current = others(audit);
+    assert.deepEqual(current.map(projection), old.map(projection));
+    writeFileSync(path.join(options.supplementalRoot, 'changed-unrelated-rows.json'), JSON.stringify({
+      count: current.length,
+      changed: current.flatMap((row, index) => JSON.stringify(row) === JSON.stringify(old[index]) ? []
+        : [{ index, before: old[index], after: row }]),
+    }, null, 2));
+  }
   assert.equal(createHash('sha256').update(JSON.stringify(others(audit))).digest('hex'),
     createHash('sha256').update(JSON.stringify(others(previous))).digest('hex'), 'every unrelated complete row must be identical');
-  assert.ok(!validateMaterialInputAudit(audit, { requireComplete: false }).some(e => e.includes('tooltip wrapping')));
+  // This diagnostic selects popup styles only. These exact full-population
+  // prerequisites cannot bind to it; every other production validation must pass.
+  assert.deepEqual(validateMaterialInputAudit(audit, { requireComplete: false }), [
+    'overlaySurfaceAuditInputs classifications lack independently bound original source evidence',
+    'chipPaintAuditInputs classifications lack independently bound original source evidence',
+    'positionFollowupAuditInputs classifications lack independently bound original source evidence',
+    'positionAuditInputs classifications lack independently bound original source evidence',
+    'visibilityAuditInputs classifications lack independently bound original source evidence',
+    'rootBackgroundInputs classifications lack independently bound original source evidence',
+    'button box sizing attribution lacks independently bound original capture evidence',
+    'button fixed width attribution lacks independently bound original capture evidence',
+    '62 cases lack paired root style evidence',
+  ]);
 }));
 
 test('tooltip wrapping production validation rejects missing binding lost rows and false equivalence', () => withCapture((raw, options) => {
