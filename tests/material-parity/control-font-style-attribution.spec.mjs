@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { planControlFontStyleAttribution } from '../../scripts/audit-material-control-font-style-attribution.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const digest = x => createHash('sha256').update(x).digest('hex');
 const planFile = 'docs/material-control-font-style-attribution-plan.json';
@@ -41,8 +41,8 @@ function fixture() {
       attribution: g.previousAttribution, retainedExtraField: true }));
     rows.push({ family: 'unrelated', element: 'sentinel', property: 'fontStyle',
       reference: 'normal', attribution: 'previously-reviewed', retainedExtraField: 'keep' });
-    source = { proof, original, rows, normalize: bindOwnerCaretNormalization(
-      readFileSync(plan.productionNormalization.module, 'utf8'), plan.productionNormalization) };
+    source = { proof, original, rows, normalize: bindHistoricalAuditNormalization(
+      plan.productionNormalization, plan.canonicalRevision) };
   }
   const { normalize, ...data } = source; return { ...structuredClone(data), normalize };
 }

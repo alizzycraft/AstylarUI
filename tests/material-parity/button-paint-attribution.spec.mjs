@@ -4,12 +4,12 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { planButtonPaintAttribution } from '../../scripts/audit-material-shared-button-paint-attribution.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const saved = JSON.parse(readFileSync('docs/material-shared-button-paint-attribution-plan.json'));
 const source = JSON.parse(readFileSync(saved.sourceProof.file));
-const normalize = bindOwnerCaretNormalization(readFileSync(saved.productionNormalization.module, 'utf8'), saved.productionNormalization);
+const normalize = bindHistoricalAuditNormalization(saved.productionNormalization, saved.canonicalRevision);
 function fixture() {
   const rows = [...saved.proposed, ...saved.retained].flatMap(g => g.canonicalMatches.map(r => ({
     family: g.family, element: g.element, property: g.property, reference: g.reference, astylar: g.astylar,

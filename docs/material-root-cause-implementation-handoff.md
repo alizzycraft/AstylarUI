@@ -14,7 +14,16 @@ unchanged. `node --test tests/material-parity/authoring-input-attribution.spec.m
 passed 5/5 in 87,170.7746 ms, including independent source replay, complete
 historical payload authentication, nine groups / 136 observations, 8,330
 unrelated rows and all rejection controls. The corresponding button-paint and
-font-style test reconciliation is under verification, not yet accepted.
+font-style reconciliation also passed: `node --test --test-concurrency=1
+tests/material-parity/button-hover-composition.spec.mjs
+tests/material-parity/button-paint-attribution.spec.mjs
+tests/material-parity/control-font-style-attribution.spec.mjs` completed 12/12
+in 260,024.0095 ms (`historical-normalizer-reconciliation.log`). Each historical
+proposal uses its own pinned revision and unchanged normalization digest;
+source replays, entire frozen payload checks, no-write guards, membership and
+mutation assertions remain intact. No proposal bytes, expected counts, live
+normalization or canonical classifications were refreshed. Current export
+source fingerprints must still be reconciled at the next integration milestone.
 
 **Full harness completed; first bounded reconciliation:** the unfiltered
 `full-audit-harness-834258e.log` ended with 1,571 tests, 1,449 passed, 122 failed,

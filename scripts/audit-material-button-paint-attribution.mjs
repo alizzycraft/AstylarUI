@@ -6,7 +6,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 import { collectButtonHoverComposition } from './audit-material-button-hover-composition.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -100,8 +100,7 @@ export async function collectButtonPaintAttributionPlan() {
   assert.equal(proofBytes, JSON.stringify(proof, null, 2) + '\n', 'composition proof must replay from original sources');
   const originalBytes = readFileSync(proof.originalCapture.file);
   assert.equal(hash(originalBytes), proof.originalCapture.sha256);
-  const source = readFileSync(normalization.module, 'utf8');
-  const normalize = bindOwnerCaretNormalization(source, normalization);
+  const normalize = bindHistoricalAuditNormalization(normalization, canonicalRevision);
   // A fixed pre-integration parent prevents a later inventory refresh or actual
   // promotion from silently rewriting the proposal's original-row witness.
   const { manifest, rows } = await readCaretConservationRows(file =>

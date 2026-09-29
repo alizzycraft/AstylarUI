@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { collectButtonHoverComposition, inspectButtonHoverComposition } from '../../scripts/audit-material-button-hover-composition.mjs';
 import { planButtonPaintAttribution } from '../../scripts/audit-material-button-paint-attribution.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const directory = 'artifacts/material-parity/current-ancestry-audit/interactions/button/light/desktop-dpr1/hover/';
 const reference = JSON.parse(readFileSync(directory + 'reference-input-tree.json'));
@@ -82,7 +82,7 @@ test('planned paint join rejects incomplete populations and changed canonical id
   const proof = collectButtonHoverComposition();
   const original = JSON.parse(readFileSync(proof.originalCapture.file));
   const saved = JSON.parse(readFileSync('docs/material-button-paint-attribution-plan.json'));
-  const normalize = bindOwnerCaretNormalization(readFileSync(saved.productionNormalization.module, 'utf8'), saved.productionNormalization);
+  const normalize = bindHistoricalAuditNormalization(saved.productionNormalization, saved.canonicalRevision);
   // Small row projections exercise the join's negative controls. The preceding
   // CLI test independently authenticates the full original canonical payload.
   const rows = saved.findings.map(g => Object.fromEntries(
