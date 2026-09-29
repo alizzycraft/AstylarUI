@@ -31,6 +31,22 @@ These are audit-harness diagnoses, not repaired renderer defects or completed
 acceptance. Preserve the full run log named below and finish the run before
 editing its tested dependencies.
 
+**Remaining interaction-coverage review:** the configured matrix is not proof
+that every requested interaction boundary is captured. In
+`tests/material-parity/run-material-parity.mjs:525`, the `focus` action calls
+`HTMLElement.focus()` on both sides, except timepicker, which receives a mouse
+click. It does not establish Tab navigation. The `edit-empty-blur` action at
+line 609 selects all, deletes and blurs before the final measurement; it does
+not itself retain a focused-empty or noncollapsed-selection capture. Check
+applicable supplemental public proofs and their exact scope before claiming
+keyboard-focus, editing and selection coverage. If absent, extend existing
+capture infrastructure with equal actions and intermediate input evidence;
+do not substitute generic renderer tests for Material comparison/state evidence.
+The main matrix does explicitly exercise both slider handles with eight motion
+samples, timepicker wheel scrolling, outside/canvas dismissal for its named
+families, and three repeated mobile Escape cycles. These actions are verified
+in source, not a claim that all their outcomes or authoring inputs are equal.
+
 **Canonical reconciliation verified:** export from `4624a9c` passed in
 2,166,050.6272 ms; independent `ASTYLAR_AUDIT_COLD=1` replay of
 `node scripts/export-material-input-audit-current-ancestry.mjs --check` passed
