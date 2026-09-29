@@ -263,8 +263,15 @@ The following survey test (1342) stopped at its source-receipt assertion:
 `border-initial-input-evidence.mjs` has current normalized hash
 `a809c257d8edcd07b1261cad6f7a0a15b5245fa0832922e4bebf287e21b6eff2`
 versus stored `3dbcf33ff70244a8179f438962a2549fb7e354948f084d35d433bcf82e76f9f4`.
-Reconcile the reviewed border-source transition before claiming its subsequent
-2,311-observation replay passed. The independent mutation proof (1343) and
+The survey now uses the existing `readGapSurveySource` border transition proof.
+Because its historical receipt also fingerprints the test itself, the edited
+receipt loop and two imports must reconstruct the entire original test source
+at its recorded hash; no original observation assertion or saved receipt is
+refreshed. The original 2,311-observation replay and mutation proof now pass 2/2
+in 11,221.2737 ms. The reused border-transition negative controls pass 1/1
+(1,276.9253 ms). An initial run exposed CRLF versus normalized-source bytes in
+the new reader call; preserving the original LF hash convention resolved that
+without altering evidence. The independent mutation proof (1343) and
 Chrome shadow-serialization checks at DPR 1 and 2 (1344–1345) passed, preserving
 the distinction between browser alpha `0.133` and candidate request `0.14`.
 These checks establish serialization, not candidate shadow-raster equivalence.
