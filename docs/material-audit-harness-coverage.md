@@ -1,5 +1,16 @@
 # Complete audit harness coverage
 
+## Current status source
+
+This document preserves historical inventory and execution checkpoints. The
+“current” counts and live-process descriptions below apply to their original
+checkpoints, not the present checkout. Use the
+[current acceptance ledger](material-root-cause-implementation-handoff.md#current-audit-checkpoint--september-29)
+for outstanding gates and recorded results, and
+`node scripts/run-material-audit-harness.mjs --list` for current discovery.
+Historical execution does not cover suites added afterward; an inventory check
+does not establish that the full harness passed.
+
 ## Remaining alignment review and current verification state
 
 Discovery now contains **173 files** (165 Material, four general, four TTS;

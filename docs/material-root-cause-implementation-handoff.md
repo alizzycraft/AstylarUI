@@ -75,7 +75,11 @@ canonical bytes changed; a prose supplement does not justify another full export
 **Non-building acceptance checks:** `npm run examples:check` passes all 11
 translation pairs (eight parity-backed, three focused inline).
 `npm run skill:check` passes synchronized developer references (12 sources,
-118 exports) and both repository skill validators. `npm run capabilities:check`
+118 exports) and both repository skill validators. The standard validator
+`python C:/Users/solar/.codex/skills/.system/skill-creator/scripts/quick_validate.py`
+also passes for `.agents/skills/astylarui-developer` and
+`.agents/skills/astylarui-maintainer` (exit 0 for each).
+`npm run capabilities:check`
 fails one source receipt, not a capability assertion: element-creation.service.ts
 expects `2edeb33f4095e3d3bb2be889991473e153df96f6d9a46ec9af94bbc56fa87d24`
 but current normalized source hashes to
