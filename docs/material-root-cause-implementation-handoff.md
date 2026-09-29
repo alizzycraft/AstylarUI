@@ -10,7 +10,15 @@ replay using the existing `bindHistoricalAuditNormalization` at the proposal's
 `06e50dbcd3594c5987d63a4ec38e792b87b08dde` revision reproduces all nine groups /
 136 observations. All finding fields match except `canonicalRowSha256`, because
 this small probe uses reduced join-test rows rather than full historical rows.
-Full canonical conservation remains required; no stored receipt was refreshed.
+The subsequent complete historical-row replay passed (exit 0, 79,370.2846 ms):
+`readCaretConservationRows` authenticated the pinned compressed/decoded payload
+and all 8,339 rows; `planAuthoringInputAttribution` with the historical normalizer
+reproduced every saved proposal field, including full-row digests and 8,330
+unrelated complete rows. The saved source-proof and original-capture hashes were
+verified, and the current equivalence function authenticated against its saved
+descriptor. Source collectors were not independently reexecuted in this probe;
+that remains part of repairing and rerunning the original collector tests.
+No stored receipt was refreshed and no evidence files were written.
 
 The explicit-gap integration test completed in 385,036.4084 ms and failed at
 line 65's scalar-population equality, after its 16-group / 1,032-observation,
