@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 29
 
+**Slider-border integration result:** the same full harness has advanced through
+test 1372 and entered `slider-input-box-integration.spec.mjs`. Test 1356 failed
+after 291,748.5582 ms at its first attribution-count assertion: 32 rows versus
+the historical expectation of 24. Commit `11c01f9` extended the existing native
+border proof from twelve properties to sixteen, adding the four side colors;
+the integration assertion still names twelve. The subsequent source-binding
+test 1365 passed, verifying all 156 original owners across 78 captures, exact
+preservation of every historical non-color proof, and the added color coverage.
+Reconcile the integration's exact color population and historical complete-row
+projection, rather than simply replacing its count or dropping conservation.
+The later assertions in test 1356 were not reached. Tests 1357–1360 passed the
+later-gap, grid, shadow and border mutation checks (291,534.4754;
+1,353,631.3524; 1,567,870.499; and 3,189,561.4488 ms respectively).
+Tests 1361–1372 also passed the border, disabled-opacity and focused native-box
+proofs. These are audit-evidence checks, not a renderer fix or full acceptance.
+
 **Full-harness reconciliation findings (run still in progress):** prioritize
 historical/current normalization boundaries before treating these failures as
 new renderer evidence. The authoring-attribution collector and its test still
