@@ -9,6 +9,7 @@ import ts from 'typescript';
 import { buildMaterialInputAudit, validateMaterialInputAudit } from './input-equivalence-audit.mjs';
 import { rootShadowAttribution } from './root-shadow-source-binding.mjs';
 import { rootFlowHeightAttribution } from './root-flow-height-source-binding.mjs';
+import { bindHistoricalAuditNormalization, bindPreciseAuditNormalization, preciseAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const original = JSON.parse(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json'));
 const baselineCommit = '502ea44a064d49cd4c273bd93dfb5d51f6adbc87';
@@ -42,6 +43,32 @@ function selectStates(rows) {
     if (seen.has(key)) return false; seen.add(key); return true;
   }).map(e => ({ ...e, styleInputs: e.styleInputs.filter(i => i.id === e.family + '-root') }));
 }
+
+test('root shadow selected inputs have exactly one independently authenticated normalization transition', () => {
+  assert.equal(hash(readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json')),
+    'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const historical = bindHistoricalAuditNormalization({ ...preciseAuditNormalization,
+    sha256: '8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e' }, baselineCommit);
+  const precise = bindPreciseAuditNormalization();
+  const entries = [...selectStates(original.results), ...selectStates(original.interactions)];
+  assert.equal(entries.length, 277);
+  assert.equal(new Set(entries.map(e => e.family)).size, 36);
+  for (const entry of entries) {
+    assert.equal(entry.styleInputs.length, 1);
+    const input = entry.styleInputs[0];
+    const before = historical(input.reference), after = precise(input.reference);
+    assert.equal(before.backgroundColor, 'rgba(246,241,249,1)');
+    assert.equal(after.backgroundColor, 'rgba(245.879925,240.73989,248.60001,1)');
+    // Compare the entire normalized object, not a list of permitted properties.
+    // This projection is diagnostic only: live audit values remain precise.
+    assert.deepEqual({ ...after, backgroundColor: before.backgroundColor }, before);
+    for (const stage of ['astylar', 'astylarNormalResolvedStyle', 'astylarInteractionResolvedStyle'])
+      assert.deepEqual(precise(input[stage] ?? {}), historical(input[stage] ?? {}));
+    assert.equal(precise(input.astylar).backgroundColor, before.backgroundColor);
+    assert.equal(after.boxShadow, before.boxShadow);
+  }
+});
+
 function withCapture(run) {
   const directory = mkdtempSync(path.resolve('artifacts/material-parity/root-shadow-integration-'));
   try {

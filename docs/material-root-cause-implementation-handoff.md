@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 29
 
+**Root-shadow scalar failure isolated:** a focused check now authenticates the
+original capture and both normalization contracts at the integration's exact
+`502ea44` predecessor. Its same `selectStates` boundary selects 277 root inputs
+across all 36 families. Every reference changes only `backgroundColor`, from
+`rgba(246,241,249,1)` to `rgba(245.879925,240.73989,248.60001,1)`; complete
+normalized objects outside that property, candidate effective/normal/interaction
+stages, and shadow values are unchanged. The candidate background remains the
+older rounded value, so these are newly visible differences, not evidence that
+the colors are equivalent. Command: `node --test --test-name-pattern='independently
+authenticated normalization transition'
+tests/material-parity/root-shadow-canonical-integration.spec.mjs` passed 1/1
+(3,357.9164 ms total). No full builder, browser capture, saved evidence or live
+normalizer changed. This closes the selected-input normalization question only;
+production test 1340 remains open. Next: account for these exact additional
+background observations in production conservation, then inspect any remaining
+complete-row metadata changes without refreshing or weakening its digest.
+
 **Case-index heading dependency:** the input-tree test receipt `c2d0884…`
 predates `1660b67`'s four heading-overflow cases (`e442a49…`). An exact reverse
 projection now authenticates the complete predecessor, preserving every original
