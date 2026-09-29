@@ -67,6 +67,23 @@ samples, timepicker wheel scrolling, outside/canvas dismissal for its named
 families, and three repeated mobile Escape cycles. These actions are verified
 in source, not a claim that all their outcomes or authoring inputs are equal.
 
+The retained overlay keyboard capture is available for reuse review:
+`artifacts/material-parity/overlay-keyboard-4d782df-settled/result.json`
+(SHA-256 `2d46a54a48316404db90f1227e5d3901c43e6aa230180719697d25958914bb90`).
+Read-only verification authenticates its producer against commit `07609be`
+(producer SHA-256 `4fd386576d688396a80f123f41e0a07480ac15963431d46970b37774368b38a1`),
+all three application-source receipts against current files, and all 104 package
+receipts against both the retained source build and the currently installed
+showcase package. It contains 24 plain/instrumented paired cases for menu,
+bottom-sheet and dialog: ArrowDown/Escape and three Tabs/Shift+Tab/Escape,
+light profile, 900x700, DPR1, with no recorded page errors. This resolves whether
+these keyboard captures exist; do not recapture merely because the main matrix
+uses programmatic focus. The current producer hash differs and this inspection
+does not authenticate a currently served bundle or expand coverage to other
+profiles/DPRs, raster visibility, or editing. Next reuse the pinned producer's
+exact action-boundary traces to verify observation identities and observer
+equivalence before counting this limited keyboard coverage as complete.
+
 The supplemental tooltip keyboard question is resolved without recapture:
 `node --test --test-name-pattern="real Tab reaches both tooltip triggers"
 tests/material-parity/tooltip-position-composition.spec.mjs` passes 1/1
