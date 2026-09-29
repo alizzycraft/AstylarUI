@@ -10,6 +10,42 @@ import { applyCustomOwnerBorderReviews, proveCustomOwnerBorder, applyDividerPosi
 import { applyTogglePositionReviews, proveTogglePositionRequests } from './custom-owner-border-review.mjs';
 import { applyOverlayOriginReviews } from './overlay-origin-request-review.mjs';
 import { applyOwnerBoundaryReviews, validateOwnerBoundaryReviews } from './custom-owner-border-review.mjs';
+import { proveRemainingBorderRequests, applyRemainingBorderReviews, validateRemainingBorderReviews } from './custom-owner-border-review.mjs';
+
+test('remaining toggle and divider borders conserve 252 observations', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => ['button-toggle', 'divider'].includes(e.family));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const rows = ['button-toggle', 'divider'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, {
+    generation: '9b827bb2b09ae9d20d35e1640f987c9a4972aeab04676d595d7dd5f7d6ee01ab',
+    indexSha256: 'cd3d3c45aab1db7095753132870a660f456dc80e5334787f6f4508e8d30d9486',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyRemainingBorderReviews(rows, cases, inventory, normalize), changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 5); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 252);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
+  assert.deepEqual(validateRemainingBorderReviews(applied, rows, cases, inventory, normalize), []);
+  const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-remaining-border-request-substitution').reviewedCases.pop();
+  assert.equal(validateRemainingBorderReviews(forged, rows, cases, inventory, normalize).length, 1);
+  const key = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+  assert.throws(() => applyRemainingBorderReviews(rows, cases.filter(e => key(e) !== changed[0].reviewedCases[0]), inventory, normalize));
+  for (const family of ['button-toggle', 'divider']) {
+    const entry = cases.find(e => e.family === family), pair = modalInventoryTrees(inventory, key(entry));
+    const proof = proveRemainingBorderRequests(entry, ...pair, normalize);
+    assert.equal(proof.renderingEquivalent, null);
+    for (const mutate of [
+      ([r]) => { r.ruleEvidenceComplete = false; },
+      ([r]) => { r.styles[r.nodes.find(n => n.key === proof.referenceNode).style].borderTopWidth = '4px'; },
+      ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).interactionResolvedStyle.borderWidth = '1px'; },
+      ([, a]) => { a.rules.push({ selector: '#' + (family === 'divider' ? 'divider-primary' : 'button-toggle-two'), borderStyle: 'dashed' }); },
+    ]) { const altered = structuredClone(pair); mutate(altered); assert.throws(() => proveRemainingBorderRequests(entry, ...altered, normalize)); }
+  }
+});
 
 test('prepared border/position/origin batch conserves the accepted caret checkpoint in full capture order', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

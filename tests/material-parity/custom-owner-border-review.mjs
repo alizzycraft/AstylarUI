@@ -42,6 +42,67 @@ const owners = {
 const relevant = k => /^(border|all$|animation|transition)/.test(k.replaceAll('-', '').toLowerCase());
 const sides = ['Top', 'Right', 'Bottom', 'Left'];
 
+export function proveRemainingBorderRequests(entry, reference, candidate, normalize) {
+  if (entry.family === 'divider') {
+    const proof = proveCustomOwnerBorder(entry, reference, candidate, normalize);
+    return { ...proof, renderingEquivalent: null, originalHeightDefectReinvestigated: false };
+  }
+  const identity = proveTogglePositionRequests(entry, reference, candidate, 'button-toggle-two');
+  const r = reference.nodes.find(n => n.key === identity.referenceNode);
+  const a = candidate.nodes.find(n => n.key === identity.astylarNode);
+  const select = value => Object.fromEntries(Object.entries(value ?? {}).filter(([k]) => relevant(k)));
+  assert.deepEqual(select(r.inline), {}); assert.deepEqual(select(a.authored.style), {});
+  const rules = r.rules.map(i => reference.rules[i]).filter(q => q.active);
+  const nativeRequests = rules.filter(q => Object.keys(select(q.declarations)).length);
+  assert.equal(nativeRequests.length, 1);
+  const request = nativeRequests[0];
+  assert.equal(request.selector, '.mat-button-toggle-group-appearance-standard .mat-button-toggle-appearance-standard + .mat-button-toggle-appearance-standard');
+  assert.deepEqual(request.conditions, []);
+  assert.equal(request.cssText, 'border-left: solid 1px var(--mat-button-toggle-divider-color, var(--mat-sys-outline));');
+  assert.deepEqual(select(request.declarations), Object.fromEntries(['width', 'style', 'color'].map(p => ['border-left-' + p, { value: '', important: false }])));
+  assert.ok(rules.filter(q => q !== request).every(q => !/(?:^|;)\s*(?:border[^:]*|all|transition[^:]*|animation[^:]*)\s*:/i.test(q.cssText)));
+  const candidateRequests = candidate.rules.filter(q => rootInitialSelectorCanApply(q.selector, a.authored))
+    .map(q => ({ selector: q.selector, declarations: select(q) })).filter(q => Object.keys(q.declarations).length);
+  assert.deepEqual(candidateRequests, [{ selector: '#button-toggle-two', declarations: { borderWidth: '0 0 0 1px', borderStyle: 'solid', borderColor: '#79747e', borderRadius: '0' } }]);
+  const native = normalize(reference.styles[r.style]);
+  for (const side of ['Top', 'Right', 'Bottom']) {
+    assert.equal(native['border' + side + 'Width'], '0'); assert.equal(native['border' + side + 'Style'], 'none');
+  }
+  assert.equal(native.borderLeftWidth, '1px'); assert.equal(native.borderLeftStyle, 'solid');
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    const local = normalize(a[stage]);
+    for (const side of ['Top', 'Right', 'Bottom']) {
+      assert.equal(local['border' + side + 'Width'], '0'); assert.equal(local['border' + side + 'Style'], 'solid');
+    }
+    assert.equal(local.borderLeftWidth, '1px'); assert.equal(local.borderLeftStyle, 'solid');
+  }
+  return { ...identity, nativeRequests, candidateRequests, renderingEquivalent: null,
+    firstDivergence: 'left-only native border request translated to all-side solid style with zero non-left widths',
+    nonLeftPaintAreaFromWidths: 0, actualRasterVerified: false, roundedClippingCauseProven: false };
+}
+
+export function applyRemainingBorderReviews(rows, cases, inventory, normalize) {
+  for (const [family, element, properties] of [
+    ['button-toggle', 'button-toggle-two', ['borderTopStyle', 'borderRightStyle', 'borderBottomStyle']],
+    ['divider', 'divider-primary', ['borderTopWidth', 'borderTopStyle']],
+  ]) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family, element, properties, prove: (e, r, a) => proveRemainingBorderRequests(e, r, a, normalize),
+    attribution: 'reviewed-remaining-border-request-substitution', owner: 'comparison side-specific border and paint-primitive authoring',
+    justification: family === 'divider'
+      ? 'Existing exact border/background proof applies to width and style too: native requests a token-colored solid 1px top border; candidate requests a 1px-high background and retains zero/none borders. This is unequal paint-primitive input, not a new diagnosis of the separately proven empty-block height defect or rendering equivalence.'
+      : 'Native requests only a left divider; candidate sets solid on all sides while non-left widths remain zero in all three stages. Preserve this authored side-scope difference, but zero-width style differences do not explain rounded clipping or establish a visible non-left border defect. Existing token/color and position findings remain separate.',
+  });
+  return rows;
+}
+
+export function validateRemainingBorderReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => r.attribution === 'reviewed-remaining-border-request-substitution');
+    assert.deepEqual(select(rows), select(applyRemainingBorderReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`remaining borders lack original evidence: ${error.message}`]; }
+}
+
 // Explicit host pairs, not a widening of ordinary-element or native-control
 // assumptions. No claims about a plugin's generated children or painted output.
 export function proveCustomOwnerBorder(entry, reference, candidate, normalize, element) {

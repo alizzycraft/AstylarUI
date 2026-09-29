@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 29
 
+**Remaining border questions answered; integration pending:** five groups / 252
+observations reuse the established divider paint proof and toggle owner mapping.
+Toggle top/right/bottom styles are overauthored solid versus native none, but
+their widths remain zero at all three candidate stages (204 observations).
+The active native left-divider token is independently preserved; these inactive
+side styles are not evidence for the rounded-clipping failure. Divider top width
+and style (48) extend the existing exact border/background substitution proof:
+native 1px solid top border versus candidate 1px-high background with no border.
+Do not conflate that authoring difference with the separately established core
+empty-block height defect or claim equivalent rendered lines.
+`node --test --test-name-pattern="remaining toggle and divider borders" tests/material-parity/custom-owner-border-review.spec.mjs`
+passes **1/1**, 2,967.4717 ms total. Original capture is hash-pinned; all raw and
+unrelated rows are conserved. Missing/forged membership, changed computed widths,
+candidate stages, incomplete rules and competing border requests are rejected.
+Canonical remains **95 unresolved**, integrated projection **10**; these five
+classifications await integration. Next: integrate and review tab padding,
+progress alignment and icon fit before source/export reconciliation and final
+gates. No renderer/fixture changes or new captures.
+
 **Expansion/tree integrated; export pending:** the four-group / 256-observation
 proof from `b4ce16d` is now in the bound production tail with replay and unbound
 guards. Expanded current-checkpoint coverage changes 65 groups / 3,182
