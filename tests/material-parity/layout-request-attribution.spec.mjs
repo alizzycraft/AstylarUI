@@ -4,14 +4,14 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
 import { planLayoutRequestAttribution } from '../../scripts/audit-material-layout-request-attribution.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const files = { alignment: 'docs/material-control-self-alignment.json', flex: 'docs/material-content-flex-requests.json',
   whitespace: 'docs/material-badge-whitespace-audit.json' };
 const originals = Object.fromEntries(Object.entries(files).map(([kind, file]) => [kind, JSON.parse(readFileSync(file))]));
 const saved = JSON.parse(readFileSync('docs/material-layout-request-attribution-plan.json'));
-const normalize = bindOwnerCaretNormalization(readFileSync(saved.productionNormalization.module, 'utf8'), saved.productionNormalization);
+const normalize = bindHistoricalAuditNormalization(saved.productionNormalization, saved.canonicalRevision);
 function fixture() {
   return { sources: structuredClone(originals), rows: saved.proposed.map(g => ({ family: g.family, element: g.element,
     property: g.property, reference: g.reference, astylar: g.astylar, occurrences: g.occurrences,

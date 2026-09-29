@@ -8,7 +8,7 @@ import { pathToFileURL } from 'node:url';
 import { collectControlSelfAlignment } from './audit-material-control-self-alignment.mjs';
 import { collectContentFlexRequests } from './audit-material-content-flex-requests.mjs';
 import { collectBadgeWhitespace } from './audit-material-badge-whitespace.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -89,7 +89,7 @@ export async function collectLayoutRequestAttribution() {
   }
   const productionNormalization = JSON.parse(readFileSync('docs/material-font-ownership-attribution-plan.json')).productionNormalization;
   assert.equal(productionNormalization.sha256, '8929720cf30769ac3148458bf954402466f6f296c0d764c3123cd797f1e9300e');
-  const normalize = bindOwnerCaretNormalization(readFileSync(productionNormalization.module, 'utf8'), productionNormalization);
+  const normalize = bindHistoricalAuditNormalization(productionNormalization, revision);
   const { manifest, rows } = await readCaretConservationRows(file => execFileSync('git',
     ['show', `${revision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   const plan = planLayoutRequestAttribution(sources, rows, normalize);

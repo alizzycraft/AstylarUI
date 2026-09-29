@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 29
 
+**Container/font and layout replay reconciliation:** both container font
+proposals and the layout-request proposal now use the normalizer from their
+own pinned canonical revision, retaining unchanged proposal bytes and checks.
+The first combined run passed eight tests but exposed a distinct container-size
+module-initialization failure: size collector → border evidence → origin alias
+mapping → full audit builder → reviewed-input binding → family collector →
+uninitialized size target list. The shared 21-owner list now lives in the
+dependency-free `scripts/material-container-font-targets.mjs`, re-exported from
+the original module; family filtering still excludes only stepper. This removes
+the eager data dependency without copying or changing the evidence population.
+Both import orders have an explicit subprocess regression check.
+
+`node --test --test-concurrency=1 tests/material-parity/container-font-family-stages.spec.mjs
+tests/material-parity/container-font-stages.spec.mjs` passed 11/11 in
+197,445.5004 ms (`container-font-reconciliation-import-order.log`), including
+original 1,082/1,150 observations, complete historical payloads and mutations.
+All three layout-request tests passed in the preceding combined run
+(`container-layout-normalizer-reconciliation.log`), including the no-write
+complete-source/payload replay. No renderer or fixture was changed. The new
+shared data module is explicitly registered in the source inventory; the next
+inventory reconciliation must account for this addition, not assume the earlier
+534-file population is still current. Canonical export remains pending.
+
 **Slider integration and historical authoring replay verified:** the unchanged
 `slider-input-box-integration.spec.mjs` rerun passed 2/2 in 914,183.1216 ms
 (`slider-input-box-integration-7708b8e.log`). Both production builders conserve

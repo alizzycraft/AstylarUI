@@ -5,8 +5,10 @@ import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { selectorCanApply } from '../tests/material-parity/border-initial-input-evidence.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
+import { containerFontStageTargets } from './material-container-font-targets.mjs';
+export { containerFontStageTargets } from './material-container-font-targets.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const digest = value => hash(JSON.stringify(value));
@@ -14,24 +16,6 @@ const one = nodes => { assert.equal(nodes.length, 1, 'owner must be unique'); re
 const rid = node => node.attributes?.['data-parity-id'] ?? node.attributes?.id;
 const stages = ['normalResolvedStyle', 'interactionResolvedStyle', 'resolvedStyle'];
 const affectsSize = value => Object.keys(value ?? {}).some(k => ['font', 'fontsize', 'all'].includes(k.replaceAll('-', '').toLowerCase()));
-export const containerFontStageTargets = Object.fromEntries([
-  ['badge', 'span', 'span'], ['button-toggle', 'mat-button-toggle-group', 'div'], ['card', 'mat-card', 'div'],
-  ['checkbox', 'mat-checkbox', 'div'], ['chips', 'mat-chip-listbox', 'div'], ['divider', 'mat-divider', 'div'],
-  ['expansion', 'mat-expansion-panel', 'div'], ['grid-list', 'mat-grid-list', 'div'], ['radio', 'mat-radio-group', 'div'],
-  ['sidenav', 'mat-sidenav-container', 'div'], ['slide-toggle', 'mat-slide-toggle', 'div'], ['sort', 'div', 'div'],
-  ['stepper', 'mat-stepper', 'div'], ['tabs', 'mat-tab-group', 'div'], ['tree', 'mat-tree', 'div'],
-].map(([family, referenceType, candidateType]) => [family + '-primary', { family, referenceType, candidateType }]));
-for (const id of ['grid-tile-one', 'grid-tile-two']) containerFontStageTargets[id] =
-  { family: 'grid-list', referenceType: 'mat-grid-tile', candidateType: 'div' };
-// These mapped visual owners also have no captured own/retained/control text.
-// This reviews their CSS font-size observation stage only; image geometry,
-// plugin drawing inputs and plugin/core ownership remain separate findings.
-for (const [family, id, referenceType, candidateType] of [
-  ['icon', 'icon-primary', 'mat-icon', 'img'],
-  ['progress-bar', 'progress-bar-primary', 'mat-progress-bar', 'showcase.material:linear-progress'],
-  ['progress-spinner', 'progress-spinner-primary', 'mat-progress-spinner', 'showcase.material:circular-progress'],
-  ['slider', 'slider-visual', 'mat-slider', 'showcase.material:range-visual'],
-]) containerFontStageTargets[id] = { family, referenceType, candidateType };
 
 function ancestry(tree, owner, stop) {
   const result = [], seen = new Set();
@@ -210,7 +194,7 @@ export async function collectContainerFontStagePlan() {
       styleInputs: e.styleInputs.filter(i => Object.hasOwn(containerFontStageTargets, i.id)) }));
     return { results: project(parsed.results), interactions: project(parsed.interactions) };
   })();
-  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const normalize = bindHistoricalAuditNormalization(normalization, canonicalRevision);
   const { manifest, rows } = await readCaretConservationRows(file =>
     execFileSync('git', ['show', `${canonicalRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   return { schemaVersion: 1, kind: 'container-font-size-stage-proposed-canonical-attribution',

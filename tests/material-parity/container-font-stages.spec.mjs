@@ -4,9 +4,25 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { collectContainerFontStages, inspectContainerFontStages, containerFontStageTargets, planContainerFontStages } from '../../scripts/audit-material-container-font-stages.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+test('container font collectors initialize in either order with one shared target population', () => {
+  const size = './scripts/audit-material-container-font-stages.mjs';
+  const family = './scripts/audit-material-container-font-family-stages.mjs';
+  for (const order of [[size, family], [family, size]]) {
+    const code = `import assert from 'node:assert/strict';
+      await import(${JSON.stringify(order[0])}); await import(${JSON.stringify(order[1])});
+      const size = await import(${JSON.stringify(size)});
+      const family = await import(${JSON.stringify(family)});
+      const shared = await import('./scripts/material-container-font-targets.mjs');
+      assert.equal(size.containerFontStageTargets, shared.containerFontStageTargets);
+      assert.equal(Object.keys(shared.containerFontStageTargets).length, 21);
+      assert.deepEqual(family.containerFontFamilyTargets, Object.fromEntries(
+        Object.entries(shared.containerFontStageTargets).filter(([, t]) => t.family !== 'stepper')));`;
+    execFileSync(process.execPath, ['--input-type=module', '-e', code], { stdio: 'pipe' });
+  }
+});
 const expected = { 'badge-primary': 52, 'button-toggle-primary': 68, 'card-primary': 52, 'checkbox-primary': 68,
   'chips-primary': 76, 'divider-primary': 24, 'expansion-primary': 68, 'grid-list-primary': 52, 'radio-primary': 68,
   'sidenav-primary': 62, 'slide-toggle-primary': 68, 'sort-primary': 60, 'stepper-primary': 68, 'tabs-primary': 70,
@@ -122,7 +138,7 @@ test('container stage join rejects incomplete altered or overclaimed coverage', 
   const proof = JSON.parse(readFileSync('docs/material-container-font-stages.json'));
   const original = JSON.parse(readFileSync(proof.originalCapture.file));
   const saved = JSON.parse(readFileSync('docs/material-container-font-stage-plan.json'));
-  const normalize = bindOwnerCaretNormalization(readFileSync(saved.productionNormalization.module, 'utf8'), saved.productionNormalization);
+  const normalize = bindHistoricalAuditNormalization(saved.productionNormalization, saved.canonicalRevision);
   // Only rejection tests use these projections. The preceding CLI checks the
   // complete authenticated canonical data and every source tree independently.
   const rows = saved.findings.map(g => ({ ...Object.fromEntries(

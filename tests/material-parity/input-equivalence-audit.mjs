@@ -9008,6 +9008,7 @@ function sourceFingerprints(root) {
     'scripts/bind-material-reviewed-input-proposals.mjs',
     'scripts/check-material-reviewed-input-transition.mjs',
     'scripts/audit-material-container-font-stages.mjs',
+    'scripts/material-container-font-targets.mjs',
     'scripts/audit-material-leaf-font-stages.mjs',
     'scripts/audit-material-leaf-font-attribution.mjs',
     'scripts/audit-material-container-font-inputs.mjs',

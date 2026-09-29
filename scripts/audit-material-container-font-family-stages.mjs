@@ -4,9 +4,10 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { containerFontStageTargets, inspectContainerFontStages } from './audit-material-container-font-stages.mjs';
+import { inspectContainerFontStages } from './audit-material-container-font-stages.mjs';
+import { containerFontStageTargets } from './material-container-font-targets.mjs';
 import { selectorCanApply } from '../tests/material-parity/border-initial-input-evidence.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
@@ -170,7 +171,7 @@ export async function collectContainerFontFamilyPlan() {
       ...(e.state ? { state: e.state } : {}), inputTrees: e.inputTrees, styleInputs: e.styleInputs.filter(i => Object.hasOwn(containerFontFamilyTargets, i.id)) }));
     return { results: project(parsed.results), interactions: project(parsed.interactions) };
   })();
-  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const normalize = bindHistoricalAuditNormalization(normalization, canonicalRevision);
   const { manifest, rows } = await readCaretConservationRows(file => execFileSync('git', ['show', `${canonicalRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   const result = planContainerFontFamily(proof, original, rows, normalize);
   assert.equal(result.proposedGroups, 20); assert.equal(result.proposedObservations, 1082);
