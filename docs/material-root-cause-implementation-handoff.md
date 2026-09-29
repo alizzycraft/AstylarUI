@@ -54,6 +54,24 @@ Remaining acceptance requirements, in execution order:
 Historical output results do not satisfy fresh final gates. No renderer, fixture
 or original capture has been changed.
 
+**Deliverable reference/provenance review:** all 188 source file/line citations
+and 106 focused-proof file/line citations in the canonical Markdown resolve to
+existing files and in-range lines. This checks reference integrity, not semantic
+proof or fresh execution. The authenticated compact summary retains 88 structure
+differences and reports zero unexplained source findings / undetected definitions.
+Two source findings omit `introducedBy`, rendered as `undefined`; supplementary
+history was checked directly without reopening their established diagnoses:
+- `fixture-tooltip-benchmark-hover-suppression`: `git show 7159b1d` adds the
+  pointerenter handler excluding benchmark-open; `git show a0f3328` replaces it
+  with the current allowlist of hover/held benchmark states. Thus the suppression
+  originates in `7159b1d` and broadens in `a0f3328`.
+- `core-border-currentcolor-has-no-color-context`: `git show 19d01be` adds the
+  service's call to `parseBackgroundColor(style.borderColor)` without element
+  color context. This establishes source lineage, not a first-bad runtime revision
+  or proof that equivalent behavior did not exist before the service extraction.
+Keep these provenance qualifications with the findings. No classification or
+canonical bytes changed; a prose supplement does not justify another full export.
+
 ### Historical checkpoint trail (superseded status, retained evidence)
 
 **Reporting scope reconciled before retry:** bounded caret/gap/origin/alignment
