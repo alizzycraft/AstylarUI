@@ -15,6 +15,45 @@ import { proveToolbarSpacingComposition, applyToolbarSpacingReviews, validateToo
 import { proveDialogActionSpacing, applyDialogActionSpacingReviews, validateDialogActionSpacingReviews } from './display-request-review.mjs';
 import { proveDialogPanelGap, applyDialogPanelGapReview, validateDialogPanelGapReview } from './display-request-review.mjs';
 import { proveTooltipShrinkComposition, applyTooltipShrinkReviews, validateTooltipShrinkReviews } from './display-request-review.mjs';
+import { proveExpansionTreeFormatting, applyExpansionTreeFormattingReviews, validateExpansionTreeFormattingReviews } from './display-request-review.mjs';
+
+test('expansion and tree formatting conserve 256 observations without assuming inherited alignment', () => {
+  const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'b07ef154485619ce57fdeb25727476077205c1f656430bc32fdc591ed034f93a');
+  const capture = JSON.parse(bytes);
+  const cases = [...capture.results.map(e => ({ ...e, kind: 'static' })), ...capture.interactions.map(e => ({ ...e, kind: 'interaction' }))].filter(e => ['expansion', 'tree'].includes(e.family));
+  const inventory = collectFullTreeInventory(cases), normalize = bindPreciseAuditNormalization();
+  assert.deepEqual(inventory.errors, []);
+  const rows = ['expansion', 'tree'].flatMap(f => queryFindings('artifacts/material-parity/working-audit', f, {
+    generation: '9b827bb2b09ae9d20d35e1640f987c9a4972aeab04676d595d7dd5f7d6ee01ab',
+    indexSha256: 'cd3d3c45aab1db7095753132870a660f456dc80e5334787f6f4508e8d30d9486',
+  })).filter(r => r.evidence.section === 'discrepancies').map(({ id, evidence, ...row }) => row);
+  const applied = applyExpansionTreeFormattingReviews(rows, cases, inventory, normalize);
+  const changed = applied.filter((r, i) => r !== rows[i]);
+  assert.equal(changed.length, 4); assert.equal(changed.reduce((n, r) => n + r.occurrences, 0), 256);
+  const metadata = new Set(['classification', 'attribution', 'justification', 'recommendedOwner', 'reviewEvidence', 'reviewedCases']);
+  const raw = r => Object.fromEntries(Object.entries(r).filter(([k]) => !metadata.has(k)));
+  assert.deepEqual(applied.map(raw), rows.map(raw));
+  applied.forEach((r, i) => { if (!changed.includes(r)) assert.deepEqual(r, rows[i]); });
+  assert.deepEqual(validateExpansionTreeFormattingReviews(applied, rows, cases, inventory, normalize), []);
+  const alignment = changed.find(r => r.property === 'textAlign');
+  assert.equal(alignment.classification, 'parity-harness-defect'); assert.equal(alignment.astylar, undefined);
+  const forged = structuredClone(applied); forged.find(r => r.attribution === 'reviewed-expansion-tree-formatting-substitution').reviewedCases.pop();
+  assert.equal(validateExpansionTreeFormattingReviews(forged, rows, cases, inventory, normalize).length, 1);
+  const key = e => `${e.kind}:${e.family}@${e.profile}/${e.viewport.id}${e.state ? '/' + e.state : ''}`;
+  assert.throws(() => applyExpansionTreeFormattingReviews(rows, cases.filter(e => key(e) !== changed[0].reviewedCases[0]), inventory, normalize));
+  for (const family of ['expansion', 'tree']) {
+    const entry = cases.find(e => e.family === family), pair = modalInventoryTrees(inventory, key(entry));
+    const proof = proveExpansionTreeFormatting(entry, ...pair);
+    assert.equal(proof.renderingEquivalent, null); assert.equal(proof.candidateComputedTextAlignProven, false);
+    for (const mutate of [
+      ([r]) => { r.ruleEvidenceComplete = false; },
+      ([, a]) => { a.nodes.find(n => n.key === proof.astylarNode).interactionResolvedStyle.textAlign = 'left'; },
+      ([, a]) => { a.rules.push({ selector: '#' + (family === 'expansion' ? 'expansion-title' : 'tree-primary'), marginRight: '16px' }); },
+      ([r]) => { r.rules[r.nodes.find(n => n.key === proof.referenceNode).rules[0]].cssText += ' text-align: right;'; },
+    ]) { const altered = structuredClone(pair); mutate(altered); assert.throws(() => proveExpansionTreeFormatting(entry, ...altered)); }
+  }
+});
 
 test('tooltip shrink preserves 80 observations across distinct parent contracts', () => {
   const bytes = readFileSync('artifacts/material-parity/current-ancestry-audit/latest-report.json');

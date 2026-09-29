@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 29
 
+**Expansion/tree formatting reviewed; integration pending:** four groups / 256
+observations distinguish three authoring substitutions from one measurement-stage
+gap. Expansion omits the native title's flex alignment and 16px trailing margin
+(68 observations each); tree substitutes column flex for native block flow (52).
+Native tree computed row does not request row layout on a block owner. Expansion
+textAlign:start versus locally omitted (68) cannot establish rendered mismatch:
+candidate parent requests left, and candidate computed inheritance is unobserved.
+No computed default, used placement or core failure is inferred.
+`node --test --test-name-pattern="expansion and tree formatting" tests/material-parity/display-request-review.spec.mjs`
+passes **1/1**, 3,089.9365 ms total. Existing display/mapping proof is reused;
+all raw/unrelated rows are conserved, and changed rules, local stages, serialized
+requests, missing cases and forged membership are rejected. Original capture is
+hash-pinned. Current source retains title rules at
+`examples/material-showcase/src/app/astylar.component.ts:663` and tree column at
+`:721`; the column already exists in initial showcase commit `2f44011`, so it is
+not evidence of a later compensation. Historical label edits are not evidence
+that omitted flex/margin requests fixed an underlying core issue.
+Canonical remains **95 unresolved**, integrated projection **14**; these four
+classifications await integration. Next: integrate, then tab padding, toggle
+border styles, divider substitution, progress alignment and icon fit.
+Source/export reconciliation and final gates remain pending. No renderer/fixture
+changes or new captures.
+
 **Tooltip shrink integrated; export pending:** the two-group / 80-observation
 proof from `be5cca9` now runs in the bound production tail with replay validation
 and unbound-attribution rejection. Against the current checkpoint the tail

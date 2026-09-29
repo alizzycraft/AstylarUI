@@ -9,6 +9,72 @@ import { proveRadioPositionSubstitution } from './radio-position-substitution.mj
 import { proveToolbarPositionInspection } from './toolbar-position-inspection.mjs';
 import { inspectOwnerGapInput } from './owner-gap-input-evidence.mjs';
 
+export function proveExpansionTreeFormatting(entry, reference, candidate) {
+  const expansion = entry.family === 'expansion';
+  assert.ok(expansion || entry.family === 'tree');
+  const element = expansion ? 'expansion-title' : 'tree-primary';
+  const display = proveDisplayRequest(entry, reference, candidate, element);
+  const r = reference.nodes.find(n => n.key === display.referenceNode);
+  const a = candidate.nodes.find(n => n.key === display.astylarNode);
+  const relevant = key => /^(align-?items|place-?items|margin(?:-?right)?|text-?align|flex-?direction|flex-?flow|all)$/i.test(key);
+  const select = style => Object.fromEntries(Object.entries(style ?? {}).filter(([key]) => relevant(key)));
+  assert.deepEqual(select(r.inline), {}); assert.deepEqual(select(a.authored.style), {});
+  const native = r.rules.map(i => reference.rules[i]).filter(q => q.active);
+  const requests = native.map(q => ({ selector: q.selector, declarations: select(q.declarations) })).filter(q => Object.keys(q.declarations).length);
+  assert.deepEqual(requests, expansion ? [{ selector: '.mat-expansion-panel-header-title, .mat-expansion-panel-header-description', declarations: {
+    'margin-right': { value: '16px', important: false }, 'align-items': { value: 'center', important: false },
+  } }] : []);
+  const serialized = native.flatMap(q => [...q.cssText.matchAll(/(?:^|;)\s*(align-items|place-items|margin(?:-right)?|text-align|flex-direction|flex-flow|all)\s*:\s*([^;]*)(?=;|$)/gi)].map(([, property, value]) => [property, value.trim()]));
+  assert.deepEqual(serialized, expansion ? [['margin-right', '16px'], ['align-items', 'center']] : []);
+  const candidateRequests = candidate.rules.filter(q => rootInitialSelectorCanApply(q.selector, a.authored)).map(q => ({ selector: q.selector, declarations: select(q) })).filter(q => Object.keys(q.declarations).length);
+  assert.deepEqual(candidateRequests, expansion ? [] : [{ selector: '.material-tree', declarations: { flexDirection: 'column' } }]);
+  for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) {
+    assert.equal(a[stage].flexDirection, expansion ? 'row' : 'column');
+    assert.equal(a[stage].alignItems, 'stretch'); assert.equal(a[stage].margin, '0');
+    assert.equal(a[stage].marginRight, undefined); assert.equal(a[stage].textAlign, undefined);
+  }
+  if (expansion) {
+    assert.equal(reference.styles[r.style].alignItems, 'center');
+    assert.equal(reference.styles[r.style].marginRight, '16px');
+    assert.equal(reference.styles[r.style].textAlign, 'start');
+    assert.equal(r.ownText, 'Advanced settings'); assert.equal(a.authored.textContent, r.ownText);
+    const parent = candidate.nodes.find(n => n.key === a.parent);
+    assert.equal(parent.authored.id, 'expansion-primary');
+    for (const stage of ['resolvedStyle', 'normalResolvedStyle', 'interactionResolvedStyle']) assert.equal(parent[stage].textAlign, 'left');
+  } else {
+    assert.equal(reference.styles[r.style].flexDirection, 'row');
+    const rc = reference.nodes.filter(n => n.parent === r.key), ac = candidate.nodes.filter(n => n.parent === a.key);
+    assert.deepEqual(rc.map(n => n.ownText), ['Documents', 'Projects', 'Archive']);
+    assert.deepEqual(ac.map(n => candidate.nodes.filter(c => c.parent === n.key).map(c => c.authored.textContent)), [['Documents'], ['Projects'], ['Archive']]);
+    assert.ok(rc.every(n => reference.styles[n.style].display === 'flex'));
+    assert.ok(ac.every(n => n.resolvedStyle.display === 'flex'));
+  }
+  return { referenceNode: r.key, astylarNode: a.key, display, requests, candidateRequests,
+    firstDivergence: expansion ? 'native flex title alignment and trailing margin omitted from inline candidate title' : 'native block tree replaced by column flex owner',
+    candidateComputedTextAlignProven: false, usedLayoutProven: false, renderingEquivalent: null };
+}
+
+export function applyExpansionTreeFormattingReviews(rows, cases, inventory, normalize) {
+  for (const [family, element, properties] of [['expansion', 'expansion-title', ['alignItems', 'marginRight']], ['tree', 'tree-primary', ['flexDirection']]]) rows = applyModalBoxReview(rows, cases, inventory, normalize, {
+    family, element, properties, prove: proveExpansionTreeFormatting,
+    attribution: 'reviewed-expansion-tree-formatting-substitution', owner: 'comparison formatting-owner authoring',
+    justification: 'Expansion drops explicit native title flex formatting, centered items and 16px trailing margin. Tree replaces a native block owner with a column flex owner; native computed row is not an active row-layout request. Preserve these unequal formatting contracts without inferring used-layout equivalence or a core defect from scalar differences.',
+  });
+  return applyModalBoxReview(rows, cases, inventory, normalize, {
+    family: 'expansion', element: 'expansion-title', properties: ['textAlign'], prove: proveExpansionTreeFormatting,
+    classification: 'parity-harness-defect', attribution: 'reviewed-expansion-text-alignment-observation-stage', owner: 'computed versus local inherited alignment evidence',
+    justification: 'Native title computes start without a direct alignment request; candidate title omits local textAlign while its parent requests left. The scalar comparison does not observe candidate computed/inherited alignment or used placement. Keep the omission and separate formatting substitution; do not manufacture a candidate default or claim start/left rendering equivalence.',
+  });
+}
+
+export function validateExpansionTreeFormattingReviews(rows, originalRows, cases, inventory, normalize) {
+  try {
+    const select = values => values.filter(r => ['reviewed-expansion-tree-formatting-substitution', 'reviewed-expansion-text-alignment-observation-stage'].includes(r.attribution));
+    assert.deepEqual(select(rows), select(applyExpansionTreeFormattingReviews(originalRows, cases, inventory, normalize)));
+    return [];
+  } catch (error) { return [`expansion/tree formatting lacks original evidence: ${error.message}`]; }
+}
+
 export function proveTooltipShrinkComposition(entry, reference, candidate, element) {
   assert.equal(entry.family, 'tooltip');
   assert.ok(['tooltip-primary', 'tooltip-popup'].includes(element));
