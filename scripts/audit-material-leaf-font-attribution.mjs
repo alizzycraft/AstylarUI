@@ -6,7 +6,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 import { collectLeafFontStages } from './audit-material-leaf-font-stages.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -88,7 +88,7 @@ export async function collectLeafFontAttributionPlan() {
   const proofFile = 'docs/material-leaf-font-stages.json', bytes = readFileSync(proofFile, 'utf8').replaceAll('\r\n', '\n');
   const proof = collectLeafFontStages(); assert.equal(bytes, JSON.stringify(proof, null, 2) + '\n');
   const originalBytes = readFileSync(proof.originalCapture.file); assert.equal(hash(originalBytes), proof.originalCapture.sha256);
-  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const normalize = bindHistoricalAuditNormalization(normalization, canonicalRevision);
   const { manifest, rows } = await readCaretConservationRows(file =>
     execFileSync('git', ['show', `${canonicalRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   return { schemaVersion: 1, kind: 'leaf-font-stage-proposed-canonical-attribution',

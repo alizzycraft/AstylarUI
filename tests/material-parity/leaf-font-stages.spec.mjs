@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { collectLeafFontStages, inspectLeafFontStages } from '../../scripts/audit-material-leaf-font-stages.mjs';
 import { planLeafFontAttribution } from '../../scripts/audit-material-leaf-font-attribution.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 test('all original selected plain-text font omissions retain matching inherited text inputs', () => {
   const actual = collectLeafFontStages();
@@ -32,7 +32,7 @@ test('planned font attribution independently replays source trees and complete f
 test('planned font join rejects incomplete evidence and preserves previously classified static groups', () => {
   const proof = collectLeafFontStages(), original = JSON.parse(readFileSync(proof.originalCapture.file));
   const saved = JSON.parse(readFileSync('docs/material-leaf-font-attribution-plan.json'));
-  const normalize = bindOwnerCaretNormalization(readFileSync(saved.productionNormalization.module, 'utf8'), saved.productionNormalization);
+  const normalize = bindHistoricalAuditNormalization(saved.productionNormalization, saved.canonicalRevision);
   // Pure small projections test join rejection; the preceding CLI authenticates
   // all rows and tree sources rather than trusting this projection as evidence.
   const rows = [...saved.proposed, ...saved.preservedStatic].map(g => ({

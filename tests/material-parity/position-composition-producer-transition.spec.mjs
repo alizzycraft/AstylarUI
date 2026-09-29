@@ -18,7 +18,19 @@ import { restoreComponentInteractionProducer } from './position-composition-prod
 import { restoreCaretPositionProducer } from './position-composition-producer-transition.mjs';
 import { restoreOwnerBoundaryProducer } from './position-composition-producer-transition.mjs';
 import { restorePreparedInputProducer } from './position-composition-producer-transition.mjs';
-import { restorePreparedInputFollowupProducer } from './position-composition-producer-transition.mjs';
+import { restorePreparedInputFollowupProducer, restoreStackingProducer } from './position-composition-producer-transition.mjs';
+
+test('shared font inventory registration preserves the full historical producer', () => {
+  const current = readFileSync('tests/material-parity/input-equivalence-audit.mjs', 'utf8').replaceAll('\r\n', '\n');
+  const registration = "    'scripts/material-container-font-targets.mjs',\n";
+  assert.equal(current.split(registration).length, 2);
+  assert.equal(restoreStackingProducer(current).restoredSource,
+    restoreStackingProducer(current.replace(registration, '')).restoredSource);
+  assert.throws(() => restoreStackingProducer(current.replace(registration, registration.repeat(2))));
+  assert.throws(() => restoreStackingProducer(current.replace(registration,
+    "    'scripts/invented-font-targets.mjs',\n")));
+  assert.throws(() => restoreStackingProducer(current + '\n// unrelated change'));
+});
 
 test('prepared input followup restores the complete accepted prepared-input predecessor', () => {
   const file = 'tests/material-parity/input-equivalence-audit.mjs';

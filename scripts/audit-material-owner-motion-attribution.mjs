@@ -6,8 +6,9 @@ import { isDeepStrictEqual } from 'node:util';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { collectOwnerInitialMotion } from './audit-material-owner-initial-motion.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
+import { verifyMotionSourceConservation } from '../tests/material-parity/motion-source-conservation.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const digest = x => hash(JSON.stringify(x));
@@ -86,9 +87,14 @@ export async function collectOwnerMotionAttribution() {
   const bytes = readFileSync(proofFile, 'utf8').replaceAll('\r\n', '\n');
   assert.equal(hash(bytes), 'f8f90799191604823875d849fb6ae56de46dd96c37e3f91c8d540bdd48916294');
   const motion = collectOwnerInitialMotion();
-  same(motion, JSON.parse(bytes), 'entire original motion proof must freshly replay');
+  // Authenticate known source transitions and require every non-receipt field
+  // to freshly replay. Never relabel historical source receipts as current.
+  const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
+  verifyMotionSourceConservation(JSON.parse(bytes), motion,
+    execFileSync('git', ['show', `4650791a7208b841dd29f1ced015f98234949623:${moduleFile}`],
+      { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }), readFileSync(moduleFile, 'utf8'));
   const normalization = JSON.parse(readFileSync('docs/material-font-ownership-attribution-plan.json')).productionNormalization;
-  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const normalize = bindHistoricalAuditNormalization(normalization, revision);
   const { manifest, rows } = await readCaretConservationRows(file => execFileSync('git',
     ['show', `${revision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   const plan = planOwnerMotionAttribution(motion, rows, normalize);

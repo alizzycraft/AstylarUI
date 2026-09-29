@@ -4,12 +4,12 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
 import { planOwnerMotionAttribution } from '../../scripts/audit-material-owner-motion-attribution.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const digest = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const original = JSON.parse(readFileSync('docs/material-owner-initial-motion-review.json'));
-const descriptor = JSON.parse(readFileSync('docs/material-font-ownership-attribution-plan.json')).productionNormalization;
-const normalize = bindOwnerCaretNormalization(readFileSync(descriptor.module, 'utf8'), descriptor);
+const saved = JSON.parse(readFileSync('docs/material-owner-motion-attribution-plan.json'));
+const normalize = bindHistoricalAuditNormalization(saved.productionNormalization, saved.canonicalRevision);
 
 // A small pure-function fixture is sufficient for rejection controls. Only the
 // separate full CLI check authenticates and replays original canonical rows.

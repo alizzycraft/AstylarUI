@@ -36,6 +36,14 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  // The import-order repair registers shared collector data; it changes no
+  // producer calculations. Remove only that exact inventory addition before
+  // authenticating the entire historical producer below.
+  const sharedFontInventory = "    'scripts/material-container-font-targets.mjs',\n";
+  if (restored.includes(sharedFontInventory)) {
+    assert.equal(restored.split(sharedFontInventory).length, 2);
+    restored = restored.replace(sharedFontInventory, '');
+  }
   // Reverse only the reviewed reporting clarification; authenticate the full
   // historical producer below, including all calculations and classifications.
   for (const [before, after] of [

@@ -2,6 +2,22 @@
 
 ## Current audit checkpoint — September 29
 
+**Font/leaf/motion replay boundaries verified:** historical font-ownership,
+leaf-font and motion proposals now use their own pinned normalizers. The first
+batch passed all four leaf-font tests but exposed two source-receipt boundaries.
+The shared-font inventory registration now has an exact reversible producer
+transition, with duplicate/renamed/unrelated additions rejected; the existing
+producer-transition suite passed 27/27 in 25,475.715 ms. Motion replay differed
+only in three source receipts, with every non-receipt field identical. Its
+collector now uses the existing `verifyMotionSourceConservation` instead of
+requiring obsolete source bytes: this authenticates source opt-ins, all twelve
+mapping declarations and every original finding without rewriting receipts.
+The font-ownership, owner-motion and motion-conservation suites passed 10/10 in
+234,782.0538 ms (`font-motion-source-reconciliation.log`), including full
+historical no-write replays and negative controls. Stored proposal bytes,
+live normalization and original evidence remain unchanged. Export/fingerprint
+reconciliation and the other recorded integration failures remain open.
+
 **Container/font and layout replay reconciliation:** both container font
 proposals and the layout-request proposal now use the normalizer from their
 own pinned canonical revision, retaining unchanged proposal bytes and checks.

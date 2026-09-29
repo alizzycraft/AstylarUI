@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { planFontOwnershipAttribution } from '../../scripts/audit-material-font-ownership-attribution.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 let cached;
@@ -13,7 +13,7 @@ function inputs() {
   const saved = JSON.parse(readFileSync('docs/material-font-ownership-attribution-plan.json'));
   const proofs = Object.fromEntries(Object.entries(saved.proofs).map(([kind, d]) => [kind, JSON.parse(readFileSync(d.file))]));
   const original = JSON.parse(readFileSync(saved.originalCapture.file));
-  const normalize = bindOwnerCaretNormalization(readFileSync(saved.productionNormalization.module, 'utf8'), saved.productionNormalization);
+  const normalize = bindHistoricalAuditNormalization(saved.productionNormalization, saved.canonicalRevision);
   // Only mutation tests use this minimal row projection. The independent CLI
   // replay below authenticates every complete row in the historical payload.
   const rows = [...saved.proposed, ...saved.preserved].map(f => ({ ...Object.fromEntries(

@@ -8,7 +8,7 @@ import { collectFontScopeInputs } from './audit-material-font-scope-inputs.mjs';
 import { collectExpansionTitleInputs } from './audit-material-expansion-title-inputs.mjs';
 import { collectTabPanelInputs } from './audit-material-tab-panel-inputs.mjs';
 import { collectOverlayFontInputs, overlayFontTargets } from './audit-material-overlay-font-inputs.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -131,7 +131,7 @@ export async function collectFontOwnershipAttributionPlan() {
   const originalCapture = proofs.scope.originalCapture;
   for (const proof of Object.values(proofs)) assert.deepEqual(proof.originalCapture, originalCapture);
   const bytes = readFileSync(originalCapture.file); assert.equal(hash(bytes), originalCapture.sha256);
-  const normalize = bindOwnerCaretNormalization(readFileSync(normalization.module, 'utf8'), normalization);
+  const normalize = bindHistoricalAuditNormalization(normalization, canonicalRevision);
   const { manifest, rows } = await readCaretConservationRows(file =>
     execFileSync('git', ['show', `${canonicalRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   return { schemaVersion: 1, kind: 'source-bound-font-ownership-attribution-proposal',
