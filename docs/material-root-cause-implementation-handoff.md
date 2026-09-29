@@ -72,6 +72,22 @@ history was checked directly without reopening their established diagnoses:
 Keep these provenance qualifications with the findings. No classification or
 canonical bytes changed; a prose supplement does not justify another full export.
 
+**Non-building acceptance checks:** `npm run examples:check` passes all 11
+translation pairs (eight parity-backed, three focused inline).
+`npm run skill:check` passes synchronized developer references (12 sources,
+118 exports) and both repository skill validators. `npm run capabilities:check`
+fails one source receipt, not a capability assertion: element-creation.service.ts
+expects `2edeb33f4095e3d3bb2be889991473e153df96f6d9a46ec9af94bbc56fa87d24`
+but current normalized source hashes to
+`bf5fd5861c7d1b412520a41abf5bfa0aa1085d9a139a96f3d202dde6cbf8ea3a`.
+Git source hashing proves the expected value is exactly `97e0da0^`, while HEAD
+matches `97e0da0`. That commit adds authoritative CSS-layout select anchor and
+viewport callbacks; its element-creation diff is ten added lines, not a line-ending
+change. Catalog receipt and bundled developer copy still predate that commit.
+Do not report the capability gate as passing or blindly refresh the hash. Review
+the owning select-anchor proof with the remaining test gates before reconciling
+the receipt; preserve capability claims and the accepted audit evidence.
+
 ### Historical checkpoint trail (superseded status, retained evidence)
 
 **Reporting scope reconciled before retry:** bounded caret/gap/origin/alignment
