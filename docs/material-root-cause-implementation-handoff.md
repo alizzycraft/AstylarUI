@@ -2,6 +2,19 @@
 
 ## Current audit checkpoint — September 29
 
+**Reporting scope reconciled before retry:** bounded caret/gap/origin/alignment
+and calendar-close prose now distinguishes collector-local limitations from final
+row attributions. Retained visual parity is explicitly not a fresh final-gate
+result. Historical proof descriptions retain their original limits, with a scope
+notice; the transformed-containing-block plan also defers to final row evidence.
+No scalar observations, classifications, proof descriptions or acceptance gates
+are changed. Exact text-only reversal still authenticates the complete historical
+producer; the existing stacking proof also rejects unrelated producer changes.
+`node --test tests/material-parity/stacking-input-review.spec.mjs` passes 1/1
+in 10,115.508 ms; scoped `git diff --check` passes.
+Next export includes this clarification and the vocabulary correction `987b631`;
+it still requires conservation review, cold replay and final acceptance gates.
+
 **Canonical export exposed a classification-vocabulary mismatch:** export from
 `e24a85d` completed in 2,171,401.666 ms, exit 1, with one unclassified difference:
 tooltip-popup `wordBreak`, 18 observations, classified `documented-limitation`.

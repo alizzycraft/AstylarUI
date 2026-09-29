@@ -36,6 +36,45 @@ export function verifyBorderEvidenceSourceTransition(previous, current) {
 export function restoreStackingProducer(source) {
   const current = source.toString().replaceAll('\r\n', '\n');
   let restored = current;
+  // Reverse only the reviewed reporting clarification; authenticate the full
+  // historical producer below, including all calculations and classifications.
+  for (const [before, after] of [
+    ["The three captured Material identity-omission groups remain separately unresolved; this proof does not automatically attribute their output.",
+      "The three captured Material identity-omission groups require separate final row evidence; this public core proof does not automatically attribute their output."],
+  [
+    "other motion/explicit-origin cases remain unresolved.",
+    "other motion/explicit-origin cases are outside this bounded proof; consult their final row attributions."
+  ],
+  [
+    "observations remain pending. Raw omissions",
+    "observations were outside this bounded collector, not necessarily pending in the final audit. Raw omissions"
+  ],
+  [
+    "motion observations remain unresolved. Independent source and classification coverage",
+    "motion observations were outside this bounded review; their final attributions include the separate dialog-panel motion review. Independent source and classification coverage"
+  ],
+  [
+    "`Visual parity is ${report.coverage.visualParityGreen ? 'green' : 'not green'}, but input equivalence",
+    "`Retained capture visual parity is ${report.coverage.visualParityGreen ? 'green' : 'not green'}; this is not a fresh final-gate result. Input equivalence"
+  ],
+  [
+    "Other contexts remain unresolved; equal line containers",
+    "Other contexts require their own final row evidence; equal line containers"
+  ],
+  [
+    "and other unreviewed typography differences remain unresolved.",
+    "and this close-state proof does not classify other typography differences."
+  ],
+  [
+    "    '## Focused evidence',\n    '',",
+    "    '## Focused evidence',\n    '',\n    'These descriptions record the scope and limitations of individual proofs, including historical pending populations. They are not the aggregate current backlog: consult final row attributions and the summary counts. Classification does not establish rendering equivalence or remove a documented defect.',\n    '',"
+  ]
+]) {
+    if (restored.includes(after)) {
+      assert.equal(restored.split(after).length, 2, 'repeated reporting clarification');
+      restored = restored.replace(after, before);
+    }
+  }
   if (restored.includes('import { applyFinalOwnerStyleReviews,')) {
     for (const [from, to] of [
       ["import { applyFinalOwnerStyleReviews, validateFinalOwnerStyleReviews } from './custom-owner-border-review.mjs';\n", ''],
