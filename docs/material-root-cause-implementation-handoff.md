@@ -2,6 +2,35 @@
 
 ## Current audit checkpoint — September 29
 
+**Full-harness reconciliation findings (run still in progress):** prioritize
+historical/current normalization boundaries before treating these failures as
+new renderer evidence. The authoring-attribution collector and its test still
+bind the historical seven-function digest against current source. A read-only
+replay using the existing `bindHistoricalAuditNormalization` at the proposal's
+`06e50dbcd3594c5987d63a4ec38e792b87b08dde` revision reproduces all nine groups /
+136 observations. All finding fields match except `canonicalRowSha256`, because
+this small probe uses reduced join-test rows rather than full historical rows.
+Full canonical conservation remains required; no stored receipt was refreshed.
+
+The explicit-gap integration test completed in 385,036.4084 ms and failed at
+line 65's scalar-population equality, after its 16-group / 1,032-observation,
+complete-coverage and unchanged-raw-input assertions passed. The current side
+contains precise color differences such as reference
+`rgba(245.879925,240.73989,248.60001,1)` versus candidate
+`rgba(246,241,249,1)` that its earlier baseline did not retain. Reconcile the
+reviewed precision transition explicitly; do not delete those differences or
+weaken population conservation to make the historical test pass.
+
+A separate failure in `control-overflow-observation.spec.mjs` is a stale source
+extraction boundary: its three-function snackbar/overflow test now extracts the
+later owner-omission pipeline, which starts with `applyOwnerMaximumWidths` and
+requires additional dependencies and a different input-stage variable. Restore
+an exact stage-specific production assertion using existing infrastructure,
+while retaining its original membership, negative controls and raw-row checks.
+These are audit-harness diagnoses, not repaired renderer defects or completed
+acceptance. Preserve the full run log named below and finish the run before
+editing its tested dependencies.
+
 **Canonical reconciliation verified:** export from `4624a9c` passed in
 2,166,050.6272 ms; independent `ASTYLAR_AUDIT_COLD=1` replay of
 `node scripts/export-material-input-audit-current-ancestry.mjs --check` passed
