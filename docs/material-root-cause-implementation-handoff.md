@@ -236,8 +236,19 @@ of `collectExpansionOwnerMapping` reproduced every saved field except
 stored `c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10`,
 current `4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d`.
 This is the existing runner-receipt transition, not a newly divergent expansion
-finding or normalizer failure. Reconcile that reviewed source transition without
-blindly refreshing the receipt; later full-population assertions remain unrun.
+finding. The attribution collector now shares the follow-up replay's exact
+runner reversal through `conserveExpansionOwnerProof`, which returns a copy only
+after every other receipt and observation matches. Its tests use the proposal's
+recorded normalization revision, not the newer live normalizer. The combined
+`expansion-owner-attribution.spec.mjs` and `followup-input-source-replay.spec.mjs`
+run passed 7/7 in 102,516.5423 ms, including the write-disabled full historical
+canonical join, 43 proposed groups, 59 preserved reviewed groups, 8,296 other
+complete rows, four source proofs / 2,640 observations, and negative controls.
+No stored proof/proposal bytes changed. This repairs the demonstrated dependency
+boundary; test 1277's later full-population assertions still need replay in the
+coherent integration batch. The direct owner-mapping CLI snapshot `--check`
+still compares current receipts literally; it is not claimed current by this
+historical attribution replay.
 
 Root-shadow integration has now completed. Test 1340 failed after
 331,395.6612 ms at scalar-population conservation against `502ea44`, with

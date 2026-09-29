@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { planExpansionOwnerAttribution } from '../../scripts/audit-material-expansion-owner-attribution.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 test('expansion attribution independently replays all owner proofs and every canonical byte without writes', () => {
@@ -38,7 +38,7 @@ function fixture() {
       property: g.property, reference: g.reference, astylar: g.astylar, occurrences: g.occurrences,
       cases: g.cases, states: g.states, attribution: g.previousAttribution, retainedExtraField: true }));
     rows.push({ family: 'unrelated', element: 'sentinel', property: 'width', attribution: 'unresolved' });
-    const normalize = bindOwnerCaretNormalization(readFileSync(plan.productionNormalization.module, 'utf8'), plan.productionNormalization);
+    const normalize = bindHistoricalAuditNormalization(plan.productionNormalization, plan.canonicalRevision);
     cached = { proof, original: { results: project(full.results), interactions: project(full.interactions) }, rows, normalize };
   }
   const { normalize, ...data } = cached; return { ...structuredClone(data), normalize };

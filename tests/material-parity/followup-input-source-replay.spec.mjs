@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { verifyFollowupSourceReceipt } from './followup-input-source-replay.mjs';
+import { verifyFollowupSourceReceipt, conserveExpansionOwnerProof } from './followup-input-source-replay.mjs';
+import { collectExpansionOwnerMapping } from '../../scripts/audit-material-expansion-owner-mapping.mjs';
 
 test('followup source replay freshly validates all four proofs without writes or claiming a new frozen join', () => {
   const guard = `import fs from 'node:fs';import{syncBuiltinESMExports}from'node:module';
@@ -38,6 +39,16 @@ const verify = f => verifyFollowupSourceReceipt(f.kind, f.binding, f.plan, f.pro
 
 test('expansion receipt reconciliation does not permit altered observations or arbitrary source receipts', () => {
   const f = fixture('expansionOwner');
+  const fresh = collectExpansionOwnerMapping(), before = JSON.stringify(fresh);
+  assert.deepEqual(conserveExpansionOwnerProof(fresh, f.proofBytes), f.proof);
+  assert.equal(JSON.stringify(fresh), before);
+  for (const mutate of [
+    p => { p.findings[0].proof.originalReferenceOwner.type = 'button'; },
+    p => { p.sourceFingerprints[0].sha256 = '0'.repeat(64); },
+    p => { p.sourceFingerprints.find(s => s.file.endsWith('/run-material-parity.mjs')).sha256 = '0'.repeat(64); },
+    p => { p.sourceFingerprints.push(structuredClone(p.sourceFingerprints.find(s => s.file.endsWith('/run-material-parity.mjs')))); },
+  ]) { const changed = structuredClone(fresh); mutate(changed);
+    assert.throws(() => conserveExpansionOwnerProof(changed, f.proofBytes)); }
   const changedSource = structuredClone(f);
   changedSource.proof.sourceFingerprints.find(s => s.file.endsWith('/run-material-parity.mjs')).sha256 = '0'.repeat(64);
   assert.throws(() => verify(changedSource));

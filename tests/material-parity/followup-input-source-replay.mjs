@@ -78,6 +78,25 @@ function readPinned(file, revision) {
   return { value: JSON.parse(bytes), bytes };
 }
 
+// Reuse the existing exact runner reversal for the historical expansion proof.
+// Return a projected copy only after every other source and observation matches.
+export function conserveExpansionOwnerProof(proof, proofBytes) {
+  const projected = structuredClone(proof), historical = JSON.parse(proofBytes);
+  const file = 'tests/material-parity/run-material-parity.mjs';
+  const current = projected.sourceFingerprints.filter(s => s.file === file);
+  const prior = historical.sourceFingerprints.filter(s => s.file === file);
+  assert.equal(current.length, 1); assert.equal(prior.length, 1);
+  const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  assert.equal(hash(source), current[0].sha256);
+  if (current[0].sha256 !== prior[0].sha256) {
+    assert.equal(hash(restoreGapCaptureDiagnostics(source)), prior[0].sha256);
+    current[0].sha256 = prior[0].sha256;
+  }
+  assert.equal(JSON.stringify(projected, null, 2) + '\n', proofBytes,
+    'expansion source proof changed beyond reviewed capture diagnostics');
+  return projected;
+}
+
 // The live builder is synchronous. Replay all original source proofs here;
 // do not claim that this also decodes or rejoins the historical 2GB payloads.
 // Those independent complete joins remain pinned to the verified binding.
@@ -94,22 +113,12 @@ export function replayFollowupInputSourcePlans() {
     const plan = readPinned(descriptor.file, descriptor.revision).value;
     const proofDescriptor = plan.proof ?? plan.sourceProof;
     const proofBytes = readFileSync(proofDescriptor.file, 'utf8').replaceAll('\r\n', '\n');
-    const proof = collect();
+    let proof = collect();
     // This retained capture predates the additive paint diagnostics. Authenticate
     // the complete current source and its exact reversal before replaying the
     // historical receipt; never relax comparison of observations or other sources.
     if (kind === 'expansionOwner') {
-      const historical = JSON.parse(proofBytes);
-      const file = 'tests/material-parity/run-material-parity.mjs';
-      const currentReceipt = proof.sourceFingerprints.find(s => s.file === file);
-      const priorReceipt = historical.sourceFingerprints.find(s => s.file === file);
-      assert.ok(currentReceipt && priorReceipt);
-      if (currentReceipt.sha256 !== priorReceipt.sha256) {
-        const source = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
-        assert.equal(hash(source), currentReceipt.sha256);
-        assert.equal(hash(restoreGapCaptureDiagnostics(source)), priorReceipt.sha256);
-        currentReceipt.sha256 = priorReceipt.sha256;
-      }
+      proof = conserveExpansionOwnerProof(proof, proofBytes);
     }
     descriptors[kind] = verifyFollowupSourceReceipt(kind, binding, plan, proof, proofBytes);
     plans[kind] = plan;

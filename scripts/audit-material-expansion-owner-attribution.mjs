@@ -7,6 +7,7 @@ import { pathToFileURL } from 'node:url';
 import { collectExpansionOwnerMapping } from './audit-material-expansion-owner-mapping.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
+import { conserveExpansionOwnerProof } from '../tests/material-parity/followup-input-source-replay.mjs';
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 const digest = x => hash(JSON.stringify(x));
@@ -84,7 +85,7 @@ export function planExpansionOwnerAttribution(proof, original, rows, normalize) 
 
 export async function collectExpansionOwnerAttribution() {
   const file = 'docs/material-expansion-owner-mapping.json', bytes = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
-  const proof = collectExpansionOwnerMapping(); assert.equal(bytes, JSON.stringify(proof, null, 2) + '\n');
+  const proof = conserveExpansionOwnerProof(collectExpansionOwnerMapping(), bytes);
   const source = readFileSync(proof.originalCapture.file); assert.equal(hash(source), proof.originalCapture.sha256);
   const normalize = bindHistoricalAuditNormalization(normalization, revision);
   const canonical = await readCaretConservationRows(file => execFileSync('git', ['show', `${revision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
