@@ -2,6 +2,18 @@
 
 ## Current audit checkpoint — September 30
 
+**Source-inventory assertion reconciled:** the historical 409-source producer
+and its original 356-source test assertion are now replayed from pinned Git
+revisions, with the prepared assertion accepting exactly the 53 reviewed
+additions. Its two focused tests pass, including missing, duplicate, reordered
+and forged-receipt mutations. The current producer registers 535 unique paths;
+the focused current test verifies the original 424 paths retain their relative
+order and identifies exactly 111 additional paths interleaved in the registry,
+then checks all current path/order and file-hash receipts. That focused test
+passes 1/1. The old "append-only" assumption was a test defect, not an input
+equivalence finding. The committed canonical package still predates this
+535-source inventory; a complete export/check and coverage gates are pending.
+
 **Slider-border historical integration reconciled:** the original two-case capture
 still yields all 32 reviewed native range border groups (64 observations): the
 original width, style and radius rows plus eight exact side-color rows. The
