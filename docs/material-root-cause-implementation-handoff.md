@@ -20,10 +20,22 @@ finding was rewritten. Focused policy/heading/rejection checks passed 3/3 in
 24,714.0073 ms; the existing capture-diagnostic reversal test passed 1/1 in
 1,086.6351 ms. The rejection test now verifies a passing original collector first
 and expects the earlier strict stacking-source rejection for its renamed mapping
-mutation. The complete case-index replay and saved conservation report are NOT
-yet current: `verifyCaseIndexAssertionMigration` still rejects changes beyond its
-reviewed assertion/import/inventory projection. Review that exact delta next;
-do not regenerate the report until membership replay succeeds.
+mutation. Assertion migration now authenticates the two exact added border-test
+imports and all eleven added, filtered-out callbacks while preserving the entire
+original suite. Its mutation checks reject changed import names/modules, eager
+side effects, forged source bytes and altered historical assertions (2/2 passed,
+7,643.9134 ms). The first membership replay passed 10/11 and isolated the remaining
+generated-mapping runner receipt; that check now reuses the same exact diagnostic
+reversal. Its 387-boundary replay passed separately (1/1, 3,098.6514 ms).
+
+`node scripts/audit-material-case-index-conservation.mjs` then completed all 11
+write-disabled membership tests with zero failures (69,163.3929 ms), checked that
+the nine saved evidence files remained unchanged, and refreshed only the existing
+conservation report. The complete conservation suite passed 4/4 (26,534.0369 ms).
+This closes case-index source/membership reconciliation, not canonical acceptance
+or rendering equivalence. Remaining priority: other recorded source/inventory and
+normalization reconciliation failures, missing Material interaction boundaries,
+then export/cold verification and final acceptance gates.
 
 **Remaining typography bindings:** host-token proposal, leaf-family tests and
 leaf weight/tracking tests now bind their own recorded historical revisions.

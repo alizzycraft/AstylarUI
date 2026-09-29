@@ -53,10 +53,16 @@ test('historical case-index binding retains saved receipts and never promotes so
   assert.equal(collected.report.projection.normalizationTransition.colorValuesEquivalent, false);
   assert.equal(collected.report.historicalReceiptsRewritten, false);
   assert.equal(collected.report.canonicalClassificationVerified, false);
-  assert.deepEqual(collected.report.dependencyProjections.map(p => p.addedSourceFindings), [[
+  assert.equal(collected.report.dependencyProjections.length, 3);
+  const policy = collected.report.dependencyProjections.find(p => p.file === 'tests/material-parity/input-equivalence-policy.mjs');
+  assert.deepEqual(policy.addedSourceFindings, [
     'core-rounded-radius-sampling-uses-unclamped-request', 'fixture-dialog-sampled-panel-and-action-geometry',
-  ]]);
-  assert.equal(collected.report.dependencyProjections[0].retainedSourceUnchanged, true);
+    'fixture-icon-svg-replaced-by-fixed-raster',
+  ]);
+  assert.deepEqual(policy.addedClassifications, ['documented-limitation']);
+  assert.ok(collected.report.dependencyProjections.every(p => p.retainedSourceUnchanged));
+  assert.deepEqual(collected.report.dependencyProjections.find(p => p.file === 'tests/material-parity/run-material-parity.mjs')
+    .addedInteractionDiagnostics, ['geometry', 'controlPaintGeometry']);
   for (const projected of collected.replayReports) {
     const disk = JSON.parse(readFileSync(projected.file)), copy = JSON.parse(projected.content);
     const receipt = disk.sourceFingerprints.find(row => row.file === caseIndexAuditModule);

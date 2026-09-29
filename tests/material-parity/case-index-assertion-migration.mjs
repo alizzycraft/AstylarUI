@@ -83,6 +83,26 @@ export function verifyCaseIndexAssertionMigration(previous, current) {
   const mappingImport = "  const { restoreMappingReadAdapterSource } = await import('./audit-evidence-session.mjs');\n";
   const mappingRead = ".update(source.file === 'tests/material-parity/generated-node-mapping-evidence.mjs'\n      ? restoreMappingReadAdapterSource(source, readFileSync(source.file))\n      : readFileSync(source.file, 'utf8').replace(/\\r\\n/g, '\\n'))";
   current = current.replaceAll('\r\n', '\n');
+  const captureImport = "  const { restoreGapCaptureDiagnostics } = await import('./gap-survey-source-replay.mjs');\n";
+  const captureRead = "      : source.file === 'tests/material-parity/run-material-parity.mjs'\n" +
+    "        ? restoreGapCaptureDiagnostics(readFileSync(source.file, 'utf8'))\n";
+  assert.equal(current.split(captureImport).length, 2, 'missing or changed capture projection import');
+  assert.equal(current.split(captureRead).length, 2, 'missing or changed capture projection call');
+  current = current.replace(captureImport, '').replace(captureRead, '');
+  // These named imports serve the added, filtered-out border tests. Admit only
+  // the reviewed declarations; whole-suite comparison below still protects all
+  // original statements and rejects uses introduced into historical callbacks.
+  const focusedImports = [
+    "import { collectBorderInitialInputs, inspectMappedBorderInitial, inspectMappedButtonBorderReset, applyMappedBorderInitial,\n" +
+    "  applyMappedButtonBorderReset, validateMappedButtonBorderReset, mappedButtonBorderResetAttribution,\n" +
+    "  inspectMappedCardBorderToken, applyCardBorderToken, validateCardBorderToken, cardBorderTokenAttribution,\n" +
+    "  validateMappedBorderInitial, mappedBorderInitialAttribution, borderColorProperties } from './border-initial-input-evidence.mjs';\n",
+    "import { bindPreciseAuditNormalization } from './audit-normalization-contracts.mjs';\n",
+  ];
+  for (const declaration of focusedImports) {
+    assert.equal(current.split(declaration).length, 2, 'missing or changed focused-test import');
+    current = current.replace(declaration, '');
+  }
   const mappingReadAdapterAuthenticated = current.includes(mappingImport);
   if (mappingReadAdapterAuthenticated) {
     assert.equal(current.split(mappingImport).length, 2);
@@ -134,5 +154,7 @@ export function verifyCaseIndexAssertionMigration(previous, current) {
   for (const edit of edits.sort((a, b) => b.start - a.start)) restored = restored.slice(0, edit.start) + edit.text + restored.slice(edit.end);
   assert.equal(canonical(parse(restored)), canonical(before), 'suite changed beyond nine receipt assertions, one import and the authenticated inventory extension');
   return { replacedReceiptAssertions: seen.size, allOtherStatementsConserved: true, addedIsolatedTests, mappingReadAdapterAuthenticated,
+    addedFocusedImports: ['./border-initial-input-evidence.mjs', './audit-normalization-contracts.mjs'],
+    captureDiagnosticsProjectionAuthenticated: true,
     originalSuiteAstSha256: createHash('sha256').update(canonical(before)).digest('hex') };
 }
