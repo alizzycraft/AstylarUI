@@ -269,6 +269,46 @@ Chrome shadow-serialization checks at DPR 1 and 2 (1344–1345) passed, preservi
 the distinction between browser alpha `0.133` and candidate request `0.14`.
 These checks establish serialization, not candidate shadow-raster equivalence.
 
+**Focused input boundaries captured — September 29:**
+`scripts/audit-material-input-boundaries.mjs` reuses the supplemental capture
+infrastructure against the unchanged build from `enforced-full-2b6cddc`.
+All 1,887 browser files matched before serving; actual document/script/style/font
+responses also matched the checkpoint during capture. The server was stopped.
+`artifacts/material-parity/input-boundaries-keypress-559f95c/latest-report.json`
+has SHA-256 `39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7`.
+It contains 110 paired boundaries / 220 local rasters and full input trees:
+form-field, email input, autocomplete, datepicker and timepicker; light desktop,
+DPR 1/2; initial, real Tab, pointer focus, four timed focused-empty samples,
+typing, forward/backward selection and blur. Runtime errors: zero. The existing
+supplemental validator authenticates every tree and runtime asset; the new
+focused evidence test additionally checks every raster, action population,
+empty/focused state and equal typed value. Both tests pass (1,249.1749 ms).
+
+New observed differences, not fixes: Tab selects the initial `Atlas` text on
+the reference, while the candidate retains collapsed position zero at both DPRs.
+After selecting characters 0–3, End plus three Shift+Left presses selects the
+last three reference characters but candidate characters 0–3 for form-field,
+autocomplete and datepicker (both DPRs). The form-field local rasters visibly
+confirm opposite selected substrings. First core divergence is
+`TextInputManager.moveCursor` (`text-input.manager.ts:745`): an existing selection
+makes End collapse to the selection maximum instead of the text end. The served
+`chunk-3JXWRYJY.js` contains that exact branch and matches checkpoint SHA-256
+`f366533bd9f80b7f85379db5031c0dea8c9c1840c14fb6ec35f57f1b65ad9eab`.
+The root is keyboard selection arithmetic, not CSS/world projection. Do not fix
+it during the audit. Tab-selection ownership still needs isolation; timepicker
+reference selection differs further and must be investigated in its popup state.
+Native email endpoints remain null: use its retained pixels, not invented native
+selection indices. A candidate form-field empty caret is visibly present in the
+first DPR1 sample; this does not establish every family's caret paint or timing.
+
+The first `insertText` attempt was stopped because it omitted keydown events and
+could not establish typing parity. Its incomplete 4,608,429-byte directory
+`input-boundaries-559f95c` is retained as diagnostic failure, not accepted evidence.
+The completed capture occupies 46,489,602 bytes (441 files), all used by this
+proof. No fixture, renderer or authored input changed. Supplemental findings
+are not yet in the canonical classifications/source inventory; dark/responsive
+coverage and detailed caret/selection raster review remain open.
+
 **Remaining interaction-coverage review:** the configured matrix is not proof
 that every requested interaction boundary is captured. In
 `tests/material-parity/run-material-parity.mjs:525`, the `focus` action calls
