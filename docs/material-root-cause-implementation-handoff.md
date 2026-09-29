@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 29
 
+**Slider integration and historical authoring replay verified:** the unchanged
+`slider-input-box-integration.spec.mjs` rerun passed 2/2 in 914,183.1216 ms
+(`slider-input-box-integration-7708b8e.log`). Both production builders conserve
+all scalar and unrelated complete rows; all eight validator mutations remain
+effective. This closes the synthetic height applicability failures 1373–1374.
+The historical authoring proposal now binds normalization at its already-pinned
+`06e50db` canonical revision, rather than binding its historical digest against
+current code. Live normalization, original evidence and proposal bytes are
+unchanged. `node --test tests/material-parity/authoring-input-attribution.spec.mjs`
+passed 5/5 in 87,170.7746 ms, including independent source replay, complete
+historical payload authentication, nine groups / 136 observations, 8,330
+unrelated rows and all rejection controls. The corresponding button-paint and
+font-style test reconciliation is under verification, not yet accepted.
+
 **Full harness completed; first bounded reconciliation:** the unfiltered
 `full-audit-harness-834258e.log` ended with 1,571 tests, 1,449 passed, 122 failed,
 zero cancelled/skipped/todo, in 31,184,564.6298 ms. No harness child remains live.

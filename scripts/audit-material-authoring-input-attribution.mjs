@@ -8,7 +8,7 @@ import ts from 'typescript';
 import { collectContainerFontInputs } from './audit-material-container-font-inputs.mjs';
 import { collectRangeFontReset } from './audit-material-range-font-reset.mjs';
 import { collectSliderDisabledInputs } from './audit-material-slider-disabled-inputs.mjs';
-import { bindOwnerCaretNormalization } from '../tests/material-parity/owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from '../tests/material-parity/audit-normalization-contracts.mjs';
 import { readCaretConservationRows } from '../tests/material-parity/owner-caret-canonical-conservation.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -140,7 +140,8 @@ export async function collectAuthoringInputAttributionPlan() {
   for (const proof of Object.values(proofs)) assert.deepEqual(proof.originalCapture, originalCapture);
   const bytes = readFileSync(originalCapture.file); assert.equal(hash(bytes), originalCapture.sha256);
   const source = readFileSync(normalization.module, 'utf8');
-  const normalize = bindOwnerCaretNormalization(source, normalization), equivalent = bindAuthoringInputEquivalence(source);
+  // This proposal replays the frozen canonical payload, not live classifications.
+  const normalize = bindHistoricalAuditNormalization(normalization, canonicalRevision), equivalent = bindAuthoringInputEquivalence(source);
   const { manifest, rows } = await readCaretConservationRows(file =>
     execFileSync('git', ['show', `${canonicalRevision}:${file}`], { maxBuffer: 64 * 1024 * 1024 }));
   return { schemaVersion: 1, kind: 'source-bound-authoring-input-proposed-attribution',

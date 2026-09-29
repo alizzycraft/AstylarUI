@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { planAuthoringInputAttribution, bindAuthoringInputEquivalence } from '../../scripts/audit-material-authoring-input-attribution.mjs';
-import { bindOwnerCaretNormalization } from './owner-caret-source-binding.mjs';
+import { bindHistoricalAuditNormalization } from './audit-normalization-contracts.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 let cached;
@@ -13,7 +13,7 @@ function inputs() {
   const saved = JSON.parse(readFileSync('docs/material-authoring-input-attribution-plan.json'));
   const proofs = Object.fromEntries(Object.entries(saved.proofs).map(([kind, descriptor]) => [kind, JSON.parse(readFileSync(descriptor.file))]));
   const original = JSON.parse(readFileSync(saved.originalCapture.file));
-  const normalize = bindOwnerCaretNormalization(readFileSync(saved.productionNormalization.module, 'utf8'), saved.productionNormalization);
+  const normalize = bindHistoricalAuditNormalization(saved.productionNormalization, saved.canonicalRevision);
   const equivalent = bindAuthoringInputEquivalence(readFileSync(saved.productionEquivalence.module, 'utf8'), saved.productionEquivalence);
   // Minimal canonical projections are for join mutation tests only. The CLI
   // test below independently authenticates the complete historical payload.
