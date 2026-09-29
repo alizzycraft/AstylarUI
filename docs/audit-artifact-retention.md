@@ -3,7 +3,7 @@
 ## Current versus historical evidence
 
 The latest completed full Material output run is
-`artifacts/material-parity/enforced-full-e26c6cb`. Keep it independent of archived
+`artifacts/material-parity/enforced-full-2b6cddc`. Keep it independent of archived
 evidence. Passing output parity does not establish input equivalence.
 
 Older captures referenced by findings are historical evidence, not alternative

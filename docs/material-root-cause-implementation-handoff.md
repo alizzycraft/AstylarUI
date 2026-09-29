@@ -33,12 +33,22 @@ Canonical package committed and pushed as `2b6cddc` on
 `codex/material-audit-alignment-integration`. GitHub accepted the push with its
 recommended-size warning for the 59.91 MiB compressed report (not a push failure).
 
+**Fresh Material output gate passed:** unfiltered `npm run material-parity:check`
+completed with exit 0 against the rebuilt packed dependency, preserving the
+original input-audit baseline separately. Saved report:
+`artifacts/material-parity/enforced-full-2b6cddc/latest-report.json`, SHA-256
+`a6f832635e896809661dcbb35eb2447e9e6ce3fb8c718ee7d7d969e3f051892c`.
+All 436 static and 1,875 interaction cases pass. Static minimum/median SSIM:
+0.965296 / 0.996382; maximum edge error 0.984px. Interaction minimum/median SSIM:
+0.954514 / 0.997458. Text alignment passes 428/428 static and 2,116/2,116
+interaction targets (maximum center-offset error 0.722px); focused rasters pass
+120/120 and 880/880, uniform backgrounds 24/24, shadow profiles 12/12.
+This is output-gate acceptance, not equal-input rendering or repaired defects.
+
 Remaining acceptance requirements, in execution order:
-- Fresh unfiltered `npm run material-parity:check` is running against a rebuilt
-  packed dependency in `artifacts/material-parity/enforced-full-2b6cddc`.
-  Inventory checks passed 2/2; build completed and case capture started.
-  This is not yet a passing browser result; retain original evidence separately.
-- Execute `node scripts/run-material-audit-harness.mjs`: current discovery finds
+- `node scripts/run-material-audit-harness.mjs` is running with complete output
+  retained in `artifacts/material-parity/full-audit-harness-834258e.log`.
+  Current discovery finds
   301 files (293 Material, four general, four TTS), including all 46 legacy
   `parity:harness:check` files. The legacy command alone cannot prove this gate.
   Inventory/runner tests pass 4/4 in 664.3749 ms, including nested discovery,
