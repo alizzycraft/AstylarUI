@@ -1,6 +1,30 @@
 # Material audit: evidence-led implementation priorities
 
-## Current audit checkpoint — September 29
+## Current audit checkpoint — September 30
+
+**Slider-border historical integration reconciled:** the original two-case capture
+still yields all 32 reviewed native range border groups (64 observations): the
+original width, style and radius rows plus eight exact side-color rows. The
+current non-border set has 213 rows because those eight colors moved into the
+reviewed group while precise color normalization exposed one fractional
+slider-root background difference. The test independently replays the complete
+`165ec492` pre-border builder and requires its unchanged 220-row SHA-256
+`4e1f09fc…`. Against that authenticated predecessor, every raw scalar, case,
+state and authored example is identical. Twenty-five later owner-style rows,
+one shadow row, six grid rows, six gap rows, two range-caret rows and one
+owner-caret row are checked at their specific boundaries; the remaining 48
+differences are pinned to 21 exact reviewed-attribution categories and change
+metadata only. The retained first-failure and row-projection diagnostics led to
+this source-based comparison; no historical digest, original capture, renderer
+or fixture was changed. The targeted production integration passed **1/1** in
+800,043.779 ms (`artifacts/material-parity/slider-border-canonical-reconciliation-v6.log`).
+This closes recorded full-harness failure 1356 for its selected population; the
+four later mutation tests passed in the historical full harness but were not
+rerun in this batch. Source-inventory/export reconciliation, missing interaction
+boundaries, full canonical validation and final browser/release gates remain
+pending. Current discovery is 302 audit files (294 Material and eight other),
+one more than the last complete harness run; old inventory counts are not
+current proof.
 
 **September 30 — tooltip historical integration row attribution:** the retained failure from
 test 1495 was narrowed without changing its original digest. The reduced
