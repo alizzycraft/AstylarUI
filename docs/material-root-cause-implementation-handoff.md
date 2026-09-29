@@ -65,6 +65,16 @@ These are audit-harness diagnoses, not repaired renderer defects or completed
 acceptance. Preserve the full run log named below and finish the run before
 editing its tested dependencies.
 
+Test 1277 (`reviewed-input-canonical-integration.spec.mjs`) stopped during
+expansion-owner source replay after 224,170.7933 ms. A separate read-only replay
+of `collectExpansionOwnerMapping` reproduced every saved field except
+`sourceFingerprints[2].sha256` for `tests/material-parity/run-material-parity.mjs`:
+stored `c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10`,
+current `4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d`.
+This is the existing runner-receipt transition, not a newly divergent expansion
+finding or normalizer failure. Reconcile that reviewed source transition without
+blindly refreshing the receipt; later full-population assertions remain unrun.
+
 **Remaining interaction-coverage review:** the configured matrix is not proof
 that every requested interaction boundary is captured. In
 `tests/material-parity/run-material-parity.mjs:525`, the `focus` action calls
