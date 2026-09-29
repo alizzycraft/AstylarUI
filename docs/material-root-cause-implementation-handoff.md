@@ -2,6 +2,20 @@
 
 ## Current audit checkpoint — September 29
 
+**Tooltip integration conservation:** test 1495 failed after 369,555.4078 ms
+at the unrelated complete-row digest against `65487ae`: current
+`cba874acbb2b76ed194451814ee65694296777a4214b33ec7b57b579572e04fd`,
+historical `a78828e86f00f5e49c92bb7954fa79abc1de91c628f819779e2b8f3ebd4b3d0c`.
+Its two wrapping groups / 36 observations, exact values, unchanged raw capture,
+complete scalar projection and source-validated later-gap checks passed first.
+Unlike the root-color failures, this establishes a complete-row metadata
+conservation discrepancy without scalar divergence in the selected tooltip
+population. The exact changed rows remain to be isolated; do not assume a
+particular later attribution or refresh the digest. Test 1496 passed all five
+production-validator mutation controls in 1,841,419.3532 ms; source-binding
+tests 1497–1502 passed. Tests 1396–1494 introduced no additional failures.
+The same full harness has advanced to tracking-input population tests.
+
 **Synthetic slider integration boundary:** tests 1373 and 1374 failed after
 221,412.4451 and 218,138.4239 ms during production audit construction, before
 their slider assertions or mutation checks. The stack reaches
