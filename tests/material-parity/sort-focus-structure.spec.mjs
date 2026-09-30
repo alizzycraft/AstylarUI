@@ -1028,6 +1028,56 @@ test('tree navigation and native button activation distinguish widget authoring 
   });
 });
 
+test('side-mode sidenav Escape applicability is checked without inventing focusable content', async () => {
+  const referenceSource = readFileSync('examples/material-showcase/src/app/reference.component.ts', 'utf8');
+  const candidateSource = readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8');
+  const materialSource = readFileSync('node_modules/@angular/material/fesm2022/sidenav.mjs', 'utf8');
+  assert.match(referenceSource, /id="sidenav-nav" mode="side" opened>Navigation<\/mat-sidenav>/);
+  assert.match(candidateSource, /type: 'aside', id: 'sidenav-nav', class: 'sidenav', textContent: 'Navigation'/);
+  assert.match(materialSource, /event\.keyCode === ESCAPE && !this\.disableClose/);
+  assert.match(materialSource, /\(mode !== \\"side\\"\) \? \\"-1\\" : null/);
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      await page.goto(`${baseUrl}/${mode}/sidenav?benchmark=1&profile=light`);
+      await page.locator('.frame').waitFor();
+      if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+      const point = await page.evaluate(mode => {
+        if (mode === 'reference') {
+          const box = document.querySelector('#sidenav-nav').getBoundingClientRect();
+          return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+        }
+        const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['sidenav-nav'], false).elements['sidenav-nav'].borderBox;
+        const canvas = document.querySelector('canvas').getBoundingClientRect();
+        return { x: canvas.x + box.left + box.width / 2, y: canvas.y + box.top + box.height / 2 };
+      }, mode);
+      await page.mouse.click(point.x, point.y);
+      await page.keyboard.press('Escape');
+      observations[mode] = await page.evaluate(mode => {
+        const nav = mode === 'reference' ? document.querySelector('#sidenav-nav') : document.querySelector('[data-astylar-id="sidenav-nav"]');
+        const beforeFocus = document.activeElement === nav;
+        nav.focus();
+        return { beforeFocus, afterFocus: document.activeElement === nav, tabindex: nav.getAttribute('tabindex'),
+          opened: mode === 'reference' ? nav.classList.contains('mat-drawer-opened') : null,
+          events: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.events().filter(event => ['click', 'keydown'].includes(event.type)).map(event => [event.type, event.targetId]) : [] };
+      }, mode);
+      assert.deepEqual(errors, []);
+      await page.close();
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    for (const mode of ['reference', 'astylar']) {
+      assert.equal(observations[mode].beforeFocus, false);
+      assert.equal(observations[mode].afterFocus, false);
+      assert.equal(observations[mode].tabindex, null);
+    }
+    assert.equal(observations.reference.opened, true);
+    assert.deepEqual(observations.astylar.events, [['click', 'sidenav-nav']]);
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));

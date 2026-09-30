@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 30
 
+**Sidenav Escape applicability:** a source check and paired Chrome
+154.0.8037.58/light/1440×900/DPR 1 probe resolve the previously pending
+focus-origin question. The HTML authors an initially opened `mode="side"`
+drawer containing only Navigation text; the candidate authors a static aside.
+Neither panel has tabindex or focusable descendants. A real click inside the
+panel followed by Escape leaves Material open; calling `focus()` on either
+unchanged node cannot focus it. Candidate records the panel click, not a panel
+keydown. Material's inherited drawer-local Escape handler is real, but the
+side-mode host deliberately omits tabindex and this example supplies no route
+for a real focused key event into it. Thus dismissal is inapplicable to this
+authored example, not an established renderer failure or a general claim that
+sidenav cannot dismiss. Do not add tabindex merely to make an audit action
+applicable. The existing focused test
+`node --test --test-name-pattern="side-mode sidenav Escape" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 in 3,974 ms without page errors. Input/style/semantic mapping and
+other-profile checks remain. No renderer, fixture, canonical data or original
+capture changed and no scratch capture was retained.
+
 **Tree navigation and native-button positive controls:** the unresolved question
 was whether leaf-tree navigation fails before key delivery or after it in widget
 authoring. On the authenticated unchanged frozen showcase, Chrome
