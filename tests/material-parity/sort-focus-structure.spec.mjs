@@ -1137,7 +1137,27 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
           await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
           cycles.push({ opened, closed: await snapshot() });
         }
-        observations[family][mode] = { initial, cycles, errors };
+        let disposal = null;
+        if (mode === 'astylar') disposal = await page.evaluate(async () => {
+          const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
+          const scene = surface.scene, engine = scene.getEngine();
+          const text = surface.host.inspection.textRenderingService;
+          const beforeCache = text.getCacheStats();
+          const retained = text.getRetainedTextures();
+          const before = { cache: { size: beforeCache.size, maxSize: beforeCache.maxSize,
+            references: beforeCache.entries.map(entry => entry.referenceCount).sort((a, b) => a - b) },
+            sceneTextures: scene.textures.length, ownedTextTextures: scene.textures.filter(texture => retained.has(texture)).length };
+          surface.dispose();
+          await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          return { before, after: { surfaceDisposed: surface.disposed, sceneDisposed: scene.isDisposed,
+            engineDisposed: engine.isDisposed, meshes: scene.meshes.length, materials: scene.materials.length,
+            textures: scene.textures.length, loadedTextures: engine.getLoadedTexturesCache().length,
+            cacheSize: text.getCacheStats().size, plugins: surface.diagnostics.pluginResources,
+            observers: Object.fromEntries(['onPointerObservable', 'onPrePointerObservable', 'onKeyboardObservable',
+              'onPreKeyboardObservable', 'onBeforeRenderObservable', 'onAfterRenderObservable', 'onDisposeObservable']
+              .map(name => [name, scene[name].observers.length])) } };
+        });
+        observations[family][mode] = { initial, cycles, disposal, errors };
         await page.close();
       }
     }
@@ -1147,9 +1167,19 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
     const candidateControls = { menu: ['menu-rename', 'menu-delete'], 'bottom-sheet': ['bottom-sheet-dismiss', 'bottom-sheet-copy'], dialog: ['dialog-cancel', 'dialog-save'] };
     for (const family of ['menu', 'bottom-sheet', 'dialog']) {
       t.diagnostic(JSON.stringify({ family, initialResources: observations[family].astylar.initial.resources,
+        disposal: observations[family].astylar.disposal,
         resources: observations[family].astylar.cycles.map(cycle => ({
         opened: cycle.opened.resources, closed: cycle.closed.resources })) }));
       const plateau = observations[family].astylar.cycles[0].closed.resources;
+      const disposal = observations[family].astylar.disposal;
+      const textureCount = family === 'dialog' ? 7 : 5;
+      assert.deepEqual(disposal.before, { cache: { size: textureCount, maxSize: 100,
+        references: [...Array(textureCount - 3).fill(0), 1, 1, 1] }, sceneTextures: textureCount, ownedTextTextures: textureCount });
+      assert.deepEqual(disposal.after, { surfaceDisposed: true, sceneDisposed: true, engineDisposed: true,
+        meshes: 0, materials: 0, textures: 0, loadedTextures: 0, cacheSize: 0,
+        plugins: { owners: 0, resources: 0, cleanups: 0, pending: 0 },
+        observers: { onPointerObservable: 0, onPrePointerObservable: 0, onKeyboardObservable: 0,
+          onPreKeyboardObservable: 0, onBeforeRenderObservable: 0, onAfterRenderObservable: 0, onDisposeObservable: 0 } });
       assert.deepEqual(plateau.scene, { meshes: 12, materials: family === 'dialog' ? 13 : 14, textures: family === 'dialog' ? 7 : 5 });
       assert.deepEqual(plateau.plugins, { owners: 2, resources: 0, cleanups: 1, pending: 0 });
       assert.equal(plateau.loadedTextures, plateau.scene.textures);

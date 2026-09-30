@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 30
 
+**Retained texture ownership and final disposal:** the same frozen dark/mobile
+overlay-cycle test now reads the existing internal inspection's text-cache
+statistics/retained texture identities before calling public `surface.dispose()`.
+All five menu/sheet textures and all seven dialog textures belong to that
+surface text cache (configured max size 100). Reference-count distributions are
+0,0,1,1,1 and 0,0,0,0,1,1,1 respectively: the first-open increases are idle
+cached popup text, not unowned texture objects. This matches
+`TextRenderingService.beginRenderCycle`/`getRetainedTextures`/`releaseTexture`,
+which preserve zero-reference idle entries for reuse. After public disposal,
+surface/scene/engine report disposed; scene meshes/materials/textures, engine
+loaded textures, text-cache size, plugin owners/resources/cleanups/pending and
+all seven sampled observer lists are zero. This classifies the bounded texture
+retention in these runs as owned cache behavior and proves final runtime-count
+cleanup, not GPU-driver byte accounting, independent two-surface disposal,
+late asynchronous completion or all-profile lifetime correctness. The retained
+material counts are not independently attributed to cache ownership, although
+they plateau and disappear on disposal. No source/fixture changes; public
+disposal is a test-only lifecycle action on the transient browser instance.
+The existing focused overlay-cycle check passes 1/1 in 20,985ms with disposal
+diagnostics and 22,430ms with exact ownership/zero-count assertions. Command:
+`node --test --test-name-pattern="dark mobile overlay cycles" tests/material-parity/sort-focus-structure.spec.mjs`.
+
 **Overlay resource-count plateau:** the existing dark/mobile open/Escape-cycle
 test now reuses public surface diagnostics for scene/plugin counts and reads
 Babylon's loaded-texture cache plus seven scene observer lists. It samples the
