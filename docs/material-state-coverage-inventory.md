@@ -2,6 +2,15 @@
 
 ## Evidence boundary
 
+October1 independent current-ancestry cold `--check` from `f6a6d0d` passes
+in2,508,067.0026ms (41.80minutes), with1,205 files/89,154,859 bytes reverified
+and0 invalidations. The canonical comparison succeeds without publication;
+sources remained unchanged during the run. Retain
+`artifacts/material-parity/cold-canonical-check-f6a6d0d.log`. This closes the
+pending source/export reconciliation milestone. Complete family/state mapping,
+local paint and current harness/browser gates remain open; input equivalent
+is still false. Earlier pending-check notes below are historical at this boundary.
+
 October1 cold export now validates and publishes generation `c3e0d7d1…` with537
 source paths and zero unresolved scalar attributions. All79 package sections remain;
 185 changed receipt/reference leaves in eight sections and the exact two-path

@@ -2,6 +2,21 @@
 
 ## Current audit checkpoint — October 1
 
+**Independent cold canonical check passed:** from pushed `f6a6d0d`,
+`node scripts/export-material-input-audit-current-ancestry.mjs --check` with
+`ASTYLAR_AUDIT_COLD=1` and `ASTYLAR_AUDIT_PROGRESS=1` exits0 in
+2,508,067.0026ms (41.80minutes). Retain
+`artifacts/material-parity/cold-canonical-check-f6a6d0d.log`. Evidence-session
+completion verifies1,205 files/89,154,859 bytes,2 collectors,10 memory hits,
+0 disk hits and0 invalidations. Canonical comparison succeeds without publication;
+all check inputs stayed unchanged throughout the run. Counts remain436/436 static,
+1,875/1,875 interaction,8,483 scalar groups/389,202 occurrences and135 source
+findings. Input equivalent remains false. This closes the pending independent
+source/export reconciliation milestone, not family/state coverage or current
+browser acceptance. Next: the existing coverage inventory's native-scrollbar
+capture applicability and remaining overlay input/paint mapping, without repeating
+the settled wheel/drag or keyboard authoring diagnoses.
+
 **Cold export published successfully; exact package conservation checked:**
 `node scripts/export-material-input-audit-current-ancestry.mjs` with cold/progress
 settings exits0 in2,596,298.8454ms (43.27minutes). Retain
