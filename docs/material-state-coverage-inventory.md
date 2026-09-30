@@ -4,8 +4,10 @@
 
 Supplemental ordinary dark/mobile timepicker: real input click opens both;
 wheel 144 changes scrollTop and first-option position by 144 CSS px on both.
-Candidate thumb pixels are present and move. Reference/candidate content extents
-differ by 8px; end reachability, thumb shape/travel/drag and other profiles remain.
+Candidate thumb pixels are present and move. The 8px extent difference matches
+unequal bottom-padding requests (native 8px; candidate shorthand 0/top-only 8px).
+Both reach all 48 options, with final bottom gaps 8px/0. Thumb shape/travel/drag
+and other profiles remain; this is not equal-input core-padding proof.
 
 Supplemental comparison-host scope: Chrome 154 at 1440×900 DPR 1 verifies
 settled bottom-sheet/dialog open on candidate, reference or both (six cases).

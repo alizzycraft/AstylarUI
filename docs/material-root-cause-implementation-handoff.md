@@ -2,6 +2,25 @@
 
 ## Current audit checkpoint — September 30
 
+**Timepicker 8px extent cause and end reachability:** extending the same ordinary
+dark/mobile wheel proof with computed/resolved padding and a real wheel-to-end
+action resolves the prior extent question upstream of rendering. Material panel
+computed padding is 8px top/bottom (`timepicker.mjs` .mat-timepicker-panel rule:
+padding 8px 0). Candidate popup resolved paddingTop is 8px, padding shorthand 0,
+and paddingBottom absent; `astylar.component.ts` .picker-popup/.timepicker-shell
+rules author top-only padding, not an equivalent bottom request. Both have
+48 options of 48px; scroll heights are exactly 48×48+16 = 2,320 and 48×48+8 =
+2,312. A real 10,000px wheel clamps to native 2,064 / candidate 2,056; the final
+option is fully reachable on both, with bottom gaps of 8px/0 respectively.
+Classify this first divergence as unequal application padding, not a confirmed
+core extent defect or measurement-stage error. This is input-audit evidence,
+not authorization to modify the fixture. Equal-input general trailing-padding
+support is not established by these unequal inputs. Live thumb movement remains
+proven in the earlier boundary; shape, drag and other profiles remain open.
+`node --test --test-name-pattern="dark mobile timepicker wheel" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 in 7,362ms diagnostic and 6,802ms with explicit end/padding assertions.
+No rendering source, canonical finding or retained capture was changed.
+
 **Timepicker wheel versus scrollbar paint, ordinary dark/mobile:** real input
 click opens both pickers at 390×844 DPR 2, without benchmark mode or state
 injection. Wheel delta 144 produces scrollTop 0→144 and first-option y movement

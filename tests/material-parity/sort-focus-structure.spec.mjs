@@ -1672,18 +1672,24 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           if (mode === 'reference') {
             const panel = document.querySelector('.mat-timepicker-panel');
             const first = panel.querySelector('[role="option"]');
+            const options = [...panel.querySelectorAll('[role="option"]')];
+            const style = getComputedStyle(panel);
             return { box: panel.getBoundingClientRect().toJSON(), scrollTop: panel.scrollTop,
               scrollHeight: panel.scrollHeight, clientHeight: panel.clientHeight,
-              firstOption: first?.getBoundingClientRect().toJSON() };
+              padding: { top: style.paddingTop, bottom: style.paddingBottom }, optionCount: options.length,
+              firstOption: first?.getBoundingClientRect().toJSON(), lastOption: options.at(-1)?.getBoundingClientRect().toJSON() };
           }
-          const measured = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['timepicker-options', 'timepicker-option-0'], false);
+          const measured = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['timepicker-options', 'timepicker-option-0', 'timepicker-option-47']);
           const canvas = document.querySelector('canvas').getBoundingClientRect();
           const box = id => { const value = measured.elements[id].borderBox;
             return { x: canvas.x + value.left, y: canvas.y + value.top, width: value.width, height: value.height }; };
           const scroll = measured.diagnostics.surface.scrolling.containers['timepicker-options'];
           const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
           const thumb = surface.scene.getMeshByName('astylar-scrollbar-thumb-timepicker-options');
+          const style = measured.inputTree.nodes.find(node => node.authored?.id === 'timepicker-options').resolvedStyle;
           return { box: box('timepicker-options'), ...scroll, firstOption: box('timepicker-option-0'),
+            lastOption: box('timepicker-option-47'), optionCount: document.querySelectorAll('[data-astylar-id^="timepicker-option-"][role="option"]').length,
+            padding: { top: style.paddingTop ?? null, bottom: style.paddingBottom ?? null, shorthand: style.padding ?? null },
             scrollbar: thumb ? { visible: thumb.isVisible && thumb.isEnabled(), localY: thumb.position.y,
               diffuse: thumb.material?.diffuseColor?.toHexString() } : null };
         }, mode);
@@ -1713,7 +1719,14 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           }
           return { count, firstY, lastY };
         };
-        observations[mode] = { before, after, scrollbarStripChanged,
+        await page.mouse.wheel(0, 10000);
+        await page.waitForFunction(mode => {
+          const scroll = mode === 'reference' ? document.querySelector('.mat-timepicker-panel')
+            : window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([], false).diagnostics.surface.scrolling.containers['timepicker-options'];
+          return scroll.scrollTop === scroll.scrollHeight - scroll.clientHeight;
+        }, mode);
+        await settle(); const end = await sample();
+        observations[mode] = { before, after, end, scrollbarStripChanged,
           candidateThumbPixels: mode === 'astylar' ? { before: thumbPixels(beforePixels), after: thumbPixels(afterPixels) } : null, errors };
       } finally { await page.close(); }
     }
@@ -1725,6 +1738,16 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
       assert.deepEqual(observations[mode].errors, []);
     }
     assert.equal(observations.reference.before.scrollHeight - observations.astylar.before.scrollHeight, 8);
+    assert.deepEqual(observations.reference.before.padding, { top: '8px', bottom: '8px' });
+    assert.deepEqual(observations.astylar.before.padding, { top: '8px', bottom: null, shorthand: '0' });
+    for (const mode of ['reference', 'astylar']) {
+      const end = observations[mode].end;
+      assert.equal(end.optionCount, 48);
+      assert.equal(end.scrollTop, end.scrollHeight - end.clientHeight);
+      const trailingGap = end.box.y + end.box.height - end.lastOption.y - end.lastOption.height;
+      assert.ok(Math.abs(trailingGap - (mode === 'reference' ? 8 : 0)) < .01);
+      assert.ok(end.lastOption.y >= end.box.y);
+    }
     const thumb = observations.astylar.candidateThumbPixels;
     assert.ok(thumb.before.count > 100 && thumb.after.count > 100);
     assert.ok(thumb.after.firstY > thumb.before.firstY);
