@@ -2,6 +2,35 @@
 
 ## Current audit checkpoint — October 1
 
+**Equal-input public text reproduces the phase difference without Material:**
+`node --test --test-name-pattern="public equal-input text separates" tests/material-parity/input-boundary-evidence.spec.mjs`
+passes1/1 in6,349.7431ms; retain `artifacts/material-parity/public-text-fractional-phase-4f4d63e-final.log`.
+One shared div tree/style definition, pinned Roboto400,12px/16px line box/.4px
+letter spacing,left alignment,120×24px border-box and4px8px padding; four CSS
+origins80/80.25/80.5/80.75 × DPR1/2. Public-root installed package, no Material
+plugin, no internal mutation, zero page/core errors. Native text-range origins
+88/88.25/88.5/88.75 match candidate projected content-plane origins within.001
+device pixel. Local candidate textures are identical across all four origins.
+At DPR2 native opaque minima178/179/179/180 versus candidate178/178/179/179;
+native opaque counts335/346/335/346 versus constant candidate249. Thus the
+half-device-pixel difference survives equal authored inputs, and not as incorrect
+plane coordinates. DPR1 native opaque counts7/9/9/11 versus candidate0; zero is
+preserved, with partially covered ink observed separately inside the content area.
+This is a demonstrated core text-paint difference. Local raster independence from
+final phase and nearest texture sampling are observed; complete native/canvas
+rasterization attribution and calibrated sharpness/full-pixel acceptance remain
+open. Do not patch tooltip offsets or change its authored inputs to hide this.
+Chrome154.0.8037.58,Angular20.3.31,Babylon8.56.2,AstylarUI0.2.0;2,515 dependency
+reads rehashed. Installed createStyledCanvas/renderTextToCanvas match current
+source transpilation. Font SHA `425c0713a8176f92273d378599c7eac57de7fafabd4bd0ed457b70eb8f80d371`;
+canvas service SHA `990525b6364989cc334520e0433c5ae38c962a9800ab861d58eccf7700bea6d0`;
+bundle SHA `79e5bab1e1becf1711db9d06fff99d972685233084869c1db71d6857971bdbdd`.
+Next check: isolate local canvas raster from native DOM baseline/paint phase with
+equivalent text inputs, then sampling/backing-size effects. Retain initial failed
+opaque-only observation and diagnostic/recheck logs as superseded measurements;
+the first ink recheck included page background and is not accepted ink evidence.
+No renderer/reference change. Source receipts reconcile at the next coherent batch.
+
 **Tooltip horizontal phase narrowed to the texture/paint boundary, not crop origin:**
 the existing ordinary dark/mobile Chrome154 DPR2 proof passes1/1 in5,490.4643ms.
 Retain `artifacts/material-parity/tooltip-texture-phase-4da8cba-final.log` and

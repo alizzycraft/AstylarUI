@@ -2,6 +2,17 @@
 
 ## Evidence boundary
 
+October1 equal-input public text phase proof passes1/1 in6,349.7431ms, eight
+paired origin/DPR cases, pinned Roboto and no Material plugin. Projected origins
+match native content origins; unchanged local textures yield DPR2 opaque minima
+178/178/179/179 versus native178/179/179/180. DPR1 candidate opaque count0 is
+explicit, with partially covered ink separately measured inside content bounds.
+Demonstrated core text-paint difference; no tooltip offset workaround justified.
+Complete native/canvas rasterization attribution and calibrated sharpness remain
+open. See current handoff and `public-text-fractional-phase-4f4d63e-final.log`.
+No renderer or canonical fixture changed; source-receipt reconciliation remains
+a coherent-batch milestone, not a reason to rebuild after this focused proof.
+
 October1 tooltip phase proof passes1/1 in5,490.4643ms: identical crop origin,
 but candidate opaque glyphs are1 device pixel left. The retained local texture
 and correctly inset projected text plane explain the candidate final bounds;

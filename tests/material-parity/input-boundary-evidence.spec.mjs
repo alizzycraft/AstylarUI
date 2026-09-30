@@ -795,6 +795,140 @@ test('public equal-input overflow isolates scrollbar gutter before projection', 
   }finally{await browser?.close();await new Promise((resolve,reject)=>server.close(error=>error?reject(error):resolve()));}
 });
 
+test('public equal-input text separates fractional origins from texture raster phase', async t => {
+  const consumer = path.resolve('examples/material-showcase');
+  const font = readFileSync(path.join(consumer, 'node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff2'));
+  const canvasPath = path.join(consumer, 'node_modules/astylarui/dist/lib/app/services/text/text-canvas-renderer.service.js');
+  const installed = readFileSync(canvasPath, 'utf8');
+  const compiled = ts.transpileModule(readFileSync('src/app/services/text/text-canvas-renderer.service.ts', 'utf8'),
+    { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const paintMethods = source => source.slice(source.indexOf('    createStyledCanvas('), source.indexOf('    calculateLayoutMetrics(')).replace(/\s+/g, ' ').trim();
+  assert.ok(paintMethods(installed).length > 1000);
+  assert.equal(paintMethods(installed), paintMethods(compiled));
+  const built = await createRequire(path.join(consumer, 'package.json'))('esbuild').build({
+    stdin: { resolveDir: consumer, sourcefile: 'equal-input-text-phase.mjs', contents: `
+      import '@angular/compiler';
+      import {provideZonelessChangeDetection} from '@angular/core';
+      import {createApplication} from '@angular/platform-browser';
+      import {Astylar} from 'astylarui';
+      const mode=new URLSearchParams(location.search).get('mode');
+      const loaded=new FontFace('AuditRoboto','url(/font.woff2)',{weight:'400'});await loaded.load();document.fonts.add(loaded);
+      const origins=[80,80.25,80.5,80.75];
+      const site={root:{children:origins.map((left,i)=>({type:'div',id:'text-'+i,textContent:'Create a project'}))},
+        styles:origins.map((left,i)=>({selector:'#text-'+i,display:'block',position:'absolute',left:left+'px',top:(20+i*32)+'px',
+          width:'120px',height:'24px',boxSizing:'border-box',padding:'4px 8px',margin:'0',borderWidth:'0',
+          fontFamily:'AuditRoboto',fontSize:'12px',fontWeight:'400',fontStyle:'normal',lineHeight:'16px',letterSpacing:'.4px',
+          textAlign:'left',whiteSpace:'nowrap',color:'#f5eff4',background:'#323033'}))};
+      document.body.style.cssText='margin:0;padding:0';
+      const host=document.createElement(mode==='reference'?'div':'canvas');
+      host.style.cssText='position:relative;display:block;width:320px;height:180px;margin:0;padding:0';document.body.append(host);
+      let app,surface;
+      if(mode==='reference'){
+        const css=document.createElement('style');css.textContent=site.styles.map(({selector,...values})=>selector+'{'+
+          Object.entries(values).map(([key,value])=>key.replace(/[A-Z]/g,c=>'-'+c.toLowerCase())+':'+value).join(';')+'}').join('');document.head.append(css);
+        for(const element of site.root.children){const node=document.createElement('div');node.id=element.id;node.textContent=element.textContent;host.append(node);}
+      }else{app=await createApplication({providers:[provideZonelessChangeDetection()]});surface=app.injector.get(Astylar).mount(host,site,{diagnostics:{logLevel:'silent'}});}
+      const settle=async()=>{await surface?.whenSettled();await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));};
+      await settle();window.textPhaseAudit={settle,snapshot(){return {site,resolved:surface?.inspectResolvedStyles()??null,
+        errors:surface?.diagnostics.messages.filter(m=>m.severity==='error')??[],rows:origins.map((left,i)=>{
+          const id='text-'+i;
+          if(mode==='reference'){const node=document.getElementById(id),range=document.createRange();range.selectNodeContents(node);
+            return {id,left,box:node.getBoundingClientRect().toJSON(),textRange:range.getBoundingClientRect().toJSON(),
+              style:Object.fromEntries(['fontFamily','fontSize','fontWeight','lineHeight','letterSpacing','textAlign'].map(k=>[k,getComputedStyle(node)[k]]))};}
+          const scene=surface.scene,engine=scene.getEngine(),camera=scene.activeCamera;
+          const mesh=scene.meshes.find(m=>m.metadata?.isTextMesh&&m.metadata?.elementId===id),texture=mesh.material.diffuseTexture;
+          const viewport=camera.viewport.toGlobal(engine.getRenderWidth(),engine.getRenderHeight());
+          const points=mesh.getBoundingInfo().boundingBox.vectorsWorld.map(p=>p.constructor.Project(p,scene.getTransformMatrix().constructor.Identity(),scene.getTransformMatrix(),viewport));
+          const size=texture.getSize(),pixels=texture.getContext().getImageData(0,0,size.width,size.height).data;
+          let minX=Infinity,maxX=-Infinity,count=0,inkMinX=Infinity,inkMaxX=-Infinity,inkCount=0;
+          for(let y=0;y<size.height;y++)for(let x=0;x<size.width;x++){
+            const alpha=pixels[(y*size.width+x)*4+3];
+            if(alpha===255){count++;minX=Math.min(minX,x);maxX=Math.max(maxX,x);}
+            if(alpha>=128){inkCount++;inkMinX=Math.min(inkMinX,x);inkMaxX=Math.max(inkMaxX,x);}
+          }
+          return {id,left,texture:{size,logicalSize:texture.metadata.astylarLogicalTextSize,samplingMode:texture.samplingMode,
+            opaque:{minX:count?minX:null,maxX:count?maxX:null,count},ink:{minX:inkMinX,maxX:inkMaxX,count:inkCount}},
+            projected:{left:Math.min(...points.map(p=>p.x)),right:Math.max(...points.map(p=>p.x))}};
+        })};},dispose(){surface?.dispose();app?.destroy();return surface?.disposed??true;}};
+    ` }, bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true });
+  const inputs = Object.keys(built.metafile.inputs).filter(file => !file.endsWith('equal-input-text-phase.mjs'))
+    .map(file => ({ file, sha256: hash(readFileSync(file)) }));
+  const packages = Object.fromEntries(['@angular/core', '@babylonjs/core', 'astylarui'].map(name =>
+    [name, JSON.parse(readFileSync(path.join(consumer, 'node_modules', name, 'package.json'))).version]));
+  assert.ok(inputs.some(input => input.file.includes('node_modules/astylarui/')));
+  assert.ok(!inputs.some(input => /^src[\\/]/.test(input.file)));
+  const server = createServer((req, res) => {
+    const script = req.url.startsWith('/audit.js'), isFont = req.url.startsWith('/font.woff2');
+    res.setHeader('content-type', script ? 'text/javascript' : isFont ? 'font/woff2' : 'text/html');
+    res.end(script ? built.outputFiles[0].contents : isFont ? font : '<!doctype html><script type="module" src="/audit.js"></script>');
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let browser; const results = [];
+  try {
+    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    for (const dpr of [1, 2]) {
+      const pair = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 320, height: 180 }, deviceScaleFactor: dpr });
+        const errors = []; page.on('pageerror', error => errors.push(String(error)));
+        try {
+          await page.goto('http://127.0.0.1:' + server.address().port + '/?mode=' + mode);
+          await page.waitForFunction(() => !!window.textPhaseAudit); await page.evaluate(() => window.textPhaseAudit.settle());
+          pair[mode] = await page.evaluate(() => window.textPhaseAudit.snapshot());
+          const image = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
+          for (const [i, row] of pair[mode].rows.entries()) {
+            let minX = Infinity, maxX = -Infinity, count = 0, inkMinX = Infinity, inkMaxX = -Infinity, inkCount = 0;
+            for (let y = (20 + i * 32) * dpr; y < (44 + i * 32) * dpr; y++) for (let x = 70 * dpr; x < 210 * dpr; x++) {
+              const p = (y * image.width + x) * 4;
+              if (image.data[p] === 245 && image.data[p + 1] === 239 && image.data[p + 2] === 244) {
+                count++; minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+              }
+              if (x >= Math.ceil((row.left + 8) * dpr) && x < Math.floor((row.left + 112) * dpr) &&
+                  image.data[p] >= 148 && image.data[p + 1] >= 144 && image.data[p + 2] >= 148) {
+                inkCount++; inkMinX = Math.min(inkMinX, x); inkMaxX = Math.max(inkMaxX, x);
+              }
+            }
+            assert.ok(inkCount > 0, JSON.stringify({mode,dpr,row,errors,diagnostics:pair[mode].errors}));
+            row.fullFrameOpaque = { minX: count ? minX : null, maxX: count ? maxX : null, count };
+            row.fullFrameInk = { minX: inkMinX, maxX: inkMaxX, count: inkCount };
+          }
+          assert.deepEqual(errors, []); assert.deepEqual(pair[mode].errors, []);
+          assert.equal(await page.evaluate(() => window.textPhaseAudit.dispose()), true);
+        } finally { await page.close(); }
+      }
+      assert.deepEqual(pair.reference.site, pair.astylar.site);
+      results.push({ dpr, reference: pair.reference.rows, candidate: pair.astylar.rows });
+      assert.deepEqual(pair.reference.rows.map(row => row.box.x), [80, 80.25, 80.5, 80.75]);
+      assert.deepEqual(pair.reference.rows.map(row => row.textRange.x), [88, 88.25, 88.5, 88.75]);
+      for (const row of pair.astylar.rows) {
+        const effective = pair.astylar.resolved.elements.find(e => e.id === row.id).effective;
+        assert.equal(effective.fontFamily, 'AuditRoboto'); assert.equal(effective.fontSize, '12px');
+        assert.equal(effective.fontWeight, '400'); assert.equal(effective.lineHeight, '16px');
+        assert.equal(effective.letterSpacing, '.4px'); assert.equal(effective.textAlign, 'left');
+        assert.equal(effective.left, row.left + 'px');
+        assert.ok(Math.abs(row.projected.left - (row.left + 8) * dpr) < .001);
+        assert.equal(row.texture.samplingMode, 1);
+      }
+      // Record known unequal output rather than turning this diagnostic into an
+      // acceptance pass. Raw local raster is unchanged across fractional origins.
+      assert.equal(browser.version(), '154.0.8037.58');
+      assert.deepEqual(pair.astylar.rows.map(row => row.texture), Array(4).fill(pair.astylar.rows[0].texture));
+      assert.deepEqual(pair.astylar.rows.map(row => row.fullFrameOpaque.count), Array(4).fill(dpr === 1 ? 0 : 249));
+      assert.deepEqual(pair.reference.rows.map(row => row.fullFrameOpaque.count), dpr === 1 ? [7, 9, 9, 11] : [335, 346, 335, 346]);
+      if (dpr === 2) {
+        assert.deepEqual(pair.reference.rows.map(row => row.fullFrameOpaque.minX), [178, 179, 179, 180]);
+        assert.deepEqual(pair.astylar.rows.map(row => row.fullFrameOpaque.minX), [178, 178, 179, 179]);
+      }
+    }
+    for (const input of inputs) assert.equal(hash(readFileSync(input.file)), input.sha256);
+    t.diagnostic(JSON.stringify({ browser: browser.version(), packages, results, fontSha256: hash(font),
+      installedCanvasPaintSha256: hash(installed), bundleSha256: hash(built.outputFiles[0].contents),
+      dependencyCount: inputs.length, dependencyReceiptSha256: hash(JSON.stringify(inputs)), acceptance: false,
+      classification: 'equal-input core text paint difference with unchanged local texture across fractional origins',
+      limitation: 'bounds/count diagnostic; not full pixel equivalence, sharpness acceptance, or complete native rasterization attribution' }));
+  } finally { await browser?.close(); await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve())); }
+});
+
 function rasterDifference(firstBytes, secondBytes, exactForeground) {
   const first = PNG.sync.read(firstBytes), second = PNG.sync.read(secondBytes);
   assert.equal(first.width, second.width);
