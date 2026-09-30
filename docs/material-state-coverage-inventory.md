@@ -2,6 +2,18 @@
 
 ## Evidence boundary
 
+October1 public input lifecycle reduction confirms retained caret materials
+without a Material plugin. Blur/refocus retains one bound material; same-ID
+background updates retain the first orphan but plateau at two caret materials.
+Remove/recreate leaves1→2→3 unbound materials after removal, with no caret mesh
+or input semantic owner. Whole-surface disposal clears sampled resources.
+Diagnostic counterexample1/1 in5,605.1914ms, not cleanup acceptance; no runtime
+errors. Installed allocation/cleanup methods match current source; all2,515
+bundle dependencies rehashed. See handoff and `public-caret-lifetime-7442d09-final.log`.
+Exact reconciliation/teardown attribution is next; no general GPU/performance
+claim, visual proof, fixture edit, or renderer fix. Source/export reconciliation
+remains due at a coherent milestone; other lifecycle/profile coverage stays open.
+
 October1 dark/mobile autocomplete/timepicker three-cycle cleanup proof records
 matched2/48 options, complete semantic removal and retained empty-input focus.
 It also disproves material plateaus:19→20→21 and26→27→28, with1→2→3 retained

@@ -18,6 +18,139 @@ const bytes = readFileSync(file);
 assert.equal(hash(bytes), '39df94e0eb87480d3824927a41a9950d1d275f7c97ab97a571c449efdc6da7d7');
 const report = JSON.parse(bytes);
 
+test('public input lifecycle isolates caret material retention without Material plugins', async t => {
+  const consumer = path.resolve('examples/material-showcase');
+  const methods = [
+    ['text/text-selection.service','createTextCursor'],
+    ['dom/input/text-cursor.renderer','disposeCursor'],
+    ['dom/input/text-input.manager','disposeTextInput'],
+  ].map(([module,name])=>{
+    const sourceFile='src/app/services/'+module+'.ts';
+    const installedFile=path.join(consumer,'node_modules/astylarui/dist/lib/app/services',module+'.js');
+    const source=readFileSync(sourceFile,'utf8'), installed=readFileSync(installedFile,'utf8');
+    const compiled=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;
+    const extract=code=>{
+      const ast=ts.createSourceFile('method.js',code,ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+      assert.equal(ast.parseDiagnostics.length,0);
+      const matches=[];
+      const visit=node=>{if(ts.isMethodDeclaration(node)&&node.name.getText(ast)===name) matches.push(node.getText(ast).replace(/\s+/g,' ').trim());ts.forEachChild(node,visit);};
+      visit(ast);assert.equal(matches.length,1,name);return matches[0];
+    };
+    assert.equal(extract(installed),extract(compiled),name+' installed method differs from current source');
+    return {sourceFile,sourceSha256:hash(Buffer.from(source)),installedFile,installedSha256:hash(Buffer.from(installed)),method:name};
+  });
+  const requireConsumer = createRequire(path.join(consumer, 'package.json'));
+  const built = await requireConsumer('esbuild').build({absWorkingDir:process.cwd(),
+    stdin:{resolveDir:consumer,sourcefile:'public-caret-lifetime.mjs',contents:`
+      import '@angular/compiler';
+      import {provideZonelessChangeDetection} from '@angular/core';
+      import {createApplication} from '@angular/platform-browser';
+      import {Astylar} from 'astylarui';
+      document.body.style.cssText='margin:0;padding:0';
+      const canvas=document.createElement('canvas');
+      canvas.style.cssText='display:block;width:390px;height:140px';document.body.append(canvas);
+      const app=await createApplication({providers:[provideZonelessChangeDetection()]});
+      const documentFor=(present=true,revision=0)=>({root:{children:present?[{
+        type:'input',inputType:'text',id:'lifetime-input',value:'Atlas',ariaLabel:'lifetime input'}]:[]},
+        styles:[{selector:'#lifetime-input',position:'absolute',left:'20px',top:'40px',width:'228px',height:'24px',
+          boxSizing:'border-box',padding:'0',borderWidth:'0',fontFamily:'Arial',fontSize:'16px',lineHeight:'24px',
+          color:'#222222',background:revision%2?'#dddddd':'#eeeeee'}]});
+      const surface=app.injector.get(Astylar).mount(canvas,documentFor(),{diagnostics:{logLevel:'silent'}});
+      const scene=surface.scene;
+      const settle=async()=>{await document.fonts.ready;await surface.whenSettled();
+        await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));};
+      const snapshot=()=>{
+        const input=document.querySelector('[data-astylar-id="lifetime-input"]');
+        const cursors=scene.meshes.filter(m=>m.name.startsWith('cursor_'));
+        const materials=scene.materials.filter(m=>m.name.startsWith('cursorMaterial_'));
+        return {focused:input===document.activeElement,value:input?.value??null,
+          meshes:scene.meshes.length,materials:scene.materials.length,textures:scene.textures.length,
+          cursors:cursors.map(m=>({id:m.uniqueId,name:m.name,material:m.material?.uniqueId})),
+          cursorMaterials:materials.map(m=>({id:m.uniqueId,name:m.name,
+            bound:scene.meshes.some(mesh=>mesh.material===m)})),diagnostics:surface.diagnostics.messages};};
+      await settle();
+      window.lifetimeAudit={settle,snapshot,async update(present,revision){
+        await surface.update(documentFor(present,revision));await settle();return snapshot();},
+        dispose(){surface.dispose();app.destroy();return {disposed:surface.disposed,
+          sceneDisposed:scene.isDisposed,meshes:scene.meshes.length,materials:scene.materials.length,textures:scene.textures.length};}};
+    `},bundle:true,write:false,format:'esm',platform:'browser',target:'es2022',metafile:true});
+  const inputs=Object.keys(built.metafile.inputs).filter(file=>path.basename(file)!=='public-caret-lifetime.mjs')
+    .map(file=>({file,sha256:hash(readFileSync(file))}));
+  assert.ok(!inputs.some(({file})=>file.includes('material-showcase/src') || file.includes('astylarui/dist/lib/plugins/material')));
+  const server=createServer((request,response)=>{
+    const script=new URL(request.url,'http://localhost').pathname==='/audit.js';
+    response.setHeader('content-type',script?'text/javascript':'text/html');
+    response.end(script?built.outputFiles[0].contents:'<!doctype html><script type="module" src="/audit.js"></script>');
+  });
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  let browser;
+  const samples=[],errors=[];
+  try {
+    browser=await chromium.launch({channel:'chrome',headless:true});
+    const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2});
+    page.on('pageerror',error=>errors.push(String(error)));
+    await page.goto(`http://127.0.0.1:${server.address().port}/`);
+    await page.waitForFunction(()=>!!window.lifetimeAudit);
+    const sample=async label=>{await page.evaluate(()=>window.lifetimeAudit.settle());
+      const state=await page.evaluate(()=>window.lifetimeAudit.snapshot());samples.push({label,...state});
+      assert.deepEqual(state.diagnostics,[]);return state;};
+    await sample('mounted');
+    for(let cycle=0;cycle<3;cycle++) {
+      await page.locator('[data-astylar-id="lifetime-input"]').focus();await sample('focus-'+cycle);
+      await page.mouse.click(10,10);await sample('blur-'+cycle);
+    }
+    await page.locator('[data-astylar-id="lifetime-input"]').focus();
+    for(let revision=1;revision<=3;revision++) {
+      await page.evaluate(revision=>window.lifetimeAudit.update(true,revision),revision);await sample('update-'+revision);
+    }
+    for(let cycle=0;cycle<3;cycle++) {
+      await page.evaluate(()=>window.lifetimeAudit.update(false,0));await sample('removed-'+cycle);
+      await page.evaluate(()=>window.lifetimeAudit.update(true,0));
+      await page.locator('[data-astylar-id="lifetime-input"]').focus();await sample('recreated-'+cycle);
+    }
+    const disposed=await page.evaluate(()=>window.lifetimeAudit.dispose());
+    t.diagnostic(JSON.stringify({browser:browser.version(),viewport:{width:390,height:844,dpr:2},
+      bundleSha256:hash(built.outputFiles[0].contents),dependencyCount:inputs.length,
+      packages:Object.fromEntries(['@angular/core','@babylonjs/core','astylarui'].map(name=>
+        [name,JSON.parse(readFileSync(path.join(consumer,'node_modules',name,'package.json'))).version])),
+      dependencyReceipt:hash(Buffer.from(JSON.stringify(inputs))),methods,samples,disposed,errors,
+      resourcePlateauAccepted:false}));
+    assert.deepEqual(errors,[]);
+    const first=samples.find(sample=>sample.label==='focus-0');
+    assert.equal(first.focused,true);assert.equal(first.cursorMaterials.length,1);assert.equal(first.cursors.length,1);
+    for(const sample of samples.filter(sample=>/^(focus|blur)-/.test(sample.label))) {
+      assert.equal(sample.value,'Atlas');assert.equal(sample.focused,sample.label.startsWith('focus-'));
+      assert.deepEqual(sample.cursorMaterials,first.cursorMaterials,'blur/refocus negative control retains one bound material');
+      assert.deepEqual(sample.cursors,first.cursors);
+    }
+    for(const sample of samples.filter(sample=>sample.label.startsWith('update-'))) {
+      assert.equal(sample.focused,true);assert.equal(sample.value,'Atlas');
+      assert.equal(sample.cursorMaterials.length,2);assert.equal(sample.cursors.length,1);
+      assert.deepEqual(sample.cursorMaterials.filter(material=>!material.bound),[
+        {...first.cursorMaterials[0],bound:false}],'same-ID updates retain the first orphan, not three accumulating orphans');
+    }
+    for(let cycle=0;cycle<3;cycle++) {
+      const removed=samples.find(sample=>sample.label==='removed-'+cycle);
+      const recreated=samples.find(sample=>sample.label==='recreated-'+cycle);
+      assert.equal(removed.value,null);assert.equal(removed.focused,false);assert.deepEqual(removed.cursors,[]);
+      assert.equal(removed.cursorMaterials.length,cycle+1);assert.ok(removed.cursorMaterials.every(material=>!material.bound));
+      assert.equal(recreated.value,'Atlas');assert.equal(recreated.focused,true);assert.equal(recreated.cursors.length,1);
+      assert.equal(recreated.cursorMaterials.length,cycle+2);
+      assert.deepEqual(recreated.cursorMaterials.filter(material=>!material.bound),removed.cursorMaterials);
+      assert.equal(recreated.cursorMaterials.filter(material=>material.bound).length,1);
+    }
+    // Audit counterexample, not cleanup acceptance: preserve the failing invariant.
+    assert.throws(()=>assert.equal(samples.find(sample=>sample.label==='removed-2').cursorMaterials.length,0),
+      {code:'ERR_ASSERTION'});
+    assert.deepEqual(disposed,{disposed:true,sceneDisposed:true,meshes:0,materials:0,textures:0});
+    for(const input of inputs) assert.equal(hash(readFileSync(input.file)),input.sha256,input.file+' changed during proof');
+    for(const method of methods) {
+      assert.equal(hash(readFileSync(method.sourceFile)),method.sourceSha256);
+      assert.equal(hash(readFileSync(method.installedFile)),method.installedSha256);
+    }
+  } finally {await browser?.close();await new Promise(resolve=>server.close(resolve));}
+});
+
 test('served core isolates Home and End selection collapse from Material popup behavior', async () => {
   const source = readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js');
   assert.equal(hash(source), 'f366533bd9f80b7f85379db5031c0dea8c9c1840c14fb6ec35f57f1b65ad9eab');

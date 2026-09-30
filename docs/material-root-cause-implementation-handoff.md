@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — October 1
 
+**Public input lifecycle confirms caret-material retention without Material:**
+`node --test --test-name-pattern="public input lifecycle isolates" tests/material-parity/input-boundary-evidence.spec.mjs`
+passes the diagnostic counterexample1/1 in5,605.1914ms (test4,662.9397ms).
+Retain `artifacts/material-parity/public-caret-lifetime-7442d09-final.log` and
+the initial/verified observations. One public-root input, valueAtlas, no plugin,
+390×844 DPR2, Chrome154.0.8037.58, Angular20.3.31/Babylon8.56.2/AstylarUI0.2.0.
+Three blur/refocus cycles retain the same single bound caret mesh/material.
+Three same-ID background updates preserve value/focus, replace the live caret,
+and retain the original unbound material; two total caret materials plateau.
+Subsequent remove/recreate cycles leave1→2→3 unbound caret materials after removal,
+with no input semantic owner or caret mesh; recreation adds one bound material.
+Final public surface disposal clears meshes/materials/textures. No page/core errors.
+Thus Material callbacks are not necessary for the retained-resource defect;
+ordinary public input lifecycle reproduces it. This is not a general GPU leak,
+performance attribution, visual-parity proof, or cleanup acceptance. The test
+preserves the violated zero-retained-caret-material invariant explicitly and
+reports resourcePlateauAccepted false. No acceptance threshold changed.
+Allocation/cleanup methods createTextCursor, disposeCursor and disposeTextInput
+in the installed package exactly match transpiled current source. The creator
+allocates a separate StandardMaterial; cursor cleanup calls mesh.dispose() without
+explicit material disposal. All2,515 bundle inputs plus these source/module
+receipts are rehashed at completion. Exact reconciliation/teardown call-path
+attribution remains next: distinguish original orphan ownership from disposal
+of subsequent live replacement materials. Do not assume every update accumulates.
+No renderer/fixture change; source/export reconciliation remains due at the next
+coherent integration milestone, alongside unresolved family/state and final gates.
+
 **Field popup cycles expose retained caret materials, not a resource plateau:**
 `node --test --test-name-pattern="dark mobile field popup cycles" tests/material-parity/sort-focus-structure.spec.mjs`
 passes the diagnostic counterexample1/1 in14,298.9964ms. Retain
