@@ -2,9 +2,11 @@
 
 ## Current audit checkpoint — October 1
 
-**Equal-input public text reproduces the phase difference without Material:**
+**Equal-input public text separates backing rasterization from fractional sampling:**
 `node --test --test-name-pattern="public equal-input text separates" tests/material-parity/input-boundary-evidence.spec.mjs`
-passes1/1 in6,349.7431ms; retain `artifacts/material-parity/public-text-fractional-phase-4f4d63e-final.log`.
+passes1/1 in8,542.1597ms; retain `artifacts/material-parity/public-text-backing-phase-a9591d1-final.log`
+and preceding baseline/solid-backing/solid-raster diagnostics. Earlier equal-input
+receipt `public-text-fractional-phase-4f4d63e-final.log` remains applicable history.
 One shared div tree/style definition, pinned Roboto400,12px/16px line box/.4px
 letter spacing,left alignment,120×24px border-box and4px8px padding; four CSS
 origins80/80.25/80.5/80.75 × DPR1/2. Public-root installed package, no Material
@@ -16,17 +18,31 @@ native opaque counts335/346/335/346 versus constant candidate249. Thus the
 half-device-pixel difference survives equal authored inputs, and not as incorrect
 plane coordinates. DPR1 native opaque counts7/9/9/11 versus candidate0; zero is
 preserved, with partially covered ink observed separately inside the content area.
-This is a demonstrated core text-paint difference. Local raster independence from
-final phase and nearest texture sampling are observed; complete native/canvas
-rasterization attribution and calibrated sharpness/full-pixel acceptance remain
-open. Do not patch tooltip offsets or change its authored inputs to hide this.
+Hidden diagnostic DOM copies reproduce original text-range geometry and measure
+baselines36/68/100/132px, with11px ascent/3px descent. Candidate plane tops match
+the16px content line boxes. At these baselines, direct opaque browser-canvas paint
+matches **every RGBA pixel in all eight native content crops**; candidate differs
+by492/511/530/518 pixels at DPR1 and1137/1352/1137/1352 at DPR2. Transparent direct
+canvas paint differs from native before Babylon. Its alpha raster exactly matches
+the retained local texture at integral device origins; fractional origins differ
+by497/507/548 pixels at DPR1 and1364 at each half-device-pixel DPR2 origin.
+Thus two independently demonstrated effects remain: transparent-versus-opaque
+canvas text paint, and local-texture paint phase not following final fractional
+origin under nearest sampling. Baseline/plane-coordinate displacement is not the
+cause in this reduction. Browser internals explaining the backing-dependent paint
+are not inferred. This is a core paint/fidelity gap under the stated parity goal;
+the catalog explicitly qualifies canvas-text fidelity, not exact browser glyph
+identity. No new blanket compatibility claim or unsupported workaround is implied.
+Owning implementation investigation: TextCanvasRendererService paint backing and
+TextRenderingService raster/cache/texture sampling. Preserve background/transparency
+and compositing; do not make every text atlas opaque or offset tooltip fixtures.
+Other fonts/backgrounds/opacity, full sharpness and current audit gates remain open.
 Chrome154.0.8037.58,Angular20.3.31,Babylon8.56.2,AstylarUI0.2.0;2,515 dependency
 reads rehashed. Installed createStyledCanvas/renderTextToCanvas match current
 source transpilation. Font SHA `425c0713a8176f92273d378599c7eac57de7fafabd4bd0ed457b70eb8f80d371`;
 canvas service SHA `990525b6364989cc334520e0433c5ae38c962a9800ab861d58eccf7700bea6d0`;
-bundle SHA `79e5bab1e1becf1711db9d06fff99d972685233084869c1db71d6857971bdbdd`.
-Next check: isolate local canvas raster from native DOM baseline/paint phase with
-equivalent text inputs, then sampling/backing-size effects. Retain initial failed
+current bundle SHA `3419f12457a6fea6aa206fb5d0bd72e586cb6402670dc90e25e7583c399fc07d`.
+Installed baseline helper also matches current source transpilation. Retain initial failed
 opaque-only observation and diagnostic/recheck logs as superseded measurements;
 the first ink recheck included page background and is not accepted ink evidence.
 No renderer/reference change. Source receipts reconcile at the next coherent batch.

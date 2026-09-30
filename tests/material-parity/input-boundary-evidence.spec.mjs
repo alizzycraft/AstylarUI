@@ -805,6 +805,10 @@ test('public equal-input text separates fractional origins from texture raster p
   const paintMethods = source => source.slice(source.indexOf('    createStyledCanvas('), source.indexOf('    calculateLayoutMetrics(')).replace(/\s+/g, ' ').trim();
   assert.ok(paintMethods(installed).length > 1000);
   assert.equal(paintMethods(installed), paintMethods(compiled));
+  const baselineMethod = source => source.slice(source.indexOf('    calculateCssLineBoxAlphabeticBaseline('),
+    source.indexOf('    applyTextTransform(')).replace(/\s+/g, ' ').trim();
+  assert.ok(baselineMethod(installed).length > 300);
+  assert.equal(baselineMethod(installed), baselineMethod(compiled));
   const built = await createRequire(path.join(consumer, 'package.json'))('esbuild').build({
     stdin: { resolveDir: consumer, sourcefile: 'equal-input-text-phase.mjs', contents: `
       import '@angular/compiler';
@@ -832,23 +836,60 @@ test('public equal-input text separates fractional origins from texture raster p
       await settle();window.textPhaseAudit={settle,snapshot(){return {site,resolved:surface?.inspectResolvedStyles()??null,
         errors:surface?.diagnostics.messages.filter(m=>m.severity==='error')??[],rows:origins.map((left,i)=>{
           const id='text-'+i;
+          // A hidden diagnostic DOM copy measures the alphabetic baseline;
+          // neither the visible reference nor the Astylar document is changed.
+          const probe=document.createElement('div');
+          for(const [key,value] of Object.entries(site.styles[i]))if(key!=='selector')probe.style[key]=value;
+          probe.style.visibility='hidden';probe.textContent='Create a project';
+          const marker=document.createElement('span');marker.style.cssText='display:inline-block;width:0;height:0;padding:0;margin:0;border:0;vertical-align:baseline';
+          probe.append(marker);document.body.append(probe);
+          const nativeBaseline=marker.getBoundingClientRect().top,probeRange=document.createRange();probeRange.selectNodeContents(probe.firstChild);
+          const diagnosticRange=probeRange.getBoundingClientRect().toJSON();probe.remove();
+          const directCanvas=document.createElement('canvas');directCanvas.width=320*devicePixelRatio;directCanvas.height=180*devicePixelRatio;
+          const direct=directCanvas.getContext('2d');direct.scale(devicePixelRatio,devicePixelRatio);
+          direct.font='normal 400 12px AuditRoboto';direct.letterSpacing='.4px';direct.fillStyle='#f5eff4';
+          const metrics=direct.measureText('Mg');
+          direct.fillText('Create a project',left+8,nativeBaseline);
+          const directPixels=direct.getImageData(0,0,directCanvas.width,directCanvas.height).data;
+          let directMinX=Infinity,directMaxX=-Infinity,directMinY=Infinity,directMaxY=-Infinity,directCount=0;
+          for(let y=0;y<directCanvas.height;y++)for(let x=0;x<directCanvas.width;x++)if(directPixels[(y*directCanvas.width+x)*4+3]===255){
+            directCount++;directMinX=Math.min(directMinX,x);directMaxX=Math.max(directMaxX,x);directMinY=Math.min(directMinY,y);directMaxY=Math.max(directMaxY,y);}
+          const solidCanvas=document.createElement('canvas');solidCanvas.width=directCanvas.width;solidCanvas.height=directCanvas.height;
+          const solid=solidCanvas.getContext('2d',{alpha:false});solid.fillStyle='#323033';solid.fillRect(0,0,solidCanvas.width,solidCanvas.height);
+          solid.scale(devicePixelRatio,devicePixelRatio);solid.font=direct.font;solid.letterSpacing=direct.letterSpacing;solid.fillStyle='#f5eff4';
+          solid.fillText('Create a project',left+8,nativeBaseline);
+          const solidPixels=solid.getImageData(0,0,solidCanvas.width,solidCanvas.height).data;
+          let solidCount=0,solidMinX=Infinity,solidMaxX=-Infinity;
+          for(let y=0;y<solidCanvas.height;y++)for(let x=0;x<solidCanvas.width;x++){
+            const p=(y*solidCanvas.width+x)*4;
+            if(solidPixels[p]===245&&solidPixels[p+1]===239&&solidPixels[p+2]===244){solidCount++;solidMinX=Math.min(solidMinX,x);solidMaxX=Math.max(solidMaxX,x);}}
+          const crop={left:Math.ceil((left+8)*devicePixelRatio),top:(24+i*32)*devicePixelRatio,
+            width:Math.floor((left+112)*devicePixelRatio)-Math.ceil((left+8)*devicePixelRatio),height:16*devicePixelRatio};
+          const cropBytes=solid.getImageData(crop.left,crop.top,crop.width,crop.height).data;
+          const directEvidence={nativeBaseline,diagnosticRange,fontAscent:metrics.fontBoundingBoxAscent,fontDescent:metrics.fontBoundingBoxDescent,
+            opaque:{minX:directCount?directMinX:null,maxX:directCount?directMaxX:null,minY:directCount?directMinY:null,maxY:directCount?directMaxY:null,count:directCount},
+            solidBacking:{minX:solidCount?solidMinX:null,maxX:solidCount?solidMaxX:null,count:solidCount,crop:{...crop,rgba:Array.from(cropBytes)}}};
           if(mode==='reference'){const node=document.getElementById(id),range=document.createRange();range.selectNodeContents(node);
-            return {id,left,box:node.getBoundingClientRect().toJSON(),textRange:range.getBoundingClientRect().toJSON(),
+            return {id,left,directEvidence,box:node.getBoundingClientRect().toJSON(),textRange:range.getBoundingClientRect().toJSON(),
               style:Object.fromEntries(['fontFamily','fontSize','fontWeight','lineHeight','letterSpacing','textAlign'].map(k=>[k,getComputedStyle(node)[k]]))};}
           const scene=surface.scene,engine=scene.getEngine(),camera=scene.activeCamera;
           const mesh=scene.meshes.find(m=>m.metadata?.isTextMesh&&m.metadata?.elementId===id),texture=mesh.material.diffuseTexture;
           const viewport=camera.viewport.toGlobal(engine.getRenderWidth(),engine.getRenderHeight());
           const points=mesh.getBoundingInfo().boundingBox.vectorsWorld.map(p=>p.constructor.Project(p,scene.getTransformMatrix().constructor.Identity(),scene.getTransformMatrix(),viewport));
           const size=texture.getSize(),pixels=texture.getContext().getImageData(0,0,size.width,size.height).data;
-          let minX=Infinity,maxX=-Infinity,count=0,inkMinX=Infinity,inkMaxX=-Infinity,inkCount=0;
+          let directGlobalAlphaDifferentPixels=0;
+          const globalLeft=Math.floor((left+8)*devicePixelRatio),globalTop=(24+i*32)*devicePixelRatio;
+          for(let y=0;y<size.height;y++)for(let x=0;x<size.width;x++){
+            if(pixels[(y*size.width+x)*4+3]!==directPixels[((globalTop+y)*directCanvas.width+globalLeft+x)*4+3])directGlobalAlphaDifferentPixels++;}
+          let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity,count=0,inkMinX=Infinity,inkMaxX=-Infinity,inkCount=0;
           for(let y=0;y<size.height;y++)for(let x=0;x<size.width;x++){
             const alpha=pixels[(y*size.width+x)*4+3];
-            if(alpha===255){count++;minX=Math.min(minX,x);maxX=Math.max(maxX,x);}
+            if(alpha===255){count++;minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);}
             if(alpha>=128){inkCount++;inkMinX=Math.min(inkMinX,x);inkMaxX=Math.max(inkMaxX,x);}
           }
-          return {id,left,texture:{size,logicalSize:texture.metadata.astylarLogicalTextSize,samplingMode:texture.samplingMode,
-            opaque:{minX:count?minX:null,maxX:count?maxX:null,count},ink:{minX:inkMinX,maxX:inkMaxX,count:inkCount}},
-            projected:{left:Math.min(...points.map(p=>p.x)),right:Math.max(...points.map(p=>p.x))}};
+          return {id,left,directEvidence,directGlobalAlphaDifferentPixels,texture:{size,logicalSize:texture.metadata.astylarLogicalTextSize,samplingMode:texture.samplingMode,
+            opaque:{minX:count?minX:null,maxX:count?maxX:null,minY:count?minY:null,maxY:count?maxY:null,count},ink:{minX:inkMinX,maxX:inkMaxX,count:inkCount}},
+            projected:{left:Math.min(...points.map(p=>p.x)),right:Math.max(...points.map(p=>p.x)),top:Math.min(...points.map(p=>p.y))}};
         })};},dispose(){surface?.dispose();app?.destroy();return surface?.disposed??true;}};
     ` }, bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true });
   const inputs = Object.keys(built.metafile.inputs).filter(file => !file.endsWith('equal-input-text-phase.mjs'))
@@ -877,11 +918,20 @@ test('public equal-input text separates fractional origins from texture raster p
           pair[mode] = await page.evaluate(() => window.textPhaseAudit.snapshot());
           const image = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
           for (const [i, row] of pair[mode].rows.entries()) {
-            let minX = Infinity, maxX = -Infinity, count = 0, inkMinX = Infinity, inkMaxX = -Infinity, inkCount = 0;
+            const solidCrop = row.directEvidence.solidBacking.crop;
+            let differingPixels = 0;
+            for (let y = 0; y < solidCrop.height; y++) for (let x = 0; x < solidCrop.width; x++) {
+              const full = ((solidCrop.top + y) * image.width + solidCrop.left + x) * 4;
+              const local = (y * solidCrop.width + x) * 4;
+              if ([0, 1, 2, 3].some(channel => image.data[full + channel] !== solidCrop.rgba[local + channel])) differingPixels++;
+            }
+            solidCrop.sha256 = hash(Buffer.from(solidCrop.rgba)); delete solidCrop.rgba;
+            solidCrop.fullFrameDifferingPixels = differingPixels;
+            let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, count = 0, inkMinX = Infinity, inkMaxX = -Infinity, inkCount = 0;
             for (let y = (20 + i * 32) * dpr; y < (44 + i * 32) * dpr; y++) for (let x = 70 * dpr; x < 210 * dpr; x++) {
               const p = (y * image.width + x) * 4;
               if (image.data[p] === 245 && image.data[p + 1] === 239 && image.data[p + 2] === 244) {
-                count++; minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+                count++; minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y);
               }
               if (x >= Math.ceil((row.left + 8) * dpr) && x < Math.floor((row.left + 112) * dpr) &&
                   image.data[p] >= 148 && image.data[p + 1] >= 144 && image.data[p + 2] >= 148) {
@@ -889,7 +939,7 @@ test('public equal-input text separates fractional origins from texture raster p
               }
             }
             assert.ok(inkCount > 0, JSON.stringify({mode,dpr,row,errors,diagnostics:pair[mode].errors}));
-            row.fullFrameOpaque = { minX: count ? minX : null, maxX: count ? maxX : null, count };
+            row.fullFrameOpaque = { minX: count ? minX : null, maxX: count ? maxX : null, minY: count ? minY : null, maxY: count ? maxY : null, count };
             row.fullFrameInk = { minX: inkMinX, maxX: inkMaxX, count: inkCount };
           }
           assert.deepEqual(errors, []); assert.deepEqual(pair[mode].errors, []);
@@ -900,6 +950,16 @@ test('public equal-input text separates fractional origins from texture raster p
       results.push({ dpr, reference: pair.reference.rows, candidate: pair.astylar.rows });
       assert.deepEqual(pair.reference.rows.map(row => row.box.x), [80, 80.25, 80.5, 80.75]);
       assert.deepEqual(pair.reference.rows.map(row => row.textRange.x), [88, 88.25, 88.5, 88.75]);
+      for (let i = 0; i < 4; i++) {
+        const reference = pair.reference.rows[i], candidate = pair.astylar.rows[i];
+        assert.deepEqual(reference.directEvidence.diagnosticRange, reference.textRange);
+        assert.equal(reference.directEvidence.nativeBaseline, 36 + i * 32);
+        assert.ok(Math.abs(candidate.projected.top - (24 + i * 32) * dpr) < .001);
+        assert.equal(reference.directEvidence.solidBacking.crop.fullFrameDifferingPixels, 0,
+          'opaque canvas at the measured native baseline exactly reproduces the native text content crop');
+        assert.ok(candidate.directEvidence.solidBacking.crop.fullFrameDifferingPixels > 0);
+        assert.equal(candidate.directEvidence.solidBacking.crop.sha256, reference.directEvidence.solidBacking.crop.sha256);
+      }
       for (const row of pair.astylar.rows) {
         const effective = pair.astylar.resolved.elements.find(e => e.id === row.id).effective;
         assert.equal(effective.fontFamily, 'AuditRoboto'); assert.equal(effective.fontSize, '12px');
@@ -913,6 +973,8 @@ test('public equal-input text separates fractional origins from texture raster p
       // acceptance pass. Raw local raster is unchanged across fractional origins.
       assert.equal(browser.version(), '154.0.8037.58');
       assert.deepEqual(pair.astylar.rows.map(row => row.texture), Array(4).fill(pair.astylar.rows[0].texture));
+      assert.deepEqual(pair.astylar.rows.map(row => row.directGlobalAlphaDifferentPixels),
+        dpr === 1 ? [0, 497, 507, 548] : [0, 1364, 0, 1364]);
       assert.deepEqual(pair.astylar.rows.map(row => row.fullFrameOpaque.count), Array(4).fill(dpr === 1 ? 0 : 249));
       assert.deepEqual(pair.reference.rows.map(row => row.fullFrameOpaque.count), dpr === 1 ? [7, 9, 9, 11] : [335, 346, 335, 346]);
       if (dpr === 2) {
@@ -925,7 +987,7 @@ test('public equal-input text separates fractional origins from texture raster p
       installedCanvasPaintSha256: hash(installed), bundleSha256: hash(built.outputFiles[0].contents),
       dependencyCount: inputs.length, dependencyReceiptSha256: hash(JSON.stringify(inputs)), acceptance: false,
       classification: 'equal-input core text paint difference with unchanged local texture across fractional origins',
-      limitation: 'bounds/count diagnostic; not full pixel equivalence, sharpness acceptance, or complete native rasterization attribution' }));
+      limitation: 'opaque canvas exactly matches eight native content crops; renderer still differs, with backing and phase effects separate; not general sharpness or full audit acceptance' }));
   } finally { await browser?.close(); await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve())); }
 });
 

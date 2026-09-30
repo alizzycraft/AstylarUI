@@ -2,14 +2,18 @@
 
 ## Evidence boundary
 
-October1 equal-input public text phase proof passes1/1 in6,349.7431ms, eight
+October1 equal-input public text phase proof passes1/1 in8,542.1597ms, eight
 paired origin/DPR cases, pinned Roboto and no Material plugin. Projected origins
 match native content origins; unchanged local textures yield DPR2 opaque minima
 178/178/179/179 versus native178/179/179/180. DPR1 candidate opaque count0 is
 explicit, with partially covered ink separately measured inside content bounds.
-Demonstrated core text-paint difference; no tooltip offset workaround justified.
-Complete native/canvas rasterization attribution and calibrated sharpness remain
-open. See current handoff and `public-text-fractional-phase-4f4d63e-final.log`.
+Opaque direct canvas matches every pixel in eight native content crops at measured
+DOM baselines; transparent canvas differs before Babylon. Integral-phase raw alpha
+matches the retained texture; fractional-phase alpha does not. Backing-dependent
+paint and local-texture phase/sampling are distinct core paint/fidelity effects,
+not misplaced text-plane coordinates. Do not patch tooltip offsets or make all
+atlases opaque. Other fonts/backgrounds and calibrated sharpness remain open.
+See handoff and `public-text-backing-phase-a9591d1-final.log`; prior receipt retained.
 No renderer or canonical fixture changed; source-receipt reconciliation remains
 a coherent-batch milestone, not a reason to rebuild after this focused proof.
 
