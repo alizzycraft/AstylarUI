@@ -1078,6 +1078,81 @@ test('side-mode sidenav Escape applicability is checked without inventing focusa
   });
 });
 
+test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const family of ['menu', 'bottom-sheet', 'dialog']) {
+      observations[family] = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+        const errors = [];
+        page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=dark`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        const snapshot = async () => page.evaluate(({ mode, family }) => {
+          const active = document.activeElement;
+          const refSelector = family === 'menu' ? '.mat-mdc-menu-panel' : family === 'dialog' ? '.mat-mdc-dialog-container' : '.mat-bottom-sheet-container';
+          const popup = mode === 'reference' ? document.querySelector(refSelector) : document.querySelector(`[data-astylar-id="${family === 'menu' ? 'menu-popup' : `${family}-overlay`}"]`);
+          return { focus: active?.getAttribute('data-astylar-id') || active?.getAttribute('data-parity-id') || active?.id || (active?.tagName === 'BODY' ? 'BODY' : active?.textContent?.trim()) || active?.tagName,
+            popupCount: mode === 'reference' ? document.querySelectorAll(refSelector).length : document.querySelectorAll(`[data-astylar-id="${family === 'menu' ? 'menu-popup' : `${family}-overlay`}"]`).length,
+            controls: popup ? [...popup.querySelectorAll('button,a')].map(node => node.getAttribute('data-astylar-id') || node.getAttribute('data-parity-id') || node.textContent.trim()) : [],
+            canvases: document.querySelectorAll('canvas').length,
+            open: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open : null };
+        }, { mode, family });
+        const cycles = [];
+        for (let cycle = 0; cycle < 3; cycle++) {
+          const point = await page.evaluate(({ mode, family }) => {
+            if (mode === 'reference') {
+              const box = document.querySelector(`#${family}-primary`).getBoundingClientRect();
+              return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+            }
+            const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([`${family}-primary`], false).elements[`${family}-primary`].borderBox;
+            const canvas = document.querySelector('canvas').getBoundingClientRect();
+            return { x: canvas.x + box.left + box.width / 2, y: canvas.y + box.top + box.height / 2 };
+          }, { mode, family });
+          await page.mouse.click(point.x, point.y);
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(() => Promise.all(document.getAnimations().filter(animation => animation.effect?.getTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {}))));
+          await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+          const opened = await snapshot();
+          await page.keyboard.press('Escape');
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          else await page.locator(family === 'menu' ? '.mat-mdc-menu-panel' : family === 'dialog' ? '.mat-mdc-dialog-container' : '.mat-bottom-sheet-container').waitFor({ state: 'detached' });
+          await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+          cycles.push({ opened, closed: await snapshot() });
+        }
+        observations[family][mode] = { cycles, errors };
+        await page.close();
+      }
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    const referenceFocus = { menu: 'Rename', 'bottom-sheet': 'Share', dialog: 'dialog-cancel' };
+    const referenceControls = { menu: ['Rename', 'Delete'], 'bottom-sheet': ['Share', 'Copy link'], dialog: ['dialog-cancel', 'dialog-save'] };
+    const candidateControls = { menu: ['menu-rename', 'menu-delete'], 'bottom-sheet': ['bottom-sheet-dismiss', 'bottom-sheet-copy'], dialog: ['dialog-cancel', 'dialog-save'] };
+    for (const family of ['menu', 'bottom-sheet', 'dialog']) {
+      for (const mode of ['reference', 'astylar']) {
+        assert.deepEqual(observations[family][mode].errors, []);
+        assert.equal(observations[family][mode].cycles.length, 3);
+        for (const { opened, closed } of observations[family][mode].cycles) {
+          assert.equal(opened.popupCount, 1);
+          assert.deepEqual(opened.controls, mode === 'reference' ? referenceControls[family] : candidateControls[family]);
+          assert.equal(opened.focus, mode === 'reference' ? referenceFocus[family] : family === 'dialog' ? 'dialog-cancel' : `${family}-primary`);
+          assert.equal(closed.popupCount, 0);
+          assert.deepEqual(closed.controls, []);
+          assert.equal(closed.focus, mode === 'astylar' && family === 'dialog' ? 'BODY' : `${family}-primary`);
+          assert.equal(opened.canvases, mode === 'reference' ? 0 : 1);
+          assert.equal(closed.canvases, opened.canvases);
+          if (mode === 'astylar') {
+            assert.equal(opened.open, true);
+            assert.equal(closed.open, false);
+          }
+        }
+      }
+    }
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));

@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — September 30
 
+**Dark/mobile repeated overlay boundary:** reuse review found the retained
+`overlay-keyboard-4d782df-settled` evidence already answers light/900×700/DPR 1
+keyboard questions, but not dark/mobile repetition. A focused test on the
+authenticated frozen build uses Chrome 154.0.8037.58, dark, 390×844, DPR 2,
+and three real pointer-open/Escape cycles per menu, sheet and dialog. Competing
+explanations were a profile-dependent focus difference, stale controls after
+reconciliation, or the already known authored focus requests. After settlement
+and finite browser animations, Material opens with focus on Rename/Share/Cancel;
+candidate opens on the menu/sheet trigger and dialog Cancel. On dismissal,
+Material restores all three triggers; candidate restores menu/sheet triggers
+but dialog ends at BODY. Each cycle contains one popup with exactly two
+controls, then zero popup controls; candidate canvas count remains one.
+This extends the known focus observations to dark/mobile, without reclassifying
+the shared cause or treating distinct sheet/menu/dialog requests as one bug.
+It proves a DOM-control/canvas-count plateau, not observer, Babylon allocation,
+GPU memory, visual clipping or local modality parity. Those ownership checks,
+dark Tab containment and intermediate local rasters remain required.
+`node --test --test-name-pattern="dark mobile overlay cycles" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 in 19,920 ms with no page errors. No renderer, comparison input,
+canonical finding or original capture changed; no new capture directory was
+created. Preserve the outstanding canonical receipt leaf-diffs and final
+integration/browser gates rather than exporting again for this test-only batch.
+The accumulated keyboard-boundary suite
+`node --test tests/material-parity/sort-focus-structure.spec.mjs` also passes
+17/17 in 126,841 ms. This integrates these focused source/state proofs, not the
+complete audit harness or full rendering acceptance matrix.
+
 **Sidenav Escape applicability:** a source check and paired Chrome
 154.0.8037.58/light/1440×900/DPR 1 probe resolve the previously pending
 focus-origin question. The HTML authors an initially opened `mode="side"`
