@@ -70,6 +70,65 @@ export async function auditSectionDigests(directory) {
   return { manifest, sections };
 }
 
+// Compare selected receipt leaves without holding either multi-GB audit in
+// memory. Containers are included so empty-container and shape changes cannot
+// silently pass as equal leaves. Callers must authenticate both byte streams.
+async function* selectedEntries(chunks, sections) {
+  const parser = new Parser(), original = parser.onToken;
+  let entries = [], complete = false, started = false;
+  const rootNames = new Set();
+  const currentPath = () => [...parser.stack.slice(1).map(frame => frame.key), parser.key];
+  const append = (kind, value) => {
+    if (!sections.has(parser.stack[1]?.key ?? parser.key)) return;
+    const at = currentPath();
+    if (sections.has(at[0])) entries.push({ path: at, kind, value });
+  };
+  parser.onToken = function(token, value) {
+    assert.equal(complete, false, 'tokens after root');
+    if (!started) { assert.equal(token, Parser.C.LEFT_BRACE, 'audit root must be an object'); started = true; }
+    if (this.stack.length === 1 && this.state === Parser.C.KEY && token === Parser.C.STRING) {
+      assert.ok(!rootNames.has(value), 'duplicate section'); rootNames.add(value);
+    }
+    if (token === 1 || token === 3) append(token === 1 ? 'object-start' : 'array-start', null);
+    original.call(this, token, value);
+  };
+  parser.onValue = function(value) {
+    if (value !== null && typeof value === 'object') append(Array.isArray(value) ? 'array-end' : 'object-end', null);
+    else append('value', value);
+    if (this.stack.length) delete this.value[this.key];
+    else complete = true;
+  };
+  const decoder = new StringDecoder('utf8');
+  for await (const chunk of chunks) {
+    parser.write(decoder.write(chunk));
+    yield* entries; entries = [];
+  }
+  const tail = decoder.end();
+  if (tail) parser.write(tail);
+  yield* entries;
+  assert.ok(complete && parser.stack.length === 0, 'incomplete audit');
+}
+
+export async function compareSectionLeaves(before, after, names) {
+  const selected = new Set(names);
+  assert.equal(selected.size, names.length, 'duplicate requested section');
+  const left = selectedEntries(before, selected), right = selectedEntries(after, selected);
+  const changes = [], counts = Object.fromEntries(names.map(name => [name, 0]));
+  try {
+    while (true) {
+      const [a, b] = await Promise.all([left.next(), right.next()]);
+      assert.equal(a.done, b.done, 'receipt membership changed');
+      if (a.done) break;
+      assert.deepEqual(a.value.path, b.value.path, 'receipt path/order changed');
+      assert.equal(a.value.kind, b.value.kind, 'receipt shape changed');
+      counts[a.value.path[0]]++;
+      if (!Object.is(a.value.value, b.value.value)) changes.push({ path: a.value.path, before: a.value.value, after: b.value.value });
+    }
+  } finally { await Promise.allSettled([left.return(), right.return()]); }
+  for (const name of names) assert.ok(counts[name] > 0, `missing receipt section ${name}`);
+  return { counts, changes };
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   assert.equal(process.argv.length, 4, 'provide previous and current report directories');
   const previous = await auditSectionDigests(process.argv[2]);

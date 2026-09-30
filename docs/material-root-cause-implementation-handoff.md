@@ -2,6 +2,37 @@
 
 ## Current audit checkpoint — September 30
 
+**Canonical receipt leaf reconciliation:** the remaining September 30 refresh
+question was a provenance-only update versus changed measurements hidden in the
+four receipt sections. The existing section-digest utility now compares selected
+paths, scalar values and container shape in bounded memory, rejecting missing
+sections, duplicate root sections, changed path/order and changed container shape.
+An explicitly opt-in integration
+test authenticates both compressed and decoded predecessor/current packages
+(`db1b33c9…`/`c93c4ad1…` → `3ec576a3…`/`f28c3bd7…`) and checks
+263,567 controlLineBoxes entries, 590,705 ownerCaretInputs entries,
+343,859 reviewedSourceBatchInputs entries and 3,684,597 controlTypography entries.
+There are exactly 99 changed scalar leaves and no path/container changes:
+48 line-box normalization receipts, one owner-caret complete-source receipt,
+one source-conservation transition receipt and 48 control-typography review
+receipts change module SHA `2328c461…` → `a787e493…`. The remaining leaf is the
+source-conservation report hash `3c1f5992…` → `bcc50d1d…`. Independently rerunning
+its existing collector reproduces the current hash; substituting only the old
+normalization source receipt reconstructs the exact predecessor hash. That
+focused hash-transition test passes 1/1 in 29,914 ms. No measurement, case,
+classification or evidence value changed within these four sections beyond
+those provenance leaves. This closes the previously unreviewed receipt scope,
+not complete source/state coverage or final browser acceptance. The comparator
+is audit instrumentation only; renderer/fixtures/canonical package are unchanged.
+Verification: `node --test tests/material-parity/audit-section-digests.spec.mjs`
+passes 3/3 fast tests (119 ms), with the two explicit integrations skipped by
+default. With `ASTYLAR_AUDIT_RECEIPT_COMPARE=1`, the
+`--test-name-pattern="published current-ancestry receipt"` test passes 1/1 in
+211,558 ms; the `--test-name-pattern="source-conservation report hash transition"`
+test passes 1/1 as recorded above. Both commands use that same existing spec.
+These milestone checks generate no decoded report or scratch capture on disk;
+do not repeat them for subsequent review prose alone.
+
 **Paginator control contract:** the unresolved question was missing native key
 activation versus unequal authored disabled-state behavior. A paired Chrome
 154.0.8037.58/light/1440×900/DPR 1 proof on the authenticated frozen showcase
@@ -460,9 +491,9 @@ normalization-module SHA-256. The readable report likewise changes proof line
 references, not substantive findings. The full audit validator passed during
 export, independent cold `--check` passed, and `npm run audit:findings:verify`
 passed for the published package.
-The other changed receipt sections were not independently leaf-diffed, so this
-is a validated canonical refresh, not a claim that every source receipt is
-semantically unchanged. The complete current audit-harness run, remaining
+The initially unreviewed receipt sections have now been independently leaf-diffed
+as documented in the current checkpoint above; their exact changes are provenance
+only. The complete current audit-harness run, remaining
 state/coverage review and unfiltered browser gates
 remain required before audit acceptance. No renderer, fixture or original capture
 was changed in this export.
