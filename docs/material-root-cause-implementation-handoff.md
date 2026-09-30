@@ -2,6 +2,38 @@
 
 ## Current audit checkpoint — October 1
 
+**Public equal-input scrollbar gutter reduction now proves the core boundary:**
+extend the existing input-boundary proof with an in-memory public-root consumer,
+no Material plugin and no fixture edits. Both modes receive exactly the same
+serializable div tree and style objects:260×128px border-box, zero margin/padding/
+border,400px-high100%-wide child. Six paired cases are hidden/auto/scroll × DPR1/2.
+`node --test --test-name-pattern="public equal-input overflow" tests/material-parity/input-boundary-evidence.spec.mjs`
+passes1/1,zero failures/skips,11,385.6592ms. Retain
+`artifacts/material-parity/public-scrollbar-gutter-395d497-final.log`.
+Native auto client area245×128px; native scroll245×113px; candidate auto/scroll
+260×128px. Native hidden stays260×128px; candidate hidden has no public scroll
+container, explicitly retained as absent rather than assigned invented metrics.
+All effective overflow/outer dimensions are checked and authored documents match.
+No page/core error diagnostics. Chrome154.0.8037.58 with effective native scrollbars
+visible, Angular20.3.31/Babylon8.56.2/AstylarUI0.2.0. Public package imports only;
+all2,515 compiled dependency reads are rehashed after the run. Installed scroll
+runtime SHA `eea5e26c692dec9f59d635e91422b01bee00360574cba1e38c563f0cfb706c40`;
+its complete createContainer method matches current TypeScript transpilation.
+Bundle SHA `858972301d1336a663a8c9290235cf98e13e5f1af6099f91ff35323b8979e224`;
+dependency receipt SHA `8c965e6922ee5536862619a47689fe523836ece1615ad495d94a3f91e2f992a4`.
+First divergence: core client-area calculation subtracts borders, not platform
+scrollbar gutters, before projection or option/plugin layout. This is a demonstrated
+equal-input core geometry support gap, not a Material compensation or world-space
+error. Overflow is catalogued compatible; native controls/styling exclusions do not
+themselves establish gutter equivalence. An implementation decision remains needed
+at the core used-size/scrollbar boundary; do not hardcode this platform's15px or
+shrink comparison options to hide it. Raster/drag/wheel and cross-platform metrics
+are not established by this geometry reduction. Full audit acceptance remains open.
+Initial run failed by reading missing hidden-container state; failure log retained.
+The corrected absence-aware recheck passes in11,764.1769ms; final run above includes
+version/missing-state receipts. No renderer/canonical input/classification changes;
+test-source fingerprint reconciliation belongs to the next coherent audit batch.
+
 **Visible-scrollbar content-width boundary isolated:** extend the existing dark/
 mobile wheel proof only with native clientWidth/offsetWidth observations and
 gutter assertions; no fixture, renderer or threshold edit. Command:

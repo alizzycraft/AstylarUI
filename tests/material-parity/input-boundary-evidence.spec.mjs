@@ -703,6 +703,98 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
   }
 });
 
+test('public equal-input overflow isolates scrollbar gutter before projection', async t => {
+  const installedPath = 'examples/material-showcase/node_modules/astylarui/dist/lib/lib/astylar-scroll-runtime.js';
+  const installed = readFileSync(installedPath, 'utf8');
+  const compiled = ts.transpileModule(readFileSync('src/lib/astylar-scroll-runtime.ts', 'utf8'),
+    { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
+  const method = source => {
+    const start = source.indexOf('    createContainer('), end = source.indexOf('    findDirectChildMesh(', start);
+    assert.ok(start > 0 && end > start);
+    return source.slice(start, end).replace(/\s+/g, ' ').trim();
+  };
+  assert.equal(method(installed), method(compiled), 'installed client-area calculation matches current source');
+  const consumer = path.resolve('examples/material-showcase');
+  const built = await createRequire(path.join(consumer, 'package.json'))('esbuild').build({
+    stdin: { resolveDir: consumer, sourcefile: 'equal-input-scroll-gutter.mjs', contents: `
+      import '@angular/compiler';
+      import {provideZonelessChangeDetection} from '@angular/core';
+      import {createApplication} from '@angular/platform-browser';
+      import {Astylar} from 'astylarui';
+      const query=new URLSearchParams(location.search), mode=query.get('mode'), overflow=query.get('overflow');
+      const site={root:{children:[{type:'div',id:'box',children:[{type:'div',id:'content'}]}]},styles:[
+        {selector:'#box',display:'block',position:'absolute',left:'20px',top:'20px',width:'260px',height:'128px',
+          boxSizing:'border-box',padding:'0',margin:'0',borderWidth:'0',background:'#eeeeee',overflow},
+        {selector:'#content',display:'block',width:'100%',height:'400px',boxSizing:'border-box',padding:'0',margin:'0',borderWidth:'0',background:'#8844aa'}]};
+      document.body.style.cssText='margin:0;padding:0';
+      const host=document.createElement(mode==='reference'?'div':'canvas');
+      host.style.cssText='position:relative;display:block;width:320px;height:200px;margin:0;padding:0';document.body.append(host);
+      let app,surface;
+      if(mode==='reference'){
+        const css=document.createElement('style');css.textContent=site.styles.map(({selector,...values})=>selector+'{'+
+          Object.entries(values).map(([key,value])=>key.replace(/[A-Z]/g,c=>'-'+c.toLowerCase())+':'+value).join(';')+'}').join('');document.head.append(css);
+        const box=document.createElement('div'),content=document.createElement('div');box.id='box';content.id='content';box.append(content);host.append(box);
+      }else{app=await createApplication({providers:[provideZonelessChangeDetection()]});surface=app.injector.get(Astylar).mount(host,site,{diagnostics:{logLevel:'silent'}});}
+      const settle=async()=>{await surface?.whenSettled();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));};
+      await settle();window.gutterAudit={settle,snapshot(){const box=document.getElementById('box');
+        return {site,scroll:surface?surface.diagnostics.scrolling.containers.box:{clientWidth:box.clientWidth,clientHeight:box.clientHeight,scrollTop:box.scrollTop,scrollHeight:box.scrollHeight},
+          native:mode==='reference'?{width:box.getBoundingClientRect().width,childWidth:document.getElementById('content').getBoundingClientRect().width,overflow:getComputedStyle(box).overflow}:null,
+          resolved:surface?.inspectResolvedStyles()??null,errors:surface?.diagnostics.messages.filter(m=>m.severity==='error')??[]};},
+        dispose(){surface?.dispose();app?.destroy();return surface?.disposed??true;}};
+    ` }, bundle:true,write:false,format:'esm',platform:'browser',target:'es2022',metafile:true });
+  const inputs = Object.keys(built.metafile.inputs).filter(file => !file.endsWith('equal-input-scroll-gutter.mjs'))
+    .map(file => ({file,sha256:hash(readFileSync(file))}));
+  const packages=Object.fromEntries(['@angular/core','@babylonjs/core','astylarui'].map(name=>
+    [name,JSON.parse(readFileSync(path.join(consumer,'node_modules',name,'package.json'))).version]));
+  assert.ok(inputs.some(input => input.file.includes('node_modules/astylarui/')));
+  assert.ok(!inputs.some(input => /^src[\\/]/.test(input.file)), 'public root package only');
+  const server=createServer((req,res)=>{const script=req.url.startsWith('/audit.js');
+    res.setHeader('content-type',script?'text/javascript':'text/html');
+    res.end(script?built.outputFiles[0].contents:'<!doctype html><script type="module" src="/audit.js"></script>');});
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  const {materialBrowserLaunchOptions,inspectMaterialBrowserLaunch}=await import('./run-checkpoint.mjs');
+  let browser;const results=[];
+  try{
+    const launch=materialBrowserLaunchOptions();browser=await chromium.launch(launch);
+    const launchEvidence=await inspectMaterialBrowserLaunch(browser,launch);
+    for(const overflow of ['hidden','auto','scroll'])for(const dpr of [1,2]){
+      const pair={};
+      for(const mode of ['reference','astylar']){
+        const page=await browser.newPage({viewport:{width:320,height:200},deviceScaleFactor:dpr});
+        const errors=[];page.on('pageerror',error=>errors.push(String(error)));
+        try{
+          await page.goto('http://127.0.0.1:'+server.address().port+'/?mode='+mode+'&overflow='+overflow);
+          await page.waitForFunction(()=>!!window.gutterAudit);await page.evaluate(()=>window.gutterAudit.settle());
+          pair[mode]=await page.evaluate(()=>window.gutterAudit.snapshot());
+          assert.deepEqual(errors,[]);assert.deepEqual(pair[mode].errors,[]);
+          assert.equal(await page.evaluate(()=>window.gutterAudit.dispose()),true);
+        }finally{await page.close();}
+      }
+      assert.deepEqual(pair.reference.site,pair.astylar.site);
+      const effective=pair.astylar.resolved.elements.find(e=>e.id==='box').effective;
+      assert.equal(effective.overflow,overflow);assert.equal(effective.width,'260px');assert.equal(effective.height,'128px');
+      assert.equal(pair.reference.native.width,260);assert.equal(pair.reference.native.overflow,overflow);
+      assert.equal(pair.reference.scroll.clientWidth,overflow==='hidden'?260:245);
+      assert.equal(pair.reference.native.childWidth,pair.reference.scroll.clientWidth);
+      assert.equal(pair.reference.scroll.clientHeight,overflow==='scroll'?113:128);
+      if(overflow==='hidden'){
+        assert.equal(pair.astylar.scroll,undefined,'clipping-only box has no public scroll-container state');
+      }else{
+        assert.equal(pair.astylar.scroll.clientWidth,260);
+        assert.equal(pair.astylar.scroll.clientHeight,128);
+      }
+      results.push({overflow,dpr,native:pair.reference.scroll,candidate:pair.astylar.scroll,
+        candidateScrollContainerPresent:pair.astylar.scroll!==undefined});
+    }
+    for(const input of inputs)assert.equal(hash(readFileSync(input.file)),input.sha256);
+    t.diagnostic(JSON.stringify({browser:browser.version(),packages,launchEvidence,results,
+      installedScrollRuntimeSha256:hash(installed),bundleSha256:hash(built.outputFiles[0].contents),
+      dependencyReceiptSha256:hash(JSON.stringify(inputs)),dependencyCount:inputs.length,
+      classification:'equal-input core scrollbar client-area divergence',acceptance:false,
+      limitation:'geometry diagnostic only; scrollbar raster, wheel and cross-platform gutter metrics are not accepted by this proof'}));
+  }finally{await browser?.close();await new Promise((resolve,reject)=>server.close(error=>error?reject(error):resolve()));}
+});
+
 function rasterDifference(firstBytes, secondBytes, exactForeground) {
   const first = PNG.sync.read(firstBytes), second = PNG.sync.read(secondBytes);
   assert.equal(first.width, second.width);

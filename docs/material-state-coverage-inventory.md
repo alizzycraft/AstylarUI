@@ -2,6 +2,16 @@
 
 ## Evidence boundary
 
+October1 public equal-input gutter reduction closes the plugin/authoring ambiguity:
+identical div/style objects with hidden/auto/scroll at DPR1/2, no Material plugin.
+Native auto245×128 and scroll245×113 client areas versus candidate260×128;
+hidden candidate scroll-container state is absent, not normalized. Public package
+proof passes1/1 with no errors; installed createContainer matches current source.
+Core omits gutter subtraction before projection: demonstrated equal-input geometry
+support gap. Core compatibility/implementation decision remains; native15px is
+platform-specific, not a renderer constant. Exact raster, wheel/drag, other platforms
+and final audit gates remain open. See handoff and retained public gutter logs.
+
 October1 scrollbar gutter is now measured separately from wheel/drag: dark/mobile
 outer popup widths260px on both, native client/option widths245px versus candidate
 260px. Existing focused proof passes1/1 after adding only client-width observations.
