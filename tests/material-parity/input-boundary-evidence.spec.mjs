@@ -494,7 +494,10 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
           cursorMeshes:surface?.scene.meshes.filter(m=>/cursor/i.test(m.name)).map(m=>({name:m.name,enabled:m.isEnabled(),visible:m.isVisible}))??[],
           coreControl:surface?.scene.meshes.filter(m=>m.metadata?.textInput).map(m=>{
             const c=m.metadata.textInput; return {value:c.value,textContent:c.textContent,cursorPosition:c.cursorPosition,
-              selection:[c.selectionStart,c.selectionEnd],origin:c.visualTextLeftEdgeCss};})??[]};
+              selection:[c.selectionStart,c.selectionEnd],origin:c.visualTextLeftEdgeCss,
+              cssSize:c.cssSize,scrollTop:c.scrollTop??0,
+              lines:c.textLayoutMetrics?.lines.map(line=>({index:line.index,startIndex:line.startIndex,endIndex:line.endIndex,
+                top:line.top,bottom:line.bottom,baseline:line.baseline}))??[]};})??[]};
       },dispose(){surface?.dispose();application?.destroy();return surface?.disposed??true;}};
     ` }, bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true });
   const inputs = Object.keys(built.metafile.inputs).filter(file => path.basename(file) !== 'equal-input-caret.mjs')
@@ -600,8 +603,15 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
       } else if (variant === 'textarea') {
         assert.equal(center(pair.astylar.stageDelta), 21.5, 'textarea shares initial insertion-edge fallback');
         assert.equal(center(pair.astylar.editedEmpty), 28, 'textarea editing initializes the padded origin');
+        const initial = pair.astylar.initialCore[0], edited = pair.astylar.deletion.core[0];
+        assert.deepEqual(initial.lines, edited.lines, 'editing did not change the empty CSS line metrics');
+        assert.deepEqual(initial.lines, [{index:0,startIndex:0,endIndex:0,top:16,bottom:16,baseline:16}]);
+        assert.deepEqual(initial.cssSize, {width:228,height:24});
+        assert.equal(initial.scrollTop, 0); assert.equal(edited.scrollTop, 0);
+        const updateCssY = -edited.cssSize.height / 2 + (edited.lines[0].top + edited.lines[0].bottom) / 2 - edited.scrollTop;
+        assert.equal(updateCssY, 4, 'core update treats empty glyph bounds as the line center, unlike initial creation');
         assert.equal((pair.astylar.editedEmpty.bounds.minY - pair.astylar.stageDelta.bounds.minY) / dpr, 4,
-          'record the unexplained four-CSS-pixel textarea caret shift after editing');
+          'CSS update placement matches the observed four-pixel shift, independently of DPR');
       } else {
         assert.equal(center(pair.astylar.stageDelta), 28, 'placeholder paint initializes the padded origin');
         if (variant === 'placeholder-keyboard') assert.deepEqual(pair.astylar.editedEmpty, pair.astylar.stageDelta);
@@ -619,7 +629,7 @@ test('public equal-input empty caret has paired WebGL raster evidence', async t 
     assert.equal(coreSources.length, 2);
     t.diagnostic(JSON.stringify({ browser: browser.version(), packages, bundleSha256: hash(bundle),
       dependencyCount: inputs.length, dependencyReceiptSha256: hash(JSON.stringify(inputs)), coreSources, results,
-      classification: 'core-initial-origin-defect-input-and-textarea; placeholder-pointer-index-defect; textarea-vertical-shift-unexplained; width-policy-differs',
+      classification: 'core-initial-origin-defect-input-and-textarea; placeholder-pointer-index-defect; textarea-glyph-bound-center-update-inconsistency; width-policy-differs',
       limitation: 'installed packed public consumer, not frozen Material bundle; native focus outline excluded from interior crop; all Material states and clipping remain unproven' }));
   } finally {
     await browser?.close();

@@ -28,9 +28,21 @@ Textarea without placeholder also starts at x=21.5px, then moves to x=28px after
 the identical type/delete sequence, confirming that the initialization finding
 extends beyond single-line input. Its exact requested-color caret rows shift
 43–60 to 47–64 at DPR1 and 85–122 to 93–130 at DPR2: **4 CSS px downward**.
-This vertical discrepancy is observed but its detailed metric/line-placement
-cause remains unassigned. `updateCursorPosition` has a textarea-specific line
-center projection (1041–1054); that source branch is a lead, not yet causal proof.
+The vertical cause is now bounded by live CSS metrics and source ownership:
+initial and edited-empty lines are identical `{top:16,bottom:16,baseline:16}`,
+with the same 228×24 CSS box and scrollTop=0. These are glyph bounds, not the
+authored 24px line-box bounds. `createTextCursor` initially places y=0;
+textarea `updateCursorPosition` uses the glyph-bounds center, calculating
+`-24/2 + (16+16)/2 = 4px` before projection (manager 1041–1054).
+`TextCanvasRenderer.calculateLayoutMetrics` derives top/bottom from measured
+glyph ascent/descent (232–234); empty glyph bounds collapse to baseline 16.
+The focused proof asserts unchanged metrics, the CSS formula and the 4px
+rendered shift at both DPRs. Changed metrics, scrolling and raster phase do
+not explain this state: the core creation/update placement rules disagree and
+the update substitutes glyph center for line-box placement. No world-space
+arithmetic or diagnostic cursor mutation is needed. General multiline,
+nonempty glyph, asymmetric padding and historical Material attribution remain
+outside this bounded proof.
 
 The foreground isolation has a synthetic positive/negative calibration and
 retains the original unfiltered delta for plain-input evidence. It excludes
@@ -39,16 +51,19 @@ question; it does not prove AA, glyph sharpness or full paint parity. Initial
 expanded runs failed on placeholder Backspace (`A` != empty), 30,825.300ms and
 24,921.265ms; added settlement did not fix the failure. Final diagnostics
 explicitly assert/preserve that defect, leave edited-empty paint null for that
-case, and never synthesize a cleared state. Final focused pass: 1/1,
-67,596.265ms, zero failures/skips, eight paired cases, not parity acceptance.
-Bundle SHA `06ce6d85caa2635c2eca61f21636b5e3a5f98a0b868b31b52da77658da56e624`;
+case, and never synthesize a cleared state. Final metrics/placement focused
+pass: 1/1, 67,943.483ms, zero failures/skips, eight paired cases, not parity
+acceptance (prior variant pass: 67,596.265ms). Read-only line-metric observation
+first passes in 67,841.889ms before the causal assertions are added.
+Current bundle SHA `67a3f9d965b6a148dc2d46d0418433b737d24295cc03d034f6acf1298269cfe8`
+(prior variant bundle `06ce6d85caa2635c2eca61f21636b5e3a5f98a0b868b31b52da77658da56e624`);
 installed dependencies/versions/core hashes remain those recorded below.
 The unchanged `shipped caret geometry fixes width` focused regression also
 passes 1/1 in 9,497.901ms using its pinned shipped methods and Babylon 8.15.1
 NullEngine; the optional color filter has not changed its full-delta evidence.
 No canonical fixture, renderer, historical capture or full export changed.
-Next text-paint gaps: textarea vertical metric origin and equal-input selection
-paint; broader Material profile/state mappings and final gates remain open.
+Next text-paint gaps: equal-input selection paint and broader textarea
+composition; Material profile/state mappings and final gates remain open.
 
 **Equal-input public empty-caret WebGL reduction:** the existing
 `input-boundary-evidence.spec.mjs` now mounts one empty text input through the

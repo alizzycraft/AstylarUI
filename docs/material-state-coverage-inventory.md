@@ -8,8 +8,12 @@ the padded x=28px origin, but pointer focus uses placeholder indices for empty
 content (core cursor 3 → 4 after typing `A` → 3 after Backspace, value remains
 `A`; native clears). Tab is a positive contrast: core 0 → 1 → 0 and value clears.
 Textarea reproduces x=21.5px initial/x=28px edited origin and separately shifts
-the caret down 4 CSS px after editing; detailed vertical cause remains pending.
-Focused diagnostic passes 1/1 in 67,596.265ms while explicitly asserting the
+the caret down 4 CSS px after editing. Identical empty glyph metrics before/after
+({top:16,bottom:16,baseline:16}, height24, no scroll) isolate differing creation
+and update rules: initial y=0, update uses glyph center rather than line-box
+placement, giving -24/2+16=4px in CSS space before projection. This bounded
+cause is now demonstrated; multiline/nonempty/padding composition is pending.
+Focused diagnostic passes 1/1 in 67,943.483ms while explicitly asserting the
 exposed defects, not claiming parity. The handoff records initial failed runs,
 source ownership, exact pixel bounds and unchanged installed dependency receipt.
 
@@ -22,8 +26,8 @@ also differs. Source traces initialization skipping the content-inset origin
 until editing. Focused diagnostic passes 1/1, not a parity pass. See the current
 handoff for receipts, exact pixel bounds and intermediate instrumentation failures.
 This installed packed consumer (Angular 20.3.31/Babylon 8.56.2) does not replace
-the frozen Material capture. Placeholder/textarea, complete selection paint,
-other profiles and historical-report attribution remain pending.
+the frozen Material capture. Broader placeholder/textarea composition, complete
+selection paint, other profiles and historical-report attribution remain pending.
 
 Latest shared browser-proof integration from `304612b`: **24/24 pass**, zero
 failures/skips/cancellations, 197,799.515ms. Corrected calendar settlement records
