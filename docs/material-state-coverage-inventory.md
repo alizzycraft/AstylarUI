@@ -2,6 +2,16 @@
 
 ## Evidence boundary
 
+October1 scrollbar gutter is now measured separately from wheel/drag: dark/mobile
+outer popup widths260px on both, native client/option widths245px versus candidate
+260px. Existing focused proof passes1/1 after adding only client-width observations.
+Authenticated captured styles show the same15px native gutter across all eight
+desktop theme/DPR cases. Core computes client area minus borders only and paints
+indicators inside it, in CSS space. Equal-input public gutter reproduction and
+compatibility classification remain pending; unequal popup overflow/box-sizing
+requests still prevent declaring this a confirmed equal-input defect. See current
+handoff and retained gutter logs. No renderer or comparison fixture changed.
+
 October1 corrected launch policy now covers every configured timepicker
 `open-scroll` case: all four themes × desktop DPR1/2,8/8 per-case passes,
 equal144px scroll offsets,8/8 existing focused-raster gates and zero runtime

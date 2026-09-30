@@ -1791,6 +1791,7 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
             const style = getComputedStyle(panel);
             return { box: panel.getBoundingClientRect().toJSON(), scrollTop: panel.scrollTop,
               scrollHeight: panel.scrollHeight, clientHeight: panel.clientHeight,
+              clientWidth: panel.clientWidth, offsetWidth: panel.offsetWidth,
               padding: { top: style.paddingTop, bottom: style.paddingBottom }, optionCount: options.length,
               firstOption: first?.getBoundingClientRect().toJSON(), lastOption: options.at(-1)?.getBoundingClientRect().toJSON() };
           }
@@ -1921,6 +1922,21 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
     assert.ok(thumb.after.firstY > thumb.before.firstY);
     assert.equal(observations.astylar.before.scrollbar.visible, true);
     assert.equal(observations.astylar.after.scrollbar.visible, true);
+    // Native platform scrollbars reserve a gutter; current core indicators
+    // paint inside an unreduced client area. Observe the first divergence
+    // before attributing option width differences to popup fixture styles.
+    const nativeGutter = observations.reference.before.offsetWidth - observations.reference.before.clientWidth;
+    const candidateGutter = observations.astylar.before.box.width - observations.astylar.before.clientWidth;
+    assert.equal(nativeGutter, 15);
+    assert.ok(Math.abs(candidateGutter) < .01);
+    assert.ok(Math.abs(observations.reference.before.firstOption.width - observations.reference.before.clientWidth) < .01);
+    assert.ok(Math.abs(observations.astylar.before.firstOption.width - observations.astylar.before.clientWidth) < .01);
+    t.diagnostic(JSON.stringify({ scrollbarGutterObservation: {
+      nativeGutter, candidateGutter,
+      nativeOptionWidth: observations.reference.before.firstOption.width,
+      candidateOptionWidth: observations.astylar.before.firstOption.width,
+      acceptance: false,
+    } }));
     assert.ok(observations.reference.drag.steps.every((step, index, steps) => step.scrollTop > (index ? steps[index - 1].scrollTop : 0)),
       'native thumb drag progresses at every held action boundary');
     assert.deepEqual(observations.astylar.drag.steps.map(step => step.scrollTop), [0, 0, 0],

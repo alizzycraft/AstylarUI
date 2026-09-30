@@ -2,6 +2,33 @@
 
 ## Current audit checkpoint — October 1
 
+**Visible-scrollbar content-width boundary isolated:** extend the existing dark/
+mobile wheel proof only with native clientWidth/offsetWidth observations and
+gutter assertions; no fixture, renderer or threshold edit. Command:
+`node --test --test-name-pattern="dark mobile timepicker wheel" tests/material-parity/sort-focus-structure.spec.mjs`.
+It passes1/1,zero failures/skips,8,706.3425ms. Retain
+`artifacts/material-parity/timepicker-scrollbar-gutter-7e5bd9a.log`.
+Both popup outer widths are260px; native client/option border-box width245px,
+candidate260px. Native reserves15px, candidate0px. Thus the option-width
+difference is present at the client-area boundary, not merely option text padding.
+Core `src/lib/astylar-scroll-runtime.ts` computes clientWidth from outer width
+minus borders only and paints the12px track inside that unreduced area. This
+calculation is CSS-space, before projection; no world-coordinate attribution.
+The compatibility contract documents owned indicators rather than native scrollbar
+features, but does not specifically establish gutter equivalence. Classify this
+as demonstrated core scrolling geometry difference, with equal-input public
+reduction/compatibility decision still pending, not a newly confirmed parity defect.
+Authored reference overflow auto versus candidate scroll, option box-sizing and
+popup structure remain unequal and must not be normalized away.
+Read-only SHA authentication of all16 input trees from the prior eight-case
+capture also proves720px panel minus(673px option content+16px+16px padding)=15px
+for every theme/DPR. Retain
+`artifacts/material-parity/timepicker-scrollbar-gutter-style-verification-7e5bd9a.log`.
+Do not compensate by shrinking candidate options; the owning core gutter rule
+requires an equal-input reduction. Existing wheel/drag outcomes are unchanged.
+This bounded test change updates harness source fingerprints; it does not rewrite
+the checked canonical snapshot. Reconcile at the next coherent integration milestone.
+
 **Native-scrollbar launch applicability covers all configured timepicker wheel cases:**
 the existing runner from `bb53103`, `--skip-build --interaction-only`,
 `ASTYLAR_MATERIAL_FAMILIES=timepicker`,
