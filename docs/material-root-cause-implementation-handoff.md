@@ -2,6 +2,43 @@
 
 ## Current audit checkpoint — September 30
 
+**Remaining launch-related review receipts reconciled without changing findings:**
+the scalar-layer review and membership generators rerun against their pinned
+capture change only the live runner SHA and its dependent review-file SHA.
+All38groups/1,902 observations/676cases remain identical, including64 unresolved
+motion observations. The existing conservation test still restores every allowed
+receipt and requires whole-report equality with its historical baseline; live
+runner authentication separately restores the exact original capture producer.
+No capture descriptor, original input, classification or rendering claim advanced.
+
+The caret source verifier's expected live SHA now names the reviewed runner
+`33c5a4b3…`, while the original recorded SHA and strict restoration remain fixed.
+`node scripts/check-material-owner-caret-source-binding.mjs` passes:2,311 original
+cases/1,734 selected captures/4,050 observations/118 reviewed groups/3,154 reviewed
+and896 retained observations/13 negative controls, canonicalUnchanged=true.
+Observation digest remains `02acd0b90149f2030f48b800b3acc68cb1ac6dc72eaf4594fc03bbc45e5edda1`.
+
+The pending-motion generator initially failed its real CSSOM replay because the
+saved isolated browser-control report named Chrome153 rather than installed154.
+`node scripts/verify-material-motion-cssom-capture.mjs` reruns all six controls;
+they pass in154.0.8037.58, changing only the browser version. Original32 dialog
+capture records and six control observations are unchanged. The subsequent
+pending-motion generator passes, changing only its two dependency hashes;
+originalResolvedMotionVerified and rendering-equivalence flags remain false.
+Historical captures are not relabeled as Chrome154 evidence.
+
+Focused verification:
+`node --test tests/material-parity/gap-survey-source-replay.spec.mjs tests/material-parity/gap-review-membership.spec.mjs`
+passes9/9,zero skips/failures,25,939.8985ms.
+`node --test tests/material-parity/gap-review-source-binding.spec.mjs tests/material-parity/pending-motion-capture-binding.spec.mjs`
+passes5/5,zero skips/failures,73,762.6512ms, including provenance/population/value/
+disposition negative controls and original-motion conservation. No renderer,
+fixture, threshold, new report framework or canonical-package change. This closes
+the known stale receipt failures below, not the full export gate. Next milestone:
+retry complete current-ancestry export with cold evidence, then authenticate and
+refresh compact queries only after full validation; broader state/input coverage
+and final browser/release gates remain pending.
+
 **Button keyboard/disabled focus question answered at a bounded state boundary:**
 the existing frozen-build browser suite now drives ordinary (non-benchmark) light
 desktop1440×900/DPR1 routes using real Tab/Enter/Space and reverse Tab in

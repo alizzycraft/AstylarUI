@@ -4,11 +4,11 @@
   "sources": [
     {
       "file": "docs/material-gap-review-membership.json",
-      "sha256": "7ba26b6efea5abfa1780c9b8a11a16870d52e6c8bc13a56fa48ab933eaf01dbb"
+      "sha256": "363a11598621f7aceb49d3f048820e85f5aa371b5b2a413659a63313c6ae0739"
     },
     {
       "file": "docs/material-motion-cssom-capture-proof.json",
-      "sha256": "0535a2b49c30797921996a0f5761458997148f6136672ccf6c7b7f303c6c3bc5"
+      "sha256": "38da63d6a91a7917ac3aa4dbb0444eb8330cef49b6450ffc57a0485fbc33f8b3"
     }
   ],
   "sourceFingerprint": {

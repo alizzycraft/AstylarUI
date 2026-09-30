@@ -19,7 +19,7 @@ const harnessSource = evidence.binding.sources.find(s => s.file === 'tests/mater
 assert.deepEqual(harnessSource, {
   file: 'tests/material-parity/run-material-parity.mjs',
   recorded: 'c3cabcfde7b9a0cd911eb919774e258145aefc629ff308a48f1f51ece0f34e10',
-  current: '4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d',
+  current: '33c5a4b31a5140bb19e524eaa9fba5bbbb877b45a38f6f0be5722fbe09113f6a',
   verification: 'exact-additive-diagnostics-reversal-with-complete-historical-source-conserved',
 });
 assert.equal(evidence.observations.length, 4050); assert.equal(evidence.captures.length, 1734);

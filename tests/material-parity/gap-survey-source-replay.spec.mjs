@@ -139,7 +139,8 @@ test('gap report refresh changes seventeen integration receipts plus the heading
         if (current.file === 'tests/material-parity/run-material-parity.mjs') {
           const savedStage = execFileSync('git', ['show', `1bc80fc:${current.file}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
           assert.equal(sha(savedStage), '4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d');
-          assert.equal(current.sha256, sha(savedStage), 'retained receipt names its historical runner, not the new launch environment');
+          assert.equal(current.sha256, sha(bytes.toString('utf8').replaceAll('\r\n', '\n')),
+            'regenerated review records the live runner; the original capture remains separately authenticated');
           assert.equal(sha(readGapSurveySource(prior, { current: () => bytes.toString('utf8') })), prior.sha256,
             'live runner must still pass the exact reviewed restoration to the original survey dependency');
         } else assert.equal(current.sha256, sha(current.file.endsWith('.mjs')

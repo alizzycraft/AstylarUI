@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "browser-cssom-motion-capture-proof",
-  "browser": "153.0.8010.53",
+  "browser": "154.0.8037.58",
   "parent": {
     "file": "docs/material-owner-gap-input-survey.json",
     "sha256": "fa7b3f57713fbfed5ad122f250c5967deeedfe4b6f5d798b6d1b9c5346879973"
