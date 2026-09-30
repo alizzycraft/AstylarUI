@@ -2,6 +2,31 @@
 
 ## Current audit checkpoint — September 30
 
+**Paginator control contract:** the unresolved question was missing native key
+activation versus unequal authored disabled-state behavior. A paired Chrome
+154.0.8037.58/light/1440×900/DPR 1 proof on the authenticated frozen showcase
+uses real Tab/Enter/Shift+Tab/Space/Tab, then nine Enter activations. Both sides
+produce the same page indices 0→1→0→1…9 and exact range labels. At the return
+to page 0, Material retains Previous focus; at page 9 it retains Next focus.
+Candidate loses focus to BODY at both boundaries. The first relevant input
+difference is Material paginator's `disabledInteractive` contract: its button
+remains natively enabled, exposes aria-disabled=true and tabindex=-1, retaining
+existing focus while preventing navigation. Candidate authors native
+`disabled: state.pageIndex === 0/9`, yielding disabled=true, no aria-disabled,
+and loss of focus. This is an application control-contract mismatch, not proof
+that core should retain focus on a natively disabled button. Whether the public
+API can fully express Material's disabled-interactive semantics remains an
+implementation-stage question; do not compensate with fixture-specific focus
+requests. Page-size selection is inapplicable to this example: Material's
+default empty options produce only size 10 text, as does candidate authoring.
+Neither live DOM contains a page-size select. Names/live-region semantics,
+icon/focus paint and other profiles remain pending.
+`node --test --test-name-pattern="paginator keyboard transitions" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 in 6,794 ms with no page errors. Renderer, comparison input,
+canonical findings and original captures are unchanged. The full suite was
+already checked at the preceding overlay milestone; only this new standalone
+proof was rerun. Canonical receipt leaf-diffs and final acceptance remain open.
+
 **Dark/mobile repeated overlay boundary:** reuse review found the retained
 `overlay-keyboard-4d782df-settled` evidence already answers light/900×700/DPR 1
 keyboard questions, but not dark/mobile repetition. A focused test on the

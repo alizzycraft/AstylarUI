@@ -1153,6 +1153,62 @@ test('dark mobile overlay cycles retain focus and semantic cleanup boundaries', 
   });
 });
 
+test('paginator keyboard transitions separate native activation from disabled-interactive focus', async () => {
+  const candidateSource = readFileSync('examples/material-showcase/src/app/astylar.component.ts', 'utf8');
+  const materialSource = readFileSync('node_modules/@angular/material/fesm2022/paginator.mjs', 'utf8');
+  assert.match(candidateSource, /id: 'paginator-previous'.*disabled: state\.pageIndex === 0/);
+  assert.match(candidateSource, /id: 'paginator-next'.*disabled: state\.pageIndex === 9/);
+  assert.match(materialSource, /_pageSizeOptions = \[\]/);
+  assert.match(materialSource, /disabledInteractive/);
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      await page.goto(`${baseUrl}/${mode}/paginator?benchmark=1&profile=light`);
+      await page.locator('.frame').waitFor();
+      if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+      const steps = [];
+      const snapshot = async key => steps.push(await page.evaluate(({ mode, key }) => {
+        const active = document.activeElement;
+        const buttons = mode === 'reference' ? [...document.querySelectorAll('#paginator-primary button')] : ['paginator-previous', 'paginator-next'].map(id => document.querySelector(`[data-astylar-id="${id}"]`));
+        const state = mode === 'reference' ? window.ng.getComponent(document.querySelector('app-reference')).store.state() : window.__ASTYLAR_MATERIAL_BENCHMARK__.state();
+        return { key, pageIndex: state.pageIndex, focus: active?.getAttribute('data-astylar-id') || active?.getAttribute('aria-label') || active?.tagName,
+          buttons: buttons.map(node => ({ disabled: node.disabled, ariaDisabled: node.getAttribute('aria-disabled'), tabindex: node.tabIndex })),
+          sizeControls: mode === 'reference' ? document.querySelectorAll('#paginator-primary mat-select').length : document.querySelectorAll('[data-astylar-id="paginator-page-size"] input').length,
+          range: mode === 'reference' ? document.querySelector('.mat-mdc-paginator-range-label').textContent.trim() : document.querySelector('[data-astylar-id="paginator-range"]').textContent.trim() };
+      }, { mode, key }));
+      await snapshot('initial');
+      for (const key of ['Tab', 'Enter', 'Shift+Tab', 'Space', 'Tab', ...Array(9).fill('Enter')]) {
+        await page.keyboard.press(key);
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        await snapshot(key);
+      }
+      observations[mode] = { steps, errors };
+      await page.close();
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    const indices = [0, 0, 1, 1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    for (const mode of ['reference', 'astylar']) {
+      assert.deepEqual(observations[mode].errors, []);
+      assert.deepEqual(observations[mode].steps.map(step => step.pageIndex), indices);
+      assert.deepEqual(observations[mode].steps.map(step => step.range), indices.map(index => `${index * 10 + 1} – ${index * 10 + 10} of 100`));
+      assert.ok(observations[mode].steps.every(step => step.sizeControls === 0));
+    }
+    assert.deepEqual(observations.reference.steps.map(step => step.focus),
+      ['BODY', 'Next page', 'Next page', 'Previous page', 'Previous page', ...Array(10).fill('Next page')]);
+    assert.deepEqual(observations.astylar.steps.map(step => step.focus),
+      ['BODY', 'paginator-next', 'paginator-next', 'paginator-previous', 'BODY', ...Array(9).fill('paginator-next'), 'BODY']);
+    for (const index of [0, 4, 14]) {
+      const buttonIndex = index === 14 ? 1 : 0;
+      assert.deepEqual(observations.reference.steps[index].buttons[buttonIndex], { disabled: false, ariaDisabled: 'true', tabindex: -1 });
+      assert.deepEqual(observations.astylar.steps[index].buttons[buttonIndex], { disabled: true, ariaDisabled: null, tabindex: 0 });
+    }
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));
