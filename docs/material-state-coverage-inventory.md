@@ -2,6 +2,12 @@
 
 ## Evidence boundary
 
+Supplemental comparison-host scope: Chrome 154 at 1440×900 DPR 1 verifies
+settled bottom-sheet/dialog open on candidate, reference or both (six cases).
+The parent selector remains clickable/focused and real closed-select keys change
+both iframe families. This covers the actual two-iframe comparison, not
+same-document multiple-surface modal isolation or transient opening focus.
+
 Supplemental ordinary dark/mobile tooltip paint check: full-frame DPR 2 ink
 offsets differ by .00125448 CSS px. Live texture paint resolves the inherited
 Roboto/Arial/sans-serif font and left alignment within a shrink-wrapped texture.

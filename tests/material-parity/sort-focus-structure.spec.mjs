@@ -1641,6 +1641,73 @@ test('dark mobile real-key selections distinguish direction state from highlight
   });
 });
 
+test('comparison iframe overlays expose parent control focus scope', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    assert.equal(browser.version(), '154.0.8037.58');
+    const observations = [];
+    for (const family of ['bottom-sheet', 'dialog']) for (const mode of ['astylar', 'reference', 'both']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      try {
+        const errors = []; page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/compare`);
+        const selector = page.locator('.comparison-toolbar > label select');
+        // Route setup only; the reachability boundary below uses real input.
+        await selector.selectOption(family);
+        await page.waitForFunction(family => [...document.querySelectorAll('iframe')]
+          .every(frame => frame.src.includes(`/${family}?`)), family);
+        const iframe = page.locator('iframe[title="AstylarUI implementation"]');
+        const candidate = await (await iframe.elementHandle()).contentFrame();
+        await candidate.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        await candidate.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        const local = await candidate.evaluate(family => {
+          const id = `${family}-primary`;
+          const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false).elements[id].borderBox;
+          const canvas = document.querySelector('canvas').getBoundingClientRect();
+          return { x: canvas.x + box.left + box.width / 2, y: canvas.y + box.top + box.height / 2 };
+        }, family);
+        const outer = await iframe.boundingBox();
+        const reference = page.frameLocator('iframe[title="Angular Material reference"]');
+        if (mode !== 'reference') {
+          await page.mouse.click(outer.x + 1 + local.x, outer.y + 1 + local.y);
+          await candidate.waitForFunction(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open);
+        }
+        if (mode !== 'astylar') {
+          await reference.locator(`#${family}-primary`).click();
+          await reference.locator(family === 'dialog' ? '.mat-mdc-dialog-container' : '.mat-bottom-sheet-container').waitFor({ state: 'visible' });
+        }
+        for (const frame of page.frames().filter(frame => frame !== page.mainFrame())) {
+          await frame.evaluate(async () => {
+            await Promise.all(document.getAnimations().filter(animation => animation.effect?.getTiming().iterations !== Infinity)
+              .map(animation => animation.finished.catch(() => {})));
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          });
+        }
+        const before = await candidate.evaluate(() => ({ open: window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open,
+          modal: document.querySelector('[aria-modal="true"]')?.getAttribute('data-astylar-id') ?? null }));
+        await selector.click();
+        const focused = await selector.evaluate(node => node === document.activeElement);
+        // Close the platform popup first; then exercise the focused native
+        // control's keyboard selection rather than platform-menu key routing.
+        await page.keyboard.press('Escape');
+        await page.keyboard.press('Home'); await page.keyboard.press('Enter');
+        t.diagnostic(JSON.stringify({ family, mode, focused, selectedAfterKeys: await selector.inputValue() }));
+        assert.equal(focused, true, `${family}/${mode} overlay intercepted parent focus`);
+        await page.waitForFunction(() => [...document.querySelectorAll('iframe')].every(frame => frame.src.includes('/core?')));
+        observations.push({ family, mode, candidateBeforeParentClick: before, parentSelectorFocused: focused,
+          selected: await selector.inputValue(), frameSources: await page.locator('iframe').evaluateAll(nodes => nodes.map(node => new URL(node.src).pathname)), errors });
+      } finally { await page.close(); }
+    }
+    t.diagnostic(JSON.stringify(observations));
+    for (const observation of observations) {
+      if (observation.mode !== 'reference') assert.equal(observation.candidateBeforeParentClick.open, true);
+      assert.equal(observation.parentSelectorFocused, true);
+      assert.equal(observation.selected, 'core');
+      assert.deepEqual(observation.frameSources, ['/reference/core', '/astylar/core']);
+      assert.deepEqual(observation.errors, []);
+    }
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));

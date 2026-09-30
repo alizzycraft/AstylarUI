@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — September 30
 
+**Comparison-page overlay scope:** a new boundary in the existing frozen-build
+browser spec opens bottom-sheet/dialog in the actual `/compare` iframe host at
+1440×900 DPR 1. Six cases cover candidate-only, reference-only and both-open.
+After finite-animation/two-rAF settlement, a real parent selector click focuses
+the parent native select in every case. Escape closes its platform popup;
+Home/Enter on the focused closed select changes the family to core and both
+iframe sources to /reference/core and /astylar/core. Candidate open=true is
+verified before the parent action, with aria-modal dialog-overlay only for the
+dialog, not the sheet. Thus the historical whole-window click-blocking report
+is not reproduced by these current authenticated inputs. The comparison owns
+two document/iframe boundaries (`comparison.component.ts`), not two Astylar
+surfaces inside one document; this does not establish general same-document
+modal isolation, cross-surface focus or GPU disposal. No source/fixture changes.
+Initial diagnostics timed out: native open-menu Home/Enter did not commit the
+route; a both-dialog probe without explicit settlement also lost parent focus.
+Isolated probes and the settled six-case probe pass; the transient focus cause
+is not assigned to core or erased by the settled result. Preserve that timing
+limitation rather than treating visible popup presence as settlement.
+`node --test --test-name-pattern="comparison iframe overlays" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 (six configurations) in 21,946ms and 22,554ms, zero page errors.
+No screenshot capture, new artifact directory or canonical rebuild. Next: same-document
+surface isolation needs an equivalent public-API reduction, not an iframe result.
+
 **Tooltip effective font and local raster phase:** the ordinary dark/mobile
 test now reads the existing live texture paint-input inspection, not the hidden
 semantic DOM's computed text. The single retained `Create a project` texture
