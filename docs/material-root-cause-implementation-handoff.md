@@ -2,6 +2,24 @@
 
 ## Current audit checkpoint — September 30
 
+**Updated browser-proof batch integration:** from `304612b`, the unfiltered
+`node --test tests/material-parity/sort-focus-structure.spec.mjs` passes **24/24**,
+zero failures/skips/cancellations, in **197,799.515ms**. The calendar timeline
+again independently observes oldClassPredicate=true/focusedCell=true with a
+pending enter animation at currentTime 0 and no events. Corrected settlement
+then records enter start/end and closeGuardAnimating=false before Escape;
+calendar test passes in 8,892ms. This integrates all recent tooltip, wheel/end
+padding and parent-selector scope proofs with prior keyboard, selection and
+resource/disposal checks. Preserve the preceding 23/24 failure as historical
+evidence; this pass does not prove every transient failure eliminated or every
+comparison input equivalent. The timepicker compact query validates current
+dependencies and returns 12,377 working records. Standalone spec/prose changes
+have not changed rendering inputs or canonical classifications; no 2GB export,
+new capture directory or release matrix was warranted for this milestone.
+Next coverage priority: equal-input WebGL text paint and remaining profile/state
+mapping, then batch canonical/harness integration and unfiltered final output
+gates. Do not rerun this full browser-proof suite for a prose-only update.
+
 **Datepicker readiness gap demonstrated, instrumentation corrected:** a bounded
 reference-only opening timeline in the existing calendar test observes the old
 class predicate=true AND focusedCell=true while the enter animation is running,

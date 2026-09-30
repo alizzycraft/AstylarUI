@@ -2,15 +2,21 @@
 
 ## Evidence boundary
 
-Latest shared browser-proof integration from `0c919dd`: 23/24 pass, one
+Latest shared browser-proof integration from `304612b`: **24/24 pass**, zero
+failures/skips/cancellations, 197,799.515ms. Corrected calendar settlement records
+actual enter start/end and clear close guard before Escape. This is diagnostic
+proof integration, not input-equivalence or final output acceptance.
+
+Prior shared browser-proof integration from `0c919dd`: 23/24 pass, one
 reference datepicker Escape-detachment timeout, zero skips/cancellations.
 Focused replay passes but does not erase that intermittent failure. Failure-only
 dispatch/focus/modifier/popup diagnostics are now retained in test output;
-integration and final acceptance remain unresolved.
+the historical intermittent failure remains recorded, not attributed conclusively.
 Bounded calendar instrumentation demonstrates the old focus/class readiness
 predicate can accept a pending enter animation. It now awaits the actual finite
 animation and verifies the reference close guard is clear before Escape; focused
-proof passes. Historical timeout attribution and renewed integration remain open.
+proof passes. Renewed integration above passes; historical timeout attribution
+and full final acceptance remain open.
 
 Supplemental ordinary dark/mobile timepicker: real input click opens both;
 wheel 144 changes scrollTop and first-option position by 144 CSS px on both.
