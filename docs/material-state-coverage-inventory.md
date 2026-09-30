@@ -54,7 +54,7 @@ source-derived applicability review before it can be closed as inapplicable.
 | Autocomplete | 12 / 98 | commit/reopen, hover content, outside/canvas dismissal, disabled, error, open, M | Light desktop input boundaries and mobile final Escape states exist; real open-popup keyboard routing, caret/selection paint and responsive focused states remain. |
 | Checkbox | 12 / 56 | disabled, selected | Pointer, hover and selected states captured. Current Chrome 154 light desktop DPR 1 real Tab/Space proof finds native HTML `input:checkbox` versus candidate `div role=checkbox`: both focus and candidate receives keydown, but only HTML toggles. Focus-ring paint, event order, and other profiles/DPRs remain. |
 | Radio | 12 / 56 | disabled, selected | Pointer/selected states captured. Current Chrome 154 light desktop DPR 1 Tab/ArrowLeft/ArrowRight proof finds Material native radio focus/selection follows team → solo → team; candidate role-only `div` receives both keys but remains on team. Focus paint, Space, event ordering and other profiles/DPRs remain. |
-| Select | 12 / 82 | commit/reopen, hover content, disabled, selected, open, M | Pointer commit and mobile final Escape captured; native expanded-option pixels are uninspectable, so keyboard focus/value/index/events/dismissal and candidate popup cleanup remain. |
+| Select | 12 / 82 | commit/reopen, hover content, disabled, selected, open, M | Chrome 154 light desktop DPR 1 real Tab/Enter/ArrowUp proof: Material custom `mat-select` opens, changes active option Team → Solo and commits Solo; candidate readonly input receives all keys but stays closed/Team. Pointer-open candidate likewise ignores ArrowUp/Enter; Escape removes its options and retains trigger focus. Material option DOM is inspectable; the former native-popup limitation did not apply here. Other keys/profiles, focus/popup paint and repeated resource cleanup remain. |
 | Slider | 12 / 66 | drag-start/end, disabled, comparison-pane drags | Chrome 154 light desktop DPR 1 Tab/Arrow proof: reference uses 0–100/step 5 and peer limits; candidate uses fixed 0–50/50–100/step 1 while the store rounds to 5, producing delayed jumps. Paired pointer proof: default 30/65 thumb centers target correctly; at 60/80 the visible start thumb hits `slider-primary`, and at 20/40 the visible end thumb hits `slider-start`, because half-width hit owners disagree with full-domain visuals. Other states/profiles, general travel geometry, capture cleanup and local paint remain. |
 | Slide-toggle | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 real Tab/Space proof: Material switch changes checked, while role-only candidate receives keydown but stays checked. Focus/hover, inactive minus paint, other profiles remain. |
 | Datepicker | 12 / 99 | secondary view, hover content, outside/canvas dismissal, disabled, error, open, short viewport, M | Light desktop input boundaries and collision/mobile cases exist; real calendar keyboard/day/year navigation, caret paint and dark/responsive focus remain. Preserve its distinct focus contract. |
@@ -85,8 +85,8 @@ source-derived applicability review before it can be closed as inapplicable.
    profile/DPR/intermediate states.
 3. Keyboard-operable selection controls: the current light desktop key probes
    classify sort, checkbox, radio, chips, slide-toggle, button-toggle, tabs,
-   stepper, expansion and slider at their first state/focus divergence. Select,
-   other keys, profiles, focus paint and complete input mapping remain. The
+   stepper, expansion, slider and select at their first state/focus divergence.
+   Other keys, profiles, focus paint and complete input mapping remain. The
    candidate callback receives composite keys; its Escape-only handler does
    not implement the reference components' activation/navigation. Slider has
    a distinct authored range/step versus store-normalization conflict, not a

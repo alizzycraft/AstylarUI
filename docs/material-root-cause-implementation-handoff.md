@@ -149,6 +149,33 @@ this proof neither repairs nor invalidates them. Both focused pointer tests
 pass 2/2. Other states, crossing transitions, profiles/DPRs, and complete
 pointer-cancel/release ownership remain open. No fixture or renderer was edited.
 
+**Select custom-combobox keyboard boundary:** the remaining question was
+whether candidate keyboard opening/navigation/commit was missing because core
+dropped the keys, application authoring omitted their behavior, or the reference
+popup was uninspectable native UI. Current reference source authors Material
+`mat-select`, not a native `select`; the paired Chrome 154/light/1440×900/DPR 1
+test observes its actual `mat-option` DOM. The earlier state-inventory native
+popup limitation was incorrect for this comparison and is corrected. On the
+authenticated frozen build, real Tab focuses both triggers. Enter opens
+Material with Team active, ArrowUp changes its active descendant to Solo, and
+Enter commits Solo and closes. The candidate readonly text input remains
+closed with Team selected, although its application callback receives every
+key. After resetting both to Team and real pointer opening, candidate ArrowUp
+and Enter still leave Team active and the popup open. Escape removes its semantic options and retains
+trigger focus. Material's component implements those keyboard transitions;
+candidate `handleKeydown` only handles Escape, and `handleClick` owns opening
+and option commit (`examples/material-showcase/src/app/astylar.component.ts`).
+Thus the first demonstrated divergence is interaction authoring after key
+delivery. This does not establish a core delivery defect or authorize replacing
+reference behavior with fixture-specific keys. Define equivalent custom
+combobox behavior through the public interaction contract during implementation.
+`node --test tests/material-parity/sort-focus-structure.spec.mjs` passes 11/11
+in 47,489 ms. The final same-state reset refinement passes its focused
+`--test-name-pattern="select real keyboard"` command 1/1 with zero page errors.
+Other keys, disabled/dark/responsive states, local paint and repeated observer/resource
+cleanup remain open; option DOM removal alone does not prove resource disposal.
+No renderer, fixture, or original capture was changed.
+
 **Independent replay:** a separate cold
 `ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
 completed with exit 0. It revalidated the full audit, rehashed the evidence

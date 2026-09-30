@@ -610,6 +610,114 @@ test('slider cross-midpoint visual thumbs reveal fixed-half hit ownership', asyn
   });
 });
 
+test('select real keyboard boundaries distinguish custom Material options from candidate authoring', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      await page.goto(`${baseUrl}/${mode}/select?benchmark=1&profile=light`);
+      await page.locator('.frame').waitFor();
+      if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+      await page.evaluate(() => {
+        window.__selectAuditKeys = [];
+        document.addEventListener('keydown', event => window.__selectAuditKeys.push({ key: event.key,
+          target: event.target.id || event.target.getAttribute('data-astylar-id') }), true);
+      });
+      const steps = [];
+      const snapshot = async boundary => {
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        steps.push(await page.evaluate(({ mode, boundary }) => {
+          const trigger = document.querySelector(mode === 'reference' ? '#select-control' : '[data-astylar-id="select-control"]');
+          const component = window.ng.getComponent(document.querySelector(mode === 'reference' ? 'app-reference' : 'app-astylar-showcase'));
+          const options = [...document.querySelectorAll(mode === 'reference' ? 'mat-option' : '[data-astylar-id^="select-option-"]')];
+          return { boundary, kind: `${trigger.tagName.toLowerCase()}:${trigger.getAttribute('role')}`,
+            focused: document.activeElement === trigger, expanded: trigger.getAttribute('aria-expanded'),
+            selected: component.store.state().selected,
+            options: options.map(option => ({ text: option.textContent.trim(), selected: option.getAttribute('aria-selected') })),
+            active: trigger.getAttribute('aria-activedescendant'),
+            activeText: document.getElementById(trigger.getAttribute('aria-activedescendant'))?.textContent.trim() ?? null,
+            keys: window.__selectAuditKeys,
+            appKeys: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.events()
+              .filter(event => event.type === 'keydown').map(event => event.targetId) : [],
+          };
+        }, { mode, boundary }));
+      };
+      for (const key of ['Tab', 'Enter', 'ArrowUp', 'Enter', 'Enter', 'Escape']) {
+        await page.keyboard.press(key);
+        await snapshot(key);
+      }
+      // Pointer opening separates missing keyboard opening from dismissal of an existing popup.
+      await page.evaluate(mode => {
+        const component = window.ng.getComponent(document.querySelector(mode === 'reference' ? 'app-reference' : 'app-astylar-showcase'));
+        component.store.patchState({ selected: true, open: false });
+      }, mode);
+      await snapshot('reset-selected');
+      if (mode === 'reference') await page.locator('#select-control').click();
+      else {
+        const point = await page.evaluate(() => {
+          const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure(['select-control'], false).elements['select-control'].borderBox;
+          const canvas = document.querySelector('canvas').getBoundingClientRect();
+          return { x: canvas.x + box.left + box.width / 2, y: canvas.y + box.top + box.height / 2 };
+        });
+        await page.mouse.click(point.x, point.y);
+      }
+      await snapshot('pointer-open');
+      await page.keyboard.press('ArrowUp');
+      await snapshot('pointer-open-arrow');
+      await page.keyboard.press('Enter');
+      await snapshot('pointer-open-enter');
+      await page.keyboard.press('Escape');
+      await snapshot('pointer-open-escape');
+      observations[mode] = { steps, errors };
+      await page.close();
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    const boundary = step => [step.boundary, step.focused, step.expanded, step.selected, step.activeText];
+    assert.deepEqual(observations.reference.steps.map(boundary), [
+      ['Tab', true, 'false', true, null],
+      ['Enter', true, 'true', true, 'Team'],
+      ['ArrowUp', true, 'true', true, 'Solo'],
+      ['Enter', true, 'false', false, null],
+      ['Enter', true, 'true', false, 'Solo'],
+      ['Escape', true, 'false', false, null],
+      ['reset-selected', true, 'false', true, null],
+      ['pointer-open', true, 'true', true, 'Team'],
+      ['pointer-open-arrow', true, 'true', true, 'Solo'],
+      ['pointer-open-enter', true, 'false', false, null],
+      ['pointer-open-escape', true, 'false', false, null],
+    ]);
+    assert.deepEqual(observations.astylar.steps.map(boundary), [
+      ['Tab', true, 'false', true, null],
+      ['Enter', true, 'false', true, null],
+      ['ArrowUp', true, 'false', true, null],
+      ['Enter', true, 'false', true, null],
+      ['Enter', true, 'false', true, null],
+      ['Escape', true, 'false', true, null],
+      ['reset-selected', true, 'false', true, null],
+      ['pointer-open', true, 'true', true, 'Team'],
+      ['pointer-open-arrow', true, 'true', true, 'Team'],
+      ['pointer-open-enter', true, 'true', true, 'Team'],
+      ['pointer-open-escape', true, 'false', true, null],
+    ]);
+    const expectedKeys = ['Tab', 'Enter', 'ArrowUp', 'Enter', 'Enter', 'Escape', 'ArrowUp', 'Enter', 'Escape'];
+    for (const mode of ['reference', 'astylar']) {
+      assert.deepEqual(observations[mode].errors, []);
+      assert.deepEqual(observations[mode].steps.at(-1).keys.map(event => event.key), expectedKeys);
+    }
+    assert.equal(observations.reference.steps[0].kind, 'mat-select:combobox');
+    assert.equal(observations.astylar.steps[0].kind, 'input:combobox');
+    assert.deepEqual(observations.reference.steps[1].options,
+      [{ text: 'Solo', selected: 'false' }, { text: 'Team', selected: 'true' }]);
+    assert.deepEqual(observations.astylar.steps[7].options, observations.reference.steps[7].options);
+    assert.deepEqual(observations.astylar.steps.at(-1).appKeys, Array(8).fill('select-control'),
+      'candidate application callback receives opening, navigation, commit and dismissal keys');
+    assert.deepEqual(observations.astylar.steps.at(-1).options, [], 'Escape removes candidate semantic options');
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));
