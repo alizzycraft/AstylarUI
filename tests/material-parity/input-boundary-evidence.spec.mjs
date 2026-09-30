@@ -255,6 +255,116 @@ test('current paired caret-visible capture binds its pixels to unequal caret aut
   assert.equal(candidateInput.resolvedStyle.color, '#1d1b20');
 });
 
+test('dark mobile empty inputs expose caret pixels without changing retained producers', async t => {
+  const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
+  const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));
+  assert.deepEqual(fingerprintDirectory(browserRoot), checkpoint.provenance.browserFiles);
+  const server = createServer((request, response) => {
+    const pathname = decodeURIComponent(new URL(request.url, 'http://127.0.0.1').pathname);
+    const candidate = path.resolve(browserRoot, pathname.replace(/^\/+/, ''));
+    const target = candidate.startsWith(browserRoot + path.sep) && path.extname(candidate) && existsSync(candidate)
+      ? candidate : path.join(browserRoot, 'index.csr.html');
+    const extension = path.extname(target);
+    response.writeHead(200, { 'content-type': extension === '.js' ? 'text/javascript' : extension === '.css' ? 'text/css' :
+      extension === '.woff2' ? 'font/woff2' : extension === '.svg' ? 'image/svg+xml' : 'text/html', 'cache-control': 'no-store' });
+    response.end(readFileSync(target));
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let browser;
+  try {
+    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    assert.equal(browser.version(), '154.0.8037.58');
+    const observations = {};
+    for (const family of ['form-field', 'input']) {
+      observations[family] = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+        const errors = [], samples = [];
+        page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`http://127.0.0.1:${server.address().port}/${mode}/${family}?benchmark=1&profile=dark`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        await page.keyboard.press('Tab');
+        await page.keyboard.press('Control+A');
+        await page.keyboard.press('Backspace');
+        for (let index = 0; index < 6; index++) {
+          if (index) await page.waitForTimeout(125);
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(async () => { await document.fonts.ready;
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
+          const control = await page.evaluate(({ mode, family }) => {
+            const id = `${family}-control`;
+            const node = mode === 'reference' ? document.querySelector(`#${id}`) : document.querySelector(`[data-astylar-id="${id}"]`);
+            let box = node.getBoundingClientRect().toJSON();
+            if (mode === 'astylar') {
+              const measured = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false).elements[id].borderBox;
+              const canvas = document.querySelector('canvas').getBoundingClientRect();
+              box = { x: canvas.x + measured.left, y: canvas.y + measured.top, width: measured.width, height: measured.height };
+            }
+            return { value: node.value, focused: document.activeElement === node, type: node.type,
+              selection: [node.selectionStart, node.selectionEnd], caretColor: getComputedStyle(node).caretColor, box };
+          }, { mode, family });
+          const { box } = control;
+          const clip = { x: Math.max(0, box.x - 8), y: Math.max(0, box.y - 8),
+            width: Math.min(390, box.x + box.width + 8) - Math.max(0, box.x - 8),
+            height: Math.min(844, box.y + box.height + 8) - Math.max(0, box.y - 8) };
+          const visible = await page.screenshot({ clip, caret: 'initial' });
+          const hidden = await page.screenshot({ clip, caret: 'hide' });
+          samples.push({ control, visible, delta: rasterDifference(visible, hidden) });
+        }
+        const pairs = samples.flatMap((sample, index) => samples.slice(index + 1).flatMap(other => [
+          rasterDifference(sample.visible, other.visible), rasterDifference(other.visible, sample.visible),
+        ]));
+        const authoring = mode === 'reference' ? await page.evaluate(({ family }) => {
+          const node = document.querySelector(`#${family}-control`);
+          return { color: getComputedStyle(node).color, caretColor: getComputedStyle(node).caretColor };
+        }, { family }) : await page.evaluate(family => {
+          const id = `${family}-control`;
+          const measurement = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id]);
+          const node = measurement.inputTree.nodes.find(node => node.authored?.id === id);
+          return { color: node.resolvedStyle.color, caretColor: node.resolvedStyle.caretColor ?? null };
+        }, family);
+        observations[family][mode] = { controls: samples.map(sample => sample.control),
+          authoring, deltas: samples.map(sample => sample.delta), blink: pairs.sort((a, b) => b.count - a.count)[0],
+          // Both directions retain the caret-on palette even when the first
+          // sampled image has an off-phase background at these pixels.
+          blinkColors: [...new Set(pairs.flatMap(pair => pair.colors))].sort(), errors };
+        await page.close();
+      }
+    }
+    for (const family of ['form-field', 'input']) {
+      for (const mode of ['reference', 'astylar']) {
+        const side = observations[family][mode];
+        assert.deepEqual(side.errors, []);
+        assert.equal(side.controls.length, 6);
+        for (const control of side.controls) {
+          assert.equal(control.value, '');
+          assert.equal(control.focused, true);
+          assert.equal(control.type, family === 'input' ? 'email' : 'text');
+          assert.deepEqual(control.selection, family === 'input' ? [null, null] : [0, 0]);
+        }
+      }
+      const reference = observations[family].reference, candidate = observations[family].astylar;
+      const nativeOn = reference.deltas.find(delta => delta.count > 0);
+      assert.ok(nativeOn, 'six samples never exposed the native caret');
+      assert.deepEqual(nativeOn, { count: 76, bounds: { minX: 16, minY: 22, maxX: 17, maxY: 59 }, colors: ['208,188,255'] });
+      assert.deepEqual(reference.authoring, { color: 'rgb(230, 225, 229)', caretColor: 'rgb(208, 188, 255)' });
+      assert.deepEqual(candidate.authoring, { color: '#1d1b20', caretColor: null });
+      assert.equal(candidate.blink.count, 156);
+      assert.deepEqual(candidate.blink.bounds, { minX: 14, minY: 21, maxX: 17, maxY: 59 });
+      assert.ok(candidate.blinkColors.includes('29,27,32'), 'canvas caret color never appeared in sampled pixels');
+      for (const key of ['x', 'y', 'width', 'height']) {
+        assert.ok(Math.abs(reference.controls[0].box[key] - candidate.controls[0].box[key]) < .01, `control ${key} differs`);
+      }
+      t.diagnostic(JSON.stringify({ family, referenceCaret: nativeOn, candidateBlink: candidate.blink,
+        candidateBlinkColors: candidate.blinkColors, referenceAuthoring: reference.authoring, candidateAuthoring: candidate.authoring }));
+    }
+  } finally {
+    if (browser) await browser.close();
+    await new Promise(resolve => server.close(resolve));
+  }
+});
+
 function rasterDifference(firstBytes, secondBytes) {
   const first = PNG.sync.read(firstBytes), second = PNG.sync.read(secondBytes);
   assert.equal(first.width, second.width);

@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 30
 
+**Dark/mobile focused-empty caret boundary:** the existing hash-bound caret
+producer and retained light capture remain unchanged. The existing input-boundary
+spec extends only missing form-field/input dark, 390×844, DPR 2 coverage on the
+authenticated 1,887-file build in Chrome 154.0.8037.58. Real Tab/Control+A/Backspace
+is followed by six settled 125 ms samples per side, paired `caret: initial/hide`
+local rasters and bidirectional temporal raster differences. Both empty controls
+remain focused; email selection endpoints are null, not invented indices.
+Native caret-on pixels are RGB 208/188/255 over 76 pixels, a 2×38 device-pixel
+footprint. Canvas on/off changes cover 156 pixels, 4×39, including RGB 29/27/32;
+its crop-relative left edge is two device pixels farther left. Input boxes agree
+within .01 CSS px. Blink phases are not matched by index, and both temporal
+directions are inspected so off-phase background color is not misreported as
+caret color. First color divergence remains authored input: HTML explicitly
+resolves primary caret color, while candidate resolved color is `#1d1b20` and
+caretColor is absent. The wider/offset canvas footprint remains a separate
+suspected paint issue needing minimal equal-input reduction; unequal color
+inputs do not prove a general core defect. No renderer or fixture was changed.
+`node --test --test-name-pattern="dark mobile empty inputs" tests/material-parity/input-boundary-evidence.spec.mjs`
+passes 1/1 in 15,285 ms, with no page errors. The retained
+`--test-name-pattern="current paired caret-visible capture"` proof in the same
+spec still passes 1/1 in 977 ms. Raster checks run in memory: no additional
+capture directory or repeated decoded report is retained. Forward/backward
+selection paint, other profiles and the other input families remain pending.
+
 **Canonical receipt leaf reconciliation:** the remaining September 30 refresh
 question was a provenance-only update versus changed measurements hidden in the
 four receipt sections. The existing section-digest utility now compares selected
