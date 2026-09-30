@@ -2,6 +2,29 @@
 
 ## Current audit checkpoint — October 1
 
+**Tooltip horizontal phase narrowed to the texture/paint boundary, not crop origin:**
+the existing ordinary dark/mobile Chrome154 DPR2 proof passes1/1 in5,490.4643ms.
+Retain `artifacts/material-parity/tooltip-texture-phase-4da8cba-final.log` and
+the preceding horizontal-phase/texture-boundary/global-raster diagnostic logs.
+Both full-frame crops start at deviceX169; native opaque glyph bounds180..356
+versus candidate179..355,249 pixels each. The candidate182×32 texture has249
+opaque pixels at localX2..178; its sole tooltip text plane projects to
+X177.2017..358.7983, exactly the popup's8-CSS-pixel inset and logical text width.
+Final opaque bounds equal floor(projectedLeft)+local bounds, with nearest sampling.
+Direct browser-canvas paint at that same fractional final X instead has236 opaque
+pixels at179..356: local texture paint and global paint do not retain the same
+raster phase. This excludes unequal crop origins and a displaced content-plane
+projection in this frozen hovered state; it does not prove DOM/canvas equivalence
+or identify the complete native-versus-texture phase cause. Raw SSIM.735369 versus
+phase-registered.999993 remains diagnostic, not acceptance or a concealed shift.
+Next decisive check: equal-input public text at controlled fractional CSS origins,
+capturing native text origin, local raster, projected plane and final pixels;
+separate native text paint snapping from local-texture phase/sampling. Current
+Material alignment/composition inputs are still unequal. Keyboard-focus opening,
+other profiles and historical blurry/offset tooltip reports remain independent.
+No renderer or canonical fixture changed. Test-source receipts need reconciliation
+at the next coherent integration milestone; do not repeat the full export now.
+
 **Public equal-input scrollbar gutter reduction now proves the core boundary:**
 extend the existing input-boundary proof with an in-memory public-root consumer,
 no Material plugin and no fixture edits. Both modes receive exactly the same

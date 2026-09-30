@@ -2,6 +2,17 @@
 
 ## Evidence boundary
 
+October1 tooltip phase proof passes1/1 in5,490.4643ms: identical crop origin,
+but candidate opaque glyphs are1 device pixel left. The retained local texture
+and correctly inset projected text plane explain the candidate final bounds;
+direct canvas paint at the same fractional final X changes raster phase.
+This narrows the unresolved question to local raster/sampling versus native paint
+phase, not a displaced popup/content-plane coordinate. Next: equal-input public
+text at controlled fractional CSS origins. Only frozen dark/mobile hovered DPR2
+is covered; not general tooltip input equivalence or a blur fix. See current
+handoff and retained `tooltip-texture-phase-4da8cba-final.log`. No fixture/core edit;
+source-receipt reconciliation remains a coherent-batch milestone.
+
 October1 public equal-input gutter reduction closes the plugin/authoring ambiguity:
 identical div/style objects with hidden/auto/scroll at DPR1/2, no Material plugin.
 Native auto245×128 and scroll245×113 client areas versus candidate260×128;

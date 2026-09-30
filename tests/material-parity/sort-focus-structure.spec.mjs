@@ -1437,6 +1437,20 @@ test('ordinary dark mobile tooltip separates keyboard opening from pointer paint
         textRasters[mode] = cropRgba(fullImage, { left: Math.floor(p.x * 2) + 8,
           top: Math.floor(p.y * 2) + 8, right: Math.floor(p.x * 2) + 204,
           bottom: Math.floor(p.y * 2) + 40 });
+        const cropOriginX = Math.floor(p.x * 2) + 8;
+        let foregroundMinX = Infinity, foregroundMaxX = -Infinity, foregroundPixels = 0;
+        for (let y = Math.floor(p.y * 2) + 8; y < Math.floor(p.y * 2) + 40; y++) {
+          for (let x = cropOriginX; x < Math.floor(p.x * 2) + 204; x++) {
+            const i = (y * fullImage.width + x) * 4;
+            if (fullImage.data[i] === 245 && fullImage.data[i + 1] === 239 && fullImage.data[i + 2] === 244) {
+              foregroundPixels++; foregroundMinX = Math.min(foregroundMinX, x); foregroundMaxX = Math.max(foregroundMaxX, x);
+            }
+          }
+        }
+        assert.ok(foregroundPixels > 100);
+        const horizontalPhase = { devicePopupX: p.x * 2, cropOriginX,
+          foregroundMinX, foregroundMaxX, foregroundPixels,
+          cropLocalMinX: foregroundMinX - cropOriginX, cropLocalMaxX: foregroundMaxX - cropOriginX };
         const ink = measureTextInkCenter(fullImage, { left: p.x, top: p.y,
           right: p.x + p.width, bottom: p.y + p.height, width: p.width, height: p.height }, 2);
         const typography = await page.evaluate(mode => {
@@ -1448,8 +1462,51 @@ test('ordinary dark mobile tooltip separates keyboard opening from pointer paint
           const paint = mode === 'astylar' ? (() => {
             const surface = window.ng.getComponent(document.querySelector('app-astylar-showcase')).surface;
             const text = surface.host.inspection.textRenderingService;
-            return [...text.getRetainedTextures()].map(texture => text.inspectTexturePaintInputs(texture))
-              .filter(inputs => inputs?.text === 'Create a project');
+            return [...text.getRetainedTextures()].flatMap(texture => {
+              const inputs = text.inspectTexturePaintInputs(texture);
+              if (inputs?.text !== 'Create a project') return [];
+              // Read the existing CPU raster and scene geometry; do not repaint,
+              // move the owner, or alter texture sampling to obtain this evidence.
+              const size = texture.getSize(), ctx = texture.getContext();
+              const pixels = ctx.getImageData(0, 0, size.width, size.height).data;
+              let opaqueMinX = Infinity, opaqueMaxX = -Infinity, opaquePixels = 0;
+              for (let y = 0; y < size.height; y++) for (let x = 0; x < size.width; x++) {
+                if (pixels[(y * size.width + x) * 4 + 3] === 255) {
+                  opaquePixels++; opaqueMinX = Math.min(opaqueMinX, x); opaqueMaxX = Math.max(opaqueMaxX, x);
+                }
+              }
+              const scene = surface.scene, engine = scene.getEngine(), camera = scene.activeCamera;
+              const viewport = camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
+              const identity = scene.getTransformMatrix().constructor.Identity();
+              const owners = scene.meshes.filter(mesh => mesh.material?.getActiveTextures().includes(texture)).map(mesh => {
+                const points = mesh.getBoundingInfo().boundingBox.vectorsWorld.map(point =>
+                  point.constructor.Project(point, identity, scene.getTransformMatrix(), viewport));
+                return { name: mesh.name, elementId: mesh.metadata?.elementId,
+                  projectedLeft: Math.min(...points.map(point => point.x)),
+                  projectedRight: Math.max(...points.map(point => point.x)),
+                  textDimensions: mesh.metadata?.textDimensions };
+              });
+              // Diagnostic browser-canvas replay at the measured final X, not
+              // an alternative fixture or a replacement rendering path.
+              const directCanvas = document.createElement('canvas');
+              directCanvas.width = engine.getRenderWidth(); directCanvas.height = 64;
+              const direct = directCanvas.getContext('2d');
+              direct.scale(window.devicePixelRatio, window.devicePixelRatio);
+              direct.font = `${inputs.style.fontStyle} ${inputs.style.fontWeight} ${inputs.style.fontSize}px ${inputs.style.fontFamily}`;
+              direct.letterSpacing = `${inputs.style.letterSpacing}px`;
+              direct.fillStyle = inputs.style.color;
+              direct.fillText(inputs.text, owners[0].projectedLeft / window.devicePixelRatio, 20);
+              const directPixels = direct.getImageData(0, 0, directCanvas.width, directCanvas.height).data;
+              let directMinX = Infinity, directMaxX = -Infinity, directOpaquePixels = 0;
+              for (let y = 0; y < directCanvas.height; y++) for (let x = 0; x < directCanvas.width; x++) {
+                if (directPixels[(y * directCanvas.width + x) * 4 + 3] === 255) {
+                  directOpaquePixels++; directMinX = Math.min(directMinX, x); directMaxX = Math.max(directMaxX, x);
+                }
+              }
+              return [{ ...inputs, rasterBoundary: { size, logicalSize: text.getLogicalTextureSize(texture),
+                samplingMode: texture.samplingMode, opaqueMinX, opaqueMaxX, opaquePixels, owners,
+                directAtProjectedOrigin: { directMinX, directMaxX, directOpaquePixels } } }];
+            });
           })() : null;
           return { resolved: Object.fromEntries(keys.map(key => [key, style[key] ?? null])), paint };
         }, mode);
@@ -1458,7 +1515,8 @@ test('ordinary dark mobile tooltip separates keyboard opening from pointer paint
         for (let i = 0; i < image.data.length; i += 4) { const color = [...image.data.subarray(i, i + 3)].join(','); colors.set(color, (colors.get(color) ?? 0) + 1); }
         await page.mouse.move(10, 10); await settle();
         await page.locator(mode === 'reference' ? '.mat-mdc-tooltip-surface' : '[data-astylar-id="tooltip-popup"]').waitFor({ state: 'detached' });
-        observations[mode] = { focused, hovered, ink, typography, commonColors: [...colors].sort((a, b) => b[1] - a[1]).slice(0, 5), closed: await sample(), errors };
+        observations[mode] = { focused, hovered, ink, typography, horizontalPhase,
+          commonColors: [...colors].sort((a, b) => b[1] - a[1]).slice(0, 5), closed: await sample(), errors };
       } finally { await page.close(); }
     }
     t.diagnostic(JSON.stringify(observations));
@@ -1495,6 +1553,27 @@ test('ordinary dark mobile tooltip separates keyboard opening from pointer paint
     assert.deepEqual(raster.phaseRegistered.phaseOffset, { x: 1, y: 0 });
     assert.ok(raster.unregistered.similarity < .8);
     assert.ok(raster.phaseRegistered.similarity > .99);
+    const referencePhase = observations.reference.horizontalPhase, candidatePhase = observations.astylar.horizontalPhase;
+    assert.equal(candidatePhase.cropOriginX, referencePhase.cropOriginX, 'phase is not caused by differing crop origins');
+    assert.equal(candidatePhase.foregroundMinX, referencePhase.foregroundMinX - 1);
+    assert.equal(candidatePhase.foregroundMaxX, referencePhase.foregroundMaxX - 1);
+    assert.equal(candidatePhase.foregroundPixels, referencePhase.foregroundPixels);
+    const boundary = paints[0].rasterBoundary;
+    assert.deepEqual(boundary.size, { width: 182, height: 32 });
+    assert.equal(boundary.samplingMode, 1);
+    assert.equal(boundary.owners.length, 1);
+    assert.equal(boundary.owners[0].elementId, 'tooltip-popup');
+    const owner = boundary.owners[0];
+    assert.ok(Math.abs(owner.projectedLeft - candidatePhase.devicePopupX - 16) < .001,
+      'projected text plane begins at the authored eight-CSS-pixel content inset');
+    assert.ok(Math.abs(owner.projectedRight - owner.projectedLeft - boundary.logicalSize.width * 2) < .001);
+    assert.equal(candidatePhase.foregroundMinX, Math.floor(owner.projectedLeft) + boundary.opaqueMinX);
+    assert.equal(candidatePhase.foregroundMaxX, Math.floor(owner.projectedLeft) + boundary.opaqueMaxX);
+    assert.equal(candidatePhase.foregroundPixels, boundary.opaquePixels);
+    // Local texture paint does not retain the same phase as direct browser
+    // canvas paint at fractional final X. This is not a DOM-equivalence proof.
+    assert.notEqual(boundary.directAtProjectedOrigin.directOpaquePixels, boundary.opaquePixels);
+    assert.equal(boundary.directAtProjectedOrigin.directMaxX, candidatePhase.foregroundMaxX + 1);
   });
 });
 
