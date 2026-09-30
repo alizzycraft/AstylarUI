@@ -2,6 +2,57 @@
 
 ## Current audit checkpoint — September 30
 
+**Equal-input public empty-caret WebGL reduction:** the existing
+`input-boundary-evidence.spec.mjs` now mounts one empty text input through the
+installed package-root `Astylar` API, with native CSS generated from exactly the
+same declarations and no Material plugin. Chrome 154.0.8037.58, Angular 20.3.31,
+Babylon 8.56.2, AstylarUI 0.2.0; DPR 1 and 2. Identical left=20px and
+padding-left=8px requests produce native insertion x=28px. Candidate initial
+empty caret paints at center x=21.5px; after real typing `A` and Backspace,
+the same focused empty state paints at center x=28px. Its colored footprint is
+three physical columns initially/two after editing at DPR 1 (phase/AA), four
+at DPR 2; the authored native caret is one CSS pixel wide. The candidate uses
+the requested caret color, but the existing two-CSS-pixel core width policy
+still differs. Full-surface subtraction locates the initially misplaced caret;
+zero pixels in the padded interior is NOT evidence that it is absent entirely.
+
+The owning source path is concrete: `TextInputManager` registration calls
+`updateTextDisplay` only for content or placeholder (line 133); `handleFocus`
+creates empty metrics but does not initialize `visualTextLeftEdgeCss` (178–221).
+`TextSelectionService.projectCursorX` falls back to half-width + 1.5px (186).
+Editing calls `updateTextDisplay`, whose empty branch calculates the authored
+content-inset origin (335). The installed versions retain these same branches.
+This isolates a core initial-empty origin defect, independently of Material
+authoring and color mismatch. It does not establish the cause of every historical
+missing-caret report, placeholder/textarea behavior, native focus-outline parity,
+outside-edge clipping or the frozen Material bundle's complete paint behavior.
+This current packed consumer uses different peer versions from older captures;
+do not silently apply its receipt to them.
+
+Focused command:
+`node --test --test-name-pattern='public equal-input empty caret' tests/material-parity/input-boundary-evidence.spec.mjs`.
+Final focused replay passes 1/1, zero skips/failures, 20,081.381ms, with identical
+typing/deletion actions on both sides and stable native insertion. Prior bounded
+replays at 16,064.403ms and 18,606.454ms reproduce the candidate origins. These are passing diagnostic
+assertions that preserve an exposed mismatch, NOT parity acceptance. The bundle
+SHA is `1357d31b1b85cc86eadd56081f525aab30807cb5ee3e376ebe181aaa51b15a13`;
+2,515 actual dependency inputs are hashed before/after execution, receipt digest
+`8c965e6922ee5536862619a47689fe523836ece1615ad495d94a3f91e2f992a4`.
+Installed manager SHA `3807a8c2f82e97bc3ab5f6f3154aa791814c1e6e78738704aa2c0dedbe9fde7d`;
+selection service SHA `83817ad4f3645dbc7b3c2205e278a13da3053172d70934bce6037388f8ab74f0`.
+The test emits machine-readable declarations, effective style and raster bounds.
+Intermediate diagnostic failures are not concealed: the virtual entry was first
+mistakenly read as a disk dependency; native focus outline contaminated the first
+full-input crop (228px instead of a caret); an unsupported `backgroundColor`
+declaration was then replaced with the supported `background` on BOTH sides.
+Only the warning-free final input supports the conclusion. All builds/captures
+are in memory, with explicit surface/application/browser/server cleanup; no
+scratch run directory or immutable capture changed. No renderer/fixture fix,
+canonical classification export or full release gate was performed.
+Next: carry this bounded initialization/width finding into remaining equal-input
+text-paint coverage (placeholder, textarea, selection and profile/state mapping)
+and integrate at a coherent batch milestone, not by repeating settled probes.
+
 **Updated browser-proof batch integration:** from `304612b`, the unfiltered
 `node --test tests/material-parity/sort-focus-structure.spec.mjs` passes **24/24**,
 zero failures/skips/cancellations, in **197,799.515ms**. The calendar timeline

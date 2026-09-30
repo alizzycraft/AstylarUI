@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import test from 'node:test';
 import ts from 'typescript';
@@ -434,6 +435,153 @@ test('shipped caret geometry fixes width before projection independently of care
       } finally { await context.close(); }
     }
   } finally { await browser?.close(); parent.dispose(false, true); scene.dispose(); engine.dispose(); }
+});
+
+test('public equal-input empty caret has paired WebGL raster evidence', async t => {
+  // Compile a public consumer in memory: no canonical fixture, Material plugin,
+  // renderer replacement, retained mesh mutation or capture directory.
+  const consumer = path.resolve('examples/material-showcase');
+  const requireConsumer = createRequire(path.join(consumer, 'package.json'));
+  const built = await requireConsumer('esbuild').build({ absWorkingDir: process.cwd(),
+    stdin: { resolveDir: consumer, sourcefile: 'equal-input-caret.mjs', contents: `
+      import '@angular/compiler';
+      import { provideZonelessChangeDetection } from '@angular/core';
+      import { createApplication } from '@angular/platform-browser';
+      import { Astylar } from 'astylarui';
+      const mode = new URLSearchParams(location.search).get('mode');
+      const site = { root: { children: [{type:'input',inputType:'text',id:'audit-empty',value:'',ariaLabel:'empty input'}] },
+        styles: [{selector:'input',position:'absolute',left:'20px',top:'40px',width:'228px',height:'24px',
+          boxSizing:'border-box',display:'block',margin:'0',padding:'0',paddingLeft:'8px',paddingRight:'8px',borderWidth:'0',borderRadius:'0',
+          background:'#e8e0eb',color:'#e6e1e5',caretColor:'#d0bcff',
+          fontFamily:'Arial',fontSize:'16px',fontWeight:'400',lineHeight:'24px',textAlign:'left'}] };
+      document.body.style.cssText='margin:0;padding:0';
+      const stage=document.createElement(mode==='reference'?'div':'canvas');
+      stage.style.cssText='position:relative;display:block;width:390px;height:140px;margin:0;padding:0';
+      document.body.append(stage);
+      let application, surface;
+      if(mode==='reference') {
+        const css=document.createElement('style');
+        css.textContent=site.styles.map(({selector,...values})=>selector+'{'+Object.entries(values)
+          .map(([key,value])=>key.replace(/[A-Z]/g,c=>'-'+c.toLowerCase())+':'+value).join(';')+'}').join('');
+        document.head.append(css);
+        const input=document.createElement('input'); input.id='audit-empty'; input.type='text';
+        input.setAttribute('aria-label','empty input'); stage.append(input);
+      } else {
+        application=await createApplication({providers:[provideZonelessChangeDetection()]});
+        surface=application.injector.get(Astylar).mount(stage,site,{diagnostics:{logLevel:'silent'}});
+      }
+      const settle=async()=>{await document.fonts.ready; await surface?.whenSettled();
+        await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));};
+      await settle();
+      window.caretAudit={settle,snapshot(){
+        const input=mode==='reference'?document.getElementById('audit-empty'):
+          document.querySelector('[data-astylar-id="audit-empty"]');
+        if(!(input instanceof HTMLInputElement)) throw Error('Missing public control');
+        return {site,focused:input===document.activeElement,value:input.value,selection:[input.selectionStart,input.selectionEnd],
+          resolved:surface?.inspectResolvedStyles()??null,diagnostics:surface?.diagnostics??null,
+          cursorMeshes:surface?.scene.meshes.filter(m=>/cursor/i.test(m.name)).map(m=>({name:m.name,enabled:m.isEnabled(),visible:m.isVisible}))??[]};
+      },dispose(){surface?.dispose();application?.destroy();return surface?.disposed??true;}};
+    ` }, bundle: true, write: false, format: 'esm', platform: 'browser', target: 'es2022', metafile: true });
+  const inputs = Object.keys(built.metafile.inputs).filter(file => path.basename(file) !== 'equal-input-caret.mjs')
+    .map(file => ({ file, sha256: hash(readFileSync(file)) }));
+  const packages = Object.fromEntries(['@angular/core', '@babylonjs/core', 'astylarui'].map(name =>
+    [name, JSON.parse(readFileSync(path.join(consumer, 'node_modules', name, 'package.json'))).version]));
+  const bundle = built.outputFiles[0].contents;
+  const html = '<!doctype html><html><head><meta charset="utf-8"></head><body><script type="module" src="/audit.js"></script></body></html>';
+  const server = createServer((request, response) => {
+    const script = new URL(request.url, 'http://localhost').pathname === '/audit.js';
+    response.setHeader('content-type', script ? 'text/javascript' : 'text/html');
+    response.end(script ? bundle : html);
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let browser;
+  const results = [], errors = [];
+  try {
+    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    for (const dpr of [1, 2]) {
+      const pair = {};
+      for (const mode of ['reference', 'astylar']) {
+        const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: dpr });
+        try {
+          const page = await context.newPage();
+          page.on('pageerror', error => errors.push(String(error)));
+          await page.goto(`http://127.0.0.1:${server.address().port}/?mode=${mode}`);
+          await page.waitForFunction(() => !!window.caretAudit);
+          const initial = await page.evaluate(() => window.caretAudit.snapshot());
+          assert.equal(initial.focused, false); assert.equal(initial.value, '');
+          // Interior crop excludes native platform focus outline. Baseline subtraction
+          // leaves visible caret pixels, not a native-only screenshot caret override.
+          const clip = { x: 24, y: 44, width: 220, height: 16 };
+          const baseline = await page.screenshot({ clip, caret: 'initial' });
+          const stageBaseline = await page.screenshot({ clip: { x: 0, y: 0, width: 390, height: 140 }, caret: 'initial' });
+          await page.mouse.click(50, 52);
+          await page.evaluate(() => window.caretAudit.settle());
+          const focused = await page.evaluate(() => window.caretAudit.snapshot());
+          assert.equal(focused.focused, true); assert.equal(focused.value, '');
+          assert.deepEqual(focused.selection, [0, 0]);
+          let paint = { count: 0 }, stageDelta = { count: 0 };
+          for (let sample = 0; sample < 6; sample++) {
+            const delta = rasterDifference(await page.screenshot({ clip, caret: 'initial' }), baseline);
+            if (delta.count > paint.count) paint = delta;
+            const fullDelta = rasterDifference(await page.screenshot({ clip: { x: 0, y: 0, width: 390, height: 140 }, caret: 'initial' }), stageBaseline);
+            if (fullDelta.count > stageDelta.count) stageDelta = fullDelta;
+            await page.waitForTimeout(125);
+          }
+          pair[mode] = { site: focused.site, paint, stageDelta, resolved: focused.resolved, cursorMeshes: focused.cursorMeshes };
+          if (mode === 'reference') assert.ok(paint.count > 0, 'native empty caret must paint');
+          if (mode === 'astylar') {
+            assert.deepEqual(focused.diagnostics.messages, [], 'minimal public input must have no unsupported declarations');
+            assert.ok(stageDelta.count > 0, 'candidate caret must be located across the whole surface, not assumed absent from interior');
+          }
+          {
+            // Same empty value reached through editing exercises the normal text
+            // display path. No cursor/mesh state is set by the diagnostic.
+            await page.keyboard.type('A');
+            assert.equal(await page.evaluate(() => window.caretAudit.snapshot().value), 'A');
+            await page.keyboard.press('Backspace');
+            await page.evaluate(() => window.caretAudit.settle());
+            const edited = await page.evaluate(() => window.caretAudit.snapshot());
+            assert.equal(edited.value, ''); assert.equal(edited.focused, true);
+            assert.deepEqual(edited.selection, [0, 0]);
+            let editedEmpty = { count: 0 };
+            for (let sample = 0; sample < 6; sample++) {
+              const delta = rasterDifference(await page.screenshot({ clip: mode === 'astylar'
+                ? { x: 0, y: 0, width: 390, height: 140 } : clip, caret: 'initial' }),
+                mode === 'astylar' ? stageBaseline : baseline);
+              if (delta.count > editedEmpty.count) editedEmpty = delta;
+              await page.waitForTimeout(125);
+            }
+            assert.ok(editedEmpty.count > 0);
+            pair[mode].editedEmpty = editedEmpty;
+          }
+          assert.equal(await page.evaluate(() => window.caretAudit.dispose()), true);
+        } finally { await context.close(); }
+      }
+      assert.deepEqual(pair.reference.site, pair.astylar.site);
+      assert.equal(pair.reference.paint.bounds.maxX - pair.reference.paint.bounds.minX + 1, dpr);
+      assert.deepEqual(pair.reference.paint.colors, ['208,188,255']);
+      assert.deepEqual(pair.reference.editedEmpty, pair.reference.paint, 'native insertion stays at the same padded origin after equal editing');
+      assert.equal(pair.astylar.paint.count, 0, 'record the initial caret outside the padded interior, not parity');
+      const center = paint => (paint.bounds.minX + paint.bounds.maxX + 1) / (2 * dpr);
+      assert.equal(center(pair.astylar.stageDelta), 21.5, 'initial empty caret takes the core insertion-edge fallback');
+      assert.equal(center(pair.astylar.editedEmpty), 28, 'editing establishes the authored padded insertion edge');
+      results.push({ dpr, reference: pair.reference.paint, astylar: pair.astylar.paint,
+        referenceEditedEmpty: pair.reference.editedEmpty, stageDelta: pair.astylar.stageDelta,
+        editedEmpty: pair.astylar.editedEmpty, cursorMeshes: pair.astylar.cursorMeshes,
+        effective: pair.astylar.resolved.elements.find(e => e.id === 'audit-empty').effective });
+    }
+    assert.deepEqual(errors, []);
+    for (const input of inputs) assert.equal(hash(readFileSync(input.file)), input.sha256, input.file);
+    const coreSources = inputs.filter(input => /(?:text-input\.manager|text-selection\.service)\.js$/.test(input.file));
+    assert.equal(coreSources.length, 2);
+    t.diagnostic(JSON.stringify({ browser: browser.version(), packages, bundleSha256: hash(bundle),
+      dependencyCount: inputs.length, dependencyReceiptSha256: hash(JSON.stringify(inputs)), coreSources, results,
+      classification: 'core-empty-input-initial-origin-diverges-from-edited-origin; caret-width-policy-also-differs',
+      limitation: 'installed packed public consumer, not frozen Material bundle; native focus outline excluded from interior crop; all Material states and clipping remain unproven' }));
+  } finally {
+    await browser?.close();
+    await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
+  }
 });
 
 function rasterDifference(firstBytes, secondBytes) {

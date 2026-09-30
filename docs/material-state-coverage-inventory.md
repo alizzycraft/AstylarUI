@@ -2,6 +2,18 @@
 
 ## Evidence boundary
 
+Equal-input public core text input (no placeholder/Material plugin) now has
+real Chrome 154 WebGL/native caret evidence at DPR 1 and 2. The initial empty
+candidate caret center is x=21.5px, versus the authored/native padded insertion
+edge x=28px; typing `A` and Backspace moves the candidate center to x=28px.
+Requested caret color is observed, while the core two-CSS-pixel width policy
+also differs. Source traces initialization skipping the content-inset origin
+until editing. Focused diagnostic passes 1/1, not a parity pass. See the current
+handoff for receipts, exact pixel bounds and intermediate instrumentation failures.
+This installed packed consumer (Angular 20.3.31/Babylon 8.56.2) does not replace
+the frozen Material capture. Placeholder/textarea, complete selection paint,
+other profiles and historical-report attribution remain pending.
+
 Latest shared browser-proof integration from `304612b`: **24/24 pass**, zero
 failures/skips/cancellations, 197,799.515ms. Corrected calendar settlement records
 actual enter start/end and clear close guard before Escape. This is diagnostic
