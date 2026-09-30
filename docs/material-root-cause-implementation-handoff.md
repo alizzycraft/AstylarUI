@@ -2,22 +2,45 @@
 
 ## Current audit checkpoint — September 30
 
-**Canonical check and publication guard:**
-`node scripts/export-material-input-audit-current-ancestry.mjs --check`
-completed its full build, validator, and evidence-session verification,
-then failed on `checked-in machine audit is stale` after 3,035,518 ms. The
-evidence session read 1,205 files / 89,154,859 bytes, with one collector,
-ten memory hits, one disk hit and no invalidations. The former runner compared
-the saved package before printing collected validation errors, so this failure
-does **not** prove that the rebuilt audit is valid. It also wrote canonical
-bytes in export mode even when validation errors existed. The runner now reports
-validation failure before either comparison or publication and leaves existing
-canonical bytes untouched; `node --test
-tests/material-parity/input-audit-cli-transport.spec.mjs` passes 1/1 across
-valid, stale, malformed and invalid/no-overwrite cases. The workflow-focused
-suite passes 6/6 and the 535-source focused assertion passes 1/1. A fresh full export is still
-required to obtain the validator result and, only if valid, publish the current
-535-source package. No renderer, fixture or original capture changed.
+**Current canonical export:** a cold
+`node scripts/export-material-input-audit-current-ancestry.mjs` completed the
+full production build, validation, evidence-session verification and canonical
+publication with exit code 0. Its verified session read 1,205 files /
+89,154,859 bytes with two collectors, ten memory hits, zero disk hits and zero
+invalidations. The package manifest authenticates 62,820,320 compressed bytes
+(`3ec576a3…`) and 2,222,799,930 decoded bytes (`f28c3bd7…`). The derived compact
+index imports and verifies the same package: 8,483 scalar discrepancies,
+389,202 occurrences, 39,904 control differences and 135 source findings. The
+configured capture inventory remains 436/436 static and 1,875/1,875 interaction
+cases across 36 families; those counts do not establish input equivalence.
+The cold run's wall time includes a host suspension and is not a CPU-time measure.
+
+**Export reconciliation and remaining gates:** streaming package authentication
+found 79 sections before and after, with no added or removed sections. Exactly
+seven changed: `sourceFingerprints`, `controlLineBoxes`, `discrepancies`,
+`ownerCaretInputs`, `reviewedSourceBatchInputs`, `controlTypography` and
+`focusedProofs`. The source inventory grew from 534 to 535 with
+`scripts/material-container-font-targets.mjs`; the 107 focused proofs retain
+their membership and descriptions, with source line shifts. Old/new compact
+finding shards contain identical raw values, cases, classifications and
+attributions; 49 complete rows changed only proof hashes or the current
+normalization-module SHA-256. The readable report likewise changes proof line
+references, not substantive findings. The full audit validator passed during
+export, and `npm run audit:findings:verify` passed for the published package.
+The other changed receipt sections were not independently leaf-diffed, so this
+is a validated canonical refresh, not a claim that every source receipt is
+semantically unchanged. An independent canonical `--check`, complete current
+audit-harness run, remaining state/coverage review and unfiltered browser gates
+remain required before audit acceptance. No renderer, fixture or original capture
+was changed in this export.
+
+**Publication guard:** the preceding `--check` had built and verified evidence
+but reported a stale checked-in package after 3,035,518 ms. Because the old
+runner compared package bytes before printing validation errors, that stale
+result alone did not prove validation. The runner now reports invalid audits
+before comparing or publishing and leaves canonical bytes untouched. Its focused
+CLI transport test passes 1/1 across valid, stale, malformed and
+invalid/no-overwrite cases; the workflow-focused suite passes 6/6.
 
 **Source-inventory assertion reconciled:** the historical 409-source producer
 and its original 356-source test assertion are now replayed from pinned Git
@@ -28,8 +51,8 @@ the focused current test verifies the original 424 paths retain their relative
 order and identifies exactly 111 additional paths interleaved in the registry,
 then checks all current path/order and file-hash receipts. That focused test
 passes 1/1. The old "append-only" assumption was a test defect, not an input
-equivalence finding. The committed canonical package still predates this
-535-source inventory; a complete export/check and coverage gates are pending.
+equivalence finding. The newly exported canonical package includes this
+535-source inventory; an independent check and coverage gates are pending.
 
 **Slider-border historical integration reconciled:** the original two-case capture
 still yields all 32 reviewed native range border groups (64 observations): the
