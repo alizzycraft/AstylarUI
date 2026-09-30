@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+import { createServer } from 'node:http';
+import path from 'node:path';
 import test from 'node:test';
 import ts from 'typescript';
 import { chromium } from 'playwright-core';
+import { fingerprintDirectory } from './run-checkpoint.mjs';
 import { validateSupplementalCapture } from './supplemental-capture-evidence.mjs';
 import { propertyGroups } from './input-equivalence-policy.mjs';
 
@@ -53,6 +56,104 @@ test('served core isolates Home and End selection collapse from Material popup b
       assert.deepEqual([input.selectionStart, input.selectionEnd], [c.shipped, c.shipped], c.key);
     }
   } finally { await browser.close(); }
+});
+
+test('native Tab selection is collapsed by the served semantic-state synchronization', async () => {
+  const manifest = JSON.parse(readFileSync(report.capture.checkpointManifest.file));
+  const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
+  assert.deepEqual(fingerprintDirectory(browserRoot), manifest.provenance.browserFiles,
+    'served showcase differs from the retained input-boundary build');
+  const server = createServer((request, response) => {
+    const pathname = decodeURIComponent(new URL(request.url, 'http://127.0.0.1').pathname);
+    const candidate = path.resolve(browserRoot, pathname.replace(/^\/+/, ''));
+    const target = candidate.startsWith(browserRoot + path.sep) && path.extname(candidate) && existsSync(candidate)
+      ? candidate : path.join(browserRoot, 'index.csr.html');
+    const extension = path.extname(target);
+    const contentType = extension === '.js' ? 'text/javascript' : extension === '.css' ? 'text/css' :
+      extension === '.woff2' ? 'font/woff2' : extension === '.svg' ? 'image/svg+xml' : 'text/html';
+    response.writeHead(200, { 'content-type': contentType, 'cache-control': 'no-store' });
+    response.end(readFileSync(target));
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let browser;
+  try {
+    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    const referencePage = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+    await referencePage.goto(`http://127.0.0.1:${server.address().port}/reference/form-field?benchmark=1&profile=light&interaction=audit-tab-focus`);
+    await referencePage.locator('.frame').waitFor();
+    await referencePage.keyboard.press('Tab');
+    const currentReference = await referencePage.locator('#form-field-control').evaluate(input =>
+      [document.activeElement === input, input.value, input.selectionStart, input.selectionEnd]);
+    assert.deepEqual(currentReference, [true, 'Atlas', 0, 5],
+      'current browser no longer selects the HTML reference value on Tab');
+    await referencePage.close();
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+    const errors = [];
+    page.on('pageerror', error => errors.push(String(error)));
+    await page.addInitScript(() => {
+      window.__tabSelectionEvidence = { focus: [], writes: [] };
+      const original = HTMLInputElement.prototype.setSelectionRange;
+      HTMLInputElement.prototype.setSelectionRange = function(start, end, direction) {
+        if (this.dataset.astylarId === 'form-field-control') {
+          window.__tabSelectionEvidence.writes.push({
+            before: [this.selectionStart, this.selectionEnd], after: [start, end],
+            stack: new Error().stack,
+          });
+        }
+        return original.call(this, start, end, direction);
+      };
+      document.addEventListener('focusin', event => {
+        if (event.target instanceof HTMLInputElement &&
+            event.target.dataset.astylarId === 'form-field-control') {
+          window.__tabSelectionEvidence.focus.push([
+            event.target.selectionStart, event.target.selectionEnd,
+          ]);
+        }
+      }, true);
+    });
+    await page.goto(`http://127.0.0.1:${server.address().port}/astylar/form-field?benchmark=1&profile=light&interaction=audit-tab-focus`);
+    await page.locator('.frame').waitFor();
+    await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+    await page.keyboard.press('Tab');
+    await page.evaluate(async () => {
+      await window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled();
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    });
+    const observed = await page.evaluate(() => {
+      const semantic = document.querySelector('[data-astylar-id="form-field-control"]');
+      const input = window.ng.getComponent(document.querySelector('app-astylar-showcase'))
+        .surface.host.inputElementService.getInputElement('form-field-control');
+      return {
+        evidence: window.__tabSelectionEvidence,
+        active: document.activeElement === semantic,
+        semantic: [semantic.selectionStart, semantic.selectionEnd],
+        scene: [input.selectionStart, input.selectionEnd],
+      };
+    });
+    const retained = report.results.find(row => row.family === 'form-field' &&
+      row.viewport.deviceScaleFactor === 1 && row.state === 'keyboard-focus');
+    assert.ok(retained);
+    assert.deepEqual([retained.reference.observation.control.selectionStart,
+      retained.reference.observation.control.selectionEnd], [0, 5]);
+    assert.deepEqual([retained.astylar.observation.control.selectionStart,
+      retained.astylar.observation.control.selectionEnd], [0, 0]);
+    assert.deepEqual(observed.evidence.focus[0], [0, 5],
+      'native Tab focus did not initially select the semantic value');
+    assert.ok(observed.evidence.writes.some(write =>
+      write.before[0] === 0 && write.before[1] === 5 &&
+      write.after[0] === 0 && write.after[1] === 0 &&
+      write.stack.includes('AstylarSemanticBridge.applyControlState') &&
+      write.stack.includes('AstylarSemanticBridge.syncControlStates')),
+    'served semantic-state sync did not overwrite the native selection');
+    assert.equal(observed.active, true);
+    assert.deepEqual(observed.semantic, [0, 0]);
+    assert.deepEqual(observed.scene, [0, 0]);
+    assert.deepEqual(errors, []);
+    await page.close();
+  } finally {
+    if (browser) await browser.close();
+    await new Promise(resolve => server.close(resolve));
+  }
 });
 
 test('retained input boundaries authenticate all runtime assets, trees, actions and local rasters', () => {

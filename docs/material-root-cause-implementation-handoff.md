@@ -15,6 +15,29 @@ configured capture inventory remains 436/436 static and 1,875/1,875 interaction
 cases across 36 families; those counts do not establish input equivalence.
 The cold run's wall time includes a host suspension and is not a CPU-time measure.
 
+**Independent replay:** a separate cold
+`ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
+completed with exit 0. It revalidated the full audit, rehashed the evidence
+session (two collectors, ten memory hits, zero disk hits or invalidations;
+1,205 files / 89,154,859 bytes), and confirmed canonical and readable report
+equality. Its 2,485,351 ms wall time includes host suspension. This closes the
+independent canonical-check gate, not interaction coverage, the full harness,
+or browser gates.
+
+**Native Tab selection boundary:** the retained Chrome 153.0.8010.53 capture
+records the HTML form-field selecting `[0,5]` and the Astylar scene retaining
+`[0,0]` after real Tab focus. A new focused test authenticates the exact served
+showcase assets and drives both sides in current Chrome 154.0.8037.58. Native
+Tab initially selects `[0,5]` in the Astylar semantic input. A subsequent
+`AstylarSemanticBridge.applyControlState` / `syncControlStates` call writes
+`setSelectionRange(0,0)`, leaving semantic DOM and scene collapsed. This places
+the first demonstrated divergence at core semantic/scene synchronization, not
+fixture CSS, missing native selection, or Babylon projection. The focused proof
+passed 1/1; it covers only form-field light desktop DPR 1. Other input families,
+dark/responsive states and actual text-selection paint remain to review. The
+existing Home/End browser-version assertion stays pinned to its historical
+capture; the current-browser test does not pretend to replay Chrome 153 rasters.
+
 **Export reconciliation and remaining gates:** streaming package authentication
 found 79 sections before and after, with no added or removed sections. Exactly
 seven changed: `sourceFingerprints`, `controlLineBoxes`, `discrepancies`,
@@ -26,11 +49,12 @@ finding shards contain identical raw values, cases, classifications and
 attributions; 49 complete rows changed only proof hashes or the current
 normalization-module SHA-256. The readable report likewise changes proof line
 references, not substantive findings. The full audit validator passed during
-export, and `npm run audit:findings:verify` passed for the published package.
+export, independent cold `--check` passed, and `npm run audit:findings:verify`
+passed for the published package.
 The other changed receipt sections were not independently leaf-diffed, so this
 is a validated canonical refresh, not a claim that every source receipt is
-semantically unchanged. An independent canonical `--check`, complete current
-audit-harness run, remaining state/coverage review and unfiltered browser gates
+semantically unchanged. The complete current audit-harness run, remaining
+state/coverage review and unfiltered browser gates
 remain required before audit acceptance. No renderer, fixture or original capture
 was changed in this export.
 
@@ -52,7 +76,7 @@ order and identifies exactly 111 additional paths interleaved in the registry,
 then checks all current path/order and file-hash receipts. That focused test
 passes 1/1. The old "append-only" assumption was a test defect, not an input
 equivalence finding. The newly exported canonical package includes this
-535-source inventory; an independent check and coverage gates are pending.
+535-source inventory; the independent check passed, while coverage gates remain.
 
 **Slider-border historical integration reconciled:** the original two-case capture
 still yields all 32 reviewed native range border groups (64 observations): the
