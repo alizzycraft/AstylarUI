@@ -2,6 +2,30 @@
 
 ## Current audit checkpoint — September 30
 
+**Ordinary tooltip focus/hover, dark/mobile:** the frozen Chrome 154 showcase is
+opened with `?profile=dark` **without benchmark mode** at 390×844 DPR 2. Real Tab
+focuses both triggers, but only Material opens its tooltip. Candidate authoring
+opens on pointerenter and closes on pointerleave; its focus callback does not
+request tooltip open. Thus the focus-opening gap persists outside the known
+benchmark hover suppression and remains an application interaction gap, not
+failed core focus delivery. Real pointer hover opens both, and pointer leave
+removes both. Settled popup heights are 24px, gaps below each trigger are 8px
+and horizontal centers agree with their respective triggers within .01 CSS px.
+Widths are 106.8125px native / 106.79834px candidate; candidate's fixed 138px
+trigger differs from native 137.9375px. Both local crops contain background
+RGB 50/48/51 and foreground 245/239/244 (249 full foreground pixels each).
+Other antialias colors differ; neither equal palette counts nor these boxes
+prove identical sharpness, input structures or whole-raster rendering. The
+reference uses connected-overlay placement while candidate uses authored
+relative flex flow: the earlier composition findings remain, despite matching
+ordinary placement here. The initial focus sample caught the reference's .8
+opening scale; waiting for its finite animation yields the settled 24px box,
+not a discrepancy to fix by resizing candidate output. Short-viewport fallback,
+scrolling, touch, local text sharpness and other profiles remain pending.
+`node --test --test-name-pattern="ordinary dark mobile tooltip" tests/material-parity/sort-focus-structure.spec.mjs`
+passes 1/1 in 6,178ms diagnostic and 6,581ms with settled geometry/palette checks,
+with no page errors. No renderer/fixture edits or new retained captures.
+
 **Browser proof integration milestone:** after committed caret/selection,
 modal-Tab, overlay-count/disposal and snackbar-action increments, the unfiltered
 shared proof suite `node --test tests/material-parity/sort-focus-structure.spec.mjs`

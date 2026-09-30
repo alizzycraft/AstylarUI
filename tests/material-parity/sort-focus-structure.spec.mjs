@@ -1271,6 +1271,73 @@ test('paginator keyboard transitions separate native activation from disabled-in
   });
 });
 
+test('ordinary dark mobile tooltip separates keyboard opening from pointer paint', async t => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    assert.equal(browser.version(), '154.0.8037.58');
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+      try {
+        const errors = []; page.on('pageerror', error => errors.push(String(error)));
+        // Ordinary mode avoids the known benchmark-only hover suppression.
+        await page.goto(`${baseUrl}/${mode}/tooltip?profile=dark`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        const settle = async () => {
+          if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+          await page.evaluate(async () => { await document.fonts.ready;
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); });
+        };
+        const sample = async () => page.evaluate(mode => {
+          const id = 'tooltip-primary';
+          const trigger = mode === 'reference' ? document.getElementById(id) : document.querySelector(`[data-astylar-id="${id}"]`);
+          const popup = mode === 'reference' ? document.querySelector('.mat-mdc-tooltip-surface') : document.querySelector('[data-astylar-id="tooltip-popup"]');
+          const nativeBox = node => { const box = node.getBoundingClientRect(); return { x: box.x, y: box.y, width: box.width, height: box.height }; };
+          const candidateBox = id => { const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false).elements[id].borderBox;
+            const canvas = document.querySelector('canvas').getBoundingClientRect(); return { x: canvas.x + box.left, y: canvas.y + box.top, width: box.width, height: box.height }; };
+          return { focus: document.activeElement?.getAttribute('data-astylar-id') || document.activeElement?.id || document.activeElement?.tagName,
+            trigger: mode === 'reference' ? nativeBox(trigger) : candidateBox(id),
+            popup: popup ? { text: popup.textContent.trim(), box: mode === 'reference' ? nativeBox(popup) : candidateBox('tooltip-popup') } : null };
+        }, mode);
+        await page.keyboard.press('Tab'); await settle();
+        if (mode === 'reference') await page.locator('.mat-mdc-tooltip-surface').waitFor({ state: 'visible' });
+        await page.evaluate(() => Promise.all(document.getAnimations().filter(animation => animation.effect?.getTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {}))));
+        const focused = await sample();
+        await page.mouse.click(10, 10); await settle();
+        if (mode === 'reference') await page.locator('.mat-mdc-tooltip-surface').waitFor({ state: 'detached' });
+        const trigger = (await sample()).trigger;
+        await page.mouse.move(trigger.x + trigger.width / 2, trigger.y + trigger.height / 2);
+        await page.locator(mode === 'reference' ? '.mat-mdc-tooltip-surface' : '[data-astylar-id="tooltip-popup"]').waitFor({ state: 'visible' });
+        await settle();
+        await page.evaluate(() => Promise.all(document.getAnimations().filter(animation => animation.effect?.getTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {}))));
+        const hovered = await sample();
+        const image = PNG.sync.read(await page.screenshot({ clip: hovered.popup.box, caret: 'hide' }));
+        const colors = new Map();
+        for (let i = 0; i < image.data.length; i += 4) { const color = [...image.data.subarray(i, i + 3)].join(','); colors.set(color, (colors.get(color) ?? 0) + 1); }
+        await page.mouse.move(10, 10); await settle();
+        await page.locator(mode === 'reference' ? '.mat-mdc-tooltip-surface' : '[data-astylar-id="tooltip-popup"]').waitFor({ state: 'detached' });
+        observations[mode] = { focused, hovered, commonColors: [...colors].sort((a, b) => b[1] - a[1]).slice(0, 5), closed: await sample(), errors };
+      } finally { await page.close(); }
+    }
+    t.diagnostic(JSON.stringify(observations));
+    assert.ok(observations.reference.focused.popup);
+    assert.equal(observations.astylar.focused.popup, null);
+    for (const mode of ['reference', 'astylar']) {
+      assert.equal(observations[mode].focused.focus, 'tooltip-primary');
+      assert.equal(observations[mode].hovered.popup.text, 'Create a project');
+      assert.equal(observations[mode].closed.popup, null);
+      assert.deepEqual(observations[mode].errors, []);
+      const { trigger, popup } = observations[mode].hovered;
+      assert.ok(Math.abs(popup.box.y - (trigger.y + trigger.height) - 8) < .01);
+      assert.ok(Math.abs((popup.box.x + popup.box.width / 2) - (trigger.x + trigger.width / 2)) < .01);
+      assert.ok(Math.abs(popup.box.height - 24) < .01);
+      assert.equal(observations[mode].commonColors[0][0], '50,48,51');
+      assert.ok(observations[mode].commonColors.some(([color, count]) => color === '245,239,244' && count > 100));
+    }
+    assert.ok(Math.abs(observations.reference.focused.popup.box.height - 24) < .01);
+  });
+});
+
 test('dark mobile snackbar keyboard activation exposes visible action and dismissal', async t => {
   await withFrozenShowcase(async (browser, baseUrl) => {
     assert.equal(browser.version(), '154.0.8037.58');
