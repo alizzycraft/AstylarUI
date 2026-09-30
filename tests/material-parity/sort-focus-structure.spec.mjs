@@ -913,6 +913,59 @@ test('datepicker keyboard opening and pointer month/date boundaries locate calen
   });
 });
 
+test('passive comparison applicability is distinguished from composite child controls', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const family of ['sidenav', 'grid-list', 'divider', 'badge', 'icon', 'list', 'table',
+      'progress-bar', 'progress-spinner', 'core', 'toolbar', 'card']) {
+      observations[family] = {};
+      for (const mode of ['reference', 'astylar']) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+        const errors = [];
+        page.on('pageerror', error => errors.push(String(error)));
+        await page.goto(`${baseUrl}/${mode}/${family}?benchmark=1&profile=light`);
+        await page.locator('.frame').waitFor();
+        if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+        const controls = await page.evaluate(mode => {
+          const elements = [...document.querySelectorAll(mode === 'reference' ? '.demo *' : '[data-astylar-id]')];
+          return elements.filter(element => element.tabIndex >= 0 && !element.disabled && element.getClientRects().length)
+            .map(element => ({ id: mode === 'reference' ? element.id : element.getAttribute('data-astylar-id'),
+              kind: element.tagName.toLowerCase(), role: element.getAttribute('role') }));
+        }, mode);
+        const progress = family.startsWith('progress-') ? await page.evaluate(() =>
+          [...document.querySelectorAll('[role="progressbar"]')].map(element => [
+            element.getAttribute('aria-valuemin'), element.getAttribute('aria-valuemax'), element.getAttribute('aria-valuenow'),
+          ])) : null;
+        await page.keyboard.press('Tab');
+        const focus = await page.evaluate(mode => mode === 'reference' ? document.activeElement?.id
+          : document.activeElement?.getAttribute('data-astylar-id'), mode);
+        observations[family][mode] = { controls, focus, progress, errors };
+        await page.close();
+      }
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    for (const family of ['sidenav', 'grid-list', 'divider', 'badge', 'icon', 'list', 'table',
+      'progress-bar', 'progress-spinner']) {
+      assert.deepEqual(observations[family].reference.controls, [], `${family} has no reference Tab control`);
+      assert.deepEqual(observations[family].astylar.controls, [], `${family} has no candidate Tab control`);
+      assert.equal(observations[family].reference.focus, '');
+      assert.equal(observations[family].astylar.focus, null);
+    }
+    for (const [family, id] of [['core', 'core-primary'], ['toolbar', 'toolbar-action'], ['card', 'card-open']]) {
+      for (const mode of ['reference', 'astylar']) {
+        assert.deepEqual(observations[family][mode].controls, [{ id, kind: 'button', role: null }]);
+        assert.equal(observations[family][mode].focus, id);
+      }
+    }
+    for (const family of Object.keys(observations)) {
+      for (const mode of ['reference', 'astylar']) assert.deepEqual(observations[family][mode].errors, []);
+    }
+    for (const family of ['progress-bar', 'progress-spinner']) {
+      for (const mode of ['reference', 'astylar']) assert.deepEqual(observations[family][mode].progress, [['0', '100', '64']]);
+    }
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));

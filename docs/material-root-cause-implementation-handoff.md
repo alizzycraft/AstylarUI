@@ -244,6 +244,39 @@ action. Secondary year/month selection, keyboard commit and other navigation
 keys, disabled/dark/responsive states, local calendar/caret paint and repeated
 resource cleanup remain open. No renderer, comparison input or capture changed.
 
+**Passive/composite state applicability:** current reference/candidate sources
+and a paired Chrome 154/light/1440×900/DPR 1 Tab probe review twelve families.
+Sidenav, grid-list, divider, badge, icon, list, table, progress-bar and
+progress-spinner have no sequential keyboard controls on either side.
+Their source consists of text/layout content or determinate progress, so control
+activation is inapplicable in these examples. The generic configured
+focus/activate cases for several of them do not establish meaningful keyboard
+interaction. Core, toolbar and card each expose one corresponding native
+button (`core-primary`, `toolbar-action`, `card-open`); real Tab focuses that
+button on both sides, and activation/focus paint remains to review.
+
+Sidenav specifically requests initial `opened`/`mode="side"` and no toggle;
+candidate emits its static side panel independently of open state. A modal
+focus trap/toggle action is therefore inapplicable, but installed Material's
+drawer inherits an Escape handler on its own element. The relevant focus-origin
+and dismissal path remains pending; neither absence of Tab stops nor the
+configured mobile flow closes it. Tree source has three leaves and no
+children/toggle: expansion is inapplicable, but inherited tree focus/navigation
+is still relevant. Both progress examples request determinate 64/100; their
+candidate `.64` ratio is the corresponding progress fraction, and the browser
+probe checks both semantic min/max/now as 0/100/64. Indeterminate animation
+phase is inapplicable here; this does not certify arc geometry, loaded paint,
+general progress-mode support or plugin/core ownership.
+
+The state checklist now distinguishes these inapplicable actions from pending
+layout/style/semantics/paint and applicable child/tree keyboard work. This is
+source-derived applicability plus a light desktop runtime check, not a full
+profile/DPR output claim or input-equivalence acceptance. No renderer,
+comparison source, original capture or configured case count was changed.
+`node --test --test-name-pattern="passive comparison applicability"
+tests/material-parity/sort-focus-structure.spec.mjs` passes 1/1 across 24 pages
+with zero page errors in 28,143 ms.
+
 **Independent replay:** a separate cold
 `ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
 completed with exit 0. It revalidated the full audit, rehashed the evidence

@@ -35,20 +35,20 @@ source-derived applicability review before it can be closed as inapplicable.
 
 | Family | Cases | Extra configured states | Reviewed evidence and next state gap |
 | --- | ---: | --- | --- |
-| Core | 12 / 40 | — | Common pointer states captured; verify whether keyboard focus/activation is applicable to its actual controls. |
-| Toolbar | 12 / 40 | — | Common states captured; review child-control focus order and authored input equality. |
-| Sidenav | 12 / 50 | open, M | Mobile final Escape state captured; real Tab/focus containment and intermediate open/dismiss boundaries remain. |
-| Grid-list | 12 / 40 | — | Common states captured; review whether any grid tile has an applicable keyboard action. |
-| Divider | 16 / 8 | passive inspect | Static/inspect captured; confirm passive semantics and input/style correspondence. |
-| Badge | 12 / 40 | — | Common states captured; confirm whether pointer/focus actions are meaningful rather than treating their green results as behavior proof. |
-| Card | 12 / 40 | — | Common states captured; review interactive descendants and keyboard applicability. |
+| Core | 12 / 40 | — | Source review plus Chrome 154 light desktop DPR 1 real Tab identifies one matching native button, `core-primary`. Keyboard activation and focus/ripple paint remain applicable and pending. |
+| Toolbar | 12 / 40 | — | Source review plus real Tab identifies one matching child button, `toolbar-action`; the toolbar itself has no activation. Child activation/focus paint and input/style equality remain. |
+| Sidenav | 12 / 50 | open, M | Authored initially open side-mode panel with static text and no toggle; paired Tab finds no controls. Modal focus containment and toggle activation are inapplicable. Material inherits an Escape handler inside the drawer; focus-origin/dismissal behavior remains pending. Configured open/M states do not prove that path. Layout/style/semantics across profiles remain. |
+| Grid-list | 12 / 40 | — | Two static text tiles, no authored interactive descendants; paired Tab finds none. Tile keyboard activation is inapplicable. Grid layout/style/semantic correspondence remains. |
+| Divider | 16 / 8 | passive inspect | Static separator between two text paragraphs; paired Tab finds no controls. Keyboard activation is inapplicable. Separator semantics and input/style correspondence remain. |
+| Badge | 12 / 40 | — | Static Notifications text/count with no control; paired Tab finds none. Focus/activate actions are inapplicable to this authored example. Badge placement, generated content and semantic/style correspondence remain. |
+| Card | 12 / 40 | — | Source review plus real Tab identifies matching child button `card-open`; the card body is passive. Child activation/focus paint and full input mapping remain. |
 | Chips | 12 / 64 | alternate activation, disabled, selected | Chrome 154 light desktop DPR 1 real Tab/Space proof: Material chip 0 changes selected, while role-only candidate receives keydown but stays selected. Focus paint, other keys/profiles and full input mapping remain. |
-| Icon | 12 / 8 | passive inspect | Static/inspect captured; confirm passive icon/semantic applicability. |
-| List | 12 / 40 | — | Common states captured; verify list-item keyboard/focus behavior and child ownership. |
-| Table | 12 / 40 | — | Common states captured; distinguish table cells from the separate sort interaction and review keyboard applicability. |
+| Icon | 12 / 8 | passive inspect | Static favorite image/icon; paired Tab finds no controls. Keyboard activation is inapplicable. Vector/image representation, naming and local paint remain. |
+| List | 12 / 40 | — | Plain `mat-list`/text rows, not a nav or selection list; paired Tab finds no controls. List-item keyboard activation is inapplicable. Structure/semantics/style correspondence remains. |
+| Table | 12 / 40 | — | Plain header/data cells without sort headers or controls; paired Tab finds none. Keyboard activation is inapplicable; sort remains a separate comparison. Table layout/style/semantics remain. |
 | Sort | 12 / 48 | activate-twice | Two pointer activations captured. Current Chrome 154 light desktop DPR 1 real Tab/Enter/Space proof finds an authored keyboard activation gap: both sides focus and receive keys, but only Material changes direction. Focus paint, other profiles/DPRs and complete sort input mapping remain. |
 | Paginator | 12 / 40 | — | Common states captured; page-size/next/previous keyboard and selected-page transitions need source review. |
-| Tree | 12 / 40 | — | Common states captured; node expansion/collapse by keyboard and focus order remain. |
+| Tree | 12 / 40 | — | Source has three leaf nodes with no children or toggle; expansion/collapse is inapplicable to this example. Tree focus/navigation and role/tab-order/style correspondence remain applicable and pending. |
 | Form-field | 12 / 64 | edit-empty-blur, disabled, error | Light desktop DPR 1/2 input boundaries include real Tab, edit and selection; Chrome 154 DPR 1 caret-visible proof covers empty focus. Dark/responsive caret and selection paint remain. |
 | Input | 12 / 64 | edit-empty-blur, disabled, error | Light desktop DPR 1/2 input boundaries exist; native email exposes null selection endpoints, so edit outcome/pixels must be checked without inventing indices. Dark/responsive caret paint remains. |
 | Autocomplete | 12 / 98 | commit/reopen, hover content, outside/canvas dismissal, disabled, error, open, M | Chrome 154 light desktop DPR 1 real Tab opens both lists; Material ArrowDown activates Cape Town and Enter writes it/closes, while candidate receives keys but retains empty value/open popup. Escape removes candidate options and preserves focus. Other navigation/edit keys, caret/selection paint, dark/responsive states and resource cleanup remain. |
@@ -69,8 +69,8 @@ source-derived applicability review before it can be closed as inapplicable.
 | Dialog | 12 / 66 | hover content, outside dismissal, open, M | Retained light 900×700 DPR 1 Tab/Escape capture exists; dark/responsive focus restoration, panel paint and repeated cleanup remain. |
 | Snack-bar | 12 / 59 | activate-twice, open, auto-dismiss, comparison-pane | Reopen and one timed expiry case captured; confirm visible action/position during lifetime and keyboard action/dismissal across applicable profiles. |
 | Tooltip | 12 / 50 | open, comparison-pane hover/held | Retained light desktop DPR 1/2 real Tab capture exists; it proves reference/candidate opening-state authoring differs, not popup-position parity. Dark/responsive focus/hover paint remains. |
-| Progress-bar | 12 / 8 | passive inspect | Static/inspect captured; confirm passive state/semantics and relevant progress values. |
-| Progress-spinner | 12 / 8 | passive inspect | Static/inspect captured; confirm passive state/semantics and animation phase applicability. |
+| Progress-bar | 12 / 8 | passive inspect | Authored determinate 64/100 (`.64` candidate ratio); paired Tab finds no controls and both semantic progressbars expose min=0/max=100/now=64. Keyboard actions and indeterminate phase are inapplicable. Geometry/paint/plugin ownership remain. |
+| Progress-spinner | 12 / 8 | passive inspect | Authored determinate 64/100 (`.64` candidate ratio); paired Tab finds no controls and min/max/now match 0/100/64. Keyboard actions and indeterminate phase are inapplicable. Arc geometry/paint/plugin ownership remain. |
 
 ## Priority and ownership of the remaining checks
 
