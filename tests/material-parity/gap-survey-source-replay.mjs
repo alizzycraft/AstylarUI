@@ -15,7 +15,40 @@ const moduleFile = 'tests/material-parity/input-equivalence-audit.mjs';
 // Authenticate both complete sources and prove that removing only those additions
 // restores the original capture; never reuse this receipt for a fresh capture.
 export function restoreGapCaptureDiagnostics(source) {
-  const current = source.replaceAll('\r\n', '\n');
+  let current = source.replaceAll('\r\n', '\n');
+  // Only for authenticating the retained capture's producer. Native scrollbar
+  // launch changes affect fresh capture and must not be called provenance-only
+  // rendering changes. Restore this exact audited instrumentation transition,
+  // then require the complete historical source digest as before.
+  if (hash(current) === '33c5a4b31a5140bb19e524eaa9fba5bbbb877b45a38f6f0be5722fbe09113f6a') {
+    const replaceOnce = (before, after) => {
+      assert.equal(current.split(before).length, 2, 'historical launch restoration must match exactly once');
+      current = current.replace(before, after);
+    };
+    replaceOnce('fingerprintModuleGraph, materialBrowserLaunchOptions, inspectMaterialBrowserLaunch, materialCaseKey',
+      'fingerprintModuleGraph, materialCaseKey');
+    replaceOnce("let browserLaunchEvidence;\nconst browserLaunchOptions = materialBrowserLaunchOptions(process.env['ASTYLAR_MATERIAL_BROWSER_CHANNEL'] ?? 'chrome');\n", '');
+    replaceOnce('    browserLaunch: browserLaunchEvidence,\n', '');
+    replaceOnce("  assert.deepEqual(await inspectMaterialBrowserLaunch(browser, browserLaunchOptions), browserLaunchEvidence,\n    'Material browser launch dependencies changed during capture.');\n", '');
+    replaceOnce(`async function launchBrowser() {
+  const launched = await chromium.launch(browserLaunchOptions);
+  try {
+    const evidence = await inspectMaterialBrowserLaunch(launched, browserLaunchOptions);
+    if (browserLaunchEvidence) assert.deepEqual(evidence, browserLaunchEvidence,
+      'Material browser restart changed launch evidence.');
+    else browserLaunchEvidence = evidence;
+    return launched;
+  } catch (error) {
+    await launched.close();
+    throw error;
+  }
+}`, `async function launchBrowser() {
+  return chromium.launch({
+    channel: process.env['ASTYLAR_MATERIAL_BROWSER_CHANNEL'] ?? 'chrome',
+    headless: true,
+  });
+}`);
+  }
   assert.equal(hash(current), '4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d');
   const start = current.indexOf('    // Read-only paint-boundary evidence for measured button controls.');
   const end = current.indexOf('    const styleInputs = compareStyleInputs', start);

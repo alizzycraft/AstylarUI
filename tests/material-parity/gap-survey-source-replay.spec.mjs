@@ -21,7 +21,14 @@ test('capture diagnostic additions preserve historical gap source and reject oth
   const before = execFileSync('git', ['show', '9a0bd47^:' + file], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
   assert.equal(readGapSurveySource(descriptor), before);
   assert.equal(readGapSurveySource(descriptor, { current: () => before }), before);
+  const beforeLaunch = execFileSync('git', ['show', '1bc80fc:' + file], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+  assert.equal(sha(beforeLaunch), '4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d');
+  assert.equal(readGapSurveySource(descriptor, { current: () => beforeLaunch }), before,
+    'both reviewed launch stages restore only the retained historical producer');
   for (const changed of [current + '\n// unreviewed',
+    current.replace('materialBrowserLaunchOptions(process.env', 'differentLaunchOptions(process.env'),
+    current.replace('browserLaunch: browserLaunchEvidence', 'browserLaunch: changedEvidence'),
+    current.replace('Material browser restart changed launch evidence.', 'Unreviewed launch restoration.'),
     current.replace('compareStyleInputs(referenceMeasurement.elements', 'compareStyleInputs(other.elements'),
     current.replace('mesh.computeWorldMatrix(true)', 'mesh.computeWorldMatrix(false)')]) {
     assert.notEqual(changed, current);
@@ -129,7 +136,13 @@ test('gap report refresh changes seventeen integration receipts plus the heading
         const current = get(projected, address), prior = get(before, address);
         assert.equal(current.file, prior.file);
         const bytes = readFileSync(current.file);
-        assert.equal(current.sha256, sha(current.file.endsWith('.mjs')
+        if (current.file === 'tests/material-parity/run-material-parity.mjs') {
+          const savedStage = execFileSync('git', ['show', `1bc80fc:${current.file}`], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+          assert.equal(sha(savedStage), '4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d');
+          assert.equal(current.sha256, sha(savedStage), 'retained receipt names its historical runner, not the new launch environment');
+          assert.equal(sha(readGapSurveySource(prior, { current: () => bytes.toString('utf8') })), prior.sha256,
+            'live runner must still pass the exact reviewed restoration to the original survey dependency');
+        } else assert.equal(current.sha256, sha(current.file.endsWith('.mjs')
           ? bytes.toString('utf8').replaceAll('\r\n', '\n') : bytes));
         assert.notEqual(current.sha256, prior.sha256);
         current.sha256 = prior.sha256;

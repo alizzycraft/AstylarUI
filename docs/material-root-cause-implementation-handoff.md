@@ -2,6 +2,41 @@
 
 ## Current audit checkpoint — September 30
 
+**Historical launch-source replay reconciled; export remains pending:** the
+canonical export attempted from `e15fddd` encountered two nested source guards
+requiring the pre-launch runner digest while the live runner included the reviewed
+native-scrollbar launch instrumentation. The parent continued after these errors;
+its owned producer was explicitly stopped without publishing. Retain
+`artifacts/material-parity/launch-receipt-canonical-export-e15fddd.log` (2,613 bytes).
+This is failed integration evidence, not a canonical or browser acceptance pass.
+
+The existing `gap-survey-source-replay.mjs` now accepts only the exact reviewed
+live runner SHA `33c5a4b31a5140bb19e524eaa9fba5bbbb877b45a38f6f0be5722fbe09113f6a`,
+reverses five exact launch-instrumentation additions, and requires the complete
+historical runner SHA `4ed6abe8b6c8028565ffc5c0674d285a567714e19842f75672b599125bd99e6d`
+before its original capture restoration. This authenticates historical evidence;
+it does not assert equivalent fresh rendering across the changed launch policy.
+Saved capture/review bytes remain unchanged. Negative controls reject unreviewed
+launch, receipt, layout and source edits. An initial run passed6/7: the last test
+incorrectly equated the saved receipt with the live runner. Its corrected explicit
+historical/live boundary passes all7/7, including27,784 original gap-style stages
+and unchanged findings/18 receipt changes. Final recheck:
+`node --test tests/material-parity/gap-survey-source-replay.spec.mjs`,7/7,
+zero skips/failures,7,117.5494ms.
+
+`node scripts/audit-material-explicit-gap-composition.mjs --check` passes:
+16groups/8owners/296cases/1,032 property observations/40 negative controls,
+canonicalIntegration=false/canonicalUnchanged=true. The prior membership-check
+process handle was missing on resume; a new read-only
+`node scripts/bind-material-gap-review-membership.mjs --check` fails in its
+`audit-material-gap-scalar-rule-loss.mjs` prerequisite: saved runner receipt
+`4ed6abe8…` versus generated live receipt `33c5a4b3…`. That is the next precise
+source-reconciliation boundary, not justification to recapture or change findings.
+Also inspect the remaining old runner pin in
+`scripts/check-material-owner-caret-source-binding.mjs` before another full export.
+Canonical export/check, cold replay, index refresh, remaining coverage and final
+unfiltered browser/release gates are still pending. No renderer or fixture change.
+
 **Launch receipt registration is now bounded in the canonical producer:** the
 existing source inventory tracked the runner but omitted its newly responsible
 checkpoint/launch module. Append exactly `run-checkpoint.mjs` and
