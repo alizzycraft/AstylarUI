@@ -2,6 +2,15 @@
 
 ## Evidence boundary
 
+October1 cold export now validates and publishes generation `c3e0d7d1…` with537
+source paths and zero unresolved scalar attributions. All79 package sections remain;
+185 changed receipt/reference leaves in eight sections and the exact two-path
+inventory addition preserve findings. Compact import/verification passes, with all
+48,522 finding/control records unchanged except snapshot identity. The current
+handoff records exact hashes, retained logs, metrics and conservation boundaries.
+Independent cold check, full current harness/browser gates and complete family/state
+mapping/paint coverage remain pending; this export does not establish equal inputs.
+
 The published compact snapshot still has zero unresolved scalar attributions.
 Exact read-only membership reconciles the failed259 groups to the four restored
 binding populations (72+49+4+134), preserving values, cases, states, occurrence

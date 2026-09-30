@@ -1,6 +1,51 @@
 # Material audit: evidence-led implementation priorities
 
-## Current audit checkpoint — September 30
+## Current audit checkpoint — October 1
+
+**Cold export published successfully; exact package conservation checked:**
+`node scripts/export-material-input-audit-current-ancestry.mjs` with cold/progress
+settings exits0 in2,596,298.8454ms (43.27minutes). Retain
+`artifacts/material-parity/cold-canonical-export-b143862.log`. Full validation and
+evidence-session rehash succeed:2 collectors,10 memory hits,0 disk hits,0 invalidations,
+1,205 files and89,154,859 bytes read/reverified. The result retains436/436 static
+and1,875/1,875 interaction cases,8,483 scalar groups/389,202 occurrences,
+39,904 control differences,135 source findings and zero unresolved attributions.
+Input equivalent remains false. No renderer or fixture changed.
+
+New package:62,820,374 compressed bytes, SHA-256
+`c3e0d7d1bd0cefda54cec42d43ddf57bdbb0a40cf7ef75026daa5280d5f6937c`;
+2,222,800,191 decoded bytes, SHA-256
+`89381db8a506dc20d78c009b38ca3df4508c28842cca692cf7e0b30129dddded`.
+Existing streamed section comparison authenticates both prior/current packages:
+79 sections each, no additions/removals; exactly nine sections change.
+Retain `artifacts/material-parity/cold-export-b143862-section-comparison.log`.
+
+Source fingerprints grow535→537 by exactly the checkpoint module/test, preserving
+all earlier paths/order. Ten prior fingerprints change at the reviewed inventory,
+launch policy, historical-source guards, verifier and gap-receipt boundaries.
+Retain `artifacts/material-parity/cold-export-b143862-source-fingerprints.log`.
+The existing streamed leaf comparison covers every leaf/container in the other
+eight changed sections, preserving path/order/shape and identifying185 changes:
+controlLineBoxes48 current normalization-module hashes; discrepancies48 dependent
+control-proof hashes; gapReviewInputs1 membership receipt; ownerCaretInputs2 live
+source receipts; reviewedSourceBatchInputs2 source-conservation receipts;
+controlTypography48 normalization-module hashes; sourceFindings2 line references;
+focusedProofs34 line references. The control-proof digest owner is
+`normal-line-box-scalar.mjs`; the current conservation-report digest owner is
+`motion-source-conservation.mjs`. Raw values, classifications and state evidence
+do not change. Retain `artifacts/material-parity/cold-export-b143862-receipt-leaf-comparison.log`.
+
+Compact import authenticates compressed/decoded hashes and passes. Both working
+indexes independently verify; all48,522 compact finding/control records are equal
+after excluding only snapshot identity/evidence references. Current generation is
+`c3e0d7d1…`,72,700,471 compact bytes. Retain the index import log. The prior
+generation remains required for the conservation evidence above, not stale scratch.
+
+Next: independent current-ancestry cold `--check`, then remaining coverage and
+current harness/browser gates. This is a successful export/conservation milestone,
+not audit completion or current-browser/input-equivalence acceptance. Historical
+notes below describe earlier pending/failure states, superseded only at the exact
+boundaries proved here.
 
 **The failed259-group count is reconciled to the four dropped binding populations:**
 authenticated compact queries of published generation `3ec576a3…` retain all8,483
