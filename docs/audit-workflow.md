@@ -64,6 +64,9 @@ touched. Do not imply every legacy test or collector is now cheap/cached.
 These remain separate expensive milestone commands. Documentation-only work does
 not justify recapture. Renderer, fixture or capture-environment changes invalidate
 affected rendering evidence and still require the applicable final gates.
+The exporter now reports validation errors before package comparison or publication;
+an invalid audit cannot overwrite the checked-in canonical package. A stale-package
+error alone does not establish that the new audit passed validation.
 
 For the retained **current-ancestry** baseline, use the named launcher instead of
 passing only `--parity-report` to the general exporter:

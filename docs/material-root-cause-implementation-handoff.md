@@ -2,6 +2,23 @@
 
 ## Current audit checkpoint — September 30
 
+**Canonical check and publication guard:**
+`node scripts/export-material-input-audit-current-ancestry.mjs --check`
+completed its full build, validator, and evidence-session verification,
+then failed on `checked-in machine audit is stale` after 3,035,518 ms. The
+evidence session read 1,205 files / 89,154,859 bytes, with one collector,
+ten memory hits, one disk hit and no invalidations. The former runner compared
+the saved package before printing collected validation errors, so this failure
+does **not** prove that the rebuilt audit is valid. It also wrote canonical
+bytes in export mode even when validation errors existed. The runner now reports
+validation failure before either comparison or publication and leaves existing
+canonical bytes untouched; `node --test
+tests/material-parity/input-audit-cli-transport.spec.mjs` passes 1/1 across
+valid, stale, malformed and invalid/no-overwrite cases. The workflow-focused
+suite passes 6/6 and the 535-source focused assertion passes 1/1. A fresh full export is still
+required to obtain the validator result and, only if valid, publish the current
+535-source package. No renderer, fixture or original capture changed.
+
 **Source-inventory assertion reconciled:** the historical 409-source producer
 and its original 356-source test assertion are now replayed from pinned Git
 revisions, with the prepared assertion accepting exactly the 53 reviewed

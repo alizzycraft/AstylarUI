@@ -42,7 +42,9 @@ const { audit, errors } = withAuditEvidenceSession(() => {
 progress('render-markdown');
 const markdown = renderMaterialInputAuditMarkdown(audit);
 
-if (check) {
+if (errors.length > 0) {
+  progress('validation-failed');
+} else if (check) {
   progress('check-canonical');
   await assertMaterialInputAuditCurrentStream(audit, JSON.parse(readFileSync(jsonPath, 'utf8')), readFileSync(payloadPath));
   assert.equal(readFileSync(markdownPath, 'utf8'), markdown, 'checked-in human audit is stale');
@@ -54,7 +56,7 @@ if (check) {
   writeFileSync(jsonPath, `${JSON.stringify(manifest, null, 2)}\n`);
   writeFileSync(markdownPath, markdown);
 }
-progress('complete');
+if (!errors.length) progress('complete');
 
 console.log(`# Material input-equivalence audit`);
 console.log(`- Parity evidence: ${path.relative(root, parityPath)}`);

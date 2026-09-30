@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -24,7 +24,7 @@ test('audit CLI awaits streamed transport and preserves unresolved, stale and ma
         allowPartial: false, parityPath: 'parity.json' });
       export const buildMaterialInputAudit = () => JSON.parse(readFileSync('expected.json'));
       export const renderMaterialInputAuditMarkdown = () => 'CLI boundary fixture\\n';
-      export const validateMaterialInputAudit = () => ['deliberately unresolved fixture'];
+      export const validateMaterialInputAudit = () => JSON.parse(readFileSync('validation.json'));
     `);
     // Fail any accidental return to aggregate-object serialization in either
     // executable branch, without allocating an oversized fixture in this test.
@@ -42,20 +42,26 @@ test('audit CLI awaits streamed transport and preserves unresolved, stale and ma
       elementInventory: { observations: [{ text: 'שלום 🎨', reference: '0px', candidate: 0 }] } };
     writeFileSync(path.join(workspace, 'expected.json'), JSON.stringify(expected));
     writeFileSync(path.join(workspace, 'parity.json'), '{}');
+    writeFileSync(path.join(workspace, 'validation.json'), JSON.stringify(['deliberately unresolved fixture']));
     const run = (args = [], progress = false) => spawnSync(process.execPath,
       ['--import', './guard.mjs', 'scripts/run-material-input-audit.mjs', ...args], { cwd: workspace, encoding: 'utf8',
         env: { ...process.env, ASTYLAR_AUDIT_PROGRESS: progress ? '1' : '0' } });
-    const generated = run();
-    assert.equal(generated.status, 1);
-    assert.match(generated.stderr, /ERROR: deliberately unresolved fixture/);
-    assert.doesNotMatch(generated.stderr, /aggregate audit serialization forbidden|TypeError/);
     const manifestPath = path.join(workspace, 'docs/material-input-equivalence-audit.json');
     const payloadPath = path.join(workspace, 'docs/material-input-equivalence-audit.json.gz');
+    const invalid = run();
+    assert.equal(invalid.status, 1);
+    assert.match(invalid.stderr, /ERROR: deliberately unresolved fixture/);
+    assert.doesNotMatch(invalid.stderr, /aggregate audit serialization forbidden|TypeError/);
+    assert.equal(existsSync(manifestPath), false, 'Invalid audit must not publish a manifest');
+    assert.equal(existsSync(payloadPath), false, 'Invalid audit must not publish a payload');
+    writeFileSync(path.join(workspace, 'validation.json'), '[]');
+    const generated = run();
+    assert.equal(generated.status, 0, generated.stderr);
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')), payload = readFileSync(payloadPath);
     assert.deepEqual(decodeMaterialInputAudit(manifest, payload).report, expected);
     assert.doesNotMatch(generated.stderr, /auditProgress/);
     const traced = run([], true);
-    assert.equal(traced.status, 1);
+    assert.equal(traced.status, 0, traced.stderr);
     const checkpoints = traced.stderr.split('\n').filter(line => line.startsWith('{')).map(line => JSON.parse(line));
     assert.deepEqual(checkpoints.map(p => p.auditProgress), ['read-reference', 'build-audit', 'validate-audit',
       'verify-evidence-session', 'render-markdown', 'encode-canonical', 'write-canonical', 'complete']);
@@ -63,14 +69,23 @@ test('audit CLI awaits streamed transport and preserves unresolved, stale and ma
     assert.deepEqual(readFileSync(payloadPath), payload, 'Progress instrumentation must not change canonical bytes');
     assert.deepEqual(JSON.parse(readFileSync(manifestPath)), manifest);
     const checked = run(['--check']);
-    assert.equal(checked.status, 1);
-    assert.match(checked.stderr, /ERROR: deliberately unresolved fixture/);
+    assert.equal(checked.status, 0, checked.stderr);
     assert.doesNotMatch(checked.stderr, /aggregate audit serialization forbidden|stale/);
     expected.elementInventory.observations[0].reference = 'different';
     writeFileSync(path.join(workspace, 'expected.json'), JSON.stringify(expected));
     const stale = run(['--check']);
     assert.equal(stale.status, 1); assert.match(stale.stderr, /machine audit is stale/);
     assert.deepEqual(readFileSync(payloadPath), payload, 'Check mode must not overwrite evidence');
+    writeFileSync(path.join(workspace, 'validation.json'), JSON.stringify(['deliberately unresolved fixture']));
+    const invalidExport = run();
+    assert.equal(invalidExport.status, 1);
+    assert.match(invalidExport.stderr, /ERROR: deliberately unresolved fixture/);
+    assert.deepEqual(readFileSync(payloadPath), payload, 'Invalid export must not overwrite evidence');
+    const invalidCheck = run(['--check']);
+    assert.equal(invalidCheck.status, 1);
+    assert.match(invalidCheck.stderr, /ERROR: deliberately unresolved fixture/);
+    assert.doesNotMatch(invalidCheck.stderr, /machine audit is stale/);
+    writeFileSync(path.join(workspace, 'validation.json'), '[]');
     writeFileSync(manifestPath, JSON.stringify({ ...manifest, payload: '../outside.gz' }));
     const malformed = run(['--check']);
     assert.equal(malformed.status, 1); assert.match(malformed.stderr, /unexpected audit payload path/);
