@@ -213,6 +213,37 @@ disabled/other navigation/edit keys, dark/responsive states, local caret/popup
 paint, scrollbar reachability and repeated observer/resource cleanup remain.
 No renderer, comparison input or original capture was changed.
 
+**Datepicker opening, navigation and commit:** the next unresolved question
+was whether calendar actions failed in routing or in authored calendar state.
+The paired Chrome 154/light/1440×900/DPR 1 frozen-build proof records real Tab,
+Alt+Down, Escape, pointer opening, Home/Right, Next and day-1 click boundaries.
+Tab keeps both calendars closed. Alt+Down reaches the candidate input callback
+but only Material opens. After pointer opening, Material focuses a calendar
+cell and Home/Right moves its active day 1 → 2; candidate retains icon focus
+and receives both keys there. Material Next advances the displayed month,
+then choosing day 1 writes the date and closes. Candidate clicks target
+`datepicker-next` and `datepicker-day-1` exactly, but its month, empty input
+value and open state remain unchanged.
+
+Current candidate source only changes the month/year **view**, handles Escape
+and toggles popup opening. Calendar labels/contents derive from the current
+date, its input value is constant empty, and Next/day handlers and calendar
+focus requests are absent (`examples/material-showcase/src/app/astylar.component.ts`).
+The first demonstrated differences are application interaction/state authoring;
+correct target delivery does not establish calendar behavior equivalence or
+prove a core routing failure. Preserve the separate confirmed coordinate/grid
+and paint findings. Implementation needs equivalent calendar state and behavior
+through the public interaction contract alongside those core corrections.
+
+`node --test --test-name-pattern="datepicker keyboard opening"
+tests/material-parity/sort-focus-structure.spec.mjs` passes 1/1 with zero page
+errors in 7,499 ms. The probe waits for actual calendar focus and completion of
+Material's opening animation before dismissal/navigation: Material explicitly
+ignores close while animating, so an immediate Escape was a premature harness
+action. Secondary year/month selection, keyboard commit and other navigation
+keys, disabled/dark/responsive states, local calendar/caret paint and repeated
+resource cleanup remain open. No renderer, comparison input or capture changed.
+
 **Independent replay:** a separate cold
 `ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
 completed with exit 0. It revalidated the full audit, rehashed the evidence

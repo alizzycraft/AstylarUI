@@ -801,6 +801,118 @@ test('editable popup keyboard boundaries locate autocomplete and timepicker inte
   });
 });
 
+test('datepicker keyboard opening and pointer month/date boundaries locate calendar authoring gaps', async () => {
+  await withFrozenShowcase(async (browser, baseUrl) => {
+    const observations = {};
+    for (const mode of ['reference', 'astylar']) {
+      const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+      const errors = [];
+      page.on('pageerror', error => errors.push(String(error)));
+      await page.goto(`${baseUrl}/${mode}/datepicker?benchmark=1&profile=light`);
+      await page.locator('.frame').waitFor();
+      if (mode === 'astylar') await page.waitForFunction(() => !!window.__ASTYLAR_MATERIAL_BENCHMARK__);
+      await page.evaluate(() => {
+        window.__calendarAuditKeys = [];
+        document.addEventListener('keydown', event => window.__calendarAuditKeys.push(event.key), true);
+      });
+      const steps = [];
+      const snapshot = async boundary => {
+        if (mode === 'astylar') await page.evaluate(() => window.__ASTYLAR_MATERIAL_BENCHMARK__.waitForSettled());
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        steps.push(await page.evaluate(({ mode, boundary }) => {
+          const input = document.querySelector(mode === 'reference' ? '#datepicker-control' : '[data-astylar-id="datepicker-control"]');
+          const popup = document.querySelector(mode === 'reference' ? 'mat-datepicker-content' : '[data-astylar-id="datepicker-popup"]');
+          const header = document.querySelector(mode === 'reference' ? '.mat-calendar-period-button' : '[data-astylar-id="datepicker-month"]');
+          return { boundary, value: input.value, open: !!popup, inputFocused: document.activeElement === input,
+            focusOwner: document.activeElement?.getAttribute('data-astylar-id') ?? document.activeElement?.getAttribute('aria-label'),
+            activeDay: mode === 'reference' ? document.querySelector('.mat-calendar-body-active .mat-calendar-body-cell-content')?.textContent.trim() ?? null
+              : document.activeElement?.getAttribute('data-astylar-id')?.match(/^datepicker-day-(\d+)$/)?.[1] ?? null,
+            header: header?.textContent.trim() ?? null, keys: window.__calendarAuditKeys,
+            appEvents: mode === 'astylar' ? window.__ASTYLAR_MATERIAL_BENCHMARK__.events()
+              .filter(event => ['keydown', 'click'].includes(event.type)).map(event => [event.type, event.targetId]) : [],
+          };
+        }, { mode, boundary }));
+      };
+      for (const key of ['Tab', 'Alt+ArrowDown', 'Escape']) {
+        await page.keyboard.press(key);
+        if (mode === 'reference' && key === 'Alt+ArrowDown') {
+          await page.waitForFunction(() => document.activeElement?.classList.contains('mat-calendar-body-cell'));
+          await page.waitForFunction(() => {
+            const popup = document.querySelector('mat-datepicker-content');
+            return popup && !popup.classList.contains('mat-datepicker-content-animating');
+          });
+        }
+        if (mode === 'reference' && key === 'Escape')
+          await page.locator('mat-datepicker-content').waitFor({ state: 'detached' });
+        await snapshot(key);
+      }
+      const clickCandidate = async id => {
+        const point = await page.evaluate(id => {
+          const box = window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([id], false).elements[id].borderBox;
+          const canvas = document.querySelector('canvas').getBoundingClientRect();
+          return { x: canvas.x + box.left + box.width / 2, y: canvas.y + box.top + box.height / 2 };
+        }, id);
+        await page.mouse.click(point.x, point.y);
+      };
+      if (mode === 'reference') await page.locator('mat-datepicker-toggle button').click();
+      else await clickCandidate('datepicker-icon');
+      if (mode === 'reference') await page.waitForFunction(() => {
+        const popup = document.querySelector('mat-datepicker-content');
+        return popup && !popup.classList.contains('mat-datepicker-content-animating');
+      });
+      await snapshot('pointer-open');
+      for (const key of ['Home', 'ArrowRight']) {
+        await page.keyboard.press(key);
+        if (mode === 'reference') await page.waitForFunction(expected =>
+          document.activeElement?.textContent.trim() === expected, key === 'Home' ? '1' : '2');
+        await snapshot(key);
+      }
+      if (mode === 'reference') await page.locator('.mat-calendar-next-button').click();
+      else await clickCandidate('datepicker-next');
+      await snapshot('next-month');
+      if (mode === 'reference') await page.locator('.mat-calendar-body-cell')
+        .filter({ has: page.locator('.mat-calendar-body-cell-content', { hasText: /^\s*1\s*$/ }) }).first().click({ timeout: 5000 });
+      else await clickCandidate('datepicker-day-1');
+      if (mode === 'reference') await page.locator('mat-datepicker-content').waitFor({ state: 'detached' });
+      await snapshot('choose-day-1');
+      observations[mode] = { steps, errors };
+      await page.close();
+    }
+    assert.equal(browser.version(), '154.0.8037.58');
+    const boundary = step => [step.boundary, step.value, step.open];
+    const ref = observations.reference.steps;
+    const candidate = observations.astylar.steps;
+    assert.deepEqual(ref.slice(0, 7).map(boundary), [
+      ['Tab', '', false], ['Alt+ArrowDown', '', true], ['Escape', '', false],
+      ['pointer-open', '', true], ['Home', '', true], ['ArrowRight', '', true], ['next-month', '', true],
+    ]);
+    assert.deepEqual(candidate.map(boundary), [
+      ['Tab', '', false], ['Alt+ArrowDown', '', false], ['Escape', '', false],
+      ['pointer-open', '', true], ['Home', '', true], ['ArrowRight', '', true], ['next-month', '', true], ['choose-day-1', '', true],
+    ]);
+    assert.equal(ref.at(-1).open, false);
+    assert.match(ref.at(-1).value, /^\d+\/1\/\d{4}$/);
+    const [month, day, year] = ref.at(-1).value.split('/').map(Number);
+    assert.equal(ref[6].header, new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' })
+      .format(new Date(year, month - 1, day)).toUpperCase(), 'committed date belongs to the displayed next month');
+    assert.notEqual(ref[6].header, ref[3].header, 'Material next advances the displayed month');
+    assert.equal(candidate[6].header, candidate[3].header, 'candidate next leaves its authored month unchanged');
+    assert.deepEqual(ref.slice(4, 6).map(step => step.activeDay), ['1', '2']);
+    assert.deepEqual(candidate.slice(3, 6).map(step => step.focusOwner), Array(3).fill('datepicker-icon'));
+    assert.deepEqual(candidate.slice(4, 6).map(step => step.activeDay), [null, null]);
+    assert.deepEqual(candidate.at(-1).appEvents, [
+      ['keydown', 'datepicker-control'], ['keydown', 'datepicker-control'], ['keydown', 'datepicker-control'],
+      ['click', 'datepicker-icon'], ['keydown', 'datepicker-icon'], ['keydown', 'datepicker-icon'],
+      ['click', 'datepicker-next'], ['click', 'datepicker-day-1'],
+    ]);
+    for (const mode of ['reference', 'astylar']) {
+      assert.deepEqual(observations[mode].errors, []);
+      assert.deepEqual(observations[mode].steps.at(-1).keys, ['Tab', 'Alt', 'ArrowDown', 'Escape', 'Home', 'ArrowRight']);
+      assert.equal(observations[mode].steps[0].inputFocused, true);
+    }
+  });
+});
+
 async function withFrozenShowcase(run) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));
