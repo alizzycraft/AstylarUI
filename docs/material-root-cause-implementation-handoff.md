@@ -14,6 +14,12 @@ index imports and verifies the same package: 8,483 scalar discrepancies,
 configured capture inventory remains 436/436 static and 1,875/1,875 interaction
 cases across 36 families; those counts do not establish input equivalence.
 The cold run's wall time includes a host suspension and is not a CPU-time measure.
+The [source-derived state checklist](material-state-coverage-inventory.md)
+accounts for all 36 families, validates every per-family 436/1,875 case count
+against the hash-pinned full report, and distinguishes real action boundaries
+from programmatic focus or final-only mobile Escape observations. Every family
+still has pending input/state applicability review; the output pass is not
+promoted to audit completion.
 
 **Independent replay:** a separate cold
 `ASTYLAR_AUDIT_COLD=1; ASTYLAR_AUDIT_PROGRESS=1; node scripts/export-material-input-audit-current-ancestry.mjs --check`
