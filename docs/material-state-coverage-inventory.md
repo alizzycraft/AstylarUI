@@ -2,6 +2,20 @@
 
 ## Evidence boundary
 
+Scrollbar dragging now has an explicit paired dark/mobile DPR2 check. The
+headless driver's default `--hide-scrollbars` hid native platform scrollbars;
+the focused proof removes that flag only for this check and verifies the actual
+launch arguments. Native thumb pixels are found before driving real held drags
+of 20/40/60px: scrollTop progresses 211/421/632. Candidate thumb pixels are
+visible, but scrollTop stays 0/0/0 and pointer events target underlying options.
+The live thumb is non-pickable, matching core paint ownership and the existing
+documented exclusion of thumb dragging. This is a core capability limitation,
+not popup padding or world-coordinate attribution. Wheel behavior remains
+verified separately. Other profiles, track clicks and complete paint remain.
+The current full runner has no native-scrollbar launch override; native scrollbar
+paint/interaction acceptance needs explicit instrumentation review before the
+final capture. Historical capture applicability is not inferred from this check.
+
 Public equal-input reduction now integrates twelve paired cases at DPR1/2:
 the eight caret cases below plus input/textarea forward/backward selection and
 collapse. Endpoint/direction state agrees; selected background and white glyph
@@ -135,7 +149,7 @@ source-derived applicability review before it can be closed as inapplicable.
 | Slider | 12 / 66 | drag-start/end, disabled, comparison-pane drags | Chrome 154 light desktop DPR 1 Tab/Arrow proof: reference uses 0–100/step 5 and peer limits; candidate uses fixed 0–50/50–100/step 1 while the store rounds to 5, producing delayed jumps. Paired pointer proof: default 30/65 thumb centers target correctly; at 60/80 the visible start thumb hits `slider-primary`, and at 20/40 the visible end thumb hits `slider-start`, because half-width hit owners disagree with full-domain visuals. Other states/profiles, general travel geometry, capture cleanup and local paint remain. |
 | Slide-toggle | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 real Tab/Space proof: Material switch changes checked, while role-only candidate receives keydown but stays checked. Focus/hover, inactive minus paint, other profiles remain. |
 | Datepicker | 12 / 99 | secondary view, hover content, outside/canvas dismissal, disabled, error, open, short viewport, M | Chrome 154 light desktop DPR 1: Tab stays closed on both; Alt+Down opens only Material. Pointer-open Material focuses the calendar and Home/Right moves active day 1 → 2; candidate keeps icon focus. Candidate receives Next/day-1 clicks but month/value/open state stay unchanged; Material advances, writes the date and closes. Secondary year/month navigation, disabled/dark/responsive states, local caret/calendar paint and resource cleanup remain. |
-| Timepicker | 12 / 98 | wheel scroll, hover content, outside/canvas dismissal, disabled, error, open, M | Chrome 154 light desktop DPR 1 real Tab leaves Material closed but candidate opens; Material ArrowDown opens and Enter writes 12:00 AM/closes, while candidate receives keys but stays empty/open. Candidate always marks option 0 selected; empty Material input has none selected. Escape removes candidate options; closed Material Escape clears its committed value. Datepicker Tab negative control stays closed on both. Pointer-origin scope, other keys, scrollbar reachability, caret paint, dark/responsive states and resource cleanup remain. |
+| Timepicker | 12 / 98 | wheel scroll, hover content, outside/canvas dismissal, disabled, error, open, M | Chrome 154 light desktop DPR 1 real Tab leaves Material closed but candidate opens; Material ArrowDown opens and Enter writes 12:00 AM/closes, while candidate receives keys but stays empty/open. Candidate always marks option 0 selected; empty Material input has none selected. Escape removes candidate options; closed Material Escape clears its committed value. Datepicker Tab negative control stays closed on both. Dark/mobile DPR2 pointer opening, wheel144, final-option reachability and thumb pixels verified; 20/40/60px native thumb drag gives scrollTop211/421/632, candidate0/0/0 with underlying option events: documented core dragging limitation. Native scrollbar launch suppression corrected only in this proof. Other keys/profiles, track clicks, complete paint and resource cleanup remain. |
 | Button | 12 / 48 | disabled | Pointer/held/disabled captured; real Tab/Enter/Space activation and focus paint remain. |
 | Button-toggle | 12 / 56 | disabled, selected | Chrome 154 light desktop DPR 1 Tab/ArrowLeft/Enter/ArrowRight proof: Material focus and selection move Grid → List → Grid; candidate receives keys but stays on Grid. Edge/hover paint and other profiles remain. |
 | Menu | 12 / 82 | hover content, outside/canvas dismissal, disabled, open, M | Retained light 900×700 DPR 1 ArrowDown/Escape capture exists. Dark/mobile DPR 2 open/Escape: HTML focuses Rename, candidate remains on trigger; both restore trigger/remove controls. Post-dismissal counts plateau (12 meshes/14 materials/5 textures); all textures are owned text-cache entries and public disposal clears sampled runtime resources, cache, plugin ownership and observers. Dark Arrow/navigation, paint, retained-material ownership and multi-surface/late-async lifetime remain. |
@@ -151,16 +165,22 @@ source-derived applicability review before it can be closed as inapplicable.
 
 ## Priority and ownership of the remaining checks
 
-1. Text inputs: same authored caret/selection intent, focused-empty and
+1. Shared remaining coverage: native scrollbar capture applicability and
+   overlay input/paint mapping, including unresolved profiles and state boundaries.
+   Do not repeat the settled wheel/drag or keyboard authoring proofs without
+   changed dependencies or contradictory evidence. Native scrollbar hiding is
+   an instrumentation issue; non-interactive candidate indicators are a separate
+   documented core limitation. Final enforced capture must distinguish them.
+2. Text inputs: same authored caret/selection intent, focused-empty and
    forward/backward selection paint at real action boundaries. The existing
    light capture used Playwright's default hidden native caret; the Chrome 154
    form-field proof isolates that harness gap and an unequal caret-color
    request. Do not infer the other four families or dark/mobile from it.
-2. Shared overlays and focus: distinguish authored open-state differences from
+3. Shared overlays and focus: distinguish authored open-state differences from
    core placement, clipping, dismissal, focus containment and resource cleanup.
    Reuse the authenticated light keyboard captures before adding only missing
    profile/DPR/intermediate states.
-3. Keyboard-operable selection controls: the current light desktop key probes
+4. Keyboard-operable selection controls: the current light desktop key probes
    classify sort, checkbox, radio, chips, slide-toggle, button-toggle, tabs,
    stepper, expansion, slider and select at their first state/focus divergence.
    Other keys, profiles, focus paint and complete input mapping remain. The
@@ -169,7 +189,7 @@ source-derived applicability review before it can be closed as inapplicable.
    a distinct authored range/step versus store-normalization conflict, not a
    missing-keydown result. Programmatic `focus()` and final pointer activation
    do not cover these paths.
-4. Source-derived applicability for passive/composite families, then complete
+5. Source-derived applicability for passive/composite families, then complete
    canonical source/finding integration, the current 302-file audit harness,
    and unfiltered enforced browser/release gates. Keep input-equivalence
    classifications separate from the historical output-pass counts.

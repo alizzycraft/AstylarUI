@@ -2,6 +2,52 @@
 
 ## Current audit checkpoint — September 30
 
+**Scrollbar drag and native capture boundary:** the existing dark/mobile
+timepicker wheel proof now drives visible thumbs with real 20/40/60px held
+pointer motion, sampling each action boundary. Chrome154, 390×844 DPR2,
+ordinary non-benchmark routes, unchanged 1,887-file frozen build. Native
+scrollTop is 211/421/632, candidate 0/0/0; option geometry follows each measured
+offset. Both keep the popup open on release. Candidate down/up events target
+`timepicker-option-0`/`timepicker-option-1`, not its visible scrollbar, and the
+live thumb has `isPickable=false`. Native neutral-gray raster thumb is RGB141
+with detected physical rows510–557; candidate point comes from exact #8B878D
+thumb pixels. No Babylon position is used to choose either pointer location.
+
+First relevant core boundary: `BabylonScrollPaintAdapter.createScrollbar`
+(66–67) sets track/thumb non-pickable; `AstylarScrollRuntime` owns indicator
+geometry and retained-offset paint, while interaction pointer movement has no
+scrollbar drag path. Compatibility lines249–252 explicitly exclude thumb
+dragging. Classify this as a documented core capability limitation, not a
+Material authoring correction or a coordinate diagnosis. If strict parity is
+implemented later, the shared CSS-space scroll/interaction owner must acquire
+drag behavior; do not build a competing Material-plugin scrollbar controller.
+Current adapter SHA `cb1c9de71a9a4a1e2fb91e61bdb85aa94e8a5fe6f7ccf18d065b9e4f166ca987`;
+scroll runtime `2c7f0667264471b12315c5619e446dde65c6bb266d0bf114f84688f76f5288ac`;
+compatibility document `e710a551f52fdcf6c0cbc85e2037a896a41cf482f9dd7030b76757e0bca3ad50`.
+
+The initial native drag check exposed a separate harness issue. Installed
+Playwright's headless launch injects `--hide-scrollbars` (coreBundle.js43070);
+two strict raster detections failed, and widening the color rule wrongly found
+selected-option background RGB216,210,216, with no native scroll. That failed
+probe is NOT evidence of native scrollbar failure. A command-line check also
+failed because `--enable-automation` was absent. The focused diagnostic now
+omits only `--hide-scrollbars`, adds automation for read-only command inspection,
+asserts the flag absent, uses a strictly neutral-gray raster detector, and
+requires real native drag progression as its positive control. All other shared
+proofs retain their existing launch defaults. Driver bundle SHA
+`9393fa79e1c67c74edc26b610d65a4f7ed73d345a762465cc88340a33a2454ac`.
+`run-material-parity.mjs:1056` likewise has no override: investigate native
+scrollbar paint acceptance before the final enforced capture, without silently
+relabeling historical evidence. Earlier wheel state proof remains valid but
+does not establish native thumb paint. The corrected focused check initially
+passes 1/1 in 8,576.2577ms. Final assertions pass 1/1, zero failures/skips,
+in 10,739.1712ms using
+`node --test --test-name-pattern='dark mobile timepicker wheel' tests/material-parity/sort-focus-structure.spec.mjs`.
+Wheel offsets remain144px on both; known authored extent differences remain
+8px, with final trailing gaps8px/0px. This passing diagnostic explicitly asserts
+the limitation, not parity. Scoped `git diff --check` passes.
+No renderer, fixture, original capture or canonical package changes are made.
+
 **Equal-input selection paint is now separated from caret and Material authoring:**
 the same in-memory public reduction adds text input and textarea containing
 `Atlas`, each at DPR 1/2, with exactly the same declarations and real keys.

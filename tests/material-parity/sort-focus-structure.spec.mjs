@@ -1691,6 +1691,11 @@ test('dark mobile real-key selections distinguish direction state from highlight
 test('dark mobile timepicker wheel separates scroll state from scrollbar paint', async t => {
   await withFrozenShowcase(async (browser, baseUrl) => {
     assert.equal(browser.version(), '154.0.8037.58');
+    const commandSession = await browser.newBrowserCDPSession();
+    const { arguments: launchArguments } = await commandSession.send('Browser.getBrowserCommandLine');
+    await commandSession.detach();
+    t.diagnostic(JSON.stringify({ nativeScrollbarsHidden: launchArguments.includes('--hide-scrollbars') }));
+    assert.equal(launchArguments.includes('--hide-scrollbars'), false);
     const observations = {};
     for (const mode of ['reference', 'astylar']) {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
@@ -1737,7 +1742,7 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           return { box: box('timepicker-options'), ...scroll, firstOption: box('timepicker-option-0'),
             lastOption: box('timepicker-option-47'), optionCount: document.querySelectorAll('[data-astylar-id^="timepicker-option-"][role="option"]').length,
             padding: { top: style.paddingTop ?? null, bottom: style.paddingBottom ?? null, shorthand: style.padding ?? null },
-            scrollbar: thumb ? { visible: thumb.isVisible && thumb.isEnabled(), localY: thumb.position.y,
+            scrollbar: thumb ? { visible: thumb.isVisible && thumb.isEnabled(), pickable: thumb.isPickable, localY: thumb.position.y,
               diffuse: thumb.material?.diffuseColor?.toHexString() } : null };
         }, mode);
         await settle(); const before = await sample();
@@ -1757,14 +1762,14 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           if ([0, 1, 2].some(channel => beforePixels.data[i + channel] !== afterPixels.data[i + channel])) scrollbarStripChanged++;
         }
         const thumbPixels = image => {
-          let count = 0, firstY = null, lastY = null;
+          let count = 0, firstY = null, lastY = null, firstX = Infinity, lastX = -Infinity;
           for (let y = top; y < bottom; y++) for (let x = left; x < right; x++) {
             const i = (y * image.width + x) * 4;
             if (image.data[i] === 139 && image.data[i + 1] === 135 && image.data[i + 2] === 141) {
-              count++; firstY ??= y; lastY = y;
+              count++; firstY ??= y; lastY = y; firstX = Math.min(firstX, x); lastX = Math.max(lastX, x);
             }
           }
-          return { count, firstY, lastY };
+          return { count, firstY, lastY, firstX, lastX };
         };
         await page.mouse.wheel(0, 10000);
         await page.waitForFunction(mode => {
@@ -1773,7 +1778,60 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
           return scroll.scrollTop === scroll.scrollHeight - scroll.clientHeight;
         }, mode);
         await settle(); const end = await sample();
+        // Drive the visible scrollbar, not the hidden semantic DOM or mesh position.
+        await page.mouse.wheel(0, -10000);
+        await page.waitForFunction(mode => mode === 'reference'
+          ? document.querySelector('.mat-timepicker-panel').scrollTop === 0
+          : window.__ASTYLAR_MATERIAL_BENCHMARK__.measure([], false).diagnostics.surface.scrolling.containers['timepicker-options'].scrollTop === 0, mode);
+        await settle();
+        const resetPixels = PNG.sync.read(await page.screenshot({ caret: 'hide' }));
+        let dragPoint, nativeThumbRun = null;
+        if (mode === 'astylar') {
+          const pixels = thumbPixels(resetPixels);
+          assert.ok(pixels.count > 100, 'candidate drag point comes from actual thumb pixels');
+          dragPoint = { x: (pixels.firstX + pixels.lastX + 1) / 4, y: (pixels.firstY + pixels.lastY + 1) / 4 };
+        } else {
+          // Native scrollbar is platform UI, not an inspectable DOM thumb. Find
+          // its neutral gray vertical run in the raster, excluding arrow rows.
+          const x = Math.floor((before.box.x + before.box.width - 8) * 2);
+          const runs = []; let run = null;
+          for (let y = top + 24; y < bottom - 24; y++) {
+            const i = (y * resetPixels.width + x) * 4;
+            const rgb = [...resetPixels.data.subarray(i, i + 3)];
+            const gray = Math.max(...rgb) - Math.min(...rgb) <= 2 && rgb[0] >= 95 && rgb[0] <= 235;
+            if (gray) { run ??= { firstY: y, lastY: y, rgb }; run.lastY = y; }
+            else if (run) { runs.push(run); run = null; }
+          }
+          if (run) runs.push(run);
+          nativeThumbRun = runs.find(value => value.lastY - value.firstY >= 15);
+          if (!nativeThumbRun) {
+            const palette = {};
+            for (let y = top; y < Math.min(bottom, top + 160); y++) {
+              const i = (y * resetPixels.width + x) * 4;
+              const color = [...resetPixels.data.subarray(i, i + 3)].join(',');
+              palette[color] = (palette[color] ?? 0) + 1;
+            }
+            t.diagnostic(JSON.stringify({ nativeThumbDetection: { x, top, bottom, runs, palette, box: before.box } }));
+          }
+          assert.ok(nativeThumbRun, 'native drag point comes from actual platform thumb pixels');
+          dragPoint = { x: (x + .5) / 2, y: (nativeThumbRun.firstY + nativeThumbRun.lastY + 1) / 4 };
+        }
+        const dragSteps = [];
+        await page.mouse.move(dragPoint.x, dragPoint.y);
+        await page.mouse.down();
+        for (const distance of [20, 40, 60]) {
+          await page.mouse.move(dragPoint.x, dragPoint.y + distance);
+          await settle();
+          dragSteps.push({ distance, ...await sample() });
+        }
+        await page.mouse.up();
+        await settle();
+        const release = await page.evaluate(mode => mode === 'reference'
+          ? { open: !!document.querySelector('.mat-timepicker-panel'), value: document.querySelector('#timepicker-control').value }
+          : { open: window.__ASTYLAR_MATERIAL_BENCHMARK__.state().open,
+            events: window.__ASTYLAR_MATERIAL_BENCHMARK__.events().filter(event => ['pointerdown', 'pointerup', 'click'].includes(event.type)) }, mode);
         observations[mode] = { before, after, end, scrollbarStripChanged,
+          drag: { point: dragPoint, nativeThumbRun, steps: dragSteps, release },
           candidateThumbPixels: mode === 'astylar' ? { before: thumbPixels(beforePixels), after: thumbPixels(afterPixels) } : null, errors };
       } finally { await page.close(); }
     }
@@ -1800,7 +1858,28 @@ test('dark mobile timepicker wheel separates scroll state from scrollbar paint',
     assert.ok(thumb.after.firstY > thumb.before.firstY);
     assert.equal(observations.astylar.before.scrollbar.visible, true);
     assert.equal(observations.astylar.after.scrollbar.visible, true);
-  });
+    assert.ok(observations.reference.drag.steps.every((step, index, steps) => step.scrollTop > (index ? steps[index - 1].scrollTop : 0)),
+      'native thumb drag progresses at every held action boundary');
+    assert.deepEqual(observations.astylar.drag.steps.map(step => step.scrollTop), [0, 0, 0],
+      'candidate painted thumb currently has no pointer scrolling behavior');
+    assert.equal(observations.astylar.before.scrollbar.pickable, false);
+    assert.deepEqual(observations.astylar.drag.release.events.slice(-2).map(event => [event.type, event.targetId]),
+      [['pointerdown', 'timepicker-option-0'], ['pointerup', 'timepicker-option-1']]);
+    assert.equal(observations.reference.drag.release.open, true);
+    assert.equal(observations.astylar.drag.release.open, true);
+    t.diagnostic(JSON.stringify({ scrollbarDragFinding: {
+      family: 'timepicker', profile: 'dark', viewport: '390x844', dpr: 2,
+      classification: 'intentional-documented-limitation', owner: 'core scrolling/interaction',
+      firstDivergence: 'painted scrollbar thumb is non-pickable; pointer targets underlying options',
+      nativeDragScrollTop: observations.reference.drag.steps.map(step => step.scrollTop),
+      candidateDragScrollTop: observations.astylar.drag.steps.map(step => step.scrollTop),
+      nativeScrollbarHarnessCorrection: 'omit --hide-scrollbars for this diagnostic only',
+      acceptance: false,
+    } }));
+    for (const mode of ['reference', 'astylar']) for (const step of observations[mode].drag.steps) {
+      assert.ok(Math.abs(observations[mode].before.firstOption.y - step.firstOption.y - step.scrollTop) < .01);
+    }
+  }, { ignoreDefaultArgs: ['--hide-scrollbars'], args: ['--enable-automation'] });
 });
 
 test('comparison iframe overlays expose parent control focus scope', async t => {
@@ -1870,7 +1949,7 @@ test('comparison iframe overlays expose parent control focus scope', async t => 
   });
 });
 
-async function withFrozenShowcase(run) {
+async function withFrozenShowcase(run, launchOptions = {}) {
   const browserRoot = path.resolve('examples/material-showcase/dist/material-showcase/browser');
   const checkpoint = JSON.parse(readFileSync('artifacts/material-parity/caret-visible-checkpoint-154/checkpoint/manifest.json'));
   assert.deepEqual(fingerprintDirectory(browserRoot), checkpoint.provenance.browserFiles);
@@ -1887,7 +1966,7 @@ async function withFrozenShowcase(run) {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   let browser;
   try {
-    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    browser = await chromium.launch({ channel: 'chrome', headless: true, ...launchOptions });
     await run(browser, `http://127.0.0.1:${server.address().port}`);
   } finally {
     if (browser) await browser.close();
