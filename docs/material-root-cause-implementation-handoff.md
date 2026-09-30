@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 30
 
+**The failed259-group count is reconciled to the four dropped binding populations:**
+authenticated compact queries of published generation `3ec576a3…` retain all8,483
+scalar rows and zero unresolved attributions. A read-only exact membership join
+matches the four verified source plans/transitions to those rows: alignment/font
+72groups/4,016 observations; text alignment49/2,677; LTR4/178; reviewed inputs
+134/3,325. Their259 distinct signatures are disjoint. Each matches exactly one
+canonical row with the same family/element/property/reference/candidate values,
+classification, attribution, occurrence count, cases and states. Existing independent
+source replays passed in the preceding increment. This is no new classification
+or renderer claim; it explains the whole failed count at the lost-binding boundary.
+
+The initial join incorrectly required every canonical row's scalar signature to
+be unique:8,359 signatures versus8,483 rows. Corrected selection retains all rows
+and requires exactly one matching classified/count-bound row per selected finding;
+no rows are deduplicated or discarded. Read-only check passes in about0.74seconds.
+This compact join does not execute the current full builder. All four source
+failures now have focused proof, so the next justified integration milestone is a
+complete current-ancestry cold export, followed by independent check and compact
+index refresh only if validation succeeds. No separate new scalar attribution
+investigation is justified by the259 count alone. Coverage/state mapping, equal-input
+core reductions and final unfiltered browser acceptance remain open.
+
 **Cold export failed; shared inventory guard now reconciled:** the complete
 current-ancestry cold export from `e450a5b` terminated with validation failure
 after 2,178,415.7494ms (36.31 minutes), before canonical publication. Retain

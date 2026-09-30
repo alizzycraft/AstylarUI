@@ -2,6 +2,13 @@
 
 ## Evidence boundary
 
+The published compact snapshot still has zero unresolved scalar attributions.
+Exact read-only membership reconciles the failed259 groups to the four restored
+binding populations (72+49+4+134), preserving values, cases, states, occurrence
+counts and classifications. This is not a current full-builder pass; cold canonical
+integration is now the next justified milestone. Complete state/input/paint coverage
+and final browser acceptance remain pending independently of scalar attribution.
+
 September30 cold canonical export failed before publication: four independent
 source bindings were missing and the failed build reported259 unresolved style
 differences. Focused replay now isolates and corrects the shared historical-producer
