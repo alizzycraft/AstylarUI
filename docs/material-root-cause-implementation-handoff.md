@@ -2,6 +2,28 @@
 
 ## Current audit checkpoint — September 30
 
+**Caret geometry isolated from color:** the existing input-boundary spec executes
+the four complete caret methods extracted from authenticated served chunk
+`chunk-3JXWRYJY.js` (SHA `f366533b…`) with actual Babylon 8.15.1 NullEngine
+meshes and records the CSS inputs passed to projection. An isolated empty native
+input in Chrome 154.0.8037.58 uses the same explicit `#d0bcff` caret, 16px Arial,
+24px line height and 228px input width. At DPR 1/2 its visible caret is exactly
+1 CSS px wide (1/2 device pixels), at the insertion edge; the shipped method
+requests width 2 CSS px, height 19.2px, and centers the box at that edge, extending
+one CSS px left and right. Both materials resolve the same caret color. Thus the
+width/left extension originates in `TextSelectionService.createTextCursor` and
+`projectCursorX` before projection, not the Material caretColor omission or a
+Babylon world-coordinate conversion. This confirms the local geometry policy
+discrepancy; NullEngine does not prove final WebGL clipping, raster height or
+whole-surface alignment. The previously observed 4-device-pixel canvas footprint
+is consistent with this policy, but full equal-input paired WebGL paint remains
+pending. Do not compensate with input padding or shift the comparison text.
+Verification: `node --test --test-name-pattern="shipped caret geometry" tests/material-parity/input-boundary-evidence.spec.mjs`
+passes 1/1 in 31,766ms; a repeat combined with the retained
+`current paired caret-visible capture` check passes 2/2 in 9,342ms (geometry
+8,309ms, retained proof 140ms). Native six-sample rasters stay in memory; no renderer,
+fixture, retained producer or canonical package changed.
+
 **Dark/mobile focused-empty caret boundary:** the existing hash-bound caret
 producer and retained light capture remain unchanged. The existing input-boundary
 spec extends only missing form-field/input dark, 390×844, DPR 2 coverage on the

@@ -365,6 +365,77 @@ test('dark mobile empty inputs expose caret pixels without changing retained pro
   }
 });
 
+test('shipped caret geometry fixes width before projection independently of caret color', async t => {
+  const source = readFileSync('examples/material-showcase/dist/material-showcase/browser/chunk-3JXWRYJY.js');
+  assert.equal(hash(source), 'f366533bd9f80b7f85379db5031c0dea8c9c1840c14fb6ec35f57f1b65ad9eab');
+  const ast = ts.createSourceFile('served.js', source.toString(), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0);
+  const names = ['createTextCursor', 'updateTextCursorColor', 'projectCursorX', 'calculateCursorPosition'];
+  const methods = new Map(names.map(name => [name, []]));
+  const visit = node => {
+    if (ts.isMethodDeclaration(node) && methods.has(node.name.getText(ast))) methods.get(node.name.getText(ast)).push(node);
+    ts.forEachChild(node, visit);
+  };
+  visit(ast);
+  for (const matches of methods.values()) assert.equal(matches.length, 1);
+  const { NullEngine, Scene, MeshBuilder, StandardMaterial, Color3 } = await import('@babylonjs/core');
+  // Execute the complete shipped methods with actual Babylon meshes, not copied
+  // caret arithmetic. NullEngine proves pre-projection geometry, not pixels.
+  const service = new Function('MeshBuilder', 'StandardMaterial', 'Color3',
+    `return ({${[...methods.values()].map(matches => matches[0].getText(ast)).join(',')}});`)(MeshBuilder, StandardMaterial, Color3);
+  service.CURSOR_WIDTH_SCALE = 1;
+  service.styleService = { parseBackgroundColor: value => ({ type: 'color', color: Color3.FromHexString(value), alpha: 1 }) };
+  const engine = new NullEngine(), scene = new Scene(engine);
+  const parent = MeshBuilder.CreatePlane('equal-input-caret', { width: 228, height: 24 }, scene);
+  const sizes = [], points = [];
+  const projection = {
+    projectCssSize: size => { sizes.push({ ...size }); return size; },
+    projectCssLocalPoint: point => { points.push({ ...point }); return { ...point, z: 0 }; },
+  };
+  let browser;
+  try {
+    browser = await chromium.launch({ channel: 'chrome', headless: true });
+    assert.equal(browser.version(), '154.0.8037.58');
+    for (const dpr of [1, 2]) {
+      const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: dpr });
+      try {
+        const page = await context.newPage();
+        await page.setContent('<input aria-label="isolated empty input" style="position:absolute;left:20px;top:40px;width:228px;height:24px;padding:0;border:0;outline:0;background:#e8e0eb;color:#e6e1e5;caret-color:#d0bcff;font:16px/24px Arial">');
+        await page.keyboard.press('Tab');
+        const input = page.locator('input'), box = await input.boundingBox();
+        const style = await input.evaluate(node => { const s = getComputedStyle(node); return { color: s.color, caretColor: s.caretColor, fontSize: s.fontSize, value: node.value, focused: document.activeElement === node }; });
+        assert.deepEqual(style, { color: 'rgb(230, 225, 229)', caretColor: 'rgb(208, 188, 255)', fontSize: '16px', value: '', focused: true });
+        let native = { count: 0 };
+        for (let sample = 0; sample < 6; sample++) {
+          const visible = await page.screenshot({ clip: box, caret: 'initial' });
+          const hidden = await page.screenshot({ clip: box, caret: 'hide' });
+          const delta = rasterDifference(visible, hidden);
+          if (delta.count > native.count) native = delta;
+          await page.waitForTimeout(125);
+        }
+        assert.ok(native.count > 0, 'native empty caret must have visible pixels');
+        assert.deepEqual(native.colors, ['208,188,255']);
+        assert.equal(native.bounds.maxX - native.bounds.minX + 1, dpr);
+        assert.equal(native.bounds.minX, 0);
+        sizes.length = 0; points.length = 0;
+        const cursor = service.createTextCursor(0, { characters: [] }, parent, scene, projection,
+          { fontSize: 16, color: '#e6e1e5', caretColor: '#d0bcff' }, { width: 228, height: 24 }, 0, 1, 0, -114);
+        try {
+          assert.deepEqual(sizes, [{ width: 2, height: 19.2 }]);
+          assert.deepEqual(points, [{ x: -114, y: 0 }]);
+          assert.equal(cursor.position.x, -114);
+          assert.equal(cursor.material.emissiveColor.toHexString().toLowerCase(), '#d0bcff');
+          const bounds = cursor.getBoundingInfo().boundingBox;
+          assert.equal(bounds.minimum.x, -1);
+          assert.equal(bounds.maximum.x, 1);
+          t.diagnostic(JSON.stringify({ dpr, native, shippedCssWidth: sizes[0].width, shippedCenterAtInsertionEdge: cursor.position.x,
+            classification: 'core-caret-geometry-policy', limitation: 'NullEngine geometry is not a full paired WebGL raster' }));
+        } finally { cursor.dispose(false, true); }
+      } finally { await context.close(); }
+    }
+  } finally { await browser?.close(); parent.dispose(false, true); scene.dispose(); engine.dispose(); }
+});
+
 function rasterDifference(firstBytes, secondBytes) {
   const first = PNG.sync.read(firstBytes), second = PNG.sync.read(secondBytes);
   assert.equal(first.width, second.width);
